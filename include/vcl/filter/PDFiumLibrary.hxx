@@ -161,6 +161,7 @@ public:
     virtual PDFiumFont getFont() = 0;
     virtual bool getFontData(PDFiumFont font, std::vector<uint8_t>& rData) = 0;
     virtual bool getFontToUnicode(PDFiumFont font, std::vector<uint8_t>& rData) = 0;
+    virtual bool getIsEmbedded(PDFiumFont font) = 0;
     virtual bool getFontProperties(FontWeight& weight) = 0;
     virtual PDFTextRenderMode getTextRenderMode() = 0;
     virtual Color getFillColor() = 0;

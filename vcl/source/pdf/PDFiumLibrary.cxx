@@ -421,6 +421,7 @@ public:
     PDFiumFont getFont() override;
     bool getFontData(PDFiumFont font, std::vector<uint8_t>& rData) override;
     bool getFontToUnicode(PDFiumFont font, std::vector<uint8_t>& rData) override;
+    bool getIsEmbedded(PDFiumFont font) override;
     bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
@@ -1214,6 +1215,12 @@ bool PDFiumPageObjectImpl::getFontToUnicode(PDFiumFont font, std::vector<uint8_t
     bOk = FPDFFont_GetToUnicodeContent(pFontObject, rData.data(), rData.size(), &buflen);
     assert(bOk && rData.size() == buflen);
     return bOk;
+}
+
+bool PDFiumPageObjectImpl::getIsEmbedded(PDFiumFont font)
+{
+    FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
+    return FPDFFont_GetIsEmbedded(pFontObject) == 1;
 }
 
 bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
