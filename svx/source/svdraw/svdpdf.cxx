@@ -1406,6 +1406,10 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
     std::vector<std::pair<OUString, OUString>> fonts;
     for (size_t i = 0; i < rSubSetInfo.aComponents.size(); ++i)
     {
+        // Ignore subsets with no glyphs in them, except for the first one
+        // which can have notdef in it
+        if (i && !rSubSetInfo.aComponents[i].nGlyphCount)
+            continue;
         fonts.push_back(std::make_pair(rSubSetInfo.aComponents[i].toMergedMapUrl,
                                        rSubSetInfo.aComponents[i].pfaCIDUrl));
     }
