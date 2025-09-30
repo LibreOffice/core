@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/extern_mergefonts.patch \
     external/afdko/extern_makeotf.patch \
     external/afdko/warnings.patch \
+    external/afdko/mergeFonts_crash.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
