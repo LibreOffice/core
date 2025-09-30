@@ -190,14 +190,31 @@ bool writeFontFile(const OUString& fileUrl, const std::vector<uint8_t>& rFontDat
     return true;
 }
 
-OUString guessFontName(const OUString& postScriptName)
+FontWeight toOfficeWeight(std::string_view style)
+{
+    if (o3tl::equalsIgnoreAsciiCase(style, "Regular"))
+        return WEIGHT_NORMAL;
+    else if (o3tl::equalsIgnoreAsciiCase(style, "Bold"))
+        return WEIGHT_BOLD;
+    else if (o3tl::equalsIgnoreAsciiCase(style, "BoldItalic"))
+        return WEIGHT_BOLD;
+    return WEIGHT_DONTKNOW;
+}
+
+OUString stripPostScriptStyle(const OUString& postScriptName, FontWeight& eWeight)
 {
     OUString sFontName;
     sal_Int32 lastDash = postScriptName.lastIndexOf('-');
     if (lastDash == -1)
+    {
         sFontName = postScriptName;
+        eWeight = WEIGHT_NORMAL;
+    }
     else
+    {
         sFontName = postScriptName.copy(0, lastDash);
+        eWeight = toOfficeWeight(postScriptName.copy(lastDash + 1).toUtf8());
+    }
     return sFontName;
 }
 }
@@ -243,12 +260,24 @@ void ImpSdrPdfImport::CollectFonts()
 
                 OUString sFontName = pPageObject->getFontName();
 
+                FontWeight eFontWeight(WEIGHT_DONTKNOW);
+                OUString sPostScriptFontFamily = stripPostScriptStyle(sPostScriptName, eFontWeight);
+
                 if (sFontName.isEmpty())
                 {
-                    sFontName = guessFontName(sPostScriptName);
+                    sFontName = sPostScriptFontFamily;
                     SAL_WARN("sd.filter",
                              "missing font name, attempt to reconstruct from postscriptname as: "
                                  << sFontName);
+                }
+
+                if (!pPageObject->getIsEmbedded(font))
+                {
+                    SAL_WARN("sd.filter", "skipping not embedded font, map: "
+                                              << sFontName << " to " << sPostScriptFontFamily);
+                    maImportedFonts.emplace(font,
+                                            OfficeFontInfo{ sPostScriptFontFamily, eFontWeight });
+                    continue;
                 }
 
                 SubSetInfo* pSubSetInfo;
@@ -274,7 +303,6 @@ void ImpSdrPdfImport::CollectFonts()
                 std::vector<uint8_t> aFontData;
                 if (!pPageObject->getFontData(font, aFontData))
                     SAL_WARN("sd.filter", "that's worrying");
-                FontWeight eFontWeight(WEIGHT_DONTKNOW);
                 bool bTTF = EmbeddedFontsManager::analyzeTTF(aFontData.data(), aFontData.size(),
                                                              eFontWeight);
                 SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
@@ -1331,17 +1359,6 @@ static OUString buildFontMenuName(const OUString& FontMenuNameDBUrl,
     FontMenuNameDB.Close();
 
     return longFontName;
-}
-
-static FontWeight toOfficeWeight(std::string_view style)
-{
-    if (o3tl::equalsIgnoreAsciiCase(style, "Regular"))
-        return WEIGHT_NORMAL;
-    else if (o3tl::equalsIgnoreAsciiCase(style, "Bold"))
-        return WEIGHT_BOLD;
-    else if (o3tl::equalsIgnoreAsciiCase(style, "BoldItalic"))
-        return WEIGHT_BOLD;
-    return WEIGHT_DONTKNOW;
 }
 
 // https://adobe-type-tools.github.io/font-tech-notes/pdfs/5900.RFMFAH_Tutorial.pdf
