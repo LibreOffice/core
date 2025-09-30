@@ -204,6 +204,15 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US">service:com.sun.star.deployment.ui.PackageManagerDialog</value>
+          <!-- tdf#119676 Turn off default shortcut for French -->
+          <value xml:lang="fr"></value>
+        </prop>
+      </node>
+      <!-- tdf#119676 Set Alt+Shift+Q shortcut for Extensions dialog in French -->
+      <node oor:name="Q_SHIFT_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="fr">service:com.sun.star.deployment.ui.PackageManagerDialog</value>
         </prop>
       </node>
       <node oor:name="O_SHIFT_MOD1" oor:op="replace">
