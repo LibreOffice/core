@@ -34,12 +34,12 @@ diff -ur skia.org/src/gpu/ganesh/vk/GrVkSemaphore.cpp skia/src/gpu/ganesh/vk/GrV
 diff -ur skia.org/src/utils/win/SkDWriteGeometrySink.h skia/src/utils/win/SkDWriteGeometrySink.h
 --- skia.org/src/utils/win/SkDWriteGeometrySink.h	2024-10-10 13:25:03.683133691 +0200
 +++ skia/src/utils/win/SkDWriteGeometrySink.h	2024-10-10 13:25:12.144187524 +0200
-@@ -13,6 +13,8 @@
- 
- class SkPath;
+@@ -8,6 +8,8 @@
+ #ifndef SkDWriteToPath_DEFINED
+ #define SkDWriteToPath_DEFINED
  
 +#define CONST const
 +
- #include <dwrite.h>
- #include <d2d1.h>
+ #include "include/core/SkPathBuilder.h"
+ #include "src/utils/win/SkObjBase.h"
  

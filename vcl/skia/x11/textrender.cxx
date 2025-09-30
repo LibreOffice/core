@@ -39,6 +39,7 @@
 #include <SkFont.h>
 #include <SkFontMgr_fontconfig.h>
 #include <SkFontTypes.h>
+#include <SkFontScanner_FreeType.h>
 
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
@@ -60,7 +61,8 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     if (!fontManager)
     {
         // Get the global FcConfig that our VCL fontconfig code uses, and refcount it.
-        fontManager = SkFontMgr_New_FontConfig(FcConfigReference(nullptr));
+        fontManager
+            = SkFontMgr_New_FontConfig(FcConfigReference(nullptr), SkFontScanner_Make_FreeType());
     }
     sk_sp<SkTypeface> typeface
         = SkFontMgr_createTypefaceFromFcPattern(fontManager, rFont.GetFontOptions()->GetPattern());

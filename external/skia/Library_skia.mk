@@ -163,7 +163,6 @@ endif
 ifneq ($(filter-out WNT MACOSX,$(OS)),)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig \
-    UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig_freetype \
 ))
 endif
 
@@ -486,6 +485,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPathBuilder \
     UnpackedTarball/skia/src/core/SkPathEffect \
     UnpackedTarball/skia/src/core/SkPathMeasure \
+    UnpackedTarball/skia/src/core/SkPathPriv \
+    UnpackedTarball/skia/src/core/SkPathRaw \
+    UnpackedTarball/skia/src/core/SkPathRawShapes \
     UnpackedTarball/skia/src/core/SkPathRef \
     UnpackedTarball/skia/src/core/SkPathUtils \
     UnpackedTarball/skia/src/core/SkPath_serial \
@@ -591,38 +593,38 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 # from file skia/gn/core.gni:667, target "skia_pathops_sources"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/modules/pathops/src/SkAddIntersections \
-    UnpackedTarball/skia/modules/pathops/src/SkDConicLineIntersection \
-    UnpackedTarball/skia/modules/pathops/src/SkDCubicLineIntersection \
-    UnpackedTarball/skia/modules/pathops/src/SkDCubicToQuads \
-    UnpackedTarball/skia/modules/pathops/src/SkDLineIntersection \
-    UnpackedTarball/skia/modules/pathops/src/SkDQuadLineIntersection \
-    UnpackedTarball/skia/modules/pathops/src/SkIntersections \
-    UnpackedTarball/skia/modules/pathops/src/SkOpAngle \
-    UnpackedTarball/skia/modules/pathops/src/SkOpBuilder \
-    UnpackedTarball/skia/modules/pathops/src/SkOpCoincidence \
-    UnpackedTarball/skia/modules/pathops/src/SkOpContour \
-    UnpackedTarball/skia/modules/pathops/src/SkOpCubicHull \
-    UnpackedTarball/skia/modules/pathops/src/SkOpEdgeBuilder \
-    UnpackedTarball/skia/modules/pathops/src/SkOpSegment \
-    UnpackedTarball/skia/modules/pathops/src/SkOpSpan \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsAsWinding \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsCommon \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsConic \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsCubic \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsCurve \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsDebug \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsLine \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsOp \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsQuad \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsRect \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsSimplify \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsTSect \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsTightBounds \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsTypes \
-    UnpackedTarball/skia/modules/pathops/src/SkPathOpsWinding \
-    UnpackedTarball/skia/modules/pathops/src/SkPathWriter \
-    UnpackedTarball/skia/modules/pathops/src/SkReduceOrder \
+    UnpackedTarball/skia/src/pathops/SkAddIntersections \
+    UnpackedTarball/skia/src/pathops/SkDConicLineIntersection \
+    UnpackedTarball/skia/src/pathops/SkDCubicLineIntersection \
+    UnpackedTarball/skia/src/pathops/SkDCubicToQuads \
+    UnpackedTarball/skia/src/pathops/SkDLineIntersection \
+    UnpackedTarball/skia/src/pathops/SkDQuadLineIntersection \
+    UnpackedTarball/skia/src/pathops/SkIntersections \
+    UnpackedTarball/skia/src/pathops/SkOpAngle \
+    UnpackedTarball/skia/src/pathops/SkOpBuilder \
+    UnpackedTarball/skia/src/pathops/SkOpCoincidence \
+    UnpackedTarball/skia/src/pathops/SkOpContour \
+    UnpackedTarball/skia/src/pathops/SkOpCubicHull \
+    UnpackedTarball/skia/src/pathops/SkOpEdgeBuilder \
+    UnpackedTarball/skia/src/pathops/SkOpSegment \
+    UnpackedTarball/skia/src/pathops/SkOpSpan \
+    UnpackedTarball/skia/src/pathops/SkPathOpsAsWinding \
+    UnpackedTarball/skia/src/pathops/SkPathOpsCommon \
+    UnpackedTarball/skia/src/pathops/SkPathOpsConic \
+    UnpackedTarball/skia/src/pathops/SkPathOpsCubic \
+    UnpackedTarball/skia/src/pathops/SkPathOpsCurve \
+    UnpackedTarball/skia/src/pathops/SkPathOpsDebug \
+    UnpackedTarball/skia/src/pathops/SkPathOpsLine \
+    UnpackedTarball/skia/src/pathops/SkPathOpsOp \
+    UnpackedTarball/skia/src/pathops/SkPathOpsQuad \
+    UnpackedTarball/skia/src/pathops/SkPathOpsRect \
+    UnpackedTarball/skia/src/pathops/SkPathOpsSimplify \
+    UnpackedTarball/skia/src/pathops/SkPathOpsTSect \
+    UnpackedTarball/skia/src/pathops/SkPathOpsTightBounds \
+    UnpackedTarball/skia/src/pathops/SkPathOpsTypes \
+    UnpackedTarball/skia/src/pathops/SkPathOpsWinding \
+    UnpackedTarball/skia/src/pathops/SkPathWriter \
+    UnpackedTarball/skia/src/pathops/SkReduceOrder \
 ))
 
 # from file skia/gn/core.gni:736, target "skia_skpicture_sources"
