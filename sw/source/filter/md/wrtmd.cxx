@@ -107,6 +107,8 @@ struct FormattingStatus
     std::unordered_map<OUString, int> aHyperlinkChanges;
     std::unordered_map<const SwRangeRedline*, int> aRedlineChanges;
     std::set<SwMDImageInfo> aImages;
+    // Checked/unchecked -> increment (1 or -1) map.
+    std::unordered_map<bool, int> aTaskListItemChanges;
 };
 
 // This is a vector of positions in the node text, where objects of class T start or end.
@@ -255,6 +257,21 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             rChange.aImages.emplace(aGraphicURL, aTitle, aDescription, aLink);
             break;
         }
+        case RES_TXTATR_CONTENTCONTROL:
+        {
+            // Content control.
+            const SwFormatContentControl& rFormatContentControl
+                = rItem.StaticWhichCast(RES_TXTATR_CONTENTCONTROL);
+            const std::shared_ptr<SwContentControl>& pContentControl
+                = rFormatContentControl.GetContentControl();
+            if (pContentControl->GetType() != SwContentControlType::CHECKBOX)
+            {
+                break;
+            }
+
+            rChange.aTaskListItemChanges[pContentControl->GetChecked()] += increment;
+            break;
+        }
     }
 }
 
@@ -334,6 +351,14 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
     if (ShouldCloseIt(current.nWeightChange, result.nWeightChange))
         rWrt.Strm().WriteUnicodeOrByteText(u"**");
 
+    for (const auto & [ bChecked, nCurr ] : result.aTaskListItemChanges)
+    {
+        if (ShouldCloseIt(current.aTaskListItemChanges[bChecked], nCurr))
+        {
+            rWrt.SetTaskListItems(rWrt.GetTaskListItems() - 1);
+        }
+    }
+
     for (const auto & [ url, curr ] : result.aHyperlinkChanges)
     {
         if (ShouldCloseIt(current.aHyperlinkChanges[url], curr))
@@ -403,6 +428,25 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
         if (ShouldOpenIt(current.aHyperlinkChanges[url], curr))
         {
             rWrt.Strm().WriteUnicodeOrByteText(u"[");
+        }
+    }
+
+    // Task list items: write the complete markup on start.
+    for (const auto & [ bChecked, nCurr ] : result.aTaskListItemChanges)
+    {
+        if (ShouldOpenIt(current.aTaskListItemChanges[bChecked], nCurr))
+        {
+            rWrt.Strm().WriteUnicodeOrByteText(u"[");
+            if (bChecked)
+            {
+                rWrt.Strm().WriteUnicodeOrByteText(u"x");
+            }
+            else
+            {
+                rWrt.Strm().WriteUnicodeOrByteText(u" ");
+            }
+            rWrt.Strm().WriteUnicodeOrByteText(u"]");
+            rWrt.SetTaskListItems(rWrt.GetTaskListItems() + 1);
         }
     }
 
@@ -706,7 +750,12 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             // 2. Escape and output the character. This relies on hints not appearing in the middle of
             // a surrogate pair.
             sal_Int32 nEndOfChunk = positions.getEndOfCurrent(nEnd);
-            OutEscapedChars(rWrt, rNodeText.subView(nStrPos, nEndOfChunk - nStrPos));
+            // If we're inside a task list item, then only write the markup, not the generated
+            // content.
+            if (!rWrt.GetTaskListItems())
+            {
+                OutEscapedChars(rWrt, rNodeText.subView(nStrPos, nEndOfChunk - nStrPos));
+            }
             nStrPos = nEndOfChunk;
         }
         assert(positions.hintStarts.current() == nullptr);
