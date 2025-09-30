@@ -19,8 +19,9 @@
 
 #if HAVE_FEATURE_PDFIMPORT
 
-#include <vcl/embeddedfontsmanager.hxx>
 #include <osl/file.hxx>
+#include <rtl/strbuf.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include "afdko.hxx"
 
 static bool convertTx(txCtx h)
@@ -150,11 +151,18 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
         return false;
 
     OString cidFontInfoPathA(cidFontInfoPath.toUtf8());
+    OString destFilePathA(destFilePath.toUtf8());
+
+    OStringBuffer aBuffer;
+    for (const auto& path : paths)
+        aBuffer.append(" "_ostr + path);
+    SAL_INFO("vcl.fonts",
+             "mergefonts -cid " << cidFontInfoPathA << " " << destFilePathA << aBuffer.toString());
+
     readCIDFontInfo(h, const_cast<char*>(cidFontInfoPathA.getStr()));
 
     setMode(h, mode_cff);
 
-    OString destFilePathA(destFilePath.toUtf8());
     dstFileSetName(h, const_cast<char*>(destFilePathA.getStr()));
     h->cfw.flags |= CFW_CHECK_IF_GLYPHS_DIFFER;
     h->cfw.flags |= CFW_PRESERVE_GLYPH_ORDER;
