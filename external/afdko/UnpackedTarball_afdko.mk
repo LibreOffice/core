@@ -17,6 +17,9 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,afdko,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,afdko,1))
 
+# mergeFonts_crash.patch upstream attempt as:
+# https://github.com/adobe-type-tools/afdko/pull/1806
+
 $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/extern_tx.patch \
     external/afdko/extern_tx_shared.patch \
@@ -24,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/extern_makeotf.patch \
     external/afdko/warnings.patch \
     external/afdko/antlr4-chrono.patch \
+    external/afdko/mergeFonts_crash.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
