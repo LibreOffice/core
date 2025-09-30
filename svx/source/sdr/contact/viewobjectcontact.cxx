@@ -170,10 +170,7 @@ ViewObjectContact::~ViewObjectContact()
     if (!maObjectRange.isEmpty())
     {
         // invalidate in view
-        if(!getObjectRange().isEmpty())
-        {
-            GetObjectContact().InvalidatePartOfView(maObjectRange);
-        }
+        GetObjectContact().InvalidatePartOfView(maObjectRange);
     }
 
     // delete PrimitiveAnimation
