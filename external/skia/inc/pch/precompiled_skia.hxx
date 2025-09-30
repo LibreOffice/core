@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2025-07-04 22:59:10 using:
+ Generated on 2025-09-30 11:36:30 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -197,6 +197,7 @@
 #include <include/encode/SkICC.h>
 #include <include/encode/SkPngEncoder.h>
 #include <include/gpu/ganesh/GrDirectContext.h>
+#include <include/pathops/SkPathOps.h>
 #include <include/private/SkEncodedInfo.h>
 #include <include/private/SkExif.h>
 #include <include/private/SkGainmapInfo.h>
@@ -249,32 +250,6 @@
 #include <include/utils/SkShadowUtils.h>
 #include <include/utils/SkTextUtils.h>
 #include <include/utils/SkTraceEventPhase.h>
-#include <modules/pathops/include/SkPathOps.h>
-#include <modules/pathops/src/SkAddIntersections.h>
-#include <modules/pathops/src/SkIntersectionHelper.h>
-#include <modules/pathops/src/SkIntersections.h>
-#include <modules/pathops/src/SkLineParameters.h>
-#include <modules/pathops/src/SkOpAngle.h>
-#include <modules/pathops/src/SkOpCoincidence.h>
-#include <modules/pathops/src/SkOpContour.h>
-#include <modules/pathops/src/SkOpEdgeBuilder.h>
-#include <modules/pathops/src/SkOpSegment.h>
-#include <modules/pathops/src/SkOpSpan.h>
-#include <modules/pathops/src/SkPathOpsBounds.h>
-#include <modules/pathops/src/SkPathOpsCommon.h>
-#include <modules/pathops/src/SkPathOpsConic.h>
-#include <modules/pathops/src/SkPathOpsCubic.h>
-#include <modules/pathops/src/SkPathOpsCurve.h>
-#include <modules/pathops/src/SkPathOpsDebug.h>
-#include <modules/pathops/src/SkPathOpsLine.h>
-#include <modules/pathops/src/SkPathOpsPoint.h>
-#include <modules/pathops/src/SkPathOpsQuad.h>
-#include <modules/pathops/src/SkPathOpsRect.h>
-#include <modules/pathops/src/SkPathOpsTCurve.h>
-#include <modules/pathops/src/SkPathOpsTSect.h>
-#include <modules/pathops/src/SkPathOpsTypes.h>
-#include <modules/pathops/src/SkPathWriter.h>
-#include <modules/pathops/src/SkReduceOrder.h>
 #include <modules/skcms/skcms.h>
 #include <src/base/SkArenaAlloc.h>
 #include <src/base/SkAutoMalloc.h>
@@ -429,6 +404,7 @@
 #include <src/core/SkPathMakers.h>
 #include <src/core/SkPathMeasurePriv.h>
 #include <src/core/SkPathPriv.h>
+#include <src/core/SkPathRawShapes.h>
 #include <src/core/SkPictureData.h>
 #include <src/core/SkPictureFlat.h>
 #include <src/core/SkPicturePlayback.h>
@@ -526,6 +502,31 @@
 #include <src/image/SkSurface_Base.h>
 #include <src/image/SkSurface_Raster.h>
 #include <src/lazy/SkDiscardableMemoryPool.h>
+#include <src/pathops/SkAddIntersections.h>
+#include <src/pathops/SkIntersectionHelper.h>
+#include <src/pathops/SkIntersections.h>
+#include <src/pathops/SkLineParameters.h>
+#include <src/pathops/SkOpAngle.h>
+#include <src/pathops/SkOpCoincidence.h>
+#include <src/pathops/SkOpContour.h>
+#include <src/pathops/SkOpEdgeBuilder.h>
+#include <src/pathops/SkOpSegment.h>
+#include <src/pathops/SkOpSpan.h>
+#include <src/pathops/SkPathOpsBounds.h>
+#include <src/pathops/SkPathOpsCommon.h>
+#include <src/pathops/SkPathOpsConic.h>
+#include <src/pathops/SkPathOpsCubic.h>
+#include <src/pathops/SkPathOpsCurve.h>
+#include <src/pathops/SkPathOpsDebug.h>
+#include <src/pathops/SkPathOpsLine.h>
+#include <src/pathops/SkPathOpsPoint.h>
+#include <src/pathops/SkPathOpsQuad.h>
+#include <src/pathops/SkPathOpsRect.h>
+#include <src/pathops/SkPathOpsTCurve.h>
+#include <src/pathops/SkPathOpsTSect.h>
+#include <src/pathops/SkPathOpsTypes.h>
+#include <src/pathops/SkPathWriter.h>
+#include <src/pathops/SkReduceOrder.h>
 #include <src/ports/SkTypeface_proxy.h>
 #include <src/sfnt/SkOTTableTypes.h>
 #include <src/sfnt/SkOTTable_OS_2.h>
