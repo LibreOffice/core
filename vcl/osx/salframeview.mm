@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
@@ -363,7 +364,21 @@ static NSString* getCurrentSelection()
                     {
                         css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY);
                         if (xTextRange.is())
-                            return [CreateNSString(xTextRange->getString()) autorelease];
+                        {
+                            // tdf#168609 catch exceptions from SwXText::getString()
+                            // Apparently, implementions of XTextRange::getString()
+                            // such as SwXText::getString() can throw an exception.
+                            OUString aStr;
+                            try
+                            {
+                                aStr = xTextRange->getString();
+                            }
+                            catch (css::uno::RuntimeException &)
+                            {
+                                TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
+                            }
+                            return [CreateNSString(aStr) autorelease];
+                        }
                     }
                 }
 
@@ -382,7 +397,21 @@ static NSString* getCurrentSelection()
                 // and Impress
                 css::uno::Reference<css::text::XTextRange> xTextRange(xSelection, css::uno::UNO_QUERY);
                 if (xTextRange.is())
-                    return [CreateNSString(xTextRange->getString()) autorelease];
+                {
+                    // tdf#168609 catch exceptions from SwXText::getString()
+                    // Apparently, implementions of XTextRange::getString()
+                    // such as SwXText::getString() can throw an exception.
+                    OUString aStr;
+                    try
+                    {
+                        aStr = xTextRange->getString();
+                    }
+                    catch (css::uno::RuntimeException &)
+                    {
+                        TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
+                    }
+                    return [CreateNSString(aStr) autorelease];
+                }
             }
         }
     }
