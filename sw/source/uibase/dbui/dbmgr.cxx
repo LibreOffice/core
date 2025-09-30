@@ -543,10 +543,12 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     switch(rMergeDesc.nMergeType)
     {
         case DBMGR_MERGE:
+            pWorkShell->LockPaint(LockPaintReason::InvalidateLayout);
             pWorkShell->StartAllAction();
             pWorkShell->SwViewShell::UpdateFields( true );
             pWorkShell->SetModified();
             pWorkShell->EndAllAction();
+            pWorkShell->UnlockPaint();
             break;
 
         case DBMGR_MERGE_PRINTER:
