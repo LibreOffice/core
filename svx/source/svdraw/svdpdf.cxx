@@ -1002,6 +1002,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     OUString toMergedMapUrl = fileUrl + u".tomergedmap";
 
     OString version, Notice, FullName, FamilyName, CIDFontName, CIDFontVersion, srcFontType;
+    OString brokenFontName;
     FontName = postScriptName.toUtf8();
     std::map<sal_Int32, OString> glyphIndexToName;
 
@@ -1021,7 +1022,6 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         return false;
     }
     SAL_INFO("sd.filter", "dump success");
-    bool bBrokenFontName(false);
     SvFileStream info(infoUrl, StreamMode::READ);
     OStringBuffer glyphBuffer;
     OString sLine;
@@ -1043,10 +1043,14 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
             continue;
         if (extractEntry(sLine, "FontName", FontName))
         {
-            bBrokenFontName = FontName != postScriptName.toUtf8();
-            SAL_WARN_IF(bBrokenFontName, "sd.filter",
-                        "expected that FontName of <" << FontName << "> matches PostScriptName of <"
-                                                      << postScriptName << ">");
+            const bool bBrokenFontName = FontName != postScriptName.toUtf8();
+            if (bBrokenFontName)
+            {
+                SAL_WARN("sd.filter", "expected that FontName of <"
+                                          << FontName << "> matches PostScriptName of <"
+                                          << postScriptName << ">");
+                brokenFontName = FontName;
+            }
             continue;
         }
         if (extractEntry(sLine, "cid.CIDFontName", CIDFontName))
@@ -1105,6 +1109,9 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
 
     if (version.isEmpty())
         version = CIDFontVersion;
+
+    if (!brokenFontName.isEmpty())
+        FontName = postScriptName.toUtf8();
 
     // Always create cidFontInfo, we will need it if we need to merge fonts
     OString AdobeCopyright, Trademark;
@@ -1170,8 +1177,8 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         }
     }
 
-    if (bBrokenFontName)
-        rewriteBrokenFontName(FontName, CIDFontName, postScriptName.toUtf8(), pfaCIDUrl);
+    if (!brokenFontName.isEmpty())
+        rewriteBrokenFontName(brokenFontName, CIDFontName, FontName, pfaCIDUrl);
 
     return true;
 }
