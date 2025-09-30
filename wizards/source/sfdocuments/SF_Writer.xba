@@ -1047,7 +1047,7 @@ Dim i As Long
 				End Select
 
 			&apos;	Body
-			Case oStr.IsRegex(psTextRange, &quot;\|0\s*?BODY\s*\|?&quot;)
+			Case oStr.IsRegex(psTextRange, &quot;\|?\s*BODY\s*\|?&quot;)
 				Set .Text = _Component.Text
 				Set .Anchor = .Text.Start
 				Set .Cursor = .Text.createTextCursor()
