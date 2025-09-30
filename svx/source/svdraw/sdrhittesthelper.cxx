@@ -122,50 +122,50 @@ bool ViewObjectContactPrimitiveHit(
 {
     basegfx::B2DRange aObjectRange(rVOC.getObjectRange());
 
-    if(!aObjectRange.isEmpty())
+    if(aObjectRange.isEmpty())
+        return false;
+
+    // first do a rough B2DRange based HitTest; do not forget to
+    // include the HitTolerance if given
+    if(rLogicHitTolerance.getX() > 0 || rLogicHitTolerance.getY() > 0)
     {
-        // first do a rough B2DRange based HitTest; do not forget to
-        // include the HitTolerance if given
-        if(rLogicHitTolerance.getX() > 0 || rLogicHitTolerance.getY() > 0)
-        {
-            aObjectRange.grow(rLogicHitTolerance);
-        }
+        aObjectRange.grow(rLogicHitTolerance);
+    }
 
-        if(aObjectRange.isInside(rHitPosition))
-        {
-            // get primitive sequence
-            sdr::contact::DisplayInfo aDisplayInfo;
-            // have to make a copy of this container here, because it might be changed underneath us
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
+    if(!aObjectRange.isInside(rHitPosition))
+        return false;
 
-            if(!aSequence.empty())
+    // get primitive sequence
+    sdr::contact::DisplayInfo aDisplayInfo;
+    // have to make a copy of this container here, because it might be changed underneath us
+    const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
+
+    if(!aSequence.empty())
+    {
+        // create a HitTest processor
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D = rVOC.GetObjectContact().getViewInformation2D();
+        drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
+            rViewInformation2D,
+            rHitPosition,
+            rLogicHitTolerance,
+            bTextOnly);
+
+        // ask for HitStack
+        aHitTestProcessor2D.collectHitStack(pHitContainer != nullptr);
+
+        // feed it with the primitives
+        aHitTestProcessor2D.process(aSequence);
+
+        // deliver result
+        if (aHitTestProcessor2D.getHit())
+        {
+            if (pHitContainer)
             {
-                // create a HitTest processor
-                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D = rVOC.GetObjectContact().getViewInformation2D();
-                drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
-                    rViewInformation2D,
-                    rHitPosition,
-                    rLogicHitTolerance,
-                    bTextOnly);
-
-                // ask for HitStack
-                aHitTestProcessor2D.collectHitStack(pHitContainer != nullptr);
-
-                // feed it with the primitives
-                aHitTestProcessor2D.process(aSequence);
-
-                // deliver result
-                if (aHitTestProcessor2D.getHit())
-                {
-                    if (pHitContainer)
-                    {
-                        // fetch HitStack primitives if requested
-                        *pHitContainer = aHitTestProcessor2D.getHitStack();
-                    }
-
-                    return true;
-                }
+                // fetch HitStack primitives if requested
+                *pHitContainer = aHitTestProcessor2D.getHitStack();
             }
+
+            return true;
         }
     }
 
