@@ -1001,7 +1001,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     OUString nameToCIDMapUrl = fileUrl + u".nametocidmap";
     OUString toMergedMapUrl = fileUrl + u".tomergedmap";
 
-    OString version, Notice, FullName, FamilyName, CIDFontName, srcFontType;
+    OString version, Notice, FullName, FamilyName, CIDFontName, CIDFontVersion, srcFontType;
     FontName = postScriptName.toUtf8();
     std::map<sal_Int32, OString> glyphIndexToName;
 
@@ -1028,6 +1028,8 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     while (info.ReadLine(sLine))
     {
         if (extractEntry(sLine, "version", version))
+            continue;
+        if (extractEntry(sLine, "cid.CIDFontVersion", CIDFontVersion))
             continue;
         if (extractEntry(sLine, "Notice", Notice))
             continue;
@@ -1098,7 +1100,11 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         }
     }
     SAL_INFO("sd.filter", "details are: " << version << Notice << FullName << FamilyName << Weight
-                                          << srcFontType << FontName);
+                                          << srcFontType << FontName << CIDFontName
+                                          << CIDFontVersion);
+
+    if (version.isEmpty())
+        version = CIDFontVersion;
 
     // Always create cidFontInfo, we will need it if we need to merge fonts
     OString AdobeCopyright, Trademark;
