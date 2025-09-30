@@ -952,8 +952,8 @@ static bool isSimpleFamilyName(std::string_view Weight)
            || Weight == "BoldItalic";
 }
 
-static void rewriteBrokenFontName(std::string_view brokenName, std::string_view fixedName,
-                                  const OUString& pfaCIDUrl)
+static void rewriteBrokenFontName(std::string_view brokenName, std::string_view brokenCIDName,
+                                  std::string_view fixedName, const OUString& pfaCIDUrl)
 {
     OUString oldCIDUrl = pfaCIDUrl + ".broken";
     if (osl::File::move(pfaCIDUrl, oldCIDUrl) != osl::File::E_None)
@@ -962,17 +962,25 @@ static void rewriteBrokenFontName(std::string_view brokenName, std::string_view 
         return;
     }
 
-    const OString sBrokenLine = "/FontName /"_ostr + brokenName + " def"_ostr;
-    const OString sFixedLine = "/FontName /"_ostr + fixedName + " def"_ostr;
+    const OString sBrokenFontLine = "/FontName /"_ostr + brokenName + " def"_ostr;
+    const OString sFixedFontLine = "/FontName /"_ostr + fixedName + " def"_ostr;
+
+    const OString sBrokenCIDFontLine = "/CIDFontName /"_ostr + brokenCIDName + " def"_ostr;
+    const OString sFixedCIDFontLine = "/CIDFontName /"_ostr + fixedName + " def"_ostr;
 
     SvFileStream input(oldCIDUrl, StreamMode::READ);
     SvFileStream output(pfaCIDUrl, StreamMode::WRITE | StreamMode::TRUNC);
     OString sLine;
     while (input.ReadLine(sLine))
     {
-        if (sLine == sBrokenLine)
+        if (sLine == sBrokenFontLine)
         {
-            output.WriteLine(sFixedLine);
+            output.WriteLine(sFixedFontLine);
+            continue;
+        }
+        else if (sLine == sBrokenCIDFontLine)
+        {
+            output.WriteLine(sFixedCIDFontLine);
             continue;
         }
         output.WriteLine(sLine);
@@ -993,7 +1001,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     OUString nameToCIDMapUrl = fileUrl + u".nametocidmap";
     OUString toMergedMapUrl = fileUrl + u".tomergedmap";
 
-    OString version, Notice, FullName, FamilyName, srcFontType;
+    OString version, Notice, FullName, FamilyName, CIDFontName, srcFontType;
     FontName = postScriptName.toUtf8();
     std::map<sal_Int32, OString> glyphIndexToName;
 
@@ -1037,6 +1045,14 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
             SAL_WARN_IF(bBrokenFontName, "sd.filter",
                         "expected that FontName of <" << FontName << "> matches PostScriptName of <"
                                                       << postScriptName << ">");
+            continue;
+        }
+        if (extractEntry(sLine, "cid.CIDFontName", CIDFontName))
+        {
+            SAL_WARN_IF(CIDFontName != postScriptName.toUtf8(), "sd.filter",
+                        "expected that cid.CIDFontName of <"
+                            << CIDFontName << "> matches PostScriptName of <" << postScriptName
+                            << ">");
             continue;
         }
         if (sLine.startsWith("glyph["))
@@ -1149,7 +1165,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     }
 
     if (bBrokenFontName)
-        rewriteBrokenFontName(FontName, postScriptName.toUtf8(), pfaCIDUrl);
+        rewriteBrokenFontName(FontName, CIDFontName, postScriptName.toUtf8(), pfaCIDUrl);
 
     return true;
 }
