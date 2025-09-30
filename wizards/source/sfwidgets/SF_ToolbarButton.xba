@@ -400,19 +400,33 @@ Dim oRect As Object							&apos;	Return value As com.sun.star.awt.Rectangle
 Try:
 	Set oElement = _Element.GetSettings(True).getByIndex(_Index)
 	Set oRect = CreateUnoStruct(&quot;com.sun.star.awt.Rectangle&quot;)
+
+	&apos;	The button must be visible
 	If ScriptForge.SF_Utils._GetPropertyValue(oElement, &quot;IsVisible&quot;) Then
-		Set oAccessible = _Element.getRealInterface().getAccessibleContext()	&apos;	Toolbar level
+		Set oAccessible = [_Parent]._GetAccessibleContext(_Element)				&apos;	Toolbar level
 		Set oAccessibleParent = oAccessible.getAccessibleParent()				&apos;	Window level
 		Set oAccessibleButton = oAccessible.getAccessibleChild(_Index)			&apos;	Toolbar button level
+
 		&apos;	The X and Y coordinates are always computed correctly when the toolbar is docked.
 		&apos;	When the toolbar is floating, the Y ordinate may be overestimated with the height of
-		&apos;	the tabbed bar or similar. However no mean has been found to get that height via code.
+		&apos;	the tabbed bar. However no mean has been found to get that height via code.
 		With oRect
-			.X = oAccessible.Location.X + oAccessibleButton.Location.X + oAccessibleParent.PosSize.X
-			.Y = oAccessible.Location.Y + oAccessibleButton.Location.Y + oAccessibleParent.PosSize.Y
-			.Height = oAccessibleButton.Size.Height
-			.Width = oAccessibleButton.Size.Width
+			&apos;	See bug https://bugs.documentfoundation.org/show_bug.cgi?id=168409
+			&apos;	Finding the button coordinates is release-dependent due to phase-out of unpublished API
+			Select case ScriptForge.SF_Platform._GetProductName(True)	&apos;	Get a sortable release number
+				Case &lt;= 25.8
+					.X = oAccessible.Location.X + oAccessibleButton.Location.X + oAccessibleParent.PosSize.X
+					.Y = oAccessible.Location.Y + oAccessibleButton.Location.Y + oAccessibleParent.PosSize.Y
+				Case Else		&apos;	&gt;= 26.2
+					.X = oAccessible.LocationOnScreen.X + oAccessibleButton.Location.X - oAccessibleParent.LocationOnScreen.X
+					.Y = oAccessible.LocationOnScreen.Y + oAccessibleButton.Location.Y - oAccessibleParent.LocationOnScreen.Y
+			End Select
+			If _Height = 0 Then _Height = oAccessibleButton.Size.Height
+			.Height = _Height
+			If _Width = 0 Then _Width = oAccessibleButton.Size.Width
+			.Width = _Width
 		End With
+
 	Else
 		With oRect
 			.X = -1	:	.Y = -1	:	.Height = 0	:	.Width = 0

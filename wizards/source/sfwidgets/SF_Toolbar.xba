@@ -67,7 +67,7 @@ Private _Component				As Object		&apos; com.sun.star.lang.XComponent
 Private _ResourceURL			As String		&apos; Toolbar internal name
 Private _UIName					As String		&apos; Toolbar external name, may be &quot;&quot;
 Private _UIConfigurationManager	As Object		&apos; com.sun.star.ui.XUIConfigurationManager
-Private _ElementsInfoIndex		As Long			&apos; Index of the toolbar in the getElementsInfo(0) array
+Private _ElementsInfoIndex		As Long			&apos; Index of the toolbar in the UIConfigurationManager.getElementsInfo(0) array
 Private _Storage				As Long			&apos; One of the toolbar location constants
 Private _LayoutManager			As Object		&apos; com.sun.star.comp.framework.LayoutManager
 
@@ -342,8 +342,8 @@ REM =========================================================== PRIVATE FUNCTION
 REM -----------------------------------------------------------------------------
 Private Sub _CollectAllButtons()
 &apos;&apos;&apos;	Stores a SF_Dictionary object instance, with
-&apos;&apos;&apos;	- key = name of the button
-&apos;&apos;&apos;	- item = a _ButtonDesc object type
+&apos;&apos;&apos;		- key = name of the button
+&apos;&apos;&apos;		- item = a _ButtonDesc object type
 &apos;&apos;&apos;	into _ToolbarButtons, a cache for all buttons.
 &apos;&apos;&apos;	The toolbar is made visible before collecting the buttons.
 &apos;&apos;&apos;
@@ -358,6 +358,7 @@ Dim oElement As Object				&apos;	com.sun.star.ui.XUIElement
 Dim oSettings As Object				&apos;	com.sun.star.container.XIndexAccess
 Dim vProperties() As Variant		&apos;	Array of property values
 Dim iType As Integer				&apos;	Separators have type = 1, others have Type = 0
+Dim oAccessibleContext As Object	&apos;	Toolbar&apos;s com.sun.star.accessibility.XAccessibleContext
 Dim oAccessible As Object			&apos;	com.sun.star.accessibility.XAccessible
 Dim sLabel As String				&apos;	Label in static description
 Dim sAccessibleName As String		&apos;	Name in AccessibleContext
@@ -373,7 +374,15 @@ Try:
 	Visible = True
 
 	Set _ToolbarButtons = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)	&apos;	with case-sensitive comparison of keys
+
+	&apos;	Find the com.sun.star.ui.XUIElement of the toolbar
 	Set oElement = _LayoutManager.getElement(_ResourceURL)
+
+	&apos;	Determine the accessible context of the toolbar
+	Set oAccessibleContext = _GetAccessibleContext(oElement)
+	If IsNull(oAccessibleContext) Then GoTo Catch
+
+	&apos;	The settings contain the info that we need
 	Set oSettings = oElement.getSettings(True)
 
 	With oSettings
@@ -383,7 +392,7 @@ Try:
 			If iType = 0 Then		&apos;	Usual button
 				sLabel = ScriptForge.SF_Utils._GetPropertyValue(vProperties, &quot;Label&quot;)
 				If Len(sLabel) = 0 Then
-					Set oAccessible = oElement.RealInterface.AccessibleContext.getAccessibleChild(i)
+					Set oAccessible = oAccessibleContext.getAccessibleChild(i)
 					sAccessibleName = oAccessible.AccessibleName
 				Else
 					sAccessibleName = &quot;&quot;
@@ -415,11 +424,62 @@ Catch:
 End Sub			&apos;	SFWidgets.SF_Toolbar._CollectAllButtons
 
 REM -----------------------------------------------------------------------------
+Public Function _GetAccessibleContext(poElement As Object) As Object
+&apos;&apos;&apos;	Determine the accessible context of the toolbar
+&apos;&apos;&apos;		See bug https://bugs.documentfoundation.org/show_bug.cgi?id=168409
+&apos;&apos;&apos;		Finding the accessible context is release-dependent due to phase-out of unpublished API
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poElement: the com.sun.star.ui.XUIElement describing the toolbar
+
+Dim dVersion As Single				&apos;	LibreOffice release number
+Dim oElement As Object				&apos;	com.sun.star.ui.XUIElement
+Dim bFloating As Boolean			&apos;	True when poElement is not docked
+Dim lIndex As Long					&apos;	Index of the toolbar in the LayoutManager.getElements array
+Dim oAccessibleContext As Object	&apos;	Toolbar&apos;s com.sun.star.accessibility.XAccessibleContext
+
+Check:
+	On Local Error GoTo Catch
+	Set oAccessibleContext = Nothing
+	If IsNull(poElement) Then GoTo Catch
+
+Try:
+	dVersion = ScriptForge.SF_Platform._GetProductName(True)	&apos;	Get a sortable release number
+
+	With poElement.RealInterface
+		Select Case dVersion
+			Case &lt;= 25.2	:	Set oAccessibleContext = .AccessibleContext
+			Case 25.8
+				&apos;	Find the com.sun.star.ui.XUIElement of the toolbar and its index in the list
+				lIndex = -1
+				bFloating = poElement.RealInterface.isFloating()
+				For Each oElement In _LayoutManager.getElements()
+					&apos;	When undocked, count undocked elements only, otherwise count all elements
+					If bFloating Then
+						If oElement.RealInterface.isFloating() Then lIndex = lIndex + 1
+					Else
+						lIndex = lIndex + 1
+					End If
+					If oElement.ResourceURL = _ResourceURL Then Exit For
+				Next oElement
+				Set oAccessibleContext = .AccessibleContext.AccessibleParent.AccessibleContext.getAccessibleChild(lIndex)
+			Case &gt;= 26.2	:	Set oAccessibleContext = .getProperty(&quot;XAccessible&quot;)
+			Case Else		:	GoTo Catch
+		End Select
+	End With
+
+Finally:
+	Set _GetAccessibleContext = oAccessibleContext
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	&apos;	SFWidgets.SF_Toolbar._GetAccessibleContext
+
+REM -----------------------------------------------------------------------------
 Public Sub _Initialize(ByRef poToolbar As Object)
 &apos;&apos;&apos;	Complete the object creation process:
 &apos;&apos;&apos;		- Initialize the toolbar descriptioner use
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		poToolbar: the toolbar description as a ui._Toolbr object
+&apos;&apos;&apos;		poToolbar: the toolbar description as a ui._Toolbar object
 
 Try:
 	&apos;	Store the static description

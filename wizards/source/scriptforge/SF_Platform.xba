@@ -347,26 +347,40 @@ Catch:
 End Function	&apos;	ScriptForge.SF_Platform._GetPrinters
 
 REM -----------------------------------------------------------------------------
-Public Function _GetProductName() as String
-&apos;&apos;&apos;	Returns Office product and version numbers found in configuration registry
+Public Function _GetProductName(Optional ByVal pvNumber As Variant) as Variant
+&apos;&apos;&apos;	Returns Office product and version numbers found in configuration registry as a string,
+&apos;&apos;&apos;	or the version number only, as a Single
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pvNumber: when True (default = False), returns the version number as a Single.
+&apos;&apos;&apos;				  For internal use only.
+&apos;&apos;&apos;	
 &apos;&apos;&apos;	Derived from the Tools library
 
 Dim oProdNameAccess as Object		&apos;	configmgr.RootAccess
 Dim sProdName as String
 Dim sVersion as String
+Dim sngVersion As Single
+Dim vVersion As Variant				&apos;	Array of version subcomponents
+Dim sDecimalPoint As String
 Dim sVendor As String
 
 	On Local Error GoTo Catch	&apos;	Prevent any error
+	If IsMissing(pvNumber) Or IsEmpty(pvNumber) Then pvNumber = False
 	_GetProductName = &quot;&quot;
 
 Try:
 	Set oProdNameAccess = SF_Utils._GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
 
-	sProdName = oProdNameAccess.ooName
-	sVersion = oProdNameAccess.ooSetupVersionAboutBox
-	sVendor = oProdNameAccess.ooVendor
-
-	_GetProductName = sProdName &amp; &quot; &quot; &amp; sVersion &amp; &quot; (&quot; &amp; sVendor &amp; &quot;)&quot;
+	If pvNumber Then	&apos;	Return the version number
+		vVersion = Split(oProdNameAccess.ooSetupVersionAboutBox, &quot;.&quot;)
+		sDecimalPoint = Mid(CStr(1.2), 2, 1)
+		If UBound(vVersion) &gt; 0 Then _GetProductName = CSng(vVersion(0) &amp; sDecimalPoint &amp; vVersion(1)) Else _GetProductName = CSng(0.0)
+	Else				&apos;	Return the verbose version string
+		sProdName = oProdNameAccess.ooName
+		sVersion = oProdNameAccess.ooSetupVersionAboutBox
+		sVendor = oProdNameAccess.ooVendor
+		_GetProductName = sProdName &amp; &quot; &quot; &amp; sVersion &amp; &quot; (&quot; &amp; sVendor &amp; &quot;)&quot;
+	End If
 
 Finally:
 	Exit Function
