@@ -884,6 +884,13 @@ void ExportDialog::setupControls()
 
     if (mnMaxFilesizeForRealtimePreview || mbIsPixelFormat)
         mxInfo->show();
+
+    // resizing SVG can take a long time
+    if (mnFormat == FORMAT_SVG)
+    {
+        mxFtEstimatedSize->hide();
+        mxInfo->hide();
+    }
 }
 
 static OUString ImpValueOfInKB( sal_Int64 rVal )
@@ -942,35 +949,39 @@ void ExportDialog::updateControls()
     if (mpSbCompression && mpSbCompression->get_visible() && mpNfCompression)
         mpSbCompression->set_value(mpNfCompression->get_value());
 
-    GetGraphicStream();
-
-    // updating estimated size
-    sal_Int64 nRealFileSize( mpTempStream->Tell() );
-    if ( mbIsPixelFormat )
+    // resizing SVG can take a long time
+    if (mnFormat != FORMAT_SVG)
     {
-        OUString aEst( nRealFileSize ? msEstimatedSizePix2 : msEstimatedSizePix1 );
-        sal_Int64 nRawFileSize( GetRawFileSize() );
-        sal_Int32 nInd = aEst.indexOf( "%" );
-        if (nInd != -1)
-            aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
+        GetGraphicStream();
 
-        if ( nRealFileSize && nInd != -1 )
+        // updating estimated size
+        sal_Int64 nRealFileSize( mpTempStream->Tell() );
+        if ( mbIsPixelFormat )
         {
-            nInd = aEst.indexOf( "%", nInd );
-            if (nInd != -1)
-                aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
-        }
-        mxFtEstimatedSize->set_label( aEst );
-    }
-    else
-    {
-        if ( mnMaxFilesizeForRealtimePreview )
-        {
-            OUString aEst( msEstimatedSizeVec );
+            OUString aEst( nRealFileSize ? msEstimatedSizePix2 : msEstimatedSizePix1 );
+            sal_Int64 nRawFileSize( GetRawFileSize() );
             sal_Int32 nInd = aEst.indexOf( "%" );
             if (nInd != -1)
-                aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+                aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
+
+            if ( nRealFileSize && nInd != -1 )
+            {
+                nInd = aEst.indexOf( "%", nInd );
+                if (nInd != -1)
+                    aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+            }
             mxFtEstimatedSize->set_label( aEst );
+        }
+        else
+        {
+            if ( mnMaxFilesizeForRealtimePreview )
+            {
+                OUString aEst( msEstimatedSizeVec );
+                sal_Int32 nInd = aEst.indexOf( "%" );
+                if (nInd != -1)
+                    aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+                mxFtEstimatedSize->set_label( aEst );
+            }
         }
     }
 
