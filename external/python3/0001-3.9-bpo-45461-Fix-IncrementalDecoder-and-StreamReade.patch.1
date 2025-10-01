@@ -1,0 +1,384 @@
+From 7c722e32bf582108680f49983cf01eaed710ddb9 Mon Sep 17 00:00:00 2001
+From: Serhiy Storchaka <storchaka@gmail.com>
+Date: Thu, 14 Oct 2021 20:03:29 +0300
+Subject: [PATCH] [3.9] bpo-45461: Fix IncrementalDecoder and StreamReader in
+ the "unicode-escape" codec (GH-28939) (GH-28945)
+
+They support now splitting escape sequences between input chunks.
+
+Add the third parameter "final" in codecs.unicode_escape_decode().
+It is True by default to match the former behavior.
+(cherry picked from commit c96d1546b11b4c282a7e21737cb1f5d16349656d)
+
+Co-authored-by: Serhiy Storchaka <storchaka@gmail.com>
+---
+ Doc/data/python3.9.abi                        | 23654 ++++++++++------
+ Include/cpython/unicodeobject.h               |    10 +-
+ Lib/encodings/unicode_escape.py               |     9 +-
+ Lib/test/test_codecs.py                       |    44 +-
+ .../2021-10-14-00-19-02.bpo-45461.4LB_tJ.rst  |     2 +
+ Modules/_codecsmodule.c                       |    13 +-
+ Modules/clinic/_codecsmodule.c.h              |    23 +-
+ Objects/unicodeobject.c                       |    49 +-
+ Parser/pegen/parse_string.c                   |     2 +-
+ Python/ast.c                                  |     2 +-
+ 10 files changed, 14377 insertions(+), 9431 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Library/2021-10-14-00-19-02.bpo-45461.4LB_tJ.rst
+
+diff --git a/Include/cpython/unicodeobject.h b/Include/cpython/unicodeobject.h
+index d24a7a6a4d7..d3c906aa927 100644
+--- a/Include/cpython/unicodeobject.h
++++ b/Include/cpython/unicodeobject.h
+@@ -857,12 +857,20 @@ PyAPI_FUNC(PyObject*) _PyUnicode_EncodeUTF16(
+ 
+ /* --- Unicode-Escape Codecs ---------------------------------------------- */
+ 
++/* Variant of PyUnicode_DecodeUnicodeEscape that supports partial decoding. */
++PyAPI_FUNC(PyObject*) _PyUnicode_DecodeUnicodeEscapeStateful(
++        const char *string,     /* Unicode-Escape encoded string */
++        Py_ssize_t length,      /* size of string */
++        const char *errors,     /* error handling */
++        Py_ssize_t *consumed    /* bytes consumed */
++);
+ /* Helper for PyUnicode_DecodeUnicodeEscape that detects invalid escape
+    chars. */
+-PyAPI_FUNC(PyObject*) _PyUnicode_DecodeUnicodeEscape(
++PyAPI_FUNC(PyObject*) _PyUnicode_DecodeUnicodeEscapeInternal(
+         const char *string,     /* Unicode-Escape encoded string */
+         Py_ssize_t length,      /* size of string */
+         const char *errors,     /* error handling */
++        Py_ssize_t *consumed,   /* bytes consumed */
+         const char **first_invalid_escape  /* on return, points to first
+                                               invalid escaped char in
+                                               string. */
+diff --git a/Lib/encodings/unicode_escape.py b/Lib/encodings/unicode_escape.py
+index 817f93265a4..9b1ce99b339 100644
+--- a/Lib/encodings/unicode_escape.py
++++ b/Lib/encodings/unicode_escape.py
+@@ -21,15 +21,16 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
+     def encode(self, input, final=False):
+         return codecs.unicode_escape_encode(input, self.errors)[0]
+ 
+-class IncrementalDecoder(codecs.IncrementalDecoder):
+-    def decode(self, input, final=False):
+-        return codecs.unicode_escape_decode(input, self.errors)[0]
++class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
++    def _buffer_decode(self, input, errors, final):
++        return codecs.unicode_escape_decode(input, errors, final)
+ 
+ class StreamWriter(Codec,codecs.StreamWriter):
+     pass
+ 
+ class StreamReader(Codec,codecs.StreamReader):
+-    pass
++    def decode(self, input, errors='strict'):
++        return codecs.unicode_escape_decode(input, errors, False)
+ 
+ ### encodings module API
+ 
+diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
+index 8d112a171d7..09ab852b398 100644
+--- a/Lib/test/test_codecs.py
++++ b/Lib/test/test_codecs.py
+@@ -2327,7 +2327,11 @@ def test_unicode_escape(self):
+                          (r"\x5c\x55\x30\x30\x31\x31\x30\x30\x30\x30", 10))
+ 
+ 
+-class UnicodeEscapeTest(unittest.TestCase):
++class UnicodeEscapeTest(ReadTest, unittest.TestCase):
++    encoding = "unicode-escape"
++
++    test_lone_surrogates = None
++
+     def test_empty(self):
+         self.assertEqual(codecs.unicode_escape_encode(""), (b"", 0))
+         self.assertEqual(codecs.unicode_escape_decode(b""), ("", 0))
+@@ -2414,6 +2418,44 @@ def test_decode_errors(self):
+         self.assertEqual(decode(br"\U00110000", "ignore"), ("", 10))
+         self.assertEqual(decode(br"\U00110000", "replace"), ("\ufffd", 10))
+ 
++    def test_partial(self):
++        self.check_partial(
++            "\x00\t\n\r\\\xff\uffff\U00010000",
++            [
++                '',
++                '',
++                '',
++                '\x00',
++                '\x00',
++                '\x00\t',
++                '\x00\t',
++                '\x00\t\n',
++                '\x00\t\n',
++                '\x00\t\n\r',
++                '\x00\t\n\r',
++                '\x00\t\n\r\\',
++                '\x00\t\n\r\\',
++                '\x00\t\n\r\\',
++                '\x00\t\n\r\\',
++                '\x00\t\n\r\\\xff',
++                '\x00\t\n\r\\\xff',
++                '\x00\t\n\r\\\xff',
++                '\x00\t\n\r\\\xff',
++                '\x00\t\n\r\\\xff',
++                '\x00\t\n\r\\\xff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff',
++                '\x00\t\n\r\\\xff\uffff\U00010000',
++            ]
++        )
+ 
+ class RawUnicodeEscapeTest(unittest.TestCase):
+     def test_empty(self):
+diff --git a/Misc/NEWS.d/next/Library/2021-10-14-00-19-02.bpo-45461.4LB_tJ.rst b/Misc/NEWS.d/next/Library/2021-10-14-00-19-02.bpo-45461.4LB_tJ.rst
+new file mode 100644
+index 00000000000..c1c4ed1ace2
+--- /dev/null
++++ b/Misc/NEWS.d/next/Library/2021-10-14-00-19-02.bpo-45461.4LB_tJ.rst
+@@ -0,0 +1,2 @@
++Fix incremental decoder and stream reader in the "unicode-escape" codec.
++Previously they failed if the escape sequence was split.
+diff --git a/Modules/_codecsmodule.c b/Modules/_codecsmodule.c
+index 952072102d5..f22d4daca09 100644
+--- a/Modules/_codecsmodule.c
++++ b/Modules/_codecsmodule.c
+@@ -487,17 +487,20 @@ _codecs_utf_32_ex_decode_impl(PyObject *module, Py_buffer *data,
+ _codecs.unicode_escape_decode
+     data: Py_buffer(accept={str, buffer})
+     errors: str(accept={str, NoneType}) = None
++    final: bool(accept={int}) = True
+     /
+ [clinic start generated code]*/
+ 
+ static PyObject *
+ _codecs_unicode_escape_decode_impl(PyObject *module, Py_buffer *data,
+-                                   const char *errors)
+-/*[clinic end generated code: output=3ca3c917176b82ab input=8328081a3a569bd6]*/
++                                   const char *errors, int final)
++/*[clinic end generated code: output=b284f97b12c635ee input=6154f039a9f7c639]*/
+ {
+-    PyObject *decoded = PyUnicode_DecodeUnicodeEscape(data->buf, data->len,
+-                                                      errors);
+-    return codec_tuple(decoded, data->len);
++    Py_ssize_t consumed = data->len;
++    PyObject *decoded = _PyUnicode_DecodeUnicodeEscapeStateful(data->buf, data->len,
++                                                               errors,
++                                                               final ? NULL : &consumed);
++    return codec_tuple(decoded, consumed);
+ }
+ 
+ /*[clinic input]
+diff --git a/Modules/clinic/_codecsmodule.c.h b/Modules/clinic/_codecsmodule.c.h
+index 772c8ca538d..4e2c057007b 100644
+--- a/Modules/clinic/_codecsmodule.c.h
++++ b/Modules/clinic/_codecsmodule.c.h
+@@ -1149,7 +1149,7 @@ exit:
+ }
+ 
+ PyDoc_STRVAR(_codecs_unicode_escape_decode__doc__,
+-"unicode_escape_decode($module, data, errors=None, /)\n"
++"unicode_escape_decode($module, data, errors=None, final=True, /)\n"
+ "--\n"
+ "\n");
+ 
+@@ -1158,7 +1158,7 @@ PyDoc_STRVAR(_codecs_unicode_escape_decode__doc__,
+ 
+ static PyObject *
+ _codecs_unicode_escape_decode_impl(PyObject *module, Py_buffer *data,
+-                                   const char *errors);
++                                   const char *errors, int final);
+ 
+ static PyObject *
+ _codecs_unicode_escape_decode(PyObject *module, PyObject *const *args, Py_ssize_t nargs)
+@@ -1166,8 +1166,9 @@ _codecs_unicode_escape_decode(PyObject *module, PyObject *const *args, Py_ssize_
+     PyObject *return_value = NULL;
+     Py_buffer data = {NULL, NULL};
+     const char *errors = NULL;
++    int final = 1;
+ 
+-    if (!_PyArg_CheckPositional("unicode_escape_decode", nargs, 1, 2)) {
++    if (!_PyArg_CheckPositional("unicode_escape_decode", nargs, 1, 3)) {
+         goto exit;
+     }
+     if (PyUnicode_Check(args[0])) {
+@@ -1208,8 +1209,20 @@ _codecs_unicode_escape_decode(PyObject *module, PyObject *const *args, Py_ssize_
+         _PyArg_BadArgument("unicode_escape_decode", "argument 2", "str or None", args[1]);
+         goto exit;
+     }
++    if (nargs < 3) {
++        goto skip_optional;
++    }
++    if (PyFloat_Check(args[2])) {
++        PyErr_SetString(PyExc_TypeError,
++                        "integer argument expected, got float" );
++        goto exit;
++    }
++    final = _PyLong_AsInt(args[2]);
++    if (final == -1 && PyErr_Occurred()) {
++        goto exit;
++    }
+ skip_optional:
+-    return_value = _codecs_unicode_escape_decode_impl(module, &data, errors);
++    return_value = _codecs_unicode_escape_decode_impl(module, &data, errors, final);
+ 
+ exit:
+     /* Cleanup for data */
+@@ -2922,4 +2935,4 @@ exit:
+ #ifndef _CODECS_CODE_PAGE_ENCODE_METHODDEF
+     #define _CODECS_CODE_PAGE_ENCODE_METHODDEF
+ #endif /* !defined(_CODECS_CODE_PAGE_ENCODE_METHODDEF) */
+-/*[clinic end generated code: output=51b42d170889524c input=a9049054013a1b77]*/
++/*[clinic end generated code: output=d4b696fe54cfee8f input=a9049054013a1b77]*/
+diff --git a/Objects/unicodeobject.c b/Objects/unicodeobject.c
+index 38fb3ffc5eb..d6fc03e1ae4 100644
+--- a/Objects/unicodeobject.c
++++ b/Objects/unicodeobject.c
+@@ -6271,9 +6271,10 @@ PyUnicode_AsUTF16String(PyObject *unicode)
+ static _PyUnicode_Name_CAPI *ucnhash_CAPI = NULL;
+ 
+ PyObject *
+-_PyUnicode_DecodeUnicodeEscape(const char *s,
++_PyUnicode_DecodeUnicodeEscapeInternal(const char *s,
+                                Py_ssize_t size,
+                                const char *errors,
++                               Py_ssize_t *consumed,
+                                const char **first_invalid_escape)
+ {
+     const char *starts = s;
+@@ -6286,6 +6287,9 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+     *first_invalid_escape = NULL;
+ 
+     if (size == 0) {
++        if (consumed) {
++            *consumed = 0;
++        }
+         _Py_RETURN_UNICODE_EMPTY();
+     }
+     /* Escaped strings will always be longer than the resulting
+@@ -6336,7 +6340,7 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+         /* \ - Escapes */
+         if (s >= end) {
+             message = "\\ at end of string";
+-            goto error;
++            goto incomplete;
+         }
+         c = (unsigned char) *s++;
+ 
+@@ -6390,7 +6394,10 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+             count = 8;
+             message = "truncated \\UXXXXXXXX escape";
+         hexescape:
+-            for (ch = 0; count && s < end; ++s, --count) {
++            for (ch = 0; count; ++s, --count) {
++                if (s >= end) {
++                    goto incomplete;
++                }
+                 c = (unsigned char)*s;
+                 ch <<= 4;
+                 if (c >= '0' && c <= '9') {
+@@ -6403,12 +6410,9 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+                     ch += c - ('A' - 10);
+                 }
+                 else {
+-                    break;
++                    goto error;
+                 }
+             }
+-            if (count) {
+-                goto error;
+-            }
+ 
+             /* when we get here, ch is a 32-bit unicode character */
+             if (ch > MAX_UNICODE) {
+@@ -6435,14 +6439,20 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+             }
+ 
+             message = "malformed \\N character escape";
+-            if (s < end && *s == '{') {
++            if (s >= end) {
++                goto incomplete;
++            }
++            if (*s == '{') {
+                 const char *start = ++s;
+                 size_t namelen;
+                 /* look for the closing brace */
+                 while (s < end && *s != '}')
+                     s++;
++                if (s >= end) {
++                    goto incomplete;
++                }
+                 namelen = s - start;
+-                if (namelen && s < end) {
++                if (namelen) {
+                     /* found a name.  look it up in the unicode database */
+                     s++;
+                     ch = 0xffffffff; /* in case 'getcode' messes up */
+@@ -6468,6 +6478,11 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+             continue;
+         }
+ 
++      incomplete:
++        if (consumed) {
++            *consumed = startinpos;
++            break;
++        }
+       error:
+         endinpos = s-starts;
+         writer.min_length = end - s + writer.pos;
+@@ -6496,12 +6511,14 @@ _PyUnicode_DecodeUnicodeEscape(const char *s,
+ }
+ 
+ PyObject *
+-PyUnicode_DecodeUnicodeEscape(const char *s,
++_PyUnicode_DecodeUnicodeEscapeStateful(const char *s,
+                               Py_ssize_t size,
+-                              const char *errors)
++                              const char *errors,
++                              Py_ssize_t *consumed)
+ {
+     const char *first_invalid_escape;
+-    PyObject *result = _PyUnicode_DecodeUnicodeEscape(s, size, errors,
++    PyObject *result = _PyUnicode_DecodeUnicodeEscapeInternal(s, size, errors,
++                                                      consumed,
+                                                       &first_invalid_escape);
+     if (result == NULL)
+         return NULL;
+@@ -6516,6 +6533,14 @@ PyUnicode_DecodeUnicodeEscape(const char *s,
+     return result;
+ }
+ 
++PyObject *
++PyUnicode_DecodeUnicodeEscape(const char *s,
++                              Py_ssize_t size,
++                              const char *errors)
++{
++    return _PyUnicode_DecodeUnicodeEscapeStateful(s, size, errors, NULL);
++}
++
+ /* Return a Unicode-Escape string version of the Unicode object. */
+ 
+ PyObject *
+diff --git a/Python/ast.c b/Python/ast.c
+index c7ba4d9c544..6dd70592631 100644
+--- a/Python/ast.c
++++ b/Python/ast.c
+@@ -4640,7 +4640,7 @@ decode_unicode_with_escapes(struct compiling *c, const node *n, const char *s,
+     s = buf;
+ 
+     const char *first_invalid_escape;
+-    v = _PyUnicode_DecodeUnicodeEscape(s, len, NULL, &first_invalid_escape);
++    v = _PyUnicode_DecodeUnicodeEscapeInternal(s, len, NULL, NULL, &first_invalid_escape);
+ 
+     if (v != NULL && first_invalid_escape != NULL) {
+         if (warn_invalid_escape_sequence(c, n, *first_invalid_escape) < 0) {
+-- 
+2.51.0
+

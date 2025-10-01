@@ -1,0 +1,168 @@
+From 3a4f66707e824ef3a8384827590ebaa6ca463dc0 Mon Sep 17 00:00:00 2001
+From: Greg Price <gnprice@gmail.com>
+Date: Thu, 12 Sep 2019 11:12:22 -0700
+Subject: [PATCH] Cut disused recode_encoding logic in _PyBytes_DecodeEscape.
+ (GH-16013)
+
+All call sites pass NULL for `recode_encoding`, so this path is
+completely untested.  That's been true since before Python 3.0.
+It adds significant complexity to this logic, so it's best to
+take it out.
+
+All call sites now have a literal NULL, and that's been true since
+commit 768921cf3 eliminated a conditional (`foo ? bar : NULL`) at
+the call site in Python/ast.c where we're parsing a bytes literal.
+But even before then, that condition `foo` had been a constant
+since unadorned string literals started meaning Unicode, in commit
+572dbf8f1 aka v3.0a1~1035 .
+
+The `unicode` parameter is already unused, so mark it as unused too.
+The code that acted on it was also taken out before Python 3.0, in
+commit 8d30cc014 aka v3.0a1~1031 .
+
+The function (PyBytes_DecodeEscape) is exposed in the API, but it's
+never been documented.
+---
+ Include/bytesobject.h |  4 +--
+ Include/longobject.h  |  2 +-
+ Objects/bytesobject.c | 63 ++++---------------------------------------
+ Python/ast.c          |  2 +-
+ 4 files changed, 8 insertions(+), 63 deletions(-)
+
+diff --git a/Include/bytesobject.h b/Include/bytesobject.h
+index 3fde4a221fd..fc9981e56d2 100644
+--- a/Include/bytesobject.h
++++ b/Include/bytesobject.h
+@@ -77,9 +77,7 @@ PyAPI_FUNC(PyObject *) PyBytes_DecodeEscape(const char *, Py_ssize_t,
+ #ifndef Py_LIMITED_API
+ /* Helper for PyBytes_DecodeEscape that detects invalid escape chars. */
+ PyAPI_FUNC(PyObject *) _PyBytes_DecodeEscape(const char *, Py_ssize_t,
+-                                             const char *, Py_ssize_t,
+-                                             const char *,
+-                                             const char **);
++                                             const char *, const char **);
+ #endif
+ 
+ /* Macro, trading safety for speed */
+diff --git a/Include/longobject.h b/Include/longobject.h
+index 1e7a58d994b..87b4d017d32 100644
+--- a/Include/longobject.h
++++ b/Include/longobject.h
+@@ -74,7 +74,7 @@ PyAPI_FUNC(int) _PyLong_Size_t_Converter(PyObject *, void *);
+ #endif
+ 
+ /* Used by Python/mystrtoul.c, _PyBytes_FromHex(),
+-   _PyBytes_DecodeEscapeRecode(), etc. */
++   _PyBytes_DecodeEscape(), etc. */
+ #ifndef Py_LIMITED_API
+ PyAPI_DATA(unsigned char) _PyLong_DigitValue[256];
+ #endif
+diff --git a/Objects/bytesobject.c b/Objects/bytesobject.c
+index e1f5ee2f62f..4b2a77b4b8c 100644
+--- a/Objects/bytesobject.c
++++ b/Objects/bytesobject.c
+@@ -1077,52 +1077,10 @@ _PyBytes_FormatEx(const char *format, Py_ssize_t format_len,
+     return NULL;
+ }
+ 
+-/* Unescape a backslash-escaped string. If unicode is non-zero,
+-   the string is a u-literal. If recode_encoding is non-zero,
+-   the string is UTF-8 encoded and should be re-encoded in the
+-   specified encoding.  */
+-
+-static char *
+-_PyBytes_DecodeEscapeRecode(const char **s, const char *end,
+-                            const char *errors, const char *recode_encoding,
+-                            _PyBytesWriter *writer, char *p)
+-{
+-    PyObject *u, *w;
+-    const char* t;
+-
+-    t = *s;
+-    /* Decode non-ASCII bytes as UTF-8. */
+-    while (t < end && (*t & 0x80))
+-        t++;
+-    u = PyUnicode_DecodeUTF8(*s, t - *s, errors);
+-    if (u == NULL)
+-        return NULL;
+-
+-    /* Recode them in target encoding. */
+-    w = PyUnicode_AsEncodedString(u, recode_encoding, errors);
+-    Py_DECREF(u);
+-    if  (w == NULL)
+-        return NULL;
+-    assert(PyBytes_Check(w));
+-
+-    /* Append bytes to output buffer. */
+-    writer->min_size--;   /* subtract 1 preallocated byte */
+-    p = _PyBytesWriter_WriteBytes(writer, p,
+-                                  PyBytes_AS_STRING(w),
+-                                  PyBytes_GET_SIZE(w));
+-    Py_DECREF(w);
+-    if (p == NULL)
+-        return NULL;
+-
+-    *s = t;
+-    return p;
+-}
+-
++/* Unescape a backslash-escaped string. */
+ PyObject *_PyBytes_DecodeEscape(const char *s,
+                                 Py_ssize_t len,
+                                 const char *errors,
+-                                Py_ssize_t unicode,
+-                                const char *recode_encoding,
+                                 const char **first_invalid_escape)
+ {
+     int c;
+@@ -1142,17 +1100,7 @@ PyObject *_PyBytes_DecodeEscape(const char *s,
+     while (s < end) {
+         if (*s != '\\') {
+           non_esc:
+-            if (!(recode_encoding && (*s & 0x80))) {
+-                *p++ = *s++;
+-            }
+-            else {
+-                /* non-ASCII character and need to recode */
+-                p = _PyBytes_DecodeEscapeRecode(&s, end,
+-                                                errors, recode_encoding,
+-                                                &writer, p);
+-                if (p == NULL)
+-                    goto failed;
+-            }
++            *p++ = *s++;
+             continue;
+         }
+ 
+@@ -1241,12 +1189,11 @@ PyObject *_PyBytes_DecodeEscape(const char *s,
+ PyObject *PyBytes_DecodeEscape(const char *s,
+                                 Py_ssize_t len,
+                                 const char *errors,
+-                                Py_ssize_t unicode,
+-                                const char *recode_encoding)
++                                Py_ssize_t Py_UNUSED(unicode),
++                                const char *Py_UNUSED(recode_encoding))
+ {
+     const char* first_invalid_escape;
+-    PyObject *result = _PyBytes_DecodeEscape(s, len, errors, unicode,
+-                                             recode_encoding,
++    PyObject *result = _PyBytes_DecodeEscape(s, len, errors,
+                                              &first_invalid_escape);
+     if (result == NULL)
+         return NULL;
+diff --git a/Python/ast.c b/Python/ast.c
+index e6f71671c18..05147a49fc1 100644
+--- a/Python/ast.c
++++ b/Python/ast.c
+@@ -4766,7 +4766,7 @@ decode_bytes_with_escapes(struct compiling *c, const node *n, const char *s,
+                           size_t len)
+ {
+     const char *first_invalid_escape;
+-    PyObject *result = _PyBytes_DecodeEscape(s, len, NULL, 0, NULL,
++    PyObject *result = _PyBytes_DecodeEscape(s, len, NULL,
+                                              &first_invalid_escape);
+     if (result == NULL)
+         return NULL;
+-- 
+2.51.0
+
