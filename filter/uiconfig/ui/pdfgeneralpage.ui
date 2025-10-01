@@ -591,9 +591,6 @@
                               <item id="3" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-3b (PDF 1.7 base)</item>
                               <item id="4" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-4 (PDF 2.0 base)</item>
                             </items>
-                            <accessibility>
-                              <relation type="labelled-by" target="pdf_version_label"/>
-                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="pdf_version-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdf_version">Versions can be either the "classic" PDF (i.e. PDF 1.7, PDF 2.0) or PDF/A conformant. PDF/A is defined as an electronic document file format for long term preservation  and archiving. It allows only a subset of PDF features that are compatible with that use case. For example: All fonts that were used in the source document will be embedded into the generated PDF file. PDF tags will be written.</property>
@@ -619,9 +616,7 @@
                                 <property name="vexpand">True</property>
                                 <property name="label" translatable="yes" context="pdfgeneralpage|pdf_version">PDF_ Version:</property>
                                 <property name="use-underline">True</property>
-                                <accessibility>
-                                  <relation type="label-for" target="pdf_version"/>
-                                </accessibility>
+                                <property name="mnemonic-widget">pdf_version</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
