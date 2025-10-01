@@ -2762,8 +2762,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 continue;
             }
 
-            SwCursorSaveState aSaveState( *mrSh.GetCursor_() );
-
             // Select the footnote:
             mrSh.SwCursorShell::SetMark();
             mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
@@ -2773,7 +2771,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
             OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
-            mrSh.GetCursor_()->RestoreSavePos();
+            // restore cursor position
+            mrSh.GetCursor_()->GetPoint()->Assign(rTNd, pTextFootnote->GetStart());
             mrSh.SwCursorShell::ClearMark();
 
             if (aTmp.empty())
