@@ -3173,6 +3173,12 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
+        <node oor:name="F12_SHIFT" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
+          </prop>
+        </node>
         <node oor:name="F2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
