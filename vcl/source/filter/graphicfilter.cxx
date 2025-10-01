@@ -981,6 +981,7 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
 
     // Get Orientation from EXIF data
     GraphicNativeMetadata aMetadata;
+    SvStreamEndian aOriginalEndianness(rStream.GetEndian());
     if (aMetadata.read(rStream))
     {
         Degree10 aRotation = aMetadata.getRotation();
@@ -990,6 +991,7 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
             aTransform.rotate(aRotation);
         }
     }
+    rStream.SetEndian(aOriginalEndianness);
 
     return aReturnCode;
 }
