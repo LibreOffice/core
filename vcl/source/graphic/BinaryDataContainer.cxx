@@ -140,13 +140,13 @@ public:
 };
 }
 
-std::shared_ptr<SvStream> BinaryDataContainer::getAsStream()
+std::shared_ptr<SvStream> BinaryDataContainer::getAsStream() const
 {
     ensureSwappedIn(); // TODO: transfer in streamed chunks
     return std::make_shared<ReferencedMemoryStream>(mpImpl->mpData);
 }
 
-css::uno::Reference<css::io::XInputStream> BinaryDataContainer::getAsXInputStream()
+css::uno::Reference<css::io::XInputStream> BinaryDataContainer::getAsXInputStream() const
 {
     ensureSwappedIn(); // TODO: transfer in streamed chunks
     return new ReferencedXInputStream(mpImpl->mpData);

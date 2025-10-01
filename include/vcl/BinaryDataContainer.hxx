@@ -48,10 +48,10 @@ public:
     SAL_DLLPRIVATE css::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
     // Returns the data as a readonly stream open for reading
-    SAL_DLLPRIVATE std::shared_ptr<SvStream> getAsStream();
+    SAL_DLLPRIVATE std::shared_ptr<SvStream> getAsStream() const;
 
     // Returns the data as a readonly stream open for reading
-    SAL_DLLPRIVATE css::uno::Reference<css::io::XInputStream> getAsXInputStream();
+    SAL_DLLPRIVATE css::uno::Reference<css::io::XInputStream> getAsXInputStream() const;
 
     /// writes the contents to the given stream
     std::size_t writeToStream(SvStream& rStream) const;
