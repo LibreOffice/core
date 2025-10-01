@@ -1721,6 +1721,7 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     Color aTextColor(COL_TRANSPARENT);
     bool bFill = false;
     bool bUse = true;
+    bool bInvisible = false;
     switch (pPageObject->getTextRenderMode())
     {
         case vcl::pdf::PDFTextRenderMode::Fill:
@@ -1734,6 +1735,9 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
         case vcl::pdf::PDFTextRenderMode::Unknown:
             break;
         case vcl::pdf::PDFTextRenderMode::Invisible:
+            bInvisible = true;
+            bUse = false;
+            break;
         case vcl::pdf::PDFTextRenderMode::Clip:
             bUse = false;
             break;
@@ -1751,11 +1755,11 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
         mbFntDirty = true;
     }
 
-    InsertTextObject(aRect.TopLeft(), aRect.GetSize(), sText);
+    InsertTextObject(aRect.TopLeft(), aRect.GetSize(), sText, bInvisible);
 }
 
 void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& /*rSize*/,
-                                       const OUString& rStr)
+                                       const OUString& rStr, bool bInvisible)
 {
     FontMetric aFontMetric(mpVD->GetFontMetric());
     vcl::Font aFont(mpVD->GetFont());
@@ -1795,6 +1799,9 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& /*rSize*/,
     pText->SetMergedItem(makeSdrTextLeftDistItem(0));
 
     pText->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
+
+    if (bInvisible)
+        pText->SetVisible(false);
 
     pText->SetLayer(mnLayer);
     pText->NbcSetText(rStr);
