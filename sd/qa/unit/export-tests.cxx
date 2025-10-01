@@ -1174,6 +1174,16 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     // - Expected: rgba[ffffffff]
     // - Actual  : rgba[000000ff]
     CPPUNIT_ASSERT_EQUAL(aExpectedColor, aBitmap.GetPixelColor(5, 5));
+
+    // All the other shape in the group are text in front of that picture
+    // but with their pdf text mode as Invisible so it is the picture that
+    // is seen and the text is hidden. Test a sample text shape here. Without
+    // the fix this test would fail as these shapes were visible.
+    uno::Reference<beans::XPropertySet> xTextShape(xGroupShape->getByIndex(10), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextShape.is());
+    bool bVisible(true);
+    xTextShape->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT_MESSAGE("Shape should be Invisible", !bVisible);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
