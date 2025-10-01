@@ -59,7 +59,11 @@ ScSpellDialogChildWindow::~ScSpellDialogChildWindow()
 
 SfxChildWinInfo ScSpellDialogChildWindow::GetInfo() const
 {
-    return svx::SpellDialogChildWindow::GetInfo();
+    // tdf#117020: visible gets written to UserData
+    // and a value of true means it automatically opens on startup
+    SfxChildWinInfo aInfo = svx::SpellDialogChildWindow::GetInfo();
+    aInfo.bVisible = false;
+    return aInfo;
 }
 
 void ScSpellDialogChildWindow::InvalidateSpellDialog()
