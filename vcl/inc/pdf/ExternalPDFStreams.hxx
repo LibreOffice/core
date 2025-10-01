@@ -38,7 +38,7 @@ struct VCL_DLLPUBLIC ExternalPDFStream
     {
         if (!mpPDFDocument)
         {
-            std::shared_ptr<SvStream> aPDFStream = maDataContainer.getAsStream();
+            std::unique_ptr<SvStream> aPDFStream = maDataContainer.getAsStream();
             auto pPDFDocument = std::make_shared<filter::PDFDocument>();
             if (!pPDFDocument->ReadWithPossibleFixup(*aPDFStream))
             {
