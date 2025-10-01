@@ -30,6 +30,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/0001-3.9-bpo-45461-Fix-IncrementalDecoder-and-StreamReade.patch.1 \
 	external/python3/0001-Cut-disused-recode_encoding-logic-in-_PyBytes_Decode.patch.1 \
 	external/python3/0001-3.9-gh-133767-Fix-use-after-free-in-the-unicode-esca.patch.1 \
+	external/python3/0001-3.9-bpo-43757-Make-pathlib-use-os.path.realpath-to-r.patch.1 \
+	external/python3/0001-3.9-gh-135034-Normalize-link-targets-in-tarfile-add-.patch.1 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
