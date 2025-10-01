@@ -127,10 +127,11 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 |************************************************************************/
 
 void SvxHyperlinkInternetTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                                                 OUString& aStrIntName, SvxLinkInsertMode& eMode )
+                                                 OUString& aStrIntName, OUString& aStrFrame,
+                                                 SvxLinkInsertMode& eMode )
 {
     rStrURL = CreateAbsoluteURL();
-    GetDataFromCommonFields( aStrName, aStrIntName, eMode );
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
 OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const

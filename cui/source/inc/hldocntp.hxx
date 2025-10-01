@@ -43,7 +43,8 @@ private:
 protected:
     void FillDlgFields(const OUString& rStrURL) override;
     void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                             OUString& aStrIntName, SvxLinkInsertMode& eMode ) override;
+                             OUString& aStrIntName, OUString& aStrFrame,
+                             SvxLinkInsertMode& eMode ) override;
 
 public:
     SvxHyperlinkNewDocTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);

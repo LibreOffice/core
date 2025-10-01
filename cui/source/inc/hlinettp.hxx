@@ -56,7 +56,8 @@ private:
 protected:
     virtual void FillDlgFields(const OUString& rStrURL) override;
     virtual void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                                     OUString& aStrIntName, SvxLinkInsertMode& eMode ) override;
+                                     OUString& aStrIntName, OUString& aStrFrame,
+                                     SvxLinkInsertMode& eMode ) override;
     virtual bool ShouldOpenMarkWnd () override { return false; }
     virtual void SetMarkWndShouldOpen (bool bOpen) override {m_bMarkWndOpen=bOpen;}
 
