@@ -629,7 +629,7 @@ bool SwWrtShell::GotoMark( const ::sw::mark::MarkBase* const pMark, bool bSelect
     ShellMoveCursor aTmp( this, bSelect );
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoMark( pMark, true/*bStart*/ );
-    if (bRet)
+    if (bRet && !IsViewLocked())
         m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }

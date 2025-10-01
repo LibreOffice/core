@@ -2745,7 +2745,7 @@ bool SwView::JumpToSwMark( const SwMarkName& rMark )
         // reset ViewStatus
         SetCursorAtTop( bSaveCT, bSaveCC );
 
-        if(!m_pWrtShell->IsFrameSelected() && !m_pWrtShell->GetSelectedObjCount())
+        if(!m_pWrtShell->IsFrameSelected() && !m_pWrtShell->GetSelectedObjCount() && !m_pWrtShell->IsViewLocked())
             m_pWrtShell->ShowCursor();
 
         if( !bHasShFocus )
