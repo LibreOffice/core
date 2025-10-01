@@ -46,6 +46,8 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -195,15 +197,19 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbSignPDF = maConfigItem.ReadBool( u"SignPDF"_ustr, false );
 
     // queue the tab pages for later creation (created when first shown)
-    AddTabPage(u"general"_ustr, ImpPDFTabGeneralPage::Create, nullptr );
-    if (comphelper::LibreOfficeKit::isActive())
-        m_xTabCtrl->remove_page(u"digitalsignatures"_ustr);
-    else
-        AddTabPage(u"digitalsignatures"_ustr, ImpPDFTabSigningPage::Create, nullptr);
-    AddTabPage(u"security"_ustr, ImpPDFTabSecurityPage::Create, nullptr);
-    AddTabPage(u"links"_ustr, ImpPDFTabLinksPage::Create, nullptr);
-    AddTabPage(u"userinterface"_ustr, ImpPDFTabViewerPage::Create, nullptr);
-    AddTabPage(u"initialview"_ustr, ImpPDFTabOpnFtrPage::Create, nullptr);
+    AddTabPage(u"general"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel), ImpPDFTabGeneralPage::Create,
+               RID_L + RID_TAB_ORGANIZER.sIconName);
+    AddTabPage(u"initialview"_ustr, TabResId(RID_TAB_PDFINITIAL.aLabel),
+               ImpPDFTabOpnFtrPage::Create, RID_L + RID_TAB_PDFINITIAL.sIconName);
+    AddTabPage(u"userinterface"_ustr, TabResId(RID_TAB_PDFUI.aLabel), ImpPDFTabViewerPage::Create,
+               RID_L + RID_TAB_PDFUI.sIconName);
+    AddTabPage(u"links"_ustr, TabResId(RID_TAB_PDFLINKS.aLabel), ImpPDFTabLinksPage::Create,
+               RID_L + RID_TAB_PDFLINKS.sIconName);
+    AddTabPage(u"security"_ustr, TabResId(RID_TAB_PDFPROTECT.aLabel), ImpPDFTabSecurityPage::Create,
+               RID_L + RID_TAB_PDFPROTECT.sIconName);
+    if (!comphelper::LibreOfficeKit::isActive())
+        AddTabPage(u"digitalsignatures"_ustr, TabResId(RID_TAB_PDFSIGN.aLabel),
+                   ImpPDFTabSigningPage::Create, RID_L + RID_TAB_PDFSIGN.sIconName);
 
     SetCurPageId(u"general"_ustr);
 

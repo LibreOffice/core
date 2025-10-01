@@ -171,6 +171,14 @@ inline constexpr TabData RID_TAB_CUSTOM{ NC_("RID_TAB_CUSTOM", "Custom Propertie
 inline constexpr TabData RID_TAB_CMIS{ NC_("RID_TAB_CMIS", "CMIS Properties"), u"browseview.png"_ustr };
 inline constexpr TabData RID_TAB_SECURITY{ NC_("RID_TAB_SECURITY", "Security"), u"protect.png"_ustr };
 inline constexpr TabData RID_TAB_STATISTICS{ NC_("RID_TAB_STATISTICS", "Statistics"), u"autosum.png"_ustr };
+// pdf export
+inline constexpr TabData RID_TAB_PDFGENERAL{ NC_("RID_TAB_PDFGENERAL", "General"), u"exportdialog.pdf"_ustr };
+inline constexpr TabData RID_TAB_PDFINITIAL{ NC_("RID_TAB_PDFINITIAL", "Initial View"), u"showbookview.pdf"_ustr };
+inline constexpr TabData RID_TAB_PDFUI{ NC_("RID_TAB_PDFUI", "User Interface"), u"dbviewaliases.pdf"_ustr };
+inline constexpr TabData RID_TAB_PDFLINKS{ NC_("RID_TAB_PDFLINKS", "Links"), u"inserthyperlinkcontrol.pdf"_ustr };
+inline constexpr TabData RID_TAB_PDFPROTECT{ NC_("RID_TAB_PDFPROTECT", "Security"), u"protect.pdf"_ustr };
+inline constexpr TabData RID_TAB_PDFSIGN{ NC_("RID_TAB_PDFSIGN", "Digital Signatures"), u"signpdf.pdf"_ustr };
+
 
 static OUString TabResId(TranslateId aId)
 {
