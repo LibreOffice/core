@@ -27,6 +27,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/macos-11.patch.0 \
 	external/python3/tsan.patch.0 \
 	external/python3/init-sys-streams-cant-initialize-stdin.patch.0 \
+	external/python3/0001-3.9-bpo-45461-Fix-IncrementalDecoder-and-StreamReade.patch.1 \
+	external/python3/0001-Cut-disused-recode_encoding-logic-in-_PyBytes_Decode.patch.1 \
+	external/python3/0001-3.9-gh-133767-Fix-use-after-free-in-the-unicode-esca.patch.1 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
