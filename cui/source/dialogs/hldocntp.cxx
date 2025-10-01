@@ -199,7 +199,8 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
 |************************************************************************/
 
 void SvxHyperlinkNewDocTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                                               OUString& aStrIntName, SvxLinkInsertMode& eMode )
+                                               OUString& aStrIntName, OUString& aStrFrame,
+                                               SvxLinkInsertMode& eMode )
 {
     // get data from dialog-controls
     rStrURL = m_xCbbPath->get_active_text();
@@ -209,7 +210,7 @@ void SvxHyperlinkNewDocTp::GetCurrentItemData ( OUString& rStrURL, OUString& aSt
         rStrURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
-    GetDataFromCommonFields( aStrName, aStrIntName, eMode );
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
 /*************************************************************************

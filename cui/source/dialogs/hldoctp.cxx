@@ -140,7 +140,8 @@ OUString SvxHyperlinkDocTp::GetCurrentURL () const
 |*
 |************************************************************************/
 void SvxHyperlinkDocTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                                            OUString& aStrIntName, SvxLinkInsertMode& eMode )
+                                            OUString& aStrIntName, OUString& aStrFrame,
+                                            SvxLinkInsertMode& eMode )
 {
     // get data from standard-fields
     rStrURL = GetCurrentURL();
@@ -148,7 +149,7 @@ void SvxHyperlinkDocTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrNa
     if( rStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
          rStrURL.clear();
 
-    GetDataFromCommonFields( aStrName, aStrIntName, eMode );
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
 /*************************************************************************
