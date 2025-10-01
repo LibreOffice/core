@@ -275,6 +275,83 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkBox" id="box3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">3</property>
+                    <child>
+                      <object class="GtkRadioButton" id="jpegcompress">
+                        <property name="label" translatable="yes" context="pdfgeneralpage|jpegcompress">_JPEG compression</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">losslesscompress</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="jpegcompress-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|jpegcompress">Select a JPEG compression level. With a high quality level, almost all pixels are preserved. With a low quality level, some pixels are lost and artifacts are introduced, but file sizes are reduced.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label5">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">quality</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="qualityframe">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkSpinButton" id="quality">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="quality-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|quality">Enter the quality level for JPEG compression.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="changeresolution">
                     <property name="label" translatable="yes" context="pdfgeneralpage|changeresolution">Change ima_ge resolution to:</property>
                     <property name="visible">True</property>
@@ -329,83 +406,6 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="qualityframe">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkSpinButton" id="quality">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="quality-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|quality">Enter the quality level for JPEG compression.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkRadioButton" id="jpegcompress">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|jpegcompress">_JPEG compression</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">losslesscompress</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="jpegcompress-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|jpegcompress">Select a JPEG compression level. With a high quality level, almost all pixels are preserved. With a low quality level, some pixels are lost and artifacts are introduced, but file sizes are reduced.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label5">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">quality</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -542,27 +542,6 @@
                 <property name="margin-top">6</property>
                 <property name="row-spacing">3</property>
                 <child>
-                  <object class="GtkCheckButton" id="embed">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|embed">Hybrid PDF (em_bed ODF file)</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that embeds the original ODF file as an attachment.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="embed-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF as an attachment. </property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
@@ -663,6 +642,27 @@
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="embed">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|embed">Hybrid PDF (em_bed ODF file)</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that embeds the original ODF file as an attachment.</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="embed-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF as an attachment. </property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
@@ -696,6 +696,27 @@
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
                 <property name="row-spacing">3</property>
+                <child>
+                  <object class="GtkCheckButton" id="forms">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|forms">Create PDF for_m</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="forms-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
                 <child>
                   <!-- n-columns=2 n-rows=2 -->
                   <object class="GtkGrid" id="forms_options_grid">
@@ -784,27 +805,6 @@
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkCheckButton" id="forms">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|forms">Create PDF for_m</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="forms-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
               </object>
             </child>
             <child type="label">
@@ -838,6 +838,27 @@
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
                 <property name="row-spacing">3</property>
+                <child>
+                  <object class="GtkCheckButton" id="tagged">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="tagged-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkCheckButton" id="bookmarks">
                     <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export outl_ines</property>
@@ -900,8 +921,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="emptypages">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|emptypages">Exp_ort automatically inserted blank pages</property>
+                  <object class="GtkCheckButton" id="commentsinmargin">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|commentsinmargin">_Comments in margin</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -909,54 +930,14 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="emptypages-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, then an even numbered blank page is normally automatically inserted. This option controls whether to export that even numbered page or not.</property>
+                      <object class="AtkObject" id="commentsinmargin-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|commentsinmargin">Select to export comments of Writer documents in the page margin.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="usereferencexobject">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|usereferencexobject">Use reference XObjects</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="usereferencexobject-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|usereferencexobject">When the option is enabled, then the reference XObject markup is used:  viewers have to support this markup to show vector images. Otherwise a fallback bitmap is shown in the viewer.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="hiddenpages">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|hiddenpages">Export _hidden pages</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="hiddenpages-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|hiddenpages">Exports document hidden slides.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -977,6 +958,26 @@
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="hiddenpages">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|hiddenpages">Export _hidden pages</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="hiddenpages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|hiddenpages">Exports document hidden slides.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -1021,8 +1022,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="commentsinmargin">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|commentsinmargin">_Comments in margin</property>
+                  <object class="GtkCheckButton" id="emptypages">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|emptypages">Exp_ort automatically inserted blank pages</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -1030,35 +1031,34 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="commentsinmargin-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|commentsinmargin">Select to export comments of Writer documents in the page margin.</property>
+                      <object class="AtkObject" id="emptypages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, then an even numbered blank page is normally automatically inserted. This option controls whether to export that even numbered page or not.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
+                    <property name="top-attach">9</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="tagged">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
+                  <object class="GtkCheckButton" id="usereferencexobject">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|usereferencexobject">Use reference XObjects</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="tagged-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
+                      <object class="AtkObject" id="usereferencexobject-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|usereferencexobject">When the option is enabled, then the reference XObject markup is used:  viewers have to support this markup to show vector images. Otherwise a fallback bitmap is shown in the viewer.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
+                    <property name="top-attach">10</property>
                   </packing>
                 </child>
               </object>
