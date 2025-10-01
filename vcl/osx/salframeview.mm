@@ -366,7 +366,7 @@ static NSString* getCurrentSelection()
                         if (xTextRange.is())
                         {
                             // tdf#168609 catch exceptions from SwXText::getString()
-                            // Apparently, implementions of XTextRange::getString()
+                            // Apparently, implementations of XTextRange::getString()
                             // such as SwXText::getString() can throw an exception.
                             OUString aStr;
                             try
@@ -399,7 +399,7 @@ static NSString* getCurrentSelection()
                 if (xTextRange.is())
                 {
                     // tdf#168609 catch exceptions from SwXText::getString()
-                    // Apparently, implementions of XTextRange::getString()
+                    // Apparently, implementations of XTextRange::getString()
                     // such as SwXText::getString() can throw an exception.
                     OUString aStr;
                     try
