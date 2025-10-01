@@ -1372,7 +1372,6 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(weld::Container* pPage, weld::Dialo
     , mxCbEnableCopy(m_xBuilder->weld_check_button(u"enablecopy"_ustr))
     , mxCbEnableAccessibility(m_xBuilder->weld_check_button(u"enablea11y"_ustr))
     , mxPasswordTitle(m_xBuilder->weld_label(u"setpasswordstitle"_ustr))
-    , mxPermissionTitle(m_xBuilder->weld_label(u"label2"_ustr))
 {
     msStrSetPwd = mxPasswordTitle->get_label();
     mxPbSetPwd->connect_clicked(LINK(this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl));
@@ -1537,7 +1536,6 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
     {
         mxCbEnableAccessibility->set_active(true);
     }
-    mxPermissionTitle->set_sensitive(!bIsPDFASel);
     mxPbSetPwd->set_sensitive(!bIsPDFASel);
     mxCbEnableAccessibility->set_sensitive(!bIsPDFUASel);
     if (bIsPDFASel)
