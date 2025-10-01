@@ -949,10 +949,6 @@ QHash<QAccessible::Attribute, QVariant> QtAccessibleWidget::attributes() const
     if (!xContext.is())
         return {};
 
-    Reference<XAccessibleExtendedAttributes> xAttributes(xContext, UNO_QUERY);
-    if (!xAttributes.is())
-        return {};
-
     QHash<QAccessible::Attribute, QVariant> aQtAttrs;
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
@@ -960,6 +956,10 @@ QHash<QAccessible::Attribute, QVariant> QtAccessibleWidget::attributes() const
     const QLocale aQLocale(toQString(aLocale.Language + u"_" + aLocale.Country));
     aQtAttrs.insert(QAccessible::Attribute::Locale, aQLocale);
 #endif
+
+    Reference<XAccessibleExtendedAttributes> xAttributes(xContext, UNO_QUERY);
+    if (!xAttributes.is())
+        return aQtAttrs;
 
     const OUString sAttrs = xAttributes->getExtendedAttributes();
     sal_Int32 nIndex = 0;
