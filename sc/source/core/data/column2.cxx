@@ -3551,6 +3551,29 @@ void ScColumn::EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAd
         rCxt.addEmptyBroadcasterPosition(rAddress.Tab(), rAddress.Col(), rAddress.Row());
 }
 
+void ScColumn::StartListeningSingleRefFormulaCells( sc::StartListeningContext& rCxt,
+                    const ScSingleRefData* pRef,
+                    const ScAddress& rAddress, ScFormulaCell** pp, ScFormulaCell** ppEnd )
+{
+    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(rAddress.Tab(), rAddress.Col());
+    if (!p)
+        return;
+    sc::BroadcasterStoreType::iterator& it = p->miBroadcasterPos;
+    ScAddress aPos(rAddress);
+    for (; pp != ppEnd; ++pp)
+    {
+        if (!aPos.IsValid())
+            break;
+
+        std::pair<sc::BroadcasterStoreType::iterator,size_t> aBroadcasterPos = maBroadcasters.position(it, aPos.Row());
+        it = aBroadcasterPos.first; // store the block position for next iteration.
+        startListening(maBroadcasters, it, aBroadcasterPos.second, aPos.Row(), **pp);
+
+        if (pRef->IsRowRel())
+            aPos.IncRow();
+    }
+}
+
 namespace {
 
 class CompileDBFormulaHandler

@@ -14,6 +14,7 @@
 #include <document.hxx>
 #include <grouparealistener.hxx>
 #include <refdata.hxx>
+#include <table.hxx>
 
 namespace sc {
 
@@ -382,15 +383,9 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
                 ScAddress aPos = pRef->toAbs(rDoc, rTopCell.aPos);
                 ScFormulaCell** pp = ppSharedTop;
                 ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
-                for (; pp != ppEnd; ++pp)
-                {
-                    if (!aPos.IsValid())
-                        break;
-
-                    rDoc.StartListeningCell(rCxt, aPos, **pp);
-                    if (pRef->IsRowRel())
-                        aPos.IncRow();
-                }
+                if (aPos.IsValid())
+                    if (ScTable* pTable = rDoc.FetchTable(aPos.Tab()))
+                        pTable->CreateColumnIfNotExists(aPos.Col()).StartListeningSingleRefFormulaCells(rCxt, pRef, aPos, pp, ppEnd);
             }
             break;
             case formula::svDoubleRef:

@@ -612,6 +612,8 @@ public:
     void        EndListening( SvtListener& rLst, SCROW nRow );
     void StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener );
+    void StartListeningSingleRefFormulaCells( sc::StartListeningContext& rCxt, const ScSingleRefData* pRef,
+                                const ScAddress& rAddress, ScFormulaCell** pp, ScFormulaCell** ppEnd );
     void StartListeners( sc::StartListeningContext& rCxt, bool bAll );
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
