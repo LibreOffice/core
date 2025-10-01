@@ -13,12 +13,6 @@ $(eval $(call gb_Executable_use_external,pythonmaker,frozen))
 
 $(eval $(call gb_Executable_use_external,pythonmaker,boost_headers))
 
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_Executable_use_externals,pythonmaker,\
-    dtoa \
-))
-endif
-
 $(eval $(call gb_Executable_use_libraries,pythonmaker,\
     unoidl \
     $(if $(filter TRUE,$(DISABLE_DYNLOADING)),reg) \

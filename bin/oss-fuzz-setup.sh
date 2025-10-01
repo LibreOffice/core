@@ -23,6 +23,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/$BOOST_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$BOX2D_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$EXPAT_TARBALL \
+    -C - -O https://dev-www.libreoffice.org/src/$FAST_FLOAT_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$LIBJPEG_TURBO_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$LCMS2_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$LIBEXTTEXTCAT_TARBALL \
