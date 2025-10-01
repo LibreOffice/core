@@ -16,6 +16,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 namespace com::sun::star::uno
 {
@@ -36,6 +37,7 @@ class EPUBExportFilter
 {
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
+    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
 public:
     EPUBExportFilter(css::uno::Reference<css::uno::XComponentContext> xContext);

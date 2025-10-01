@@ -27,9 +27,12 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/stream.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include "exp/xmlimp.hxx"
 #include "EPUBPackage.hxx"
+#include <strings.hrc>
+#include <WPFTResMgr.hxx>
 
 using namespace com::sun::star;
 
@@ -79,6 +82,10 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
         else if (rProp.Name == "EPUBLayoutMethod")
             rProp.Value >>= nLayoutMethod;
     }
+
+    utl::MediaDescriptor aMediaDesc(rDescriptor);
+    mxStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_STATUSINDICATOR, uno::Reference<task::XStatusIndicator>());
 
     // Build the export filter chain: the package has direct access to the ZIP
     // file, the flat ODF filter has access to the doc model, everything else
@@ -139,8 +146,12 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageM
 
     xCursor->jumpToLastPage();
     sal_Int16 nPages = xCursor->getPage();
+    if (mxStatusIndicator)
+        mxStatusIndicator->start(WpResId(STR_EPUB_EXPORTING_PAGES), nPages);
     for (sal_Int16 nPage = 1; nPage <= nPages; ++nPage)
     {
+        if (mxStatusIndicator)
+            mxStatusIndicator->setValue(nPage);
         Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
         Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
         // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
@@ -167,6 +178,8 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageM
         aPage.aChapterNames = aRenderer.getChapterNames();
         rPageMetafiles.push_back(std::move(aPage));
     }
+    if (mxStatusIndicator)
+        mxStatusIndicator->end();
 }
 
 void EPUBExportFilter::cancel() {}

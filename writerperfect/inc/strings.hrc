@@ -19,5 +19,6 @@
 #define STR_ENCODING_DIALOG_TITLE_LOTUS         NC_("STR_ENCODING_DIALOG_TITLE_LOTUS", "Import Lotus file")
 #define STR_ENCODING_DIALOG_TITLE_SYMPHONY      NC_("STR_ENCODING_DIALOG_TITLE_SYMPHONY", "Import Symphony file")
 #define STR_ENCODING_DIALOG_TITLE_QUATTROPRO    NC_("STR_ENCODING_DIALOG_TITLE_QUATTROPRO", "Import Quattro Pro file")
+#define STR_EPUB_EXPORTING_PAGES                NC_("STR_ENCODING_DIALOG_TITLE", "Exporting pages")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
