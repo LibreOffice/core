@@ -19,6 +19,8 @@
 
 #include "Exif.hxx"
 #include <memory>
+
+#include <comphelper/scopeguard.hxx>
 #include <osl/endian.h>
 #include <tools/stream.hxx>
 
@@ -65,22 +67,23 @@ Degree10 Exif::getRotation() const
 
 bool Exif::read(SvStream& rStream)
 {
-    sal_uInt64 nStreamPosition = rStream.Tell();
-    bool result = processJpeg(rStream, false);
-    rStream.Seek( nStreamPosition );
-
-    return result;
+    return processJpeg(rStream, false);
 }
 
 void Exif::write(SvStream& rStream)
 {
-    sal_uInt64 nStreamPosition = rStream.Tell();
     processJpeg(rStream, true);
-    rStream.Seek( nStreamPosition );
 }
 
 bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
 {
+    comphelper::ScopeGuard restore(
+        [&rStream, p = rStream.Tell(), e = rStream.GetEndian()]
+        {
+            rStream.SetEndian(e);
+            rStream.Seek(p);
+        });
+
     sal_uInt16  aMagic16;
     sal_uInt16  aLength;
 
