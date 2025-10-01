@@ -6477,7 +6477,7 @@ if test "$with_system_hsqldb" = "yes"; then
 fi
 if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
-    perl_use_string="$perl_use_string ; use FindBin"
+    perl_use_string="$perl_use_string ; use FindBin ; use Time::Piece"
 fi
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
