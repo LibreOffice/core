@@ -636,6 +636,15 @@ def main(argv):
         moduleRules = {}
         if os.path.exists(rulePath):
             moduleRules = yaml.full_load(open(rulePath))
+            # Check for duplicate file name entries in the yaml file
+            p1 = subprocess.Popen(['git', 'grep', '-h', ':$', rulePath ], stdout=subprocess.PIPE)
+            p2 = subprocess.Popen(['sort'], stdin=p1.stdout, stdout=subprocess.PIPE)
+            p3 = subprocess.Popen(['uniq', '-d'], stdin=p2.stdout, stdout=subprocess.PIPE)
+            p1.stdout.close()
+            p2.stdout.close()
+            output, _ = p3.communicate()
+            if output:
+                print("WARNING: The following files have duplicate entries - Please merge them - in:", rulePath, "\n", re.sub(r'[: ]+', '', output.decode()).strip())
         if "excludelist" in moduleRules.keys():
             excludelistRules = moduleRules["excludelist"]
             for pathname in excludelistRules.keys():

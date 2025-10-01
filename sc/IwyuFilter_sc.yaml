@@ -637,6 +637,8 @@ excludelist:
     sc/source/ui/vba/vbarange.cxx:
     # Needed for linker visibility of range::serviceDecl
     - service.hxx
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     sc/source/ui/vba/vbasheetobjects.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XGraphicObjects.hpp
@@ -662,12 +664,16 @@ excludelist:
     sc/source/ui/vba/vbaworkbooks.cxx:
     # Needed for linker visibility of worksheet::serviceDecl
     - service.hxx
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     sc/source/ui/vba/vbaworksheet.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XWorksheet.hpp
     sc/source/ui/vba/vbaworksheet.cxx:
     # Needed for linker visibility of workbook::serviceDecl
     - service.hxx
+    # Actually used
+    - com/sun/star/beans/XIntrospectionAccess.hpp
     sc/source/ui/vba/vbaworksheets.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XWorksheets.hpp
@@ -1068,16 +1074,7 @@ excludelist:
     sc/source/ui/vba/vbapagebreaks.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
-    sc/source/ui/vba/vbaworkbooks.cxx:
-    # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
     sc/source/ui/vba/vbawsfunction.cxx:
-    # Actually used
-    - com/sun/star/beans/XIntrospectionAccess.hpp
-    sc/source/ui/vba/vbarange.cxx:
-    # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
-    sc/source/ui/vba/vbaworksheet.cxx:
     # Actually used
     - com/sun/star/beans/XIntrospectionAccess.hpp
     sc/source/ui/view/viewfun4.cxx:
