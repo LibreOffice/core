@@ -26,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-move-iscii_devanagari_tbl-etc-out-of-.data-section.patch \
 	external/hunspell/bit_cast.patch.0 \
 	external/hunspell/clock-monotonic.patch.1 \
+	external/hunspell/dont-suggest-matching-capitalized-replacement.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
