@@ -6941,9 +6941,9 @@ if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
     if test -n "$WSL_ONLY_AS_HELPER"; then
         # OpenSSL is built via spp, FindBin is provided by default, but deps might change in future
-        perl_use_string_spp="$perl_use_string_spp ; use FindBin"
+        perl_use_string_spp="$perl_use_string_spp ; use FindBin ; use Time::Piece"
     else
-        perl_use_string="$perl_use_string ; use FindBin"
+        perl_use_string="$perl_use_string ; use FindBin ; use Time::Piece"
     fi
 fi
 dnl in WSL_ONLY_AS_HELPER case the test should be done with git-bash-provided-perl and not perl from
