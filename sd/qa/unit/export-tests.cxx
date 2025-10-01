@@ -1127,6 +1127,42 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
                          "style:text-properties[@fo:font-family='AcademyEngravedLetPlain']");
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTest)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+
+    uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroupShape.is());
+
+    // first shape in the group is the picture
+    uno::Reference<beans::XPropertySet> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2582), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(3325), aBitmap.GetSizePixel().Height());
+
+    Color aExpectedColor(ColorAlphaTag::ColorAlpha, 0xFFFFFFFF);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[ffffffff]
+    // - Actual  : rgba[000000ff]
+    CPPUNIT_ASSERT_EQUAL(aExpectedColor, aBitmap.GetPixelColor(5, 5));
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");

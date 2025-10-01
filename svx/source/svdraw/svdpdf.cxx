@@ -1834,6 +1834,13 @@ void ImpSdrPdfImport::MapScaling()
     mnMapScalingOfs = nCount;
 }
 
+static BitmapEx createBitmap(const Size& rSize, bool bGrayScale)
+{
+    if (bGrayScale)
+        return BitmapEx(Bitmap(rSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256)));
+    return BitmapEx(rSize, vcl::PixelFormat::N24_BPP);
+}
+
 void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                   int /*nPageObjectIndex*/)
 {
@@ -1855,10 +1862,13 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     const int nWidth = bitmap->getWidth();
     const int nHeight = bitmap->getHeight();
     const int nStride = bitmap->getStride();
-    BitmapEx aBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
+    BitmapEx aBitmap(createBitmap(Size(nWidth, nHeight), format == vcl::pdf::PDFBitmapType::Gray));
 
     switch (format)
     {
+        case vcl::pdf::PDFBitmapType::Gray:
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N8BitPal, nHeight, nStride);
+            break;
         case vcl::pdf::PDFBitmapType::BGR:
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight, nStride);
             break;
