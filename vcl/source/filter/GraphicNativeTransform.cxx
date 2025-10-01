@@ -127,20 +127,18 @@ void GraphicNativeTransform::rotateJPEG(Degree10 aRotation)
     {
         GfxLink aLink = mrGraphic.GetGfxLink();
 
-        SvMemoryStream aSourceStream;
-        aSourceStream.WriteBytes(aLink.GetData(), aLink.GetDataSize());
-        aSourceStream.Seek(STREAM_SEEK_TO_BEGIN);
+        std::unique_ptr<SvStream> pSourceStream(aLink.getDataContainer().getAsStream());
 
         exif::Orientation aOrientation = exif::TOP_LEFT;
 
         Exif exif;
-        if (exif.read(aSourceStream))
+        if (exif.read(*pSourceStream))
         {
             aOrientation = exif.getOrientation();
         }
 
         SvMemoryStream aTargetStream;
-        JpegTransform transform(aSourceStream, aTargetStream);
+        JpegTransform transform(*pSourceStream, aTargetStream);
         transform.setRotate(aRotation);
         transform.perform();
 
