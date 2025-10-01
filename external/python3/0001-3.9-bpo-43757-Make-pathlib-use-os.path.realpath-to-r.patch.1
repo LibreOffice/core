@@ -1,0 +1,537 @@
+From 00af9794dd118f7b835dd844b2b609a503ad951e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Langa?= <lukasz@langa.pl>
+Date: Mon, 2 Jun 2025 18:28:09 +0200
+Subject: [PATCH] [3.9] bpo-43757: Make pathlib use os.path.realpath() to
+ resolve symlinks in a path (GH-25264) (GH-135035)
+
+Also adds a new "strict" argument to realpath() to avoid changing the default behaviour of pathlib while sharing the implementation.
+
+(cherry-picked from commit baecfbd849dbf42360d3a84af6cc13160838f24d)
+
+Co-authored-by: Barney Gale <barney.gale@gmail.com>
+---
+ Doc/library/os.path.rst                       |  18 ++-
+ Lib/ntpath.py                                 |   4 +-
+ Lib/pathlib.py                                | 148 +++++-------------
+ Lib/posixpath.py                              |  26 ++-
+ Lib/test/test_ntpath.py                       |  60 ++++++-
+ Lib/test/test_posixpath.py                    |  57 ++++++-
+ .../2021-04-08-22-11-27.bpo-25264.b33fa0.rst  |   3 +
+ 7 files changed, 192 insertions(+), 124 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Library/2021-04-08-22-11-27.bpo-25264.b33fa0.rst
+
+diff --git a/Doc/library/os.path.rst b/Doc/library/os.path.rst
+index 97bb684a245..19a5ae028a5 100644
+--- a/Doc/library/os.path.rst
++++ b/Doc/library/os.path.rst
+@@ -345,15 +345,24 @@ the :mod:`glob` module.)
+       Accepts a :term:`path-like object`.
+ 
+ 
+-.. function:: realpath(path)
++.. function:: realpath(path, *, strict=False)
+ 
+    Return the canonical path of the specified filename, eliminating any symbolic
+    links encountered in the path (if they are supported by the operating
+    system).
+ 
++   If a path doesn't exist or a symlink loop is encountered, and *strict* is
++   ``True``, :exc:`OSError` is raised. If *strict* is ``False``, the path is
++   resolved as far as possible and any remainder is appended without checking
++   whether it exists.
++
+    .. note::
+-      When symbolic link cycles occur, the returned path will be one member of
+-      the cycle, but no guarantee is made about which member that will be.
++      This function emulates the operating system's procedure for making a path
++      canonical, which differs slightly between Windows and UNIX with respect
++      to how links and subsequent path components interact.
++
++      Operating system APIs make paths canonical as needed, so it's not
++      normally necessary to call this function.
+ 
+    .. versionchanged:: 3.6
+       Accepts a :term:`path-like object`.
+@@ -361,6 +370,9 @@ the :mod:`glob` module.)
+    .. versionchanged:: 3.8
+       Symbolic links and junctions are now resolved on Windows.
+ 
++   .. versionchanged:: 3.9.23
++      The *strict* parameter was added.
++
+ 
+ .. function:: relpath(path, start=os.curdir)
+ 
+diff --git a/Lib/ntpath.py b/Lib/ntpath.py
+index 6f771773a7d..92b46e20fc8 100644
+--- a/Lib/ntpath.py
++++ b/Lib/ntpath.py
+@@ -622,7 +622,7 @@ def _getfinalpathname_nonstrict(path):
+                 tail = join(name, tail) if tail else name
+         return tail
+ 
+-    def realpath(path):
++    def realpath(path, *, strict=False):
+         path = normpath(path)
+         if isinstance(path, bytes):
+             prefix = b'\\\\?\\'
+@@ -647,6 +647,8 @@ def realpath(path):
+             path = _getfinalpathname(path)
+             initial_winerror = 0
+         except OSError as ex:
++            if strict:
++                raise
+             initial_winerror = ex.winerror
+             path = _getfinalpathname_nonstrict(path)
+         # The path returned by _getfinalpathname will always start with \\?\ -
+diff --git a/Lib/pathlib.py b/Lib/pathlib.py
+index 7aeda14a141..1185a245739 100644
+--- a/Lib/pathlib.py
++++ b/Lib/pathlib.py
+@@ -14,15 +14,6 @@
+ 
+ 
+ supports_symlinks = True
+-if os.name == 'nt':
+-    import nt
+-    if sys.getwindowsversion()[:2] >= (6, 0):
+-        from nt import _getfinalpathname
+-    else:
+-        supports_symlinks = False
+-        _getfinalpathname = None
+-else:
+-    nt = None
+ 
+ 
+ __all__ = [
+@@ -34,14 +25,17 @@
+ # Internals
+ #
+ 
++_WINERROR_NOT_READY = 21  # drive exists but is not accessible
++_WINERROR_INVALID_NAME = 123  # fix for bpo-35306
++_WINERROR_CANT_RESOLVE_FILENAME = 1921  # broken symlink pointing to itself
++
+ # EBADF - guard against macOS `stat` throwing EBADF
+ _IGNORED_ERROS = (ENOENT, ENOTDIR, EBADF, ELOOP)
+ 
+ _IGNORED_WINERRORS = (
+-    21,  # ERROR_NOT_READY - drive exists but is not accessible
+-    123, # ERROR_INVALID_NAME - fix for bpo-35306
+-    1921,  # ERROR_CANT_RESOLVE_FILENAME - fix for broken symlink pointing to itself
+-)
++    _WINERROR_NOT_READY,
++    _WINERROR_INVALID_NAME,
++    _WINERROR_CANT_RESOLVE_FILENAME)
+ 
+ def _ignore_error(exception):
+     return (getattr(exception, 'errno', None) in _IGNORED_ERROS or
+@@ -200,30 +194,6 @@ def casefold_parts(self, parts):
+     def compile_pattern(self, pattern):
+         return re.compile(fnmatch.translate(pattern), re.IGNORECASE).fullmatch
+ 
+-    def resolve(self, path, strict=False):
+-        s = str(path)
+-        if not s:
+-            return os.getcwd()
+-        previous_s = None
+-        if _getfinalpathname is not None:
+-            if strict:
+-                return self._ext_to_normal(_getfinalpathname(s))
+-            else:
+-                tail_parts = []  # End of the path after the first one not found
+-                while True:
+-                    try:
+-                        s = self._ext_to_normal(_getfinalpathname(s))
+-                    except FileNotFoundError:
+-                        previous_s = s
+-                        s, tail = os.path.split(s)
+-                        tail_parts.append(tail)
+-                        if previous_s == s:
+-                            return path
+-                    else:
+-                        return os.path.join(s, *reversed(tail_parts))
+-        # Means fallback on absolute
+-        return None
+-
+     def _split_extended_path(self, s, ext_prefix=ext_namespace_prefix):
+         prefix = ''
+         if s.startswith(ext_prefix):
+@@ -234,10 +204,6 @@ def _split_extended_path(self, s, ext_prefix=ext_namespace_prefix):
+                 s = '\\' + s[3:]
+         return prefix, s
+ 
+-    def _ext_to_normal(self, s):
+-        # Turn back an extended path into a normal DOS-like path
+-        return self._split_extended_path(s)[1]
+-
+     def is_reserved(self, parts):
+         # NOTE: the rules for reserved names seem somewhat complicated
+         # (e.g. r"..\NUL" is reserved but not r"foo\NUL").
+@@ -324,54 +290,6 @@ def casefold_parts(self, parts):
+     def compile_pattern(self, pattern):
+         return re.compile(fnmatch.translate(pattern)).fullmatch
+ 
+-    def resolve(self, path, strict=False):
+-        sep = self.sep
+-        accessor = path._accessor
+-        seen = {}
+-        def _resolve(path, rest):
+-            if rest.startswith(sep):
+-                path = ''
+-
+-            for name in rest.split(sep):
+-                if not name or name == '.':
+-                    # current dir
+-                    continue
+-                if name == '..':
+-                    # parent dir
+-                    path, _, _ = path.rpartition(sep)
+-                    continue
+-                if path.endswith(sep):
+-                    newpath = path + name
+-                else:
+-                    newpath = path + sep + name
+-                if newpath in seen:
+-                    # Already seen this path
+-                    path = seen[newpath]
+-                    if path is not None:
+-                        # use cached value
+-                        continue
+-                    # The symlink is not resolved, so we must have a symlink loop.
+-                    raise RuntimeError("Symlink loop from %r" % newpath)
+-                # Resolve the symbolic link
+-                try:
+-                    target = accessor.readlink(newpath)
+-                except OSError as e:
+-                    if e.errno != EINVAL and strict:
+-                        raise
+-                    # Not a symlink, or non-strict mode. We just leave the path
+-                    # untouched.
+-                    path = newpath
+-                else:
+-                    seen[newpath] = None # not resolved symlink
+-                    path = _resolve(path, target)
+-                    seen[newpath] = path # resolved symlink
+-
+-            return path
+-        # NOTE: according to POSIX, getcwd() cannot contain path components
+-        # which are symlinks.
+-        base = '' if path.is_absolute() else os.getcwd()
+-        return _resolve(base, str(path)) or sep
+-
+     def is_reserved(self, parts):
+         return False
+ 
+@@ -443,17 +361,11 @@ def link_to(self, target):
+ 
+     replace = os.replace
+ 
+-    if nt:
+-        if supports_symlinks:
+-            symlink = os.symlink
+-        else:
+-            def symlink(a, b, target_is_directory):
+-                raise NotImplementedError("symlink() not available on this system")
++    if hasattr(os, "symlink"):
++        symlink = os.symlink
+     else:
+-        # Under POSIX, os.symlink() takes two args
+-        @staticmethod
+-        def symlink(a, b, target_is_directory):
+-            return os.symlink(a, b)
++        def symlink(self, src, dst, target_is_directory=False):
++            raise NotImplementedError("os.symlink() not available on this system")
+ 
+     utime = os.utime
+ 
+@@ -475,6 +387,12 @@ def group(self, path):
+     def readlink(self, path):
+         return os.readlink(path)
+ 
++    getcwd = os.getcwd
++
++    expanduser = staticmethod(os.path.expanduser)
++
++    realpath = staticmethod(os.path.realpath)
++
+ 
+ _normal_accessor = _NormalAccessor()
+ 
+@@ -1212,17 +1130,27 @@ def resolve(self, strict=False):
+         """
+         if self._closed:
+             self._raise_closed()
+-        s = self._flavour.resolve(self, strict=strict)
+-        if s is None:
+-            # No symlink resolution => for consistency, raise an error if
+-            # the path doesn't exist or is forbidden
+-            self.stat()
+-            s = str(self.absolute())
+-        # Now we have no symlinks in the path, it's safe to normalize it.
+-        normed = self._flavour.pathmod.normpath(s)
+-        obj = self._from_parts((normed,), init=False)
+-        obj._init(template=self)
+-        return obj
++
++        def check_eloop(e):
++            winerror = getattr(e, 'winerror', 0)
++            if e.errno == ELOOP or winerror == _WINERROR_CANT_RESOLVE_FILENAME:
++                raise RuntimeError("Symlink loop from %r" % e.filename)
++
++        try:
++            s = self._accessor.realpath(self, strict=strict)
++        except OSError as e:
++            check_eloop(e)
++            raise
++        p = self._from_parts((s,))
++
++        # In non-strict mode, realpath() doesn't raise on symlink loops.
++        # Ensure we get an exception by calling stat()
++        if not strict:
++            try:
++                p.stat()
++            except OSError as e:
++                check_eloop(e)
++        return p
+ 
+     def stat(self):
+         """
+diff --git a/Lib/posixpath.py b/Lib/posixpath.py
+index af2814bdb05..eb80fb9e9be 100644
+--- a/Lib/posixpath.py
++++ b/Lib/posixpath.py
+@@ -385,16 +385,16 @@ def abspath(path):
+ # Return a canonical path (i.e. the absolute location of a file on the
+ # filesystem).
+ 
+-def realpath(filename):
++def realpath(filename, *, strict=False):
+     """Return the canonical path of the specified filename, eliminating any
+ symbolic links encountered in the path."""
+     filename = os.fspath(filename)
+-    path, ok = _joinrealpath(filename[:0], filename, {})
++    path, ok = _joinrealpath(filename[:0], filename, strict, {})
+     return abspath(path)
+ 
+ # Join two paths, normalizing and eliminating any symbolic links
+ # encountered in the second path.
+-def _joinrealpath(path, rest, seen):
++def _joinrealpath(path, rest, strict, seen):
+     if isinstance(path, bytes):
+         sep = b'/'
+         curdir = b'.'
+@@ -423,7 +423,15 @@ def _joinrealpath(path, rest, seen):
+                 path = pardir
+             continue
+         newpath = join(path, name)
+-        if not islink(newpath):
++        try:
++            st = os.lstat(newpath)
++        except OSError:
++            if strict:
++                raise
++            is_link = False
++        else:
++            is_link = stat.S_ISLNK(st.st_mode)
++        if not is_link:
+             path = newpath
+             continue
+         # Resolve the symbolic link
+@@ -434,10 +442,14 @@ def _joinrealpath(path, rest, seen):
+                 # use cached value
+                 continue
+             # The symlink is not resolved, so we must have a symlink loop.
+-            # Return already resolved part + rest of the path unchanged.
+-            return join(newpath, rest), False
++            if strict:
++                # Raise OSError(errno.ELOOP)
++                os.stat(newpath)
++            else:
++                # Return already resolved part + rest of the path unchanged.
++                return join(newpath, rest), False
+         seen[newpath] = None # not resolved symlink
+-        path, ok = _joinrealpath(path, os.readlink(newpath), seen)
++        path, ok = _joinrealpath(path, os.readlink(newpath), strict, seen)
+         if not ok:
+             return join(path, rest), False
+         seen[newpath] = path # resolved symlink
+diff --git a/Lib/test/test_ntpath.py b/Lib/test/test_ntpath.py
+index 6f881f197c4..2d3fa101bc4 100644
+--- a/Lib/test/test_ntpath.py
++++ b/Lib/test/test_ntpath.py
+@@ -267,6 +267,17 @@ def test_realpath_basic(self):
+         self.assertPathEqual(ntpath.realpath(os.fsencode(ABSTFN + "1")),
+                          os.fsencode(ABSTFN))
+ 
++    @support.skip_unless_symlink
++    @unittest.skipUnless(HAVE_GETFINALPATHNAME, 'need _getfinalpathname')
++    def test_realpath_strict(self):
++        # Bug #43757: raise FileNotFoundError in strict mode if we encounter
++        # a path that does not exist.
++        ABSTFN = ntpath.abspath(support.TESTFN)
++        os.symlink(ABSTFN + "1", ABSTFN)
++        self.addCleanup(support.unlink, ABSTFN)
++        self.assertRaises(FileNotFoundError, ntpath.realpath, ABSTFN, strict=True)
++        self.assertRaises(FileNotFoundError, ntpath.realpath, ABSTFN + "2", strict=True)
++
+     @support.skip_unless_symlink
+     @unittest.skipUnless(HAVE_GETFINALPATHNAME, 'need _getfinalpathname')
+     def test_realpath_relative(self):
+@@ -338,8 +349,9 @@ def test_realpath_broken_symlinks(self):
+     @support.skip_unless_symlink
+     @unittest.skipUnless(HAVE_GETFINALPATHNAME, 'need _getfinalpathname')
+     def test_realpath_symlink_loops(self):
+-        # Symlink loops are non-deterministic as to which path is returned, but
+-        # it will always be the fully resolved path of one member of the cycle
++        # Symlink loops in non-strict mode are non-deterministic as to which
++        # path is returned, but it will always be the fully resolved path of
++        # one member of the cycle
+         ABSTFN = ntpath.abspath(support.TESTFN)
+         self.addCleanup(support.unlink, ABSTFN)
+         self.addCleanup(support.unlink, ABSTFN + "1")
+@@ -381,6 +393,50 @@ def test_realpath_symlink_loops(self):
+         # Test using relative path as well.
+         self.assertPathEqual(ntpath.realpath(ntpath.basename(ABSTFN)), ABSTFN)
+ 
++    @support.skip_unless_symlink
++    @unittest.skipUnless(HAVE_GETFINALPATHNAME, 'need _getfinalpathname')
++    def test_realpath_symlink_loops_strict(self):
++        # Symlink loops raise OSError in strict mode
++        ABSTFN = ntpath.abspath(support.TESTFN)
++        self.addCleanup(support.unlink, ABSTFN)
++        self.addCleanup(support.unlink, ABSTFN + "1")
++        self.addCleanup(support.unlink, ABSTFN + "2")
++        self.addCleanup(support.unlink, ABSTFN + "y")
++        self.addCleanup(support.unlink, ABSTFN + "c")
++        self.addCleanup(support.unlink, ABSTFN + "a")
++
++        os.symlink(ABSTFN, ABSTFN)
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN, strict=True)
++
++        os.symlink(ABSTFN + "1", ABSTFN + "2")
++        os.symlink(ABSTFN + "2", ABSTFN + "1")
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "1", strict=True)
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "2", strict=True)
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "1\\x", strict=True)
++        # Windows eliminates '..' components before resolving links, so the
++        # following call is not expected to raise.
++        self.assertPathEqual(ntpath.realpath(ABSTFN + "1\\..", strict=True),
++                             ntpath.dirname(ABSTFN))
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "1\\..\\x", strict=True)
++        os.symlink(ABSTFN + "x", ABSTFN + "y")
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "1\\..\\"
++                                             + ntpath.basename(ABSTFN) + "y",
++                                             strict=True)
++        self.assertRaises(OSError, ntpath.realpath,
++                          ABSTFN + "1\\..\\" + ntpath.basename(ABSTFN) + "1",
++                          strict=True)
++
++        os.symlink(ntpath.basename(ABSTFN) + "a\\b", ABSTFN + "a")
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "a", strict=True)
++
++        os.symlink("..\\" + ntpath.basename(ntpath.dirname(ABSTFN))
++                   + "\\" + ntpath.basename(ABSTFN) + "c", ABSTFN + "c")
++        self.assertRaises(OSError, ntpath.realpath, ABSTFN + "c", strict=True)
++
++        # Test using relative path as well.
++        self.assertRaises(OSError, ntpath.realpath, ntpath.basename(ABSTFN),
++                          strict=True)
++
+     @support.skip_unless_symlink
+     @unittest.skipUnless(HAVE_GETFINALPATHNAME, 'need _getfinalpathname')
+     def test_realpath_symlink_prefix(self):
+diff --git a/Lib/test/test_posixpath.py b/Lib/test/test_posixpath.py
+index 18819a5dc1c..aee3cb421fb 100644
+--- a/Lib/test/test_posixpath.py
++++ b/Lib/test/test_posixpath.py
+@@ -350,6 +350,19 @@ def test_realpath_basic(self):
+         finally:
+             support.unlink(ABSTFN)
+ 
++    @unittest.skipUnless(hasattr(os, "symlink"),
++                         "Missing symlink implementation")
++    @skip_if_ABSTFN_contains_backslash
++    def test_realpath_strict(self):
++        # Bug #43757: raise FileNotFoundError in strict mode if we encounter
++        # a path that does not exist.
++        try:
++            os.symlink(ABSTFN+"1", ABSTFN)
++            self.assertRaises(FileNotFoundError, realpath, ABSTFN, strict=True)
++            self.assertRaises(FileNotFoundError, realpath, ABSTFN + "2", strict=True)
++        finally:
++            support.unlink(ABSTFN)
++
+     @unittest.skipUnless(hasattr(os, "symlink"),
+                          "Missing symlink implementation")
+     @skip_if_ABSTFN_contains_backslash
+@@ -365,7 +378,7 @@ def test_realpath_relative(self):
+     @skip_if_ABSTFN_contains_backslash
+     def test_realpath_symlink_loops(self):
+         # Bug #930024, return the path unchanged if we get into an infinite
+-        # symlink loop.
++        # symlink loop in non-strict mode (default).
+         try:
+             os.symlink(ABSTFN, ABSTFN)
+             self.assertEqual(realpath(ABSTFN), ABSTFN)
+@@ -402,6 +415,48 @@ def test_realpath_symlink_loops(self):
+             support.unlink(ABSTFN+"c")
+             support.unlink(ABSTFN+"a")
+ 
++    @unittest.skipUnless(hasattr(os, "symlink"),
++                         "Missing symlink implementation")
++    @skip_if_ABSTFN_contains_backslash
++    def test_realpath_symlink_loops_strict(self):
++        # Bug #43757, raise OSError if we get into an infinite symlink loop in
++        # strict mode.
++        try:
++            os.symlink(ABSTFN, ABSTFN)
++            self.assertRaises(OSError, realpath, ABSTFN, strict=True)
++
++            os.symlink(ABSTFN+"1", ABSTFN+"2")
++            os.symlink(ABSTFN+"2", ABSTFN+"1")
++            self.assertRaises(OSError, realpath, ABSTFN+"1", strict=True)
++            self.assertRaises(OSError, realpath, ABSTFN+"2", strict=True)
++
++            self.assertRaises(OSError, realpath, ABSTFN+"1/x", strict=True)
++            self.assertRaises(OSError, realpath, ABSTFN+"1/..", strict=True)
++            self.assertRaises(OSError, realpath, ABSTFN+"1/../x", strict=True)
++            os.symlink(ABSTFN+"x", ABSTFN+"y")
++            self.assertRaises(OSError, realpath,
++                              ABSTFN+"1/../" + basename(ABSTFN) + "y", strict=True)
++            self.assertRaises(OSError, realpath,
++                              ABSTFN+"1/../" + basename(ABSTFN) + "1", strict=True)
++
++            os.symlink(basename(ABSTFN) + "a/b", ABSTFN+"a")
++            self.assertRaises(OSError, realpath, ABSTFN+"a", strict=True)
++
++            os.symlink("../" + basename(dirname(ABSTFN)) + "/" +
++                       basename(ABSTFN) + "c", ABSTFN+"c")
++            self.assertRaises(OSError, realpath, ABSTFN+"c", strict=True)
++
++            # Test using relative path as well.
++            with support.change_cwd(dirname(ABSTFN)):
++                self.assertRaises(OSError, realpath, basename(ABSTFN), strict=True)
++        finally:
++            support.unlink(ABSTFN)
++            support.unlink(ABSTFN+"1")
++            support.unlink(ABSTFN+"2")
++            support.unlink(ABSTFN+"y")
++            support.unlink(ABSTFN+"c")
++            support.unlink(ABSTFN+"a")
++
+     @unittest.skipUnless(hasattr(os, "symlink"),
+                          "Missing symlink implementation")
+     @skip_if_ABSTFN_contains_backslash
+diff --git a/Misc/NEWS.d/next/Library/2021-04-08-22-11-27.bpo-25264.b33fa0.rst b/Misc/NEWS.d/next/Library/2021-04-08-22-11-27.bpo-25264.b33fa0.rst
+new file mode 100644
+index 00000000000..593846ec15c
+--- /dev/null
++++ b/Misc/NEWS.d/next/Library/2021-04-08-22-11-27.bpo-25264.b33fa0.rst
+@@ -0,0 +1,3 @@
++:func:`os.path.realpath` now accepts a *strict* keyword-only argument.
++When set to ``True``, :exc:`OSError` is raised if a path doesn't exist
++or a symlink loop is encountered.
+-- 
+2.51.0
+
