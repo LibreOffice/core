@@ -964,6 +964,8 @@ void AbstractSwWordCountFloatDlg_Impl::SetCounts(const SwDocStat &rCurrCnt, cons
     m_xDlg->SetCounts(rCurrCnt, rDocStat);
 }
 
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
+
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
 {
 }
@@ -996,6 +998,8 @@ sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
     return m_xDlg->GetRestartPage();
 }
 
+#endif
+
 std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSelectedLanguage()
 {
 #if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
@@ -1004,6 +1008,8 @@ std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSele
     return {};
 #endif
 }
+
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
 
 short AbstractChangeDbDialog_Impl::Execute()
 {
@@ -1015,6 +1021,8 @@ bool AbstractChangeDbDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
 {
     return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
+
+#endif
 
 VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg(weld::Window* pParent)
 {

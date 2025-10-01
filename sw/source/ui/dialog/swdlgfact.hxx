@@ -59,6 +59,9 @@
 #include <pagenumberdlg.hxx>
 #include <changedb.hxx>
 
+#include <config_features.h>
+#include <config_fuzzers.h>
+
 
 class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
@@ -732,6 +735,8 @@ public:
     virtual std::shared_ptr<SfxDialogController> GetController() override;
 };
 
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
+
 class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
@@ -763,6 +768,8 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void UpdateFields() override { m_xDlg->UpdateFields(); }
 };
+
+#endif
 
 
 //AbstractDialogFactory_Impl implementations
