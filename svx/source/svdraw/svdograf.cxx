@@ -35,6 +35,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
@@ -413,9 +414,25 @@ css::uno::Reference<css::lang::XComponent> SdrGrafObj::GetReplacementGraphicMode
 
     if (SdrView* pView = pViewShell->GetDrawView())
     {
-        // Group shapes together
-        pView->MarkAllObj();
-        pView->GroupMarked();
+        if (SdrPageView* pPV = pView->GetSdrPageView())
+        {
+            // Group shapes together, including invisible objects
+
+            rtl::Reference<SdrObject> xGrp(new SdrObjGroup(rSdrModel));
+            SdrObjList* pDstList = xGrp->GetSubList();
+
+            SdrObjList* pSrcList = pPV->GetObjList();
+            size_t i = pSrcList->GetObjCount();
+            while (i > 0)
+            {
+                --i;
+                rtl::Reference<SdrObject> xObj(pSrcList->GetObj(i));
+                pSrcList->RemoveObject(i);
+                pDstList->InsertObject(xObj.get(), 0);
+            }
+
+            pSrcList->InsertObject(xGrp.get(), 0);
+        }
     }
 
     return xComponent;
