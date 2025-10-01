@@ -27,6 +27,7 @@
 #include <ndtxt.hxx>
 #include <fmturl.hxx>
 #include <textcontentcontrol.hxx>
+#include <fmtfsize.hxx>
 
 namespace
 {
@@ -805,6 +806,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdExport)
     // - Actual  : ☐ foo\n\n☐ bar
     // i.e. checkboxes were not written using the task list item markup.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdImport)
+{
+    // Given a document with an embedded image:
+    // When importing that document:
+    setImportFilterName("Markdown");
+    createSwDoc("embedded-image.md");
+
+    // Then make sure the embedded image gets imported, with the correct size:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    sw::FrameFormats<sw::SpzFrameFormat*>& rFlys = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(!rFlys.empty());
+    sw::SpzFrameFormat& rFly = *rFlys[0];
+    const SwFormatFrameSize& rSize = rFly.GetFrameSize();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 960
+    // - Actual  : 500 (MD_MIN_IMAGE_WIDTH_IN_TWIPS)
+    // i.e. the image wasn't imported, had the default minimal size.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(960), rSize.GetWidth());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(960), rSize.GetHeight());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

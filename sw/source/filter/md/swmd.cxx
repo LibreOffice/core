@@ -632,6 +632,17 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
 
     Graphic aGraphic;
     INetURLObject aGraphicURL(sGrfNm);
+    if (aGraphicURL.GetProtocol() == INetProtocol::Data)
+    {
+        // 'data:' URL: read that here, initialize aGraphic anc clear sGrfNm.
+        std::unique_ptr<SvMemoryStream> pStream = aGraphicURL.getData();
+        if (pStream)
+        {
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+            aGraphic = rFilter.ImportUnloadedGraphic(*pStream);
+            sGrfNm.clear();
+        }
+    }
 
     if (!sGrfNm.isEmpty())
     {
@@ -639,12 +650,17 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     }
 
     Size aGrfSz(0, 0);
-    if (allowAccessLink(*m_xDoc) && !aGraphicURL.IsExoticProtocol())
+    if (allowAccessLink(*m_xDoc) && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(true))
             aGrfSz
                 = o3tl::convert(aDescriptor.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
+    }
+    else if (aGraphic.GetType() == GraphicType::Bitmap)
+    {
+        // We have an unloaded graphic in aGraphic, read its size.
+        aGrfSz = o3tl::convert(aGraphic.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
     }
 
     tools::Long nWidth = 0;
