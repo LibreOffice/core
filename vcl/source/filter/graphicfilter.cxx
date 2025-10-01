@@ -941,8 +941,6 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic& rGraphic, GfxLinkTyp
 
 ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, GraphicFilterImportFlags nImportFlags)
 {
-    ErrCode aReturnCode = ERRCODE_NONE;
-
     // set LOGSIZE flag always, if not explicitly disabled
     // (see #90508 and #106763)
     if (!(nImportFlags & GraphicFilterImportFlags::DontSetLogsizeForJpeg))
@@ -950,48 +948,25 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
         nImportFlags |= GraphicFilterImportFlags::SetLogsizeForJpeg;
     }
 
-    sal_uInt64 nPosition = rStream.Tell();
     ImportOutput aImportOutput;
-    if (!ImportJPEG(rStream, aImportOutput, nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
+    if (!ImportJPEG(rStream, aImportOutput, nImportFlags, nullptr))
     {
-        aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
+        return ERRCODE_GRFILTER_FILTERERROR;
     }
-    else
-    {
-        Bitmap& rBitmap = *aImportOutput.moBitmap;
-        BitmapScopedWriteAccess pWriteAccess(rBitmap);
-        rStream.Seek(nPosition);
-        if (!ImportJPEG(rStream, aImportOutput, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess))
-        {
-            aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
-        }
-        else
-        {
-            if (aImportOutput.moBitmap)
-            {
-                rGraphic = Graphic(*aImportOutput.moBitmap);
-                rLinkType = GfxLinkType::NativeJpg;
-            }
-            else
-            {
-                aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
-            }
-        }
-    }
+
+    rGraphic = Graphic(*aImportOutput.moBitmap);
+    rLinkType = GfxLinkType::NativeJpg;
 
     // Get Orientation from EXIF data
-    GraphicNativeMetadata aMetadata;
-    if (aMetadata.read(rStream))
+    if (GraphicNativeMetadata aMetadata; aMetadata.read(rStream))
     {
-        Degree10 aRotation = aMetadata.getRotation();
-        if (aRotation)
+        if (Degree10 aRotation = aMetadata.getRotation())
         {
-            GraphicNativeTransform aTransform(rGraphic);
-            aTransform.rotate(aRotation);
+            GraphicNativeTransform(rGraphic).rotate(aRotation);
         }
     }
 
-    return aReturnCode;
+    return ERRCODE_NONE;
 }
 
 ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, BinaryDataContainer& rpGraphicContent)
