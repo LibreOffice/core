@@ -99,7 +99,7 @@ namespace rptui
 
                     // the expression matches -> translate it to the new data source of the report control model
                     sFormulaExpression = rEntry.second->assembleExpression( sNewUnprefixed, sLHS, sRHS );
-                    ReportFormula aFormula(ReportFormula(ReportFormula::Expression, sFormulaExpression));
+                    ReportFormula aFormula(ReportFormula(ReportFormula::BindType::Expression, sFormulaExpression));
                     xFormatCondition->setFormula(aFormula.getCompleteFormula());
                     break;
                 }

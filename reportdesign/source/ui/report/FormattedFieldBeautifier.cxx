@@ -77,7 +77,7 @@ namespace rptui
                 {
                     ReportFormula aFormula( sDataField );
                     bool bSet = true;
-                    if ( aFormula.getType() == ReportFormula::Field )
+                    if ( aFormula.getType() == ReportFormula::BindType::Field )
                     {
                         const OUString& sColumnName = aFormula.getFieldName();
                         OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);

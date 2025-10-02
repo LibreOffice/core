@@ -245,9 +245,9 @@ void Condition::impl_setCondition( const OUString& _rConditionFormula )
     {
         // the unprefixed expression which forms the condition
         ReportFormula aFormula( _rConditionFormula );
-        OSL_ENSURE( aFormula.getType() == ReportFormula::Expression, "Condition::setCondition: illegal formula!" );
+        OSL_ENSURE( aFormula.getType() == ReportFormula::BindType::Expression, "Condition::setCondition: illegal formula!" );
         OUString sExpression;
-        if ( aFormula.getType() == ReportFormula::Expression )
+        if (aFormula.getType() == ReportFormula::BindType::Expression)
             sExpression = aFormula.getExpression();
         // as fallback, if the below matching does not succeed, assume
         // the whole expression is the LHS
@@ -352,7 +352,7 @@ void Condition::fillFormatCondition(const uno::Reference< report::XFormatConditi
         sUndecoratedFormula = pFactory->assembleExpression( sUnprefixedFieldContent, sLHS, sRHS );
     }
 
-    ReportFormula aFormula( ReportFormula::Expression, sUndecoratedFormula );
+    ReportFormula aFormula(ReportFormula::BindType::Expression, sUndecoratedFormula);
     _xCondition->setFormula( aFormula.getCompleteFormula() );
 }
 

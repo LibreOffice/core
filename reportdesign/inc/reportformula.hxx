@@ -36,7 +36,7 @@ namespace rptui
     class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) ReportFormula
     {
     public:
-        enum BindType
+        enum class BindType
         {
             Expression,
             Field,
@@ -100,14 +100,14 @@ namespace rptui
 
     inline OUString const & ReportFormula::getFieldName() const
     {
-        OSL_PRECOND( getType() == Field, "ReportFormula::getFieldName: not bound to a field!" );
+        OSL_PRECOND(getType() == BindType::Field, "ReportFormula::getFieldName: not bound to a field!");
         return getUndecoratedContent();
     }
 
 
     inline OUString const & ReportFormula::getExpression() const
     {
-        OSL_PRECOND( getType() == Expression, "ReportFormula::getExpression: not bound to an expression!" );
+        OSL_PRECOND( getType() == BindType::Expression, "ReportFormula::getExpression: not bound to an expression!" );
         return getUndecoratedContent();
     }
 

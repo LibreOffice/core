@@ -3180,7 +3180,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 
             if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && !_sFunction.isEmpty() )
             {
-                ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
+                ReportFormula aFunctionFormula(ReportFormula::BindType::Expression, _sFunction );
                 xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::Any( aFunctionFormula.getCompleteFormula() ) );
             }
 
@@ -3493,7 +3493,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             sDefaultName = sName;
                             xUnoProp->setPropertyValue(PROPERTY_NAME,uno::Any(sDefaultName));
 
-                            ReportFormula aFormula( ReportFormula::Field, sName );
+                            ReportFormula aFormula( ReportFormula::BindType::Field, sName );
                             xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::Any( aFormula.getCompleteFormula() ) );
                         }
 

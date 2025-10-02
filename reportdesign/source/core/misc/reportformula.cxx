@@ -36,14 +36,14 @@ namespace rptui
 
 
     ReportFormula::ReportFormula( const OUString& _rFormula )
-        :m_eType( Invalid )
+        :m_eType(BindType::Invalid)
     {
         m_sCompleteFormula = _rFormula;
 
         // is it an ordinary expression?
         if ( m_sCompleteFormula.startsWith( sExpressionPrefix, &m_sUndecoratedContent ) )
         {
-            m_eType = Expression;
+            m_eType = BindType::Expression;
             return;
         }
 
@@ -56,7 +56,7 @@ namespace rptui
                 &&  ( m_sCompleteFormula[ m_sCompleteFormula.getLength() - 1 ] == ']' )
                 )
             {
-                m_eType = Field;
+                m_eType = BindType::Field;
                 m_sUndecoratedContent = m_sCompleteFormula.copy( nPrefixLen + 1, m_sCompleteFormula.getLength() - nPrefixLen - 2 );
                 return;
             }
@@ -69,7 +69,7 @@ namespace rptui
     {
         switch ( m_eType )
         {
-        case Expression:
+        case BindType::Expression:
         {
             if ( _rFieldOrExpression.startsWith( sExpressionPrefix ) )
                 m_sCompleteFormula = _rFieldOrExpression;
@@ -78,7 +78,7 @@ namespace rptui
         }
         break;
 
-        case Field:
+        case BindType::Field:
         {
             m_sCompleteFormula = sFieldPrefix + OUString::Concat(u"[") + _rFieldOrExpression + "]";
         }
@@ -97,7 +97,7 @@ namespace rptui
 
     OUString ReportFormula::getBracketedFieldOrExpression() const
     {
-        bool bIsField = ( getType() == Field );
+        bool bIsField = ( getType() == BindType::Field );
         OUStringBuffer aFieldContent;
         if ( bIsField )
             aFieldContent.append( "[" );
@@ -108,7 +108,7 @@ namespace rptui
         return aFieldContent.makeStringAndClear();
     }
 
-    bool                    ReportFormula::isValid() const { return getType() != Invalid; }
+    bool ReportFormula::isValid() const { return getType() != BindType::Invalid; }
 
     OUString ReportFormula::getEqualUndecoratedContent() const
     {
