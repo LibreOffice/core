@@ -681,8 +681,8 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
     assert(loadedGraphics.size() == toLoad.size());
     for( size_t i = 0; i < toLoad.size(); ++i )
     {
-        if(loadedGraphics[ i ] != nullptr)
-            toLoad[ i ]->ImplGetImpGraphic()->updateFromLoadedGraphic(loadedGraphics[ i ]->ImplGetImpGraphic());
+        assert(loadedGraphics[ i ] != nullptr);
+        toLoad[ i ]->ImplGetImpGraphic()->updateFromLoadedGraphic(loadedGraphics[ i ]->ImplGetImpGraphic());
     }
 }
 

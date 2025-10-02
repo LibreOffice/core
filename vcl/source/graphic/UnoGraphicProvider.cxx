@@ -453,12 +453,10 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
     {
         uno::Reference<graphic::XGraphic> xGraphic;
 
-        if (pGraphic)
-        {
-            rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic();
-            pUnoGraphic->init(*pGraphic);
-            xGraphic = pUnoGraphic;
-        }
+        assert(pGraphic);
+        rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic();
+        pUnoGraphic->init(*pGraphic);
+        xGraphic = pUnoGraphic;
 
         aRet.push_back(xGraphic);
     }
