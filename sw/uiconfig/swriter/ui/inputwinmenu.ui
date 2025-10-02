@@ -32,19 +32,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="phd">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="inputwinmenu|phd">Percent</property>
-        <property name="use_underline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="phd-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="inputwinmenu|extended_tip|phd">Calculates a percentage</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="sqrt">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
