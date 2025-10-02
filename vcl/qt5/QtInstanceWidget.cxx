@@ -337,7 +337,7 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
         }
         case QEvent::ToolTip:
         {
-            return handleToolTipEvent(static_cast<QHelpEvent*>(pEvent));
+            return handleToolTipEvent(static_cast<QHelpEvent&>(*pEvent));
         }
         default:
             return QObject::eventFilter(pObject, pEvent);
@@ -821,7 +821,7 @@ void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
     assert(false && "Not implemented yet");
 }
 
-bool QtInstanceWidget::handleToolTipEvent(const QHelpEvent* pHelpEvent)
+bool QtInstanceWidget::handleToolTipEvent(const QHelpEvent& rHelpEvent)
 {
     // show extended tip if enabled and set
     if (!ImplGetSVHelpData().mbBalloonHelp)
@@ -832,7 +832,7 @@ bool QtInstanceWidget::handleToolTipEvent(const QHelpEvent* pHelpEvent)
     if (sExtendedTip.isEmpty())
         return false;
 
-    QToolTip::showText(pHelpEvent->globalPos(), sExtendedTip, getQWidget());
+    QToolTip::showText(rHelpEvent.globalPos(), sExtendedTip, getQWidget());
     return true;
 }
 

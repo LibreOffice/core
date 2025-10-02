@@ -223,7 +223,7 @@ private:
 
     void setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol);
 
-    bool handleToolTipEvent(const QHelpEvent* pEvent);
+    bool handleViewPortToolTipEvent(const QHelpEvent& rEvent);
 
 private Q_SLOTS:
     void handleActivated();

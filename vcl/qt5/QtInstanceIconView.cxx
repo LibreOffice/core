@@ -32,9 +32,6 @@ QtInstanceIconView::QtInstanceIconView(QListView* pListView)
     m_pSelectionModel = m_pListView->selectionModel();
     assert(m_pSelectionModel);
 
-    // install event filter to handle tooltip events
-    m_pListView->installEventFilter(this);
-
     connect(m_pListView, &QListView::activated, this, &QtInstanceIconView::handleActivated);
     connect(m_pSelectionModel, &QItemSelectionModel::selectionChanged, this,
             &QtInstanceIconView::handleSelectionChanged);
@@ -312,16 +309,6 @@ int QtInstanceIconView::n_children() const
     return nChildren;
 }
 
-bool QtInstanceIconView::eventFilter(QObject* pObject, QEvent* pEvent)
-{
-    assert(pObject == m_pListView);
-
-    if (pEvent->type() == QEvent::ToolTip)
-        return handleToolTipEvent(static_cast<QHelpEvent*>(pEvent));
-
-    return QtInstanceWidget::eventFilter(pObject, pEvent);
-}
-
 QModelIndex QtInstanceIconView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
 
 QModelIndex QtInstanceIconView::modelIndex(const weld::TreeIter& rIter) const
@@ -335,19 +322,19 @@ int QtInstanceIconView::position(const weld::TreeIter& rIter)
     return aModelIndex.row();
 }
 
-bool QtInstanceIconView::handleToolTipEvent(const QHelpEvent* pHelpEvent)
+bool QtInstanceIconView::handleToolTipEvent(const QHelpEvent& rHelpEvent)
 {
-    QModelIndex aIndex = m_pListView->indexAt(pHelpEvent->pos());
+    QModelIndex aIndex = m_pListView->indexAt(rHelpEvent.pos());
     if (!aIndex.isValid())
-        return false;
+        return QtInstanceWidget::handleToolTipEvent(rHelpEvent);
 
     SolarMutexGuard g;
     const QtInstanceTreeIter aIter(aIndex);
     const QString sToolTip = toQString(signal_query_tooltip(aIter));
     if (sToolTip.isEmpty())
-        return false;
+        return QtInstanceWidget::handleToolTipEvent(rHelpEvent);
 
-    QToolTip::showText(pHelpEvent->globalPos(), sToolTip, m_pListView,
+    QToolTip::showText(rHelpEvent.globalPos(), sToolTip, m_pListView,
                        m_pListView->visualRect(aIndex));
     return true;
 }

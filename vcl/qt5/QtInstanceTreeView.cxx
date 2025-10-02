@@ -1104,7 +1104,7 @@ void QtInstanceTreeView::setColumnRoles(QTreeView& rTreeView,
 bool QtInstanceTreeView::eventFilter(QObject* pObject, QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::ToolTip && pObject == m_pTreeView->viewport())
-        return handleToolTipEvent(static_cast<QHelpEvent*>(pEvent));
+        return handleViewPortToolTipEvent(static_cast<QHelpEvent&>(*pEvent));
 
     return QtInstanceWidget::eventFilter(pObject, pEvent);
 }
@@ -1170,9 +1170,9 @@ void QtInstanceTreeView::setImage(const weld::TreeIter& rIter, const QPixmap& rP
     });
 }
 
-bool QtInstanceTreeView::handleToolTipEvent(const QHelpEvent* pHelpEvent)
+bool QtInstanceTreeView::handleViewPortToolTipEvent(const QHelpEvent& rHelpEvent)
 {
-    QModelIndex aIndex = m_pTreeView->indexAt(pHelpEvent->pos());
+    QModelIndex aIndex = m_pTreeView->indexAt(rHelpEvent.pos());
     if (!aIndex.isValid())
         return false;
 
@@ -1182,7 +1182,7 @@ bool QtInstanceTreeView::handleToolTipEvent(const QHelpEvent* pHelpEvent)
     if (sToolTip.isEmpty())
         return false;
 
-    QToolTip::showText(pHelpEvent->globalPos(), sToolTip, m_pTreeView,
+    QToolTip::showText(rHelpEvent.globalPos(), sToolTip, m_pTreeView,
                        m_pTreeView->visualRect(aIndex));
     return true;
 }

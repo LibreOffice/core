@@ -184,8 +184,8 @@ public:
     void setFont(vcl::Font rFont);
     static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
 
-private:
-    bool handleToolTipEvent(const QHelpEvent* pEvent);
+protected:
+    virtual bool handleToolTipEvent(const QHelpEvent& rHelpEvent);
 
 private Q_SLOTS:
     void applicationFocusChanged(QWidget* pOldFocus, QWidget* pNewFocus);

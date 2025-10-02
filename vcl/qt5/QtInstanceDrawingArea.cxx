@@ -136,11 +136,6 @@ bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
         case QEvent::Resize:
             handleResizeEvent();
             return false;
-        case QEvent::ToolTip:
-        {
-            QHelpEvent* pHelpEvent = static_cast<QHelpEvent*>(pEvent);
-            return handleToolTipEvent(*pHelpEvent);
-        }
         default:
             break;
     }
@@ -175,12 +170,12 @@ void QtInstanceDrawingArea::handleResizeEvent()
     m_aSizeAllocateHdl.Call(toSize(aLabelSize));
 }
 
-bool QtInstanceDrawingArea::handleToolTipEvent(QHelpEvent& rEvent)
+bool QtInstanceDrawingArea::handleToolTipEvent(const QHelpEvent& rHelpEvent)
 {
-    tools::Rectangle aHelpArea(toPoint(rEvent.pos()), Size(0, 0));
+    tools::Rectangle aHelpArea(toPoint(rHelpEvent.pos()), Size(0, 0));
     const OUString sToolTipText = signal_query_tooltip(aHelpArea);
     if (sToolTipText.isEmpty())
-        return false;
+        return QtInstanceWidget::handleToolTipEvent(rHelpEvent);
 
     const QPoint aPos = getQWidget()->mapToGlobal(toQRect(aHelpArea).topLeft());
     QToolTip::showText(aPos, toQString(sToolTipText), getQWidget());

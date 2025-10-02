@@ -72,7 +72,8 @@ public:
 
     virtual int n_children() const override;
 
-    virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+protected:
+    virtual bool handleToolTipEvent(const QHelpEvent& rHelpEvent) override;
 
 private:
     void insert(int nPos, const OUString* pStr, const OUString* pId, const QPixmap* pIcon,
@@ -81,8 +82,6 @@ private:
     QModelIndex modelIndex(int nPos) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter) const;
     static int position(const weld::TreeIter& rIter);
-
-    bool handleToolTipEvent(const QHelpEvent* pEvent);
 
 private Q_SLOTS:
     void handleActivated();
