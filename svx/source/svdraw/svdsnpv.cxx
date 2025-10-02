@@ -369,19 +369,34 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if(mbGridSnap)
     {
+        Point aGridOrigin = pPV->GetPageOrigin();
+        const SdrPageGridFrameList* pFrames = pPV->GetPage()->GetGridFrameList(pPV, nullptr);
+        if (pFrames != nullptr)
+        {
+            for (sal_uInt16 nFrame = 0; nFrame < pFrames->GetCount(); nFrame++)
+            {
+                const SdrPageGridFrame& rGridFrame = (*pFrames)[nFrame];
+                if(rGridFrame.GetPaperRect().Contains(rPnt))
+                {
+                    aGridOrigin = rGridFrame.GetUserArea().TopLeft();
+                    break;
+                }
+            }
+        }
+
         double fSnapWidth(maSnapWdtX);
         if(dx == NOT_SNAPPED && fSnapWidth != 0.0)
         {
             double fx = static_cast<double>(x);
 
             // round instead of trunc
-            if(fx - static_cast<double>(pPV->GetPageOrigin().X()) >= 0.0)
+            if(fx - static_cast<double>(aGridOrigin.X()) >= 0.0)
                 fx += fSnapWidth / 2.0;
             else
                 fx -= fSnapWidth / 2.0;
 
-            x = static_cast<tools::Long>((fx - static_cast<double>(pPV->GetPageOrigin().X())) / fSnapWidth);
-            x = static_cast<tools::Long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().X()));
+            x = static_cast<tools::Long>((fx - static_cast<double>(aGridOrigin.X())) / fSnapWidth);
+            x = static_cast<tools::Long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(aGridOrigin.X()));
             dx = 0;
         }
         fSnapWidth = double(maSnapWdtY);
@@ -390,13 +405,13 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             double fy = static_cast<double>(y);
 
             // round instead of trunc
-            if(fy - static_cast<double>(pPV->GetPageOrigin().Y()) >= 0.0)
+            if(fy - static_cast<double>(aGridOrigin.Y()) >= 0.0)
                 fy += fSnapWidth / 2.0;
             else
                 fy -= fSnapWidth / 2.0;
 
-            y = static_cast<tools::Long>((fy - static_cast<double>(pPV->GetPageOrigin().Y())) / fSnapWidth);
-            y = static_cast<tools::Long>(static_cast<double>(y) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().Y()));
+            y = static_cast<tools::Long>((fy - static_cast<double>(aGridOrigin.Y())) / fSnapWidth);
+            y = static_cast<tools::Long>(static_cast<double>(y) * fSnapWidth + static_cast<double>(aGridOrigin.Y()));
             dy = 0;
         }
     }
