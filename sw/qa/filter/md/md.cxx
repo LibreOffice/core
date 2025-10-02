@@ -13,6 +13,8 @@
 
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
+#include <vcl/graphicfilter.hxx>
+
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -838,6 +840,39 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdImport)
     // i.e. the image wasn't imported, had the default minimal size.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(960), rSize.GetWidth());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(960), rSize.GetHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdExport)
+{
+    // Given a document with an embedded inline image:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A "_ustr);
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+    aFrameSet.Put(aAnchor);
+    OUString aImageURL = createFileURL(u"test.png");
+    SvFileStream aImageStream(aImageURL, StreamMode::READ);
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rFilter.ImportUnloadedGraphic(aImageStream);
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwFlyFrameFormat* pFlyFormat
+        = rIDCO.InsertGraphic(*pCursor, /*rGrfName=*/OUString(), OUString(), &aGraphic, &aFrameSet,
+                              /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
+    pFlyFormat->SetObjDescription(u"mydesc"_ustr);
+    pWrtShell->Insert(u" B"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure that the embedded image is exported:
+    std::string aActual = TempFileToString();
+    // Without the accompanying fix in place, this test would have failed, aActual was 'A  B\n'.
+    CPPUNIT_ASSERT(aActual.starts_with("A ![mydesc](data:image/png;base64,"));
+    CPPUNIT_ASSERT(aActual.ends_with(") B" SAL_NEWLINE_STRING));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
