@@ -73,7 +73,7 @@ namespace sw
     enum class IteratorMode { Exact, UnwrapMulti };
 }
 
-template<typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator;
+template <typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator;
 
 namespace sw
 {
