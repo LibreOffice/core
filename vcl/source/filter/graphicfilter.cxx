@@ -673,8 +673,7 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
     streams.reserve(toLoad.size());
     for( auto graphic : toLoad )
     {
-        streams.push_back( std::make_unique<SvMemoryStream>( const_cast<sal_uInt8*>(graphic->GetSharedGfxLink()->GetData()),
-            graphic->GetSharedGfxLink()->GetDataSize(), StreamMode::READ | StreamMode::WRITE));
+        streams.push_back(graphic->GetSharedGfxLink()->getDataContainer().getAsStream());
     }
     std::vector< std::shared_ptr<Graphic>> loadedGraphics;
     loadedGraphics.reserve(streams.size());
