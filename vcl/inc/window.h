@@ -417,7 +417,7 @@ class VCL_DLLPUBLIC PaintBufferGuard
     tools::Rectangle m_aPaintRect;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
-    ~PaintBufferGuard() COVERITY_NOEXCEPT_FALSE;
+    ~PaintBufferGuard();
     /// If this is called, then the dtor will also copy rRectangle to the window from the buffer, before restoring the state.
     void SetPaintRect(const tools::Rectangle& rRectangle);
     /// Returns either the frame's buffer or the window, in case of no buffering.

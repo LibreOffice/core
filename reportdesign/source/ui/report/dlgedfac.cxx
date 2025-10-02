@@ -33,7 +33,7 @@ DlgEdFactory::DlgEdFactory()
 }
 
 
-DlgEdFactory::~DlgEdFactory() COVERITY_NOEXCEPT_FALSE
+DlgEdFactory::~DlgEdFactory()
 {
     SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }

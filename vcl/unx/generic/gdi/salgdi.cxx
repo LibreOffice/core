@@ -86,7 +86,7 @@ X11SalGraphics::X11SalGraphics():
     }
 }
 
-X11SalGraphics::~X11SalGraphics() COVERITY_NOEXCEPT_FALSE
+X11SalGraphics::~X11SalGraphics()
 {
     mxImpl->DeInit();
     SetDrawable(None, nullptr, m_nXScreen);

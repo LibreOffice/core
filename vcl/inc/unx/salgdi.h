@@ -66,7 +66,7 @@ class X11SalGraphics final : public SalGraphicsAutoDelegateToImpl
 
 public:
                                     X11SalGraphics();
-    virtual                         ~X11SalGraphics() COVERITY_NOEXCEPT_FALSE override;
+    virtual                         ~X11SalGraphics() override;
 
     void                            Init(X11SalFrame& rFrame, Drawable aDrawable, SalX11Screen nXScreen);
     void                            Init(X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr,

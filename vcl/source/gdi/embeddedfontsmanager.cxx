@@ -251,7 +251,7 @@ EmbeddedFontsManager::EmbeddedFontsManager(const uno::Reference<frame::XModel>& 
 {
 }
 
-EmbeddedFontsManager::~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE
+EmbeddedFontsManager::~EmbeddedFontsManager()
 {
     if (m_aAccumulatedFonts.empty())
         return;

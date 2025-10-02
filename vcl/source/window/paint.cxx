@@ -109,7 +109,7 @@ PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWind
     pFrameData->mpBuffer->EnableRTL(pWindow->IsRTLEnabled());
 }
 
-PaintBufferGuard::~PaintBufferGuard() COVERITY_NOEXCEPT_FALSE
+PaintBufferGuard::~PaintBufferGuard()
 {
     if (!mpFrameData->mpBuffer)
         return;

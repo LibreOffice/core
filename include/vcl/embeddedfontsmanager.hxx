@@ -108,7 +108,7 @@ public:
     static void releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts);
 
     EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
-    ~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE;
+    ~EmbeddedFontsManager();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

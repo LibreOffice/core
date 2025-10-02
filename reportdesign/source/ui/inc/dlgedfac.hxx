@@ -31,7 +31,7 @@ class DlgEdFactory
 {
 public:
     DlgEdFactory();
-    ~DlgEdFactory() COVERITY_NOEXCEPT_FALSE;
+    ~DlgEdFactory();
 
     DECL_STATIC_LINK(DlgEdFactory, MakeObject, SdrObjCreatorParams, rtl::Reference<SdrObject>);
 };
