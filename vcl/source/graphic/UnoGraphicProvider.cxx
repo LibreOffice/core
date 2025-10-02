@@ -438,16 +438,12 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
 
     // Import: streams to graphics.
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    std::vector<std::shared_ptr<Graphic>> aGraphics = rFilter.ImportGraphics(std::move(aStreams));
+    std::vector<Graphic> aGraphics = rFilter.ImportGraphics(std::move(aStreams));
 
     // Returning: graphics to UNO objects.
     uno::Sequence<uno::Reference<graphic::XGraphic>> aRet(aGraphics.size());
     std::transform(aGraphics.begin(), aGraphics.end(), aRet.getArray(),
-                   [](const auto& pGraphic)
-                   {
-                       assert(pGraphic);
-                       return pGraphic->GetXGraphic();
-                   });
+                   [](const auto& rGraphic) { return rGraphic.GetXGraphic(); });
     return aRet;
 }
 

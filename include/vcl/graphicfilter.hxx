@@ -283,7 +283,7 @@ public:
     /// Imports multiple graphics.
     ///
     /// The resulting graphic is added to result on success, empty graphic is added on failure.
-    SAL_DLLPRIVATE std::vector<std::shared_ptr<Graphic>> ImportGraphics(std::vector< std::unique_ptr<SvStream> > vStreams);
+    SAL_DLLPRIVATE std::vector<Graphic> ImportGraphics(std::vector< std::unique_ptr<SvStream> > vStreams);
 
     /**
      Tries to ensure all Graphic objects are available (Graphic::isAvailable()). Only an optimization, may
