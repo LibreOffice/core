@@ -634,7 +634,7 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     INetURLObject aGraphicURL(sGrfNm);
     if (aGraphicURL.GetProtocol() == INetProtocol::Data)
     {
-        // 'data:' URL: read that here, initialize aGraphic anc clear sGrfNm.
+        // 'data:' URL: read that here, initialize aGraphic and clear sGrfNm.
         std::unique_ptr<SvMemoryStream> pStream = aGraphicURL.getData();
         if (pStream)
         {
