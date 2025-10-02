@@ -12,9 +12,9 @@ diff --git a/crypto/err/err.c b/crypto/err/err.c
 index 167b66ed6b..e9228d66a3 100644
 --- a/crypto/err/err.c
 +++ b/crypto/err/err.c
-@@ -35,7 +35,7 @@
+@@ -34,7 +34,7 @@
+ #endif
  
- static void ERR_STATE_free(ERR_STATE *s);
  #ifndef OPENSSL_NO_ERR
 -static ERR_STRING_DATA ERR_str_libraries[] = {
 +static const ERR_STRING_DATA ERR_str_libraries[] = {
