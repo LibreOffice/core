@@ -26,7 +26,6 @@
 #include <txtfly.hxx>
 #include <dbg_lay.hxx>
 
-SwCache *SwTextFrame::s_pTextCache = nullptr;
 SwContourCache *pContourCache = nullptr;
 SwDropCapCache *pDropCapCache = nullptr;
 
@@ -38,19 +37,12 @@ void TextInit_()
 {
     pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
     pSwFontCache = new SwFontCache; // Cache for SwTextFormatColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
-    SwCache *pTextCache = new SwCache( 250 // Cache for SwTextFrame -> SwTextLine = { SwParaPortion* pLine }
-#ifdef DBG_UTIL
-    , "static SwTextFrame::s_pTextCache"_ostr
-#endif
-    );
-    SwTextFrame::SetTextCache( pTextCache );
     PROTOCOL_INIT
 }
 
 void TextFinit()
 {
     PROTOCOL_STOP
-    delete SwTextFrame::GetTextCache();
     delete pSwFontCache;
     delete pFntCache;
     delete pContourCache;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "txtcache.hxx"
 #include <txtfrm.hxx>
 #include "porlay.hxx"
 
@@ -25,174 +24,40 @@
 #include <osl/diagnose.h>
 #include <view.hxx>
 
-SwTextLine::SwTextLine(SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> xNew)
-    : SwCacheObj(static_cast<void const *>(pFrame))
-    , m_xLine(std::move(xNew) )
+SwParaPortion *SwTextFrame::EnsurePara()
 {
-}
-
-SwTextLine::~SwTextLine()
-{
-}
-
-void SwTextLine::UpdateCachePos()
-{
-    // note: SwTextFrame lives longer than its SwTextLine, see ~SwTextFrame
-    assert(m_pOwner);
-    const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx(GetCachePos());
-}
-
-SwCacheObj *SwTextLineAccess::NewObj()
-{
-    return new SwTextLine( static_cast<SwTextFrame const *>(m_pOwner) );
-}
-
-SwParaPortion *SwTextLineAccess::GetPara()
-{
-    SwTextLine *pRet;
-    if ( m_pObj )
-        pRet = static_cast<SwTextLine*>(m_pObj);
-    else
+    if (!m_xParaPortion)
     {
-        pRet = static_cast<SwTextLine*>(Get(false));
-        const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx( pRet->GetCachePos() );
+        m_xParaPortion = std::make_shared<SwParaPortion>();
     }
-    if ( !pRet->GetPara() )
-        pRet->SetPara(std::make_unique<SwParaPortion>());
-    return pRet->GetPara();
-}
-
-SwTextLineAccess::SwTextLineAccess( const SwTextFrame *pOwn ) :
-    SwCacheAccess( *SwTextFrame::GetTextCache(), pOwn, pOwn->GetCacheIdx() )
-{
-}
-
-bool SwTextLineAccess::IsAvailable() const
-{
-    return m_pObj && static_cast<SwTextLine*>(m_pObj)->GetPara();
-}
-
-bool SwTextFrame::HasPara_() const
-{
-    SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrame::GetTextCache()->
-                                            Get( this, GetCacheIdx(), false ));
-    if ( pTextLine )
-    {
-        if ( pTextLine->GetPara() )
-            return true;
-    }
-    else
-        const_cast<SwTextFrame*>(this)->mnCacheIndex = USHRT_MAX;
-
-    return false;
-}
-
-SwParaPortion *SwTextFrame::GetPara()
-{
-    if ( GetCacheIdx() != USHRT_MAX )
-    {
-        SwTextLine *pLine = static_cast<SwTextLine*>(SwTextFrame::GetTextCache()->
-                                        Get( this, GetCacheIdx(), false ));
-        if ( pLine )
-            return pLine->GetPara();
-        else
-            mnCacheIndex = USHRT_MAX;
-    }
-    return nullptr;
+    return m_xParaPortion.get();
 }
 
 void SwTextFrame::ClearPara()
 {
     OSL_ENSURE( !IsLocked(), "+SwTextFrame::ClearPara: this is locked." );
-    if ( !IsLocked() && GetCacheIdx() != USHRT_MAX )
+    if ( !IsLocked() && m_xParaPortion )
     {
-        SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrame::GetTextCache()->
-                                        Get( this, GetCacheIdx(), false ));
-        if ( pTextLine )
-        {
-            pTextLine->SetPara(nullptr);
-        }
-        else
-            mnCacheIndex = USHRT_MAX;
+        m_xParaPortion.reset();
     }
 }
 
 void SwTextFrame::RemoveFromCache()
 {
-    if (GetCacheIdx() != USHRT_MAX)
-    {
-        s_pTextCache->Delete(this, GetCacheIdx());
-        SetCacheIdx(USHRT_MAX);
-    }
+    m_xParaPortion.reset();
 }
 
-std::unique_ptr<SwParaPortion> SwTextFrame::SetPara(std::unique_ptr<SwParaPortion> xNew)
+std::shared_ptr<SwParaPortion> SwTextFrame::SetPara(std::shared_ptr<SwParaPortion> xNew)
 {
-    std::unique_ptr<SwParaPortion> xOld;
+    std::shared_ptr<SwParaPortion> xOld;
 
-    if ( GetCacheIdx() != USHRT_MAX )
-    {
-        // Only change the information, the CacheObj stays there
-        SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrame::GetTextCache()->
-                                        Get( this, GetCacheIdx(), false ));
-        if ( pTextLine )
-        {
-            return pTextLine->SetPara(std::move(xNew));
-        }
-        else
-        {
-            mnCacheIndex = USHRT_MAX;
-        }
-    }
+    if ( m_xParaPortion )
+        xOld = std::move(m_xParaPortion);
 
     if (xNew)
-    {
-        // Insert a new one
-        SwTextLine *pTextLine = new SwTextLine(this, std::move(xNew));
-        if (SwTextFrame::GetTextCache()->Insert(pTextLine, false))
-            mnCacheIndex = pTextLine->GetCachePos();
-        else
-        {
-            OSL_FAIL("+SetPara: InsertCache failed, Losing SwParaPortion.");
-        }
-    }
+        m_xParaPortion = std::move(xNew);
 
     return xOld;
-}
-
-/** Prevent the SwParaPortions of the *visible* paragraphs from being deleted;
-    they would just be recreated on the next paint.
-
-    Heuristic: 100 per view are visible
-
-    If the cache is too small, enlarge it to ensure there are sufficient free
-    entries for the layout so it doesn't have to throw away a node's
-    SwParaPortion when it starts formatting the next node.
-*/
-SwSaveSetLRUOfst::SwSaveSetLRUOfst()
-{
-    sal_uInt16 nVisibleShells(0);
-    for (auto pView = SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>);
-         pView != nullptr;
-         pView = SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>))
-    {
-        // Apparently we are not interested here what document pView is for, but only in the
-        // total number of shells in the process?
-        ++nVisibleShells;
-    }
-
-    sal_uInt16 const nPreserved(100 * nVisibleShells);
-    SwCache & rCache(*SwTextFrame::GetTextCache());
-    if (rCache.GetCurMax() < nPreserved + 250)
-    {
-        rCache.IncreaseMax(nPreserved + 250 - rCache.GetCurMax());
-    }
-    rCache.SetLRUOfst(nPreserved);
-}
-
-SwSaveSetLRUOfst::~SwSaveSetLRUOfst()
-{
-    SwTextFrame::GetTextCache()->ResetLRUOfst();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

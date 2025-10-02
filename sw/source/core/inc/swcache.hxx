@@ -120,14 +120,6 @@ public:
     sal_uInt16 size() { return m_aCacheObjects.size(); }
 };
 
-/// Try to prevent visible SwParaPortions from being deleted.
-class SwSaveSetLRUOfst
-{
-public:
-    SwSaveSetLRUOfst();
-    ~SwSaveSetLRUOfst();
-};
-
 /**
  * The Cache object base class
  * Users of the Cache must derive a class from the SwCacheObj and store

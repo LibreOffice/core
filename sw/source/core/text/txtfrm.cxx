@@ -58,7 +58,6 @@
 #include <sectfrm.hxx>
 #include "itrform2.hxx"
 #include "widorp.hxx"
-#include "txtcache.hxx"
 #include <fntcache.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>
@@ -775,7 +774,6 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
     , mnOffset( 0 )
     , mnNoHyphOffset( COMPLETE_STRING )
     , mnNoHyphEndZone( 0 )
-    , mnCacheIndex( USHRT_MAX )
     , mbLocked( false )
     , mbWidow( false )
     , mbJustWidow( false )
@@ -1477,11 +1475,8 @@ LanguageType SwTextFrame::GetLangOfChar(TextFrameIndex const nIndex,
 
 void SwTextFrame::ResetPreps()
 {
-    if ( GetCacheIdx() != USHRT_MAX )
-    {
-        if (SwParaPortion *pPara = GetPara())
-            pPara->ResetPreps();
-    }
+    if ( m_xParaPortion )
+        m_xParaPortion->ResetPreps();
 }
 
 static auto FindCellFrame(SwFrame const* pLower) -> SwLayoutFrame const*
@@ -3051,9 +3046,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         return bParaPossiblyInvalid;
     }
 
-    // Get object from cache while locking
-    SwTextLineAccess aAccess( this );
-    SwParaPortion *pPara = aAccess.GetPara();
+    SwParaPortion *pPara = EnsurePara();
 
     switch( ePrep )
     {
@@ -3238,7 +3231,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                             if (bRelaxed)
                             {
                                 // It's possible that pPara was deleted above; retrieve it again
-                                pPara = aAccess.GetPara();
+                                pPara = EnsurePara();
                             }
                         }
                     }
@@ -3273,7 +3266,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if (bParaPossiblyInvalid)
                 {
                     // It's possible that pPara was deleted above; retrieve it again
-                    pPara = aAccess.GetPara();
+                    pPara = EnsurePara();
                 }
 
             }
@@ -3287,7 +3280,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
                 // It's possible that pPara was deleted above; retrieve it again
                 bParaPossiblyInvalid = true;
-                pPara = aAccess.GetPara();
+                pPara = EnsurePara();
 
                 InvalidateSize();
                 InvalidatePrt_();
@@ -3387,7 +3380,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 class SwTestFormat
 {
     SwTextFrame *pFrame;
-    std::unique_ptr<SwParaPortion> xOldPara;
+    std::shared_ptr<SwParaPortion> xOldPara;
     SwRect aOldFrame, aOldPrt;
 public:
     SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPrv, SwTwips nMaxHeight );
@@ -3439,7 +3432,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
         aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(pFrame->getFrameArea()) - ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
     }
 
-    xOldPara = pFrame->SetPara(std::make_unique<SwParaPortion>());
+    xOldPara = pFrame->SetPara(std::make_shared<SwParaPortion>());
     OSL_ENSURE( ! pFrame->IsSwapped(), "A frame is swapped before Format_" );
 
     if ( pFrame->IsVertical() )
@@ -3666,7 +3659,7 @@ SwTwips SwTextFrame::CalcFitToContent()
         return getFramePrintArea().Width();
 
     //Swap old para for a dummy
-    std::unique_ptr<SwParaPortion> xOldPara = SetPara(std::make_unique<SwParaPortion>());
+    std::shared_ptr<SwParaPortion> xOldPara = SetPara(std::make_unique<SwParaPortion>());
     const SwPageFrame* pPage = FindPageFrame();
 
     const Point   aOldFramePos   = getFrameArea().Pos();
@@ -3771,7 +3764,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
         return;
 
     // keep current paragraph portion and apply dummy paragraph portion
-    std::unique_ptr<SwParaPortion> xOldPara = SetPara(std::make_unique<SwParaPortion>());
+    std::shared_ptr<SwParaPortion> xOldPara = SetPara(std::make_shared<SwParaPortion>());
 
     // lock paragraph
     TextFrameLockGuard aLock( this );

@@ -173,9 +173,6 @@ void SwViewShell::Init( const SwViewOption *pNewOpt, tools::Long const nFlags)
         mxDoc->getIDocumentState().ResetModified();
     }
 
-    // extend format cache.
-    if ( SwTextFrame::GetTextCache()->GetCurMax() < 2550 )
-        SwTextFrame::GetTextCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess().GetDrawModel() )
         Imp()->MakeDrawView();
 
@@ -288,10 +285,6 @@ SwViewShell::~SwViewShell()
         }
 
         mpOpt.reset();
-
-        // resize format cache.
-        if ( SwTextFrame::GetTextCache()->GetCurMax() > 250 )
-            SwTextFrame::GetTextCache()->DecreaseMax( 100 );
 
         // Remove from PaintQueue if necessary
         SwPaintQueue::Remove( this );

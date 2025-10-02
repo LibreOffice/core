@@ -41,7 +41,6 @@
 #include <fmtanchr.hxx>
 #include "itrform2.hxx"
 #include "widorp.hxx"
-#include "txtcache.hxx"
 #include <sectfrm.hxx>
 #include <rootfrm.hxx>
 #include <frmfmt.hxx>
@@ -982,10 +981,7 @@ bool SwTextFrame::CalcPreps()
                 if( !CalcPrepFootnoteAdjust() )
                 {
                     if( bPrepMustFit )
-                    {
-                        SwTextLineAccess aAccess( this );
-                        aAccess.GetPara()->SetPrepMustFit(true);
-                    }
+                        EnsurePara()->SetPrepMustFit(true);
                     return false;
                 }
             }
@@ -2115,9 +2111,8 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
     if( aRectFnSet.GetWidth(getFramePrintArea()) <= 0 )
     {
         // If MustFit is set, we shrink to the Upper's bottom edge if needed.
-        SwTextLineAccess aAccess( this );
 
-        if( aAccess.GetPara()->IsPrepMustFit() )
+        if( EnsurePara()->IsPrepMustFit() )
         {
             const SwTwips nLimit = aRectFnSet.GetPrtBottom(*GetUpper());
             const SwTwips nDiff = - aRectFnSet.BottomDist( getFrameArea(), nLimit );
@@ -2208,8 +2203,11 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             }
         }
 
-        SwTextLineAccess aAccess( this );
-        const bool bNew = !aAccess.IsAvailable();
+        const bool bNew = !m_xParaPortion;
+        EnsurePara(); // force creation of m_xParaPortion
+        // We have to work with a shared_ptr here because code like CalcAdditionalFirstLineOffset
+        // wants to swap out and then restore the SwParaPortion underneath us.
+        std::shared_ptr<SwParaPortion> xPara = m_xParaPortion;
         const bool bSetOffset =
             (GetOffset() && GetOffset() > TextFrameIndex(GetText().getLength()));
 
@@ -2217,12 +2215,12 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             ; // nothing
         // We return if already formatted, but if the TextFrame was just created
         // and does not have any format information
-        else if( !bNew && !aAccess.GetPara()->GetReformat().Len() )
+        else if( !bNew && !xPara->GetReformat().Len() )
         {
             if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
             {
-                aAccess.GetPara()->SetPrepAdjust();
-                aAccess.GetPara()->SetPrep();
+                xPara->SetPrepAdjust();
+                xPara->SetPrep();
                 CalcPreps();
             }
             SetWidow( false );
@@ -2267,7 +2265,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                 {
                     nexts.push_back(pNext);
                 }
-                FormatImpl(pRenderContext, aAccess.GetPara(), intersectingObjs);
+                FormatImpl(pRenderContext, xPara.get(), intersectingObjs);
                 if( pFootnoteBoss && nFootnoteHeight )
                 {
                     const SwFootnoteContFrame* pCont = pFootnoteBoss->FindFootnoteCont();
@@ -2429,9 +2427,8 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
         ( ( IsVertical() ? getFramePrintArea().Width() : getFramePrintArea().Height() ) && IsHiddenNow() ) )
         return false;
 
-    SwTextLineAccess aAccess( this );
-    SwParaPortion *pPara = aAccess.GetPara();
-    if( !pPara )
+    SwParaPortion *pPara = GetPara();
+    if (!pPara)
         return false;
 
     SwFrameSwapper aSwapper( this, true );

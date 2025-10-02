@@ -177,13 +177,6 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     friend class TextFrameLockGuard; // May Lock()/Unlock()
     friend bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew);
 
-    /// SwLineLayout cache: the lines are not actually owned by the SwTextFrame
-    /// but by this SwCache, so they will be deleted in large documents
-    /// if there are too many of them, but the "valid" flags of the frame
-    /// will still be set; GetFormatted() is the function that forces
-    /// recreation of the SwLineLayout by Format() if necessary.
-    static SwCache *s_pTextCache;
-
     sal_Int32  mnAllLines        :24; // Line count for the Paint (including nThisLines)
     sal_Int32  mnThisLines       :8; // Count of Lines of the Frame
 
@@ -204,14 +197,16 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
 
+    // Should be a unique_ptr, but code like CalcAdditionalFirstLineOffset wants to play games
+    // where it swaps out and then restores the SwParaPortion.
+    std::shared_ptr<SwParaPortion> m_xParaPortion;
+
     /// redline merge data
     std::unique_ptr<sw::MergedPara> m_pMergedPara;
 
     TextFrameIndex mnOffset; // Is the offset in the Content (character count)
     TextFrameIndex mnNoHyphOffset; // Is the offset of the last line with disabled or limited hyphenation
     sal_Int16 mnNoHyphEndZone;     // size of end zone (-1 means disabled hyphenation)
-
-    sal_uInt16 mnCacheIndex; // Index into the cache, USHRT_MAX if there's definitely no fitting object in the cache
 
     // Separates the Master and creates a Follow or adjusts the data in the Follow
     void AdjustFollow_( SwTextFormatter &rLine, TextFrameIndex nOffset,
@@ -301,7 +296,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     bool GetDropRect_( SwRect &rRect ) const;
 
     // returns the old SwParaPortion, if present
-    std::unique_ptr<SwParaPortion> SetPara(std::unique_ptr<SwParaPortion> xNew);
+    std::shared_ptr<SwParaPortion> SetPara(std::shared_ptr<SwParaPortion> xNew);
 
     bool IsFootnoteNumFrame_() const;
 
@@ -522,10 +517,11 @@ public:
     /// Test grow
     inline SwTwips GrowTst( const SwTwips nGrow, SwResizeLimitReason& );
 
-    SwParaPortion *GetPara();
+    inline SwParaPortion *GetPara() { return m_xParaPortion.get(); }
     inline const SwParaPortion *GetPara() const;
-    inline bool HasPara() const;
-    bool HasPara_() const;
+    inline bool HasPara() const { return bool(m_xParaPortion); }
+    // ensure the SwParaPortion exists
+    SwParaPortion* EnsurePara();
 
     /// map position in potentially merged text frame to SwPosition
     std::pair<SwTextNode*, sal_Int32> MapViewToModel(TextFrameIndex nIndex) const;
@@ -631,12 +627,6 @@ public:
     /// DropCaps and selections
     bool GetDropRect( SwRect &rRect ) const
     { return HasPara() && GetDropRect_( rRect ); }
-
-    static SwCache *GetTextCache() { return s_pTextCache; }
-    static void     SetTextCache( SwCache *pNew ) { s_pTextCache = pNew; }
-
-    sal_uInt16 GetCacheIdx() const { return mnCacheIndex; }
-    void   SetCacheIdx( const sal_uInt16 nNew ) { mnCacheIndex = nNew; }
 
     /// Removes the Line information from the Cache but retains the entry itself
     void ClearPara();
@@ -857,11 +847,6 @@ public:
 inline const SwParaPortion *SwTextFrame::GetPara() const
 {
     return const_cast<SwTextFrame*>(this)->GetPara();
-}
-
-inline bool SwTextFrame::HasPara() const
-{
-    return mnCacheIndex!=USHRT_MAX && HasPara_();
 }
 
 inline SwTwips SwTextFrame::GrowTst(const SwTwips nGrow, SwResizeLimitReason& reason)

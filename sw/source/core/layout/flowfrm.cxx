@@ -647,7 +647,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         // The CacheIdx idea seems to be a bit risky!
         if ( pFloat->IsTextFrame() )
         {
-            if ( static_cast<SwTextFrame*>(pFloat)->GetCacheIdx() != USHRT_MAX )
+            if ( static_cast<SwTextFrame*>(pFloat)->HasPara() )
                 static_cast<SwTextFrame*>(pFloat)->Init();    // I'm his friend.
         }
         else

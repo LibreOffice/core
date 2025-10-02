@@ -35,7 +35,6 @@
 #include <txtfrm.hxx>
 #include "itrpaint.hxx"
 #include "txtpaint.hxx"
-#include "txtcache.hxx"
 #include <flyfrm.hxx>
 #include "redlnitr.hxx"
 #include <redline.hxx>
@@ -375,8 +374,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     {
         TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
 
-        SwTextLineAccess aAccess( this );
-        aAccess.GetPara();
+        const_cast<SwTextFrame*>(this)->EnsurePara();
 
         SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
 
@@ -725,8 +723,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     // rRepaint is set. Indeed, we cannot avoid this problem from a formal
     // perspective. Luckily we can assume rRepaint to be empty when we need
     // paint the while Frame.
-    SwTextLineAccess aAccess( this );
-    SwParaPortion *pPara = aAccess.GetPara();
+    SwParaPortion *pPara = const_cast<SwTextFrame*>(this)->EnsurePara();
 
     SwRepaint &rRepaint = pPara->GetRepaint();
 

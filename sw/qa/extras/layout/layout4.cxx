@@ -355,6 +355,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf156419)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf145826)
 {
     createSwDoc("tdf145826.odt");
+
+    // Something weird going on here. If I run this unit test by itself, it passes fine.
+    // But when run as part of the test suite, it needs the following dispatchCommand
+    // in order to pass.
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    Scheduler::ProcessEventsToIdle();
+
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 

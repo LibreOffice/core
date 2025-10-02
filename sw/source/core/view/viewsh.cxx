@@ -853,8 +853,6 @@ void SwViewShell::LayoutIdle()
 #endif
 
     {
-        // Preserve top of the text frame cache.
-        SwSaveSetLRUOfst aSaveLRU;
         // #125243# there are lots of stacktraces indicating that Imp() returns NULL
         // this SwViewShell seems to be invalid - but it's not clear why
         // this return is only a workaround!
@@ -1231,9 +1229,6 @@ void SwViewShell::CalcLayout()
 
     CurrShell aCurr( this );
     SwWait aWait( *GetDoc()->GetDocShell(), true );
-
-    // Preserve top of the text frame cache.
-    SwSaveSetLRUOfst aSaveLRU;
 
     //switch on Progress when none is running yet.
     const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == nullptr;

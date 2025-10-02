@@ -3100,7 +3100,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
         if ( pSav->IsContentFrame() )
         {
             if ( pSav->IsTextFrame() &&
-                 static_cast<SwTextFrame*>(pSav)->GetCacheIdx() != USHRT_MAX )
+                 static_cast<SwTextFrame*>(pSav)->HasPara() )
                 static_cast<SwTextFrame*>(pSav)->Init();  // I am its friend
 
             if ( pPage && pSav->GetDrawObjs() )
@@ -3114,7 +3114,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
                 {   if ( pPage && pBlub->GetDrawObjs() )
                         ::lcl_AddObjsToPage( pBlub, pPage );
                     if( pBlub->IsTextFrame() && static_cast<SwTextFrame*>(pBlub)->HasFootnote() &&
-                         static_cast<SwTextFrame*>(pBlub)->GetCacheIdx() != USHRT_MAX )
+                         static_cast<SwTextFrame*>(pBlub)->HasPara() )
                         static_cast<SwTextFrame*>(pBlub)->Init(); // I am its friend
                     pBlub = pBlub->GetNextContentFrame();
                 } while ( pBlub && static_cast<SwLayoutFrame*>(pSav)->IsAnLower( pBlub ));

@@ -2339,11 +2339,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
     const bool bOldLockView = mrSh.IsViewLocked();
     mrSh.LockView( true );
 
-    // tdf#133976 speeds up export greatly
-    SwTextFrame::GetTextCache()->IncreaseMax( 10000 );
-    const ::comphelper::ScopeGuard aGuard(
-        []() mutable { SwTextFrame::GetTextCache()->DecreaseMax( 10000 ); } );
-
     if ( !mbEditEngineOnly )
     {
         assert(pPDFExtOutDevData->GetSwPDFState() == nullptr);
