@@ -441,14 +441,14 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
     std::vector<std::shared_ptr<Graphic>> aGraphics = rFilter.ImportGraphics(std::move(aStreams));
 
     // Returning: graphics to UNO objects.
-    std::vector< uno::Reference<graphic::XGraphic> > aRet;
-    for (const auto& pGraphic : aGraphics)
-    {
-        assert(pGraphic);
-        aRet.push_back(pGraphic->GetXGraphic());
-    }
-
-    return comphelper::containerToSequence(aRet);
+    uno::Sequence<uno::Reference<graphic::XGraphic>> aRet(aGraphics.size());
+    std::transform(aGraphics.begin(), aGraphics.end(), aRet.getArray(),
+                   [](const auto& pGraphic)
+                   {
+                       assert(pGraphic);
+                       return pGraphic->GetXGraphic();
+                   });
+    return aRet;
 }
 
 void ImplCalculateCropRect( ::Graphic const & rGraphic, const text::GraphicCrop& rGraphicCropLogic, tools::Rectangle& rGraphicCropPixel )
