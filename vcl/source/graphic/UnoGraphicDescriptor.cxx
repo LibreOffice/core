@@ -81,7 +81,7 @@ void GraphicDescriptor::init( const OUString& rURL )
     std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ ));
 
     if( pIStm )
-        implCreate( *pIStm, &rURL );
+        implCreate( *pIStm, rURL );
 }
 
 void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const OUString& rURL )
@@ -89,15 +89,12 @@ void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, 
     std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rxIStm ));
 
     if( pIStm )
-        implCreate( *pIStm, &rURL );
+        implCreate( *pIStm, rURL );
 }
 
-void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
+void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString& rURL )
 {
-    OUString aURL;
-    if( pURL )
-        aURL = *pURL;
-    ::GraphicDescriptor aDescriptor( rIStm, &aURL );
+    ::GraphicDescriptor aDescriptor( rIStm, &rURL );
 
     mpGraphic = nullptr;
     maMimeType.clear();

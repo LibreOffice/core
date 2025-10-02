@@ -108,7 +108,7 @@ private:
 
     GraphicDescriptor& operator=( const GraphicDescriptor& ) = delete;
 
-    void implCreate( SvStream& rIStm, const OUString* pPath );
+    void implCreate( SvStream& rIStm, const OUString& rURL );
 };
 
 }
