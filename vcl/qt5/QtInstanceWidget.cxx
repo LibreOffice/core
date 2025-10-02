@@ -18,6 +18,7 @@
 
 #include <QtGui/QMouseEvent>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolTip>
 
 /** Name of QObject property used for the help ID. */
 const char* const PROPERTY_HELP_ID = "help-id";
@@ -333,6 +334,10 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
         {
             QMouseEvent* pMouseEvent = static_cast<QMouseEvent*>(pEvent);
             return signal_mouse_motion(toVclMouseEvent(*pMouseEvent));
+        }
+        case QEvent::ToolTip:
+        {
+            return handleToolTipEvent(static_cast<QHelpEvent*>(pEvent));
         }
         default:
             return QObject::eventFilter(pObject, pEvent);
@@ -814,6 +819,21 @@ void QtInstanceWidget::set_background()
 void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
 {
     assert(false && "Not implemented yet");
+}
+
+bool QtInstanceWidget::handleToolTipEvent(const QHelpEvent* pHelpEvent)
+{
+    // show extended tip if enabled and set
+    if (!ImplGetSVHelpData().mbBalloonHelp)
+        return false;
+
+    // extended tip currently (mis)uses the accessible description
+    const QString sExtendedTip = getQWidget()->accessibleDescription();
+    if (sExtendedTip.isEmpty())
+        return false;
+
+    QToolTip::showText(pHelpEvent->globalPos(), sExtendedTip, getQWidget());
+    return true;
 }
 
 void QtInstanceWidget::applicationFocusChanged(QWidget* pOldFocus, QWidget* pNewFocus)
