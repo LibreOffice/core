@@ -31,6 +31,7 @@
 #include <editeng/fontitem.hxx>
 #include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
+#include <svx/xoutbmp.hxx>
 
 #include <officecfg/Office/Writer.hxx>
 
@@ -216,12 +217,21 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             {
                 SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
                 aGraphic = pGrfNode->GetGraphic();
-                if (!pGrfNode->IsLinkedFile())
+                if (pGrfNode->IsLinkedFile())
                 {
-                    // Not linked, ignore for now.
-                    break;
+                    pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
                 }
-                pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
+                else
+                {
+                    // Not linked, image data goes into the "URL".
+                    OUString aGraphicInBase64;
+                    if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64))
+                    {
+                        break;
+                    }
+
+                    aGraphicURL = "data:" + aGraphicInBase64;
+                }
             }
             else
             {
@@ -232,7 +242,8 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             }
 
             const OUString& rBaseURL = rWrt.GetBaseURL();
-            if (!rBaseURL.isEmpty())
+            INetURLObject aGraphicURLObject(aGraphicURL);
+            if (!rBaseURL.isEmpty() && aGraphicURLObject.GetProtocol() != INetProtocol::Data)
             {
                 aGraphicURL = URIHelper::simpleNormalizedMakeRelative(rBaseURL, aGraphicURL);
             }
