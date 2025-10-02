@@ -657,9 +657,17 @@ def main(argv):
                 else:
                     try:
                         for exclusion in excludelistRules[pathname]:
-                            p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
-                            if p.returncode == 1 :
-                                print("WARNING:", exclusion, "is not present anymore in", file)
+                            # class names behind namespace prefixes may be in separate lines
+                            c=re.match(r"(?:namespace.*{ )(class.*|struct .*); }.*", exclusion)
+                            if c:
+                                classname=c.group(1)
+                                p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, "-e", classname, file])
+                                if p.returncode == 1 :
+                                    print("WARNING:", exclusion, "is not present anymore in", file)
+                            else:
+                                p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
+                                if p.returncode == 1 :
+                                    print("WARNING:", exclusion, "is not present anymore in", file)
                     except TypeError:
                         print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
