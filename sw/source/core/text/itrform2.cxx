@@ -477,12 +477,48 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         if( pPor->InFieldGrp() )
             static_cast<SwFieldPortion*>(pPor)->CheckScript( rInf );
 
+        auto fnRequireKerningAtPosition = [&](TextFrameIndex nIdx)
+        {
+            if (nIdx == TextFrameIndex{ 0 })
+                return false;
+
+            auto nCurrScriptType = m_pScriptInfo->ScriptType(nIdx);
+            auto nPrevScriptType = m_pScriptInfo->ScriptType(nIdx - TextFrameIndex{ 1 });
+            if (nCurrScriptType == nPrevScriptType)
+                return false;
+
+            // tdf#89288: Only insert space between CJK and non-CJK text
+            if (nCurrScriptType != css::i18n::ScriptType::ASIAN
+                && nPrevScriptType != css::i18n::ScriptType::ASIAN)
+                return false;
+
+            // tdf#136663: However, this extra space is only a feature of Chinese and Japanese
+            // typesetting. Extra space shouldn't be inserted between Hangul and non-CJK characters.
+            const CharClass& rCC = GetAppCharClass();
+            auto fnIsHangul = [&](TextFrameIndex nPos)
+            {
+                auto nType = rCC.getScript(rInf.GetText(), static_cast<sal_Int32>(nPos));
+                switch (nType)
+                {
+                    case css::i18n::UnicodeScript_kHangulJamo:
+                    case css::i18n::UnicodeScript_kHangulCompatibilityJamo:
+                    case css::i18n::UnicodeScript_kHangulSyllable:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            };
+
+            bool bCurrIsHangul = fnIsHangul(nIdx);
+            bool bPrevIsHangul = fnIsHangul(nIdx - TextFrameIndex{ 1 });
+            return !bPrevIsHangul && !bCurrIsHangul;
+        };
+
         if( ! bHasGrid && rInf.HasScriptSpace() &&
             rInf.GetLast() && rInf.GetLast()->InTextGrp() &&
             rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
-            SwFontScript nNxtActual = rInf.GetFont()->GetActual();
-            SwFontScript nLstActual = nNxtActual;
             tools::Long nLstHeight = rInf.GetFont()->GetHeight();
             bool bAllowBehind = false;
             const CharClass& rCC = GetAppCharClass();
@@ -496,10 +532,6 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         !aAltText.isEmpty() )
                 {
                     bAllowBehind = rCC.isLetterNumeric( aAltText, 0 );
-
-                    const SwFont* pTmpFnt = static_cast<SwFieldPortion*>(pPor)->GetFont();
-                    if ( pTmpFnt )
-                        nNxtActual = pTmpFnt->GetActual();
                 }
             }
             else
@@ -525,7 +557,6 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         const SwFont* pTmpFnt = static_cast<const SwFieldPortion*>(pLast)->GetFont();
                         if ( pTmpFnt )
                         {
-                            nLstActual = pTmpFnt->GetActual();
                             nLstHeight = pTmpFnt->GetHeight();
                         }
                     }
@@ -533,18 +564,12 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 else if ( rInf.GetIdx() )
                 {
                     bAllowBefore = rCC.isLetterNumeric(rInf.GetText(), sal_Int32(rInf.GetIdx()) - 1);
-                    // Note: ScriptType returns values in [1,4]
-                    if ( bAllowBefore )
-                        nLstActual = SwFontScript(m_pScriptInfo->ScriptType(rInf.GetIdx() - TextFrameIndex(1)) - 1);
                 }
 
                 nLstHeight /= 5;
                 // does the kerning portion still fit into the line?
-                if( bAllowBefore && ( nLstActual != nNxtActual ) &&
-                    // tdf#89288 we want to insert space between CJK and non-CJK text only.
-                    ( nLstActual == SwFontScript::CJK || nNxtActual == SwFontScript::CJK ) &&
-                    nLstHeight && rInf.X() + nLstHeight <= rInf.Width() &&
-                    ! pPor->InTabGrp() )
+                if (bAllowBefore && fnRequireKerningAtPosition(rInf.GetIdx()) && nLstHeight
+                    && rInf.X() + nLstHeight <= rInf.Width() && !pPor->InTabGrp())
                 {
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
@@ -680,10 +705,9 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
                 TextFrameIndex const nTmp = rInf.GetIdx() + pPor->GetLen();
-                if (nTmp == m_pScriptInfo->NextScriptChg(nTmp - TextFrameIndex(1)) &&
-                    nTmp != TextFrameIndex(rInf.GetText().getLength()) &&
-                    (m_pScriptInfo->ScriptType(nTmp - TextFrameIndex(1)) == css::i18n::ScriptType::ASIAN ||
-                     m_pScriptInfo->ScriptType(nTmp) == css::i18n::ScriptType::ASIAN) )
+                if (nTmp == m_pScriptInfo->NextScriptChg(nTmp - TextFrameIndex(1))
+                    && nTmp != TextFrameIndex(rInf.GetText().getLength())
+                    && fnRequireKerningAtPosition(nTmp))
                 {
                     const SwTwips nDist = rInf.GetFont()->GetHeight()/5;
 
