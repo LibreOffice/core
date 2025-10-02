@@ -53,8 +53,9 @@ using namespace css::uno;
 class SdrObject;
 class SdrObjCustomShape;
 
-EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const css::uno::Sequence< css::uno::Any >& aArguments) :
-    mbForceGroupWithText    ( false )
+EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const css::uno::Sequence< css::uno::Any >& aArguments)
+    : mpCustomShape(nullptr)
+    , mbForceGroupWithText(false)
 {
     for (const css::uno::Any& rArg : aArguments)
     {
@@ -79,9 +80,9 @@ EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const css::uno::Sequence< c
     }
 }
 
-EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(SdrObjCustomShape& rShape) :
-    mpCustomShape(&rShape),
-    mbForceGroupWithText(false)
+EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(SdrObjCustomShape& rShape)
+    : mpCustomShape(&rShape)
+    , mbForceGroupWithText(false)
 {
 }
 
