@@ -3030,7 +3030,10 @@ void VclDrawingArea::RequestHelp(const HelpEvent& rHelpEvent)
     tools::Rectangle aHelpArea(aPos.X(), aPos.Y());
     OUString sHelpTip = m_aQueryTooltipHdl.Call(aHelpArea);
     if (sHelpTip.isEmpty())
+    {
+        Control::RequestHelp(rHelpEvent);
         return;
+    }
     Point aPt = OutputToScreenPixel(aHelpArea.TopLeft());
     aHelpArea.SetLeft(aPt.X());
     aHelpArea.SetTop(aPt.Y());
