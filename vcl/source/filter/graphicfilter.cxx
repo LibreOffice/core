@@ -608,6 +608,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     rSharedPool.waitUntilDone(pTag);
 
     // Process data after import.
+    rGraphics.reserve(aContexts.size());
     for (auto& rContext : aContexts)
     {
         rContext.m_pAccess.reset();
@@ -676,7 +677,6 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
         streams.push_back(graphic->GetSharedGfxLink()->getDataContainer().getAsStream());
     }
     std::vector< std::shared_ptr<Graphic>> loadedGraphics;
-    loadedGraphics.reserve(streams.size());
     ImportGraphics(loadedGraphics, std::move(streams));
     assert(loadedGraphics.size() == toLoad.size());
     for( size_t i = 0; i < toLoad.size(); ++i )
