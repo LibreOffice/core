@@ -1739,6 +1739,44 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf168528)
     createSwDoc("tdf168528.odt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf136663_Korean_No_Extra_Spacing)
+{
+    // For Chinese and Japanese typesetting, extra spacing should be inserted between
+    // CJ characters and non-Asian scripts. However, this is not present in Korean
+    // typesetting. Check to ensure extra space is not added around Hangul characters.
+    createSwDoc("tdf136663-korean-no-extra-spacing.fodt");
+
+    auto pXmlDoc = parseLayoutDump();
+
+    // Line 1: English around Chinese (kern portions)
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion", 5);
+    assertXPath(pXmlDoc,
+                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 2);
+
+    // Line 2: Chinese around English (kern portions)
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion", 5);
+    assertXPath(pXmlDoc,
+                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 2);
+
+    // Line 3: English around Korean (no kern portions)
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
+
+    // Line 4: Korean around English (no kern portions)
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
