@@ -9391,8 +9391,8 @@ public:
         {
             pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(pNotebook));
             GtkCssProvider* pProvider = gtk_css_provider_new();
-            static const gchar data[] = "notebook > header > tabs > tab { padding-top: 1; "
-                                        "padding-bottom: 1; margin-top: 0; margin-bottom: 0;}";
+            static const gchar data[] = "notebook > header > tabs > tab { padding-top: 1px; "
+                                        "padding-bottom: 1px; margin-top: 0; margin-bottom: 0;}";
             css_provider_load_from_data(pProvider, data, -1);
             gtk_style_context_add_provider(pNotebookContext, GTK_STYLE_PROVIDER(pProvider),
                                         GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
