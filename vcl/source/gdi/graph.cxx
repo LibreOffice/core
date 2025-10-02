@@ -351,9 +351,7 @@ uno::Reference<css::graphic::XGraphic> Graphic::GetXGraphic() const
     if (GetType() == GraphicType::NONE)
         return nullptr;
 
-    rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic;
-    pUnoGraphic->init(*this);
-    return pUnoGraphic;
+    return new unographic::Graphic(*this);
 }
 
 Size Graphic::GetPrefSize() const

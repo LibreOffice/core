@@ -35,11 +35,8 @@ class Graphic final : public css::graphic::XGraphic,
                 public ::unographic::GraphicDescriptor
 {
 public:
-    Graphic();
+    Graphic(const ::Graphic& rGraphic);
     virtual ~Graphic() noexcept override;
-
-    using ::unographic::GraphicDescriptor::init;
-    void init(const ::Graphic& rGraphic);
 
     const ::Graphic& GetGraphic() const { return maGraphic; }
 

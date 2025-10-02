@@ -39,18 +39,14 @@ using namespace com::sun::star;
 
 namespace unographic {
 
-Graphic::Graphic()
+Graphic::Graphic(const ::Graphic& rGraphic)
+    : maGraphic(rGraphic)
 {
+    unographic::GraphicDescriptor::init(maGraphic);
 }
 
 Graphic::~Graphic() noexcept
 {
-}
-
-void Graphic::init(const ::Graphic& rGraphic)
-{
-    maGraphic = rGraphic;
-    unographic::GraphicDescriptor::init(maGraphic);
 }
 
 uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )

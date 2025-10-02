@@ -69,7 +69,6 @@ public:
     GraphicDescriptor();
     virtual ~GraphicDescriptor() noexcept override;
 
-    void init( const ::Graphic& rGraphic );
     void init( const OUString& rURL );
     void init( const css::uno::Reference< css::io::XInputStream >& rxIStm, const OUString& rURL );
 
@@ -81,6 +80,8 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
 protected:
+    void init( const ::Graphic& rGraphic );
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
