@@ -35,6 +35,7 @@
 #include <tabview.hxx>
 #include <viewdata.hxx>
 #include <columnspanset.hxx>
+#include <SheetViewManager.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/enumrange.hxx>
 
@@ -333,8 +334,20 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
         Color aFaceColor(rStyleSettings.GetFaceColor());
-        if (pTabView && pTabView->GetViewData().GetSheetViewID() >= 0)
-            aFaceColor.Merge(COL_LIGHTBLUE, 220);
+        if (pTabView)
+        {
+            ScViewData& rViewData = pTabView->GetViewData();
+            sc::SheetViewID nSheetViewID = rViewData.GetSheetViewID();
+            if (nSheetViewID >= 0)
+            {
+                auto pSheetManager = rViewData.GetDocument().GetSheetViewManager(rViewData.GetTabNumber());
+                auto pSheetView = pSheetManager->get(nSheetViewID);
+                if (pSheetView->isSynced())
+                    aFaceColor.Merge(COL_LIGHTBLUE, 220);
+                else
+                    aFaceColor.Merge(COL_LIGHTRED, 220);
+            }
+        }
         if (bDark)
             aFaceColor.IncreaseLuminance(20);
         else
