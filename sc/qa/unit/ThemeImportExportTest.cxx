@@ -121,17 +121,17 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
         OString aClrScheme = "/a:theme/a:themeElements/a:clrScheme"_ostr;
         assertXPath(pXmlDoc, aClrScheme, "name", u"Office");
         assertXPath(pXmlDoc, aClrScheme + "/a:dk1/a:srgbClr", "val", u"000000");
-        assertXPath(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val", u"ffffff");
-        assertXPath(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val", u"44546a");
-        assertXPath(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val", u"e7e6e6");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val", u"4472c4");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val", u"ed7d31");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val", u"a5a5a5");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val", u"ffc000");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val", u"5b9bd5");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val", u"70ad47");
-        assertXPath(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val", u"0563c1");
-        assertXPath(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val", u"954f72");
+        assertXPath(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val", u"FFFFFF");
+        assertXPath(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val", u"44546A");
+        assertXPath(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val", u"E7E6E6");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val", u"4472C4");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val", u"ED7D31");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val", u"A5A5A5");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val", u"FFC000");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val", u"5B9BD5");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val", u"70AD47");
+        assertXPath(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val", u"0563C1");
+        assertXPath(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val", u"954F72");
     }
 
     {
