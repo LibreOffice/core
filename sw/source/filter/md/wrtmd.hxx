@@ -51,6 +51,16 @@ struct SwMDTableInfo
     const SwEndNode* pEndNode = nullptr;
 };
 
+/// Tracks an anchored object to be exported at a specific document model position.
+struct SwMDFly
+{
+    SwNodeOffset m_nAnchorNodeOffset = {};
+    sal_Int32 m_nAnchorContentOffset = {};
+    const SwFrameFormat* m_pFrameFormat = nullptr;
+
+    bool operator<(const SwMDFly&) const;
+};
+
 class SwMDWriter : public Writer
 {
 public:
@@ -64,12 +74,14 @@ public:
 
     void SetTaskListItems(int nTaskListItems) { m_nTaskListItems = nTaskListItems; }
     int GetTaskListItems() const { return m_nTaskListItems; }
+    o3tl::sorted_vector<SwMDFly>& GetFlys() { return m_aFlys; }
 
 protected:
     ErrCode WriteStream() override;
 
 private:
     void Out_SwDoc(SwPaM* pPam);
+    void CollectFlys();
 
     bool m_bOutTable = false;
     SwNodeOffset m_nStartNodeIndex{ 0 };
@@ -78,6 +90,8 @@ private:
     std::stack<SwMDTableInfo> m_aTableInfos;
     /// Number of currently open task list items.
     int m_nTaskListItems = 0;
+    /// Anchored fly frames, e.g. images.
+    o3tl::sorted_vector<SwMDFly> m_aFlys;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
