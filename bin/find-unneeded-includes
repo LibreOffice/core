@@ -131,6 +131,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         return True
     if include == "libetonyek/libetonyek.h" and "libetonyek/EtonyekDocument.h" in toAdd:
         return True
+    if include == "box2d/box2d.h" and "box2d/b2_world.h" in toAdd:
+        return True
 
     noRemove = (
         # <https://www.openoffice.org/tools/CodingGuidelines.sxw> insists on not
