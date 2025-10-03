@@ -920,13 +920,13 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     if (fRepeatCount != 0)
         sRepeatCount = OString::number(static_cast<sal_Int32>(fRepeatCount * 1000.0));
 
-    mpFS->startElementNS(
-        XML_p, XML_cTn, XML_id, OString::number(GetNextAnimationNodeId(rXNode)), XML_dur, sDuration,
-        XML_autoRev, sax_fastparser::UseIf("1", bAutoReverse), XML_restart, pRestart, XML_nodeType,
-        pNodeType, XML_fill, pFill, XML_presetClass, pPresetClass, XML_presetID,
-        sax_fastparser::UseIf(OString::number(nPresetId), bPresetId), XML_presetSubtype,
-        sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType), XML_repeatCount,
-        sRepeatCount);
+    mpFS->startElementNS(XML_p, XML_cTn, XML_id, OString::number(GetNextAnimationNodeId(rXNode)),
+                         XML_dur, sDuration, XML_restart, pRestart, XML_presetID,
+                         sax_fastparser::UseIf(OString::number(nPresetId), bPresetId),
+                         XML_presetClass, pPresetClass, XML_fill, pFill, XML_nodeType, pNodeType,
+                         XML_autoRev, sax_fastparser::UseIf("1", bAutoReverse), XML_presetSubtype,
+                         sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType),
+                         XML_repeatCount, sRepeatCount);
 
     WriteAnimationCondList(mpContext->getBeginCondList(), XML_stCondLst);
     WriteAnimationCondList(mpContext->getEndCondList(), XML_endCondLst);

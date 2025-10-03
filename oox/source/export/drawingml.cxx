@@ -2696,14 +2696,14 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     assert(nSize >= 200 && "Minimum accepted value for fontsize(ST_TextFontSize) is 200");
 
     mpFS->startElementNS( XML_a, nElement,
-                          XML_b, bold,
-                          XML_i, italic,
                           XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()),
                           XML_sz, OString::number(nSize),
-            // For Condensed character spacing spc value is negative.
+                          XML_b, bold,
+                          XML_i, italic,
+                          XML_u, underline,
+                          // For Condensed character spacing spc value is negative.
                           XML_spc, sax_fastparser::UseIf(OString::number(nCharKerning), nCharKerning != 0),
                           XML_strike, strikeout,
-                          XML_u, underline,
                           XML_baseline, sax_fastparser::UseIf(OString::number(nCharEscapement*1000), nCharEscapement != 0),
                           XML_cap, cap );
 
