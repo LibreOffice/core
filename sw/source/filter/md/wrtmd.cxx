@@ -144,6 +144,58 @@ struct NodePositions
     }
 };
 
+void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
+                         FormattingStatus& rChange)
+{
+    const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
+    SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
+    Graphic aGraphic;
+    OUString aGraphicURL;
+    if (rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType() == SwNodeType::Grf)
+    {
+        SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
+        aGraphic = pGrfNode->GetGraphic();
+        if (pGrfNode->IsLinkedFile())
+        {
+            pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
+        }
+        else
+        {
+            // Not linked, image data goes into the "URL".
+            OUString aGraphicInBase64;
+            if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64))
+            {
+                return;
+            }
+
+            aGraphicURL = "data:" + aGraphicInBase64;
+        }
+    }
+    else
+    {
+        SwOLENode* pOLENode = rWrt.m_pDoc->GetNodes()[nStart]->GetOLENode();
+        assert(pOLENode->GetGraphic());
+        aGraphic = *pOLENode->GetGraphic();
+        // TODO fill aGraphicURL with the right info
+    }
+
+    const OUString& rBaseURL = rWrt.GetBaseURL();
+    INetURLObject aGraphicURLObject(aGraphicURL);
+    if (!rBaseURL.isEmpty() && aGraphicURLObject.GetProtocol() != INetProtocol::Data)
+    {
+        aGraphicURL = URIHelper::simpleNormalizedMakeRelative(rBaseURL, aGraphicURL);
+    }
+    OUString aTitle = rFrameFormat.GetObjTitle();
+    OUString aDescription = rFrameFormat.GetObjDescription();
+    OUString aLink;
+    if (rFrameFormat.GetAttrSet().HasItem(RES_URL))
+    {
+        const SwFormatURL& rLink = rFrameFormat.GetURL();
+        aLink = rLink.GetURL();
+    }
+    rChange.aImages.emplace(aGraphicURL, aTitle, aDescription, aLink);
+}
+
 void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& rItem, int increment)
 {
     auto IterateItemSet = [&rWrt, &rChange, increment](const SfxItemSet& set) {
@@ -213,53 +265,7 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             const SwFormatFlyCnt& rFormatFlyCnt = rItem.StaticWhichCast(RES_TXTATR_FLYCNT);
             const auto& rFrameFormat
                 = static_cast<const SwFlyFrameFormat&>(*rFormatFlyCnt.GetFrameFormat());
-            const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-            SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
-            Graphic aGraphic;
-            OUString aGraphicURL;
-            if (rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType() == SwNodeType::Grf)
-            {
-                SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
-                aGraphic = pGrfNode->GetGraphic();
-                if (pGrfNode->IsLinkedFile())
-                {
-                    pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
-                }
-                else
-                {
-                    // Not linked, image data goes into the "URL".
-                    OUString aGraphicInBase64;
-                    if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64))
-                    {
-                        break;
-                    }
-
-                    aGraphicURL = "data:" + aGraphicInBase64;
-                }
-            }
-            else
-            {
-                SwOLENode* pOLENode = rWrt.m_pDoc->GetNodes()[nStart]->GetOLENode();
-                assert(pOLENode->GetGraphic());
-                aGraphic = *pOLENode->GetGraphic();
-                // TODO fill aGraphicURL with the right info
-            }
-
-            const OUString& rBaseURL = rWrt.GetBaseURL();
-            INetURLObject aGraphicURLObject(aGraphicURL);
-            if (!rBaseURL.isEmpty() && aGraphicURLObject.GetProtocol() != INetProtocol::Data)
-            {
-                aGraphicURL = URIHelper::simpleNormalizedMakeRelative(rBaseURL, aGraphicURL);
-            }
-            OUString aTitle = rFrameFormat.GetObjTitle();
-            OUString aDescription = rFrameFormat.GetObjDescription();
-            OUString aLink;
-            if (rFrameFormat.GetAttrSet().HasItem(RES_URL))
-            {
-                const SwFormatURL& rLink = rFrameFormat.GetURL();
-                aLink = rLink.GetURL();
-            }
-            rChange.aImages.emplace(aGraphicURL, aTitle, aDescription, aLink);
+            ApplyFlyFrameFormat(rFrameFormat, rWrt, rChange);
             break;
         }
         case RES_TXTATR_CONTENTCONTROL:
@@ -329,6 +335,38 @@ bool ShouldCloseIt(int prev, int curr) { return prev != curr && prev >= 0 && cur
 bool ShouldOpenIt(int prev, int curr) { return prev != curr && prev <= 0 && curr > 0; }
 
 void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars);
+
+void OutMarkdown_SwMDImageInfo(const SwMDImageInfo& rImageInfo, SwMDWriter& rWrt)
+{
+    if (!rImageInfo.aLink.isEmpty())
+    {
+        // Start image link.
+        rWrt.Strm().WriteUnicodeOrByteText(u"[");
+    }
+
+    rWrt.Strm().WriteUnicodeOrByteText(u"![");
+    OutEscapedChars(rWrt, rImageInfo.aDescription);
+    rWrt.Strm().WriteUnicodeOrByteText(u"](");
+    rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aURL);
+
+    if (!rImageInfo.aTitle.isEmpty())
+    {
+        rWrt.Strm().WriteUnicodeOrByteText(u" \"");
+        OutEscapedChars(rWrt, rImageInfo.aTitle);
+        rWrt.Strm().WriteUnicodeOrByteText(u"\"");
+    }
+
+    rWrt.Strm().WriteUnicodeOrByteText(u")");
+
+    if (!rImageInfo.aLink.isEmpty())
+    {
+        // End image link.
+        rWrt.Strm().WriteUnicodeOrByteText(u"](");
+        rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aLink);
+        rWrt.Strm().WriteUnicodeOrByteText(u")");
+    }
+}
+
 void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 pos,
                          FormattingStatus& current)
 {
@@ -495,33 +533,7 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
             continue;
         }
 
-        if (!rImageInfo.aLink.isEmpty())
-        {
-            // Start image link.
-            rWrt.Strm().WriteUnicodeOrByteText(u"[");
-        }
-
-        rWrt.Strm().WriteUnicodeOrByteText(u"![");
-        OutEscapedChars(rWrt, rImageInfo.aDescription);
-        rWrt.Strm().WriteUnicodeOrByteText(u"](");
-        rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aURL);
-
-        if (!rImageInfo.aTitle.isEmpty())
-        {
-            rWrt.Strm().WriteUnicodeOrByteText(u" \"");
-            OutEscapedChars(rWrt, rImageInfo.aTitle);
-            rWrt.Strm().WriteUnicodeOrByteText(u"\"");
-        }
-
-        rWrt.Strm().WriteUnicodeOrByteText(u")");
-
-        if (!rImageInfo.aLink.isEmpty())
-        {
-            // End image link.
-            rWrt.Strm().WriteUnicodeOrByteText(u"](");
-            rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aLink);
-            rWrt.Strm().WriteUnicodeOrByteText(u")");
-        }
+        OutMarkdown_SwMDImageInfo(rImageInfo, rWrt);
     }
 
     current = result;
