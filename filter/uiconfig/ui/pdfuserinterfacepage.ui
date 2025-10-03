@@ -39,25 +39,6 @@
                 <property name="margin-top">6</property>
                 <property name="row-spacing">6</property>
                 <child>
-                  <object class="GtkCheckButton" id="center">
-                    <property name="label" translatable="yes" context="pdfuserinterfacepage|center">_Center window on screen</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="center-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|center">Select to generate a PDF file that is shown in a reader window centered on screen.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="resize">
                     <property name="label" translatable="yes" context="pdfuserinterfacepage|resize">_Resize window to initial page</property>
                     <property name="visible">True</property>
@@ -74,6 +55,25 @@
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="center">
+                    <property name="label" translatable="yes" context="pdfuserinterfacepage|center">_Center window on screen</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="center-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|center">Select to generate a PDF file that is shown in a reader window centered on screen.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -147,25 +147,6 @@
                 <property name="margin-top">6</property>
                 <property name="row-spacing">6</property>
                 <child>
-                  <object class="GtkCheckButton" id="toolbar">
-                    <property name="label" translatable="yes" context="pdfuserinterfacepage|toolbar">Hide _toolbar</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="toolbar-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|toolbar">Select to hide the reader's toolbar when the document is active.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="menubar">
                     <property name="label" translatable="yes" context="pdfuserinterfacepage|menubar">Hide _menubar</property>
                     <property name="visible">True</property>
@@ -182,6 +163,25 @@
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="toolbar">
+                    <property name="label" translatable="yes" context="pdfuserinterfacepage|toolbar">Hide _toolbar</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="toolbar-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|toolbar">Select to hide the reader's toolbar when the document is active.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
