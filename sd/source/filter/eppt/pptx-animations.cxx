@@ -996,7 +996,7 @@ void PPTXAnimationExport::WriteAnimationNodeEffect()
         const char* pFilter = ::ppt::AnimationExporter::FindTransitionName(
             xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection());
         const char* pMode = xFilter->getMode() ? "in" : "out";
-        mpFS->startElementNS(XML_p, XML_animEffect, XML_filter, pFilter, XML_transition, pMode);
+        mpFS->startElementNS(XML_p, XML_animEffect, XML_transition, pMode, XML_filter, pFilter);
 
         WriteAnimationNodeAnimateInside(false);
 

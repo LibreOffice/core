@@ -3413,7 +3413,7 @@ void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
             default:
                 sAlignment = "l"_ostr;
         }
-        mpFS->singleElementNS(XML_a, XML_tab, XML_algn, sAlignment, XML_pos, sPosition);
+        mpFS->singleElementNS(XML_a, XML_tab, XML_pos, sPosition, XML_algn, sAlignment);
     }
     if (aTabStops.getLength() > 0)
         mpFS->endElementNS(XML_a, XML_tabLst);
