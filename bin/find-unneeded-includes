@@ -671,11 +671,11 @@ def main(argv):
                                 classname=c.group(1)
                                 p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, "-e", classname, file])
                                 if p.returncode == 1 :
-                                    print("WARNING:", exclusion, "is not present anymore in", file)
+                                    print("WARNING:", file, ":", exclusion, "line is not present anymore, remove it from:", rulePath)
                             else:
                                 p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
                                 if p.returncode == 1 :
-                                    print("WARNING:", exclusion, "is not present anymore in", file)
+                                    print("WARNING:", file, ":", exclusion, "line is not present anymore, remove it from:", rulePath)
                     except TypeError:
                         print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
