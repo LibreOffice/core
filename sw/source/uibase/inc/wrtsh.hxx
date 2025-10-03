@@ -351,6 +351,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = nullptr );
     SW_DLLPUBLIC void LaunchOLEObj(sal_Int32 nVerb = css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY); // start server
+    bool    IsOLEMath();
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset ) override;
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = nullptr,
