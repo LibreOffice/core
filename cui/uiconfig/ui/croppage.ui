@@ -1,265 +1,299 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.3 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="lower">-99.98999999999999</property>
+    <property name="upper">99.98999999999999</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">1</property>
     <property name="upper">9999</property>
     <property name="value">100</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">100</property>
+    <property name="step-increment">10</property>
+    <property name="page-increment">100</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="lower">0.050000000000000003</property>
+    <property name="lower">0.05</property>
     <property name="upper">200</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
-    <property name="lower">0.050000000000000003</property>
+    <property name="lower">0.05</property>
     <property name="upper">200</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
     <property name="lower">1</property>
     <property name="upper">9999</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">100</property>
+    <property name="step-increment">10</property>
+    <property name="page-increment">100</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="lower">-99.98999999999999</property>
+    <property name="upper">99.98999999999999</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment7">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="lower">-99.98999999999999</property>
+    <property name="upper">99.98999999999999</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment8">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="lower">-99.98999999999999</property>
+    <property name="upper">99.98999999999999</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
+  <!-- n-columns=3 n-rows=3 -->
   <object class="GtkGrid" id="CropPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="valign">start</property>
     <property name="hexpand">True</property>
-    <property name="border_width">6</property>
-    <property name="row_spacing">12</property>
-    <property name="column_spacing">24</property>
+    <property name="border-width">6</property>
+    <property name="row-spacing">12</property>
+    <property name="column-spacing">24</property>
     <child>
       <object class="GtkFrame" id="cropframe">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
+          <!-- n-columns=3 n-rows=5 -->
           <object class="GtkGrid" id="grid10">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_start">12</property>
-            <property name="margin_top">6</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <property name="hexpand">True</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">18</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">18</property>
             <child>
               <object class="GtkRadioButton" id="keepscale">
                 <property name="label" translatable="yes" context="croppage|keepscale">Keep _scale</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="keepsize">
                 <property name="label" translatable="yes" context="croppage|keepsize">Keep image si_ze</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">keepscale</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label2">_Left:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">left</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">left</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="left">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="truncate_multiline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label3">_Right:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">right</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">right</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="right">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="truncate_multiline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment7</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label4">_Top:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">top</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">top</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label5">_Bottom:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">bottom</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">bottom</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="top">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="truncate_multiline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="bottom">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="truncate_multiline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment8</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <child>
                       <object class="GtkDrawingArea" id="preview">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                       </object>
@@ -268,70 +302,107 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
                 <property name="height">4</property>
               </packing>
             </child>
             <child>
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="origsizegrid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="origsizeft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">origsize</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">origsize</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="origsize">
                     <property name="label" translatable="yes" context="croppage|origsize">_Original Size</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="halign">end</property>
                     <property name="hexpand">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="uncrop">
                 <property name="label" translatable="yes" context="croppage|uncrop">Reset Crop</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>
         <child type="label">
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="croppage|label1">Crop</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -340,85 +411,101 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
         <property name="width">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkFrame" id="scaleframe">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
+          <!-- n-columns=3 n-rows=3 -->
           <object class="GtkGrid" id="grid4">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_start">12</property>
-            <property name="margin_top">6</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label6">_Width:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">widthzoom</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">widthzoom</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="widthzoom">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="activates_default">True</property>
-                <property name="truncate_multiline">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label7">_Height:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">heightzoom</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">heightzoom</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="heightzoom">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="activates_default">True</property>
-                <property name="truncate_multiline">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment5</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>
         <child type="label">
           <object class="GtkLabel" id="label10">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="croppage|label10">Scale</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -427,86 +514,102 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkFrame" id="sizeframe">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
+          <!-- n-columns=3 n-rows=3 -->
           <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_start">12</property>
-            <property name="margin_top">6</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label8">_Width:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">width</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">width</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="width">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="activates_default">True</property>
-                <property name="truncate_multiline">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="digits">2</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label9">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label9">_Height:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">height</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">height</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="height">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="activates_default">True</property>
-                <property name="truncate_multiline">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment4</property>
                 <property name="digits">2</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>
         <child type="label">
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="croppage|label11">Image Size</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -515,9 +618,24 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
