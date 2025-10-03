@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf114848)
 
     xmlDocUniquePtr pXmlDocTheme1 = parseExport(u"ppt/theme/theme1.xml"_ustr);
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
-                u"1f497d");
+                u"1F497D");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf147586)
@@ -755,7 +755,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118835)
     xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent, "(//p:animClr)[1]", "clrSpc", u"rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[1]//p:attrName", u"style.color");
-    assertXPath(pXmlDocContent, "(//p:animClr)[1]//p:to/a:srgbClr", "val", u"ed1c24");
+    assertXPath(pXmlDocContent, "(//p:animClr)[1]//p:to/a:srgbClr", "val", u"ED1C24");
 
     assertXPath(pXmlDocContent, "(//p:animClr)[2]", "clrSpc", u"rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[2]//p:attrName", u"stroke.color");
@@ -763,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118835)
 
     assertXPath(pXmlDocContent, "(//p:animClr)[3]", "clrSpc", u"rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[3]//p:attrName", u"fillcolor");
-    assertXPath(pXmlDocContent, "(//p:animClr)[3]//p:to/a:srgbClr", "val", u"fcd3c1");
+    assertXPath(pXmlDocContent, "(//p:animClr)[3]//p:to/a:srgbClr", "val", u"FCD3C1");
 
     assertXPath(pXmlDocContent, "(//p:animClr)[5]", "clrSpc", u"hsl");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[5]//p:attrName", u"fillcolor");

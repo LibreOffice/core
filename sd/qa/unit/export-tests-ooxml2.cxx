@@ -1381,7 +1381,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112333)
                    "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/"
                    "p:animClr/p:to/a:srgbClr",
                    "val");
-    CPPUNIT_ASSERT_EQUAL(u"0563c1"_ustr, sTo);
+    CPPUNIT_ASSERT_EQUAL(u"0563C1"_ustr, sTo);
 
     sAttributeName = getXPathContent(
         pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
@@ -1694,10 +1694,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testAccentColor)
                 u"accent6");
     xmlDocUniquePtr pXmlDocTheme1 = parseExport(u"ppt/theme/theme1.xml"_ustr);
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
-                u"70ad47");
+                u"70AD47");
     xmlDocUniquePtr pXmlDocTheme2 = parseExport(u"ppt/theme/theme2.xml"_ustr);
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
-                u"deb340");
+                u"DEB340");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Motyw pakietu Office
@@ -1714,9 +1714,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testThemeColors)
 
     xmlDocUniquePtr pXmlDocTheme2 = parseExport(u"ppt/theme/theme1.xml"_ustr);
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
-                u"44546a");
+                u"44546A");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent3/a:srgbClr", "val",
-                u"a5a5a5");
+                u"A5A5A5");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111785)
