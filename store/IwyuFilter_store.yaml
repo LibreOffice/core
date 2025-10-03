@@ -11,4 +11,4 @@ excludelist:
     store/source/storpage.hxx:
     # Checking other file gives this
     - namespace store { struct OStoreDirectoryPageData; }
-    - namespace store { class OStoreDirectoryPageObject; }
+    - namespace store { class  OStoreDirectoryPageObject; }

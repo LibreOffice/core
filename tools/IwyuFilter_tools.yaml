@@ -4,7 +4,6 @@ excludelist:
     tools/qa/cppunit/test_pathutils.cxx:
     # Needed for WIN32 specific unit test
     - cppunit/TestAssert.h
-    - cppunit/plugin/TestPlugIn.h
     - tools/pathutils.hxx
     - cwchar
     tools/qa/cppunit/test_cpu_runtime_detection_AVX2_check.cxx:
@@ -16,11 +15,6 @@ excludelist:
     # Needed for LO_SSSE3_AVAILABLE case
     - tools/simdsupport.hxx
     - stdlib.h
-    tools/source/debug/debug.cxx:
-    # Needed for linker visibility
-    - comphelper/diagnose_ex.hxx
-    # Keep for commented out "if defined __GLIBCXX__" path
-    - cxxabi.h
     tools/source/misc/extendapplicationenvironment.cxx:
     # Needed on MACOSX
     - config_folders.h

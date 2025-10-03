@@ -19,7 +19,6 @@ excludelist:
     - com/sun/star/container/XNameContainer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/beans/XPropertySet.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/container/XEnumerationAccess.hpp
     - com/sun/star/container/XIndexAccess.hpp
@@ -89,7 +88,6 @@ excludelist:
     - com/sun/star/container/XIndexAccess.hpp
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/sheet/XCellRangeReferrer.hpp
     - com/sun/star/sheet/XConsolidationDescriptor.hpp
     - com/sun/star/sheet/XDatabaseRange.hpp
@@ -153,7 +151,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/text/XTextField.hpp
     - com/sun/star/beans/XPropertySet.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     sc/inc/filtuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyAccess.hpp
@@ -166,7 +163,6 @@ excludelist:
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/container/XEnumerationAccess.hpp
     - com/sun/star/container/XNameAccess.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/FormulaToken.hpp
     - com/sun/star/sheet/XSheetCondition2.hpp
@@ -200,8 +196,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFunctionAccess.hpp
     sc/inc/global.hxx:
-    # base class has to be a complete type
-    - tools/ref.hxx
     # Needed for macro #define
     - com/sun/star/i18n/CollatorOptions.hpp
     sc/inc/linkuno.hxx:
@@ -238,7 +232,6 @@ excludelist:
     - com/sun/star/container/XEnumerationAccess.hpp
     - com/sun/star/document/XActionLockable.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/sheet/XCellRangeReferrer.hpp
     - com/sun/star/sheet/XFormulaTokens.hpp
     - com/sun/star/sheet/XLabelRange.hpp
@@ -274,9 +267,6 @@ excludelist:
     - com/sun/star/chart2/data/XPivotTableDataProvider.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
-    sc/inc/reftokenhelper.hxx:
-    # base class has to be a complete type
-    - refdata.hxx
     sc/inc/rowheightcontext.hxx:
     # base class has to be a complete type
     - vcl/outdev.hxx
@@ -311,7 +301,6 @@ excludelist:
     sc/inc/srchuno.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XReplaceDescriptor.hpp
     sc/inc/styleuno.hxx:
     # base class has to be a complete type
@@ -322,7 +311,6 @@ excludelist:
     - com/sun/star/container/XIndexAccess.hpp
     - com/sun/star/container/XNameContainer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/style/XStyle.hpp
     - com/sun/star/style/XStyleLoader2.hpp
     sc/inc/TablePivotChart.hxx:
@@ -345,7 +333,6 @@ excludelist:
     sc/inc/textuno.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/text/XTextFieldsSupplier.hpp
     sc/inc/tokenuno.hxx:
     # base class has to be a complete type
@@ -429,7 +416,6 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessible.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     sc/source/ui/inc/AccessibleCellBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleValue.hpp
@@ -635,8 +621,6 @@ excludelist:
     # base class has to be a complete type
     - ooo/vba/excel/XRange.hpp
     sc/source/ui/vba/vbarange.cxx:
-    # Needed for linker visibility of range::serviceDecl
-    - service.hxx
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
     sc/source/ui/vba/vbasheetobjects.hxx:
@@ -655,23 +639,13 @@ excludelist:
     sc/source/ui/vba/vbawindows.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XWindows.hpp
-    sc/source/ui/vba/vbawindow.cxx:
-    # Needed for linker visibility of window::serviceDecl
-    - service.hxx
-    sc/source/ui/vba/vbaworkbook.cxx:
-    # Needed for linker visibility of workbook::serviceDecl
-    - service.hxx
     sc/source/ui/vba/vbaworkbooks.cxx:
-    # Needed for linker visibility of worksheet::serviceDecl
-    - service.hxx
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
     sc/source/ui/vba/vbaworksheet.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XWorksheet.hpp
     sc/source/ui/vba/vbaworksheet.cxx:
-    # Needed for linker visibility of workbook::serviceDecl
-    - service.hxx
     # Actually used
     - com/sun/star/beans/XIntrospectionAccess.hpp
     sc/source/ui/vba/vbaworksheets.hxx:
@@ -722,9 +696,6 @@ excludelist:
     sc/source/core/tool/addincol.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sc/source/core/tool/cellkeytranslator.cxx:
-    # Needed for localized keywords
-    - cellkeywords.inl
     sc/source/core/tool/formularesult.cxx:
     # Complete type needed for boost::intrusive_ptr
     - scmatrix.hxx
@@ -827,8 +798,6 @@ excludelist:
     sc/source/filter/oox/sheetdatabuffer.cxx:
     # Needed for template
     - com/sun/star/sheet/XSpreadsheetDocument.hpp
-    - com/sun/star/table/XCell.hpp
-    - com/sun/star/table/XCellRange.hpp
     sc/source/filter/oox/stylesbuffer.cxx:
     # Needed for template
     - com/sun/star/sheet/XSpreadsheetDocument.hpp
@@ -907,9 +876,6 @@ excludelist:
     sc/source/ui/attrdlg/scdlgfact.cxx:
     # Complete type needed for unique_ptr & ScConditionalFormatList
     - conditio.hxx
-    sc/source/ui/attrdlg/scdlgfact.hxx:
-    # Complete type needed for unique_ptr & ScLinkedAreaDlg
-    - linkarea.hxx
     sc/source/ui/app/inputhdl.cxx:
     # Complete type needed for unique_ptr
     - docpool.hxx

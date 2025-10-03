@@ -4,9 +4,6 @@ excludelist:
     configmgr/source/nodemap.hxx:
     # Needed for direct member access
     - node.hxx
-    configmgr/source/access.cxx:
-    # Safer to keep for use in cppu:UnoType template
-    - com/sun/star/uno/XWeak.hpp
     configmgr/source/dconf.cxx:
     # Generic wrapper for dconf
     - dconf/dconf.h
@@ -37,6 +34,8 @@ excludelist:
     - com/sun/star/container/XContainerListener.hpp
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/uno/XInterface.hpp
+    # Safer to keep for use in cppu:UnoType template
+    - com/sun/star/uno/XWeak.hpp
     configmgr/source/parsemanager.cxx:
     # Actually used
     - set

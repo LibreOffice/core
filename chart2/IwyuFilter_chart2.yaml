@@ -3,7 +3,6 @@ assumeFilename: chart2/source/controller/main/ChartWindow.cxx
 excludelist:
     chart2/inc/ChartModel.hxx:
     # base class has to be a complete type
-    - com/sun/star/chart2/X3DChartWindowProvider.hpp
     - com/sun/star/chart2/XChartDocument.hpp
     - com/sun/star/chart2/XTitled.hpp
     - com/sun/star/chart2/data/XDataReceiver.hpp
@@ -35,7 +34,6 @@ excludelist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/qa/XDumper.hpp
     - com/sun/star/util/XModifyListener.hpp
     chart2/source/inc/AxisHelper.hxx:
@@ -49,11 +47,6 @@ excludelist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    chart2/source/inc/ConfigColorScheme.hxx:
-    # base class has to be a complete type
-    - com/sun/star/chart2/XColorScheme.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     chart2/source/inc/chartview/ChartSfxItemIds.hxx:
     # Needed for TypedWhichId macros
     - class SvxSizeItem
@@ -81,7 +74,6 @@ excludelist:
     - com/sun/star/chart2/data/XDataSource.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/util/XModifyListener.hpp
     chart2/source/inc/InternalData.hxx:
     # complete type is needed in the inline dtor
@@ -153,8 +145,6 @@ excludelist:
     chart2/source/model/inc/StockBar.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/inc/XMLFilter.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XExporter.hpp
@@ -173,8 +163,6 @@ excludelist:
     - com/sun/star/container/XChild.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/main/Axis.cxx:
     # Needed for template
     - com/sun/star/awt/Size.hpp
@@ -192,8 +180,6 @@ excludelist:
     - com/sun/star/chart2/XDataPointCustomLabelField.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/main/Legend.cxx:
     # Needed for template
     - com/sun/star/awt/Size.hpp
@@ -203,8 +189,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/main/Title.cxx:
     # Needed for template
     - com/sun/star/awt/Size.hpp
@@ -216,8 +200,6 @@ excludelist:
     chart2/source/model/main/Wall.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/template/AreaChartTypeTemplate.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
@@ -317,8 +299,6 @@ excludelist:
     - com/sun/star/chart2/XTitle.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/tools/RegressionEquation.cxx:
     # Needed for template
     - com/sun/star/awt/Size.hpp
@@ -371,8 +351,6 @@ excludelist:
     chart2/source/view/main/LabelPositionHelper.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
-    # Actually used
-    - rtl/math.hxx
     chart2/source/view/main/PropertyMapper.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
@@ -390,7 +368,6 @@ excludelist:
     chart2/source/controller/inc/AccessibleTextHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/lang/XInitialization.hpp
     chart2/source/controller/inc/AccessibleChartView.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
@@ -400,9 +377,6 @@ excludelist:
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleComponent.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XEventListener.hpp
     chart2/source/controller/inc/CharacterPropertyItemConverter.hxx:
     # has to be a complete type
     - com/sun/star/awt/Size.hpp
@@ -415,12 +389,10 @@ excludelist:
     - com/sun/star/util/XUpdatable.hpp
     chart2/source/controller/inc/ChartController.hxx:
     # base class has to be a complete type
-    - com/sun/star/frame/XController.hpp
     - com/sun/star/frame/XDispatchProvider.hpp
     - com/sun/star/frame/XLayoutManagerListener.hpp
     - com/sun/star/ui/XContextMenuInterception.hpp
     - com/sun/star/util/XModeChangeListener.hpp
-    - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloseListener.hpp
     - com/sun/star/util/XModifyListener.hpp
@@ -450,11 +422,9 @@ excludelist:
     chart2/source/controller/accessibility/AccessibleChartShape.hxx:
     # base class has to be a complete type
     - AccessibleBase.hxx
-    - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
     chart2/source/controller/accessibility/AccessibleChartElement.hxx:
     # base class has to be a complete type
     - AccessibleBase.hxx
-    - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
     chart2/source/controller/accessibility/AccessibleChartView.cxx:
     # Actually used
     - com/sun/star/view/XSelectionSupplier.hpp
@@ -526,9 +496,6 @@ excludelist:
     chart2/source/controller/main/ChartModelClone.hxx:
     # Needed for implicit dtor
     - com/sun/star/uno/Any.hxx
-    chart2/source/controller/main/ChartController.cxx:
-    # Needed for implicit dtor
-    - com/sun/star/awt/XWindowPeer.hpp
     chart2/source/controller/main/ChartFrameloader.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XSynchronousFrameLoader.hpp
@@ -600,7 +567,6 @@ excludelist:
     - com/sun/star/chart/XDateCategories.hpp
     - com/sun/star/lang/XComponent.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/uno/XComponent.hpp
     chart2/source/controller/chartapiwrapper/AxisWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/chart/XAxis.hpp

@@ -23,9 +23,6 @@ excludelist:
     - com/sun/star/task/XPasswordContainer2.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XEventListener.hpp
-    svl/qa/unit/items/stylepool.cxx:
-    # Needed for system-cppunit
-    - unotest/bootstrapfixturebase.hxx
     svl/qa/unit/lockfiles/test_lockfiles.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx

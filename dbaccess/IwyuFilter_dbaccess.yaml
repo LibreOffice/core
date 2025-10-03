@@ -50,9 +50,6 @@ excludelist:
     # Actually used
     - com/sun/star/embed/XStorage.hpp
     - com/sun/star/sdbc/XConnection.hpp
-    dbaccess/source/filter/hsqldb/rowinputbinary.cxx:
-    # Needed boost wrapper header
-    - boost/date_time/posix_time/posix_time.hpp
     dbaccess/source/filter/xml/xmlDatabase.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -117,7 +114,6 @@ excludelist:
     dbaccess/source/ui/dlg/queryfilter.cxx:
     # Actually used
     - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
-    - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/sdbc/XConnection.hpp
     dbaccess/source/ui/misc/DExport.cxx:
     # Actually used

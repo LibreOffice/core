@@ -4,9 +4,6 @@ excludelist:
     toolkit/source/awt/vclxmenu.cxx:
     # Needed for direct member access
     - vcl/window.hxx
-    toolkit/source/helper/servicenames.cxx:
-    # Needed for extern array declarations
-    - toolkit/helper/servicenames.hxx
     toolkit/inc/awt/animatedimagespeer.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XAnimation.hpp
@@ -17,7 +14,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/awt/XPointer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     toolkit/inc/awt/vclxspinbutton.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XSpinValue.hpp
@@ -26,13 +22,11 @@ excludelist:
     - com/sun/star/awt/XPrinterPropertySet.hpp
     - com/sun/star/awt/XInfoPrinter.hpp
     - com/sun/star/awt/XPrinterPropertySet.hpp
-    - com/sun/star/awt/XPrinterServer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     toolkit/inc/awt/vclxtabpagecontainer.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/tab/XTabPageContainer.hpp
     - com/sun/star/container/XContainerListener.hpp
-    - toolkit/awt/vclxcontainer.hxx
     toolkit/inc/controls/accessiblecontrolcontext.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
@@ -77,24 +71,12 @@ excludelist:
     toolkit/inc/controls/tabpagecontainer.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/tab/XTabPageContainer.hpp
-    - toolkit/controls/controlmodelcontainerbase.hxx
     toolkit/inc/controls/tabpagemodel.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/tab/XTabPage.hpp
-    - toolkit/controls/unocontrolcontainer.hxx
-    toolkit/inc/controls/unocontrolcontainer.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XControlContainer.hpp
-    - com/sun/star/awt/XUnoControlContainer.hpp
-    - com/sun/star/container/XContainer.hpp
-    - com/sun/star/container/XIdentifierContainer.hpp
-    - toolkit/controls/unocontrolbase.hxx
     toolkit/source/controls/animatedimages.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySetInfo.hpp
     toolkit/source/hatchwindow/hatchwindow.cxx:
     # Actually used
     - com/sun/star/embed/XHatchWindowController.hpp
-    toolkit/source/helper/servicenames.cxx:
-    # Needed for extern
-    - helper/servicenames.hxx

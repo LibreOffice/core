@@ -97,7 +97,6 @@ excludelist:
     - com/sun/star/task/XStatusIndicator.hpp
     oox/source/helper/modelobjecthelper.cxx:
     # Actually used
-    - com/sun/star/awt/Gradient.hpp
     - com/sun/star/drawing/LineDash.hpp
     - com/sun/star/drawing/Hatch.hpp
     - com/sun/star/drawing/PolyPolygonBezierCoords.hpp

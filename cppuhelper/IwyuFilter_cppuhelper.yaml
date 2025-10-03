@@ -7,7 +7,6 @@ excludelist:
     - com/sun/star/container/XSet.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp
-    - cppuhelper/compbase.hxx
     cppuhelper/source/access_control.cxx:
     # Needed for UnoType
     - com/sun/star/security/RuntimePermission.hpp

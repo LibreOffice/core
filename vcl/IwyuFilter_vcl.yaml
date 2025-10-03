@@ -29,7 +29,6 @@ excludelist:
     - salframe.hxx
     vcl/source/app/svdata.cxx:
     # Needed on WIN32
-    - com/sun/star/accessibility/MSAAService.hpp
     - salframe.hxx
     vcl/source/app/svmain.cxx:
     # Needed on WIN32
@@ -47,9 +46,6 @@ excludelist:
     vcl/source/filter/wmf/wmfexternal.cxx:
     # Actually these are used
     - com/sun/star/beans/PropertyValue.hpp
-    vcl/source/gdi/salgdilayout.cxx:
-    # Needed on WIN32
-    - desktop/exithelper.h
     vcl/source/helper/commandinfoprovider.cxx:
     # Actually these are used
     - com/sun/star/frame/XFrame.hpp
@@ -89,9 +85,6 @@ excludelist:
     - QUrl
     - QApplication
     - QDebug
-    vcl/qa/cppunit/filter/ipdf/ipdf.cxx:
-    - prewin.h
-    - postwin.h
     vcl/qt5/QtAccessibleWidget.cxx:
     # Needed for QT 6.9
     - com/sun/star/accessibility/XAccessibleContext2.hpp

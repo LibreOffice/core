@@ -48,7 +48,6 @@ excludelist:
     ucb/source/ucp/webdav-curl/webdavcontent.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
-    ucb/source/ucp/webdav-curl/webdavcontent.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
     - com/sun/star/ucb/XCommandInfo.hpp

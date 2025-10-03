@@ -14,6 +14,3 @@ excludelist:
     vbahelper/source/msforms/vbacontrol.cxx:
     # Actually used
     - com/sun/star/frame/XModel.hpp
-    vbahelper/source/msforms/vbauserform.cxx:
-    # Needed for extern declaration
-    - service.hxx

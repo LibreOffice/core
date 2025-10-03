@@ -25,15 +25,10 @@ excludelist:
     comphelper/source/container/embeddedobjectcontainer.cxx:
     # Keep for OSL_DEBUG_LEVEL > 1
     - com/sun/star/container/XNameAccess.hpp
-    comphelper/source/container/IndexedPropertyValuesContainer.cxx:
-    # Needed for typedef
-    - com/sun/star/beans/PropertyValue.hpp
     comphelper/source/container/NamedPropertyValuesContainer.cxx:
     # Needed for typedef
     - com/sun/star/beans/PropertyValue.hpp
     comphelper/source/container/enumerablemap.cxx:
-    # Avoid loplugin:unreffun error
-    - comphelper_services.hxx
     # Needed for typedef
     - com/sun/star/lang/XServiceInfo.hpp
     comphelper/source/container/namecontainer.cxx:
@@ -89,9 +84,6 @@ excludelist:
     - comphelper/processfactory.hxx
     # Needed for direct member access
     - com/sun/star/uno/XComponentContext.hpp
-    include/comphelper/MasterPropertySet.hxx:
-    # Stop warnings about include/
-    - namespace comphelper { class ChainablePropertySet; }
     comphelper/source/property/genericpropertyset.cxx:
     # Needed for linker visibility
     - comphelper/genericpropertyset.hxx

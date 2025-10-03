@@ -10,8 +10,6 @@ excludelist:
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/accessibility/XAccessibleComponent.hpp
     - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     svtools/source/dialogs/insdlg.cxx:
     # Needed on WIN
     - comphelper/classids.hxx

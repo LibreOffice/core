@@ -1,9 +1,6 @@
 ---
 assumeFilename: svx/source/svdraw/svdobj.cxx
 excludelist:
-    svx/inc/getallcharpropids.hxx:
-    # Actually used
-    - o3tl/span.hxx
     svx/inc/lboxctrl.hxx:
     # Needed for --fwdecl mode to avoid "externally available entity "SvxPopupWindowListBox" is not previously declared in an included file"
     - class SvxPopupWindowListBox
@@ -138,9 +135,6 @@ excludelist:
     svx/source/unodraw/unoprov.cxx:
     # Needed for UnoType instantiation
     - com/sun/star/lang/Locale.hpp
-    svx/qa/unit/xoutdev.cxx:
-    # Needed for system-cppunit
-    - unotest/bootstrapfixturebase.hxx
     svx/qa/unit/XTableImportExportTest.cxx:
     # Needed for --with-system-cppunit
     - unotest/bootstrapfixturebase.hxx

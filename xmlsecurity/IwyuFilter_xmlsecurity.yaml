@@ -66,12 +66,10 @@ excludelist:
     xmlsecurity/source/gpg/CertificateImpl.hxx:
     # Base class needs complete type
     - com/sun/star/security/XCertificate.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     xmlsecurity/source/gpg/SecurityEnvironment.hxx:
     # Base class needs complete type
     - com/sun/star/xml/crypto/XSecurityEnvironment.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     xmlsecurity/source/gpg/XMLSecurityContext.hxx:
     # Base class needs complete type
     - com/sun/star/xml/crypto/XXMLSecurityContext.hpp
@@ -93,7 +91,6 @@ excludelist:
     xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/xml/wrapper/XXMLElementWrapper.hpp
     xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.hxx:
     # Base class needs complete type
@@ -101,7 +98,6 @@ excludelist:
     xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.hxx:
     # Base class needs complete type
     - com/sun/star/security/XCertificate.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     xmlsecurity/source/xmlsec/nss/seinitializer_nssimpl.hxx:
     # Base class needs complete type
@@ -112,7 +108,6 @@ excludelist:
     - com/sun/star/xml/crypto/XSecurityEnvironment.hpp
     - com/sun/star/xml/crypto/XCertificateCreator.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     xmlsecurity/source/xmlsec/nss/secerror.cxx:
     # Used as array initializer
     - certerrors.h

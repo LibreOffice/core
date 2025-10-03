@@ -1,11 +1,6 @@
 ---
 assumeFilename: sd/source/core/drawdoc.cxx
 excludelist:
-    sd/qa/unit/SdrPdfImportTest.cxx:
-    # Needed on WIN to compile
-    - prewin.h
-    - postwin.h
-    - fpdfview.h
     sd/sdi/sdslots.hrc:
     # Needed for sdi files to compile
     - sfx2/sfxsids.hrc
@@ -91,7 +86,6 @@ excludelist:
     - class HtmlState
     sd/source/ui/annotations/annotationmanagerimpl.hxx:
     # base class has to be a complete type
-    - annotationtag.hxx
     - com/sun/star/document/XEventListener.hpp
     sd/source/ui/annotations/annotationmanager.cxx:
     # Needed for unique_ptr type
@@ -114,24 +108,10 @@ excludelist:
     - com/sun/star/container/XNamed.hpp
     sd/source/ui/inc/framework/factories/BasicToolBarFactory.hxx:
     - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/inc/framework/factories/BasicPaneFactory.hxx:
-    - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/inc/framework/factories/BasicViewFactory.hxx:
-    - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/framework/factories/ChildWindowPane.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
     - framework/Pane.hxx
-    sd/source/ui/framework/module/CenterViewFocusModule.hxx:
-    # base class has to be a complete type
-    sd/source/ui/framework/module/ShellStackGuard.hxx:
-    # base class has to be a complete type
-    sd/source/ui/framework/module/ToolBarModule.hxx:
-    # base class has to be a complete type
-    sd/source/ui/framework/module/SlideSorterModule.hxx:
-    # base class has to be a complete type
-    sd/source/ui/framework/module/ViewTabBarModule.hxx:
-    # base class has to be a complete type
     sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
@@ -144,21 +124,11 @@ excludelist:
     sd/source/ui/inc/AccessibleSlideSorterObject.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp
-    - com/sun/star/accessibility/XAccessibleComponent.hpp
-    - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     sd/source/ui/inc/AccessibleSlideSorterView.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp
-    - com/sun/star/accessibility/XAccessibleComponent.hpp
-    - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleSelection.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    sd/source/ui/inc/CustomAnimationPane.hxx:
-    # Needed for typedef
-    - motionpathtag.hxx
     sd/source/ui/inc/DrawDocShell.hxx:
     # base class has to be a complete type
     - fupoor.hxx
@@ -169,7 +139,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/drawing/XDrawView.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/view/XFormLayerAccess.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
     - sfx2/sfxbasecontroller.hxx
@@ -180,17 +149,9 @@ excludelist:
     # typedef needs a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/presentation/XPresentation2.hpp
-    sd/source/ui/inc/unomodel.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/XDrawPages.hpp
     sd/source/ui/inc/unosrch.hxx:
     # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XReplaceDescriptor.hpp
-    sd/source/ui/inc/ViewTabBar.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/XToolBar.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/ui/inc/framework/Configuration.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
@@ -201,25 +162,13 @@ excludelist:
     sd/source/ui/inc/framework/ModuleController.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/inc/framework/Pane.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/AbstractPane.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/ui/inc/framework/ViewShellWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XWindowListener.hpp
-    - framework/XView.hxx
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
     sd/source/ui/inc/tools/SlotStateListener.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
-    sd/source/ui/presenter/PresenterHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/presenter/PresenterPreviewCache.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/presenter/PresenterCanvas.hxx:
     # base class has to be a complete type
     - com/sun/star/rendering/XSpriteCanvas.hpp
@@ -235,7 +184,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/presentation/XShapeEventListener.hpp
     - com/sun/star/presentation/XSlideShowController.hpp
-    - com/sun/star/presentation/XSlideShowListener.hpp
     sd/source/ui/slideshow/slideshowviewimpl.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XPaintListener.hpp
@@ -246,7 +194,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/document/XEventListener.hpp
     - com/sun/star/beans/XPropertyChangeListener.hpp
-    - com/sun/star/accessibility/XAccessibleEventListener.hpp
     - com/sun/star/frame/XFrameActionListener.hpp
     sd/source/ui/unoidl/sddetect.hxx:
     # base class has to be a complete type
@@ -260,13 +207,11 @@ excludelist:
     - com/sun/star/lang/XComponent.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XSingleServiceFactory.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/ui/unoidl/unopback.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/core/CustomAnimationCloner.cxx:
     # Avoid loplugin:unreffun error
     - CustomAnimationCloner.hxx
@@ -358,6 +303,8 @@ excludelist:
     sd/source/filter/eppt/epptso.cxx:
     # Needed for direct member access
     - com/sun/star/table/XTable.hpp
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sd/source/filter/eppt/pptx-animations.hxx:
     # Needed for typedef
     - sax/fshelper.hxx
@@ -374,9 +321,6 @@ excludelist:
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/style/TabStop.hpp
     - com/sun/star/graphic/XGraphic.hpp
-    sd/source/filter/eppt/epptso.cxx:
-    # Needed for template
-    - com/sun/star/frame/XModel.hpp
     sd/source/filter/ppt/pptinanimations.cxx:
     # Needed for template
     - com/sun/star/drawing/XDrawPage.hpp
@@ -417,9 +361,6 @@ excludelist:
     sd/source/ui/func/futempl.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sd/source/ui/presenter/PresenterHelper.cxx:
-    # Needed for template
-    - com/sun/star/awt/XWindowPeer.hpp
     sd/source/ui/sidebar/MasterPageObserver.cxx:
     # Actually used
     - set

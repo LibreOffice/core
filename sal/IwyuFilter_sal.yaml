@@ -9,7 +9,7 @@ excludelist:
     - execinfo.h
     sal/osl/unx/nlsupport.hxx:
     # Needed on MACOSX
-    - #include <rtl/ustring.hxx>
+    - include <rtl/ustring.hxx>
     sal/osl/unx/system.hxx:
     # needed for the define  pthread_testcancel() to work
     - pthread.h

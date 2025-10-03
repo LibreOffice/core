@@ -84,11 +84,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     # contains versioned namespace so cannot forward declare
     - unicode/regex.h
-    i18npool/source/breakiterator/xdictionary.cxx:
-    # Used after #ifdef DICT_JA_ZH_IN_DATAFILE
-    - config_folders.h
-    - osl/file.h
-    - rtl/bootstrap.hxx
     i18npool/source/collator/collator_unicode.cxx:
     # Config options are used in #ifdef
     - config_locales.h

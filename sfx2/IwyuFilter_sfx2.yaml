@@ -19,7 +19,6 @@ excludelist:
     sfx2/inc/unoctitm.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XNotifyingDispatch.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     sfx2/source/doc/syspathw32.hxx:
     # Needed on WIN32
     - sal/types.h
@@ -78,9 +77,6 @@ excludelist:
     sfx2/source/control/dispatch.cxx:
     # Needed for DENTERREGISTRATIONS DLEAVEREGISTRATIONS macros from sfx2/bindings.hxx in DBG_UTIL mode
     - rtl/strbuf.hxx
-    sfx2/source/control/listview.cxx:
-    # Needed for MOREBUTTON in sfx2/inc/bitmaps.hlst to not fail, until a bit of cleanup there.
-    - tools/wintypes.hxx
     sfx2/source/control/sfxstatuslistener.cxx:
     # Actually used
     - com/sun/star/frame/XDispatchProvider.hpp
@@ -108,9 +104,6 @@ excludelist:
     sfx2/source/doc/guisaveas.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
-    sfx2/source/doc/iframe.cxx:
-    # Needed for template
-    - com/sun/star/awt/XWindowPeer.hpp
     sfx2/source/doc/objstor.cxx:
     # Actually used
     - com/sun/star/frame/XModel.hpp
@@ -149,12 +142,6 @@ excludelist:
     sfx2/source/sidebar/SidebarPanelBase.cxx:
     # Needed for template
     - com/sun/star/awt/XWindowPeer.hpp
-    sfx2/source/view/ipclient.cxx:
-    # Needed for template
-    - com/sun/star/awt/XWindowPeer.hpp
-    sfx2/source/view/sfxbasecontroller.cxx:
-    # Needed for template
-    - com/sun/star/awt/XWindowPeer.hpp
     sfx2/source/view/viewfrm2.cxx:
     # Needed for direct member access
     - com/sun/star/embed/VerbDescriptor.hpp
@@ -166,8 +153,6 @@ excludelist:
     # Actually used
     - com/sun/star/awt/XKeyHandler.hpp
     - com/sun/star/awt/XMouseClickHandler.hpp
-    # Needed for template
-    - com/sun/star/awt/XWindowPeer.hpp
     sfx2/source/view/viewsh.cxx:
     # Needed for TypedWhichId define
     - svl/eitem.hxx
