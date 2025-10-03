@@ -12,7 +12,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_basic_types_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_basic_types_test,\
-    sc/qa/unit/ScAddressTest \
+    sc/qa/unit/types/ScAddressTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,sc_basic_types_test,boost_headers))
