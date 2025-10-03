@@ -2270,7 +2270,6 @@ cui/source/inc/cuioptgenrl.hxx
 cui/source/inc/cuisrchdlg.hxx
 cui/source/inc/cuitabarea.hxx
 cui/source/inc/cuitabline.hxx
-cui/source/inc/dbregister.hxx
 cui/source/inc/defdlgname.hxx
 cui/source/inc/grfpage.hxx
 cui/source/inc/hangulhanjadlg.hxx

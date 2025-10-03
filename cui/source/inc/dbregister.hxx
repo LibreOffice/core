@@ -25,87 +25,87 @@
 
 namespace svx
 {
+class DbRegistrationOptionsPage : public SfxTabPage
+{
+private:
+    size_t m_nOldCount;
+    bool m_bModified;
 
-    class DbRegistrationOptionsPage : public SfxTabPage
-    {
-    private:
-        size_t              m_nOldCount;
-        bool                m_bModified;
+    std::unique_ptr<weld::Button> m_xNew;
+    std::unique_ptr<weld::Button> m_xEdit;
+    std::unique_ptr<weld::Button> m_xDelete;
+    std::unique_ptr<weld::TreeView> m_xPathBox;
+    std::unique_ptr<weld::TreeIter> m_xIter;
 
-        std::unique_ptr<weld::Button> m_xNew;
-        std::unique_ptr<weld::Button> m_xEdit;
-        std::unique_ptr<weld::Button> m_xDelete;
-        std::unique_ptr<weld::TreeView> m_xPathBox;
-        std::unique_ptr<weld::TreeIter> m_xIter;
+    DECL_LINK(NewHdl, weld::Button&, void);
+    DECL_LINK(EditHdl, weld::Button&, void);
+    DECL_LINK(DeleteHdl, weld::Button&, void);
+    DECL_LINK(PathBoxDoubleClickHdl, weld::TreeView&, bool);
 
-        DECL_LINK( NewHdl, weld::Button&, void );
-        DECL_LINK( EditHdl, weld::Button&, void );
-        DECL_LINK( DeleteHdl, weld::Button&, void );
-        DECL_LINK( PathBoxDoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(PathSelect_Impl, weld::TreeView&, void);
 
-        DECL_LINK( PathSelect_Impl, weld::TreeView&, void);
+    DECL_LINK(HeaderSelect_Impl, int, void);
+    DECL_LINK(NameValidator, const OUString&, bool);
 
-        DECL_LINK( HeaderSelect_Impl, int, void );
-        DECL_LINK( NameValidator, const OUString&, bool);
-
-        /** inserts a new entry in the tablistbox
-            @param  _sName
-                The name of the entry.
-            @param  _sLocation
-                The location of the file.
-        */
-        void insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool bReadOnly );
-
-        /** opens the LinkDialog to create a register pair
-            @param  sOldName
-                The old name of the entry may be empty.
-            @param  sOldLocation
-                The old location of the entry may be empty.
-            @param  nEntry
-                The entry to remove if the entry will be changed
-        */
-        void openLinkDialog(const OUString& sOldName, const OUString& sOldLocation, int nEntry = -1);
-
-    public:
-        DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
-        virtual ~DbRegistrationOptionsPage() override;
-
-        static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
-
-        virtual OUString GetAllStrings() override;
-
-        virtual bool        FillItemSet( SfxItemSet* rSet ) override;
-        virtual void        Reset( const SfxItemSet* rSet ) override;
-        virtual void        FillUserData() override;
-    };
-
-    /** helper for DatabaseRegistrationDialog
-
-        Necessary so that DatabaseRegistrationDialog is self-contained, i.e. always reflects
-        the current registration state.
+    /** inserts a new entry in the tablistbox
+        @param  _sName
+            The name of the entry.
+        @param  _sLocation
+            The location of the file.
     */
-    class RegistrationItemSetHolder
-    {
-    private:
-        SfxItemSet  m_aRegistrationItems;
+    void insertNewEntry(const OUString& _sName, const OUString& _sLocation, const bool bReadOnly);
 
-    protected:
-        RegistrationItemSetHolder( SfxItemSet _aMasterSet );
-        ~RegistrationItemSetHolder();
+    /** opens the LinkDialog to create a register pair
+        @param  sOldName
+            The old name of the entry may be empty.
+        @param  sOldLocation
+            The old location of the entry may be empty.
+        @param  nEntry
+            The entry to remove if the entry will be changed
+    */
+    void openLinkDialog(const OUString& sOldName, const OUString& sOldLocation, int nEntry = -1);
 
-    protected:
-        const SfxItemSet& getRegistrationItems() const { return m_aRegistrationItems; }
-    };
+public:
+    DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController,
+                              const SfxItemSet& rSet);
+    virtual ~DbRegistrationOptionsPage() override;
 
-    class DatabaseRegistrationDialog    :public RegistrationItemSetHolder
-                                        ,public SfxSingleTabDialogController
-    {
-    public:
-        DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rAttr);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
-        virtual short   run() override;
-    };
+    virtual OUString GetAllStrings() override;
+
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
+    virtual void FillUserData() override;
+};
+
+/** helper for DatabaseRegistrationDialog
+
+    Necessary so that DatabaseRegistrationDialog is self-contained, i.e. always reflects
+    the current registration state.
+*/
+class RegistrationItemSetHolder
+{
+private:
+    SfxItemSet m_aRegistrationItems;
+
+protected:
+    RegistrationItemSetHolder(SfxItemSet _aMasterSet);
+    ~RegistrationItemSetHolder();
+
+protected:
+    const SfxItemSet& getRegistrationItems() const { return m_aRegistrationItems; }
+};
+
+class DatabaseRegistrationDialog : public RegistrationItemSetHolder,
+                                   public SfxSingleTabDialogController
+{
+public:
+    DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rAttr);
+
+    virtual short run() override;
+};
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
