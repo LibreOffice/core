@@ -316,7 +316,8 @@ void SwView::SelectShell()
     if ( m_pFormShell && m_pFormShell->IsActiveControl() )
         nNewSelectionType |= SelectionType::FormControl;
 
-    if ( nNewSelectionType == m_nSelectionType )
+    if ( nNewSelectionType == m_nSelectionType &&
+        !(m_nSelectionType == SelectionType::Ole && m_pWrtShell->IsOLEMath()) )
     {
         GetViewFrame().GetBindings().InvalidateAll( false );
         if ( m_nSelectionType & SelectionType::Ole ||

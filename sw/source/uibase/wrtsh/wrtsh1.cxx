@@ -666,6 +666,16 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     return bActivate;
 }
 
+bool SwWrtShell::IsOLEMath() {
+    svt::EmbeddedObjectRef& xRef = GetOLEObject();
+    OSL_ENSURE( xRef.is(), "OLE not found" );
+
+    const auto classId = xRef->getClassID();
+    if ( SotExchange::IsMath(classId) )
+        return true;
+    return false;
+}
+
 // The current selected OLE object will be loaded with the
 // verb into the server.
 void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
