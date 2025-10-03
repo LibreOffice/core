@@ -50,6 +50,7 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <fmturl.hxx>
+#include <fmtanchr.hxx>
 #include "wrtmd.hxx"
 
 #include <algorithm>
@@ -110,6 +111,7 @@ struct FormattingStatus
     std::set<SwMDImageInfo> aImages;
     // Checked/unchecked -> increment (1 or -1) map.
     std::unordered_map<bool, int> aTaskListItemChanges;
+    std::set<const SwFrameFormat*> aFlys;
 };
 
 // This is a vector of positions in the node text, where objects of class T start or end.
@@ -136,6 +138,7 @@ struct NodePositions
     PosData<SfxPoolItem> hintEnds;
     PosData<SwRangeRedline> redlineStarts;
     PosData<SwRangeRedline> redlineEnds;
+    PosData<SwFrameFormat> flys;
 
     sal_Int32 getEndOfCurrent(sal_Int32 end)
     {
@@ -146,6 +149,7 @@ struct NodePositions
             pos_of(hintStarts.current()),
             pos_of(redlineEnds.current()),
             pos_of(redlineStarts.current()),
+            pos_of(flys.current()),
         });
     }
 };
@@ -297,6 +301,11 @@ void ApplyItem(FormattingStatus& rChange, const SwRangeRedline* pItem, int incre
     rChange.aRedlineChanges[pItem] += increment;
 }
 
+void ApplyItem(FormattingStatus& rChange, const SwFrameFormat* pItem)
+{
+    rChange.aFlys.insert(pItem);
+}
+
 // currentFormatting is the state of properties before this position. For any hint and/or redline
 // that starts and/or ends at this position, every property that starts here increments respective
 // applied status, and properties that end here decrement their applied count (see comment for
@@ -324,6 +333,12 @@ FormattingStatus CalculateFormattingChange(SwMDWriter& rWrt, NodePositions& posi
     for (auto* p = positions.redlineStarts.current(); p && p->first == pos;
          p = positions.redlineStarts.next())
         ApplyItem(result, p->second, +1);
+
+    // Output anchored flys.
+    for (auto it = positions.flys.current(); it && it->first == pos; it = positions.flys.next())
+    {
+        ApplyItem(result, it->second);
+    }
 
     return result;
 }
@@ -454,6 +469,29 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
             rWrt.Strm().WriteUnicodeOrByteText(buf);
             rWrt.Strm().WriteUnicodeOrByteText(u"\">");
         }
+    }
+
+    // Write flys anchored at this position.
+    FormattingStatus aChange;
+    for (const SwFrameFormat* pFrameFormat : result.aFlys)
+    {
+        if (current.aFlys.contains(pFrameFormat))
+        {
+            // 'current' is the old state and 'result' is the new state, so don't write images which were written already.
+            continue;
+        }
+
+        if (pFrameFormat->Which() != RES_FLYFRMFMT)
+        {
+            continue;
+        }
+
+        const auto& rFlyFrameFormat = static_cast<const SwFlyFrameFormat&>(*pFrameFormat);
+        ApplyFlyFrameFormat(rFlyFrameFormat, rWrt, aChange);
+    }
+    for (const SwMDImageInfo& rImage : aChange.aImages)
+    {
+        OutMarkdown_SwMDImageInfo(rImage, rWrt);
     }
 
     // Not in CommonMark
@@ -763,6 +801,24 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
 
         positions.redlineEnds.sort();
 
+        // Collect flys anchored to this text node.
+        for (size_t nFly = 0; nFly < rWrt.GetFlys().size(); ++nFly)
+        {
+            const SwMDFly& rFly = rWrt.GetFlys()[nFly];
+            if (rFly.m_nAnchorNodeOffset < rNode.GetIndex())
+            {
+                continue;
+            }
+            if (rFly.m_nAnchorNodeOffset > rNode.GetIndex())
+            {
+                break;
+            }
+
+            SwMDFly aFly = rWrt.GetFlys().erase_extract(nFly);
+            --nFly;
+            positions.flys.add(aFly.m_nAnchorContentOffset, aFly.m_pFrameFormat);
+        }
+
         FormattingStatus currentStatus;
         while (nStrPos < nEnd)
         {
@@ -904,8 +960,45 @@ void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
 
 SwMDWriter::SwMDWriter(const OUString& rBaseURL) { SetBaseURL(rBaseURL); }
 
+bool SwMDFly::operator<(const SwMDFly& rFly) const
+{
+    if (m_nAnchorNodeOffset != rFly.m_nAnchorNodeOffset)
+    {
+        return m_nAnchorNodeOffset < rFly.m_nAnchorNodeOffset;
+    }
+
+    if (m_nAnchorContentOffset != rFly.m_nAnchorContentOffset)
+    {
+        return m_nAnchorContentOffset < rFly.m_nAnchorContentOffset;
+    }
+
+    return m_pFrameFormat->GetAnchor().GetOrder() < rFly.m_pFrameFormat->GetAnchor().GetOrder();
+}
+
+void SwMDWriter::CollectFlys()
+{
+    // ApplyItem() already handles as-char flys.
+    SwPosFlyFrames aFrames(m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam.get(),
+                                                    /*bDrawAlso=*/false));
+    for (const SwPosFlyFrame& rFrame : aFrames)
+    {
+        const SwFrameFormat& rFrameFormat = rFrame.GetFormat();
+        const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
+        SwContentNode* pAnchorNode = rAnchor.GetAnchorContentNode();
+        if (!pAnchorNode)
+        {
+            continue;
+        }
+
+        m_aFlys.insert(
+            { pAnchorNode->GetIndex(), rAnchor.GetAnchorContentOffset(), &rFrameFormat });
+    }
+}
+
 ErrCode SwMDWriter::WriteStream()
 {
+    CollectFlys();
+
     Strm().SetStreamCharSet(RTL_TEXTENCODING_UTF8);
     if (m_bShowProgress)
         ::StartProgress(STR_STATSTR_W4WWRITE, 0, sal_Int32(m_pDoc->GetNodes().Count()),
