@@ -20,6 +20,9 @@
 #pragma once
 
 #include "tphfedit.hxx"
+
+#include <attrib.hxx>
+
 #include <sfx2/tabdlg.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
