@@ -487,7 +487,10 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
-        EditPaM aPaM( pView->getImpl().GetEditSelection().Max() );
+        // tdf#168674 we are possibly being called from the calc formula bar in ScInputHandler::EnterHandler2, where layout is off
+        const bool bOldUpdateLayout = SetUpdateLayout(true);
+
+        EditPaM aPaM(pView->getImpl().GetEditSelection().Max());
         tools::Rectangle aR1 = PaMtoEditCursor( aPaM );
 
         if ( !IsFormatted() )
@@ -515,6 +518,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             else if (vcl::Window* pWindow = pView->GetWindow())
                 pWindow->SetCursorRect(&aRect, nExtTextInputWidth);
         }
+        SetUpdateLayout(bOldUpdateLayout);
     }
     else if ( rCEvt.GetCommand() == CommandEventId::SelectionChange )
     {
