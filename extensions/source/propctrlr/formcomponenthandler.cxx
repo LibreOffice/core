@@ -524,7 +524,7 @@ namespace pcr
             if( ! (_rControlValue >>= sControlValue) )
                 SAL_WARN("extensions.propctrlr", "convertToControlValue: unable to get property for Show/Hide");
 
-            static_assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
+            static_assert(std::size(RID_RSC_ENUM_SHOWHIDE) == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
             bool bShow = sControlValue == PcrRes(RID_RSC_ENUM_SHOWHIDE[1]);
 
             aPropertyValue <<= bShow;
@@ -632,7 +632,7 @@ namespace pcr
         case PROPERTY_ID_SHOW_RECORDACTIONS:
         case PROPERTY_ID_SHOW_FILTERSORT:
         {
-            static_assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
+            static_assert(std::size(RID_RSC_ENUM_SHOWHIDE) == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
             OUString sControlValue =     ::comphelper::getBOOL(_rPropertyValue)
                                             ? PcrRes(RID_RSC_ENUM_SHOWHIDE[1])
                                             : PcrRes(RID_RSC_ENUM_SHOWHIDE[0]);
@@ -1222,10 +1222,10 @@ namespace pcr
                 ||  ( nPropId == PROPERTY_ID_SHOW_FILTERSORT )
                 )
             {
-                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, RID_RSC_ENUM_SHOWHIDE, SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE), false);
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, RID_RSC_ENUM_SHOWHIDE, std::size(RID_RSC_ENUM_SHOWHIDE), false);
             }
             else
-                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, RID_RSC_ENUM_YESNO, SAL_N_ELEMENTS(RID_RSC_ENUM_YESNO), false);
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, RID_RSC_ENUM_YESNO, std::size(RID_RSC_ENUM_YESNO), false);
             bNeedDefaultStringIfVoidAllowed = true;
         }
 
@@ -2212,11 +2212,9 @@ namespace pcr
                     ControlType::PROGRESSBAR
                 };
 
-                sal_Int32 nKnownControlTypes = SAL_N_ELEMENTS( aControlModelServiceNames );
-                OSL_ENSURE( nKnownControlTypes == SAL_N_ELEMENTS( nClassIDs ),
-                    "FormComponentPropertyHandler::impl_classifyControlModel_throw: inconsistence" );
-
-                for ( sal_Int32 i = 0; i < nKnownControlTypes; ++i )
+                static_assert(std::size( aControlModelServiceNames ) == std::size( nClassIDs ),
+                    "FormComponentPropertyHandler::impl_classifyControlModel_throw: inconsistence");
+                for ( size_t i = 0; i < std::size( aControlModelServiceNames ); ++i )
                 {
                     OUString sServiceName = "com.sun.star.awt."  +
                         OUString::createFromAscii( aControlModelServiceNames[ i ] );
