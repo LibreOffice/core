@@ -20,12 +20,18 @@
 
 #include <svl/ctloptions.hxx>
 
+#include <svl/languageoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <osl/mutex.hxx>
 #include "itemholder2.hxx"
+#include <officecfg/System.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
@@ -286,6 +292,49 @@ void SvtCTLOptions_Impl::Load()
                     }
                 }
             }
+        }
+    }
+
+    if (!m_bCTLFontEnabled)
+    {
+        SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+        //system locale is CTL
+        bool bAutoEnableCTL = bool(nScriptType & SvtScriptType::COMPLEX);
+
+        if (!bAutoEnableCTL)
+        {
+            //windows secondary system locale is CTL
+            OUString sWin16SystemLocale = officecfg::System::L10N::SystemLocale::get();
+            LanguageType eSystemLanguage = LANGUAGE_NONE;
+            if (!sWin16SystemLocale.isEmpty())
+            {
+                eSystemLanguage
+                    = LanguageTag::convertToLanguageTypeWithFallback(sWin16SystemLocale);
+            }
+
+            if (eSystemLanguage != LANGUAGE_SYSTEM)
+            {
+                SvtScriptType nWinScript
+                    = SvtLanguageOptions::GetScriptTypeOfLanguage(eSystemLanguage);
+                bAutoEnableCTL = bool(nWinScript & SvtScriptType::COMPLEX);
+            }
+
+            //CTL keyboard is installed
+            if (!bAutoEnableCTL)
+            {
+                bAutoEnableCTL = SvtSystemLanguageOptions::isCTLKeyboardLayoutInstalled();
+            }
+        }
+
+        if (bAutoEnableCTL)
+        {
+            m_bCTLFontEnabled = true;
+            LanguageType nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
+            //enable sequence checking for the appropriate languages
+            m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace
+                = (MsLangId::needsSequenceChecking(nLanguage)
+                   || MsLangId::needsSequenceChecking(LANGUAGE_SYSTEM));
+            Commit();
         }
     }
 

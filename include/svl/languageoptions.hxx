@@ -77,8 +77,9 @@ namespace SvtLanguageOptions
  */
 namespace SvtSystemLanguageOptions
 {
-    bool            isCJKKeyboardLayoutInstalled();
-};
+bool isCJKKeyboardLayoutInstalled();
+bool isCTLKeyboardLayoutInstalled();
+}
 
 #endif // INCLUDED_SVL_LANGUAGEOPTIONS_HXX
 

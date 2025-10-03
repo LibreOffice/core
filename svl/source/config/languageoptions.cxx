@@ -132,6 +132,11 @@ namespace SvtSystemLanguageOptions
     {
         return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::ASIAN);
     }
+
+    bool isCTLKeyboardLayoutInstalled()
+    {
+        return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::COMPLEX);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
