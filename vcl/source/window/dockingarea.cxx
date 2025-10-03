@@ -133,8 +133,6 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
-
     EnableNativeWidget(); // only required because the toolkit currently switches this flag off
     if (!rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire))
         return;

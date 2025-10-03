@@ -505,7 +505,6 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
             bNativeOk = ImplDrawNativeBackground(rRenderContext);
         if (!bNativeOk)
         {
-            const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
             if (!IsBackground())
             {
                 if (!IsInPaint())
