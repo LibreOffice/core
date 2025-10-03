@@ -5269,8 +5269,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             if ( pAttrBuf )
             {
                 sal_Int32 nTextLen2 = aEvt.maText.getLength();
-                pSalAttrAry.reset(new ExtTextInputAttr[nTextLen2]);
-                memset( pSalAttrAry.get(), 0, nTextLen2*sizeof( sal_uInt16 ) );
+                pSalAttrAry = std::make_unique<ExtTextInputAttr[]>(nTextLen2); // zero-initialize
                 for( sal_Int32 i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
                     BYTE nWinAttr = pAttrBuf.get()[i];
