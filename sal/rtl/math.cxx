@@ -235,8 +235,8 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
             {
                 if (bufsize > 256)
                 {
-                    stringInHeap = std::make_unique<char[]>(bufsize);
-                    mapInHeap = std::make_unique<const CharT* []>(bufsize);
+                    stringInHeap = std::make_unique_for_overwrite<char[]>(bufsize);
+                    mapInHeap = std::make_unique_for_overwrite<const CharT* []>(bufsize);
                     string = stringInHeap.get();
                     map = mapInHeap.get();
                 }
