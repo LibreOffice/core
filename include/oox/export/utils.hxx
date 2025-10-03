@@ -23,17 +23,29 @@
 #include <sal/config.h>
 
 #include <o3tl/unit_conversion.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/types.h>
 
 #include <cmath>
 
+// Only used to output rgb colors as hex
 inline OString I32SHEX(sal_Int32 x)
 {
-    OString aStr = OString::number(x, 16);
-    while (aStr.getLength() < 6)
-        aStr = "0" + aStr;
-    return aStr;
+    assert(x <= 0xffffff);
+    rtl::OStringBuffer aRes(6);
+    aRes.setLength(6);
+    sal_Int32 n = 0;
+    for (int nShift = 24-4; nShift >=0; nShift -= 4)
+    {
+        char nDigit = static_cast<char>((x >> nShift) & 0xf);
+        if ( nDigit > 9 )
+            aRes[n] = (nDigit-10) + 'A';
+        else
+            aRes[n] = (nDigit + '0');
+        n++;
+    }
+    return aRes.makeStringAndClear();
 }
 
 /**
