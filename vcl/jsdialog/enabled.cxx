@@ -305,7 +305,8 @@ constexpr auto SchartDialogList
         { u"modules/schart/ui/tp_DataSource.ui" },
         { u"modules/schart/ui/tp_RangeChooser.ui" },
         { u"modules/schart/ui/tp_Trendline.ui" },
-        { u"modules/schart/ui/wizelementspage.ui" }
+        { u"modules/schart/ui/wizelementspage.ui" },
+        { u"modules/schart/ui/tp_Scale.ui" },
     });
 
 constexpr auto SmathDialogList
