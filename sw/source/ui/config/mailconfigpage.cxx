@@ -253,8 +253,9 @@ IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, weld::Button&, void)
 {
-    SwTestAccountSettingsDialog aDlg(this);
-    aDlg.run();
+    std::shared_ptr<SwTestAccountSettingsDialog> pDialog
+        = std::make_shared<SwTestAccountSettingsDialog>(this);
+    weld::DialogController::runAsync(pDialog, [](int) {});
 }
 
 IMPL_LINK(SwMailConfigPage, SecureHdl, weld::Toggleable&, rBox, void)
