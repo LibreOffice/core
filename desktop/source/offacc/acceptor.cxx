@@ -22,6 +22,7 @@
 #include "acceptor.hxx"
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
+#include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <officecfg/Office/Security.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -121,6 +122,9 @@ void Acceptor::run()
             // the bridge, it will be destructed.
             m_bridges.add(m_rBridgeFactory->createBridge(
                 u""_ustr, m_aProtocol, rConnection, rInstanceProvider));
+        } catch (const ConnectionSetupException&) {
+            TOOLS_WARN_EXCEPTION("desktop.offacc", "");
+            break;
         } catch (const Exception&) {
             TOOLS_WARN_EXCEPTION("desktop.offacc", "");
             // connection failed...
