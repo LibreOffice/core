@@ -38,7 +38,6 @@ protected:
     bool        bUseGridsnap:1;
     bool        bSynchronize:1;
     bool        bGridVisible:1;
-    bool        bEqualGrid:  1;
 
 public:
     SvxOptionsGrid();
@@ -50,7 +49,6 @@ public:
     void    SetUseGridSnap( bool bSet ) {bUseGridsnap   = bSet;}
     void    SetSynchronize( bool bSet ) {bSynchronize   = bSet;}
     void    SetGridVisible( bool bSet ) {bGridVisible   = bSet;}
-    void    SetEqualGrid( bool bSet )   {bEqualGrid     = bSet;}
 
     sal_uInt32  GetFieldDrawX(    ) const {  return nFldDrawX;    }
     sal_uInt32  GetFieldDivisionX() const {  return nFldDivisionX;}
@@ -59,7 +57,6 @@ public:
     bool        GetUseGridSnap( ) const {  return bUseGridsnap; }
     bool        GetSynchronize( ) const {  return bSynchronize; }
     bool        GetGridVisible( ) const {  return bGridVisible; }
-    bool        GetEqualGrid()    const {  return bEqualGrid;   }
 };
 
 class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem

@@ -64,8 +64,7 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
             && nFldDivisionY    == rCpy.nFldDivisionY
             && bUseGridsnap     == rCpy.bUseGridsnap
             && bSynchronize     == rCpy.bSynchronize
-            && bGridVisible     == rCpy.bGridVisible
-            && bEqualGrid       == rCpy.bEqualGrid );
+            && bGridVisible     == rCpy.bGridVisible );
 }
 
 ScViewRenderingOptions::ScViewRenderingOptions()
@@ -161,7 +160,6 @@ std::unique_ptr<SvxGridItem> ScViewOptions::CreateGridItem() const
     pItem->SetUseGridSnap   ( aGridOpt.GetUseGridSnap() );
     pItem->SetSynchronize   ( aGridOpt.GetSynchronize() );
     pItem->SetGridVisible   ( aGridOpt.GetGridVisible() );
-    pItem->SetEqualGrid     ( aGridOpt.GetEqualGrid() );
 
     return pItem;
 }
@@ -231,7 +229,6 @@ constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 #define SCGRIDOPT_SNAPTOGRID        4
 #define SCGRIDOPT_SYNCHRON          5
 #define SCGRIDOPT_VISIBLE           6
-#define SCGRIDOPT_SIZETOGRID        7
 
 Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
 {
@@ -275,8 +272,7 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
              u"Subdivision/YAxis"_ustr,                                   // SCGRIDOPT_SUBDIV_Y
              u"Option/SnapToGrid"_ustr,                                   // SCGRIDOPT_SNAPTOGRID
              u"Option/Synchronize"_ustr,                                  // SCGRIDOPT_SYNCHRON
-             u"Option/VisibleGrid"_ustr,                                  // SCGRIDOPT_VISIBLE
-             u"Option/SizeToGrid"_ustr};                                  // SCGRIDOPT_SIZETOGRID;
+             u"Option/VisibleGrid"_ustr};                                  // SCGRIDOPT_VISIBLE
 }
 
 ScViewCfg::ScViewCfg() :
@@ -568,9 +564,6 @@ void ScViewCfg::ReadGridCfg()
                 case SCGRIDOPT_VISIBLE:
                     aGrid.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
-                case SCGRIDOPT_SIZETOGRID:
-                    aGrid.SetEqualGrid( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                    break;
             }
         }
     }
@@ -615,9 +608,6 @@ IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCGRIDOPT_VISIBLE:
                 pValues[nProp] <<= rGrid.GetGridVisible();
-                break;
-            case SCGRIDOPT_SIZETOGRID:
-                pValues[nProp] <<= rGrid.GetEqualGrid();
                 break;
         }
     }

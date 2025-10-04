@@ -61,8 +61,7 @@ SvxOptionsGrid::SvxOptionsGrid() :
     nFldDivisionY   ( 0 ),
     bUseGridsnap    ( false ),
     bSynchronize    ( true ),
-    bGridVisible    ( false ),
-    bEqualGrid      ( true )
+    bGridVisible    ( false )
 {
 }
 
@@ -80,7 +79,6 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
     return (    bUseGridsnap == rItem.bUseGridsnap &&
                 bSynchronize == rItem.bSynchronize &&
                 bGridVisible == rItem.bGridVisible &&
-                bEqualGrid   == rItem.bEqualGrid   &&
                 nFldDrawX    == rItem.nFldDrawX    &&
                 nFldDivisionX== rItem.nFldDivisionX&&
                 nFldDrawY    == rItem.nFldDrawY    &&

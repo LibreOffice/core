@@ -809,14 +809,6 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="SizeToGrid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
-          <info>
-            <desc>Specifies whether the snap grid is matched with the main grid.</desc>
-            <label>Size to grid</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
           <info>
