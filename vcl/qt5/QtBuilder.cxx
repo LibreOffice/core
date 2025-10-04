@@ -1085,6 +1085,8 @@ void QtBuilder::setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rPro
     {
         if (rKey == u"accepts-tab")
             rTextEdit.setTabChangesFocus(!toBool(rValue));
+        else if (rKey == u"editable")
+            rTextEdit.setReadOnly(!toBool(rValue));
     }
 }
 
