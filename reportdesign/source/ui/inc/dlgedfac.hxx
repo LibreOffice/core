@@ -29,6 +29,9 @@ namespace rptui
 
 class DlgEdFactory
 {
+private:
+    void ImplDestroy();
+
 public:
     DlgEdFactory();
     ~DlgEdFactory();
