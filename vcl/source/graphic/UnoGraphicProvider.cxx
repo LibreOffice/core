@@ -187,10 +187,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( std::u16s
     if( nGraphicAddress == 0 )
         return nullptr;
 
-    rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
-
-    pUnoGraphic->init( *reinterpret_cast< ::Graphic* >( nGraphicAddress ) );
-    return pUnoGraphic;
+    return reinterpret_cast<::Graphic*>(nGraphicAddress)->GetXGraphic();
 }
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( std::u16string_view rResourceURL )
@@ -408,10 +405,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             if (!aPath.isEmpty() && bLoadAsLink)
                 aVCLGraphic.setOriginURL(aPath);
 
-            rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
-
-            pUnoGraphic->init( aVCLGraphic );
-            xRet = pUnoGraphic;
+            xRet = aVCLGraphic.GetXGraphic();
         }
         else{
             SAL_WARN("svtools", "Could not create graphic for:" << aPath << " error: " << error);
@@ -450,14 +444,8 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
     std::vector< uno::Reference<graphic::XGraphic> > aRet;
     for (const auto& pGraphic : aGraphics)
     {
-        uno::Reference<graphic::XGraphic> xGraphic;
-
         assert(pGraphic);
-        rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic();
-        pUnoGraphic->init(*pGraphic);
-        xGraphic = pUnoGraphic;
-
-        aRet.push_back(xGraphic);
+        aRet.push_back(pGraphic->GetXGraphic());
     }
 
     return comphelper::containerToSequence(aRet);
