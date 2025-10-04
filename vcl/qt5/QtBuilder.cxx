@@ -1084,9 +1084,21 @@ void QtBuilder::setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rPro
     for (auto const & [ rKey, rValue ] : rProps)
     {
         if (rKey == u"accepts-tab")
+        {
             rTextEdit.setTabChangesFocus(!toBool(rValue));
+        }
+        else if (rKey == u"buffer")
+        {
+            const TextBuffer* pTextBuffer = get_buffer_by_name(rValue);
+            assert(pTextBuffer && "No TextBuffer with the given ID");
+            auto aIt = pTextBuffer->find(u"text"_ustr);
+            if (aIt != pTextBuffer->end())
+                rTextEdit.setPlainText(toQString(aIt->second));
+        }
         else if (rKey == u"editable")
+        {
             rTextEdit.setReadOnly(!toBool(rValue));
+        }
     }
 }
 
