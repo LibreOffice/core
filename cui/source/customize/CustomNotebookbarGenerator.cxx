@@ -31,8 +31,6 @@
 #include <libxml/parser.h>
 #include <o3tl/string_view.hxx>
 
-#define aUIPropertiesCount 3
-
 using namespace css;
 
 CustomNotebookbarGenerator::CustomNotebookbarGenerator() {}
@@ -191,6 +189,7 @@ void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>
     const OString sCustomizedUIPath = getSystemPath(sUIPath);
     for (auto const& aValue : sUIItemProperties)
     {
+        constexpr sal_Int32 aUIPropertiesCount = 3;
         std::vector<OString> aProperties(aUIPropertiesCount);
         for (sal_Int32 aIndex = 0; aIndex < aUIPropertiesCount; aIndex++)
         {
