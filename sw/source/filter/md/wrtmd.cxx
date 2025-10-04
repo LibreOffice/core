@@ -784,11 +784,13 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         positions.redlineEnds.sort();
 
         // Collect flys anchored to this text node.
-        for (size_t nFly = 0; nFly < rWrt.GetFlys().size(); ++nFly)
+        size_t nFly = 0;
+        while (nFly < rWrt.GetFlys().size())
         {
             const SwMDFly& rFly = rWrt.GetFlys()[nFly];
             if (rFly.m_nAnchorNodeOffset < rNode.GetIndex())
             {
+                ++nFly;
                 continue;
             }
             if (rFly.m_nAnchorNodeOffset > rNode.GetIndex())
@@ -797,7 +799,6 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             }
 
             SwMDFly aFly = rWrt.GetFlys().erase_extract(nFly);
-            --nFly;
             positions.flys.add(aFly.m_nAnchorContentOffset, aFly.m_pFrameFormat);
         }
 
