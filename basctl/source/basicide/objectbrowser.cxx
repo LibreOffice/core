@@ -92,6 +92,63 @@ bool IsExpandable(const IdeSymbolInfo& rSymbol)
     }
 }
 
+std::shared_ptr<const IdeSymbolInfo>
+GetSymbolForIter(const weld::TreeIter& rIter, weld::TreeView& rTree,
+                 const std::map<OUString, std::shared_ptr<IdeSymbolInfo>>& rIndex)
+{
+    const OUString sId = rTree.get_id(rIter);
+    if (sId.isEmpty())
+    {
+        return nullptr;
+    }
+
+    auto it = rIndex.find(sId);
+
+    return (it != rIndex.end()) ? it->second : nullptr;
+}
+
+bool ShouldShowMembers(const IdeSymbolInfo& rSymbol)
+{
+    switch (rSymbol.eKind)
+    {
+        case IdeSymbolKind::UNO_CONSTANTS:
+        case IdeSymbolKind::UNO_ENUM:
+        case IdeSymbolKind::UNO_EXCEPTION:
+        case IdeSymbolKind::UNO_INTERFACE:
+        case IdeSymbolKind::UNO_SERVICE:
+        case IdeSymbolKind::UNO_STRUCT:
+        case IdeSymbolKind::UDT:
+        case IdeSymbolKind::MODULE:
+        case IdeSymbolKind::CLASS_MODULE:
+            return true;
+        default:
+            return false;
+    }
+}
+OUString GetGroupNameForKind(IdeSymbolKind eKind)
+{
+    switch (eKind)
+    {
+        case IdeSymbolKind::UNO_PROPERTY:
+        case IdeSymbolKind::PROPERTY_GET:
+        case IdeSymbolKind::PROPERTY_LET:
+        case IdeSymbolKind::PROPERTY_SET:
+            return IDEResId(RID_STR_OB_GROUP_PROPERTIES);
+        case IdeSymbolKind::UNO_METHOD:
+            return IDEResId(RID_STR_OB_GROUP_METHODS);
+        case IdeSymbolKind::UNO_FIELD:
+            return IDEResId(RID_STR_OB_GROUP_FIELDS);
+        case IdeSymbolKind::ENUM_MEMBER:
+            return IDEResId(RID_STR_OB_GROUP_MEMBERS);
+        case IdeSymbolKind::SUB:
+            return IDEResId(RID_STR_OB_GROUP_PROCEDURES);
+        case IdeSymbolKind::FUNCTION:
+            return IDEResId(RID_STR_OB_GROUP_FUNCTIONS);
+        default:
+            return IDEResId(RID_STR_OB_GROUP_OTHER);
+    }
+}
+
 // Helper to add a symbol entry to a tree view and its corresponding data stores.
 void AddEntry(weld::TreeView& rTargetTree, std::vector<std::shared_ptr<IdeSymbolInfo>>& rStore,
               std::map<OUString, std::shared_ptr<IdeSymbolInfo>>& rIndex,
@@ -100,6 +157,12 @@ void AddEntry(weld::TreeView& rTargetTree, std::vector<std::shared_ptr<IdeSymbol
 {
     if (!pSymbol)
         return;
+
+    if (pSymbol->sName.isEmpty())
+    {
+        SAL_WARN("basctl", "AddEntry - Symbol with empty name. ID: " << pSymbol->sIdentifier);
+        return;
+    }
 
     OUString sId = pSymbol->sIdentifier;
     if (pSymbol->eKind == IdeSymbolKind::PLACEHOLDER)
@@ -243,6 +306,10 @@ void ObjectBrowser::dispose()
         m_xLeftTreeView->connect_selection_changed(Link<weld::TreeView&, void>());
         m_xLeftTreeView->connect_expanding(Link<const weld::TreeIter&, bool>());
     }
+    if (m_xRightMembersView)
+    {
+        m_xRightMembersView->connect_selection_changed(Link<weld::TreeView&, void>());
+    }
 
     m_pDocNotifier->dispose();
     m_pDocNotifier.reset();
@@ -340,6 +407,7 @@ void ObjectBrowser::RefreshUI(bool /*bForceKeepUno*/)
     }
 
     m_xLeftTreeView->thaw();
+    m_xRightMembersView->thaw();
 
     if (m_xStatusLabel)
         m_xStatusLabel->set_label(u"Ready"_ustr);
@@ -434,6 +502,53 @@ void ObjectBrowser::ScheduleRefresh()
         m_bDataMayBeStale = true;
 }
 
+void ObjectBrowser::PopulateMembersPane(const IdeSymbolInfo& rSymbol)
+{
+    if (!m_xRightMembersView)
+    {
+        return;
+    }
+
+    m_xRightMembersView->freeze();
+    ClearRightTreeView();
+
+    if (m_xRightPaneHeaderLabel)
+    {
+        m_xRightPaneHeaderLabel->set_label(u"Members of: "_ustr + rSymbol.sName);
+    }
+    GroupedSymbolInfoList aGroupedMembers = m_pDataProvider->GetMembers(rSymbol);
+    std::vector<std::unique_ptr<weld::TreeIter>> aGroupItersToExpand;
+
+    for (const auto& rPair : aGroupedMembers)
+    {
+        if (rPair.second.empty())
+        {
+            continue;
+        }
+        OUString sGroupName = GetGroupNameForKind(rPair.first);
+        auto pGroupNode
+            = std::make_shared<IdeSymbolInfo>(sGroupName, IdeSymbolKind::PLACEHOLDER, u"");
+        pGroupNode->bSelectable = false;
+        auto xGroupIter = m_xRightMembersView->make_iterator();
+        AddEntry(*m_xRightMembersView, m_aRightTreeSymbolStore, m_aRightTreeSymbolIndex, nullptr,
+                 pGroupNode, true, xGroupIter.get());
+
+        for (const auto& pMemberInfo : rPair.second)
+        {
+            AddEntry(*m_xRightMembersView, m_aRightTreeSymbolStore, m_aRightTreeSymbolIndex,
+                     xGroupIter.get(), pMemberInfo, false);
+        }
+        aGroupItersToExpand.push_back(std::move(xGroupIter));
+    }
+
+    m_xRightMembersView->thaw();
+
+    for (const auto& xGroupIter : aGroupItersToExpand)
+    {
+        m_xRightMembersView->expand_row(*xGroupIter);
+    }
+}
+
 // Document Event Handlers
 void ObjectBrowser::onDocumentCreated(const ScriptDocument&) { ScheduleRefresh(); }
 void ObjectBrowser::onDocumentOpened(const ScriptDocument&) { ScheduleRefresh(); }
@@ -445,11 +560,64 @@ void ObjectBrowser::onDocumentClosed(const ScriptDocument&) { ScheduleRefresh();
 void ObjectBrowser::onDocumentTitleChanged(const ScriptDocument&) { ScheduleRefresh(); }
 void ObjectBrowser::onDocumentModeChanged(const ScriptDocument&) { /* STUB */}
 
-IMPL_STATIC_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, /*rTree*/, void) { /* STUB */}
-IMPL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, /*rTree*/, void) { /* STUB */}
-IMPL_STATIC_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, /*rParentIter*/, bool)
+IMPL_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, rTree, void)
 {
-    return false;
+    if (m_bDisposed)
+    {
+        return;
+    }
+
+    auto xSelectedIter = rTree.make_iterator();
+    if (!rTree.get_selected(xSelectedIter.get()))
+    {
+        return;
+    }
+
+    auto pSymbol = GetSymbolForIter(*xSelectedIter, rTree, m_aLeftTreeSymbolIndex);
+    if (!pSymbol)
+    {
+        return;
+    }
+
+    ClearRightTreeView();
+
+    if (ShouldShowMembers(*pSymbol))
+    {
+        PopulateMembersPane(*pSymbol);
+    }
+}
+
+IMPL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, /*rTree*/, void) { /* STUB */}
+
+IMPL_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, rParentIter, bool)
+{
+    if (m_bDisposed || !m_pDataProvider)
+    {
+        return false;
+    }
+
+    auto pParentSymbol = GetSymbolForIter(rParentIter, *m_xLeftTreeView, m_aLeftTreeSymbolIndex);
+    if (!pParentSymbol)
+    {
+        return false;
+    }
+
+    const auto aAllChildren = m_pDataProvider->GetChildNodes(*pParentSymbol);
+    if (aAllChildren.empty())
+    {
+        return true;
+    }
+
+    for (const auto& pChildInfo : aAllChildren)
+    {
+        if (pChildInfo)
+        {
+            AddEntry(*m_xLeftTreeView, m_aLeftTreeSymbolStore, m_aLeftTreeSymbolIndex, &rParentIter,
+                     pChildInfo, IsExpandable(*pChildInfo));
+        }
+    }
+
+    return true;
 }
 
 IMPL_LINK(ObjectBrowser, OnScopeChanged, weld::ComboBox&, rComboBox, void)

@@ -227,6 +227,7 @@ void ImplGetChildrenOfBasicLibrary(SymbolInfoList& rChildren, const IdeSymbolInf
                 pNode->sOriginLocation = aDoc.getDocument()->getURL();
             }
             pNode->sParentName = rParent.sName;
+            pNode->sIdentifier = rParent.sIdentifier + u":" + rLibName;
             rChildren.push_back(pNode);
         }
     }
@@ -245,6 +246,7 @@ void ImplGetChildrenOfBasicLibrary(SymbolInfoList& rChildren, const IdeSymbolInf
                     pNode->sOriginLocation = rParent.sOriginLocation;
                     pNode->sOriginLibrary = rParent.sName;
                     pNode->sParentName = rParent.sName;
+                    pNode->sIdentifier = rParent.sIdentifier + u":" + pNode->sName;
                     rChildren.push_back(pNode);
                 }
             }

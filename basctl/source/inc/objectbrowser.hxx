@@ -79,6 +79,7 @@ private:
     void ShowLoadingState();
     void ClearLeftTreeView();
     void ClearRightTreeView();
+    void PopulateMembersPane(const IdeSymbolInfo& rSymbol);
 
     // Core References
     Shell* m_pShell;
@@ -117,9 +118,9 @@ private:
     std::unique_ptr<basctl::DocumentEventNotifier> m_pDocNotifier;
 
     // UI Event Handlers
-    DECL_STATIC_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, void);
+    DECL_LINK(OnLeftTreeSelect, weld::TreeView&, void);
     DECL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, void);
-    DECL_STATIC_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, bool);
+    DECL_LINK(OnNodeExpand, const weld::TreeIter&, bool);
     DECL_LINK(OnScopeChanged, weld::ComboBox&, void);
 };
 
