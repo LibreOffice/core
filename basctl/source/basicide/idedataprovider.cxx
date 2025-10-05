@@ -9,8 +9,10 @@
 
 #include <idedataprovider.hxx>
 #include "idetimer.hxx"
+#include <unordered_set>
 
 #include <basic/basmgr.hxx>
+#include <basic/sbmeth.hxx>
 #include <basctl/scriptdocument.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
@@ -30,9 +32,232 @@ using namespace css::uno;
 using namespace css::lang;
 using namespace css::reflection;
 
+namespace
+{
+OUString helper_getTypeName(const Reference<XIdlClass>& xTypeClass)
+{
+    if (xTypeClass.is())
+    {
+        return xTypeClass->getName();
+    }
+    return u"<UnknownType>"_ustr;
+}
+
+void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNode,
+                             std::unordered_set<OUString>& rVisitedTypes, sal_uInt16 nDepth = 0)
+{
+    constexpr sal_uInt16 nMaxRecursionDepth(8);
+
+    if (nDepth > nMaxRecursionDepth || rNode.eKind == IdeSymbolKind::UNO_TYPEDEF
+        || rNode.eKind == IdeSymbolKind::UNO_TYPE)
+    {
+        return;
+    }
+
+    if (!rNode.sQualifiedName.isEmpty() && !rVisitedTypes.insert(rNode.sQualifiedName).second)
+    {
+        return;
+    }
+    try
+    {
+        Reference<XIdlReflection> xReflection
+            = css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext());
+        if (!xReflection.is())
+        {
+            return;
+        }
+
+        Reference<XIdlClass> xTypeClass = xReflection->forName(rNode.sQualifiedName);
+        if (!xTypeClass.is())
+        {
+            return;
+        }
+
+        if (rNode.eKind == IdeSymbolKind::UNO_SERVICE)
+        {
+            for (const auto& xInterface : xTypeClass->getInterfaces())
+            {
+                auto pNode = std::make_shared<IdeSymbolInfo>(
+                    xInterface->getName(), IdeSymbolKind::UNO_INTERFACE, rNode.sIdentifier);
+                pNode->sQualifiedName = xInterface->getName();
+                rMembers.push_back(pNode);
+            }
+            return;
+        }
+
+        for (const auto& xMethod : xTypeClass->getMethods())
+        {
+            if (!xMethod.is())
+            {
+                continue;
+            }
+            auto pNode = std::make_shared<IdeSymbolInfo>(
+                xMethod->getName(), IdeSymbolKind::UNO_METHOD, rNode.sIdentifier);
+            pNode->sReturnTypeName = helper_getTypeName(xMethod->getReturnType());
+            for (const auto& rParam : xMethod->getParameterInfos())
+            {
+                IdeParamInfo aParam;
+                aParam.sName = rParam.aName;
+                aParam.sTypeName = helper_getTypeName(rParam.aType);
+                aParam.bIsIn = (rParam.aMode == css::reflection::ParamMode_IN
+                                || rParam.aMode == css::reflection::ParamMode_INOUT);
+                aParam.bIsOut = (rParam.aMode == css::reflection::ParamMode_OUT
+                                 || rParam.aMode == css::reflection::ParamMode_INOUT);
+                pNode->aParameters.push_back(std::move(aParam));
+            }
+
+            rMembers.push_back(pNode);
+        }
+
+        for (const auto& xField : xTypeClass->getFields())
+        {
+            if (!xField.is())
+            {
+                continue;
+            }
+            IdeSymbolKind eFieldKind = IdeSymbolKind::UNO_PROPERTY;
+            if (rNode.eKind == IdeSymbolKind::UNO_STRUCT
+                || rNode.eKind == IdeSymbolKind::UNO_EXCEPTION)
+            {
+                eFieldKind = IdeSymbolKind::UNO_FIELD;
+            }
+            else if (rNode.eKind == IdeSymbolKind::UNO_ENUM
+                     || rNode.eKind == IdeSymbolKind::UNO_CONSTANTS)
+            {
+                eFieldKind = IdeSymbolKind::ENUM_MEMBER;
+            }
+
+            auto pMember
+                = std::make_shared<IdeSymbolInfo>(xField->getName(), eFieldKind, rNode.sIdentifier);
+            pMember->sTypeName = helper_getTypeName(xField->getType());
+
+            Reference<XIdlClass> xFieldType = xField->getType();
+            if (xFieldType.is())
+            {
+                TypeClass eTypeClass = xFieldType->getTypeClass();
+                if (eTypeClass == TypeClass_STRUCT || eTypeClass == TypeClass_INTERFACE)
+                {
+                    IdeSymbolInfo tempFieldNodeAsType(
+                        xFieldType->getName(), UnoApiHierarchy::typeClassToSymbolKind(eTypeClass),
+                        rNode.sIdentifier);
+                    tempFieldNodeAsType.sQualifiedName = xFieldType->getName();
+
+                    // Recursively get the nested members
+                    SymbolInfoList aNestedMembers;
+                    ImplGetMembersOfUnoType(aNestedMembers, tempFieldNodeAsType, rVisitedTypes,
+                                            nDepth + 1);
+
+                    for (const auto& pNested : aNestedMembers)
+                    {
+                        pMember->mapMembers[pNested->sName] = pNested;
+                    }
+                }
+            }
+
+            rMembers.push_back(pMember);
+        }
+    }
+    catch (const Exception& e)
+    {
+        SAL_WARN("basctl", "Exception while getting members of UNO type: " << e.Message);
+    }
+}
+
+void ImplGetMembersOfBasicModule(SymbolInfoList& rMembers, const IdeSymbolInfo& rNode)
+{
+    ScriptDocument aDoc = rNode.sOriginLocation.isEmpty()
+                              ? ScriptDocument::getApplicationScriptDocument()
+                              : ScriptDocument::getDocumentWithURLOrCaption(rNode.sOriginLocation);
+    if (!aDoc.isAlive())
+    {
+        return;
+    }
+
+    BasicManager* pBasMgr = aDoc.getBasicManager();
+    StarBASIC* pLib = pBasMgr ? pBasMgr->GetLib(rNode.sOriginLibrary) : nullptr;
+    SbModule* pModule = pLib ? pLib->FindModule(rNode.sName) : nullptr;
+    if (pModule)
+    {
+        if (!pModule->IsCompiled())
+        {
+            pModule->Compile();
+        }
+        SbxArray* pMethods = pModule->GetMethods().get();
+        for (sal_uInt32 i = 0; i < pMethods->Count(); ++i)
+        {
+            SbxVariable* pVar = pMethods->Get(i);
+            if (auto* pMethod = dynamic_cast<SbMethod*>(pVar))
+            {
+                if (pMethod->IsHidden())
+                {
+                    continue;
+                }
+
+                IdeSymbolKind eKind = (pMethod->GetType() == SbxDataType::SbxVOID)
+                                          ? IdeSymbolKind::SUB
+                                          : IdeSymbolKind::FUNCTION;
+                auto pMember
+                    = std::make_shared<IdeSymbolInfo>(pMethod->GetName(), eKind, rNode.sIdentifier);
+                rMembers.push_back(pMember);
+            }
+        }
+    }
+}
+
+void ImplGetChildrenOfBasicLibrary(SymbolInfoList& rChildren, const IdeSymbolInfo& rParent)
+{
+    ScriptDocument aDoc
+        = rParent.sOriginLocation.isEmpty()
+              ? ScriptDocument::getApplicationScriptDocument()
+              : ScriptDocument::getDocumentWithURLOrCaption(rParent.sOriginLocation);
+    if (!aDoc.isAlive())
+    {
+        return;
+    }
+
+    if (rParent.eKind == IdeSymbolKind::ROOT_APPLICATION_LIBS
+        || rParent.eKind == IdeSymbolKind::ROOT_DOCUMENT_LIBS)
+    {
+        for (const auto& rLibName : aDoc.getLibraryNames())
+        {
+            auto pNode = std::make_shared<IdeSymbolInfo>(rLibName, IdeSymbolKind::LIBRARY,
+                                                         rParent.sIdentifier);
+            if (aDoc.isDocument())
+            {
+                pNode->sOriginLocation = aDoc.getDocument()->getURL();
+            }
+            pNode->sParentName = rParent.sName;
+            rChildren.push_back(pNode);
+        }
+    }
+    else if (rParent.eKind == IdeSymbolKind::LIBRARY)
+    {
+        BasicManager* pBasMgr = aDoc.getBasicManager();
+        if (aDoc.hasLibrary(E_SCRIPTS, rParent.sName))
+        {
+            StarBASIC* pLib = pBasMgr->GetLib(rParent.sName);
+            if (pLib)
+            {
+                for (const auto& pModule : pLib->GetModules())
+                {
+                    auto pNode = std::make_shared<IdeSymbolInfo>(
+                        pModule->GetName(), IdeSymbolKind::MODULE, rParent.sIdentifier);
+                    pNode->sOriginLocation = rParent.sOriginLocation;
+                    pNode->sOriginLibrary = rParent.sName;
+                    pNode->sParentName = rParent.sName;
+                    rChildren.push_back(pNode);
+                }
+            }
+        }
+    }
+}
+
+} // anonymous namespace
+
 IdeDataProvider::IdeDataProvider()
     : m_pUnoHierarchy(std::make_unique<UnoApiHierarchy>())
     , m_bInitialized(false)
+    , m_eCurrentScope(IdeBrowserScope::ALL_LIBRARIES)
 {
 }
 
@@ -123,11 +348,13 @@ void IdeDataProvider::Initialize()
     }
     SAL_INFO("basctl", "BASIC library preload finished.");
 
-    m_aTopLevelNodes.clear();
-    m_aTopLevelNodes.push_back(
+    m_aAllTopLevelNodes.clear();
+    m_aAllTopLevelNodes.push_back(
         std::make_shared<IdeSymbolInfo>(u"UNO APIs", IdeSymbolKind::ROOT_UNO_APIS, u"root"));
-    m_aTopLevelNodes.push_back(std::make_shared<IdeSymbolInfo>(
+    m_aAllTopLevelNodes.push_back(std::make_shared<IdeSymbolInfo>(
         u"Application Macros", IdeSymbolKind::ROOT_APPLICATION_LIBS, u"root"));
+
+    AddDocumentNodesWithModules();
 
     m_bInitialized = true;
     SAL_INFO("basctl", "Synchronous data provider initialization complete.");
@@ -137,7 +364,7 @@ void IdeDataProvider::Reset()
 {
     SAL_INFO("basctl", "IdeDataProvider: Resetting state.");
     m_bInitialized = false;
-    m_aTopLevelNodes.clear();
+    m_aAllTopLevelNodes.clear();
 
     m_pUnoHierarchy = std::make_unique<UnoApiHierarchy>();
 }
@@ -190,6 +417,61 @@ void IdeDataProvider::performFullUnoScan()
                                                 << nProcessedCount << " types.");
 }
 
+void IdeDataProvider::AddDocumentNodesWithModules()
+{
+    for (const auto& rDoc : ScriptDocument::getAllScriptDocuments(ScriptDocument::DocumentsSorted))
+    {
+        if (rDoc.isAlive())
+        {
+            bool bHasModules = false;
+            BasicManager* pBasMgr = rDoc.getBasicManager();
+            if (pBasMgr)
+            {
+                sal_uInt16 nLibCount = pBasMgr->GetLibCount();
+                for (sal_uInt16 i = 0; i < nLibCount; ++i)
+                {
+                    StarBASIC* pLib = pBasMgr->GetLib(i);
+                    if (pLib && !pLib->GetModules().empty())
+                    {
+                        bHasModules = true;
+                        break;
+                    }
+                }
+            }
+
+            if (bHasModules)
+            {
+                auto pDocNode = std::make_shared<IdeSymbolInfo>(
+                    rDoc.getTitle(), IdeSymbolKind::ROOT_DOCUMENT_LIBS, u"root");
+                if (rDoc.isDocument() && rDoc.getDocument().is())
+                {
+                    pDocNode->sOriginLocation = rDoc.getDocument()->getURL();
+                }
+                m_aAllTopLevelNodes.push_back(pDocNode);
+            }
+        }
+    }
+}
+
+void IdeDataProvider::RefreshDocumentNodes()
+{
+    if (!m_bInitialized)
+    {
+        return;
+    }
+
+    // Remove old document nodes
+    m_aAllTopLevelNodes.erase(std::remove_if(m_aAllTopLevelNodes.begin(), m_aAllTopLevelNodes.end(),
+                                             [](const auto& pNode) {
+                                                 return pNode->eKind
+                                                        == IdeSymbolKind::ROOT_DOCUMENT_LIBS;
+                                             }),
+                              m_aAllTopLevelNodes.end());
+
+    // Re-add current document nodes
+    AddDocumentNodesWithModules();
+}
+
 SymbolInfoList IdeDataProvider::GetTopLevelNodes()
 {
     if (!m_bInitialized)
@@ -201,10 +483,71 @@ SymbolInfoList IdeDataProvider::GetTopLevelNodes()
         aNodes.push_back(pLoadingNode);
         return aNodes;
     }
-    return m_aTopLevelNodes;
+
+    SymbolInfoList aFilteredNodes;
+    for (const auto& pNode : m_aAllTopLevelNodes)
+    {
+        if (pNode->eKind == IdeSymbolKind::ROOT_UNO_APIS
+            || pNode->eKind == IdeSymbolKind::ROOT_APPLICATION_LIBS)
+        {
+            aFilteredNodes.push_back(pNode);
+        }
+        else if (pNode->eKind == IdeSymbolKind::ROOT_DOCUMENT_LIBS)
+        {
+            if (m_eCurrentScope == IdeBrowserScope::ALL_LIBRARIES)
+            {
+                aFilteredNodes.push_back(pNode);
+            }
+            else // CURRENT_DOCUMENT scope
+            {
+                // m_sCurrentDocumentURL now holds either the URL or the Title
+                bool bMatchesByURL = !m_sCurrentDocumentURL.isEmpty()
+                                     && (pNode->sOriginLocation == m_sCurrentDocumentURL);
+                bool bMatchesByTitle = !m_sCurrentDocumentURL.isEmpty()
+                                       && pNode->sOriginLocation.isEmpty()
+                                       && (pNode->sName == m_sCurrentDocumentURL);
+
+                if (bMatchesByURL || bMatchesByTitle)
+                {
+                    aFilteredNodes.push_back(pNode);
+                }
+            }
+        }
+    }
+    return aFilteredNodes;
 }
 
-GroupedSymbolInfoList IdeDataProvider::GetMembers(const IdeSymbolInfo& /*rNode*/) { return {}; }
+GroupedSymbolInfoList IdeDataProvider::GetMembers(const IdeSymbolInfo& rNode)
+{
+    GroupedSymbolInfoList aGroupedMembers;
+    SymbolInfoList aFlatMembers;
+
+    switch (rNode.eKind)
+    {
+        case IdeSymbolKind::UNO_CONSTANTS:
+        case IdeSymbolKind::UNO_ENUM:
+        case IdeSymbolKind::UNO_EXCEPTION:
+        case IdeSymbolKind::UNO_INTERFACE:
+        case IdeSymbolKind::UNO_SERVICE:
+        case IdeSymbolKind::UNO_STRUCT:
+        {
+            std::unordered_set<OUString> aVisitedTypes;
+            ImplGetMembersOfUnoType(aFlatMembers, rNode, aVisitedTypes);
+            break;
+        }
+        case IdeSymbolKind::MODULE:
+            ImplGetMembersOfBasicModule(aFlatMembers, rNode);
+            break;
+        default:
+            break;
+    }
+
+    for (const auto& pMemberInfo : aFlatMembers)
+    {
+        aGroupedMembers[pMemberInfo->eKind].push_back(pMemberInfo);
+    }
+    return aGroupedMembers;
+}
 
 SymbolInfoList IdeDataProvider::GetChildNodes(const IdeSymbolInfo& rParent)
 {
@@ -214,16 +557,34 @@ SymbolInfoList IdeDataProvider::GetChildNodes(const IdeSymbolInfo& rParent)
     }
 
     SymbolInfoList aChildren;
-    if (rParent.eKind == IdeSymbolKind::ROOT_UNO_APIS)
+    switch (rParent.eKind)
     {
-        aChildren = m_pUnoHierarchy->m_hierarchyCache[OUString()];
-    }
-    else if (rParent.eKind == IdeSymbolKind::UNO_NAMESPACE)
-    {
-        aChildren = m_pUnoHierarchy->m_hierarchyCache[rParent.sQualifiedName];
+        case IdeSymbolKind::ROOT_UNO_APIS:
+            aChildren = m_pUnoHierarchy->m_hierarchyCache[OUString()];
+            break;
+        case IdeSymbolKind::UNO_NAMESPACE:
+            aChildren = m_pUnoHierarchy->m_hierarchyCache[rParent.sQualifiedName];
+            break;
+        case IdeSymbolKind::ROOT_APPLICATION_LIBS:
+        case IdeSymbolKind::ROOT_DOCUMENT_LIBS:
+        case IdeSymbolKind::LIBRARY:
+            ImplGetChildrenOfBasicLibrary(aChildren, rParent);
+            break;
+        default:
+            break;
     }
 
     return aChildren;
+}
+
+void IdeDataProvider::SetScope(IdeBrowserScope eScope, const OUString& rCurrentDocumentURL)
+{
+    m_eCurrentScope = eScope;
+    m_sCurrentDocumentURL = rCurrentDocumentURL;
+    SAL_INFO("basctl", "SetScope: Scope changed to "
+                           << (eScope == IdeBrowserScope::ALL_LIBRARIES ? "ALL_LIBRARIES"
+                                                                        : "CURRENT_DOCUMENT")
+                           << " for doc URL: '" << rCurrentDocumentURL << "'");
 }
 
 void UnoApiHierarchy::addNode(std::u16string_view sQualifiedNameView, TypeClass eTypeClass)

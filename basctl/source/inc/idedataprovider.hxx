@@ -11,11 +11,9 @@
 
 #include <basctl/idecodecompletiontypes.hxx>
 
+#include <map>
 #include <memory>
 #include <vector>
-
-#include <rtl/ustring.hxx>
-#include <tools/link.hxx>
 
 #include <com/sun/star/uno/TypeClass.hpp>
 
@@ -24,6 +22,12 @@ namespace basctl
 using IdeSymbolInfo = basctl::IdeSymbolInfo;
 using SymbolInfoList = std::vector<std::shared_ptr<IdeSymbolInfo>>;
 using GroupedSymbolInfoList = std::map<IdeSymbolKind, SymbolInfoList>;
+
+enum class IdeBrowserScope
+{
+    ALL_LIBRARIES,
+    CURRENT_DOCUMENT
+};
 
 // Data structure for the in-memory UNO type hierarchy
 struct UnoApiHierarchy
@@ -46,6 +50,8 @@ public:
     virtual SymbolInfoList GetTopLevelNodes() = 0;
     virtual GroupedSymbolInfoList GetMembers(const IdeSymbolInfo& rNode) = 0;
     virtual SymbolInfoList GetChildNodes(const IdeSymbolInfo& rParent) = 0;
+    // Scope Management
+    virtual void SetScope(IdeBrowserScope eScope, const OUString& rCurrentDocumentURL) = 0;
 };
 
 class IdeDataProvider : public IdeDataProviderInterface
@@ -56,20 +62,26 @@ public:
     void Initialize() override;
     bool IsInitialized() const override { return m_bInitialized; }
     void Reset() override;
+    void AddDocumentNodesWithModules();
+    void RefreshDocumentNodes();
 
     SymbolInfoList GetTopLevelNodes() override;
     GroupedSymbolInfoList GetMembers(const IdeSymbolInfo& rNode) override;
     SymbolInfoList GetChildNodes(const IdeSymbolInfo& rParent) override;
+    void SetScope(IdeBrowserScope eScope, const OUString& rCurrentDocumentURL) override;
 
 private:
     void performFullUnoScan();
+    void addDocumentNodes();
 
     // Core data
     std::unique_ptr<UnoApiHierarchy> m_pUnoHierarchy;
-    SymbolInfoList m_aTopLevelNodes;
+    SymbolInfoList m_aAllTopLevelNodes;
 
     // State management
     bool m_bInitialized = false;
+    IdeBrowserScope m_eCurrentScope = IdeBrowserScope::ALL_LIBRARIES;
+    OUString m_sCurrentDocumentURL;
 };
 
 } // namespace basctl

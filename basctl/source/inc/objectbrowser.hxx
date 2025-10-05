@@ -14,11 +14,17 @@
 #include "idedataprovider.hxx"
 
 #include <basctl/idecodecompletiontypes.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/event.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
+#include <vcl/weld.hxx>
 
+#include <map>
 #include <memory>
 #include <vector>
-
-#include <vcl/weld.hxx>
 
 namespace basctl
 {
@@ -35,7 +41,9 @@ enum class ObjectBrowserInitState
     Disposed
 };
 
-class ObjectBrowser : public basctl::DockingWindow, public basctl::DocumentEventListener
+class ObjectBrowser : public basctl::DockingWindow,
+                      public basctl::DocumentEventListener,
+                      public SfxListener
 {
 public:
     ObjectBrowser(Shell& rShell, vcl::Window* pParent);
@@ -47,7 +55,10 @@ public:
     void Show(bool bVisible = true);
     void RefreshUI(bool bForceKeepUno = false);
 
-    // DocumentEventListener stubs
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+
+    void ScheduleRefresh();
+
     void onDocumentCreated(const ScriptDocument& _rDocument) override;
     void onDocumentOpened(const ScriptDocument& _rDocument) override;
     void onDocumentSave(const ScriptDocument& _rDocument) override;
@@ -63,13 +74,11 @@ public:
     weld::Button* GetClearSearchButton() { return m_xClearSearchButton.get(); }
 
 private:
+    // Initialization & Core UI Management
     void Initialize();
-
-    // Core tree management methods
-    static void ClearTreeView(weld::TreeView& rTree,
-                              std::vector<std::shared_ptr<basctl::IdeSymbolInfo>>& rStore);
-    void PopulateLeftTree();
     void ShowLoadingState();
+    void ClearLeftTreeView();
+    void ClearRightTreeView();
 
     // Core References
     Shell* m_pShell;
@@ -80,7 +89,8 @@ private:
     // State Management
     bool m_bDisposed = false;
     ObjectBrowserInitState m_eInitState = ObjectBrowserInitState::NotInitialized;
-    bool m_bUIInitialized = false;
+    bool m_bDataMayBeStale = true;
+    OUString m_sLastActiveDocumentIdentifier;
 
     // UI Widgets
     std::unique_ptr<weld::ComboBox> m_xScopeSelector;
@@ -94,10 +104,11 @@ private:
     std::unique_ptr<weld::Button> m_xForwardButton;
     std::unique_ptr<weld::Button> m_xClearSearchButton;
 
-    // Data Storage for TreeViews
+    // Data Storage & Indexes
     std::vector<std::shared_ptr<basctl::IdeSymbolInfo>> m_aLeftTreeSymbolStore;
     std::vector<std::shared_ptr<basctl::IdeSymbolInfo>> m_aRightTreeSymbolStore;
-    std::map<OUString, size_t> m_aNextChunk; // For lazy-loading nodes
+    std::map<OUString, std::shared_ptr<IdeSymbolInfo>> m_aLeftTreeSymbolIndex;
+    std::map<OUString, std::shared_ptr<IdeSymbolInfo>> m_aRightTreeSymbolIndex;
 
     // Search Handler
     std::unique_ptr<ObjectBrowserSearch> m_pSearchHandler;
@@ -109,7 +120,7 @@ private:
     DECL_STATIC_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, void);
     DECL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, void);
     DECL_STATIC_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, bool);
-    DECL_STATIC_LINK(ObjectBrowser, OnScopeChanged, weld::ComboBox&, void);
+    DECL_LINK(OnScopeChanged, weld::ComboBox&, void);
 };
 
 } // namespace basctl
