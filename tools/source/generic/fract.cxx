@@ -116,7 +116,7 @@ Fraction::operator double() const
     if (!mbValid)
     {
         SAL_WARN( "tools.fraction", "'double()' on invalid fraction" );
-        return 0.0;
+        return std::numeric_limits<double>::quiet_NaN();
     }
 
     return boost::rational_cast<double>(toRational(mnNumerator, mnDenominator));
