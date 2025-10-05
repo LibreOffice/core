@@ -5355,17 +5355,22 @@ End Function	&apos;	SFDocuments.SF_Calc._QuoteSheetName
 REM -----------------------------------------------------------------------------
 Private Function _RangePosition(ByVal psRange As String) As Object
 &apos;&apos;&apos;	Determine a best guess of the coordinates (in pixels) of the given range
+&apos;&apos;&apos;	The resulting values (X, Y, Width, Height) are computed relatively to the
+&apos;&apos;&apos;	borders of the ContainerWindow, which starts below the title and menu bars.
+&apos;&apos;&apos;	It includes the tabbed bar and the toolbars.
 &apos;&apos;&apos;	Inspired (and enhanced) from https://forum.openoffice.org/en/forum/viewtopic.php?p=308693#p308693
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psRange: the range as a string
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		a com.sun.star.awt.Rectangle UNO structure
 
-Dim oRectOnScreen As New com.sun.star.awt.Rectangle	&apos;	Range position versus top-left screen corner (return value)
-Dim oRect As New com.sun.star.awt.Rectangle			&apos;	Range position versus the A1 cell
-Dim oLocation As Object								&apos;	com.sun.star.awt.Rectangle
-Dim oController As Object							&apos;	Current controller
+Dim oRectOnScreen As New com.sun.star.awt.Rectangle	&apos;	Range position versus top-left corner of the ContainerWindow (return value)
+Dim oRect As New com.sun.star.awt.Rectangle			&apos;	Range position versus the A1 cell (row/column headers excluded), in 1/100mm
+Dim dZoom As Double									&apos;	The actual zoom value
+Dim oController As Object							&apos;	com.sun.star.frame.XController
+Dim oContainerWindow As Object						&apos;	com.sun.star.awt.XWindow
 Dim oXRange As Object								&apos;	com.sun.star.Table.CellRange
+Dim oSize As New com.sun.star.awt.Size				&apos;	Size of range in pixels
 
 Check:
 	On Local Error GoTo Finally
@@ -5373,31 +5378,33 @@ Check:
 Try:
 	Set oController = _Component.CurrentController
 	Set oXRange = _ParseAddress(psRange).XCellRange
-	&apos;	Grab the window location on the screen
-	Select Case ScriptForge.SF_Platform._GetProductName(True)	&apos;	Get a sortable release number
-		Case &lt;= 25.8
-			Set oLocation = oController.ComponentWindow.AccessibleContext.LocationOnScreen
-		Case Else
-			Set oLocation = oController.ComponentWindow.getProperty(&quot;XAccessible&quot;).LocationOnScreen
-	End Select
 
+	&apos;	Initialize the range area
 	With oRect
 		.X = oXRange.Position.X
 		.Y = oXRange.Position.Y
-		.Width = oXRange.Size.Width
+		.Width = oXRange.Size.Width			&apos;	Size is in 1/100mm
 		.Height = oXRange.Size.Height
 	End With
 
-	&apos;Compute the rectangle in pixels (empirical computation)
 	With oController
+		&apos;	Convert dimensions in pixels
+		Set oSize = oController.ComponentWindow.convertSizeToPixel(oXRange.Size, com.sun.star.util.MeasureUnit.MM_100TH)
+		&apos;	Initialize useful data for next computations
+		dZoom = CDbl(.ZoomValue / 100.0)
+		Set oContainerWindow = .Frame.ContainerWindow
+	
+		&apos;	Compute the rectangle in pixels (empirical computations)
 		oRectOnScreen.X = .VisibleAreaOnScreen.X _
 				+ .VisibleAreaOnScreen.Width * (oRect.X - .VisibleArea.X) / .VisibleArea.Width _
-				- oLocation.X
+				- oContainerWindow.Info.LeftInset _
+				- oContainerWindow.PosSize.X
 		oRectOnScreen.Y = .VisibleAreaOnScreen.Y _
 				+ .VisibleAreaOnScreen.Height * (oRect.Y - .VisibleArea.Y) / .VisibleArea.Height _
-				- oLocation.Y
-		oRectOnScreen.Width = oRect.Width * .VisibleAreaOnScreen.Width / .VisibleArea.Width
-		oRectOnScreen.Height = oRect.Height * .VisibleAreaOnScreen.Height / .VisibleArea.Height
+				- oContainerWindow.Info.TopInset _
+				- oContainerWindow.PosSize.Y
+		oRectOnScreen.Width = CLng(oSize.Width * dZoom + 0.5)
+		oRectOnScreen.Height = CLng(oSize.Height * dZoom + 0.5)
 	End With
 
 Finally:
