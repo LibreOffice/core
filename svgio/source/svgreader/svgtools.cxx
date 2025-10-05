@@ -955,7 +955,7 @@ namespace svgio::svgreader
                                 if(readNumberAndUnit(rCandidate, nPos, aTransX, nLen))
                                 {
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
-                                    SvgNumber aTransY;
+                                    SvgNumber aTransY(0);
                                     readNumberAndUnit(rCandidate, nPos, aTransY, nLen);
                                     skip_char(rCandidate, ' ', ')', nPos, nLen);
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
