@@ -6259,6 +6259,16 @@ void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
     pNewSumRangeTok->IncRef();
 }
 
+// If we are loading, we might be loading each sheet in a separate thread at the same time
+// It is unsafe to use ShrinkToDataArea on a range that refers to a different sheet whose
+// columns and rows are still being added to. Even if it is the same sheet, it probably
+// doesn't make sense to ShrinkToDataArea during document load.
+static bool IsSafeToShrinkToDataArea(const ScDocument* pDoc)
+{
+    const bool bIsLoading = !pDoc->GetDocumentShell() || pDoc->GetDocumentShell()->IsLoading();
+    return !bIsLoading;
+}
+
 void ScCompiler::AnnotateTrimOnDoubleRefs()
 {
     if (!pCode || !(*(pCode - 1)))
@@ -6459,8 +6469,8 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                 SCROW nTempStartRow = rRange.aStart.Row();
                 SCCOL nTempEndCol = rRange.aEnd.Col();
                 SCROW nTempEndRow = rRange.aEnd.Row();
-                pDoc->ShrinkToDataArea(rRange.aStart.Tab(), nTempStartCol, nTempStartRow,
-                    nTempEndCol, nTempEndRow);
+                if (IsSafeToShrinkToDataArea(pDoc))
+                    pDoc->ShrinkToDataArea(rRange.aStart.Tab(), nTempStartCol, nTempStartRow, nTempEndCol, nTempEndRow);
                 // check if range is still valid
                 if (nTempStartRow <= nTempEndRow && nTempStartCol <= nTempEndCol)
                 {
