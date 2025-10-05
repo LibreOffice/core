@@ -20,6 +20,7 @@
 #pragma once
 
 #include <basegfx/range/basicrange.hxx>
+#include <ostream>
 
 
 namespace basegfx

@@ -189,6 +189,9 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/lang/XComponent.hpp
+    include/basegfx/tuple/Tuple2D.hxx:
+    # IWYU 0.25 still suggests <concepts> despite o3tl prefix
+    - o3tl/concepts.hxx
     include/basegfx/numeric/ftools.hxx:
     # MSVC does not compile when this is removed
     - math.h
@@ -773,3 +776,4 @@ excludelist:
     include/comphelper/parallelsort.hxx:
     # Needed when PARALLELSORT_ENABLEPZ is defined
     - chrono
+    - iostream

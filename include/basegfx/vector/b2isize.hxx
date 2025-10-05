@@ -20,6 +20,7 @@
 #pragma once
 
 #include <basegfx/tuple/Size2D.hxx>
+#include <ostream>
 
 namespace basegfx
 {

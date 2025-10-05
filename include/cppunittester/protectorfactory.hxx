@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
 #define INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
 
-#include <sal/types.h>
 #include <cppunit/Protector.h>
 
 namespace cppunittester

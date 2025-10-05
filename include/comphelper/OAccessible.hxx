@@ -19,14 +19,12 @@
 
 #pragma once
 
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 

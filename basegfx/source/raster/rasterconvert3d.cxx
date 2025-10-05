@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/point/b3dpoint.hxx>
+#include <osl/diagnose.h>
 
 // implementations of the 3D raster converter
 

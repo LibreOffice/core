@@ -18,8 +18,6 @@
 #include <rtl/ustring.hxx>
 #include <vcl/salctype.hxx>
 
-#include <com/sun/star/uno/Reference.h>
-
 namespace com::sun::star::graphic
 {
 class XGraphic;

@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <comphelper/multiinterfacecontainer4.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

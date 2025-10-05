@@ -24,8 +24,6 @@
 #include <cassert>
 #include <vector>
 
-#include <osl/diagnose.h>
-
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>

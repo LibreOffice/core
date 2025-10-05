@@ -25,7 +25,6 @@
 #include <ostream>
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
-#include <compare>
 
 #if defined(DBG_UTIL)
 #include <o3tl/source_location.hxx>
