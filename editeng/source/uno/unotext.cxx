@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/TextRangeSelection.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 

@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/tabdlg.hxx>

@@ -26,6 +26,7 @@
 #include <svx/svdobj.hxx>
 #include <svl/whichranges.hxx>
 #include <unotools/syslocale.hxx>
+#include <vcl/timer.hxx>
 #include <memory>
 #include <o3tl/unit_conversion.hxx>
 

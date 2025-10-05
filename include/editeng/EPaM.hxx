@@ -23,6 +23,8 @@
 
 #include <sal/types.h>
 
+#include <ostream>
+
 inline constexpr sal_Int32 EE_PARA_MAX = SAL_MAX_INT32;
 inline constexpr sal_Int32 EE_TEXTPOS_MAX = SAL_MAX_INT32;
 

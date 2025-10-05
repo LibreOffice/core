@@ -664,6 +664,7 @@ excludelist:
     - com/sun/star/container/XIndexReplace.hpp
     - com/sun/star/awt/FontSlant.hpp
     - com/sun/star/awt/FontDescriptor.hpp
+    - com/sun/star/beans/Pair.hpp
     - com/sun/star/style/LineSpacing.hpp
     - com/sun/star/style/TabStop.hpp
     - com/sun/star/util/XComplexColor.hpp

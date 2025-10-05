@@ -35,11 +35,7 @@
 #include <comphelper/errcode.hxx>
 #include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
-
-#include <vcl/GraphicObject.hxx>
-
 #include <editeng/svxfont.hxx>
-#include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

@@ -11,8 +11,6 @@
 
 #include <config_options.h>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <com/sun/star/chart2/XChartStyle.hpp>
 

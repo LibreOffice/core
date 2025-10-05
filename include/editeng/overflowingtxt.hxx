@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
 #include <editeng/editengdllapi.h>
-#include <editeng/editdata.hxx>
+#include <editeng/ESelection.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <optional>

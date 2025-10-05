@@ -23,11 +23,7 @@
 #include <memory>
 
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <dbaccess/dbaccessdllapi.h>

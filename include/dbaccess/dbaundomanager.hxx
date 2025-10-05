@@ -23,8 +23,6 @@
 #include <memory>
 
 #include <com/sun/star/document/XUndoManager.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <rtl/ustring.hxx>

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <basegfx/color/bcolor.hxx>

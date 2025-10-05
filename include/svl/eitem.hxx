@@ -22,7 +22,6 @@
 
 #include <svl/svldllapi.h>
 #include <svl/cenumitm.hxx>
-#include <cassert>
 
 template<typename EnumT>
 class SAL_DLLPUBLIC_RTTI SfxEnumItem : public SfxEnumItemInterface

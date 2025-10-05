@@ -22,7 +22,6 @@
 
 #include <editeng/unoedsrc.hxx>
 #include <editeng/editengdllapi.h>
-#include <editeng/editdata.hxx>
 #include <svl/itemset.hxx>
 #include <optional>
 

@@ -26,7 +26,6 @@
 #include <tools/fontenum.hxx>
 #include <editeng/unoedsrc.hxx>
 
-#include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 
 class SvxAccessibleTextAdapter final : public SvxTextForwarder

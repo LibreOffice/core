@@ -26,6 +26,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

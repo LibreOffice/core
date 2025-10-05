@@ -19,9 +19,9 @@
 #ifndef INCLUDED_EDITENG_ESCAPEMENTITEM_HXX
 #define INCLUDED_EDITENG_ESCAPEMENTITEM_HXX
 
-#include <svl/cenumitm.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
+#include <svl/poolitem.hxx>
 
 // class SvxEscapementItem -----------------------------------------------
 

@@ -18,10 +18,8 @@
  */
 #pragma once
 
-#include <tools/fontenum.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
-#include <ostream>
 #include <i18nutil/scriptchangescanner.hxx>
 
 class EDITENG_DLLPUBLIC SvxScriptHintItem final : public SfxEnumItem<i18nutil::ScriptHintType>

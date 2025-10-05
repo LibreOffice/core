@@ -23,8 +23,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/OAccessible.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <editeng/editengdllapi.h>
 #include <rtl/ref.hxx>
 

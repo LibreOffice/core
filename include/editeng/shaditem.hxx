@@ -19,9 +19,8 @@
 #ifndef INCLUDED_EDITENG_SHADITEM_HXX
 #define INCLUDED_EDITENG_SHADITEM_HXX
 
+#include <svl/poolitem.hxx>
 #include <tools/color.hxx>
-#include <tools/mapunit.hxx>
-#include <svl/cenumitm.hxx>
 
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>

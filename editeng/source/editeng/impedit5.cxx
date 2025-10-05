@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/txtrange.hxx>
+#include <rtl/strbuf.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/app.hxx>

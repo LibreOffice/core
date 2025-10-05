@@ -25,8 +25,6 @@
 #include <utility>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>

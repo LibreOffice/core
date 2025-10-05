@@ -27,7 +27,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <tools/long.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <memory>

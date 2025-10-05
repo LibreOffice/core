@@ -52,7 +52,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <svl/itemset.hxx>
 #include <svl/solar.hrc>
-#include <editeng/editdata.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editengdllapi.h>

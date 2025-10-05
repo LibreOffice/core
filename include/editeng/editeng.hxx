@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_EDITENG_HXX
 
 #include <memory>
-#include <span>
 #include <vector>
 
 #include <optional>
@@ -42,12 +41,9 @@
 #include <tools/degree.hxx>
 #include <tools/long.hxx>
 #include <tools/fontenum.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
 
-#include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/kernarray.hxx>
 #include <comphelper/errcode.hxx>
 #include <functional>
 

@@ -58,6 +58,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>
+#include <tools/debug.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>

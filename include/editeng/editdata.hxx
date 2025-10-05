@@ -26,7 +26,6 @@
 #include <i18nlangtag/lang.h>
 #include <editeng/ESelection.hxx>
 #include <memory>
-#include <ostream>
 
 class SfxPoolItem;
 template<typename T> class SvParser;

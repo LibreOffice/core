@@ -26,7 +26,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
@@ -35,7 +34,6 @@
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/unoedprx.hxx>
 #include <unotools/weakref.hxx>

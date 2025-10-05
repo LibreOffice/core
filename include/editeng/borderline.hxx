@@ -28,7 +28,6 @@
 #include <editeng/editengdllapi.h>
 #include <svtools/borderline.hxx>
 #include <docmodel/color/ComplexColor.hxx>
-#include <o3tl/hash_combine.hxx>
 
 class IntlWrapper;
 

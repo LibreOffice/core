@@ -12,7 +12,6 @@
 
 #include <editeng/editengdllapi.h>
 #include <editeng/flditem.hxx>
-#include <svl/itempool.hxx>
 #include <memory>
 
 class EditTextObject;

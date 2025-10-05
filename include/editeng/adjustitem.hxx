@@ -19,7 +19,6 @@
 #ifndef INCLUDED_EDITENG_ADJUSTITEM_HXX
 #define INCLUDED_EDITENG_ADJUSTITEM_HXX
 
-#include <svl/cenumitm.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>

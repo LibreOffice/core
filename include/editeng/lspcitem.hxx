@@ -19,10 +19,9 @@
 #ifndef INCLUDED_EDITENG_LSPCITEM_HXX
 #define INCLUDED_EDITENG_LSPCITEM_HXX
 
-#include <svl/cenumitm.hxx>
-#include <tools/mapunit.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
+#include <svl/poolitem.hxx>
 
 // class SvxLineSpacingItem ----------------------------------------------
 

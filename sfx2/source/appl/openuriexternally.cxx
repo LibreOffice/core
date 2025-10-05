@@ -21,6 +21,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/lok.hxx>

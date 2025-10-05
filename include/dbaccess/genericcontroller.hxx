@@ -24,7 +24,6 @@
 
 #include <deque>
 #include <map>
-#include <memory>
 #include <mutex>
 #include <utility>
 #include <vector>
@@ -41,7 +40,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Any.hxx>
