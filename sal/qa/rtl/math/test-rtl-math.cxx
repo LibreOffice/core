@@ -524,6 +524,7 @@ public:
         CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 7.4124095894894475e+158, 7.4124095894894514e+158));
         CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 1.2905754687023132e+79, 1.2905754687023098e+79));
         CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 3.5612905090455637e+38, 3.5612905090455599e+38));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 0.001000810185185185, 0.00100081018518519));
         // 0.3 - 0.2 - 0.1 == 0.0
         CPPUNIT_ASSERT_EQUAL( 0.0, rtl::math::approxSub( rtl::math::approxSub( 0.3, 0.2), 0.1));
         // ((2^53)-1) - ((2^53)-2) == 1.0
