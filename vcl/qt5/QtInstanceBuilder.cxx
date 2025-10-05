@@ -174,6 +174,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/swriter/ui/rowheight.ui"_ustr,
         u"modules/swriter/ui/splittable.ui"_ustr,
         u"modules/swriter/ui/testmailsettings.ui"_ustr,
+        u"modules/swriter/ui/watermarkdialog.ui"_ustr,
         u"modules/swriter/ui/wordcount.ui"_ustr,
         u"sfx/ui/documentpropertiesdialog.ui"_ustr,
         u"sfx/ui/editdurationdialog.ui"_ustr,
