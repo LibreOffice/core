@@ -6764,7 +6764,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
     {
-        fXScale *= double(m_aCurrentPDFState.m_aMapMode.GetScaleX() / m_aCurrentPDFState.m_aMapMode.GetScaleY());
+        fXScale *= double(m_aCurrentPDFState.m_aMapMode.GetScaleX()) / double(m_aCurrentPDFState.m_aMapMode.GetScaleY());
     }
 
     Degree10 nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();
