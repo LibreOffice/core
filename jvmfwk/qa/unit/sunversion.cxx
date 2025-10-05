@@ -58,9 +58,9 @@ void TestSunVersion::testSunVersion()
                             "1.3.1", "1.3.1_00a", "1.3.1_01", "1.3.1_01a",
                             "1.3.2", "1.4.0", "1.5.0_01-ea", "2.0.0"};
 
-    int num = SAL_N_ELEMENTS (versions);
-    int numBad = SAL_N_ELEMENTS (badVersions);
-    int numOrdered = SAL_N_ELEMENTS (orderedVer);
+    int num = std::size(versions);
+    int numBad = std::size(badVersions);
+    int numOrdered = std::size(orderedVer);
     //parsing test (positive)
     for (int i = 0; i < num; i++)
     {

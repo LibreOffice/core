@@ -139,7 +139,7 @@ void LangGuess_Impl::EnsureInitialized()
         {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""}, {"sa", ""},
         {"ta", ""}, {"th", ""}, {"qu", ""}, {"yi", ""}
     };
-    sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
+    sal_Int32 nNum = std::size(aDisable);
     Sequence< Locale > aDisableSeq( nNum );
     Locale *pDisableSeq = aDisableSeq.getArray();
     for (sal_Int32 i = 0;  i < nNum;  ++i)
