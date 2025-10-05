@@ -91,7 +91,7 @@ class SbiIoSystem
     void      WriteCon(std::u16string_view);
 public:
     SbiIoSystem();
-   ~SbiIoSystem() COVERITY_NOEXCEPT_FALSE;
+   ~SbiIoSystem();
     ErrCode GetError();
     void  Shutdown();
     void  SetPrompt(const OUString& r) { aPrompt = r; }

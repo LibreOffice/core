@@ -165,7 +165,7 @@ TextLayouterDevice::TextLayouterDevice()
     mrDevice.setSubpixelPositioning(true);
 }
 
-TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE { releaseGlobalVirtualDevice(); }
+TextLayouterDevice::~TextLayouterDevice() { releaseGlobalVirtualDevice(); }
 
 void TextLayouterDevice::setFont(const vcl::Font& rFont)
 {

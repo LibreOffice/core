@@ -39,7 +39,7 @@ DlgEdFactory::DlgEdFactory( css::uno::Reference< css::frame::XModel > xModel ) :
 }
 
 
-DlgEdFactory::~DlgEdFactory() COVERITY_NOEXCEPT_FALSE
+DlgEdFactory::~DlgEdFactory()
 {
     SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }

@@ -52,7 +52,7 @@ namespace connectivity::jdbc
             return *this;
         }
 
-        ~GlobalRef() COVERITY_NOEXCEPT_FALSE
+        ~GlobalRef()
         {
             reset();
         }

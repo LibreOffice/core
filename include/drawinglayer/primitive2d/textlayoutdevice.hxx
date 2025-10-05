@@ -82,7 +82,7 @@ class DRAWINGLAYER_DLLPUBLIC TextLayouterDevice
 public:
     /// constructor/destructor
     TextLayouterDevice();
-    ~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE;
+    ~TextLayouterDevice();
 
     /// tooling methods
     void setFont(const vcl::Font& rFont);

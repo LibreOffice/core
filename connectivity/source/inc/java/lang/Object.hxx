@@ -77,7 +77,7 @@ namespace connectivity
         // The actual ctor
         java_lang_Object();
 
-        virtual ~java_lang_Object() COVERITY_NOEXCEPT_FALSE;
+        virtual ~java_lang_Object();
 
         void                saveRef( JNIEnv * pEnv, jobject myObj );
         jobject             getJavaObject() const { return object; }
