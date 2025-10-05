@@ -3143,8 +3143,17 @@
      <table:table-cell table:style-name="Default"/>
      <table:table-cell/>
     </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.J10:.J10];&quot;=&quot;&amp;[.J10])" office:value-type="float"/>
+     <table:table-cell office:value-type="float" office:value="1"/>
+     <table:table-cell table:formula="of:=[.A10]=[.B10]" office:value-type="boolean"/>
+     <table:table-cell table:formula="of:=FORMULA([.A10])" office:value-type="string"/>
+     <table:table-cell office:value-type="string" office:string-value="tdf#168673"/>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell office:value-type="time" office:time-value="PT00H01M26.47S"/>
+    </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C9">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C100">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>

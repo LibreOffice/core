@@ -603,7 +603,10 @@ double SAL_CALL rtl_math_approxValue(double fValue) noexcept
 
 bool SAL_CALL rtl_math_approxEqual(double a, double b) noexcept
 {
+    // threshold is last four bits of mantissa:
     static const double e48 = 0x1p-48;
+    // threshold is half of the 15th significant decimal (see doubleToString):
+    static const double half15thSignificand = 5E-15;
 
     if (a == b)
         return true;
@@ -616,10 +619,11 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) noexcept
         return false; // Nan or Inf involved
 
     a = fabs(a);
-    if (d >= (a * e48))
-        return false;
     b = fabs(b);
-    if (d >= (b * e48))
+    const double min_ab = std::min(a, b);
+    const double threshold1 = min_ab * e48;
+    const double threshold2 = getN10Exp(floor(log10(min_ab))) * half15thSignificand;
+    if (d >= std::max(threshold1, threshold2))
         return false;
 
     if (isRepresentableInteger(a) && isRepresentableInteger(b))
