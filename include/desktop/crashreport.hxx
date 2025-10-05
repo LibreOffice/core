@@ -10,13 +10,14 @@
 #ifndef INCLUDED_DESKTOP_CRASHREPORT_HXX
 #define INCLUDED_DESKTOP_CRASHREPORT_HXX
 
-#include <desktop/dllapi.h>
 
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 
 #include <config_features.h>
 
+#if HAVE_FEATURE_BREAKPAD
+#include <desktop/dllapi.h>
+#include <osl/mutex.hxx>
 // vector not sort the entries
 #include <memory>
 #include <vector>
@@ -27,6 +28,7 @@ namespace google_breakpad
 {
 class ExceptionHandler;
 }
+#endif
 
 /**
  * Provides access to the crash reporter service.
