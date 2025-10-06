@@ -225,7 +225,7 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
     return true;
 }
 
-void LoadImage(std::u16string_view rPreviewFile, std::shared_ptr<AdditionsItem> pCurrentItem)
+void LoadImage(std::u16string_view rPreviewFile, const AdditionsItem& rCurrentItem)
 {
     const sal_Int8 Margin = 6;
 
@@ -240,7 +240,7 @@ void LoadImage(std::u16string_view rPreviewFile, std::shared_ptr<AdditionsItem> 
     aFilter.ImportGraphic(aGraphic, aURLObj);
     Bitmap aBmp = aGraphic.GetBitmap();
     Size aBmpSize = aBmp.GetSizePixel();
-    Size aThumbSize(pCurrentItem->m_xImageScreenshot->get_size_request());
+    Size aThumbSize(rCurrentItem.m_xImageScreenshot->get_size_request());
     if (!aBmp.IsEmpty())
     {
         double aScale;
@@ -257,13 +257,13 @@ void LoadImage(std::u16string_view rPreviewFile, std::shared_ptr<AdditionsItem> 
         aBmpSize = aBmp.GetSizePixel();
     }
 
-    ScopedVclPtr<VirtualDevice> xVirDev = pCurrentItem->m_xImageScreenshot->create_virtual_device();
+    ScopedVclPtr<VirtualDevice> xVirDev = rCurrentItem.m_xImageScreenshot->create_virtual_device();
     xVirDev->SetOutputSizePixel(aThumbSize);
     //white background since images come with a white border
     xVirDev->SetBackground(Wallpaper(COL_WHITE));
     xVirDev->Erase();
     xVirDev->DrawBitmapEx(Point(aThumbSize.Width() / 2 - aBmpSize.Width() / 2, Margin), aBmp);
-    pCurrentItem->m_xImageScreenshot->set_image(xVirDev.get());
+    rCurrentItem.m_xImageScreenshot->set_image(xVirDev.get());
     xVirDev.disposeAndClear();
 }
 
@@ -301,16 +301,16 @@ void SearchAndParseThread::Append(AdditionInfo& additionInfo)
     m_pAdditionsDialog->m_aAdditionsItems.push_back(std::make_shared<AdditionsItem>(
         m_pAdditionsDialog->m_xContentGrid.get(), m_pAdditionsDialog, additionInfo));
 
-    std::shared_ptr<AdditionsItem> aCurrentItem = m_pAdditionsDialog->m_aAdditionsItems.back();
+    AdditionsItem& rCurrentItem = *m_pAdditionsDialog->m_aAdditionsItems.back();
 
-    LoadImage(aPreviewFile, aCurrentItem);
+    LoadImage(aPreviewFile, rCurrentItem);
     m_pAdditionsDialog->m_nCurrentListItemCount++;
 
     if (m_pAdditionsDialog->m_nCurrentListItemCount == m_pAdditionsDialog->m_nMaxItemCount)
     {
         if (m_pAdditionsDialog->m_nCurrentListItemCount
             != m_pAdditionsDialog->m_aAllExtensionsVector.size())
-            aCurrentItem->m_xButtonShowMore->set_visible(true);
+            rCurrentItem.m_xButtonShowMore->set_visible(true);
     }
 }
 
