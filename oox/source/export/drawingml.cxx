@@ -353,23 +353,7 @@ namespace
 OString getColorStr(const ::Color nColor)
 {
     // Transparency is a separate element.
-    OString sColor = OString::number(sal_uInt32(nColor) & 0x00FFFFFF, 16);
-    if (sColor.getLength() < 6)
-    {
-        OStringBuffer sBuf("0");
-        int remains = 5 - sColor.getLength();
-
-        while (remains > 0)
-        {
-            sBuf.append("0");
-            remains--;
-        }
-
-        sBuf.append(sColor);
-
-        sColor = sBuf.toString();
-    }
-    return sColor;
+    return I32SHEX(sal_uInt32(nColor) & 0x00FFFFFF);
 }
 }
 

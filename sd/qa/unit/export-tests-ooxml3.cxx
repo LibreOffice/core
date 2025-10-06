@@ -133,8 +133,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf114848)
     save(u"Impress Office Open XML"_ustr);
 
     xmlDocUniquePtr pXmlDocTheme1 = parseExport(u"ppt/theme/theme1.xml"_ustr);
-    assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
-                u"1F497D");
+    assertXPathInsensitive(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr",
+                           "val", u"1F497D");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf147586)
@@ -146,12 +146,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf147586)
     // Without the fix in place, this test would have failed with
     // - Expected: 227fc7
     // - Actual  : 4f4f4f
-    assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[1]/a:pPr/a:buClr/a:srgbClr", "val",
-                u"227fc7");
-    assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[2]/a:pPr/a:buClr/a:srgbClr", "val",
-                u"227fc7");
+    assertXPathInsensitive(pXmlDocContent,
+                           "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[1]/a:pPr/a:buClr/a:srgbClr",
+                           "val", u"227fc7");
+    assertXPathInsensitive(pXmlDocContent,
+                           "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[2]/a:pPr/a:buClr/a:srgbClr",
+                           "val", u"227fc7");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf68759)
@@ -755,15 +755,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118835)
     xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent, "(//p:animClr)[1]", "clrSpc", u"rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[1]//p:attrName", u"style.color");
-    assertXPath(pXmlDocContent, "(//p:animClr)[1]//p:to/a:srgbClr", "val", u"ED1C24");
+    assertXPathInsensitive(pXmlDocContent, "(//p:animClr)[1]//p:to/a:srgbClr", "val", u"ED1C24");
 
     assertXPath(pXmlDocContent, "(//p:animClr)[2]", "clrSpc", u"rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[2]//p:attrName", u"stroke.color");
-    assertXPath(pXmlDocContent, "(//p:animClr)[2]//p:to/a:srgbClr", "val", u"333399");
+    assertXPathInsensitive(pXmlDocContent, "(//p:animClr)[2]//p:to/a:srgbClr", "val", u"333399");
 
     assertXPath(pXmlDocContent, "(//p:animClr)[3]", "clrSpc", u"rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[3]//p:attrName", u"fillcolor");
-    assertXPath(pXmlDocContent, "(//p:animClr)[3]//p:to/a:srgbClr", "val", u"FCD3C1");
+    assertXPathInsensitive(pXmlDocContent, "(//p:animClr)[3]//p:to/a:srgbClr", "val", u"FCD3C1");
 
     assertXPath(pXmlDocContent, "(//p:animClr)[5]", "clrSpc", u"hsl");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[5]//p:attrName", u"fillcolor");
@@ -895,15 +895,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf128096)
     save(u"Impress Office Open XML"_ustr);
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDocContent1,
-                "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val",
-                u"ffff00");
+    assertXPathInsensitive(
+        pXmlDocContent1,
+        "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val",
+        u"ffff00");
 
     // Check that underlined content is also highlighted
     xmlDocUniquePtr pXmlDocContent2 = parseExport(u"ppt/slides/slide2.xml"_ustr);
-    assertXPath(pXmlDocContent2,
-                "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val",
-                u"ffff00");
+    assertXPathInsensitive(
+        pXmlDocContent2,
+        "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val",
+        u"ffff00");
 }
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf120573)
 {

@@ -109,6 +109,7 @@ protected:
     {
         assertXPathInsensitive(pXmlDoc, sXPath.getStr(), pAttribute, rExpectedValue);
     }
+
     void          assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
                           const std::vector<std::pair<const char*, std::u16string_view>>& aPairVector);
     void assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const OString& sXPath,

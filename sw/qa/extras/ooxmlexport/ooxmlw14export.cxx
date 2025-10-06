@@ -296,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Groupshapes)
     OString sPathGlow = sPathToShapeRunProperties + "/w14:glow";
     assertXPath(pXmlDoc, sPathGlow, 1);
     assertXPath(pXmlDoc, sPathGlow, "rad", u"127000");
-    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr", "val", u"00B050");
+    assertXPathInsensitive(pXmlDoc, sPathGlow+"/w14:srgbClr", "val", u"00B050");
     assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr/w14:alpha", "val", u"60000");
 
     // Shadow

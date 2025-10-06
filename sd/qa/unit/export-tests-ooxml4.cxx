@@ -998,14 +998,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf94122_autoColor)
                 u"000000");
 
     xmlDocUniquePtr pXmlDocContent2 = parseExport(u"ppt/slides/slide2.xml"_ustr);
-    assertXPath(pXmlDocContent2,
-                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
-                u"ffffff");
+    assertXPathInsensitive(
+        pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
+        "val", u"ffffff");
 
     xmlDocUniquePtr pXmlDocContent3 = parseExport(u"ppt/slides/slide3.xml"_ustr);
-    assertXPath(pXmlDocContent3,
-                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
-                "val", u"ffffff");
+    assertXPathInsensitive(
+        pXmlDocContent3,
+        "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
+        u"ffffff");
     assertXPath(pXmlDocContent3,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
                 "val", u"000000");

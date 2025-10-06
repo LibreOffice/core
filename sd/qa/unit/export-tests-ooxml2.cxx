@@ -1715,10 +1715,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testThemeColors)
     save(u"Impress Office Open XML"_ustr);
 
     xmlDocUniquePtr pXmlDocTheme2 = parseExport(u"ppt/theme/theme1.xml"_ustr);
-    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
-                u"44546A");
-    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent3/a:srgbClr", "val",
-                u"A5A5A5");
+    assertXPathInsensitive(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr",
+                           "val", u"44546A");
+    assertXPathInsensitive(pXmlDocTheme2,
+                           "/a:theme/a:themeElements/a:clrScheme/a:accent3/a:srgbClr", "val",
+                           u"A5A5A5");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111785)
@@ -1731,8 +1732,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111785)
     // Without the fix in place, this test would have failed with
     // - Expected: ed1c24
     // - Actual  : ffffff
-    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:pattFill/a:bgClr/a:srgbClr",
-                "val", u"ed1c24");
+    assertXPathInsensitive(pXmlDocRels,
+                           "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:pattFill/a:bgClr/a:srgbClr",
+                           "val", u"ed1c24");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf118825)
