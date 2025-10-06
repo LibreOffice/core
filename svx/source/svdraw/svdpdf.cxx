@@ -1116,6 +1116,12 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     if (version.isEmpty())
         version = CIDFontVersion;
 
+    if (version.isEmpty() || version.toDouble() == 0.0)
+    {
+        SAL_WARN("sd.filter", "Font version cannot be empty or 0.0");
+        version = "0.001"_ostr;
+    }
+
     if (!brokenFontName.isEmpty())
         FontName = postScriptName.toUtf8();
 
