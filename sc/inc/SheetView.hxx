@@ -8,7 +8,9 @@
  */
 
 #pragma once
+
 #include "types.hxx"
+#include <rtl/ustring.hxx>
 
 class ScTable;
 
@@ -24,12 +26,15 @@ class SheetView
 private:
     ScTable* mpTable = nullptr;
     bool mbSynced = true;
+    OUString maName;
 
 public:
-    SheetView(ScTable* pTable);
+    SheetView(ScTable* pTable, OUString const& rName);
 
     ScTable* getTablePointer() const;
     SCTAB getTableNumber() const;
+
+    OUString const& GetName() { return maName; }
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;

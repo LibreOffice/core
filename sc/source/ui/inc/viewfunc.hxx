@@ -371,6 +371,7 @@ public:
     void RemoveCurrentSheetView();
     void SwitchSheetView(sc::SwitchSheetViewDirection eDirection);
     void ExitSheetView(); // Switch to default view
+    void SelectSheetView(sc::SheetViewID nSelectSheetViewID);
 
                                                 // Internal helper functions
 protected:

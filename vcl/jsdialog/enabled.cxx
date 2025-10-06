@@ -202,7 +202,8 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/warnautocorrect.ui" },
         { u"modules/scalc/ui/ztestdialog.ui" },
         { u"modules/scalc/ui/definedatabaserangedialog.ui" },
-        { u"modules/scalc/ui/selectrange.ui" }
+        { u"modules/scalc/ui/selectrange.ui" },
+        { u"modules/scalc/ui/selectsheetviewdialog.ui" },
     });
 
 constexpr auto SwriterDialogList

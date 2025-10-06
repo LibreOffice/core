@@ -6104,6 +6104,24 @@ SfxBoolItem SwitchToPreviousSheetView FID_SWITCH_TO_PREVIOUS_SHEET_VIEW
     GroupId = SfxGroupId::View
 ]
 
+SfxBoolItem SelectSheetView FID_SELECT_SHEET_VIEW
+[
+    /* flags */
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View
+]
+
 SfxBoolItem ExitSheetView FID_EXIT_SHEET_VIEW
 [
     /* flags */

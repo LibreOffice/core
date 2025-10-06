@@ -26,11 +26,14 @@ class SC_DLLPUBLIC SheetViewManager
 {
 private:
     std::vector<std::shared_ptr<SheetView>> maViews;
+    sal_Int32 maNameCounter = 0;
 
     bool isValidSheetViewID(SheetViewID nID) const
     {
         return nID >= 0 && o3tl::make_unsigned(nID) < maViews.size();
     }
+
+    OUString generateName();
 
 public:
     SheetViewManager();
