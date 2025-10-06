@@ -85,7 +85,11 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
             pItem->setIcon(toQPixmap(*pImageSurface));
 
         if (m_bExtraToggleButtonsEnabled)
+        {
+            // avoid triggering signal_toggled via QtInstanceTreeView::handleDataChanged for new item
+            QSignalBlocker aSignalBlocker(m_pModel);
             itemFromIndex(toggleButtonModelIndex(QtInstanceTreeIter(aIndex)))->setCheckable(true);
+        }
 
         if (pRet)
             static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(aIndex);
