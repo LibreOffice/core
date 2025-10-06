@@ -195,7 +195,7 @@ namespace pcr
         {
             m_rUIUpdate.suspendAutoFire();
         }
-        ~ComposedUIAutoFireGuard() COVERITY_NOEXCEPT_FALSE
+        ~ComposedUIAutoFireGuard()
         {
             m_rUIUpdate.resumeAutoFire();
         }

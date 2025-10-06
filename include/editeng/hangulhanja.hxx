@@ -117,7 +117,7 @@ namespace editeng
             bool _bIsInteractive
         );
 
-        virtual ~HangulHanjaConversion() COVERITY_NOEXCEPT_FALSE;
+        virtual ~HangulHanjaConversion();
 
         // converts the whole document
         void    ConvertDocument();

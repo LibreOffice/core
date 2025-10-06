@@ -829,7 +829,7 @@ namespace emfio
         Color               ReadColor();
 
         explicit            MtfTools(GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF);
-        ~MtfTools() COVERITY_NOEXCEPT_FALSE;
+        ~MtfTools();
     };
 }
 

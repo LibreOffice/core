@@ -41,7 +41,7 @@ const SvxUnoTextRangeBaseVec& SvxEditSource::getRanges() const
 }
 
 
-SvxTextForwarder::~SvxTextForwarder() COVERITY_NOEXCEPT_FALSE
+SvxTextForwarder::~SvxTextForwarder()
 {
 }
 

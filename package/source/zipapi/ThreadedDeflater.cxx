@@ -72,7 +72,7 @@ ThreadedDeflater::ThreadedDeflater(sal_Int32 nSetLevel)
 {
 }
 
-ThreadedDeflater::~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE { clear(); }
+ThreadedDeflater::~ThreadedDeflater() { clear(); }
 
 void ThreadedDeflater::deflateWrite(
     const css::uno::Reference<css::io::XInputStream>& xInStream,

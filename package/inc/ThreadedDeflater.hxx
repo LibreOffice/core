@@ -51,7 +51,7 @@ class ThreadedDeflater final
 public:
     // Unlike with Deflater class, bNoWrap is always true.
     ThreadedDeflater(sal_Int32 nSetLevel);
-    ~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE;
+    ~ThreadedDeflater();
     void deflateWrite(const css::uno::Reference<css::io::XInputStream>& xInStream,
                       const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>&
                           rProcessInputFunc,

@@ -947,7 +947,7 @@ namespace editeng
     {
     }
 
-    HangulHanjaConversion::~HangulHanjaConversion() COVERITY_NOEXCEPT_FALSE
+    HangulHanjaConversion::~HangulHanjaConversion()
     {
     }
 

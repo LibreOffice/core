@@ -1144,7 +1144,7 @@ namespace emfio
         mpGDIMetaFile->AddAction( new MetaRasterOpAction( RasterOp::OverPaint ) );
     }
 
-    MtfTools::~MtfTools() COVERITY_NOEXCEPT_FALSE
+    MtfTools::~MtfTools()
     {
         mpGDIMetaFile->AddAction( new MetaPopAction() );
         mpGDIMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
