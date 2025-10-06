@@ -12,24 +12,6 @@
     <property name="row-spacing">24</property>
     <property name="column-spacing">12</property>
     <child>
-      <object class="GtkButton" id="buttonShowMore">
-        <property name="label" translatable="yes" context="additionsDialog|buttonShowMore">Show More Extensions</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="buttonShowMore-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes" context="additionsDialog|buttonShowMore">Button "Show more"</property>
-            <property name="AtkObject::accessible-description" translatable="yes" context="additionsDialog|buttonShowMore">This button shows more extensions.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">1</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
       <!-- n-columns=3 n-rows=8 -->
       <object class="GtkGrid">
         <property name="visible">True</property>

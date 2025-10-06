@@ -310,7 +310,7 @@ void SearchAndParseThread::Append(AdditionInfo& additionInfo)
     {
         if (m_pAdditionsDialog->m_nCurrentListItemCount
             != m_pAdditionsDialog->m_aAllExtensionsVector.size())
-            rCurrentItem.m_xButtonShowMore->set_visible(true);
+            m_pAdditionsDialog->m_xButtonShowMore->set_visible(true);
     }
 }
 
@@ -432,6 +432,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_xButtonClose(m_xBuilder->weld_button(u"buttonClose"_ustr))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
     , m_xContentGrid(m_xBuilder->weld_grid(u"contentGrid"_ustr))
+    , m_xButtonShowMore(m_xBuilder->weld_button(u"buttonShowMore"_ustr))
     , m_xLabelProgress(m_xBuilder->weld_label(u"labelProgress"_ustr))
     , m_xGearBtn(m_xBuilder->weld_menu_button(u"buttonGear"_ustr))
 {
@@ -443,6 +444,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
 
     m_xEntrySearch->connect_changed(LINK(this, AdditionsDialog, SearchUpdateHdl));
     m_xEntrySearch->connect_focus_out(LINK(this, AdditionsDialog, FocusOut_Impl));
+    m_xButtonShowMore->connect_clicked(LINK(this, AdditionsDialog, ShowMoreHdl));
     m_xButtonClose->connect_clicked(LINK(this, AdditionsDialog, CloseButtonHdl));
 
     m_sTag = sAdditionsTag;
@@ -619,7 +621,6 @@ AdditionsItem::AdditionsItem(weld::Grid* pParentGrid, AdditionsDialog* pParentDi
     , m_xImageVoting4(m_xBuilder->weld_image(u"imageVoting4"_ustr))
     , m_xImageVoting5(m_xBuilder->weld_image(u"imageVoting5"_ustr))
     , m_xLabelDownloadNumber(m_xBuilder->weld_label(u"labelDownloadNumber"_ustr))
-    , m_xButtonShowMore(m_xBuilder->weld_button(u"buttonShowMore"_ustr))
     , m_pParentDialog(pParentDialog)
     , m_sDownloadURL(u""_ustr)
     , m_sExtensionID(u""_ustr)
@@ -682,7 +683,6 @@ AdditionsItem::AdditionsItem(weld::Grid* pParentGrid, AdditionsDialog* pParentDi
     m_sDownloadURL = additionInfo.sDownloadURL;
     m_sExtensionID = additionInfo.sExtensionID;
 
-    m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
     m_xButtonInstall->connect_clicked(LINK(this, AdditionsItem, InstallHdl));
 }
 
@@ -738,14 +738,14 @@ IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
     this->response(RET_CLOSE);
 }
 
-IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
+IMPL_LINK_NOARG(AdditionsDialog, ShowMoreHdl, weld::Button&, void)
 {
-    this->m_xButtonShowMore->set_visible(false);
-    m_pParentDialog->m_nMaxItemCount += PAGE_SIZE;
-    if (m_pParentDialog->m_pSearchThread.is())
-        m_pParentDialog->m_pSearchThread->StopExecution();
-    m_pParentDialog->m_pSearchThread = new SearchAndParseThread(m_pParentDialog, false);
-    m_pParentDialog->m_pSearchThread->launch();
+    m_xButtonShowMore->set_visible(false);
+    m_nMaxItemCount += PAGE_SIZE;
+    if (m_pSearchThread.is())
+        m_pSearchThread->StopExecution();
+    m_pSearchThread = new SearchAndParseThread(this, false);
+    m_pSearchThread->launch();
 }
 
 IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
