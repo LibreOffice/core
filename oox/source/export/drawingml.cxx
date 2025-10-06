@@ -5894,7 +5894,8 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
                 {
                     sal_Int64 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ) );
+                    if (nVal != 0)
+                        aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "dir" )
                 {
