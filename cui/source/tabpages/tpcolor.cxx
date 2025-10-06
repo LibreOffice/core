@@ -31,6 +31,7 @@
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
+#include <sfx2/AdditionsDialogHelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
@@ -568,12 +569,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::Toggleable&, voi
     UpdateColorValues();
 }
 
-
-IMPL_STATIC_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
+IMPL_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        u"AdditionsTag"_ustr, u"Color Palette"_ustr) };
-    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
+    AdditionsDialogHelper::RunAdditionsDialog(GetDialogController()->getDialog(),
+                                              u"Color Palette"_ustr);
 }
 
 void SvxColorTabPage::ChangeColor(const NamedColor &rNewColor, bool bUpdatePreset )

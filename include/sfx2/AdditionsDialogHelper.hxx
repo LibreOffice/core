@@ -9,9 +9,10 @@
 
 #pragma once
 
+#include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 
-class AdditionsDialogHelper
+class SFX2_DLLPUBLIC AdditionsDialogHelper
 {
 public:
     AdditionsDialogHelper() = delete;
