@@ -101,7 +101,7 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
 
     const sal_Int32 nHeight(rSource.GetSizePixel().Height());
     ImplCalculateContributions(nWidth, nNewWidth, nNumberOfContributions, aWeights, aPixels, aCounts, rKernel);
-    rTarget = Bitmap(Size(nNewWidth, nHeight), vcl::PixelFormat::N24_BPP);
+    rTarget = Bitmap(Size(nNewWidth, nHeight), vcl::PixelFormat::N32_BPP);
     BitmapScopedWriteAccess pWriteAcc(rTarget);
 
     if (!pWriteAcc)
@@ -119,6 +119,7 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
             sal_Int32 nValueRed(0);
             sal_Int32 nValueGreen(0);
             sal_Int32 nValueBlue(0);
+            sal_Int32 nValueAlpha(0);
 
             for (sal_Int32 j(0); j < aCounts[x]; j++)
             {
@@ -136,14 +137,16 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
                 nValueRed += nWeight * aColor.GetRed();
                 nValueGreen += nWeight * aColor.GetGreen();
                 nValueBlue += nWeight * aColor.GetBlue();
+                nValueAlpha += nWeight * aColor.GetAlpha();
             }
 
             assert(nSum != 0);
 
-            const BitmapColor aResultColor(
+            const BitmapColor aResultColor(ColorAlpha,
                 static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255)),
                 static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)));
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueAlpha / nSum, 0, 255)));
 
             pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
         }
@@ -177,7 +180,7 @@ bool ImplScaleConvolutionVer(const Bitmap& rSource, Bitmap& rTarget, const doubl
 
     const sal_Int32 nWidth(rSource.GetSizePixel().Width());
     ImplCalculateContributions(nHeight, nNewHeight, nNumberOfContributions, aWeights, aPixels, aCounts, rKernel);
-    rTarget = Bitmap(Size(nWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
+    rTarget = Bitmap(Size(nWidth, nNewHeight), vcl::PixelFormat::N32_BPP);
     BitmapScopedWriteAccess pWriteAcc(rTarget);
     if(!pWriteAcc)
         return false;
@@ -197,6 +200,7 @@ bool ImplScaleConvolutionVer(const Bitmap& rSource, Bitmap& rTarget, const doubl
             sal_Int32 nValueRed(0);
             sal_Int32 nValueGreen(0);
             sal_Int32 nValueBlue(0);
+            sal_Int32 nValueAlpha(0);
 
             for(sal_Int32 j(0); j < aCounts[y]; j++)
             {
@@ -207,14 +211,16 @@ bool ImplScaleConvolutionVer(const Bitmap& rSource, Bitmap& rTarget, const doubl
                 nValueRed += nWeight * aColor.GetRed();
                 nValueGreen += nWeight * aColor.GetGreen();
                 nValueBlue += nWeight * aColor.GetBlue();
+                nValueAlpha += nWeight * aColor.GetAlpha();
             }
 
             assert(nSum != 0);
 
-            const BitmapColor aResultColor(
+            const BitmapColor aResultColor(ColorAlpha,
                 static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255)),
                 static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)));
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueAlpha / nSum, 0, 255)));
 
             if(pWriteAcc->HasPalette())
             {
