@@ -30,6 +30,8 @@
 #include <string_view>
 #include <unordered_map>
 
+#include <boost/property_tree/ptree_fwd.hpp>
+
 #define LOK_NOTIFY_LOG_TO_CLIENT 1
 
 #define LOK_LOG_STREAM(level, area, stream) \
@@ -269,6 +271,8 @@ public:
     static std::map<OUString, OUString> parseCommandParameters(std::u16string_view rCommand);
     /// Registers function pointers in comphelper/ to set/get of the current LOK view.
     static void registerViewCallbacks();
+
+    static void dispatchUnoCommand(const boost::property_tree::ptree& tree);
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);
