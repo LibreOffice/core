@@ -137,6 +137,7 @@
 #include <formulaopt.hxx>
 #include <output.hxx>
 #include <stlpool.hxx>
+#include <SheetViewManager.hxx>
 
 #include <strings.hrc>
 
@@ -646,9 +647,21 @@ OUString ScModelObj::getPartInfo( int nPart )
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
         return OUString();
+    ScDocument& rDocument = pViewData->GetDocument();
+    const bool bIsVisible = rDocument.IsVisible(nPart);
+    const bool bIsProtected = rDocument.IsTabProtected(nPart);
+    const sc::SheetViewID nSheetViewID = pViewData->GetSheetViewIDForSheet(nPart);
 
-    const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
-    const bool bIsProtected = pViewData->GetDocument().IsTabProtected(nPart);
+    bool nSheetViewSynced = true;
+
+    if (auto pSheetViewManager = rDocument.GetSheetViewManager(nPart))
+    {
+        if (auto pSheetView = pSheetViewManager->get(nSheetViewID))
+        {
+            nSheetViewSynced = pSheetView->isSynced();
+        }
+    }
+
     //FIXME: Implement IsSelected().
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
     const bool bIsRTLLayout = pViewData->GetDocument().IsLayoutRTL(nPart);
@@ -657,6 +670,8 @@ OUString ScModelObj::getPartInfo( int nPart )
     jsonWriter.put("visible", static_cast<unsigned int>(bIsVisible));
     jsonWriter.put("rtllayout", static_cast<unsigned int>(bIsRTLLayout));
     jsonWriter.put("protected", static_cast<unsigned int>(bIsProtected));
+    jsonWriter.put("sheetviewid", int32_t(nSheetViewID));
+    jsonWriter.put("sheetviewsynced", uint32_t(nSheetViewSynced));
     jsonWriter.put("selected", static_cast<unsigned int>(bIsSelected));
 
     OUString tabName;

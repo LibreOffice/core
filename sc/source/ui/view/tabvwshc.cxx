@@ -455,7 +455,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
 int ScTabViewShell::getPart() const
 {
-    return GetViewData().CurrentTabForData();
+    return GetViewData().GetTabNumber();
 }
 
 void ScTabViewShell::afterCallbackRegistered()
