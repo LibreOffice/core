@@ -2097,6 +2097,9 @@ void ScViewFunc::RemoveCurrentSheetView()
 
     ScDocument& rDocument = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNumber();
+    if (rDocument.IsSheetView(nTab))
+        return;
+
     auto pSheetManager = rDocument.GetSheetViewManager(nTab);
     if (!pSheetManager)
         return;
@@ -2113,35 +2116,34 @@ void ScViewFunc::RemoveCurrentSheetView()
 
 void ScViewFunc::SwitchSheetView(sc::SwitchSheetViewDirection eDirection)
 {
-    SCTAB nTab = GetViewData().GetTabNumber();
     ScDocument& rDocument = GetViewData().GetDocument();
-    if (rDocument.IsSheetView(nTab))
-        return;
-
-    sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
+    SCTAB nTab = GetViewData().GetTabNumber();
     auto pSheetManager = rDocument.GetSheetViewManager(nTab);
+    sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
 
     sc::SheetViewID nSwitchSheetViewID = eDirection == sc::SwitchSheetViewDirection::Next
                                             ? pSheetManager->getNextSheetView(nSheetViewID)
                                             : pSheetManager->getPreviousSheetView(nSheetViewID);
-
-    GetViewData().SetSheetViewID(nSwitchSheetViewID);
-
-    SheetViewChanged();
+    SelectSheetView(nSwitchSheetViewID);
 }
 
 void ScViewFunc::ExitSheetView()
 {
+    SelectSheetView(sc::DefaultSheetViewID);
+}
+
+void ScViewFunc::SelectSheetView(sc::SheetViewID nSelectSheetViewID)
+{
     SCTAB nTab = GetViewData().GetTabNumber();
-    ScDocument& rDocument = GetViewData().GetDocument();
-    if (rDocument.IsSheetView(nTab))
+
+    if (GetViewData().GetDocument().IsSheetView(nTab))
         return;
 
     sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
-    if (nSheetViewID == sc::DefaultSheetViewID)
+    if (nSheetViewID == nSelectSheetViewID)
         return;
 
-    GetViewData().SetSheetViewID(sc::DefaultSheetViewID);
+    GetViewData().SetSheetViewID(nSelectSheetViewID);
 
     SheetViewChanged();
 }

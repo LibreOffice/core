@@ -12,8 +12,9 @@
 
 namespace sc
 {
-SheetView::SheetView(ScTable* pTable)
+SheetView::SheetView(ScTable* pTable, OUString const& rName)
     : mpTable(pTable)
+    , maName(rName)
 {
 }
 

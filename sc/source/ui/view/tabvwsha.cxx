@@ -399,6 +399,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_REMOVE_SHEET_VIEW:
             case FID_SWITCH_TO_NEXT_SHEET_VIEW:
             case FID_SWITCH_TO_PREVIOUS_SHEET_VIEW:
+            case FID_SELECT_SHEET_VIEW:
             case FID_EXIT_SHEET_VIEW:
                 {
                     if (GetViewData().GetDocShell().IsReadOnly() || IsCurrentLokViewReadOnly())

@@ -65,6 +65,7 @@
 
 #include <svx/dialog/ThemeDialog.hxx>
 #include <ThemeColorChanger.hxx>
+#include <dialogs/SelectSheetViewDialog.hxx>
 
 namespace
 {
@@ -1061,6 +1062,23 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         break;
         case FID_EXIT_SHEET_VIEW:
             ExitSheetView();
+        break;
+        case FID_SELECT_SHEET_VIEW:
+        {
+            ScViewData& rViewData = GetViewData();
+            auto pDialog = std::make_shared<sc::SelectSheetViewDialog>(GetFrameWeld(), rViewData);
+            weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
+                if (RET_OK != nResult)
+                    return;
+
+                sc::SheetViewID nID = pDialog->getSelectedSheetViewID();
+                if (nID != sc::InvalidSheetViewID)
+                {
+                    SelectSheetView(nID);
+                }
+            });
+            rReq.Done();
+        }
         break;
 
         case SID_ATTR_ZOOM: // status row

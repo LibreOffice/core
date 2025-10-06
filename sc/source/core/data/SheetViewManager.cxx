@@ -17,7 +17,7 @@ SheetViewManager::SheetViewManager() {}
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 {
     SheetViewID nID(maViews.size());
-    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable));
+    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName()));
     return nID;
 }
 
@@ -115,6 +115,12 @@ void SheetViewManager::unsyncAllSheetViews()
     {
         pSheetView->unsync();
     }
+}
+
+OUString SheetViewManager::generateName()
+{
+    maNameCounter++;
+    return u"Temp SheetView " + OUString::number(maNameCounter);
 }
 }
 
