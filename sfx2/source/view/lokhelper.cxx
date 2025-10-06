@@ -16,13 +16,18 @@
 
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/lokunocmdlist.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/JsonToPropertyValues_with_boost.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/lok.hxx>
@@ -1188,6 +1193,29 @@ void SfxLokHelper::registerViewCallbacks()
     comphelper::LibreOfficeKit::setViewGetter([]() -> int {
         return SfxLokHelper::getCurrentView();
     });
+}
+
+void SfxLokHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
+{
+    auto command = OStringToOUString(tree.get_child("name").get_value<std::string>(),
+                                     RTL_TEXTENCODING_UTF8);
+    // Check if the uno command is allowed
+    if (std::u16string_view rest;
+        !command.startsWith(".uno:", &rest) || !GetKitUnoCommandList().contains(rest))
+    {
+        LOK_WARN("lok.transform",
+                 "UnoCommand command is not recognized: '" << command << "'");
+        return;
+    }
+    std::vector<beans::PropertyValue> arguments;
+    if (auto args = tree.get_child_optional("arguments"))
+    {
+        arguments = comphelper::JsonToPropertyValues(*args);
+    }
+    // Make the uno command synchron
+    arguments.push_back(comphelper::makePropertyValue(u"SynchronMode"_ustr, true));
+
+    comphelper::dispatchCommand(command, comphelper::containerToSequence(arguments));
 }
 
 namespace

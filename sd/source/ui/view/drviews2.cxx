@@ -1372,6 +1372,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         }
                     }
                 }
+                else if (aItem.first == "UnoCommand")
+                {
+                    SfxLokHelper::dispatchUnoCommand(aItem.second);
+                }
             }
             rReq.Done();
         }

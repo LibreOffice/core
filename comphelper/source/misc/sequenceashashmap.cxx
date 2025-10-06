@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/reflection/XIdlField.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <comphelper/JsonToPropertyValues_with_boost.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -302,7 +303,7 @@ void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
     }
 }
 
-static std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::property_tree::ptree& aTree)
+std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::property_tree::ptree& aTree)
 {
     std::vector<beans::PropertyValue> aArguments;
     boost::property_tree::ptree aNodeNull, aNodeValue;
