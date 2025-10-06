@@ -46,11 +46,14 @@ std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
 /// Calculate the next existing sheet view to use.
 SheetViewID SheetViewManager::getNextSheetView(SheetViewID nID)
 {
+    if (nID != DefaultSheetViewID && nID < 0)
+        return InvalidSheetViewID;
+
     if (maViews.empty())
         return DefaultSheetViewID;
 
     // Set to max, so we prevent the for loop to run
-    size_t startIndex = std::numeric_limits<size_t>::max();
+    sal_Int32 startIndex = std::numeric_limits<sal_Int32>::max();
 
     // Start with first index and search for the first sheet view in for loop.
     if (nID == DefaultSheetViewID)
@@ -61,10 +64,43 @@ SheetViewID SheetViewManager::getNextSheetView(SheetViewID nID)
     // for then next valid sheet view in the for loop.
     else if (isValidSheetViewID(nID))
     {
-        startIndex = size_t(nID) + 1;
+        startIndex = sal_Int32(nID) + 1;
     }
 
-    for (size_t nIndex = startIndex; nIndex < maViews.size(); ++nIndex)
+    for (sal_Int32 nIndex = startIndex; nIndex < sal_Int32(maViews.size()); ++nIndex)
+    {
+        if (maViews[nIndex])
+            return SheetViewID(nIndex);
+    }
+
+    return DefaultSheetViewID;
+}
+
+/// Calculate the previous existing sheet view to use.
+SheetViewID SheetViewManager::getPreviousSheetView(SheetViewID nID)
+{
+    if (nID != DefaultSheetViewID && nID < 0)
+        return InvalidSheetViewID;
+
+    if (maViews.empty())
+        return DefaultSheetViewID;
+
+    // Set to -1, so we prevent the for loop to run
+    sal_Int32 startIndex = -1;
+
+    // Start with first index and search for the first sheet view in for loop.
+    if (nID == DefaultSheetViewID)
+    {
+        startIndex = sal_Int32(maViews.size()) - 1;
+    }
+    // If we assume currnet ID is valid, so set the start to current + 1 to search
+    // for then next valid sheet view in the for loop.
+    else if (isValidSheetViewID(nID))
+    {
+        startIndex = sal_Int32(nID) - 1;
+    }
+
+    for (sal_Int32 nIndex = startIndex; nIndex >= 0; --nIndex)
     {
         if (maViews[nIndex])
             return SheetViewID(nIndex);

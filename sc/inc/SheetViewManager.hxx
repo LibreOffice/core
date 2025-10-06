@@ -53,6 +53,9 @@ public:
     /** Calculate the next sheet view ID from the current ID. */
     SheetViewID getNextSheetView(SheetViewID nID);
 
+    /** Calculate the previous sheet view ID from the current ID. */
+    SheetViewID getPreviousSheetView(SheetViewID nID);
+
     void unsyncAllSheetViews();
 };
 }
