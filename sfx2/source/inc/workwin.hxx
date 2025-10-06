@@ -116,6 +116,7 @@ struct SfxChildWin_Impl
     SfxChild_Impl*                  pCli;          // != 0 at direct Children
     SfxVisibilityFlags              nVisibility;
     bool                            bEnable;
+    bool bCreatingChildWindow = false;
 
     SfxChildWin_Impl( sal_uInt32 nID ) :
         nSaveId(static_cast<sal_uInt16>(nID & 0xFFFF) ),
@@ -212,7 +213,7 @@ class SfxWorkWindow final
     SfxFrame*               pMasterFrame;
     SfxFrame*               pFrame;
 
-    void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
+    bool                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
     SfxChild_Impl*          FindChild_Impl( const vcl::Window* rWindow ) const;

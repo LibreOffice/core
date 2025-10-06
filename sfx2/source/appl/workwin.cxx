@@ -1296,7 +1296,10 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 // Currently, no window here, but it is enabled; windows
                 // Create window and if possible theContext
                 if ( bCreate )
-                    CreateChildWin_Impl( pCW, false );
+                {
+                    if (!CreateChildWin_Impl(pCW, false))
+                        continue;
+                }
 
                 if ( !bAllChildrenVisible && pCW->pCli )
                     pCW->pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
@@ -1343,13 +1346,19 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
     }
 }
 
-void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
+bool SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
 {
+    if (pCW->bCreatingChildWindow)
+        return false;
+
     pCW->aInfo.bVisible = true;
 
+    pCW->bCreatingChildWindow = true;
     SfxChildWindow *pChildWin = SfxChildWindow::CreateChildWindow( pCW->nId, pWorkWin, &GetBindings(), pCW->aInfo).release();
+    pCW->bCreatingChildWindow = false;
+
     if (!pChildWin)
-        return;
+        return false;
 
     if ( bSetFocus )
         bSetFocus = pChildWin->WantsFocus();
@@ -1403,6 +1412,7 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
 
     // Save the information in the INI file
     SaveStatus_Impl(pChildWin, pCW->aInfo);
+    return true;
 }
 
 void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
@@ -1832,10 +1842,11 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
                 else
                 {
                     // create actual Window
-                    CreateChildWin_Impl( pCW, bSetFocus );
-                    if ( !pCW->pWin )
+                    if (!CreateChildWin_Impl(pCW, bSetFocus))
+                    {
                         // no success
                         pCW->bCreate = false;
+                    }
                 }
             }
         }
