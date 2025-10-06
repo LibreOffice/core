@@ -910,17 +910,17 @@ OUString SdPageObjsTLV::GetObjectName(
         OUString sObjName;
         if (pObject->GetObjIdentifier() == SdrObjKind::CustomShape)
         {
-#ifndef NDEBUG
-            OUString aEngine(pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_ENGINE).GetValue());
-            assert(aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine");
-#endif
             // taken from SdrObjCustomShape::GetCustomShapeName
-            OUString sShapeType;
-            const SdrCustomShapeGeometryItem& rGeometryItem
-                = pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-            const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
-            if (pAny && (*pAny >>= sShapeType))
-                sObjName = SdResId(STR_NAVIGATOR_CUSTOMSHAPE) + u": " + sShapeType;
+            OUString aEngine(pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_ENGINE).GetValue());
+            if(aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine")
+            {
+                OUString sShapeType;
+                const SdrCustomShapeGeometryItem& rGeometryItem
+                    = pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+                const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+                if (pAny && (*pAny >>= sShapeType))
+                    sObjName = SdResId(STR_NAVIGATOR_CUSTOMSHAPE) + u": " + sShapeType;
+            }
         }
         else
             sObjName = pObject->TakeObjNameSingul();
