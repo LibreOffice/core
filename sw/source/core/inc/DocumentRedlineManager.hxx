@@ -103,7 +103,8 @@ public:
                                bool bDirect = false) override;
 
     virtual bool AcceptRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ sal_Int8 nDepth = 0) override;
+                               /*[in]*/ sal_Int8 nDepth = 0,
+                               bool bDirect = false) override;
 
     virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam) override;
 

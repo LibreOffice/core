@@ -208,6 +208,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDirect)
         CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetValue());
     }
 
+    // And given an undo, so we can redo:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+
+    // When doing the same again via redo:
+    pWrtShell->Redo();
+
+    // Then make sure we again have a single large delete:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. instead of a large delete redline, we have 2 small ones for AAA and CCC only.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+
     // And given a reset state:
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
@@ -268,6 +282,20 @@ CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatDirect)
         const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
         CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetValue());
     }
+
+    // And given an undo, so we can redo:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+
+    // When doing the same again via redo:
+    pWrtShell->Redo();
+
+    // Then make sure we again have a single large insert:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. redo was broken, the middle part was a format redline instead of an insert redline.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 
     // And given a reset state:
     pWrtShell->Undo();
