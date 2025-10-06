@@ -21,6 +21,7 @@
 
 #include <vcl/ColorDialog.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <cmath>
 #include <o3tl/typed_flags_set.hxx>
@@ -89,8 +90,13 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
 
 void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.SetFillColor(m_aColor);
-    rRenderContext.SetLineColor(m_aColor);
+    Color aCol = m_aColor;
+    // If the color has been set to transparent, we need to paint a block that matches the dialog
+    // background.
+    if (aCol.GetAlpha() == 0)
+        aCol = Application::GetSettings().GetStyleSettings().GetDialogColor();
+    rRenderContext.SetFillColor(aCol);
+    rRenderContext.SetLineColor(aCol);
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
 }
 
