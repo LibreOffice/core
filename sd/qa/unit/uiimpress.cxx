@@ -12,6 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -64,6 +65,7 @@
 #include <slideshow.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
+#include <unopage.hxx>
 
 using namespace ::com::sun::star;
 
@@ -277,6 +279,44 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
           "\"Collabora Online\", \"\", \"Powerful Online Collaboration\"]}}}}}}}}"_ostr;
 
     CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUnoCommand)
+{
+    // 1. Create a document;
+    // 2. Check that its first slide has two objects (the default title + content placeholders);
+    // 3. Perform a "TransformDocumentStructure" with a "UnoCommand" calling ".uno:SelectAll" and
+    //    ".uno:Cut";
+    // 4. Check that the first slide has no objects now.
+
+    createSdImpressDoc();
+
+    // Let comphelper::dispatchCommand (in SfxLokHelper::dispatchUnoCommand) find the frame
+    auto xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    auto pImpressDocument = static_cast<SdXImpressDocument*>(mxComponent.get());
+    auto pFrame = pImpressDocument->GetDocShell()->GetFrame();
+    CPPUNIT_ASSERT(pFrame);
+    xDesktop->setActiveFrame(pFrame->GetFrame().GetFrameInterface());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
+                         pImpressDocument->getSdDrawPages()->getDrawPageByIndex(0)->getCount());
+
+    static constexpr OUString aJson = uR"json(
+{
+    "UnoCommand": {
+        "name": ".uno:SelectAll"
+    },
+    "UnoCommand": {
+        "name": ".uno:Cut"
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         pImpressDocument->getSdDrawPages()->getDrawPageByIndex(0)->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)

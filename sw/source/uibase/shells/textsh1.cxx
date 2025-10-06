@@ -3579,11 +3579,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                     + aItem2.first + "'");
                             }
                         }
-                        else if (aItem2.first == "UnoCommand")
-                        {
-                            SfxLokHelper::dispatchUnoCommand(aItem2.second);
-                        }
                     }
+                }
+                else if (aItem.first == "UnoCommand")
+                {
+                    SfxLokHelper::dispatchUnoCommand(aItem.second);
                 }
             }
         }

@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
@@ -34,6 +35,7 @@
 #include <osl/thread.hxx>
 
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <cmdid.h>
 #include <fmtanchr.hxx>
 #include <view.hxx>
@@ -1121,6 +1123,43 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines_te
     }
 
     CPPUNIT_ASSERT(bool(it == docStructure.end()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureUnoCommand)
+{
+    // 1. Create a document;
+    // 2. Check that it's not in change tracking mode;
+    // 3. Perform a "TransformDocumentStructure" with a "UnoCommand" of ".uno:TrackChanges";
+    // 4. Check that it's in change tracking mode now.
+
+    createSwDoc();
+
+    // Let comphelper::dispatchCommand (in SfxLokHelper::dispatchUnoCommand) find the frame
+    auto xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    auto pFrame = getSwDocShell()->GetFrame();
+    CPPUNIT_ASSERT(pFrame);
+    xDesktop->setActiveFrame(pFrame->GetFrame().GetFrameInterface());
+
+    CPPUNIT_ASSERT(!getSwDoc()->getIDocumentRedlineAccess().IsRedlineOn());
+
+    static constexpr OUString aJson = uR"json(
+{
+    "UnoCommand": {
+        "name": ".uno:TrackChanges",
+        "arguments": {
+            "TrackChanges": {
+                "type": "boolean",
+                "value": "true"
+            }
+        }
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().IsRedlineOn());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
