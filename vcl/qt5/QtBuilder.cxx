@@ -1104,9 +1104,15 @@ void QtBuilder::setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rPro
 
 void QtBuilder::setWidgetProperties(QWidget& rWidget, stringmap& rProps)
 {
+    auto aHeightRequest = rProps.find(u"height-request"_ustr);
+    if (aHeightRequest != rProps.end())
+        rWidget.setMinimumHeight(aHeightRequest->second.toInt32());
     auto aSensitiveIt = rProps.find(u"sensitive"_ustr);
     if (aSensitiveIt != rProps.end())
         rWidget.setEnabled(toBool(aSensitiveIt->second));
+    auto aWidthRequestIt = rProps.find(u"width-request"_ustr);
+    if (aWidthRequestIt != rProps.end())
+        rWidget.setMinimumWidth(aWidthRequestIt->second.toInt32());
 }
 
 QWidget* QtBuilder::windowForObject(QObject* pObject)
