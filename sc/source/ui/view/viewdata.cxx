@@ -846,7 +846,7 @@ ScDBFunc* ScViewData::GetView() const { return pView; }
 
 bool ScViewData::IsValidTabNumber(SCTAB nTabNumber) const
 {
-    return nTabNumber >= 0 || o3tl::make_unsigned(nTabNumber) < maTabData.size();
+    return nTabNumber >= 0 && o3tl::make_unsigned(nTabNumber) < maTabData.size();
 }
 
 void ScViewData::UpdateCurrentTab()
