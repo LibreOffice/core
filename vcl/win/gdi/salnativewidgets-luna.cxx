@@ -1098,20 +1098,29 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if (bCanUseThemeColors || bUseDarkMode)
         {
             Color aColor;
+            const bool bVertical = (rValue.meTabBarPosition == TabBarPosition::Left)
+                                   | (rValue.meTabBarPosition == TabBarPosition::Right);
             switch (iState)
             {
                 case TILES_NORMAL:
                     aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
-                    if (aColor.IsDark())
-                        aColor.IncreaseLuminance(30);
-                    else
-                        aColor.DecreaseLuminance(30);
+                    if (!bVertical)
+                    {
+                        if (aColor.IsDark())
+                            aColor.IncreaseLuminance(30);
+                        else
+                            aColor.DecreaseLuminance(30);
+                    }
                     break;
                 case TILES_DISABLED:
                     aColor = Application::GetSettings().GetStyleSettings().GetInactiveTabColor();
                     break;
                 case TILES_SELECTED:
-                    aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
+                    // Vertical tabs do not merge nicely with the content and are drawn with accent color therefore
+                    aColor
+                        = bVertical
+                              ? Application::GetSettings().GetStyleSettings().GetAccentColor()
+                              : Application::GetSettings().GetStyleSettings().GetActiveTabColor();
                     break;
                 case TILES_HOT:
                     aColor = Application::GetSettings().GetStyleSettings().GetMenuBarRolloverColor();
