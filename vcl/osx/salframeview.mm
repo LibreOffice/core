@@ -2398,13 +2398,11 @@ static NSString* getCurrentSelection()
     // When a Japanese keyboard is selected, the keyboard's "Reverse Conversion"
     // menu item would silently fail when an empty range was returned by
     // -[SalFrameView selectedRange].
-    // So return a valid range in that call using the following steps:
-    // 1. If there is marked text, return the marked text range
-    // 2. If LibreOffice is selected text, return the selected text length
-    // Similar steps in the same order are in
-    // -[SalFrameView attributedSubstringForProposedRange:actualRange:].
-    if ( [self hasMarkedText] )
-        return ( mMarkedRange.location == NSNotFound ? NSMakeRange( 0, 0 ) : mMarkedRange );
+    // So if LibreOffice has selected text, return the selected text length.
+    // tdf#168711 Ignore marked text in -[SalFrameView selectedRange]
+    // While -[SalFrameView attributedSubstringForProposedRange:actualRange:]
+    // looks at marked text, -[SalFrameView selectedRange] should only return
+    // selected text.
     NSString *pSelectedText = getCurrentSelection();
     if ( pSelectedText )
         return NSMakeRange( 0, [pSelectedText length] );
@@ -2553,7 +2551,7 @@ static NSString* getCurrentSelection()
     // -[SalFrameView attributedSubstringForProposedRange:actualRange:].
     // So return a valid string in that call using the following steps:
     // 1. If there is marked text, return the last marked text
-    // 2. If LibreOffice is selected text, return the selected text
+    // 2. If LibreOffice has selected text, return the selected text
     // Similar steps in the same order are in -[SalFrameView selectedRange].
     if ( [self hasMarkedText] )
     {
