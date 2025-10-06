@@ -80,7 +80,18 @@ public:
 
 // #111897 PARAM_INFO flags start at 0x00010000 to not
 // conflict with DefaultId in SbxParamInfo::nUserData
-#define PARAM_INFO_PARAMARRAY       0x0010000
-#define PARAM_INFO_WITHBRACKETS     0x0020000
+
+enum class ParamInfo{
+    ParamArray  =     0x0010000,
+    WithBrackets =    0x0020000
+};
+struct ParamInfoFlag{
+    static void setFlagFor(sal_uInt32& val, const ParamInfo &&pe){
+        val |= static_cast<sal_uInt32>(pe);
+    };
+    static bool checkFlagFor(const sal_uInt32& val, const ParamInfo &&pe){
+        return val & static_cast<sal_uInt32>(pe);
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

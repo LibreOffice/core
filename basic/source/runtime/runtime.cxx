@@ -654,7 +654,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             const SbxParamInfo* p = pInfo ? pInfo->GetParam( sal::static_int_cast<sal_uInt16>(i) ) : nullptr;
 
             // #111897 ParamArray
-            if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
+            if( p && ParamInfoFlag::checkFlagFor(p->nUserData, ParamInfo::ParamArray) )
             {
                 SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
                 sal_uInt32 nParamArrayParamCount = nParamCount - i;
@@ -697,7 +697,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                     bByVal = true;
                 }
 
-                bTargetTypeIsArray = (p->nUserData & PARAM_INFO_WITHBRACKETS) != 0;
+                bTargetTypeIsArray = ParamInfoFlag::checkFlagFor(p->nUserData, ParamInfo::WithBrackets);
             }
             if( bByVal )
             {
@@ -745,7 +745,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
     // #111897 Check first missing parameter for ParamArray
     const SbxParamInfo* p = pInfo->GetParam(sal::static_int_cast<sal_uInt16>(nParamCount));
-    if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
+    if( p && ParamInfoFlag::checkFlagFor(p->nUserData, ParamInfo::ParamArray) )
     {
         SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
         pArray->unoAddDim(0, -1);

@@ -85,7 +85,7 @@ struct SbiForStack {                // for/next stack:
     {}
 };
 
-#define MAXRECURSION 500 //to prevent dead-recursions
+constexpr size_t MAXRECURSION = 500; //to prevent dead-recursions
 
 // Related to: Dir, GetAttr, SetAttr
 namespace SbAttributes

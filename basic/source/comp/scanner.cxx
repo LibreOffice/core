@@ -142,7 +142,6 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 
 // reading the next symbol into the variables aSym, nVal and eType
 // return value is sal_False at EOF or errors
-#define BUF_SIZE 80
 
 void SbiScanner::scanAlphanumeric()
 {
@@ -222,6 +221,7 @@ static bool isValidCompilerDirective(std::u16string_view directive)
 
 bool SbiScanner::NextSym()
 {
+    constexpr sal_Int32 BUF_SIZE = 80;
     // memorize for the EOLN-case
     sal_Int32 nOldLine = nLine;
     sal_Int32 nOldCol1 = nCol1;

@@ -30,7 +30,7 @@ class SvStream;
 // Global files (channel numbers 256 to 511) are not
 // implemented at the moment.
 
-#define CHANNELS 256
+constexpr sal_Int32 CHANNELS = 256;
 
 enum class SbiStreamFlags
 {
