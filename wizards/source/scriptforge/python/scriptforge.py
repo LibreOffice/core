@@ -2608,7 +2608,8 @@ class SFDocuments:
         def ClearValues(self, range, filterformula = '', filterscope = ''):
             return self.ExecMethod(self.vbMethod, 'ClearValues', range, filterformula, filterscope)
 
-        def ColorizeRange(self, targetrange, foreground = -1, background = -1, filterformula = '', filterscope = ''):
+        def ColorizeRange(self, targetrange, foreground = 16777216, background = 16777216, filterformula = '',
+                          filterscope = ''):    # 16777216 = RGB(255, 255, 255) + 1
             return self.ExecMethod(self.vbMethod, 'ColorizeRange', targetrange, foreground, background,
                                    filterformula, filterscope)
 

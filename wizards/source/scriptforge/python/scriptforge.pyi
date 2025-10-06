@@ -5498,8 +5498,10 @@ class SFDocuments:
                         ``targetrange``: the cell or the range as a string in which cells should be re-colorizeed.
 
                         ``foreground``: the foreground color as the output of the basic.RGB() function.
+                        A negative value resets the foreground color to its default value.
 
                         ``background``: the background color as the output of the basic.RGB() function.
+                        A negative value cleans the background color.
 
                         ``filterformula``: a ``Calc`` formula that shall be applied to the given range
                         to determine which cells will be affected. The specified formula must return ``True``
