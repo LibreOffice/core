@@ -3394,15 +3394,16 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             bool bHierarchicalFormat = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
+                // Set up the undo action with the correct depth & directness.
                 sal_Int8 nDepth = 0;
-                if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
+                if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert && !bDirect)
                 {
                     // Only work with the underlying insert, so the undo action matches the UI
                     // action below.
                     nDepth = 1;
                 }
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoAcceptRedline>(*pTmp, nDepth));
+                    std::make_unique<SwUndoAcceptRedline>(*pTmp, nDepth, bDirect));
             }
             nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
@@ -3598,7 +3599,7 @@ bool DocumentRedlineManager::AcceptRedline(SwRedlineTable::size_type nPos, bool 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
-bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete, sal_Int8 nDepth )
+bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete, sal_Int8 nDepth, bool bDirect )
 {
     // Switch to visible in any case
     if( (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete) !=
@@ -3626,7 +3627,25 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete,
     int nRet = 0;
     if (nDepth == 0)
     {
-        nRet = lcl_AcceptRejectRedl(lcl_AcceptRedline, maRedlineTable, bCallDelete, *pPam);
+        SwRedlineTable::size_type nRdlIdx = 0;
+        const SwRangeRedline* pRedline = maRedlineTable.FindAtPosition(*rPam.Start(), nRdlIdx);
+        bool bHierarchicalFormat = pRedline && pRedline->GetType() == RedlineType::Format
+                                   && pRedline->GetStackCount() > 1;
+        if (bHierarchicalFormat && bDirect
+            && (pRedline->GetType(1) == RedlineType::Insert
+                || pRedline->GetType(1) == RedlineType::Delete))
+        {
+            // Direct accept: work with the format redline on top.
+            if (lcl_AcceptOuterFormat(maRedlineTable, nRdlIdx))
+            {
+                nRet = 1;
+            }
+        }
+        else
+        {
+            // Non-direct accept: work with all redlines under pPam.
+            nRet = lcl_AcceptRejectRedl(lcl_AcceptRedline, maRedlineTable, bCallDelete, *pPam);
+        }
     }
     else
     {

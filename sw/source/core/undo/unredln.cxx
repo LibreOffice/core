@@ -37,12 +37,13 @@
 #include <sortopt.hxx>
 #include <docedt.hxx>
 
-SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange, sal_Int8 nDepth, bool bHierarchical )
+SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange, sal_Int8 nDepth, bool bHierarchical, bool bDirect )
     : SwUndo( SwUndoId::REDLINE, &rRange.GetDoc() ), SwUndRng( rRange ),
     mnUserId( nUsrId ),
     mbHiddenRedlines( false ),
     mnDepth( nDepth ),
-    mbHierarchical(bHierarchical)
+    mbHierarchical(bHierarchical),
+    mbDirect(bDirect)
 {
     // consider Redline
     SwDoc& rDoc = rRange.GetDoc();
@@ -128,6 +129,10 @@ void SwUndoRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("depth"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::number(mnDepth).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("direct"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbDirect).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
@@ -462,14 +467,14 @@ void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
     m_nSaveEndContent = rPos.GetContentIndex();
 }
 
-SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */ )
-    : SwUndoRedline( SwUndoId::ACCEPT_REDLINE, rRange, nDepth )
+SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */, bool bDirect )
+    : SwUndoRedline( SwUndoId::ACCEPT_REDLINE, rRange, nDepth, /*bHierarhical=*/false, bDirect )
 {
 }
 
 void SwUndoAcceptRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rDoc.getIDocumentRedlineAccess().AcceptRedline(rPam, false, mnDepth);
+    rDoc.getIDocumentRedlineAccess().AcceptRedline(rPam, false, mnDepth, mbDirect);
 }
 
 void SwUndoAcceptRedline::RepeatImpl(::sw::RepeatContext & rContext)

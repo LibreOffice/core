@@ -36,15 +36,18 @@ protected:
     std::unique_ptr<SwRedlineSaveDatas> mpRedlSaveData;
     SwUndoId mnUserId;
     bool mbHiddenRedlines;
-    sal_Int8 mnDepth;       // index of the SwRedlineData in SwRangeRedline
-    /// If the redline has multiple SwRedlineData instances associated that we want to track.
+    /// Start at this index when processing the list of SwRedlineDatas.
+    sal_Int8 mnDepth;
+    /// When creating the undo action, copy "next" SwRedlineDatas or not?
     bool mbHierarchical;
+    /// Just process this item, not later ones when processing the list of SwRedlineDatas.
+    bool mbDirect;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
 
 public:
-    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange, sal_Int8 nDepth = 0, bool bHierarchical = false );
+    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange, sal_Int8 nDepth = 0, bool bHierarchical = false, bool bDirect = false );
 
     virtual ~SwUndoRedline() override;
 
@@ -114,7 +117,7 @@ private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth = 0 );
+    SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth = 0, bool bDirect = false );
 
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };

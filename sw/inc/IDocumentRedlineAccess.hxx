@@ -205,7 +205,8 @@ public:
         = 0;
 
     virtual bool AcceptRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ sal_Int8 nDepth = 0)
+                               /*[in]*/ sal_Int8 nDepth = 0,
+                               bool bDirect = false)
         = 0;
 
     virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam ) = 0;
