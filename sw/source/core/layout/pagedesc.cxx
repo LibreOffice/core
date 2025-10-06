@@ -770,6 +770,11 @@ UIName const & SwPageDescExt::GetName() const
     return m_PageDesc.GetName();
 }
 
+UIName const & SwPageDescExt::GetFollowName() const
+{
+    return m_sFollow;
+}
+
 void SwPageDescExt::SetPageDesc(const SwPageDesc & rPageDesc)
 {
     m_PageDesc = rPageDesc;

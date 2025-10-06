@@ -174,6 +174,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testAnchorTypeChangePosition)
     CPPUNIT_ASSERT_EQUAL(aOldPos, aNewPos);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescThatFollowsItself)
+{
+    createSwDoc();
+
+    SwDoc* pDoc = getSwDoc();
+
+    // Create a custom page desc that has its follow page desc set to itself
+    // (that happens by default). This means that, if the current page uses this
+    // page desc, then the next page will as well.
+    SwPageDesc* pOldPageDesc = pDoc->MakePageDesc(UIName("customPageDesc"), nullptr, true);
+    CPPUNIT_ASSERT(pOldPageDesc);
+    CPPUNIT_ASSERT_EQUAL(pOldPageDesc, pOldPageDesc->GetFollow());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+
+    // Without the fix, the follow page desc no longer matches, and the next page
+    // would not use the correct page desc.
+    SwPageDesc* pNewPageDesc = pDoc->FindPageDesc(UIName("customPageDesc"));
+    CPPUNIT_ASSERT(pNewPageDesc);
+    CPPUNIT_ASSERT_EQUAL(pNewPageDesc, pNewPageDesc->GetFollow());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

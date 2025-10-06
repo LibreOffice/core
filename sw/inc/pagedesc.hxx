@@ -395,6 +395,7 @@ public:
     SwPageDescExt & operator = (const SwPageDesc & rSrc);
 
     UIName const & GetName() const;
+    UIName const & GetFollowName() const;
 
     explicit operator SwPageDesc() const; // #i7983#
 };

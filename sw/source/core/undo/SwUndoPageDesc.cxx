@@ -278,7 +278,9 @@ void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 void SwUndoPageDescCreate::DoImpl()
 {
     SwPageDesc aPageDesc(m_aNew);
-    m_rDoc.MakePageDesc(m_aNew.GetName(), &aPageDesc, false);
+    SwPageDesc* pNewPageDesc = m_rDoc.MakePageDesc(m_aNew.GetName(), &aPageDesc, false);
+    if (m_aNew.GetName() == m_aNew.GetFollowName())
+        pNewPageDesc->SetFollow(pNewPageDesc);
 }
 
 void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
@@ -317,7 +319,9 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {
     SwPageDesc aPageDesc(m_aOld);
-    m_rDoc.MakePageDesc(m_aOld.GetName(), &aPageDesc, false);
+    SwPageDesc* pNewPageDesc = m_rDoc.MakePageDesc(m_aOld.GetName(), &aPageDesc, false);
+    if (m_aOld.GetName() == m_aOld.GetFollowName())
+        pNewPageDesc->SetFollow(pNewPageDesc);
 }
 
 void SwUndoPageDescDelete::DoImpl()
