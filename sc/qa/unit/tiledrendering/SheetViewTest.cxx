@@ -406,6 +406,78 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
     CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewManager)
+{
+    sc::SheetViewID nNonExistingID = 99;
+
+    // Empty
+    sc::SheetViewManager maSheetViewManager;
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getNextSheetView(sc::DefaultSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getNextSheetView(0)); // First non existing
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getNextSheetView(1)); // Next non existing
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getNextSheetView(nNonExistingID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID,
+                         maSheetViewManager.getNextSheetView(sc::InvalidSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getNextSheetView(-99));
+
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(sc::DefaultSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(0)); // First non existing
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(1)); // Next non existing
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(nNonExistingID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(sc::InvalidSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getPreviousSheetView(-99));
+
+    // Add ID 1
+    auto nID1 = maSheetViewManager.create(nullptr);
+    CPPUNIT_ASSERT(maSheetViewManager.get(nID1));
+
+    CPPUNIT_ASSERT_EQUAL(nID1, maSheetViewManager.getNextSheetView(sc::DefaultSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, maSheetViewManager.getNextSheetView(nID1));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getNextSheetView(nNonExistingID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID,
+                         maSheetViewManager.getNextSheetView(sc::InvalidSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getNextSheetView(-99));
+
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, maSheetViewManager.getPreviousSheetView(nID1));
+    CPPUNIT_ASSERT_EQUAL(nID1, maSheetViewManager.getPreviousSheetView(sc::DefaultSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(nNonExistingID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(sc::InvalidSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getPreviousSheetView(-99));
+
+    // Add ID 2
+    auto nID2 = maSheetViewManager.create(nullptr);
+    CPPUNIT_ASSERT(maSheetViewManager.get(nID2));
+    CPPUNIT_ASSERT_EQUAL(nID1, maSheetViewManager.getNextSheetView(sc::DefaultSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(nID2, maSheetViewManager.getNextSheetView(nID1));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, maSheetViewManager.getNextSheetView(nID2));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getNextSheetView(nNonExistingID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID,
+                         maSheetViewManager.getNextSheetView(sc::InvalidSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getNextSheetView(-99));
+
+    CPPUNIT_ASSERT_EQUAL(nID2, maSheetViewManager.getPreviousSheetView(sc::DefaultSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(nID1, maSheetViewManager.getPreviousSheetView(nID2));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, maSheetViewManager.getPreviousSheetView(nID1));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(nNonExistingID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID,
+                         maSheetViewManager.getPreviousSheetView(sc::InvalidSheetViewID));
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getPreviousSheetView(-99));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
