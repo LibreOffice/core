@@ -241,14 +241,13 @@
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="contentGrid">
+                          <object class="GtkBox" id="contentBox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
                               <placeholder/>
                             </child>

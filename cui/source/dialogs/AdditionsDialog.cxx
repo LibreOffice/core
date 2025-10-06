@@ -299,7 +299,7 @@ void SearchAndParseThread::Append(AdditionInfo& additionInfo)
     SolarMutexGuard aGuard;
 
     m_pAdditionsDialog->m_aAdditionsItems.push_back(std::make_unique<AdditionsItem>(
-        m_pAdditionsDialog->m_xContentGrid.get(), m_pAdditionsDialog, additionInfo));
+        m_pAdditionsDialog->m_xContentBox.get(), m_pAdditionsDialog, additionInfo));
 
     AdditionsItem& rCurrentItem = *m_pAdditionsDialog->m_aAdditionsItems.back();
 
@@ -431,7 +431,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_xEntrySearch(m_xBuilder->weld_entry(u"entrySearch"_ustr))
     , m_xButtonClose(m_xBuilder->weld_button(u"buttonClose"_ustr))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
-    , m_xContentGrid(m_xBuilder->weld_grid(u"contentGrid"_ustr))
+    , m_xContentBox(m_xBuilder->weld_box(u"contentBox"_ustr))
     , m_xButtonShowMore(m_xBuilder->weld_button(u"buttonShowMore"_ustr))
     , m_xLabelProgress(m_xBuilder->weld_label(u"labelProgress"_ustr))
     , m_xGearBtn(m_xBuilder->weld_menu_button(u"buttonGear"_ustr))
@@ -602,9 +602,9 @@ bool AdditionsDialog::sortByDownload(const AdditionInfo& a, const AdditionInfo& 
     return a.sDownloadNumber.toUInt32() > b.sDownloadNumber.toUInt32();
 }
 
-AdditionsItem::AdditionsItem(weld::Grid* pParentGrid, AdditionsDialog* pParentDialog,
+AdditionsItem::AdditionsItem(weld::Box* pParentBox, AdditionsDialog* pParentDialog,
                              const AdditionInfo& additionInfo)
-    : m_xBuilder(Application::CreateBuilder(pParentGrid, u"cui/ui/additionsfragment.ui"_ustr))
+    : m_xBuilder(Application::CreateBuilder(pParentBox, u"cui/ui/additionsfragment.ui"_ustr))
     , m_xContainer(m_xBuilder->weld_widget(u"additionsEntry"_ustr))
     , m_xImageScreenshot(m_xBuilder->weld_image(u"imageScreenshot"_ustr))
     , m_xButtonInstall(m_xBuilder->weld_button(u"buttonInstall"_ustr))
@@ -628,8 +628,7 @@ AdditionsItem::AdditionsItem(weld::Grid* pParentGrid, AdditionsDialog* pParentDi
     SolarMutexGuard aGuard;
 
     // AdditionsItem set location
-    pParentGrid->set_child_left_attach(*m_xContainer, 0);
-    pParentGrid->set_child_top_attach(*m_xContainer, pParentDialog->m_aAdditionsItems.size());
+    pParentBox->reorder_child(m_xContainer.get(), pParentDialog->m_aAdditionsItems.size());
 
     // Set maximum length of the extension title
     OUString sExtensionName;

@@ -72,7 +72,7 @@ public:
     std::vector<AdditionInfo> m_aAllExtensionsVector; // Stores the all extensions' info
 
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
-    std::unique_ptr<weld::Grid> m_xContentGrid;
+    std::unique_ptr<weld::Box> m_xContentBox;
     std::unique_ptr<weld::Button> m_xButtonShowMore;
 
     std::unique_ptr<weld::Label> m_xLabelProgress;
@@ -103,7 +103,7 @@ public:
 class AdditionsItem
 {
 public:
-    AdditionsItem(weld::Grid* pParentGrid, AdditionsDialog* pParentDialog,
+    AdditionsItem(weld::Box* pParentBox, AdditionsDialog* pParentDialog,
                   const AdditionInfo& additionInfo);
     bool getExtensionFile(OUString& sExtensionFile);
 
