@@ -25,14 +25,10 @@ private:
     ScTable* mpTable = nullptr;
 
 public:
-    SheetView() = default;
     SheetView(ScTable* pTable);
 
     ScTable* getTablePointer() const;
     SCTAB getTableNumber() const;
-
-    /** A sheet view is valid if the pointer to the table is set */
-    bool isValid() const;
 };
 }
 
