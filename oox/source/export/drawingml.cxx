@@ -3596,18 +3596,23 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (GetProperty(rXPropSet, u"ParaTabStopDefaultDistance"_ustr))
         mAny >>= nParaDefaultTabSize;
 
+    // ST_TextIndentLevelType
+    sal_Int32 nOutLevel = nLevel;
+    if( nOutLevel > 8 || nOutLevel < 0 )
+        nOutLevel = 0;
+
     if (nParaLeftMargin) // For Paragraph
         mpFS->startElementNS( XML_a, nElement,
-                           XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
+                           XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number((bForceZeroIndent && nParaFirstLineIndent == 0) ? 0 : oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), (bForceZeroIndent || nParaFirstLineIndent != 0)),
                            XML_algn, GetAlignment( nAlignment ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
         mpFS->startElementNS( XML_a, nElement,
-                           XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
+                           XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
                            XML_algn, GetAlignment( nAlignment ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
