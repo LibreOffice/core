@@ -21,7 +21,7 @@
 
 #include <java/LocalRef.hxx>
 #include <java/lang/Object.hxx>
-
+#include <o3tl/deleter.hxx>
 
 namespace connectivity::jdbc
 {
@@ -54,7 +54,7 @@ namespace connectivity::jdbc
 
         ~GlobalRef()
         {
-            reset();
+            suppress_fun_call_w_exception(reset());
         }
 
         void reset()

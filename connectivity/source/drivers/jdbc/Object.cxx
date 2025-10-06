@@ -22,6 +22,7 @@
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <java/tools.hxx>
 #include <java/sql/SQLException.hxx>
+#include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 #include <java/LocalRef.hxx>
 #include <strings.hxx>
@@ -110,7 +111,7 @@ java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
         object = pXEnv->NewGlobalRef( myObj );
 }
 
-java_lang_Object::~java_lang_Object()
+void java_lang_Object::ImplDestroy()
 {
     if( object )
     {
@@ -119,6 +120,12 @@ java_lang_Object::~java_lang_Object()
     }
     SDBThreadAttach::releaseRef();
 }
+
+java_lang_Object::~java_lang_Object()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
+}
+
 void java_lang_Object::clearObject(JNIEnv& rEnv)
 {
     if( object )

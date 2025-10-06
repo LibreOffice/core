@@ -165,7 +165,10 @@ TextLayouterDevice::TextLayouterDevice()
     mrDevice.setSubpixelPositioning(true);
 }
 
-TextLayouterDevice::~TextLayouterDevice() { releaseGlobalVirtualDevice(); }
+TextLayouterDevice::~TextLayouterDevice()
+{
+    suppress_fun_call_w_exception(releaseGlobalVirtualDevice());
+}
 
 void TextLayouterDevice::setFont(const vcl::Font& rFont)
 {

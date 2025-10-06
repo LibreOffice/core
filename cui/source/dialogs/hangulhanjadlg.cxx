@@ -73,7 +73,7 @@ namespace svx
             }
             ~FontSwitch()
             {
-                m_rDev.Pop();
+                suppress_fun_call_w_exception(m_rDev.Pop());
             }
         };
 

@@ -55,10 +55,12 @@ namespace connectivity
     };
 
 
-    class  java_lang_Object
+    class java_lang_Object
     {
         java_lang_Object& operator= (java_lang_Object const &) = delete;
         java_lang_Object(java_lang_Object const &) = delete;
+
+        void ImplDestroy();
 
     protected:
         // The Java handle to this class

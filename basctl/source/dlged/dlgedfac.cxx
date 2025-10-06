@@ -38,12 +38,15 @@ DlgEdFactory::DlgEdFactory( css::uno::Reference< css::frame::XModel > xModel ) :
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
-
-DlgEdFactory::~DlgEdFactory()
+void DlgEdFactory::ImplDestroy()
 {
     SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
+DlgEdFactory::~DlgEdFactory()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
+}
 
 IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, rtl::Reference<SdrObject> )
 {

@@ -31,6 +31,8 @@ class DlgEdFactory
 {
     const css::uno::Reference<css::frame::XModel> mxModel;
 
+    void ImplDestroy();
+
 public:
     DlgEdFactory(css::uno::Reference<css::frame::XModel> xModel);
     ~DlgEdFactory();
