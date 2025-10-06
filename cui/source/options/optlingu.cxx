@@ -29,11 +29,11 @@
 #include <unotools/linguprops.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
+#include <sfx2/AdditionsDialogHelper.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
@@ -1545,9 +1545,10 @@ void SvxLinguTabPage::HideModulesGroup()
     }
 }
 
-IMPL_STATIC_LINK_NOARG(SvxLinguTabPage, OnLinkClick, weld::LinkButton&, bool)
+IMPL_LINK_NOARG(SvxLinguTabPage, OnLinkClick, weld::LinkButton&, bool)
 {
-    comphelper::dispatchCommand(u".uno:MoreDictionaries"_ustr, {});
+    AdditionsDialogHelper::RunAdditionsDialog(GetDialogController()->getDialog(),
+                                              u"Dictionary"_ustr);
     return true;
 }
 
@@ -2001,9 +2002,9 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl, weld::Button&, void)
     LangSelectHdl_Impl(nullptr);
 }
 
-IMPL_STATIC_LINK_NOARG(SvxEditModulesDlg, OnLinkClick, weld::LinkButton&, bool)
+IMPL_LINK_NOARG(SvxEditModulesDlg, OnLinkClick, weld::LinkButton&, bool)
 {
-    comphelper::dispatchCommand(u".uno:MoreDictionaries"_ustr, {});
+    AdditionsDialogHelper::RunAdditionsDialog(getDialog(), u"Dictionary"_ustr);
     return true;
 }
 

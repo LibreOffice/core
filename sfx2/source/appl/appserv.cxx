@@ -1711,9 +1711,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_MORE_DICTIONARIES:
         {
-            uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-                u"AdditionsTag"_ustr, u"Dictionary"_ustr) };
-            comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
+            AdditionsDialogHelper::RunAdditionsDialog(rReq.GetFrameWeld(), u"Dictionary"_ustr);
             break;
         }
 #if HAVE_FEATURE_SCRIPTING
