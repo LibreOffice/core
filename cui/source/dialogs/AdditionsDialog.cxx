@@ -479,11 +479,11 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
         {
             sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_THEMES);
         }
-        this->set_title(sDialogTitle);
+        set_title(sDialogTitle);
     }
     else
     {
-        this->set_title(titlePrefix);
+        set_title(titlePrefix);
         m_sTag = "allextensions"; // Means empty parameter
     }
 
@@ -569,11 +569,11 @@ void AdditionsDialog::ClearList()
     // for VCL to be able to destroy bitmaps
     SolarMutexGuard aGuard;
 
-    for (auto& item : this->m_aAdditionsItems)
+    for (auto& item : m_aAdditionsItems)
     {
         item->m_xContainer->hide();
     }
-    this->m_aAdditionsItems.clear();
+    m_aAdditionsItems.clear();
 }
 
 void AdditionsDialog::RefreshUI()
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
 {
     if (m_pSearchThread.is())
         m_pSearchThread->StopExecution();
-    this->response(RET_CLOSE);
+    response(RET_CLOSE);
 }
 
 IMPL_LINK_NOARG(AdditionsDialog, ShowMoreHdl, weld::Button&, void)
