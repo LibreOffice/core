@@ -79,7 +79,7 @@ public:
 
     void DisableFontSelection();
 
-    const vcl::Font& GetCharFont() const { return aFont; }
+    const vcl::Font& GetCharFont() const { return m_aFont; }
     void SetCharFont(const vcl::Font& rFont);
 
     void SetChar(sal_UCS4);
@@ -128,9 +128,9 @@ private:
     DECL_DLLPRIVATE_LINK(UpdateFavHdl, void*, void);
 
     ScopedVclPtr<VirtualDevice> m_xVirDev;
-    vcl::Font aFont;
-    std::unique_ptr<const SubsetMap> pSubsetMap;
-    bool isSearchMode;
+    vcl::Font m_aFont;
+    std::unique_ptr<const SubsetMap> m_pSubsetMap;
+    bool m_isSearchMode;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
     SfxCharmapContainer m_aCharmapContents;
     SvxShowText m_aShowChar;
