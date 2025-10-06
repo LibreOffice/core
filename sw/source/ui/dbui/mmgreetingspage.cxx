@@ -403,8 +403,8 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, weld::Button&, void)
         const SwDBData& rDBData = m_rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
         sal_Int32 nPos = m_xFemaleColumnLB->get_active();
-        if(aAssignment.getLength() < MM_PART_GENDER)
-            aAssignment.realloc(MM_PART_GENDER);
+        if(aAssignment.getLength() <= MM_PART_GENDER)
+            aAssignment.realloc(MM_PART_GENDER + 1);
         if( nPos > 0 )
             aAssignment.getArray()[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         else
