@@ -5233,12 +5233,18 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
                     // Add undo actions and delete the pages.  The order of adding
                     // the undo actions is important.
                     rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
-                    rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+                    if (pNotesPage)
+                    {
+                        rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+                    }
                     rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
                 }
 
                 rDoc.RemovePage( nPage ); // the page
-                rDoc.RemovePage( nPage ); // the notes page
+                if (pNotesPage)
+                {
+                    rDoc.RemovePage( nPage ); // the notes page
+                }
 
                 if( bUndo )
                 {
