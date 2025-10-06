@@ -13,13 +13,13 @@
 #include <editeng/editids.hrc>
 #include <officecfg/Office/Common.hxx>
 #include <strings.hrc>
+#include <sfx2/AdditionsDialogHelper.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/themecolors.hxx>
-#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
@@ -403,11 +403,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeListToggleHdl, weld::ComboBox&, void
     LoadSchemeList();
 }
 
-IMPL_STATIC_LINK_NOARG(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        u"AdditionsTag"_ustr, u"Themes"_ustr) };
-    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
+    AdditionsDialogHelper::RunAdditionsDialog(GetDialogController()->getDialog(), u"Themes"_ustr);
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ResetAllBtnHdl, weld::Button&, void)
@@ -697,11 +695,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, OnNotebookbarIconSizeChange, weld::ComboBo
     }
 }
 
-IMPL_STATIC_LINK_NOARG(SvxAppearanceTabPage, OnMoreIconsClick, weld::Button&, void)
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnMoreIconsClick, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        u"AdditionsTag"_ustr, u"Icons"_ustr) };
-    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
+    AdditionsDialogHelper::RunAdditionsDialog(GetDialogController()->getDialog(), u"Icons"_ustr);
 }
 
 void SvxAppearanceTabPage::UpdateColorDropdown()

@@ -60,7 +60,7 @@ private:
     DECL_LINK(UseOnlyWhiteDocBackgroundHdl, weld::Toggleable&, void);
     DECL_LINK(SchemeChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SchemeListToggleHdl, weld::ComboBox&, void);
-    DECL_STATIC_LINK(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void);
+    DECL_LINK(MoreThemesHdl, weld::Button&, void);
     DECL_LINK(ResetAllBtnHdl, weld::Button&, void);
 
     DECL_LINK(BitmapDropDownHdl, weld::ComboBox&, void);
@@ -68,7 +68,7 @@ private:
     DECL_LINK(UseBmpForAppBackHdl, weld::Toggleable&, void);
 
     DECL_LINK(OnIconThemeChange, weld::ComboBox&, void);
-    DECL_STATIC_LINK(SvxAppearanceTabPage, OnMoreIconsClick, weld::Button&, void);
+    DECL_LINK(OnMoreIconsClick, weld::Button&, void);
     DECL_LINK(OnToolbarIconSizeChange, weld::ComboBox&, void);
     DECL_LINK(OnSidebarIconSizeChange, weld::ComboBox&, void);
     DECL_LINK(OnNotebookbarIconSizeChange, weld::ComboBox&, void);
