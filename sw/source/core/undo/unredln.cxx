@@ -468,7 +468,7 @@ void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
 }
 
 SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */, bool bDirect )
-    : SwUndoRedline( SwUndoId::ACCEPT_REDLINE, rRange, nDepth, /*bHierarhical=*/false, bDirect )
+    : SwUndoRedline( SwUndoId::ACCEPT_REDLINE, rRange, nDepth, /*bHierarchical=*/false, bDirect )
 {
 }
 
