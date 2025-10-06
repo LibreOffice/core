@@ -175,7 +175,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
         {
             sal_Int32 nItemValue = static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            bool bAttachToMainAxis = nItemValue == CHART_AXIS_PRIMARY_Y;
+            bool bAttachToMainAxis = nItemValue == AFAxix(AxisAtr::PrimaryY);
             if( bAttachToMainAxis != m_bAttachToMainAxis )
             {
                 //change model:
@@ -356,8 +356,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
     {
         case SCHATTR_AXIS:
         {
-            sal_Int32 nItemValue = m_bAttachToMainAxis ? CHART_AXIS_PRIMARY_Y : CHART_AXIS_SECONDARY_Y;
-            rOutItemSet.Put( SfxInt32Item(nWhichId,nItemValue ) );
+            rOutItemSet.Put( SfxInt32Item(nWhichId,AFAxix::toNum(m_bAttachToMainAxis ? AxisAtr::PrimaryY : AxisAtr::SecondaryY) ) );
             break;
         }
         case SCHATTR_BAR_OVERLAP:

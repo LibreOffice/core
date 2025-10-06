@@ -211,31 +211,62 @@ inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_COLOR_PALETTE_END);
 // values for Items
 
 // values for SCHATTR_AXIS_TICKS and SCHATTR_AXIS_HELPTICKS items
-#define CHAXIS_MARK_BOTH   3
-#define CHAXIS_MARK_OUTER  2
-#define CHAXIS_MARK_INNER  1
-#define CHAXIS_MARK_NONE   0
-
+enum class AxisTicksAtr {
+    None  = 0,
+    Inner = 1,
+    Outer = 2,
+    Both  = 3
+};
 // values for SCHATTR_AXISTYPE items
-#define CHART_AXIS_REALNUMBER   0
-#define CHART_AXIS_PERCENT      1
-#define CHART_AXIS_CATEGORY     2
-#define CHART_AXIS_SERIES       3
-#define CHART_AXIS_DATE         4
-
+enum class AxisTypesAtr{
+    RealNumber  = 0,
+    Percent     = 1,
+    Category    = 2,
+    Series      = 3,
+    Date        = 4
+};
 // values for SCHATTR_STYLE_SHAPE items
-#define CHART_SHAPE3D_IGNORE  -2 //internal! (GetChartShapeStyle()!)
-#define CHART_SHAPE3D_SQUARE   0
-#define CHART_SHAPE3D_CYLINDER 1
-#define CHART_SHAPE3D_CONE     2
-#define CHART_SHAPE3D_PYRAMID  3 //reserved
-#define CHART_SHAPE3D_HANOI    4
-
+constexpr sal_Int32 CHART_SHAPE3D_IGNORE = -2;
+enum class StyleShapeAtr{
+    Square   = 0,
+    Cylinder = 1,
+    Cone     = 2,
+    Pyramid  = 3, //reserved
+    Hanoi    = 4
+};
 // values for SCHATTR_AXIS items
-#define CHART_AXIS_PRIMARY_X    1
-#define CHART_AXIS_PRIMARY_Y    2
-#define CHART_AXIS_PRIMARY_Z    3
-#define CHART_AXIS_SECONDARY_Y  4
-#define CHART_AXIS_SECONDARY_X  5
+enum class AxisAtr{
+    PrimaryX    = 1,
+    PrimaryY    = 2,
+    PrimaryZ    = 3,
+    SecondaryY  = 4,
+    SecondaryX  = 5
+};
+
+
+template <typename T>
+concept enumerator = std::is_enum_v<T>;
+
+template <typename T>
+concept integral = std::is_integral_v<T>;
+
+template <integral T, enumerator U>
+struct AxisFlags{
+    AxisFlags(const U&& fl):m(fl){}
+
+    static void setFlagFor( T& val, const U&& fl){val |= static_cast<T>(fl);}
+    static bool checkFlagFor( const T& val, const U&& fl){ return val & static_cast<T>(fl);}
+    static T toNum (const U&& fl){ return static_cast<T>(fl);}
+    bool operator==(const T& val){return val == static_cast<T>(m);}
+    bool operator==(const U& fl){return fl == m;}
+    bool operator==(const AxisFlags& other){return other==this;}
+private:
+    U m;
+};
+
+typedef AxisFlags<sal_Int32,AxisTicksAtr> AFTicks;
+typedef AxisFlags<sal_Int32,AxisTypesAtr> AFTypes;
+typedef AxisFlags<sal_Int32,StyleShapeAtr> AFShapes;
+typedef AxisFlags<sal_Int32,AxisAtr> AFAxix;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

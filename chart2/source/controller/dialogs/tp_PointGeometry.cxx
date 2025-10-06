@@ -46,12 +46,12 @@ std::unique_ptr<SfxTabPage> SchLayoutTabPage::Create(weld::Container* pPage, wel
 
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
-    int nShape = m_pGeometryResources ? m_pGeometryResources->get_selected_index() : -1;
+    sal_Int32 nShape = m_pGeometryResources ? m_pGeometryResources->get_selected_index() : -1;
     if (nShape != -1)
     {
         tools::Long nSegs=32;
 
-        if (nShape==CHART_SHAPE3D_PYRAMID)
+        if (nShape==AFShapes(StyleShapeAtr::Pyramid))
             nSegs=4;
 
         rOutAttrs->Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
