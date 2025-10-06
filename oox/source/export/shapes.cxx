@@ -1433,9 +1433,9 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         mAny >>= eClickAction;
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id,     OString::number(GetNewShapeID(xShape)),
-                          XML_name,   GetShapeName(xShape),
-                          XML_descr,  sax_fastparser::UseIf(sDescr, bHaveDesc));
+                         XML_id,     OString::number(GetNewShapeID(xShape)),
+                         XML_name,   GetShapeName(xShape),
+                         XML_descr,  sax_fastparser::UseIf(sDescr, bHaveDesc && !sDescr.isEmpty()));
 
     if (eClickAction != presentation::ClickAction_NONE)
     {
