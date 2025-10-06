@@ -78,6 +78,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <sfx2/AdditionsDialogHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1704,15 +1705,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if (pStringArg)
                 sAdditionsTag = pStringArg->GetValue();
 
-            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            VclPtr<AbstractAdditionsDialog> pDialog(
-                pFact->CreateAdditionsDialog(rReq.GetFrameWeld(), sAdditionsTag));
-            pDialog->StartExecuteAsync(
-                [pDialog] (sal_Int32 /*nResult*/)->void
-                {
-                    pDialog->disposeOnce();
-                }
-                );
+            AdditionsDialogHelper::RunAdditionsDialog(rReq.GetFrameWeld(), sAdditionsTag);
             break;
         }
 
