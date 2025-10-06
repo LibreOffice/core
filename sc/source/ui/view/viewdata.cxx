@@ -4502,4 +4502,16 @@ SCTAB ScViewData::CurrentTabForData() const
     return GetTabNumber();
 }
 
+sc::SheetViewID ScViewData::GetSheetViewIDForSheet(SCTAB nTab) const
+{
+    if (!IsValidTabNumber(nTab))
+        return sc::InvalidSheetViewID;
+
+    if (!maTabData[nTab])
+        return sc::InvalidSheetViewID;
+
+    return maTabData[nTab]->mnSheetViewID;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

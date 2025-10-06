@@ -424,6 +424,8 @@ public:
         return pThisTab->mnSheetViewID;
     }
 
+    sc::SheetViewID GetSheetViewIDForSheet(SCTAB nTab) const;
+
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }
