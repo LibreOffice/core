@@ -298,7 +298,7 @@ void SearchAndParseThread::Append(AdditionInfo& additionInfo)
 
     SolarMutexGuard aGuard;
 
-    m_pAdditionsDialog->m_aAdditionsItems.push_back(std::make_shared<AdditionsItem>(
+    m_pAdditionsDialog->m_aAdditionsItems.push_back(std::make_unique<AdditionsItem>(
         m_pAdditionsDialog->m_xContentGrid.get(), m_pAdditionsDialog, additionInfo));
 
     AdditionsItem& rCurrentItem = *m_pAdditionsDialog->m_aAdditionsItems.back();
