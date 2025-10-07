@@ -15064,7 +15064,6 @@ winaccessibility/source/UAccCOM/AccTable.cxx
 winaccessibility/source/UAccCOM/AccTable.h
 winaccessibility/source/UAccCOM/AccText.cxx
 winaccessibility/source/UAccCOM/AccText.h
-winaccessibility/source/UAccCOM/AccTextBase.cxx
 winaccessibility/source/UAccCOM/AccValue.h
 winaccessibility/source/UAccCOM/EnumVariant.cxx
 winaccessibility/source/UAccCOM/EnumVariant.h

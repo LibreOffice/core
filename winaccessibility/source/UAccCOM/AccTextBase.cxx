@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // AccTextBase.cpp: implementation of the CAccTextBase class.
 
 #include "stdafx.h"
@@ -48,23 +47,22 @@ sal_Int16 lcl_matchIA2TextBoundaryType(IA2TextBoundaryType boundaryType)
 {
     switch (boundaryType)
     {
-    case IA2_TEXT_BOUNDARY_CHAR:
-        return css::accessibility::AccessibleTextType::CHARACTER;
-    case IA2_TEXT_BOUNDARY_WORD:
-       return css::accessibility::AccessibleTextType::WORD;
-    case IA2_TEXT_BOUNDARY_SENTENCE:
-        return css::accessibility::AccessibleTextType::SENTENCE;
-    case IA2_TEXT_BOUNDARY_PARAGRAPH:
-        return css::accessibility::AccessibleTextType::PARAGRAPH;
-    case IA2_TEXT_BOUNDARY_LINE:
-        return css::accessibility::AccessibleTextType::LINE;
-    case IA2_TEXT_BOUNDARY_ALL:
-        // assert here, better handle it directly at call site
-        assert(false
-               && "No match for IA2_TEXT_BOUNDARY_ALL, handle at call site.");
-        break;
-    default:
-        break;
+        case IA2_TEXT_BOUNDARY_CHAR:
+            return css::accessibility::AccessibleTextType::CHARACTER;
+        case IA2_TEXT_BOUNDARY_WORD:
+            return css::accessibility::AccessibleTextType::WORD;
+        case IA2_TEXT_BOUNDARY_SENTENCE:
+            return css::accessibility::AccessibleTextType::SENTENCE;
+        case IA2_TEXT_BOUNDARY_PARAGRAPH:
+            return css::accessibility::AccessibleTextType::PARAGRAPH;
+        case IA2_TEXT_BOUNDARY_LINE:
+            return css::accessibility::AccessibleTextType::LINE;
+        case IA2_TEXT_BOUNDARY_ALL:
+            // assert here, better handle it directly at call site
+            assert(false && "No match for IA2_TEXT_BOUNDARY_ALL, handle at call site.");
+            break;
+        default:
+            break;
     }
 
     SAL_WARN("iacc2", "Unmatched text boundary type: " << boundaryType);
@@ -72,16 +70,11 @@ sal_Int16 lcl_matchIA2TextBoundaryType(IA2TextBoundaryType boundaryType)
 }
 }
 
-
 // Construction/Destruction
 
+CAccTextBase::CAccTextBase() {}
 
-CAccTextBase::CAccTextBase()
-{}
-
-CAccTextBase::~CAccTextBase()
-{}
-
+CAccTextBase::~CAccTextBase() {}
 
 /**
    * Get special selection.
@@ -94,27 +87,30 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_addSelection(long startOffse
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
 
-    if(pUNOInterface == nullptr)
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+
+        Reference<XAccessibleTextSelection> pRExtension(pRContext, UNO_QUERY);
+
+        if (pRExtension.is())
+        {
+            pRExtension->addSelection(startOffset, endOffset);
+            return S_OK;
+        }
+        else
+        {
+            pRXText->setSelection(startOffset, endOffset);
+            return S_OK;
+        }
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-
-    Reference< XAccessibleTextSelection > pRExtension(pRContext,UNO_QUERY);
-
-    if( pRExtension.is() )
-    {
-        pRExtension->addSelection(startOffset, endOffset);
-        return S_OK;
     }
-    else
-    {
-        pRXText->setSelection(startOffset, endOffset);
-        return S_OK;
-    }
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -125,35 +121,38 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_addSelection(long startOffse
    * @param textAttributes     Variant to accept attributes.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long* startOffset,
+                                                               long* endOffset,
+                                                               BSTR* textAttributes)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (startOffset == nullptr || endOffset == nullptr || textAttributes == nullptr)
+            return E_INVALIDARG;
 
-    if (startOffset == nullptr || endOffset == nullptr || textAttributes == nullptr)
-        return E_INVALIDARG;
+        if (!pRXText.is())
+        {
+            return E_FAIL;
+        }
 
-    if(!pRXText.is())
+        if (offset < 0 || offset > pRXText->getCharacterCount())
+            return E_FAIL;
+
+        const OUString sAttrs = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
+            pRXText, IA2AttributeType::TextAttributes, offset, *startOffset, *endOffset);
+
+        if (*textAttributes)
+            SysFreeString(*textAttributes);
+        *textAttributes = sal::systools::BStr::newBSTR(sAttrs);
+
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-
-    if (offset < 0 || offset > pRXText->getCharacterCount() )
-        return E_FAIL;
-
-
-    const OUString sAttrs = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(pRXText,
-                                                                                         IA2AttributeType::TextAttributes,
-                                                                                         offset, *startOffset, *endOffset);
-
-    if(*textAttributes)
-        SysFreeString(*textAttributes);
-    *textAttributes = sal::systools::BStr::newBSTR(sAttrs);
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -161,25 +160,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
    * @param offset     Variant to accept caret offset.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_caretOffset(long* offset)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (offset == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
+    try
     {
-        *offset = 0;
+        if (offset == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+        {
+            *offset = 0;
+            return S_OK;
+        }
+
+        *offset = pRXText->getCaretPosition();
         return S_OK;
     }
-
-    *offset = pRXText->getCaretPosition();
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -187,25 +189,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
    * @param nCharacters  Variant to accept character count.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long* nCharacters)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (nCharacters == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
+    try
     {
-        *nCharacters = 0;
+        if (nCharacters == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+        {
+            *nCharacters = 0;
+            return S_OK;
+        }
+
+        *nCharacters = pRXText->getCharacterCount();
         return S_OK;
     }
-
-    *nCharacters = pRXText->getCharacterCount();
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -217,71 +222,77 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long * nChara
    * @param Height Variant to accept height.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset,
+                                                                     IA2CoordinateType coordType,
+                                                                     long* x, long* y, long* width,
+                                                                     long* height)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (x == nullptr || height == nullptr || y == nullptr || width == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
-        return E_FAIL;
-
-    if (offset < 0 || offset > pRXText->getCharacterCount())
-        return E_FAIL;
-
-    css::awt::Rectangle rectangle;
-    rectangle = pRXText->getCharacterBounds(offset);
-
-    //IA2Point aPoint;
-    css::awt::Point aPoint;
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+    try
     {
-        return E_FAIL;
-    }
-    Reference<XAccessibleComponent> pRComp(pRContext,UNO_QUERY);
-    if( pRComp.is() )
-    {
-        if(coordType == IA2_COORDTYPE_SCREEN_RELATIVE)
+        if (x == nullptr || height == nullptr || y == nullptr || width == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+            return E_FAIL;
+
+        if (offset < 0 || offset > pRXText->getCharacterCount())
+            return E_FAIL;
+
+        css::awt::Rectangle rectangle;
+        rectangle = pRXText->getCharacterBounds(offset);
+
+        //IA2Point aPoint;
+        css::awt::Point aPoint;
+
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
         {
-            css::awt::Point pt = pRComp->getLocationOnScreen();
-            aPoint.X = pt.X;
-            aPoint.Y = pt.Y;
+            return E_FAIL;
         }
-        else if(coordType == IA2_COORDTYPE_PARENT_RELATIVE)
+        Reference<XAccessibleComponent> pRComp(pRContext, UNO_QUERY);
+        if (pRComp.is())
         {
-            css::awt::Point pt = pRComp->getLocation();
-            aPoint.X = pt.X;
-            aPoint.Y = pt.Y;
+            if (coordType == IA2_COORDTYPE_SCREEN_RELATIVE)
+            {
+                css::awt::Point pt = pRComp->getLocationOnScreen();
+                aPoint.X = pt.X;
+                aPoint.Y = pt.Y;
+            }
+            else if (coordType == IA2_COORDTYPE_PARENT_RELATIVE)
+            {
+                css::awt::Point pt = pRComp->getLocation();
+                aPoint.X = pt.X;
+                aPoint.Y = pt.Y;
+            }
         }
+        rectangle.X = rectangle.X + aPoint.X;
+        rectangle.Y = rectangle.Y + aPoint.Y;
+
+        *x = rectangle.X;
+        *y = rectangle.Y;
+
+        // pRXText->getCharacterBounds() have different implement in different acc component
+        // But we need return the width/height == 1 for every component when offset == text length.
+        // So we ignore the return result of pRXText->getCharacterBounds() when offset == text length.
+        if (offset == pRXText->getCharacterCount())
+        {
+            *width = 1;
+            *height = 1;
+        }
+        else
+        {
+            *width = rectangle.Width;
+            *height = rectangle.Height;
+        }
+
+        return S_OK;
     }
-    rectangle.X = rectangle.X + aPoint.X;
-    rectangle.Y = rectangle.Y + aPoint.Y;
-
-    *x = rectangle.X;
-    *y = rectangle.Y;
-
-    // pRXText->getCharacterBounds() have different implement in different acc component
-    // But we need return the width/height == 1 for every component when offset == text length.
-    // So we ignore the return result of pRXText->getCharacterBounds() when offset == text length.
-    if (offset == pRXText->getCharacterCount())
+    catch (...)
     {
-        *width = 1;
-        *height = 1;
+        return E_FAIL;
     }
-    else
-    {
-        *width = rectangle.Width;
-        *height = rectangle.Height;
-    }
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -289,42 +300,45 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset
    * @param nSelections Variant to accept selections count.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long* nSelections)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (nSelections == nullptr)
-        return E_INVALIDARG;
-
-    if(pUNOInterface == nullptr)
+    try
     {
+        if (nSelections == nullptr)
+            return E_INVALIDARG;
+
+        if (pUNOInterface == nullptr)
+        {
+            *nSelections = 0;
+            return S_OK;
+        }
+
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+
+        Reference<XAccessibleTextSelection> pRExtension(pRContext, UNO_QUERY);
+
+        if (pRExtension.is())
+        {
+            *nSelections = pRExtension->getSelectedPortionCount();
+            return S_OK;
+        }
+
+        long iLength = pRXText->getSelectedText().getLength();
+        if (iLength > 0)
+        {
+            *nSelections = 1;
+            return S_OK;
+        }
+
         *nSelections = 0;
         return S_OK;
     }
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-
-    Reference< XAccessibleTextSelection > pRExtension(pRContext,UNO_QUERY);
-
-    if( pRExtension.is() )
+    catch (...)
     {
-        *nSelections = pRExtension->getSelectedPortionCount();
-        return S_OK;
+        return E_FAIL;
     }
-
-    long iLength = pRXText->getSelectedText().getLength();
-    if( iLength> 0)
-    {
-        *nSelections = 1;
-        return S_OK;
-    }
-
-    *nSelections = 0;
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -335,39 +349,44 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long * nSelectio
    * @param offset Variant to accept offset.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType coordType, long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y,
+                                                                  IA2CoordinateType coordType,
+                                                                  long* offset)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (offset == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
-        return E_FAIL;
-
-    css::awt::Point point;
-    point.X = x;
-    point.Y = y;
-
-    if (coordType == IA2_COORDTYPE_SCREEN_RELATIVE)
+    try
     {
-        // convert from screen to local coordinates
-        Reference<XAccessibleContext> xContext = pUNOInterface->getAccessibleContext();
-        Reference<XAccessibleComponent> xComponent(xContext, UNO_QUERY);
-        if (!xComponent.is())
-            return S_FALSE;
+        if (offset == nullptr)
+            return E_INVALIDARG;
 
-        css::awt::Point aObjectPos = xComponent->getLocationOnScreen();
-        point.X -= aObjectPos.X;
-        point.Y -= aObjectPos.Y;
+        if (!pRXText.is())
+            return E_FAIL;
+
+        css::awt::Point point;
+        point.X = x;
+        point.Y = y;
+
+        if (coordType == IA2_COORDTYPE_SCREEN_RELATIVE)
+        {
+            // convert from screen to local coordinates
+            Reference<XAccessibleContext> xContext = pUNOInterface->getAccessibleContext();
+            Reference<XAccessibleComponent> xComponent(xContext, UNO_QUERY);
+            if (!xComponent.is())
+                return S_FALSE;
+
+            css::awt::Point aObjectPos = xComponent->getLocationOnScreen();
+            point.X -= aObjectPos.X;
+            point.Y -= aObjectPos.Y;
+        }
+
+        *offset = pRXText->getIndexAtPoint(point);
+        return S_OK;
     }
-
-    *offset = pRXText->getIndexAtPoint(point);
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -378,46 +397,50 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y
    * @return Result.
 */
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset, long * endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionIndex,
+                                                              long* startOffset, long* endOffset)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (startOffset == nullptr || endOffset == nullptr )
-        return E_INVALIDARG;
-
-    if(pUNOInterface == nullptr )
-        return E_FAIL;
-
-    long nSelection = 0;
-    get_nSelections(&nSelection);
-
-    if(selectionIndex >= nSelection || selectionIndex < 0 )
-        return E_FAIL;
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-
-    Reference< XAccessibleTextSelection > pRExtension(pRContext,UNO_QUERY);
-
-    if( pRExtension.is() )
+    try
     {
-        *startOffset = pRExtension->getSeletedPositionStart(selectionIndex);
-        *endOffset = pRExtension->getSeletedPositionEnd(selectionIndex);
-        return S_OK;
+        if (startOffset == nullptr || endOffset == nullptr)
+            return E_INVALIDARG;
+
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
+
+        long nSelection = 0;
+        get_nSelections(&nSelection);
+
+        if (selectionIndex >= nSelection || selectionIndex < 0)
+            return E_FAIL;
+
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+
+        Reference<XAccessibleTextSelection> pRExtension(pRContext, UNO_QUERY);
+
+        if (pRExtension.is())
+        {
+            *startOffset = pRExtension->getSeletedPositionStart(selectionIndex);
+            *endOffset = pRExtension->getSeletedPositionEnd(selectionIndex);
+            return S_OK;
+        }
+        else if (pRXText->getSelectionEnd() > -1)
+        {
+            *startOffset = pRXText->getSelectionStart();
+            *endOffset = pRXText->getSelectionEnd();
+            return S_OK;
+        }
+
+        *startOffset = 0;
+        *endOffset = 0;
+        return E_FAIL;
     }
-    else if (pRXText->getSelectionEnd() > -1)
+    catch (...)
     {
-        *startOffset = pRXText->getSelectionStart();
-        *endOffset = pRXText->getSelectionEnd();
-        return S_OK;
+        return E_FAIL;
     }
-
-    *startOffset = 0;
-    *endOffset = 0;
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -427,30 +450,34 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionInde
    * @param text        Variant to accept the text of special range.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset,
+                                                         BSTR* text)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (text == nullptr)
+            return E_INVALIDARG;
 
-    if (text == nullptr)
-        return E_INVALIDARG;
+        if (!pRXText.is())
+            return E_FAIL;
 
-    if(!pRXText.is())
+        if (endOffset == -1)
+            endOffset = pRXText->getCharacterCount();
+
+        if (endOffset < 0 || endOffset < startOffset)
+            return E_FAIL;
+
+        const OUString ouStr = pRXText->getTextRange(startOffset, endOffset);
+        SysFreeString(*text);
+        *text = sal::systools::BStr::newBSTR(ouStr);
+        return S_OK;
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    if (endOffset == -1)
-        endOffset = pRXText->getCharacterCount();
-
-    if (endOffset < 0 || endOffset < startOffset)
-        return E_FAIL;
-
-    const OUString ouStr = pRXText->getTextRange(startOffset, endOffset);
-    SysFreeString(*text);
-    *text = sal::systools::BStr::newBSTR(ouStr);
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    }
 }
 
 /**
@@ -462,40 +489,44 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long 
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(
+    long offset, IA2TextBoundaryType boundaryType, long* startOffset, long* endOffset, BSTR* text)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (startOffset == nullptr || endOffset == nullptr || text == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
-        return E_FAIL;
-
-    if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
+    try
     {
-        long nChar;
-        get_nCharacters( &nChar );
-        *startOffset = 0;
-        *endOffset = nChar;
-        return get_text(0, nChar, text);
+        if (startOffset == nullptr || endOffset == nullptr || text == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+            return E_FAIL;
+
+        if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
+        {
+            long nChar;
+            get_nCharacters(&nChar);
+            *startOffset = 0;
+            *endOffset = nChar;
+            return get_text(0, nChar, text);
+        }
+
+        const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
+        if (nUnoBoundaryType < 0)
+            return E_FAIL;
+
+        TextSegment segment = pRXText->getTextBeforeIndex(offset, nUnoBoundaryType);
+        SysFreeString(*text);
+        *text = sal::systools::BStr::newBSTR(segment.SegmentText);
+        *startOffset = segment.SegmentStart;
+        *endOffset = segment.SegmentEnd;
+
+        return S_OK;
     }
-
-    const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
-    if (nUnoBoundaryType < 0)
+    catch (...)
+    {
         return E_FAIL;
-
-    TextSegment segment = pRXText->getTextBeforeIndex(offset, nUnoBoundaryType);
-    SysFreeString(*text);
-    *text = sal::systools::BStr::newBSTR(segment.SegmentText);
-    *startOffset = segment.SegmentStart;
-    *endOffset = segment.SegmentEnd;
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    }
 }
 
 /**
@@ -507,40 +538,44 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(
+    long offset, IA2TextBoundaryType boundaryType, long* startOffset, long* endOffset, BSTR* text)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (startOffset == nullptr || endOffset == nullptr || text == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
-        return E_FAIL;
-
-    if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
+    try
     {
-        long nChar;
-        get_nCharacters( &nChar );
-        *startOffset = 0;
-        *endOffset = nChar;
-        return get_text(0, nChar, text);
+        if (startOffset == nullptr || endOffset == nullptr || text == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+            return E_FAIL;
+
+        if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
+        {
+            long nChar;
+            get_nCharacters(&nChar);
+            *startOffset = 0;
+            *endOffset = nChar;
+            return get_text(0, nChar, text);
+        }
+
+        const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
+        if (nUnoBoundaryType < 0)
+            return E_FAIL;
+
+        TextSegment segment = pRXText->getTextBehindIndex(offset, nUnoBoundaryType);
+        SysFreeString(*text);
+        *text = sal::systools::BStr::newBSTR(segment.SegmentText);
+        *startOffset = segment.SegmentStart;
+        *endOffset = segment.SegmentEnd;
+
+        return S_OK;
     }
-
-    const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
-    if (nUnoBoundaryType < 0)
+    catch (...)
+    {
         return E_FAIL;
-
-    TextSegment segment = pRXText->getTextBehindIndex(offset, nUnoBoundaryType);
-    SysFreeString(*text);
-    *text = sal::systools::BStr::newBSTR(segment.SegmentText);
-    *startOffset = segment.SegmentStart;
-    *endOffset = segment.SegmentEnd;
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    }
 }
 
 /**
@@ -552,40 +587,46 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset,
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAtOffset(long offset,
+                                                                 IA2TextBoundaryType boundaryType,
+                                                                 long* startOffset, long* endOffset,
+                                                                 BSTR* text)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (startOffset == nullptr || text == nullptr ||endOffset == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
-        return E_FAIL;
-
-    if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
+    try
     {
-        long nChar;
-        get_nCharacters( &nChar );
-        *startOffset = 0;
-        *endOffset = nChar;
-        return get_text(0, nChar, text);
+        if (startOffset == nullptr || text == nullptr || endOffset == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+            return E_FAIL;
+
+        if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
+        {
+            long nChar;
+            get_nCharacters(&nChar);
+            *startOffset = 0;
+            *endOffset = nChar;
+            return get_text(0, nChar, text);
+        }
+
+        const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
+        if (nUnoBoundaryType < 0)
+            return E_FAIL;
+
+        TextSegment segment = pRXText->getTextAtIndex(offset, nUnoBoundaryType);
+        SysFreeString(*text);
+        *text = sal::systools::BStr::newBSTR(segment.SegmentText);
+        *startOffset = segment.SegmentStart;
+        *endOffset = segment.SegmentEnd;
+
+        return S_OK;
     }
-
-    const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
-    if (nUnoBoundaryType < 0)
+    catch (...)
+    {
         return E_FAIL;
-
-    TextSegment segment = pRXText->getTextAtIndex(offset, nUnoBoundaryType);
-    SysFreeString(*text);
-    *text = sal::systools::BStr::newBSTR(segment.SegmentText);
-    *startOffset = segment.SegmentStart;
-    *endOffset = segment.SegmentEnd;
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    }
 }
 
 /**
@@ -598,30 +639,33 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::removeSelection(long selectionIn
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (pUNOInterface == nullptr)
+        {
+            return E_FAIL;
+        }
 
-    if(pUNOInterface == nullptr)
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+
+        Reference<XAccessibleTextSelection> pRExtension(pRContext, UNO_QUERY);
+
+        if (pRExtension.is())
+        {
+            pRExtension->removeSelection(selectionIndex);
+            return S_OK;
+        }
+        else
+        {
+            const sal_Int32 nCaretPos = pRXText->getCaretPosition();
+            pRXText->setSelection(nCaretPos, nCaretPos);
+            return S_OK;
+        }
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-
-    Reference< XAccessibleTextSelection > pRExtension(pRContext,UNO_QUERY);
-
-    if( pRExtension.is() )
-    {
-        pRExtension->removeSelection(selectionIndex);
-        return S_OK;
-    }
-    else
-    {
-        const sal_Int32 nCaretPos = pRXText->getCaretPosition();
-        pRXText->setSelection(nCaretPos, nCaretPos);
-        return S_OK;
-    }
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -634,16 +678,19 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (!pRXText.is())
+            return E_FAIL;
 
-    if(!pRXText.is())
+        pRXText->setCaretPosition(offset);
+
+        return S_OK;
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    pRXText->setCaretPosition(offset);
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    }
 }
 
 /**
@@ -658,18 +705,21 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setSelection(long, long startOff
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (!pRXText.is())
+        {
+            return E_FAIL;
+        }
 
-    if(!pRXText.is())
+        pRXText->setSelection(startOffset, endOffset);
+
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-
-    pRXText->setSelection(startOffset, endOffset);
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -677,38 +727,35 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setSelection(long, long startOff
    * @param nCharacters Variant to accept the characters count.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nCharacters(long* nCharacters)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (nCharacters == nullptr)
-        return E_INVALIDARG;
-
-    if(!pRXText.is())
+    try
     {
-        *nCharacters = 0;
+        if (nCharacters == nullptr)
+            return E_INVALIDARG;
+
+        if (!pRXText.is())
+        {
+            *nCharacters = 0;
+            return S_OK;
+        }
+
+        *nCharacters = pRXText->getCharacterCount();
+
         return S_OK;
     }
-
-    *nCharacters = pRXText->getCharacterCount();
-
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 // added by qiuhd, 2006/07/03, for direver 07/11
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_newText( IA2TextSegment *)
-{
-    return E_NOTIMPL;
-}
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_newText(IA2TextSegment*) { return E_NOTIMPL; }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_oldText( IA2TextSegment *)
-{
-    return E_NOTIMPL;
-}
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_oldText(IA2TextSegment*) { return E_NOTIMPL; }
 
 /**
    * Scroll to special sub-string .
@@ -716,55 +763,61 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_oldText( IA2TextSegment *)
    * @param endIndex   End index of sub string.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringToPoint(long, long, IA2CoordinateType, long, long )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringToPoint(long, long,
+                                                                       IA2CoordinateType, long,
+                                                                       long)
 {
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long startIndex, long endIndex, IA2ScrollType type)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long startIndex, long endIndex,
+                                                                  IA2ScrollType type)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if(!pRXText.is())
-        return E_FAIL;
-
-    AccessibleScrollType lUnoType;
-
-    switch(type)
+    try
     {
-    case IA2_SCROLL_TYPE_TOP_LEFT:
-        lUnoType = AccessibleScrollType_SCROLL_TOP_LEFT;
-        break;
-    case IA2_SCROLL_TYPE_BOTTOM_RIGHT:
-        lUnoType = AccessibleScrollType_SCROLL_BOTTOM_RIGHT;
-        break;
-    case IA2_SCROLL_TYPE_TOP_EDGE:
-        lUnoType = AccessibleScrollType_SCROLL_TOP_EDGE;
-        break;
-    case IA2_SCROLL_TYPE_BOTTOM_EDGE:
-        lUnoType = AccessibleScrollType_SCROLL_BOTTOM_EDGE;
-        break;
-    case IA2_SCROLL_TYPE_LEFT_EDGE:
-        lUnoType = AccessibleScrollType_SCROLL_LEFT_EDGE;
-        break;
-    case IA2_SCROLL_TYPE_RIGHT_EDGE:
-        lUnoType = AccessibleScrollType_SCROLL_RIGHT_EDGE;
-        break;
-    case IA2_SCROLL_TYPE_ANYWHERE:
-        lUnoType = AccessibleScrollType_SCROLL_ANYWHERE;
-        break;
-    default:
+        if (!pRXText.is())
+            return E_FAIL;
+
+        AccessibleScrollType lUnoType;
+
+        switch (type)
+        {
+            case IA2_SCROLL_TYPE_TOP_LEFT:
+                lUnoType = AccessibleScrollType_SCROLL_TOP_LEFT;
+                break;
+            case IA2_SCROLL_TYPE_BOTTOM_RIGHT:
+                lUnoType = AccessibleScrollType_SCROLL_BOTTOM_RIGHT;
+                break;
+            case IA2_SCROLL_TYPE_TOP_EDGE:
+                lUnoType = AccessibleScrollType_SCROLL_TOP_EDGE;
+                break;
+            case IA2_SCROLL_TYPE_BOTTOM_EDGE:
+                lUnoType = AccessibleScrollType_SCROLL_BOTTOM_EDGE;
+                break;
+            case IA2_SCROLL_TYPE_LEFT_EDGE:
+                lUnoType = AccessibleScrollType_SCROLL_LEFT_EDGE;
+                break;
+            case IA2_SCROLL_TYPE_RIGHT_EDGE:
+                lUnoType = AccessibleScrollType_SCROLL_RIGHT_EDGE;
+                break;
+            case IA2_SCROLL_TYPE_ANYWHERE:
+                lUnoType = AccessibleScrollType_SCROLL_ANYWHERE;
+                break;
+            default:
+                return E_NOTIMPL;
+        }
+
+        if (pRXText->scrollSubstringTo(startIndex, endIndex, lUnoType))
+            return S_OK;
+
         return E_NOTIMPL;
     }
-
-    if (pRXText->scrollSubstringTo(startIndex, endIndex, lUnoType))
-        return S_OK;
-
-    return E_NOTIMPL;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -776,22 +829,25 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    try {
+    try
+    {
+        CUNOXWrapper::put_XInterface(pXInterface);
 
-    CUNOXWrapper::put_XInterface(pXInterface);
-
-    if(pUNOInterface == nullptr)
-        return E_FAIL;
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleText> pRXI(pRContext, UNO_QUERY);
+        pRXText = pRXI;
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    Reference<XAccessibleText> pRXI(pRContext,UNO_QUERY);
-    pRXText = pRXI;
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
