@@ -1273,9 +1273,9 @@ std::unique_ptr<SfxTabPage> SwFieldVarPage::Create( weld::Container* pPage, weld
     return std::make_unique<SwFieldVarPage>( pPage, pController, pAttrSet );
 }
 
-sal_uInt16 SwFieldVarPage::GetGroup()
+SwFieldGroup SwFieldVarPage::GetGroup()
 {
-    return GRP_VAR;
+    return SwFieldGroup::UserVariable;
 }
 
 void SwFieldVarPage::FillUserData()

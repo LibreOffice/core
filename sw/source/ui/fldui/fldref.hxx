@@ -80,7 +80,7 @@ class SwFieldRefPage : public SwFieldPage
     void SaveSelectedTextNode();
 
 protected:
-    virtual sal_uInt16      GetGroup() override;
+    virtual SwFieldGroup GetGroup() override;
 
 public:
     SwFieldRefPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pSet);

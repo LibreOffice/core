@@ -43,15 +43,16 @@ class SvNumberFormatter;
 namespace weld { class Widget; class Window; }
 enum class SwFieldIds : sal_uInt16;
 
-// the groups of fields
-enum SwFieldGroups
+// the groups of fields, used to decide which tab/panel to display when editing a SwField
+enum class SwFieldGroup
 {
-    GRP_DOC,
-    GRP_FKT,
-    GRP_REF,
-    GRP_REG,
-    GRP_DB,
-    GRP_VAR
+    Document,
+    Functions,
+    CrossRefs,
+    DocInfos,
+    Database,
+    UserVariable,
+    LAST = UserVariable
 };
 
 struct SwFieldGroupRgn
@@ -166,8 +167,8 @@ public:
 
     // access via TypeId from the dialog
     // Ids for a range of fields
-    static const SwFieldGroupRgn& GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId);
-    static sal_uInt16           GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType);
+    static const SwFieldGroupRgn& GetGroupRange(bool bHtmlMode, SwFieldGroup nGrpId);
+    static SwFieldGroup           GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType);
 
     // the current field's TypeId
     SwFieldTypesEnum    GetCurTypeId() const;

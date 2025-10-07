@@ -265,9 +265,9 @@ std::unique_ptr<SfxTabPage> SwFieldDBPage::Create( weld::Container* pPage, weld:
     return std::make_unique<SwFieldDBPage>( pPage, pController, pAttrSet );
 }
 
-sal_uInt16 SwFieldDBPage::GetGroup()
+SwFieldGroup SwFieldDBPage::GetGroup()
 {
-    return GRP_DB;
+    return SwFieldGroup::Database;
 }
 
 IMPL_LINK( SwFieldDBPage, TypeListBoxHdl, weld::TreeView&, rBox, void )

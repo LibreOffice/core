@@ -502,9 +502,9 @@ std::unique_ptr<SfxTabPage> SwFieldDokInfPage::Create( weld::Container* pPage, w
     return std::make_unique<SwFieldDokInfPage>(pPage, pController, pAttrSet);
 }
 
-sal_uInt16 SwFieldDokInfPage::GetGroup()
+SwFieldGroup SwFieldDokInfPage::GetGroup()
 {
-    return GRP_REG;
+    return SwFieldGroup::DocInfos;
 }
 
 void SwFieldDokInfPage::FillUserData()

@@ -59,7 +59,7 @@ class SwFieldDBPage : public SwFieldPage
     SwWrtShell* CheckAndGetWrtShell();
 
 protected:
-    virtual sal_uInt16      GetGroup() override;
+    virtual SwFieldGroup GetGroup() override;
 
 public:
     SwFieldDBPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);

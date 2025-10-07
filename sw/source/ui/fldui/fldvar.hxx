@@ -67,7 +67,7 @@ class SwFieldVarPage : public SwFieldPage
     void                FillFormatLB(SwFieldTypesEnum nTypeId);
 
 protected:
-    virtual sal_uInt16      GetGroup() override;
+    virtual SwFieldGroup GetGroup() override;
 
 public:
     SwFieldVarPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pSet);

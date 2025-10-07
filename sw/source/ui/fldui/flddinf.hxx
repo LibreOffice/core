@@ -50,7 +50,7 @@ class SwFieldDokInfPage : public SwFieldPage
     sal_Int32               FillSelectionLB(SwDocInfoSubType nSubTypeId);
 
 protected:
-    virtual sal_uInt16      GetGroup() override;
+    virtual SwFieldGroup GetGroup() override;
 
 public:
     SwFieldDokInfPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pSet);

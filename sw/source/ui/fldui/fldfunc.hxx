@@ -73,7 +73,7 @@ class SwFieldFuncPage : public SwFieldPage
     void                UpdateSubType();
 
 protected:
-    virtual sal_uInt16      GetGroup() override;
+    virtual SwFieldGroup GetGroup() override;
 
 public:
     SwFieldFuncPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pSet);

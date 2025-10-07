@@ -1211,9 +1211,9 @@ std::unique_ptr<SfxTabPage> SwFieldRefPage::Create( weld::Container* pPage, weld
     return std::make_unique<SwFieldRefPage>(pPage, pController, pAttrSet);
 }
 
-sal_uInt16 SwFieldRefPage::GetGroup()
+SwFieldGroup SwFieldRefPage::GetGroup()
 {
-    return GRP_REF;
+    return SwFieldGroup::CrossRefs;
 }
 
 void    SwFieldRefPage::FillUserData()

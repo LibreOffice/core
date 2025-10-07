@@ -26,6 +26,7 @@
 class SwView;
 class SwWrtShell;
 class SwFieldMgr;
+enum class SwFieldGroup;
 
 class SwFieldEditDlg final : public SfxSingleTabDialogController
 {
@@ -38,7 +39,7 @@ class SwFieldEditDlg final : public SfxSingleTabDialogController
     DECL_LINK(NextPrevHdl, weld::Button&, void);
 
     void            Init();
-    SfxTabPage* CreatePage(sal_uInt16 nGroup);
+    SfxTabPage* CreatePage(SwFieldGroup nGroup);
 
     void EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr);
 

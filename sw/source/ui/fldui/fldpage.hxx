@@ -82,7 +82,7 @@ public:
     SwFieldMgr&    GetFieldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );
     void                EditNewField( bool bOnlyActivate = false );
-    virtual sal_uInt16      GetGroup() = 0;
+    virtual SwFieldGroup GetGroup() = 0;
 };
 
 #endif

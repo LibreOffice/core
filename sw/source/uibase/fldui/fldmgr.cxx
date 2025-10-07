@@ -22,6 +22,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
+#include <o3tl/enumrange.hxx>
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
@@ -458,7 +459,7 @@ SwField* SwFieldMgr::GetCurField()
 }
 
 // provide group range
-const SwFieldGroupRgn& SwFieldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId)
+const SwFieldGroupRgn& SwFieldMgr::GetGroupRange(bool bHtmlMode, SwFieldGroup nGrpId)
 {
     static SwFieldGroupRgn const aRanges[] =
     {
@@ -480,13 +481,13 @@ const SwFieldGroupRgn& SwFieldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrp
     };
 
     if (bHtmlMode)
-        return aWebRanges[nGrpId];
+        return aWebRanges[static_cast<int>(nGrpId)];
     else
-        return aRanges[nGrpId];
+        return aRanges[static_cast<int>(nGrpId)];
 }
 
 // determine GroupId
-sal_uInt16 SwFieldMgr::GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType)
+SwFieldGroup SwFieldMgr::GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType)
 {
     if (nTypeId == SwFieldTypesEnum::SetInput)
         nTypeId = SwFieldTypesEnum::Set;
@@ -500,7 +501,7 @@ sal_uInt16 SwFieldMgr::GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType)
     if (nTypeId == SwFieldTypesEnum::FixedTime)
         nTypeId = SwFieldTypesEnum::Time;
 
-    for (sal_uInt16 i = GRP_DOC; i <= GRP_VAR; i++)
+    for( auto i : o3tl::enumrange<SwFieldGroup>() )
     {
         const SwFieldGroupRgn& rRange = GetGroupRange(false/*bHtmlMode*/, i);
         for (sal_uInt16 nPos = rRange.nStart; nPos < rRange.nEnd; nPos++)
@@ -509,7 +510,8 @@ sal_uInt16 SwFieldMgr::GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType)
                 return i;
         }
     }
-    return USHRT_MAX;
+    assert(false);
+    return SwFieldGroup::Document; // random choice
 }
 
 // determine names to TypeId
