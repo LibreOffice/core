@@ -408,6 +408,7 @@ ParaFirstLineIndent
 ParaIndent
 ParaIsHangingPunctuation
 ParaIsHyphenation
+ParaIsNumberingRestart
 ParaLeftMargin
 ParaLineSpacing
 ParaRightMargin
