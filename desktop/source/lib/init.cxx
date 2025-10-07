@@ -4828,6 +4828,20 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
     return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
+static char* getAllPartSize(LibreOfficeKitDocument* pThis)
+{
+    SetLastExceptionMsg();
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return nullptr;
+    }
+    tools::JsonWriter aJsonWriter;
+    pDoc->getAllPartSize(aJsonWriter);
+    return convertOString(aJsonWriter.finishAndGetAsOString());
+}
+
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     comphelper::ProfileZone aZone("doc_postKeyEvent");
@@ -6878,6 +6892,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:ViewRenderState")
     {
         return convertOString(pDoc->getViewRenderState());
+    }
+    else if (aCommand == ".uno:AllPageSize")
+    {
+        return getAllPartSize(pThis);
     }
     else if (aCommand.starts_with(aViewRowColumnHeaders))
     {
