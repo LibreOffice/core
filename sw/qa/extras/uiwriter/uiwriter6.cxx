@@ -2295,6 +2295,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf51223)
     CPPUNIT_ASSERT_EQUAL(u"I"_ustr, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(u"i"_ustr, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // tdf#165973: undo should only remove autoformat - a second undo necessary to undo split
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
 // Unit test for fix inconsistent bookmark behavior around at-char/as-char anchored frames

@@ -210,7 +210,7 @@ public:
        Copy all selections to the document. */
     bool CopySelToDoc( SwDoc& rInsDoc );
 
-    SW_DLLPUBLIC void SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
+    SW_DLLPUBLIC void SplitNode(bool bCheckTableStart = true);
     SW_DLLPUBLIC bool AppendTextNode();
     void AutoFormatBySplitNode();
 

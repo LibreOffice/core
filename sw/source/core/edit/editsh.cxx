@@ -179,7 +179,7 @@ void SwEditShell::Overwrite(const OUString &rStr)
     EndAllAction();
 }
 
-void SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
+void SwEditShell::SplitNode(bool bCheckTableStart)
 {
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
@@ -192,9 +192,6 @@ void SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
     }
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
-
-    if( bAutoFormat )
-        AutoFormatBySplitNode();
 
     ClearTableBoxContent();
 

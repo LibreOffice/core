@@ -584,7 +584,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     }
 
     if ( !bStarMath )
-        SwFEShell::SplitNode( false, false );
+        SwFEShell::SplitNode(false);
 
     EnterSelFrameMode();
 
@@ -1110,7 +1110,7 @@ void SwWrtShell::InsertColumnBreak()
     {
         if(HasSelection())
             DelRight();
-        SwFEShell::SplitNode( false, false );
+        SwFEShell::SplitNode(false);
     }
     SetAttrItem(SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
 
@@ -1444,9 +1444,13 @@ void SwWrtShell::SplitNode( bool bAutoFormat )
         bHandled = lcl_FoldedOutlineNodeEndOfParaSplit(this);
 
     if (!bHandled)
-        SwFEShell::SplitNode( bAutoFormat );
+        SwFEShell::SplitNode();
 
     EndUndo(SwUndoId::SPLITNODE);
+
+    // run autoformat after "New Paragraph" undo, so it can be undone separately from the newline
+    if (!bHandled && bAutoFormat)
+        AutoFormatBySplitNode();
 }
 
 // Turn on numbering
