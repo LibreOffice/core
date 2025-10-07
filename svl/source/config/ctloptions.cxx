@@ -453,7 +453,8 @@ void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
 
 bool SvtCTLOptions::IsCTLFontEnabled()
 {
-    return officecfg::Office::Common::I18N::CTL::CTLFont::get();
+    // tdf#168719: The CTL font can no longer be disabled
+    return true;
 }
 
 void SvtCTLOptions::SetCTLVerticalText(bool bVertical)
@@ -464,7 +465,8 @@ void SvtCTLOptions::SetCTLVerticalText(bool bVertical)
 
 bool SvtCTLOptions::IsCTLVerticalText()
 {
-    return officecfg::Office::Common::I18N::CTL::CTLVerticalText::get();
+    // tdf#168719: The CTL font can no longer be disabled
+    return true;
 }
 
 void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )

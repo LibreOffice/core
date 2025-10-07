@@ -135,8 +135,6 @@ struct LanguageConfig_Impl;
 
 class OfaLanguagesTabPage : public SfxTabPage
 {
-    bool        m_bOldAsian;
-    bool        m_bOldCtl;
     std::unique_ptr<LanguageConfig_Impl> pLangConfig;
 
     OUString        m_sUserLocaleValue;
@@ -163,16 +161,15 @@ class OfaLanguagesTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xWesternLanguageFT;
     std::unique_ptr<weld::Widget> m_xWesternLanguageImg;
     std::unique_ptr<SvxLanguageBox> m_xAsianLanguageLB;
+    std::unique_ptr<weld::Label> m_xAsianLanguageFT;
+    std::unique_ptr<weld::Widget> m_xAsianLanguageImg;
     std::unique_ptr<SvxLanguageBox> m_xComplexLanguageLB;
+    std::unique_ptr<weld::Label> m_xComplexLanguageFT;
+    std::unique_ptr<weld::Widget> m_xComplexLanguageImg;
     std::unique_ptr<weld::CheckButton> m_xCurrentDocCB;
-    std::unique_ptr<weld::CheckButton> m_xAsianSupportCB;
-    std::unique_ptr<weld::Widget> m_xAsianSupportImg;
-    std::unique_ptr<weld::CheckButton> m_xCTLSupportCB;
-    std::unique_ptr<weld::Widget> m_xCTLSupportImg;
     std::unique_ptr<weld::CheckButton> m_xIgnoreLanguageChangeCB;
     std::unique_ptr<weld::Widget> m_xIgnoreLanguageChangeImg;
 
-    DECL_LINK(SupportHdl, weld::Toggleable&, void);
     DECL_LINK(LocaleSettingHdl, weld::ComboBox&, void);
     DECL_LINK(DatePatternsHdl, weld::Entry&, void);
 

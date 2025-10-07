@@ -34,43 +34,57 @@ namespace SvtCJKOptions
 bool IsCJKFontEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::CJKFont::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 bool IsVerticalTextEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::VerticalText::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 bool IsAsianTypographyEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::AsianTypography::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 bool IsJapaneseFindEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::JapaneseFind::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 bool IsRubyEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::Ruby::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 bool IsChangeCaseMapEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::ChangeCaseMap::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 bool IsDoubleLinesEnabled()
 {
     SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::DoubleLines::get();
+
+    // tdf#168719: The CJK font can no longer be disabled
+    return true;
 }
 
 void        SetAll(bool bSet)

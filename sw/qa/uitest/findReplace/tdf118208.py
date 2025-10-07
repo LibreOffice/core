@@ -25,13 +25,6 @@ class tdf118208(UITestCase):
             xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
             xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          # General
 
-            asianlanguage = xDialog.getChild("asiansupport")
-            complexlanguage = xDialog.getChild("ctlsupport")
-            if (get_state_as_dict(asianlanguage)["Selected"]) != enabled:
-                asianlanguage.executeAction("CLICK", tuple())
-            if (get_state_as_dict(complexlanguage)["Selected"]) != enabled:
-                complexlanguage.executeAction("CLICK", tuple())
-
     def test_tdf118208_search_dialog_format_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118208.odt")) as writer_doc:
             # 1. Open the attached file.

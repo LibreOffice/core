@@ -919,12 +919,12 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     , m_xWesternLanguageFT(m_xBuilder->weld_label(u"western"_ustr))
     , m_xWesternLanguageImg(m_xBuilder->weld_widget(u"lockwesternlanguage"_ustr))
     , m_xAsianLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"asianlanguage"_ustr)))
+    , m_xAsianLanguageFT(m_xBuilder->weld_label(u"asian"_ustr))
+    , m_xAsianLanguageImg(m_xBuilder->weld_widget(u"lockasianlanguage"_ustr))
     , m_xComplexLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"complexlanguage"_ustr)))
+    , m_xComplexLanguageFT(m_xBuilder->weld_label(u"complex"_ustr))
+    , m_xComplexLanguageImg(m_xBuilder->weld_widget(u"lockcomplexlanguage"_ustr))
     , m_xCurrentDocCB(m_xBuilder->weld_check_button(u"currentdoc"_ustr))
-    , m_xAsianSupportCB(m_xBuilder->weld_check_button(u"asiansupport"_ustr))
-    , m_xAsianSupportImg(m_xBuilder->weld_widget(u"lockasiansupport"_ustr))
-    , m_xCTLSupportCB(m_xBuilder->weld_check_button(u"ctlsupport"_ustr))
-    , m_xCTLSupportImg(m_xBuilder->weld_widget(u"lockctlsupport"_ustr))
     , m_xIgnoreLanguageChangeCB(m_xBuilder->weld_check_button(u"ignorelanguagechange"_ustr))
     , m_xIgnoreLanguageChangeImg(m_xBuilder->weld_widget(u"lockignorelanguagechange"_ustr))
 {
@@ -1056,26 +1056,6 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xLocaleSettingLB->connect_changed( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
     m_xDatePatternsED->connect_changed( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
 
-    Link<weld::Toggleable&,void> aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
-    m_xAsianSupportCB->connect_toggled( aLink );
-    m_xCTLSupportCB->connect_toggled( aLink );
-
-    m_bOldAsian = SvtCJKOptions::IsAnyEnabled();
-    m_xAsianSupportCB->set_active(m_bOldAsian);
-    m_xAsianSupportCB->save_state();
-    bool bReadonly = SvtCJKOptions::IsAnyReadOnly();
-    m_xAsianSupportCB->set_sensitive(!bReadonly);
-    m_xAsianSupportImg->set_visible(bReadonly);
-    SupportHdl(*m_xAsianSupportCB);
-
-    m_bOldCtl = SvtCTLOptions::IsCTLFontEnabled();
-    m_xCTLSupportCB->set_active(m_bOldCtl);
-    m_xCTLSupportCB->save_state();
-    bReadonly = pLangConfig->aCTLLanguageOptions.IsReadOnly(SvtCTLOptions::E_CTLFONT);
-    m_xCTLSupportCB->set_sensitive(!bReadonly);
-    m_xCTLSupportImg->set_visible(bReadonly);
-    SupportHdl(*m_xCTLSupportCB);
-
     m_xIgnoreLanguageChangeCB->set_active( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() );
 }
 
@@ -1086,24 +1066,6 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 std::unique_ptr<SfxTabPage> OfaLanguagesTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
     return std::make_unique<OfaLanguagesTabPage>(pPage, pController, *rAttrSet);
-}
-
-static void lcl_Update(std::unique_ptr<SfxVoidItem> pInvalidItems[], std::unique_ptr<SfxBoolItem> pBoolItems[], sal_uInt16 nCount)
-{
-    SfxViewFrame* pCurrentFrm = SfxViewFrame::Current();
-    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst();
-    while(pViewFrm)
-    {
-        SfxBindings& rBind = pViewFrm->GetBindings();
-        for(sal_uInt16 i = 0; i < nCount; i++)
-        {
-            if(pCurrentFrm == pViewFrm)
-                rBind.InvalidateAll(false);
-            rBind.SetState( *pInvalidItems[i] );
-            rBind.SetState( *pBoolItems[i] );
-        }
-        pViewFrm = SfxViewFrame::GetNext(*pViewFrm);
-    }
 }
 
 OUString OfaLanguagesTabPage::GetAllStrings()
@@ -1119,8 +1081,8 @@ OUString OfaLanguagesTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { u"decimalseparator"_ustr, u"asiansupport"_ustr, u"ctlsupport"_ustr, u"currentdoc"_ustr,
-                               u"ignorelanguagechange"_ustr };
+    OUString checkButton[]
+        = { u"decimalseparator"_ustr, u"currentdoc"_ustr, u"ignorelanguagechange"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -1141,15 +1103,9 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     /*
      * Sequence checking only matters when CTL support is enabled.
      *
-     * So we only need to check for sequence checking if
-     * a) previously it was unchecked and is now checked or
-     * b) it was already checked but the CTL language has changed
+     * So we only need to check for sequence checking if the CTL language has changed
      */
-    if (
-         m_xCTLSupportCB->get_active() &&
-         (m_xCTLSupportCB->get_saved_state() != TRISTATE_TRUE ||
-         m_xComplexLanguageLB->get_active_id_changed_from_saved())
-       )
+    if (m_xComplexLanguageLB->get_active_id_changed_from_saved())
     {
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = m_xComplexLanguageLB->get_active_id();
@@ -1328,41 +1284,6 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             == MsLangId::getPrimaryLanguage(LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA));
     }
 
-    if(m_xAsianSupportCB->get_state_changed_from_saved() )
-    {
-        bool bChecked = m_xAsianSupportCB->get_active();
-        SvtCJKOptions::SetAll(bChecked);
-
-        //iterate over all bindings to invalidate vertical text direction
-        const sal_uInt16 STATE_COUNT = 2;
-
-        std::unique_ptr<SfxBoolItem> pBoolItems[STATE_COUNT];
-        pBoolItems[0].reset(new SfxBoolItem(SID_VERTICALTEXT_STATE, false));
-        pBoolItems[1].reset(new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, false));
-
-        std::unique_ptr<SfxVoidItem> pInvalidItems[STATE_COUNT];
-        pInvalidItems[0].reset(new SfxVoidItem(SID_VERTICALTEXT_STATE));
-        pInvalidItems[1].reset(new SfxVoidItem(SID_TEXT_FITTOSIZE_VERTICAL));
-
-        lcl_Update(pInvalidItems, pBoolItems, STATE_COUNT);
-    }
-
-    if ( m_xCTLSupportCB->get_state_changed_from_saved() )
-    {
-        SvtSearchOptions aOpt;
-        aOpt.SetIgnoreDiacritics_CTL(true);
-        aOpt.SetIgnoreKashida_CTL(true);
-        aOpt.Commit();
-        pLangConfig->aCTLLanguageOptions.SetCTLFontEnabled( m_xCTLSupportCB->get_active() );
-
-        const sal_uInt16 STATE_COUNT = 1;
-        std::unique_ptr<SfxBoolItem> pBoolItems[STATE_COUNT];
-        pBoolItems[0].reset(new SfxBoolItem(SID_CTLFONT_STATE, false));
-        std::unique_ptr<SfxVoidItem> pInvalidItems[STATE_COUNT];
-        pInvalidItems[0].reset(new SfxVoidItem(SID_CTLFONT_STATE));
-        lcl_Update(pInvalidItems, pBoolItems, STATE_COUNT);
-    }
-
     if ( pLangConfig->aSysLocaleOptions.IsModified() )
         pLangConfig->aSysLocaleOptions.Commit();
 
@@ -1532,6 +1453,16 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     m_xWesternLanguageLB->set_sensitive( bEnable );
     m_xWesternLanguageImg->set_visible( !bEnable );
 
+    bEnable = !pLangConfig->aLinguConfig.IsReadOnly(u"DefaultLocale_CJK");
+    m_xAsianLanguageFT->set_sensitive(bEnable);
+    m_xAsianLanguageLB->set_sensitive(bEnable);
+    m_xAsianLanguageImg->set_visible(!bEnable);
+
+    bEnable = !pLangConfig->aLinguConfig.IsReadOnly(u"DefaultLocale_CTL");
+    m_xComplexLanguageFT->set_sensitive(bEnable);
+    m_xComplexLanguageLB->set_sensitive(bEnable);
+    m_xComplexLanguageImg->set_visible(!bEnable);
+
     // check the box "For the current document only"
     // set the focus to the Western Language box
     const SfxBoolItem* pLang = rSet->GetItemIfSet(SID_SET_DOCUMENT_LANGUAGE, false );
@@ -1543,63 +1474,9 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-IMPL_LINK(OfaLanguagesTabPage, SupportHdl, weld::Toggleable&, rBox, void)
-{
-    bool bCheck = rBox.get_active();
-    if ( m_xAsianSupportCB.get() == &rBox )
-    {
-        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly(u"DefaultLocale_CJK");
-        bCheck = ( bCheck && !bReadonly );
-        m_xAsianLanguageLB->set_sensitive( bCheck );
-        if (rBox.get_sensitive())
-            m_bOldAsian = bCheck;
-    }
-    else if ( m_xCTLSupportCB.get() == &rBox )
-    {
-        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly(u"DefaultLocale_CTL");
-        bCheck = ( bCheck && !bReadonly  );
-        m_xComplexLanguageLB->set_sensitive( bCheck );
-        if (rBox.get_sensitive())
-            m_bOldCtl = bCheck;
-    }
-    else
-        SAL_WARN( "cui.options", "OfaLanguagesTabPage::SupportHdl(): wrong rBox" );
-}
-
-namespace
-{
-    void lcl_checkLanguageCheckBox(weld::CheckButton& _rCB, bool _bNewValue, bool _bOldValue)
-    {
-        if ( _bNewValue )
-            _rCB.set_active(true);
-        else
-            _rCB.set_active( _bOldValue );
-// #i15082# do not call save_state() in running dialog...
-//      _rCB.save_state();
-        _rCB.set_sensitive( !_bNewValue );
-    }
-}
-
 IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
 {
     LanguageType eLang = m_xLocaleSettingLB->get_active_id();
-    SvtScriptType nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
-    // first check if CTL must be enabled
-    // #103299# - if CTL font setting is not readonly
-    if(!pLangConfig->aCTLLanguageOptions.IsReadOnly(SvtCTLOptions::E_CTLFONT))
-    {
-        bool bIsCTLFixed = bool(nType & SvtScriptType::COMPLEX);
-        lcl_checkLanguageCheckBox(*m_xCTLSupportCB, bIsCTLFixed, m_bOldCtl);
-        SupportHdl(*m_xCTLSupportCB);
-    }
-    // second check if CJK must be enabled
-    // #103299# - if CJK support is not readonly
-    if(!SvtCJKOptions::IsAnyReadOnly())
-    {
-        bool bIsCJKFixed = bool(nType & SvtScriptType::ASIAN);
-        lcl_checkLanguageCheckBox(*m_xAsianSupportCB, bIsCJKFixed, m_bOldAsian);
-        SupportHdl(*m_xAsianSupportCB);
-    }
 
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry(
             (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getConfiguredSystemLanguage() : eLang);

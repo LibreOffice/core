@@ -39,10 +39,6 @@ class tdf126248(UITestCase):
             xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
             xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())
 
-            # Check asian support is enabled
-            asianlanguage = xDialog.getChild("asiansupport")
-            self.assertEqual("true", get_state_as_dict(asianlanguage)['Selected'])
-
             localeSetting = xDialog.getChild("localesetting")
             select_by_text(localeSetting, language)
             self.ui_test.wait_until_property_is_updated(localeSetting, 'SelectEntryText', language)
