@@ -16,6 +16,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <sfx2/AdditionsDialogHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
@@ -48,7 +49,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <comphelper/dispatchcommand.hxx>
 
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
@@ -642,9 +642,7 @@ void SfxTemplateManagerDlg::ImportActionHdl()
 
 void SfxTemplateManagerDlg::ExtensionsActionHdl()
 {
-    uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        u"AdditionsTag"_ustr, u"Templates"_ustr) };
-    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
+    AdditionsDialogHelper::RunAdditionsDialog(getDialog(), u"Templates"_ustr);
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
