@@ -8,6 +8,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 import os
 
+
 # Test for sfx2/source/doc/objserv.cxx.
 class Test(UITestCase):
 
