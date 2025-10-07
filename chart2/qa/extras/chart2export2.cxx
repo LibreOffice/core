@@ -162,10 +162,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
                 "layoutId", u"funnel");
-    assertXPath(pXmlDoc,
-                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr/"
-                "a:solidFill/a:srgbClr",
-                "val", u"c55a11");
+    assertXPathInsensitive(
+        pXmlDoc,
+        "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr/"
+        "a:solidFill/a:srgbClr",
+        "val", u"c55a11");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Funnel chart!");
 }
@@ -352,10 +353,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Check the data labels font color for the complete data series
-    assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:p/a:pPr/"
-                "a:defRPr/a:solidFill/a:srgbClr",
-                "val", u"404040");
+    assertXPathInsensitive(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:p/a:pPr/"
+        "a:defRPr/a:solidFill/a:srgbClr",
+        "val", u"404040");
 }
 
 /// Test for tdf#94235
@@ -608,7 +610,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161607PieChartLeaderLinesColorWid
     CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(100), std::abs(nWidth - 88900));
 
     // test LeaderLines Color
-    assertXPath(
+    assertXPathInsensitive(
         pXmlDoc,
         "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:leaderLines/c:spPr/"
         "a:ln/a:solidFill/a:srgbClr",
@@ -656,8 +658,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesColorFillPPTX)
     save(u"Impress MS PowerPoint 2007 XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val",
-                u"ff0000");
+    assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr",
+                           "val", u"ff0000");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
@@ -667,12 +669,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesGradientFillPPTX
     save(u"Impress MS PowerPoint 2007 XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val",
-                u"f6f8fc");
-    assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val",
-                u"c7d5ed");
+    assertXPathInsensitive(
+        pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val",
+        u"f6f8fc");
+    assertXPathInsensitive(
+        pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val",
+        u"c7d5ed");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
@@ -1055,11 +1057,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf59857)
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:floor/c:spPr/a:ln/a:noFill", 1);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:floor/c:spPr/a:solidFill/a:srgbClr", "val",
-                u"cccccc");
+    assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:floor/c:spPr/a:solidFill/a:srgbClr",
+                           "val", u"cccccc");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:backWall/c:spPr/a:ln/a:noFill", 0);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:backWall/c:spPr/a:ln/a:solidFill/a:srgbClr",
-                "val", u"b3b3b3");
+    assertXPathInsensitive(pXmlDoc,
+                           "/c:chartSpace/c:chart/c:backWall/c:spPr/a:ln/a:solidFill/a:srgbClr",
+                           "val", u"b3b3b3");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf126076)
@@ -1751,10 +1754,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf166249)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // test color and alpha value of data label borders
-    assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:spPr/a:ln/"
-                "a:solidFill/a:srgbClr",
-                "val", u"156082");
+    assertXPathInsensitive(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:spPr/a:ln/"
+        "a:solidFill/a:srgbClr",
+        "val", u"156082");
 
     assertXPath(pXmlDoc,
                 "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:spPr/a:ln/"

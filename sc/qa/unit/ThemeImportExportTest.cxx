@@ -120,18 +120,18 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
         xmlDocUniquePtr pXmlDoc = parseExport(u"xl/theme/theme1.xml"_ustr);
         OString aClrScheme = "/a:theme/a:themeElements/a:clrScheme"_ostr;
         assertXPath(pXmlDoc, aClrScheme, "name", u"Office");
-        assertXPath(pXmlDoc, aClrScheme + "/a:dk1/a:srgbClr", "val", u"000000");
-        assertXPath(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val", u"FFFFFF");
-        assertXPath(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val", u"44546A");
-        assertXPath(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val", u"E7E6E6");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val", u"4472C4");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val", u"ED7D31");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val", u"A5A5A5");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val", u"FFC000");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val", u"5B9BD5");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val", u"70AD47");
-        assertXPath(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val", u"0563C1");
-        assertXPath(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val", u"954F72");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:dk1/a:srgbClr", "val", u"000000");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val", u"FFFFFF");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val", u"44546A");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val", u"E7E6E6");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val", u"4472C4");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val", u"ED7D31");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val", u"A5A5A5");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val", u"FFC000");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val", u"5B9BD5");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val", u"70AD47");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val", u"0563C1");
+        assertXPathInsensitive(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val", u"954F72");
     }
 
     {
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
         OString aFont = "/x:styleSheet/x:fonts/x:font"_ostr;
         assertXPath(pXmlDoc, aFont, 6);
         assertXPath(pXmlDoc, aFont + "[5]/x:color", "theme", u"7");
-        assertXPath(pXmlDoc, aFont + "[6]/x:color", "rgb", u"FF9C5700");
+        assertXPathInsensitive(pXmlDoc, aFont + "[6]/x:color", "rgb", u"FF9C5700");
 
         // Fills
         OString aFill = "/x:styleSheet/x:fills/x:fill"_ostr;
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
         assertXPath(pXmlDoc, aFill + "[1]/x:patternFill", "patternType", u"none");
         assertXPath(pXmlDoc, aFill + "[2]/x:patternFill", "patternType", u"gray125");
         assertXPath(pXmlDoc, aFill + "[3]/x:patternFill", "patternType", u"solid");
-        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill/x:fgColor", "rgb", u"FFFFEB9C");
+        assertXPathInsensitive(pXmlDoc, aFill + "[3]/x:patternFill/x:fgColor", "rgb", u"FFFFEB9C");
         assertXPath(pXmlDoc, aFill + "[4]/x:patternFill", "patternType", u"solid");
         assertXPath(pXmlDoc, aFill + "[4]/x:patternFill/x:fgColor", "theme", u"4");
     }

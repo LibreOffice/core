@@ -832,7 +832,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr",
             "val", u"accent6");
     // check whether theme color has been converted into native color
-    assertXPath(pXmlDocument,
+    assertXPathInsensitive(pXmlDocument,
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
             "val", u"9bbb59");
 
@@ -940,13 +940,13 @@ CPPUNIT_TEST_FIXTURE(Test, testGradientFillPreservation)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // check rgb colors for every step in the gradient of the first shape
-    assertXPath(pXmlDocument,
+    assertXPathInsensitive(pXmlDocument,
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr",
             "val", u"ffff00");
-    assertXPath(pXmlDocument,
+    assertXPathInsensitive(pXmlDocument,
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr",
             "val", u"ffff33");
-    assertXPath(pXmlDocument,
+    assertXPathInsensitive(pXmlDocument,
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[3]/a:srgbClr",
             "val", u"ff0000");
 
