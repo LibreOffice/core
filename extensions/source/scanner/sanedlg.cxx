@@ -556,7 +556,7 @@ void SaneDlg::InitFields()
         {
             bool bIsSpecial = false;
             for( size_t n = 0; !bIsSpecial &&
-                     n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
+                     n < std::size(ppSpecialOptions); n++ )
             {
                 if( aOption == OUString::createFromAscii(ppSpecialOptions[n]) )
                     bIsSpecial=true;
