@@ -6,12 +6,15 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
-
+import os
 
 # Test for sfx2/source/doc/objserv.cxx.
 class Test(UITestCase):
 
     def testPdfSigning(self):
+        # test does not work with --disable-pdfimport config option
+        if os.getenv('ENABLE_PDFIMPORT') != 'TRUE':
+            return
         # Start Impress.
         with self.ui_test.load_file(get_url_for_data_file("pdf-sign.pdf")):
 
