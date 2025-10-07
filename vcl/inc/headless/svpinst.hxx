@@ -106,6 +106,7 @@ public:
     static SvpSalInstance*  s_pDefaultInstance;
 
     SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
+    virtual void AfterAppInit() override;
     virtual ~SvpSalInstance() override;
 
     SAL_DLLPRIVATE bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
