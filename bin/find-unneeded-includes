@@ -493,7 +493,7 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd):
+def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd, debug):
     return_code = 0
 
     try:
@@ -552,6 +552,11 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
             # but those and our CI are not reliable enough yet for use
             else:
                 invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
+
+            if debug:
+                print(invocation)
+                sys.exit(0)
+
             task_queue.put((invocation, moduleRules))
 
         task_queue.join()
@@ -583,6 +588,9 @@ def main(argv):
                          'in a subsequent normal run')
     parser.add_argument('--finderrors', action='store_true',
                    help='Report IWYU failures when it returns with -1 error code. '
+                        'Use only for debugging this script!')
+    parser.add_argument('-d', action='store_true',
+                   help='Print the full IWYU invocation of a given file. '
                         'Use only for debugging this script!')
     parser.add_argument('--fwdecl', action='store_true',
                     help='Suggest removal of obsolete forward declarations')
@@ -672,7 +680,7 @@ def main(argv):
                         print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl)
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
