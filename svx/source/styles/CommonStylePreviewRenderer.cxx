@@ -373,6 +373,13 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
 
         if (maFontColor != COL_AUTO)
             mrOutputDev.SetTextColor(maFontColor);
+        else
+        {
+            if (maBackgroundColor != COL_AUTO)
+               mrOutputDev.SetTextColor(maBackgroundColor.IsDark() ? COL_WHITE : COL_BLACK);
+            else if (maHighlightColor != COL_AUTO)
+               mrOutputDev.SetTextColor(maHighlightColor.IsDark() ? COL_WHITE : COL_BLACK);
+        }
 
         if (maHighlightColor != COL_AUTO)
             mrOutputDev.SetTextFillColor(maHighlightColor);
