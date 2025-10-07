@@ -611,6 +611,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 SID_DISPLAY_MASTER_OBJECTS,
                 0 };
             updateMasterSlideSelection();
+            updatePaperSizeBoxSelection();
             GetBindings()->Invalidate( SidArray );
         }
         break;
@@ -685,6 +686,17 @@ void SlideBackground::updateMasterSlideSelection()
         SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
         SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
         mxMasterSlide->set_active_text(pMasterPage->GetName());
+    }
+}
+
+void SlideBackground::updatePaperSizeBoxSelection()
+{
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+    SdPage* pPage = pMainViewShell ? pMainViewShell->getCurrentPage() : nullptr;
+    if (pPage != nullptr)
+    {
+        Paper ePaper = SvxPaperInfo::GetSvxPaper(pPage->GetSize(), MapUnit::Map100thMM);
+        mxPaperSizeBox->set_active_id(ePaper);
     }
 }
 
