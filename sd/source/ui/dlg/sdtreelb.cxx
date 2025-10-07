@@ -65,6 +65,8 @@
 
 #include <unordered_set>
 
+#include <Window.hxx>
+
 using namespace com::sun::star;
 
 namespace {
@@ -324,6 +326,35 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         return false;
 
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
+
+    // tdf#167573 - Deleting an object using Navigator deletes the whole page
+    if (rKeyCode.GetCode() == KEY_DELETE)
+    {
+        // Seems this is needed for Gtk3 with Wayland but not with X11. Other VCL plugins seem not
+        // to need this before explicitly trying to grab the draw shell focus.
+        if (SfxViewShell* pCurSh = SfxViewShell::Current())
+        {
+            if (vcl::Window* pShellWnd = pCurSh->GetWindow())
+            {
+                pShellWnd->GrabFocus();
+            }
+        }
+        // The current shell may be the slide sorter. Explicitly try to grab the draw
+        // shell focus so delete works with the selected object(s) and not with the whole slide.
+        if (sd::DrawDocShell* pDocShell = m_pDoc->GetDocSh())
+        {
+            if (sd::ViewShell* pViewShell = pDocShell->GetViewShell())
+            {
+                if (vcl::Window* pWindow = pViewShell->GetActiveWindow())
+                {
+                    pWindow->GrabFocus();
+                    // now grab focus back to the tree
+                    m_xTreeView->grab_focus();
+                }
+            }
+        }
+    }
+
     if (m_xAccel->execute(rKeyCode))
     {
         // the accelerator consumed the event
