@@ -77,6 +77,7 @@ private:
     // Core data
     std::unique_ptr<UnoApiHierarchy> m_pUnoHierarchy;
     SymbolInfoList m_aAllTopLevelNodes;
+    std::map<OUString, GroupedSymbolInfoList> m_aMembersCache;
 
     // State management
     bool m_bInitialized = false;

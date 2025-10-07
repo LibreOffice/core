@@ -92,6 +92,10 @@ private:
     ObjectBrowserInitState m_eInitState = ObjectBrowserInitState::NotInitialized;
     bool m_bDataMayBeStale = true;
     OUString m_sLastActiveDocumentIdentifier;
+    bool m_bPerformingAction = false; // Flag for Right Pane Double Click
+
+    // Helper Method for Double-Click Actions
+    void NavigateToMacroSource(const IdeSymbolInfo& rSymbol);
 
     // UI Widgets
     std::unique_ptr<weld::ComboBox> m_xScopeSelector;
@@ -119,7 +123,9 @@ private:
 
     // UI Event Handlers
     DECL_LINK(OnLeftTreeSelect, weld::TreeView&, void);
-    DECL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, void);
+    DECL_LINK(OnRightTreeSelect, weld::TreeView&, void);
+    DECL_LINK(OnRightNodeExpand, const weld::TreeIter&, bool);
+    DECL_LINK(OnRightTreeDoubleClick, weld::TreeView&, bool);
     DECL_LINK(OnNodeExpand, const weld::TreeIter&, bool);
     DECL_LINK(OnScopeChanged, weld::ComboBox&, void);
 };

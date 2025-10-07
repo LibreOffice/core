@@ -17,14 +17,23 @@
 #include <iderid.hxx>
 #include <strings.hrc>
 
+#include <basctl/sbxitem.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/weld.hxx>
+
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 namespace basctl
 {
@@ -193,6 +202,124 @@ void AddEntry(weld::TreeView& rTargetTree, std::vector<std::shared_ptr<IdeSymbol
     rTargetTree.set_image(*pRetIter, sIconName, -1);
 }
 
+OUString BuildDoxygenUrl(const IdeSymbolInfo& rSymbol)
+{
+    if (rSymbol.sQualifiedName.isEmpty())
+        return OUString();
+
+    if (rSymbol.sQualifiedName.startsWith("ooo.vba."))
+    {
+        SAL_INFO("basctl", "BuildDoxygenUrl: Skipping VBA type '" << rSymbol.sQualifiedName << "'");
+        return OUString();
+    }
+    // Doxygen mangles names by replacing '.' with "_1_1"
+    OUString sMangledName;
+    OUString sTypePrefix;
+    OUString sAnchor;
+
+    switch (rSymbol.eKind)
+    {
+        // Case 1: Types that have their OWN dedicated .html page
+        case IdeSymbolKind::UNO_STRUCT:
+            sTypePrefix = u"struct"_ustr;
+            sMangledName = rSymbol.sQualifiedName.replaceAll(".", "_1_1");
+            break;
+        case IdeSymbolKind::UNO_INTERFACE:
+            sTypePrefix = u"interface"_ustr;
+            sMangledName = rSymbol.sQualifiedName.replaceAll(".", "_1_1");
+            break;
+        case IdeSymbolKind::UNO_SERVICE:
+            sTypePrefix = u"service"_ustr;
+            sMangledName = rSymbol.sQualifiedName.replaceAll(".", "_1_1");
+            break;
+        case IdeSymbolKind::UNO_EXCEPTION:
+            sTypePrefix = u"exception"_ustr;
+            sMangledName = rSymbol.sQualifiedName.replaceAll(".", "_1_1");
+            break;
+        case IdeSymbolKind::UNO_NAMESPACE:
+            sTypePrefix = u"namespace"_ustr;
+            sMangledName = rSymbol.sQualifiedName.replaceAll(".", "_1_1");
+            break;
+
+        // Case 2: Types that are documented as ANCHORS on their parent namespace page
+        case IdeSymbolKind::UNO_ENUM:
+        case IdeSymbolKind::UNO_CONSTANTS:
+        case IdeSymbolKind::UNO_TYPEDEF:
+        {
+            if (rSymbol.sParentName.isEmpty())
+            {
+                return OUString();
+            }
+            sTypePrefix = u"namespace"_ustr;
+            sMangledName = rSymbol.sParentName.replaceAll(".", "_1_1");
+            sAnchor = u"#"_ustr + rSymbol.sName;
+            break;
+        }
+        // This symbol kind does not have a Doxygen page
+        default:
+            return OUString();
+    }
+
+    if (sMangledName.isEmpty() || sTypePrefix.isEmpty())
+    {
+        return OUString();
+    }
+
+    return u"https://api.libreoffice.org/docs/idl/ref/"_ustr + sTypePrefix + sMangledName
+           + u".html"_ustr + sAnchor;
+}
+
+void ShowDocsError(vcl::Window* pParent, const OUString& sPrimaryText,
+                   const OUString& sSecondaryText = OUString())
+{
+    if (!pParent)
+        return;
+
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+        pParent->GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok, sPrimaryText));
+    xBox->set_title(IDEResId(RID_STR_OB_DOCS_ERROR_TITLE));
+
+    if (!sSecondaryText.isEmpty())
+    {
+        xBox->set_secondary_text(sSecondaryText);
+    }
+    xBox->run();
+}
+
+void OpenDoxygenDocumentation(vcl::Window* pParent, const IdeSymbolInfo& rSymbol)
+{
+    OUString sUrl = BuildDoxygenUrl(rSymbol);
+    SAL_INFO("basctl", "OpenDoxygenDocumentation: Built URL='" << sUrl << "' for symbol '"
+                                                               << rSymbol.sName << "'");
+    if (sUrl.isEmpty())
+    {
+        ShowDocsError(pParent, IDEResId(RID_STR_OB_NO_DOCUMENTATION));
+        return;
+    }
+
+    try
+    {
+        css::uno::Reference<css::uno::XComponentContext> xContext
+            = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::lang::XMultiComponentFactory> xServiceManager
+            = xContext->getServiceManager();
+
+        css::uno::Reference<css::system::XSystemShellExecute> xSystemShell(
+            xServiceManager->createInstanceWithContext(
+                u"com.sun.star.system.SystemShellExecute"_ustr, xContext),
+            css::uno::UNO_QUERY_THROW);
+
+        xSystemShell->execute(sUrl, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
+    }
+    catch (const css::uno::Exception& e)
+    {
+        SAL_WARN("basctl", "Failed to open Doxygen documentation: " << e.Message);
+
+        OUString sSecondaryMsg = u"URL: "_ustr + sUrl + u"\nError: "_ustr + e.Message;
+        ShowDocsError(pParent, IDEResId(RID_STR_OB_BROWSER_LAUNCH_FAILED), sSecondaryMsg);
+    }
+}
+
 } // anonymous namespace
 
 ObjectBrowser::ObjectBrowser(Shell& rShell, vcl::Window* pParent)
@@ -251,6 +378,9 @@ void ObjectBrowser::Initialize()
     {
         m_xRightMembersView->connect_selection_changed(
             LINK(this, ObjectBrowser, OnRightTreeSelect));
+        m_xRightMembersView->connect_expanding(LINK(this, ObjectBrowser, OnRightNodeExpand));
+        m_xRightMembersView->connect_row_activated(
+            LINK(this, ObjectBrowser, OnRightTreeDoubleClick));
     }
 
     if (m_xBackButton)
@@ -372,6 +502,13 @@ void ObjectBrowser::Show(bool bVisible)
 void ObjectBrowser::RefreshUI(bool /*bForceKeepUno*/)
 {
     IdeTimer aTimer(u"ObjectBrowser::RefreshUI"_ustr);
+
+    if (m_bPerformingAction)
+    {
+        SAL_INFO("basctl", "ObjectBrowser::RefreshUI: Blocked because an action is in progress.");
+        return;
+    }
+
     if (!m_pDataProvider || !m_pDataProvider->IsInitialized())
     {
         ShowLoadingState();
@@ -432,9 +569,12 @@ void ObjectBrowser::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         return;
     }
 
-    // Filter out activations of the BASIC IDE
-    if (pObjShell->GetFactory().GetDocumentServiceName().endsWith(u"BasicIDE"))
+    OUString sServiceName = pObjShell->GetFactory().GetDocumentServiceName();
+
+    // Filter out BasicIDE and HTML/Web documents (Doxygen docs)
+    if (sServiceName.endsWith(u"BasicIDE") || sServiceName.endsWith(u"WebDocument"))
     {
+        SAL_INFO("basctl", "ObjectBrowser::Notify: Ignoring BasicIDE & WebDocument activation");
         return;
     }
 
@@ -496,10 +636,63 @@ void ObjectBrowser::ClearRightTreeView()
 
 void ObjectBrowser::ScheduleRefresh()
 {
+    if (m_bPerformingAction)
+    {
+        SAL_INFO("basctl",
+                 "ScheduleRefresh: Blocked refresh request because an action is in progress.");
+        return;
+    }
+
+    m_bDataMayBeStale = true;
+
     if (IsVisible())
+    {
         RefreshUI();
+    }
+}
+
+void ObjectBrowser::NavigateToMacroSource(const IdeSymbolInfo& rSymbol)
+{
+    SAL_INFO("basctl", "NavigateToMacroSource: Entry - Library='"
+                           << rSymbol.sOriginLibrary << "', Module='" << rSymbol.sOriginModule
+                           << "', Method='" << rSymbol.sName << "'");
+
+    if (!m_pShell || rSymbol.sOriginLibrary.isEmpty() || rSymbol.sOriginModule.isEmpty())
+    {
+        SAL_WARN("basctl", "NavigateToMacroSource: Invalid parameters.");
+        return;
+    }
+
+    ScriptDocument aDoc
+        = rSymbol.sOriginLocation.isEmpty()
+              ? ScriptDocument::getApplicationScriptDocument()
+              : ScriptDocument::getDocumentWithURLOrCaption(rSymbol.sOriginLocation);
+
+    if (aDoc.isAlive())
+    {
+        SAL_INFO("basctl",
+                 "NavigateToMacroSource: Document is alive, dispatching SID_BASICIDE_SHOWSBX.");
+
+        // Pass the method name so it navigates to the exact line
+        SbxItem aSbxItem(SID_BASICIDE_ARG_SBX, aDoc, rSymbol.sOriginLibrary, rSymbol.sOriginModule,
+                         rSymbol.sName, basctl::SBX_TYPE_METHOD);
+
+        SfxViewFrame& rViewFrame = m_pShell->GetViewFrame();
+        if (SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher())
+        {
+            std::ignore = pDispatcher->ExecuteList(SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
+                                                   { &aSbxItem });
+            SAL_INFO("basctl", "NavigateToMacroSource: Dispatched successfully.");
+        }
+        else
+        {
+            SAL_WARN("basctl", "NavigateToMacroSource: Could not get dispatcher.");
+        }
+    }
     else
-        m_bDataMayBeStale = true;
+    {
+        SAL_WARN("basctl", "NavigateToMacroSource: ScriptDocument is not alive.");
+    }
 }
 
 void ObjectBrowser::PopulateMembersPane(const IdeSymbolInfo& rSymbol)
@@ -535,8 +728,10 @@ void ObjectBrowser::PopulateMembersPane(const IdeSymbolInfo& rSymbol)
 
         for (const auto& pMemberInfo : rPair.second)
         {
+            bool bHasNestedMembers = !pMemberInfo->mapMembers.empty();
+
             AddEntry(*m_xRightMembersView, m_aRightTreeSymbolStore, m_aRightTreeSymbolIndex,
-                     xGroupIter.get(), pMemberInfo, false);
+                     xGroupIter.get(), pMemberInfo, bHasNestedMembers);
         }
         aGroupItersToExpand.push_back(std::move(xGroupIter));
     }
@@ -587,7 +782,185 @@ IMPL_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, rTree, void)
     }
 }
 
-IMPL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, /*rTree*/, void) { /* STUB */}
+IMPL_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, rTree, void)
+{
+    if (m_bDisposed)
+    {
+        return;
+    }
+
+    auto xSelectedIter = rTree.make_iterator();
+    if (!rTree.get_selected(xSelectedIter.get()))
+    {
+        return;
+    }
+
+    auto pSymbol = GetSymbolForIter(*xSelectedIter, rTree, m_aRightTreeSymbolIndex);
+    if (!pSymbol || pSymbol->eKind == IdeSymbolKind::PLACEHOLDER)
+    {
+        return;
+    }
+}
+
+IMPL_LINK(ObjectBrowser, OnRightNodeExpand, const weld::TreeIter&, rParentIter, bool)
+{
+    if (m_bDisposed)
+    {
+        return false;
+    }
+
+    auto pParentSymbol
+        = GetSymbolForIter(rParentIter, *m_xRightMembersView, m_aRightTreeSymbolIndex);
+    if (!pParentSymbol)
+    {
+        return false;
+    }
+
+    for (const auto& pair : pParentSymbol->mapMembers)
+    {
+        const auto& pChildSymbol = pair.second;
+        if (pChildSymbol)
+        {
+            // Check if the child is also expandable
+            bool bChildHasChildren = !pChildSymbol->mapMembers.empty();
+            AddEntry(*m_xRightMembersView, m_aRightTreeSymbolStore, m_aRightTreeSymbolIndex,
+                     &rParentIter, pChildSymbol, bChildHasChildren);
+        }
+    }
+
+    return true;
+}
+
+IMPL_LINK(ObjectBrowser, OnRightTreeDoubleClick, weld::TreeView&, rTree, bool)
+{
+    SAL_INFO("basctl", "OnRightTreeDoubleClick: Handler entered.");
+
+    if (m_bDisposed)
+    {
+        SAL_WARN("basctl", "OnRightTreeDoubleClick: Browser is disposed, aborting.");
+        return false;
+    }
+
+    auto xSelectedIter = rTree.make_iterator();
+    if (!rTree.get_selected(xSelectedIter.get()))
+    {
+        SAL_INFO("basctl", "OnRightTreeDoubleClick: No item selected.");
+        return false;
+    }
+
+    auto pSymbol = GetSymbolForIter(*xSelectedIter, rTree, m_aRightTreeSymbolIndex);
+    if (!pSymbol || pSymbol->eKind == IdeSymbolKind::PLACEHOLDER)
+    {
+        SAL_INFO("basctl",
+                 "OnRightTreeDoubleClick: Selected item is a placeholder or has no symbol.");
+        return false;
+    }
+
+    m_bPerformingAction = true;
+    SAL_INFO("basctl", "OnRightTreeDoubleClick: Processing symbol '"
+                           << pSymbol->sName << "' of kind " << static_cast<int>(pSymbol->eKind));
+
+    // Symbol is a BASIC Macro
+    if (pSymbol->eKind == IdeSymbolKind::SUB || pSymbol->eKind == IdeSymbolKind::FUNCTION)
+    {
+        SAL_INFO("basctl", "OnRightTreeDoubleClick: Action is NavigateToMacroSource.");
+        NavigateToMacroSource(*pSymbol);
+        m_bPerformingAction = false;
+        return true;
+    }
+
+    // The symbol itself is documentable
+    OUString sSymbolUrl = BuildDoxygenUrl(*pSymbol);
+    if (!sSymbolUrl.isEmpty())
+    {
+        SAL_INFO("basctl",
+                 "OnRightTreeDoubleClick: Symbol is a documentable container. Opening its docs.");
+        OpenDoxygenDocumentation(this, *pSymbol);
+        m_bPerformingAction = false;
+        return true;
+    }
+
+    // Find documentable parent in RIGHT tree first
+    auto xParentIter = rTree.make_iterator(xSelectedIter.get());
+    while (rTree.iter_parent(*xParentIter))
+    {
+        auto pParentSymbol = GetSymbolForIter(*xParentIter, rTree, m_aRightTreeSymbolIndex);
+        if (pParentSymbol && pParentSymbol->eKind != IdeSymbolKind::PLACEHOLDER)
+        {
+            // If this parent has a qualified name it's documentable
+            if (!pParentSymbol->sQualifiedName.isEmpty())
+            {
+                SAL_INFO("basctl",
+                         "OnRightTreeDoubleClick: Action is OpenDoxygenDocumentation for parent '"
+                             << pParentSymbol->sName << "' (from right pane).");
+                OpenDoxygenDocumentation(this, *pParentSymbol);
+                m_bPerformingAction = false;
+                return true;
+            }
+            // Otherwise, keep walking up the tree
+        }
+    }
+
+    // Find documentable parent in LEFT tree
+    auto xLeftTreeParentIter = m_xLeftTreeView->make_iterator();
+    if (m_xLeftTreeView->get_selected(xLeftTreeParentIter.get()))
+    {
+        auto pParentSymbol
+            = GetSymbolForIter(*xLeftTreeParentIter, *m_xLeftTreeView, m_aLeftTreeSymbolIndex);
+        if (pParentSymbol)
+        {
+            // Try to build URL for parent
+            OUString sParentUrl = BuildDoxygenUrl(*pParentSymbol);
+
+            if (sParentUrl.isEmpty())
+            {
+                auto xAncestorIter = m_xLeftTreeView->make_iterator(xLeftTreeParentIter.get());
+                while (m_xLeftTreeView->iter_parent(*xAncestorIter))
+                {
+                    auto pAncestorSymbol = GetSymbolForIter(*xAncestorIter, *m_xLeftTreeView,
+                                                            m_aLeftTreeSymbolIndex);
+                    if (pAncestorSymbol)
+                    {
+                        if (pAncestorSymbol->sQualifiedName.startsWith("ooo.vba"))
+                        {
+                            SAL_INFO("basctl", "OnRightTreeDoubleClick: Ancestor is VBA namespace, "
+                                               "skipping documentation.");
+                            break;
+                        }
+                        OUString sAncestorUrl = BuildDoxygenUrl(*pAncestorSymbol);
+                        if (!sAncestorUrl.isEmpty())
+                        {
+                            SAL_INFO(
+                                "basctl",
+                                "OnRightTreeDoubleClick: Parent has no docs, opening ancestor '"
+                                    << pAncestorSymbol->sName << "'");
+                            OpenDoxygenDocumentation(this, *pAncestorSymbol);
+                            m_bPerformingAction = false;
+                            return true;
+                        }
+                    }
+                }
+                SAL_INFO("basctl", "OnRightTreeDoubleClick: No documentable ancestor found for '"
+                                       << pParentSymbol->sName << "'");
+            }
+            else
+            {
+                SAL_INFO("basctl",
+                         "OnRightTreeDoubleClick: Action is OpenDoxygenDocumentation for parent '"
+                             << pParentSymbol->sName << "' (from left pane).");
+                OpenDoxygenDocumentation(this, *pParentSymbol);
+                m_bPerformingAction = false;
+                return true;
+            }
+        }
+    }
+
+    m_bPerformingAction = false;
+    SAL_WARN("basctl", "OnRightTreeDoubleClick: No action taken for symbol.");
+    ShowDocsError(this, IDEResId(RID_STR_OB_NO_DOCUMENTATION));
+
+    return false;
+}
 
 IMPL_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, rParentIter, bool)
 {

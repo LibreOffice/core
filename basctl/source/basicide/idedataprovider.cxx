@@ -93,6 +93,12 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
             }
             auto pNode = std::make_shared<IdeSymbolInfo>(
                 xMethod->getName(), IdeSymbolKind::UNO_METHOD, rNode.sIdentifier);
+
+            if (!rNode.sQualifiedName.isEmpty())
+            {
+                pNode->sQualifiedName = rNode.sQualifiedName + u"." + xMethod->getName();
+                pNode->sParentName = rNode.sQualifiedName;
+            }
             pNode->sReturnTypeName = helper_getTypeName(xMethod->getReturnType());
             for (const auto& rParam : xMethod->getParameterInfos())
             {
@@ -129,6 +135,12 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
 
             auto pMember
                 = std::make_shared<IdeSymbolInfo>(xField->getName(), eFieldKind, rNode.sIdentifier);
+
+            if (!rNode.sQualifiedName.isEmpty())
+            {
+                pMember->sQualifiedName = rNode.sQualifiedName + u"." + xField->getName();
+                pMember->sParentName = rNode.sQualifiedName;
+            }
             pMember->sTypeName = helper_getTypeName(xField->getType());
 
             Reference<XIdlClass> xFieldType = xField->getType();
@@ -198,6 +210,16 @@ void ImplGetMembersOfBasicModule(SymbolInfoList& rMembers, const IdeSymbolInfo& 
                                           : IdeSymbolKind::FUNCTION;
                 auto pMember
                     = std::make_shared<IdeSymbolInfo>(pMethod->GetName(), eKind, rNode.sIdentifier);
+
+                pMember->sOriginLibrary = rNode.sOriginLibrary;
+                pMember->sOriginModule = rNode.sName; // The parent node name is the module name
+                pMember->sOriginLocation = rNode.sOriginLocation;
+
+                if (!rNode.sOriginLibrary.isEmpty() && !rNode.sName.isEmpty())
+                {
+                    pMember->sParentName = rNode.sOriginLibrary + u"." + rNode.sName;
+                    pMember->sQualifiedName = pMember->sParentName + u"." + pMethod->GetName();
+                }
                 rMembers.push_back(pMember);
             }
         }
@@ -367,6 +389,7 @@ void IdeDataProvider::Reset()
     SAL_INFO("basctl", "IdeDataProvider: Resetting state.");
     m_bInitialized = false;
     m_aAllTopLevelNodes.clear();
+    m_aMembersCache.clear();
 
     m_pUnoHierarchy = std::make_unique<UnoApiHierarchy>();
 }
@@ -521,6 +544,12 @@ SymbolInfoList IdeDataProvider::GetTopLevelNodes()
 
 GroupedSymbolInfoList IdeDataProvider::GetMembers(const IdeSymbolInfo& rNode)
 {
+    auto it = m_aMembersCache.find(rNode.sIdentifier);
+    if (it != m_aMembersCache.end())
+    {
+        return it->second;
+    }
+
     GroupedSymbolInfoList aGroupedMembers;
     SymbolInfoList aFlatMembers;
 
@@ -548,6 +577,9 @@ GroupedSymbolInfoList IdeDataProvider::GetMembers(const IdeSymbolInfo& rNode)
     {
         aGroupedMembers[pMemberInfo->eKind].push_back(pMemberInfo);
     }
+
+    m_aMembersCache[rNode.sIdentifier] = aGroupedMembers;
+
     return aGroupedMembers;
 }
 
