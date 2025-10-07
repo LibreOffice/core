@@ -81,7 +81,6 @@ public:
     ::rtl::Reference<SearchAndParseThread> m_pSearchThread;
 
     OUString m_sURL;
-    OUString m_sTag;
     size_t
         m_nMaxItemCount; // Max number of item which will appear on the list before the press to the show more button.
     size_t m_nCurrentListItemCount; // Current number of item on the list

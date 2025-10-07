@@ -447,12 +447,12 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     m_xButtonShowMore->connect_clicked(LINK(this, AdditionsDialog, ShowMoreHdl));
     m_xButtonClose->connect_clicked(LINK(this, AdditionsDialog, CloseButtonHdl));
 
-    m_sTag = sAdditionsTag;
     m_nMaxItemCount = PAGE_SIZE; // Dialog initialization item count
     m_nCurrentListItemCount = 0; // First, there is no item on the list.
 
+    OUString sTag = sAdditionsTag;
     OUString titlePrefix = CuiResId(RID_CUISTR_ADDITIONS_DIALOG_TITLE_PREFIX);
-    if (!m_sTag.isEmpty())
+    if (!sTag.isEmpty())
     { // tdf#142564 localize extension category names
         OUString sDialogTitle = u""_ustr;
         if (sAdditionsTag == "Templates")
@@ -484,10 +484,10 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     else
     {
         set_title(titlePrefix);
-        m_sTag = "allextensions"; // Means empty parameter
+        sTag = "allextensions"; // Means empty parameter
     }
 
-    OUString sEncodedURLPart = INetURLObject::encode(m_sTag, INetURLObject::PART_PCHAR,
+    OUString sEncodedURLPart = INetURLObject::encode(sTag, INetURLObject::PART_PCHAR,
                                                      INetURLObject::EncodeMechanism::All);
 
     //FIXME: Temporary URL - v0 is not using actual api
