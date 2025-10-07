@@ -248,6 +248,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDirect)
         const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
         CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, rWeightItem.GetValue());
     }
+
+    // And given an undo:
+    pWrtShell->Undo();
+
+    // When redoing:
+    pWrtShell->Redo();
+
+    // Then make sure that we only get a single big delete redline:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. we got <del>AAA</del><format>BBB</format><del>CCC</del> instead of one big delete
+    // redline.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatDirect)
@@ -325,6 +339,19 @@ CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatDirect)
         const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
         CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, rWeightItem.GetValue());
     }
+
+    // And given an undo:
+    pWrtShell->Undo();
+
+    // When redoing:
+    pWrtShell->Redo();
+
+    // Then make sure that we only get a single big insert redline:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. we got <ins>AAA</ins>BBB<ins>CCC</ins> instead of one big insert.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 }
 }
 

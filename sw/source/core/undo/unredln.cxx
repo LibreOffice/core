@@ -482,14 +482,14 @@ void SwUndoAcceptRedline::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().getIDocumentRedlineAccess().AcceptRedline(rContext.GetRepeatPaM(), true);
 }
 
-SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */, bool bHierarchical /*= false*/ )
-    : SwUndoRedline( SwUndoId::REJECT_REDLINE, rRange, nDepth, bHierarchical )
+SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */, bool bHierarchical /*= false*/, bool bDirect /*= false*/ )
+    : SwUndoRedline( SwUndoId::REJECT_REDLINE, rRange, nDepth, bHierarchical, bDirect )
 {
 }
 
 void SwUndoRejectRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rDoc.getIDocumentRedlineAccess().RejectRedline(rPam, false, mnDepth);
+    rDoc.getIDocumentRedlineAccess().RejectRedline(rPam, false, mnDepth, mbDirect);
 }
 
 void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
