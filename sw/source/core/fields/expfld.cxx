@@ -884,7 +884,6 @@ std::unique_ptr<SwField> SwSetExpField::Copy() const
 
 void SwSetExpField::SetSubType(SwGetSetExpType nSub)
 {
-    assert((nSub & SwGetSetExpType::LowerMask) != (SwGetSetExpType::String | SwGetSetExpType::Expr) && "SubType is illegal!");
     static_cast<SwSetExpFieldType*>(GetTyp())->SetType(nSub & SwGetSetExpType::LowerMask);
     mnSubType = nSub & SwGetSetExpType::UpperMask;
 }
