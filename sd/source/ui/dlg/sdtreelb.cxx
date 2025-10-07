@@ -63,6 +63,8 @@
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
 
+#include <unordered_set>
+
 using namespace com::sun::star;
 
 namespace {
@@ -1255,6 +1257,18 @@ void SdPageObjsTLV::AddShapeList (
  */
 void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUString& rDocName)
 {
+    // record collapsed page/slide name entries to reset after the tree is refilled
+    std::unordered_set<OUString> aCollapsedEntriesSet;
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (m_xTreeView->get_iter_first(*xEntry))
+    {
+        do
+        {
+            if (!m_xTreeView->get_row_expanded(*xEntry))
+                aCollapsedEntriesSet.insert(m_xTreeView->get_text(*xEntry));
+        } while (m_xTreeView->iter_next_sibling(*xEntry));
+    }
+
     OUString aSelection = m_xTreeView->get_selected_text();
     clear();
 
@@ -1315,6 +1329,15 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
             }
             return false;
         });
+    }
+    // collapse page/slide entries
+    if (m_xTreeView->get_iter_first(*xEntry))
+    {
+        do
+        {
+            if (aCollapsedEntriesSet.contains(m_xTreeView->get_text(*xEntry)))
+                m_xTreeView->collapse_row(*xEntry);
+        } while (m_xTreeView->iter_next_sibling(*xEntry));
     }
 }
 

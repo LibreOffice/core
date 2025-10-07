@@ -208,7 +208,6 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     if( !mxTlbObjects->IsEqualToDoc( pDoc ) )
     {
         OUString aDocName = pDocShell->GetMedium()->GetName();
-        mxTlbObjects->clear();
         mxTlbObjects->Fill( pDoc, false, aDocName ); // only normal pages
 
         RefreshDocumentLB();
@@ -843,7 +842,7 @@ void SdNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
     if (nState & NavState::TableUpdate)
     {
         // InitTlb; is initiated by Slot
-        if (maUpdateRequest && !pNavigatorWin->GetObjects().get_treeview().has_focus())
+        if (maUpdateRequest)
             maUpdateRequest();
     }
 }
