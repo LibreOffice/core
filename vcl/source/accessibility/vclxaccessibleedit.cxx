@@ -219,8 +219,6 @@ sal_Int16 VCLXAccessibleEdit::implGetAccessibleRole(  )
     VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit && ( pEdit->IsPassword() || pEdit->GetEchoChar() ) )
         nRole = AccessibleRole::PASSWORD_TEXT;
-    else if ( pEdit && ( pEdit->GetStyle() & WB_READONLY ) )
-        nRole = AccessibleRole::STATIC;
     else
         nRole = AccessibleRole::TEXT;
 

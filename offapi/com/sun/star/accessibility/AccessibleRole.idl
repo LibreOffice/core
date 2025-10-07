@@ -492,8 +492,8 @@ constants AccessibleRole
 
     /** Text role.
 
-        <p>An object that presents text to the user. The text is usually
-        editable by the user as opposed to a label or static text.</p>
+        <p>An interactive object that presents text to the user and optionally
+        accepts user input.</p>
 
         <p>See also LABEL and STATIC.</p>
     */
@@ -725,7 +725,7 @@ constants AccessibleRole
     /** Static text role.
 
         <p>An object that presents a brief amount of information to the user.
-           The text is not editable by the user as opposed to a text, and not
+           The object is not interactive as opposed to a text, and not
            meant to have a relation with another object as opposed to a
            label.</p>
 
