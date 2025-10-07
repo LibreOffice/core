@@ -1427,7 +1427,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkBitmapFill)
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     static constexpr OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:blipFill/a:blip", 1);
-    assertXPath(pXmlDoc, sPathStart + "/a:ln/a:solidFill/a:srgbClr", "val", u"ffbf00");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:ln/a:solidFill/a:srgbClr", "val", u"ffbf00");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkGradientGlow)
@@ -1439,9 +1439,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkGradientGlow)
     // Without the patch, fill was black and no glow applied.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     static constexpr OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr"_ostr);
-    assertXPath(pXmlDoc, sPathStart + "/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", u"8d281e");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val",
+                           u"8d281e");
     assertXPath(pXmlDoc, sPathStart + "/a:effectLst/a:glow", "rad", u"63360");
-    assertXPath(pXmlDoc, sPathStart + "/a:effectLst/a:glow/a:srgbClr", "val", u"ff4500");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:effectLst/a:glow/a:srgbClr", "val", u"ff4500");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345FullTransparentGradient)
@@ -1465,11 +1466,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientLinear)
     assertXPath(pXmlDoc, sPathStart + "/a:lin", "ang", u"3600000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos", u"25000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", u"ff0000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", u"20000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", u"ff0000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val",
+                           u"20000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos", u"100000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr", "val", u"ff0000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", u"80000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr", "val", u"ff0000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val",
+                           u"80000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientRadial)
@@ -1482,9 +1485,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientRadial)
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     static constexpr OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", u"ff0000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", u"ff0000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr", "val", u"ffffff");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr", "val", u"ffffff");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", u"0");
 }
 
@@ -1522,8 +1525,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf134969TransparencyOnColorGradien
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     static constexpr OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", u"60000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", u"60000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val",
+                           u"60000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val",
+                           u"60000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testArcTo)
@@ -1625,8 +1630,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf140865Wordart3D)
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "h", u"38100");
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "prst", u"softRound");
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelB", "h", u"152400");
-    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:extrusionClr/a:srgbClr", "val", u"990000");
-    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:contourClr/a:srgbClr", "val", u"009876");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:sp3d/a:extrusionClr/a:srgbClr", "val",
+                           u"990000");
+    assertXPathInsensitive(pXmlDoc, sPathStart + "/a:sp3d/a:contourClr/a:srgbClr", "val",
+                           u"009876");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124457)

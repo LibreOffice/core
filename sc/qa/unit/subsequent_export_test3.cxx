@@ -1469,10 +1469,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTextUnderlineColorXLSX)
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr",
                 "b", u"1");
     // Make sure that the underline color is RED
-    assertXPath(pDoc,
-                "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/"
-                "a:solidFill/a:srgbClr",
-                "val", u"ff0000");
+    assertXPathInsensitive(
+        pDoc,
+        "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/"
+        "a:solidFill/a:srgbClr",
+        "val", u"ff0000");
 
     // Make sure the underline type is drawn with heavy line
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr",

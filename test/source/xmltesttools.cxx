@@ -184,6 +184,14 @@ void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const char*
                                  rExpectedValue, std::u16string_view(aValue));
 }
 
+void XmlTestTools::assertXPathInsensitive(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute, std::u16string_view rExpectedValue)
+{
+    OUString aValue = getXPath(pXmlDoc, pXPath, pAttribute).toAsciiLowerCase();
+    OUString aExpectedValue = OUString(rExpectedValue).toAsciiLowerCase();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, attribute '" + pAttribute + "' of '" + pXPath + "' incorrect case insensitive value. '" + aValue.toUtf8() + "' should be '" + aExpectedValue.toUtf8() + "'").getStr(),
+                                 aExpectedValue, aValue);
+}
+
 void XmlTestTools::assertXPathDoubleValue(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute, double expectedValue, double delta)
 {
     OUString aValue = getXPath(pXmlDoc, pXPath, pAttribute);
