@@ -4181,6 +4181,34 @@ Size SdXImpressDocument::getDocumentSize()
     return o3tl::convert(aSize, o3tl::Length::mm100, o3tl::Length::twip);
 }
 
+Size SdXImpressDocument::getPartSize(int part)
+{
+    if (part < 0 || part > 0xFFFF)
+        return Size(0,0);
+
+    const sal_uInt16 nSlideIndex = static_cast<sal_uInt16>(part);
+    SdPage* pPage = mpDoc ? mpDoc->GetSdPage(nSlideIndex, PageKind::Standard) : nullptr;
+
+    if (pPage == nullptr)
+        return Size(0,0);
+
+    Size aRectSize(pPage->GetWidth() + 1, pPage->GetHeight() + 1);
+    return o3tl::convert(aRectSize, o3tl::Length::mm100, o3tl::Length::twip);
+}
+
+void SdXImpressDocument::getAllPartSize(::tools::JsonWriter& rJsonWriter)
+{
+    auto aArray = rJsonWriter.startArray("parts");
+    const int nParts = getParts();
+    for (int i = 0; i < nParts; ++i)
+    {
+        const Size aSize = getPartSize(i);
+        auto aItem = rJsonWriter.startStruct();
+        rJsonWriter.put("width", aSize.getWidth());
+        rJsonWriter.put("height", aSize.getHeight());
+    }
+}
+
 void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
 {
     auto commentsNode = rJsonWriter.startNode("comments");

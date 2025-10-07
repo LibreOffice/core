@@ -1064,8 +1064,9 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
 
                     if (comphelper::LibreOfficeKit::isActive())
                     {
-                        SdXImpressDocument* pDoc = GetDoc()->getUnoModel();
-                        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
+                        OString aPayload = ".uno:CurrentPageResize"_ostr;
+                        SfxViewShell* pViewShell = GetViewShell();
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
                     }
                 }
             }

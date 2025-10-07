@@ -71,6 +71,23 @@ public:
     virtual Size getDocumentSize() = 0;
 
     /**
+     * Gets the part size in TWIPs.
+     *
+     * nPart is the part number in 0-based indexing.
+     */
+    virtual Size getPartSize(int /*nPart*/)
+    {
+        return Size(1,1);
+    }
+
+    /**
+     * Gets all parts' size in TWIPs.
+     */
+    virtual void getAllPartSize(::tools::JsonWriter& /*rJsonWriter*/)
+    {
+    }
+
+    /**
      * Get the data area size (in Calc last column and row).
      */
     virtual Size getDataArea(long /*nPart*/)
