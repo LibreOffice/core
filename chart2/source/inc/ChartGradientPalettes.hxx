@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include "charttoolsdllapi.hxx"
+
+#include <svx/ChartGradientVariation.hxx>
+#include <svtools/valueset.hxx>
+
+namespace chart
+{
+class OOO_DLLPUBLIC_CHARTTOOLS ChartGradientPalettes final
+{
+public:
+    typedef Link<const MouseEvent&, bool> MouseEventHandler;
+
+private:
+    weld::Builder& mrBuilder;
+    std::unique_ptr<weld::IconView> mxIconView;
+    std::unique_ptr<weld::ScrolledWindow> mxWindow;
+    std::vector<basegfx::BGradient> maGradientSets;
+    sal_uInt16 mnHighlightedItemId;
+    MouseEventHandler maMouseMoveHdl;
+
+public:
+    ChartGradientPalettes(weld::Builder& rBuilder, const OUString& id, const OUString& winId);
+
+    sal_uInt16 GetSelectedItemId();
+    sal_uInt16 GetHighlightedItemId();
+    void SetSelectHdl(const Link<weld::IconView&, bool>& rLink);
+    void SetNoSelection();
+    void SelectItem(sal_uInt16 nItemId);
+    bool IsNoSelection();
+    void GrabFocus();
+
+    void insert(basegfx::BGradient const& rGradientSet);
+    const basegfx::BGradient* getPalette(sal_uInt32 nItem) const;
+    void setMouseMoveHdl(const MouseEventHandler& rLink);
+
+    void Fill();
+
+private:
+    DECL_LINK(OnQueryTooltip, const weld::TreeIter&, OUString);
+    DECL_LINK(OnMouseMove, const MouseEvent&, bool);
+};
+
+} // end namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

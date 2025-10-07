@@ -63,6 +63,7 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="shadow-type">in</property>
+                <property name="propagate-natural-width">True</property>
                 <child>
                   <object class="GtkIconView" id="colorful_palettes">
                     <property name="visible">True</property>
@@ -114,6 +115,7 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="shadow-type">in</property>
+                <property name="propagate-natural-width">True</property>
                 <child>
                   <object class="GtkIconView" id="monochromatic_palettes">
                     <property name="visible">True</property>

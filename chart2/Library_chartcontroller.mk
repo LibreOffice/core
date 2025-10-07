@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/tp_AxisLabel \
     chart2/source/controller/dialogs/tp_AxisPositions \
     chart2/source/controller/dialogs/tp_ChartColorPalette \
+    chart2/source/controller/dialogs/tp_ChartGradients \
     chart2/source/controller/dialogs/tp_ChartType \
     chart2/source/controller/dialogs/tp_DataLabel \
     chart2/source/controller/dialogs/tp_DataPointOption \
@@ -202,6 +203,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/sidebar/ChartAreaPanel \
     chart2/source/controller/sidebar/ChartColorsPanel \
     chart2/source/controller/sidebar/ChartColorPaletteControl \
+    chart2/source/controller/sidebar/ChartGradientsPanel \
+    chart2/source/controller/sidebar/ChartGradientPaletteControl \
     chart2/source/controller/sidebar/ChartAxisPanel \
     chart2/source/controller/sidebar/ChartColorWrapper \
     chart2/source/controller/sidebar/ChartElementsPanel \

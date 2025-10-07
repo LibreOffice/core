@@ -20,7 +20,7 @@ constexpr size_t ChartColorPaletteSize = 6;
 
 typedef std::array<Color, ChartColorPaletteSize> ChartColorPalette;
 
-enum class ChartColorPaletteType : sal_uInt8
+enum class ChartColorPaletteType
 {
     Unknown,
     Colorful,

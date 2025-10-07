@@ -2087,6 +2087,17 @@
           <value>com.sun.star.comp.chart2.ChartThemeControl</value>
         </prop>
       </node>
+      <node oor:name="ChartGradientPaletteControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartGradientPalette</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.chart2.ChartGradientPaletteControl</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c5" oor:op="replace">

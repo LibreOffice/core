@@ -174,7 +174,7 @@ const WhichRangesContainer& GraphicPropertyItemConverter::GetWhichPairs() const
 
 bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    if (nWhichId == SCHATTR_COLOR_PALETTE)
+    if (nWhichId == SCHATTR_COLOR_PALETTE || nWhichId == SCHATTR_GRADIENT_PRESET)
     {
         return false;
     }
@@ -759,7 +759,30 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             m_xChartModel->setColorPalette(rItem.GetType(), rItem.GetIndex());
             const auto oColorPalette = m_xChartModel->getCurrentColorPalette();
             if (oColorPalette)
+            {
+                m_xChartModel->clearGradientPalette();
                 m_xChartModel->applyColorPaletteToDataSeries(*oColorPalette);
+            }
+            else
+            {
+                m_xChartModel->clearColorPalette();
+            }
+        }
+        break;
+        case SCHATTR_GRADIENT_PRESET:
+        {
+            const auto& rItem = static_cast<const SvxChartGradientPresetItem&>(rItemSet.Get(nWhichId));
+            m_xChartModel->setGradientPalette(rItem.GetVariation(), rItem.GetType());
+            const auto oGradientPreset = m_xChartModel->getCurrentGradientPalette();
+            if (oGradientPreset)
+            {
+                m_xChartModel->clearColorPalette();
+                m_xChartModel->applyGradientPaletteToDataSeries(*oGradientPreset);
+            }
+            else
+            {
+                m_xChartModel->clearGradientPalette();
+            }
         }
         break;
     }

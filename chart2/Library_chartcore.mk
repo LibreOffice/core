@@ -27,6 +27,7 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,chart2/inc/pch/precomp
 
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
+	frozen \
 	libxml2 \
 ))
 
@@ -41,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayercore \
 	drawinglayer \
 	editeng \
     fwk \
@@ -185,6 +187,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/CharacterProperties \
     chart2/source/tools/ChartColorPalettes \
     chart2/source/tools/ChartColorPaletteHelper \
+    chart2/source/tools/ChartGradientPalettes \
+    chart2/source/tools/ChartGradientPaletteHelper \
     chart2/source/tools/ChartColorScheme \
     chart2/source/tools/ChartModelHelper \
     chart2/source/tools/ChartTypeHelper \

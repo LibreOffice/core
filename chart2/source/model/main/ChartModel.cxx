@@ -32,8 +32,10 @@
 #include <CloneHelper.hxx>
 #include <NameContainer.hxx>
 #include "UndoManager.hxx"
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <ChartColorPaletteHelper.hxx>
+#include <ChartGradientPaletteHelper.hxx>
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -50,6 +52,7 @@
 
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
@@ -129,6 +132,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     , m_eColorPaletteType(ChartColorPaletteType::Unknown)
     , m_nColorPaletteIndex(0)
     , m_aStyles(new UnoChartStyle)
+    , m_eGradientPaletteVariation(ChartGradientVariation::Unknown)
+    , m_nGradientPaletteType(ChartGradientType::TopLeftToBottomRight)
     , mnStart(0)
     , mnEnd(0)
 {
@@ -176,6 +181,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
     , m_eColorPaletteType(ChartColorPaletteType::Unknown)
     , m_nColorPaletteIndex(0)
+    , m_eGradientPaletteVariation(ChartGradientVariation::Unknown)
+    , m_nGradientPaletteType(ChartGradientType::TopLeftToBottomRight)
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
 {
@@ -1507,6 +1514,96 @@ void ChartModel::onDocumentThemeChanged()
         setModified(true);
     }
 }
+
+void ChartModel::setGradientPalette(ChartGradientVariation eVariation, ChartGradientType eType)
+{
+    m_eGradientPaletteVariation = eVariation;
+    m_nGradientPaletteType = eType;
+}
+
+void ChartModel::clearGradientPalette()
+{
+    // Not reset the selected palette if user is just previewing a color
+    // for a data series or a data point
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    if (pCurrentShell && pCurrentShell->IsLOKColorPreviewEnabled())
+        return;
+
+    setGradientPalette(ChartGradientVariation::Unknown, ChartGradientType::Invalid);
+    m_aGradientBaseColors.clear();
+}
+
+bool ChartModel::usesGradientPalette() const
+{
+    return m_eGradientPaletteVariation != ChartGradientVariation::Unknown;
+}
+
+const std::vector<Color>& ChartModel::getDataSeriesColorsForGradient(bool bIsPreview)
+{
+    if (!m_aGradientBaseColors.empty() && (usesGradientPalette() || bIsPreview))
+        return m_aGradientBaseColors;
+
+    const rtl::Reference<Diagram> xDiagram = getFirstChartDiagram();
+    if (!xDiagram.is())
+        return m_aGradientBaseColors;
+
+    const auto xDataSeriesArray = xDiagram->getDataSeries();
+    for (size_t i = 0; i < xDataSeriesArray.size(); ++i)
+    {
+        Color aColor = ChartGradientPresetInvalidColor;
+        const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
+        drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+        if (xPropSet->getPropertyValue("FillStyle") >>= eFillStyle)
+        {
+            if (eFillStyle == drawing::FillStyle_SOLID)
+            {
+                xPropSet->getPropertyValue("FillColor") >>= aColor;
+            }
+        }
+        m_aGradientBaseColors.push_back(aColor);
+    }
+    return m_aGradientBaseColors;
+}
+
+std::optional<ChartGradientPalette> ChartModel::getCurrentGradientPalette() const
+{
+    if (!usesGradientPalette())
+    {
+        SAL_WARN("chart2", "ChartModel::getCurrentGradientPalette: no palette is in use");
+        return std::nullopt;
+    }
+
+    const std::vector<Color> aColorSet = const_cast<ChartModel*>(this)->getDataSeriesColorsForGradient();
+    const ChartGradientPaletteHelper aGradientPaletteHelper(aColorSet);
+    return aGradientPaletteHelper.getGradientPalette(getGradientPaletteVariation(), getGradientPaletteType());
+}
+
+
+void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rGradientPalette)
+{
+    const rtl::Reference<Diagram> xDiagram = getFirstChartDiagram();
+    const auto xDataSeriesArray = xDiagram->getDataSeries();
+    for (size_t i = 0; i < xDataSeriesArray.size(); ++i)
+    {
+        const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
+        const size_t nPaletteIndex = i % rGradientPalette.size();
+        xPropSet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_GRADIENT));
+
+        // check if we have to skip this data set
+        const basegfx::BGradient& rGradient = rGradientPalette[nPaletteIndex];
+
+        if (rGradient.GetColorStops().empty())
+            continue;
+
+        awt::Gradient2 aPropGradient = model::gradient::createUnoGradient2(rGradient);
+
+        // register a gradient and set it
+        css::uno::Any aGradientVal(aPropGradient);
+        OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, this, "");
+        xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
+    }
+}
+
 
 }  // namespace chart
 

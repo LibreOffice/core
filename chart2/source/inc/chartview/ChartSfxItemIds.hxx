@@ -34,6 +34,7 @@ class SvxChartTextOrderItem;
 class SvxChartRegressItem;
 class SdrAngleItem;
 class SvxChartColorPaletteItem;
+class SvxChartGradientPresetItem;
 
 // SCHATTR
 
@@ -206,7 +207,12 @@ inline constexpr sal_uInt16                             SCHATTR_COLOR_PALETTE_ST
 inline constexpr TypedWhichId<SvxChartColorPaletteItem> SCHATTR_COLOR_PALETTE              (SCHATTR_COLOR_PALETTE_START);
 inline constexpr sal_uInt16                             SCHATTR_COLOR_PALETTE_END          (SCHATTR_COLOR_PALETTE);
 
-inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_COLOR_PALETTE_END);
+inline constexpr sal_uInt16                               SCHATTR_GRADIENT_PRESET_START        (SCHATTR_COLOR_PALETTE_END + 1);
+inline constexpr TypedWhichId<SvxChartGradientPresetItem> SCHATTR_GRADIENT_PRESET              (SCHATTR_GRADIENT_PRESET_START);
+inline constexpr sal_uInt16                               SCHATTR_GRADIENT_PRESET_END          (SCHATTR_GRADIENT_PRESET);
+
+
+inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_GRADIENT_PRESET_END);
 
 // values for Items
 

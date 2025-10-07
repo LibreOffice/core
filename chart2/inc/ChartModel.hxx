@@ -54,6 +54,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <svl/lstner.hxx>
 #include <svx/ChartColorPaletteType.hxx>
+#include <svx/ChartGradientVariation.hxx>
 
 #include <memory>
 
@@ -184,7 +185,12 @@ private:
     ChartColorPaletteType m_eColorPaletteType;
     sal_uInt32 m_nColorPaletteIndex;
 
+
     rtl::Reference<UnoChartStyle> m_aStyles;
+
+    ChartGradientVariation m_eGradientPaletteVariation;
+    ChartGradientType m_nGradientPaletteType;
+    std::vector<Color>  m_aGradientBaseColors;
 
 private:
     //private methods
@@ -503,6 +509,15 @@ public:
     std::optional<ChartColorPalette> getCurrentColorPalette() const;
     void applyColorPaletteToDataSeries(const ChartColorPalette& rColorPalette);
     void onDocumentThemeChanged();
+
+    ChartGradientVariation getGradientPaletteVariation() const { return m_eGradientPaletteVariation; }
+    ChartGradientType getGradientPaletteType() const { return m_nGradientPaletteType; }
+    void setGradientPalette(ChartGradientVariation eVariation, ChartGradientType eType);
+    void clearGradientPalette();
+    bool usesGradientPalette() const;
+    const std::vector<Color>& getDataSeriesColorsForGradient(bool bIsPreview = false);
+    std::optional<ChartGradientPalette> getCurrentGradientPalette() const;
+    void applyGradientPaletteToDataSeries(const ChartGradientPalette& rColorPalette);
 
 private:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

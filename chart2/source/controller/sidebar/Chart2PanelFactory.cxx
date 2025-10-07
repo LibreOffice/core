@@ -37,6 +37,7 @@
 #include "ChartColorsPanel.hxx"
 #include "ChartThemePanel.hxx"
 #include <officecfg/Office/Common.hxx>
+#include "ChartGradientsPanel.hxx"
 
 using namespace css::uno;
 
@@ -106,6 +107,8 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         else if (rsResourceURL.endsWith("/ThemePanel")
                  && officecfg::Office::Common::Misc::ExperimentalMode::get())
             xPanel = ChartThemePanel::Create(pParent, xFrame, pController);
+        else if (rsResourceURL.endsWith("/GradientsPanel"))
+            xPanel = ChartGradientsPanel::Create(pParent, xFrame, pController);
 
         if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(

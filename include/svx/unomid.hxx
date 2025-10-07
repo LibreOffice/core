@@ -97,6 +97,10 @@
 #define MID_CHART_COLOR_PALETTE_TYPE 0
 #define MID_CHART_COLOR_PALETTE_INDEX 1
 
+// SvxChartGradientPresetItem
+#define MID_CHART_GRADIENT_PRESET_VARIATION 0
+#define MID_CHART_GRADIENT_PRESET_TYPE 1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

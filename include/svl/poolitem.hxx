@@ -323,6 +323,7 @@ enum class SfxItemType : sal_uInt16
     SvxCharRotateItemType,
     SvxCharScaleWidthItemType,
     SvxChartColorPaletteItemType,
+    SvxChartGradientPresetItemType,
     SvxChartColorTableItemType,
     SvxChartIndicateItemType,
     SvxChartKindErrorItemType,

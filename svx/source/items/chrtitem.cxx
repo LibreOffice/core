@@ -24,6 +24,7 @@
 #include <o3tl/hash_combine.hxx>
 
 #include <svx/ChartColorPaletteType.hxx>
+#include <svx/ChartGradientVariation.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/unomid.hxx>
 
@@ -262,6 +263,93 @@ bool SvxChartColorPaletteItem::operator==(const SfxPoolItem& rItem) const
 SvxChartColorPaletteItem* SvxChartColorPaletteItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartColorPaletteItem(*this);
+}
+
+// SvxChartGradientPresetItem implementation
+
+SfxPoolItem* SvxChartGradientPresetItem::CreateDefault()
+{
+    return new SvxChartGradientPresetItem(ChartGradientVariation::Unknown, ChartGradientType::Invalid,
+                                        TypedWhichId<SvxChartGradientPresetItem>(0));
+}
+
+SvxChartGradientPresetItem::SvxChartGradientPresetItem(ChartGradientVariation eVariation,
+                                                       ChartGradientType eType,
+                                                       const TypedWhichId<SvxChartGradientPresetItem> nId)
+    : SfxPoolItem(nId)
+    , meVariation(eVariation)
+    , meType(eType)
+{
+}
+
+SvxChartGradientPresetItem::SvxChartGradientPresetItem(const SvxChartGradientPresetItem& rItem)
+    : SfxPoolItem(rItem)
+    , meVariation(rItem.meVariation)
+    , meType(rItem.meType)
+{
+}
+
+bool SvxChartGradientPresetItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMemberId) const
+{
+    if (nMemberId == MID_CHART_GRADIENT_PRESET_VARIATION)
+    {
+        rVal <<= static_cast<sal_uInt8>(meVariation);
+        return true;
+    }
+    if (nMemberId == MID_CHART_GRADIENT_PRESET_TYPE)
+    {
+        rVal <<= static_cast<sal_uInt8>(meType);
+        return true;
+    }
+    return false;
+}
+
+bool SvxChartGradientPresetItem::PutValue(const uno::Any& rVal, const sal_uInt8 nMemberId)
+{
+    if (nMemberId == MID_CHART_GRADIENT_PRESET_VARIATION)
+    {
+        sal_uInt8 nVariation = 0;
+        rVal >>= nVariation;
+        meVariation = static_cast<ChartGradientVariation>(nVariation);
+        return true;
+    }
+    if (nMemberId == MID_CHART_GRADIENT_PRESET_TYPE)
+    {
+        sal_uInt8 eType = 0;
+        rVal >>= eType;
+        meType = static_cast<ChartGradientType>(eType);
+        return true;
+    }
+    return false;
+}
+
+bool SvxChartGradientPresetItem::GetPresentation(SfxItemPresentation /*ePres*/,
+                                                 MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
+                                                 OUString& rText, const IntlWrapper&) const
+{
+    if (meVariation == ChartGradientVariation::LightVariation)
+        rText = u"Light"_ustr;
+    else if (meVariation == ChartGradientVariation::DarkVariation)
+        rText = u"Dark"_ustr;
+    else
+        rText = u"Unknown"_ustr;
+
+    rText += u" "_ustr;
+    rText += OUString::number(static_cast<sal_uInt8>(meType));
+
+    return true;
+}
+
+bool SvxChartGradientPresetItem::operator==(const SfxPoolItem& rItem) const
+{
+    assert(SfxPoolItem::operator==(rItem));
+    const auto& rOther = static_cast<const SvxChartGradientPresetItem&>(rItem);
+    return (meVariation == rOther.meVariation && meType == rOther.meType);
+}
+
+SvxChartGradientPresetItem* SvxChartGradientPresetItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SvxChartGradientPresetItem(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

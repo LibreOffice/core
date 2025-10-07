@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="chart">
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkBox" id="tp_ChartGradients">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="margin-top">4</property>
+    <property name="margin-bottom">4</property>
+    <property name="spacing">16</property>
+    <child>
+      <object class="GtkFrame" id="FL_LIGHT">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">4</property>
+        <property name="margin-end">4</property>
+        <property name="margin-top">3</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkScrolledWindow" id="lightwin">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="valign">start</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkIconView" id="light_palettes">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="pixbuf-column">0</property>
+                <property name="row-spacing">0</property>
+                <property name="column-spacing">0</property>
+                <property name="item-padding">4</property>
+                <property name="activate-on-single-click">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="LBL_LIGHT"/>
+                </accessibility>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="LBL_LIGHT">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">2</property>
+            <property name="label" translatable="yes" context="tp_ChartGradients|lightwin">Light Variations</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+            <accessibility>
+              <relation type="label-for" target="light_palettes"/>
+            </accessibility>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="padding">8</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="FL_DARK">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">4</property>
+        <property name="margin-end">4</property>
+        <property name="margin-top">3</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkScrolledWindow" id="darkwin">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="valign">start</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkIconView" id="dark_palettes">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore2</property>
+                <property name="pixbuf-column">0</property>
+                <property name="row-spacing">0</property>
+                <property name="column-spacing">0</property>
+                <property name="item-padding">4</property>
+                <property name="activate-on-single-click">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="LBL_DARK"/>
+                </accessibility>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="LBL_DARK">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">2</property>
+            <property name="label" translatable="yes" context="tp_ChartGradients|darkwin">Dark Variations</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+            <accessibility>
+              <relation type="label-for" target="dark_palettes"/>
+            </accessibility>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="padding">8</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

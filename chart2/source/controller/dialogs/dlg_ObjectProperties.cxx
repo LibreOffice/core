@@ -37,6 +37,7 @@
 #include "tp_DataPointOption.hxx"
 #include "tp_DataTable.hxx"
 #include "tp_ChartColorPalette.hxx"
+#include "tp_ChartGradients.hxx"
 #include <ResId.hxx>
 #include <ViewElementListProvider.hxx>
 #include <ChartModelHelper.hxx>
@@ -366,6 +367,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
             AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
+            AddTabPage(u"gradients"_ustr, SchResId(STR_PAGE_GRADIENT_PRESETS), ChartGradientsTabPage::Create);
             AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             AddTabPage(u"legendpos"_ustr, SchResId(STR_PAGE_POSITION), SchLegendPosTabPage::Create);
@@ -392,6 +394,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             }
             AddTabPage(u"border"_ustr, SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE ), RID_SVXPAGE_LINE);
             AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
+            AddTabPage(u"gradients"_ustr, SchResId(STR_PAGE_GRADIENT_PRESETS), ChartGradientsTabPage::Create);
             break;
 
         case OBJECTTYPE_DATA_LABEL:
@@ -459,7 +462,10 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
             AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             if (eType != OBJECTTYPE_DATA_STOCK_LOSS && eType != OBJECTTYPE_DATA_STOCK_GAIN)
+            {
                 AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
+                AddTabPage(u"gradients"_ustr, SchResId(STR_PAGE_GRADIENT_PRESETS), ChartGradientsTabPage::Create);
+            }
             break;
 
         case OBJECTTYPE_LEGEND_ENTRY:
@@ -637,6 +643,14 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         if (pColorPaletteTabPage)
         {
             pColorPaletteTabPage->init(m_pParameter->getDocument());
+        }
+    }
+    else if (rId == "gradients")
+    {
+        auto* pGradientsTabPage = dynamic_cast<ChartGradientsTabPage*>( &rPage );
+        if (pGradientsTabPage)
+        {
+            pGradientsTabPage->init(m_pParameter->getDocument());
         }
     }
 }

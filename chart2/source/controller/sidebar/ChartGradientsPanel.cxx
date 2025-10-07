@@ -6,24 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
-#include "ChartColorsPanel.hxx"
-#include "ChartColorPaletteControl.hxx"
+#include "ChartGradientsPanel.hxx"
+#include "ChartGradientPaletteControl.hxx"
 
-#include <ChartColorPaletteHelper.hxx>
+#include <ChartGradientPaletteHelper.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
@@ -72,20 +63,22 @@ OUString getCID(const uno::Reference<frame::XModel>& xModel)
     return aCID;
 }
 
-ChartColorPaletteControl* getChartColorPaletteControl(const ToolbarUnoDispatcher& rToolBoxColor)
+ChartGradientPaletteControl*
+getChartGradientPaletteControl(const ToolbarUnoDispatcher& rToolBoxGradient)
 {
     const uno::Reference<frame::XToolbarController> xController
-        = rToolBoxColor.GetControllerForCommand(sUnoChartColorPalette);
+        = rToolBoxGradient.GetControllerForCommand(sUnoChartGradientPalette);
     const auto pToolBoxLineStyleControl
-        = dynamic_cast<ChartColorPaletteControl*>(xController.get());
+        = dynamic_cast<ChartGradientPaletteControl*>(xController.get());
     return pToolBoxLineStyleControl;
 }
 } // end unnamed namespace
 
-class ColorPaletteWrapper final : public IColorPaletteHandler
+class GradientPaletteWrapper final : public IGradientPaletteHandler
 {
 public:
-    ColorPaletteWrapper(rtl::Reference<ChartModel> mxModel, ChartColorPaletteControl* pControl);
+    GradientPaletteWrapper(rtl::Reference<ChartModel> mxModel,
+                           ChartGradientPaletteControl* pControl);
 
     void updateModel(const rtl::Reference<ChartModel>& xModel);
     void updateData() const;
@@ -93,34 +86,36 @@ public:
     void createDiagramSnapshot() override;
     void restoreOriginalDiagram() override;
 
-    void select(ChartColorPaletteType eType, sal_uInt32 nIndex) override;
-    void apply(const ChartColorPalette* pColorPalette) override;
-    [[nodiscard]] std::shared_ptr<ChartColorPaletteHelper> getHelper() const override;
-    [[nodiscard]] ChartColorPaletteType getType() const override;
-    [[nodiscard]] sal_uInt32 getIndex() const override;
+    void select(ChartGradientVariation eVariant, ChartGradientType eType) override;
+    void apply(const ChartGradientPalette& rGradientPalette) override;
+    void setPreview(bool bFlag) override;
+    [[nodiscard]] std::shared_ptr<ChartGradientPaletteHelper> getHelper() const override;
+    [[nodiscard]] ChartGradientVariation getVariation() const override;
+    [[nodiscard]] ChartGradientType getType() const override;
 
 private:
     rtl::Reference<ChartModel> mxModel;
-    ChartColorPaletteControl* mpControl;
+    ChartGradientPaletteControl* mpControl;
     rtl::Reference<Diagram> mxDiagramSnapshot;
+    bool mbIsPreview;
 };
 
-ColorPaletteWrapper::ColorPaletteWrapper(rtl::Reference<ChartModel> xModel,
-                                         ChartColorPaletteControl* pControl)
+GradientPaletteWrapper::GradientPaletteWrapper(rtl::Reference<ChartModel> xModel,
+                                               ChartGradientPaletteControl* pControl)
     : mxModel(std::move(xModel))
     , mpControl(pControl)
 {
 }
 
-void ColorPaletteWrapper::updateModel(const rtl::Reference<ChartModel>& xModel)
+void GradientPaletteWrapper::updateModel(const rtl::Reference<ChartModel>& xModel)
 {
     mxModel = xModel;
 }
 
-void ColorPaletteWrapper::updateData() const
+void GradientPaletteWrapper::updateData() const
 {
     util::URL aUrl;
-    aUrl.Complete = sUnoChartColorPalette;
+    aUrl.Complete = sUnoChartGradientPalette;
 
     frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL = aUrl;
@@ -130,13 +125,13 @@ void ColorPaletteWrapper::updateData() const
         mpControl->statusChanged(aEvent);
 }
 
-void ColorPaletteWrapper::createDiagramSnapshot()
+void GradientPaletteWrapper::createDiagramSnapshot()
 {
     const rtl::Reference<Diagram> xDiagram = mxModel->getFirstChartDiagram();
     mxDiagramSnapshot = new ::chart::Diagram(*xDiagram);
 }
 
-void ColorPaletteWrapper::restoreOriginalDiagram()
+void GradientPaletteWrapper::restoreOriginalDiagram()
 {
     if (mxDiagramSnapshot)
     {
@@ -147,61 +142,66 @@ void ColorPaletteWrapper::restoreOriginalDiagram()
     }
 }
 
-void ColorPaletteWrapper::select(ChartColorPaletteType eType, const sal_uInt32 nIndex)
+void GradientPaletteWrapper::select(ChartGradientVariation eVariant, ChartGradientType eType)
 {
-    mxModel->clearGradientPalette();
-    mxModel->setColorPalette(eType, nIndex);
+    mxModel->clearColorPalette();
+    mxModel->setGradientPalette(eVariant, eType);
 }
 
-void ColorPaletteWrapper::apply(const ChartColorPalette* pColorPalette)
+void GradientPaletteWrapper::apply(const ChartGradientPalette& rGradientPalette)
 {
-    if (pColorPalette)
-        mxModel->applyColorPaletteToDataSeries(*pColorPalette);
+    mxModel->applyGradientPaletteToDataSeries(rGradientPalette);
 }
 
-std::shared_ptr<ChartColorPaletteHelper> ColorPaletteWrapper::getHelper() const
+void GradientPaletteWrapper::setPreview(bool bFlag) { mbIsPreview = bFlag; }
+
+std::shared_ptr<ChartGradientPaletteHelper> GradientPaletteWrapper::getHelper() const
 {
-    const std::shared_ptr<model::Theme> pTheme = mxModel->getDocumentTheme();
-    return std::make_shared<ChartColorPaletteHelper>(pTheme);
+    return std::make_shared<ChartGradientPaletteHelper>(
+        mxModel->getDataSeriesColorsForGradient(mbIsPreview));
 }
 
-ChartColorPaletteType ColorPaletteWrapper::getType() const
+ChartGradientVariation GradientPaletteWrapper::getVariation() const
 {
-    return mxModel->getColorPaletteType();
+    return mxModel->getGradientPaletteVariation();
 }
 
-sal_uInt32 ColorPaletteWrapper::getIndex() const { return mxModel->getColorPaletteIndex(); }
+ChartGradientType GradientPaletteWrapper::getType() const
+{
+    return mxModel->getGradientPaletteType();
+}
 
-const std::vector<ObjectType> ChartColorsPanel::maAcceptedTypes{
+const std::vector<ObjectType> ChartGradientsPanel::maAcceptedTypes{
     OBJECTTYPE_PAGE,         OBJECTTYPE_LEGEND,        OBJECTTYPE_DIAGRAM,
     OBJECTTYPE_DIAGRAM_WALL, OBJECTTYPE_DIAGRAM_FLOOR, OBJECTTYPE_DATA_SERIES,
     OBJECTTYPE_DATA_POINT,
 };
 
-ChartColorsPanel::ChartColorsPanel(weld::Widget* pParent,
-                                   const uno::Reference<frame::XFrame>& rxFrame,
-                                   ChartController* pController)
-    : PanelLayout(pParent, "ChartColorsPanel", "modules/schart/ui/sidebarcolors.ui")
+ChartGradientsPanel::ChartGradientsPanel(weld::Widget* pParent,
+                                         const uno::Reference<frame::XFrame>& rxFrame,
+                                         ChartController* pController)
+    : PanelLayout(pParent, "ChartGradientsPanel", "modules/schart/ui/sidebargradients.ui")
     , mxModel(pController->getChartModel())
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this))
     , mbModelValid(true)
-    , mxColorPaletteTB(m_xBuilder->weld_toolbar("colorpalettetype"))
-    , mxColorPaletteDispatch(new ToolbarUnoDispatcher(*mxColorPaletteTB, *m_xBuilder, rxFrame))
+    , mxGradientPaletteTB(m_xBuilder->weld_toolbar("gradientpalettetype"))
+    , mxGradientPaletteDispatch(
+          new ToolbarUnoDispatcher(*mxGradientPaletteTB, *m_xBuilder, rxFrame))
 {
     auto aAcceptedTypes(maAcceptedTypes);
     mxSelectionListener->setAcceptedTypes(std::move(aAcceptedTypes));
     Initialize();
 }
 
-ChartColorsPanel::~ChartColorsPanel()
+ChartGradientsPanel::~ChartGradientsPanel()
 {
     doUpdateModel(nullptr);
-    mxColorPaletteDispatch.reset();
-    mxColorPaletteTB.reset();
+    mxGradientPaletteDispatch.reset();
+    mxGradientPaletteTB.reset();
 }
 
-void ChartColorsPanel::Initialize()
+void ChartGradientsPanel::Initialize()
 {
     mxModel->addModifyListener(mxModifyListener);
 
@@ -210,16 +210,17 @@ void ChartColorsPanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
-    ChartColorPaletteControl* pColorPaletteControl
-        = getChartColorPaletteControl(*mxColorPaletteDispatch);
-    assert(pColorPaletteControl);
-    mxColorPaletteWrapper = std::make_shared<ColorPaletteWrapper>(mxModel, pColorPaletteControl);
-    pColorPaletteControl->setColorPaletteHandler(mxColorPaletteWrapper);
+    ChartGradientPaletteControl* pGradientPaletteControl
+        = getChartGradientPaletteControl(*mxGradientPaletteDispatch);
+    assert(pGradientPaletteControl);
+    mxGradientPaletteWrapper
+        = std::make_shared<GradientPaletteWrapper>(mxModel, pGradientPaletteControl);
+    pGradientPaletteControl->setGradientPaletteHandler(mxGradientPaletteWrapper);
 
     updateData();
 }
 
-void ChartColorsPanel::updateData()
+void ChartGradientsPanel::updateData()
 {
     if (!mbModelValid)
         return;
@@ -232,7 +233,7 @@ void ChartColorsPanel::updateData()
     if (std::find(maAcceptedTypes.begin(), maAcceptedTypes.end(), eType) == maAcceptedTypes.end())
         return;
 
-    // if fill style is not solid clear palette selection
+    // if fill style is not a gradient clear palette selection
     if (eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT)
     {
         const uno::Reference<beans::XPropertySet> xPropSet
@@ -249,46 +250,46 @@ void ChartColorsPanel::updateData()
         {
             drawing::FillStyle eFillStyle = drawing::FillStyle_SOLID;
             xPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
-            if (eFillStyle != drawing::FillStyle_SOLID)
+            if (eFillStyle != drawing::FillStyle_GRADIENT)
             {
-                mxModel->clearColorPalette();
+                mxModel->clearGradientPalette();
             }
         }
     }
 
-    mxColorPaletteWrapper->updateData();
+    mxGradientPaletteWrapper->updateData();
 }
 
-std::unique_ptr<PanelLayout> ChartColorsPanel::Create(weld::Widget* pParent,
-                                                      const uno::Reference<frame::XFrame>& rxFrame,
-                                                      ChartController* pController)
+std::unique_ptr<PanelLayout>
+ChartGradientsPanel::Create(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame,
+                            ChartController* pController)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartColorsPanel::Create",
-                                             nullptr, 0);
+        throw lang::IllegalArgumentException(
+            "no parent Window given to ChartGradientsPanel::Create", nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartColorsPanel::Create", nullptr,
-                                             1);
+        throw lang::IllegalArgumentException("no XFrame given to ChartGradientsPanel::Create",
+                                             nullptr, 1);
 
-    return std::make_unique<ChartColorsPanel>(pParent, rxFrame, pController);
+    return std::make_unique<ChartGradientsPanel>(pParent, rxFrame, pController);
 }
 
-void ChartColorsPanel::DataChanged(const DataChangedEvent& rEvent)
+void ChartGradientsPanel::DataChanged(const DataChangedEvent& rEvent)
 {
     PanelLayout::DataChanged(rEvent);
     updateData();
 }
 
-void ChartColorsPanel::HandleContextChange(const vcl::EnumContext&) { updateData(); }
+void ChartGradientsPanel::HandleContextChange(const vcl::EnumContext&) { updateData(); }
 
-void ChartColorsPanel::NotifyItemUpdate(sal_uInt16 /*nSID*/, SfxItemState /*eState*/,
-                                        const SfxPoolItem* /*pState*/)
+void ChartGradientsPanel::NotifyItemUpdate(sal_uInt16 /*nSID*/, SfxItemState /*eState*/,
+                                           const SfxPoolItem* /*pState*/)
 {
 }
 
-void ChartColorsPanel::modelInvalid() { mbModelValid = false; }
+void ChartGradientsPanel::modelInvalid() { mbModelValid = false; }
 
-void ChartColorsPanel::doUpdateModel(const rtl::Reference<ChartModel>& xModel)
+void ChartGradientsPanel::doUpdateModel(const rtl::Reference<ChartModel>& xModel)
 {
     if (mbModelValid)
     {
@@ -308,7 +309,7 @@ void ChartColorsPanel::doUpdateModel(const rtl::Reference<ChartModel>& xModel)
     if (!mbModelValid)
         return;
 
-    mxColorPaletteWrapper->updateModel(mxModel);
+    mxGradientPaletteWrapper->updateModel(mxModel);
 
     mxModel->addModifyListener(mxModifyListener);
 
@@ -318,14 +319,14 @@ void ChartColorsPanel::doUpdateModel(const rtl::Reference<ChartModel>& xModel)
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
-void ChartColorsPanel::updateModel(const uno::Reference<frame::XModel> xModel)
+void ChartGradientsPanel::updateModel(const uno::Reference<frame::XModel> xModel)
 {
     const auto pModel = dynamic_cast<ChartModel*>(xModel.get());
     assert(!xModel || pModel);
     doUpdateModel(pModel);
 }
 
-void ChartColorsPanel::selectionChanged(const bool bCorrectType)
+void ChartGradientsPanel::selectionChanged(const bool bCorrectType)
 {
     if (bCorrectType)
         updateData();
