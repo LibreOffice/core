@@ -173,6 +173,7 @@ private:
     void ExecuteMarginULChange(const ::tools::Long mnPageTopMargin, const ::tools::Long mnPageBottomMargin);
     void populateMasterSlideDropdown();
     void updateMasterSlideSelection();
+    void updatePaperSizeBoxSelection();
 
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
