@@ -1387,7 +1387,7 @@ OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& 
     if ( _bStartWithNumber )
         sName += OUString::number( nPos );
 
-    while ( aUsedNames.find( sName ) != aUsedNames.end() )
+    while ( aUsedNames.contains( sName ) )
     {
         sName = _rBaseName + OUString::number( ++nPos );
     }
@@ -1706,8 +1706,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
         OUString sName;
         xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
 
-        TParameterPositions::const_iterator aFind = aParameterNames.find(sName);
-        if ( aFind != aParameterNames.end() )
+        if ( aParameterNames.contains(sName) )
             aNewParameterSet[i] = true;
         aParameterNames[sName].push_back(i+1);
     }
