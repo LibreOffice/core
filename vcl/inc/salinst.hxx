@@ -83,6 +83,10 @@ protected:
     bool m_bSupportsBitmap32 = false;
     bool m_bSupportsOpenGL = false;
 
+#ifdef MACOSX
+    static void MacStartupWorkarounds();
+#endif
+
 public:
     SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
     virtual ~SalInstance();

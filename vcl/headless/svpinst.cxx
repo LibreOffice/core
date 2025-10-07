@@ -106,6 +106,13 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
 #endif
 }
 
+void SvpSalInstance::AfterAppInit()
+{
+#if defined(MACOSX)
+    SalInstance::MacStartupWorkarounds();
+#endif
+}
+
 SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
