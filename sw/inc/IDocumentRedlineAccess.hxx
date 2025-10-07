@@ -209,7 +209,8 @@ public:
         = 0;
 
     virtual bool RejectRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ sal_Int8 nDepth = 0)
+                               /*[in]*/ sal_Int8 nDepth = 0,
+                               bool bDirect = false)
         = 0;
 
     virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const = 0;

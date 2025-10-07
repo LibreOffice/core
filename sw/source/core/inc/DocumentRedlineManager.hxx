@@ -113,7 +113,8 @@ public:
                                bool bDirect = false) override;
 
     virtual bool RejectRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ sal_Int8 nDepth = 0) override;
+                               /*[in]*/ sal_Int8 nDepth = 0,
+                               bool bDirect = false) override;
 
     virtual void AcceptAllRedline(/*[in]*/bool bAcceptReject) override;
 

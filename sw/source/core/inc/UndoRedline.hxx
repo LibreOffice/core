@@ -129,7 +129,7 @@ private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth = 0, bool bHierarchical = false );
+    SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth = 0, bool bHierarchical = false, bool bDirect = false );
 
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
