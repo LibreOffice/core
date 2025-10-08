@@ -3396,7 +3396,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             // Selecting this cell is not allowed, neither is context menu.
             return;
 
-        if (mpSpellCheckCxt)
+        if (mpSpellCheckCxt
+            && (bPosIsInEditView || !mrViewData.GetMarkData().IsCellMarked(nCellX, nCellY)))
         {
             // Find the first string to the left for spell checking in case the current cell is empty.
             ScAddress aPos(nCellX, nCellY, nTab);
