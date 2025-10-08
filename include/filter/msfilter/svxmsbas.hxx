@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
-#define INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
+#pragma once
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/ustring.hxx>
@@ -67,7 +66,5 @@ private:
     rtl::Reference<SotStorage> xRoot;
     SfxObjectShell& rDocSh;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

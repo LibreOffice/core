@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_MSFILTERDLLAPI_H
-#define INCLUDED_FILTER_MSFILTER_MSFILTERDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -29,7 +28,5 @@
 #endif
 
 #define MSFILTER_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
