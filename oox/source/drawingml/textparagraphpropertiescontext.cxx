@@ -291,7 +291,12 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         {
             try {
                 sal_Int32 nType = rAttribs.getToken( XML_type, 0 );
-                sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, 1 );
+                sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, -1 );
+                if( nStartAt >= 0 )
+                {
+                    mrTextParagraphProperties.setRestartNumbering(true);
+                }
+
                 if( nStartAt > 32767 )
                 {
                     nStartAt = 32767;
