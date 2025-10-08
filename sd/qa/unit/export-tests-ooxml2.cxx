@@ -984,7 +984,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf133502)
     save(u"Impress Office Open XML"_ustr);
     xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/comments/comment1.xml"_ustr);
 
-    assertXPathContent(pXmlDocRels, "/p:cmLst/p:cm/p:text", u"Test for creator-initials");
+    // Without the fix to tdf#168754 the special characters would cause errors during parsing
+    assertXPathContent(pXmlDocRels, "/p:cmLst/p:cm/p:text",
+                       u"Test for creator-initials\n< > & \" '");
 
     // Without the fix in place, the comment position would have been 0,0
     assertXPath(pXmlDocRels, "/p:cmLst/p:cm/p:pos", "x", u"2032");
