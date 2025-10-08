@@ -91,7 +91,7 @@ private:
     void importBorderElement(oox::xls::BorderRef xBorder, sal_Int32 nBorderElement,
                              sal_Int32 nBorderElementId);
     void importBorders();
-    // TODO: void importFonts();
+    void importFonts();
     void importDxfs();
     void importTableStyle(const TableStyle& rTableStyleInfo);
 

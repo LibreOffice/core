@@ -897,7 +897,7 @@ vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const S
 
     // fill the font object
     vcl::Font aFont;
-    ScPatternAttr::fillFontOnly(aFont, rItemSet, nullptr, nullptr, nullptr, nScScript);
+    ScPatternAttr::fillFontOnly(aFont, rItemSet, nullptr, nullptr, nullptr, nullptr, nScScript);
     return aFont;
 }
 
