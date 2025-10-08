@@ -43,6 +43,53 @@ OUString helper_getTypeName(const Reference<XIdlClass>& xTypeClass)
     return u"<UnknownType>"_ustr;
 }
 
+OUString GetBasicTypeName(SbxDataType eType)
+{
+    switch (eType)
+    {
+        case SbxDataType::SbxSTRING:
+            return u"String"_ustr;
+        case SbxDataType::SbxINTEGER:
+            return u"Integer"_ustr;
+        case SbxDataType::SbxLONG:
+            return u"Long"_ustr;
+        case SbxDataType::SbxULONG:
+            return u"ULong"_ustr;
+        case SbxDataType::SbxSALINT64:
+            return u"Long64"_ustr;
+        case SbxDataType::SbxSALUINT64:
+            return u"ULong64"_ustr;
+        case SbxDataType::SbxDECIMAL:
+            return u"Decimal"_ustr;
+        case SbxDataType::SbxCHAR:
+            return u"Char"_ustr;
+        case SbxDataType::SbxBYTE:
+            return u"Byte"_ustr;
+        case SbxDataType::SbxSINGLE:
+            return u"Single"_ustr;
+        case SbxDataType::SbxDOUBLE:
+            return u"Double"_ustr;
+        case SbxDataType::SbxCURRENCY:
+            return u"Currency"_ustr;
+        case SbxDataType::SbxDATE:
+            return u"Date"_ustr;
+        case SbxDataType::SbxBOOL:
+            return u"Boolean"_ustr;
+        case SbxDataType::SbxOBJECT:
+            return u"Object"_ustr;
+        case SbxDataType::SbxERROR:
+            return u"Error"_ustr;
+        case SbxDataType::SbxEMPTY:
+            return u"Empty"_ustr;
+        case SbxDataType::SbxNULL:
+            return u"Null"_ustr;
+        case SbxDataType::SbxVOID:
+            return u"Void"_ustr;
+        default:
+            return u"Variant"_ustr;
+    }
+}
+
 void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNode,
                              std::unordered_set<OUString>& rVisitedTypes, sal_uInt16 nDepth = 0)
 {
@@ -220,6 +267,34 @@ void ImplGetMembersOfBasicModule(SymbolInfoList& rMembers, const IdeSymbolInfo& 
                     pMember->sParentName = rNode.sOriginLibrary + u"." + rNode.sName;
                     pMember->sQualifiedName = pMember->sParentName + u"." + pMethod->GetName();
                 }
+
+                SbxInfo* pInfo = pMethod->GetInfo();
+                if (pInfo)
+                {
+                    pMember->sReturnTypeName = GetBasicTypeName(pMethod->GetType());
+                    sal_uInt32 j = 1;
+                    const SbxParamInfo* pParamInfo = pInfo->GetParam(j);
+                    while (pParamInfo)
+                    {
+                        IdeParamInfo aParam;
+                        aParam.sName = pParamInfo->aName;
+                        aParam.sTypeName = GetBasicTypeName(pParamInfo->eType);
+                        aParam.bIsByVal = !(pParamInfo->nFlags & SbxFlagBits::Reference);
+                        aParam.bIsOptional
+                            = static_cast<bool>(pParamInfo->nFlags & SbxFlagBits::Optional);
+
+                        bool bIsByRef
+                            = static_cast<bool>(pParamInfo->nFlags & SbxFlagBits::Reference);
+                        aParam.bIsByVal = !bIsByRef;
+                        aParam.bIsIn = true;
+                        aParam.bIsOut = bIsByRef;
+
+                        pMember->aParameters.push_back(aParam);
+
+                        pParamInfo = pInfo->GetParam(++j);
+                    }
+                }
+
                 rMembers.push_back(pMember);
             }
         }

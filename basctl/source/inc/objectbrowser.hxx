@@ -80,6 +80,8 @@ private:
     void ClearLeftTreeView();
     void ClearRightTreeView();
     void PopulateMembersPane(const IdeSymbolInfo& rSymbol);
+    void UpdateDetailsPane(const IdeSymbolInfo* pSymbol, bool bIsContainer);
+    void UpdateStatusBar(const IdeSymbolInfo* pLeftSymbol, const IdeSymbolInfo* pRightSymbol);
 
     // Core References
     Shell* m_pShell;
@@ -93,6 +95,7 @@ private:
     bool m_bDataMayBeStale = true;
     OUString m_sLastActiveDocumentIdentifier;
     bool m_bPerformingAction = false; // Flag for Right Pane Double Click
+    bool m_bFirstLoadComplete = false; // Tracks initial load message
 
     // Helper Method for Double-Click Actions
     void NavigateToMacroSource(const IdeSymbolInfo& rSymbol);

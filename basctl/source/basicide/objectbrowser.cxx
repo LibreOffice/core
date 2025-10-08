@@ -19,6 +19,9 @@
 
 #include <basctl/sbxitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -26,7 +29,6 @@
 #include <svl/itemset.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/weld.hxx>
 
@@ -156,6 +158,287 @@ OUString GetGroupNameForKind(IdeSymbolKind eKind)
         default:
             return IDEResId(RID_STR_OB_GROUP_OTHER);
     }
+}
+
+OUString GetSymbolTypeDescription(basctl::IdeSymbolKind eKind)
+{
+    using basctl::IdeSymbolKind;
+    switch (eKind)
+    {
+        case IdeSymbolKind::ROOT_UNO_APIS:
+            return IDEResId(RID_STR_OB_TYPE_UNO_APIS_ROOT);
+        case IdeSymbolKind::ROOT_APPLICATION_LIBS:
+            return IDEResId(RID_STR_OB_TYPE_APP_LIBS);
+        case IdeSymbolKind::ROOT_DOCUMENT_LIBS:
+            return IDEResId(RID_STR_OB_TYPE_DOC_LIBS);
+        case IdeSymbolKind::LIBRARY:
+            return IDEResId(RID_STR_OB_TYPE_LIBRARY);
+        case IdeSymbolKind::MODULE:
+            return IDEResId(RID_STR_OB_TYPE_MODULE);
+        case IdeSymbolKind::CLASS_MODULE:
+            return IDEResId(RID_STR_OB_TYPE_CLASS_MODULE);
+        case IdeSymbolKind::UNO_NAMESPACE:
+            return IDEResId(RID_STR_OB_TYPE_NAMESPACE);
+        case IdeSymbolKind::UNO_INTERFACE:
+            return IDEResId(RID_STR_OB_TYPE_INTERFACE);
+        case IdeSymbolKind::UNO_SERVICE:
+            return IDEResId(RID_STR_OB_TYPE_SERVICE);
+        case IdeSymbolKind::UNO_STRUCT:
+            return IDEResId(RID_STR_OB_TYPE_STRUCT);
+        case IdeSymbolKind::UNO_ENUM:
+            return IDEResId(RID_STR_OB_TYPE_ENUM);
+        case IdeSymbolKind::UNO_CONSTANTS:
+            return IDEResId(RID_STR_OB_TYPE_CONSTANTS);
+        case IdeSymbolKind::UNO_EXCEPTION:
+            return IDEResId(RID_STR_OB_TYPE_EXCEPTION);
+        case IdeSymbolKind::UNO_TYPEDEF:
+            return IDEResId(RID_STR_OB_TYPE_TYPEDEF);
+        case IdeSymbolKind::UNO_METHOD:
+            return IDEResId(RID_STR_OB_TYPE_METHOD);
+        case IdeSymbolKind::UNO_PROPERTY:
+            return IDEResId(RID_STR_OB_TYPE_PROPERTY);
+        case IdeSymbolKind::UNO_FIELD:
+            return IDEResId(RID_STR_OB_TYPE_FIELD);
+        case IdeSymbolKind::SUB:
+            return IDEResId(RID_STR_OB_TYPE_SUB);
+        case IdeSymbolKind::FUNCTION:
+            return IDEResId(RID_STR_OB_TYPE_FUNCTION);
+        case IdeSymbolKind::ENUM_MEMBER:
+            return IDEResId(RID_STR_OB_TYPE_ENUM_MEMBER);
+        default:
+            return IDEResId(RID_STR_OB_TYPE_ITEM);
+    }
+}
+
+void FormatMethodSignature(rtl::OUStringBuffer& rBuffer, const basctl::IdeSymbolInfo& rSymbol)
+{
+    rBuffer.append(rSymbol.sName);
+    rBuffer.append(u"(");
+    if (!rSymbol.aParameters.empty())
+    {
+        for (size_t i = 0; i < rSymbol.aParameters.size(); ++i)
+        {
+            const auto& param = rSymbol.aParameters[i];
+            if (param.bIsOptional)
+            {
+                rBuffer.append(IDEResId(RID_STR_OB_OPTIONAL) + u" ");
+            }
+            if (!param.bIsByVal)
+            {
+                rBuffer.append(IDEResId(RID_STR_OB_BYREF) + u" ");
+            }
+            if (param.bIsOut && !param.bIsIn)
+            {
+                rBuffer.append(IDEResId(RID_STR_OB_OUT_PARAM) + u" ");
+            }
+            else if (param.bIsOut && param.bIsIn)
+            {
+                rBuffer.append(IDEResId(RID_STR_OB_INOUT_PARAM) + u" ");
+            }
+
+            rBuffer.append(param.sName + IDEResId(RID_STR_OB_AS) + param.sTypeName);
+            if (i < rSymbol.aParameters.size() - 1)
+            {
+                rBuffer.append(u", ");
+            }
+        }
+    }
+    rBuffer.append(u")");
+    if (!rSymbol.sReturnTypeName.isEmpty() && rSymbol.sReturnTypeName != "Void")
+    {
+        rBuffer.append(IDEResId(RID_STR_OB_AS) + rSymbol.sReturnTypeName);
+    }
+}
+
+void FormatPropertySignature(rtl::OUStringBuffer& rBuffer, const basctl::IdeSymbolInfo& rSymbol)
+{
+    rBuffer.append(rSymbol.sName);
+    OUString sType = !rSymbol.sTypeName.isEmpty() ? rSymbol.sTypeName : rSymbol.sReturnTypeName;
+    if (!sType.isEmpty())
+    {
+        rBuffer.append(IDEResId(RID_STR_OB_AS) + sType);
+    }
+}
+
+OUString AccessModifierToString(IdeAccessModifier eAccess)
+{
+    switch (eAccess)
+    {
+        case IdeAccessModifier::PUBLIC:
+            return IDEResId(RID_STR_OB_ACCESS_PUBLIC);
+        case IdeAccessModifier::PRIVATE:
+            return IDEResId(RID_STR_OB_ACCESS_PRIVATE);
+        default:
+            return OUString();
+    }
+}
+
+OUString FormatSymbolSignature(const IdeSymbolInfo& rSymbol)
+{
+    rtl::OUStringBuffer sDescription;
+
+    sDescription.append(u"━━━ " + GetSymbolTypeDescription(rSymbol.eKind) + u" ━━━\n\n📌 ");
+
+    switch (rSymbol.eKind)
+    {
+        case IdeSymbolKind::UNO_METHOD:
+        case IdeSymbolKind::SUB:
+        case IdeSymbolKind::FUNCTION:
+            FormatMethodSignature(sDescription, rSymbol);
+            break;
+        case IdeSymbolKind::UNO_PROPERTY:
+        case IdeSymbolKind::UNO_FIELD:
+            FormatPropertySignature(sDescription, rSymbol);
+            break;
+        default:
+            sDescription.append(rSymbol.sName);
+            break;
+    }
+    sDescription.append(u"\n\n");
+
+    if (rSymbol.eAccessModifier != IdeAccessModifier::NOT_APPLICABLE)
+    {
+        sDescription.append(u"🔒 " + IDEResId(RID_STR_OB_ACCESS)
+                            + AccessModifierToString(rSymbol.eAccessModifier) + u"\n");
+    }
+
+    if (!rSymbol.sReturnTypeName.isEmpty() && rSymbol.sReturnTypeName != "Void")
+    {
+        sDescription.append(u"↩️ " + IDEResId(RID_STR_OB_RETURNS) + rSymbol.sReturnTypeName
+                            + u"\n");
+    }
+
+    if (!rSymbol.sTypeName.isEmpty() && rSymbol.sReturnTypeName.isEmpty())
+    {
+        sDescription.append(u"📦 " + IDEResId(RID_STR_OB_TYPE) + rSymbol.sTypeName + u"\n");
+    }
+
+    if (!rSymbol.aParameters.empty())
+    {
+        sDescription.append(u"\n📋 " + IDEResId(RID_STR_OB_PARAMETERS));
+        for (const auto& param : rSymbol.aParameters)
+        {
+            sDescription.append(u"  • " + param.sName + u" : " + param.sTypeName);
+            rtl::OUStringBuffer sModifiers;
+            if (param.bIsOptional)
+            {
+                sModifiers.append(IDEResId(RID_STR_OB_OPTIONAL));
+            }
+            if (param.bIsOut && !param.bIsIn)
+            {
+                OUString sOut = IDEResId(RID_STR_OB_OUT_PARAM);
+                sModifiers.append(sModifiers.getLength() ? (u", "_ustr + sOut) : sOut);
+            }
+            else if (param.bIsOut && param.bIsIn)
+            {
+                OUString sInOut = IDEResId(RID_STR_OB_INOUT_PARAM);
+                sModifiers.append(sModifiers.getLength() ? (u", "_ustr + sInOut) : sInOut);
+            }
+            if (!param.bIsByVal)
+            {
+                OUString sByRef = IDEResId(RID_STR_OB_BYREF);
+                sModifiers.append(sModifiers.getLength() ? (u", "_ustr + sByRef) : sByRef);
+            }
+            if (sModifiers.getLength() > 0)
+            {
+                sDescription.append(u" [" + sModifiers.makeStringAndClear() + u"]");
+            }
+            if (param.osDefaultValueExpression.has_value())
+            {
+                sDescription.append(u" = " + param.osDefaultValueExpression.value());
+            }
+            sDescription.append(u"\n");
+        }
+    }
+
+    sDescription.append(
+        u"\n━━━ " + OUString::Concat(o3tl::trim(IDEResId(RID_STR_OB_LOCATION_HEADER))) + u" ━━━\n");
+
+    if (!rSymbol.sParentName.isEmpty())
+    {
+        sDescription.append(u"📂 " + IDEResId(RID_STR_OB_MEMBER_OF) + rSymbol.sParentName + u"\n");
+    }
+    if (!rSymbol.sOriginLibrary.isEmpty())
+    {
+        sDescription.append(u"📚 " + IDEResId(RID_STR_OB_LIBRARY) + rSymbol.sOriginLibrary + u"\n");
+    }
+    if (!rSymbol.sOriginLocation.isEmpty())
+    {
+        sDescription.append(u"📄 " + IDEResId(RID_STR_OB_DOCUMENT) + rSymbol.sOriginLocation
+                            + u"\n");
+    }
+    if (rSymbol.nSourceLine > 0)
+    {
+        sDescription.append(u"📍 " + IDEResId(RID_STR_OB_LINE)
+                            + OUString::number(rSymbol.nSourceLine) + u"\n");
+    }
+    if (!rSymbol.sQualifiedName.isEmpty() && rSymbol.sQualifiedName != rSymbol.sName)
+    {
+        sDescription.append(u"\n━━━ "
+                            + OUString::Concat(o3tl::trim(IDEResId(RID_STR_OB_FULLNAME_HEADER)))
+                            + u" ━━━\n");
+        sDescription.append(rSymbol.sQualifiedName + u"\n");
+    }
+
+    return sDescription.makeStringAndClear();
+}
+
+OUString FormatContainerSignature(const IdeSymbolInfo& rSymbol,
+                                  IdeDataProviderInterface* pDataProvider)
+{
+    if (!pDataProvider)
+    {
+        return OUString();
+    }
+
+    rtl::OUStringBuffer sInfo;
+    sInfo.append(u"━━━ " + GetSymbolTypeDescription(rSymbol.eKind) + u" ━━━\n\n📌 " + rSymbol.sName
+                 + u"\n\n");
+
+    if (ShouldShowMembers(rSymbol))
+    {
+        GroupedSymbolInfoList aMembers = pDataProvider->GetMembers(rSymbol);
+        size_t nTotalMembers = 0;
+        for (const auto& pair : aMembers)
+            nTotalMembers += pair.second.size();
+
+        sInfo.append(IDEResId(RID_STR_OB_CONTENTS_HEADER) + IDEResId(RID_STR_OB_TOTAL_MEMBERS)
+                     + OUString::number(static_cast<sal_Int64>(nTotalMembers)) + u"\n\n");
+
+        for (const auto& pair : aMembers)
+        {
+            sInfo.append(u"  • " + GetGroupNameForKind(pair.first) + u": "
+                         + OUString::number(static_cast<sal_Int64>(pair.second.size())) + u"\n");
+        }
+    }
+    else if (IsExpandable(rSymbol))
+    {
+        auto aChildren = pDataProvider->GetChildNodes(rSymbol);
+        sal_Int64 nChildren = static_cast<sal_Int64>(aChildren.size());
+        sInfo.append(
+            IDEResId(RID_STR_OB_CONTENTS_HEADER)
+            + IDEResId(RID_STR_OB_CONTAINS_ITEMS).replaceFirst(u"%1", OUString::number(nChildren)));
+    }
+
+    if (!rSymbol.sQualifiedName.isEmpty() && rSymbol.sQualifiedName != rSymbol.sName)
+    {
+        sInfo.append(IDEResId(RID_STR_OB_FULLNAME_HEADER) + rSymbol.sQualifiedName + u"\n");
+    }
+
+    if (!rSymbol.sOriginLibrary.isEmpty() || !rSymbol.sOriginLocation.isEmpty())
+    {
+        sInfo.append(IDEResId(RID_STR_OB_LOCATION_HEADER));
+        if (!rSymbol.sOriginLibrary.isEmpty())
+        {
+            sInfo.append(IDEResId(RID_STR_OB_LIBRARY) + rSymbol.sOriginLibrary + u"\n");
+        }
+        if (!rSymbol.sOriginLocation.isEmpty())
+        {
+            sInfo.append(IDEResId(RID_STR_OB_DOCUMENT) + rSymbol.sOriginLocation + u"\n");
+        }
+    }
+
+    return sInfo.makeStringAndClear();
 }
 
 // Helper to add a symbol entry to a tree view and its corresponding data stores.
@@ -383,6 +666,14 @@ void ObjectBrowser::Initialize()
             LINK(this, ObjectBrowser, OnRightTreeDoubleClick));
     }
 
+    if (m_xDetailPane)
+    {
+        vcl::Font aFont = m_xDetailPane->get_font();
+        aFont.SetFamilyName(u"Monospace"_ustr);
+        aFont.SetPitch(PITCH_FIXED);
+        m_xDetailPane->set_font(aFont);
+    }
+
     if (m_xBackButton)
         m_xBackButton->set_sensitive(false);
     if (m_xForwardButton)
@@ -486,12 +777,24 @@ void ObjectBrowser::Show(bool bVisible)
         if (!m_pDataProvider->IsInitialized())
         {
             ShowLoadingState();
+            IdeTimer aTotalInitTimer("ObjectBrowser::FullInitialization");
             weld::WaitObject aWait(GetFrameWeld());
             m_pDataProvider->Initialize();
-            m_bDataMayBeStale = true; // Data is fresh, but force a refresh
-        }
+            m_bDataMayBeStale = true;
 
-        if (m_bDataMayBeStale)
+            RefreshUI();
+            m_bDataMayBeStale = false;
+
+            if (!m_bFirstLoadComplete)
+            {
+                m_bFirstLoadComplete = true;
+                double fElapsedSeconds = aTotalInitTimer.getElapsedTimeMs() / 1000.0;
+                OUString sStatus = IDEResId(RID_STR_OB_READY_LOADED)
+                                       .replaceFirst(u"%1", OUString::number(fElapsedSeconds));
+                m_xStatusLabel->set_label(sStatus);
+            }
+        }
+        else if (m_bDataMayBeStale)
         {
             RefreshUI();
             m_bDataMayBeStale = false;
@@ -527,10 +830,7 @@ void ObjectBrowser::RefreshUI(bool /*bForceKeepUno*/)
         m_xRightPaneHeaderLabel->set_label(IDEResId(RID_STR_OB_GROUP_MEMBERS));
     }
 
-    if (m_xDetailPane)
-    {
-        m_xDetailPane->set_text(u""_ustr);
-    }
+    UpdateDetailsPane(nullptr, false);
 
     // Get the filtered list of nodes based on the current scope
     SymbolInfoList aTopLevelNodes = m_pDataProvider->GetTopLevelNodes();
@@ -546,8 +846,8 @@ void ObjectBrowser::RefreshUI(bool /*bForceKeepUno*/)
     m_xLeftTreeView->thaw();
     m_xRightMembersView->thaw();
 
-    if (m_xStatusLabel)
-        m_xStatusLabel->set_label(u"Ready"_ustr);
+    if (!m_bFirstLoadComplete && m_xStatusLabel)
+        m_xStatusLabel->set_label(IDEResId(RID_STR_OB_READY));
 }
 
 void ObjectBrowser::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
@@ -649,6 +949,86 @@ void ObjectBrowser::ScheduleRefresh()
     {
         RefreshUI();
     }
+}
+
+void ObjectBrowser::UpdateDetailsPane(const IdeSymbolInfo* pSymbol, bool bIsContainer)
+{
+    if (!m_xDetailPane)
+    {
+        return;
+    }
+
+    if (pSymbol && pSymbol->eKind != IdeSymbolKind::PLACEHOLDER && pSymbol->bSelectable)
+    {
+        if (bIsContainer)
+        {
+            m_xDetailPane->set_text(FormatContainerSignature(*pSymbol, m_pDataProvider.get()));
+        }
+        else
+        {
+            m_xDetailPane->set_text(FormatSymbolSignature(*pSymbol));
+        }
+    }
+    else
+    {
+        m_xDetailPane->set_text(u""_ustr);
+    }
+}
+
+void ObjectBrowser::UpdateStatusBar(const IdeSymbolInfo* pLeftSymbol,
+                                    const IdeSymbolInfo* pRightSymbol)
+{
+    if (!m_xStatusLabel)
+    {
+        return;
+    }
+    OUString sStatusText;
+
+    if (pRightSymbol)
+    {
+        if (pRightSymbol->eKind == IdeSymbolKind::PLACEHOLDER)
+        {
+            sStatusText = pRightSymbol->sName;
+        }
+        else
+        {
+            sStatusText = GetSymbolTypeDescription(pRightSymbol->eKind);
+        }
+    }
+    else if (pLeftSymbol)
+    {
+        if (ShouldShowMembers(*pLeftSymbol))
+        {
+            GroupedSymbolInfoList aMembers = m_pDataProvider->GetMembers(*pLeftSymbol);
+            size_t nTotalMembers = 0;
+            for (const auto& pair : aMembers)
+                nTotalMembers += pair.second.size();
+            sStatusText
+                = IDEResId(RID_STR_OB_MEMBERS_COUNT)
+                      .replaceFirst(u"%1", OUString::number(static_cast<sal_Int64>(nTotalMembers)));
+        }
+        else if (IsExpandable(*pLeftSymbol))
+        {
+            auto aChildren = m_pDataProvider->GetChildNodes(*pLeftSymbol);
+            sStatusText
+                = IDEResId(RID_STR_OB_ITEMS_COUNT)
+                      .replaceFirst(u"%1",
+                                    OUString::number(static_cast<sal_Int64>(aChildren.size())));
+        }
+        else
+        {
+            sStatusText = GetSymbolTypeDescription(pLeftSymbol->eKind);
+        }
+    }
+    else if (m_bFirstLoadComplete)
+    {
+        sStatusText = m_xStatusLabel->get_label();
+    }
+    else
+    {
+        sStatusText = IDEResId(RID_STR_OB_READY);
+    }
+    m_xStatusLabel->set_label(sStatusText);
 }
 
 void ObjectBrowser::NavigateToMacroSource(const IdeSymbolInfo& rSymbol)
@@ -765,6 +1145,8 @@ IMPL_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, rTree, void)
     auto xSelectedIter = rTree.make_iterator();
     if (!rTree.get_selected(xSelectedIter.get()))
     {
+        UpdateStatusBar(nullptr, nullptr);
+        UpdateDetailsPane(nullptr, false);
         return;
     }
 
@@ -773,6 +1155,10 @@ IMPL_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, rTree, void)
     {
         return;
     }
+
+    // A selection in the left pane is always a container
+    UpdateDetailsPane(pSymbol.get(), true);
+    UpdateStatusBar(pSymbol.get(), nullptr);
 
     ClearRightTreeView();
 
@@ -789,17 +1175,34 @@ IMPL_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, rTree, void)
         return;
     }
 
-    auto xSelectedIter = rTree.make_iterator();
-    if (!rTree.get_selected(xSelectedIter.get()))
+    auto xLeftIter = m_xLeftTreeView->make_iterator();
+    m_xLeftTreeView->get_selected(xLeftIter.get());
+    auto pLeftSymbol = GetSymbolForIter(*xLeftIter, *m_xLeftTreeView, m_aLeftTreeSymbolIndex);
+
+    auto xRightIter = rTree.make_iterator();
+    if (!rTree.get_selected(xRightIter.get()))
+    {
+        // Revert to showing container info if right-pane selection is cleared
+        UpdateStatusBar(pLeftSymbol.get(), nullptr);
+        UpdateDetailsPane(pLeftSymbol.get(), true);
+        return;
+    }
+
+    auto pRightSymbol = GetSymbolForIter(*xRightIter, rTree, m_aRightTreeSymbolIndex);
+    if (!pRightSymbol)
     {
         return;
     }
 
-    auto pSymbol = GetSymbolForIter(*xSelectedIter, rTree, m_aRightTreeSymbolIndex);
-    if (!pSymbol || pSymbol->eKind == IdeSymbolKind::PLACEHOLDER)
+    // We create a temporary copy to correctly populate the parent name for display
+    IdeSymbolInfo tempSymbol = *pRightSymbol;
+    if (pLeftSymbol)
     {
-        return;
+        tempSymbol.sParentName = pLeftSymbol->sName;
     }
+
+    UpdateDetailsPane(&tempSymbol, false);
+    UpdateStatusBar(pLeftSymbol.get(), pRightSymbol.get());
 }
 
 IMPL_LINK(ObjectBrowser, OnRightNodeExpand, const weld::TreeIter&, rParentIter, bool)
@@ -807,6 +1210,11 @@ IMPL_LINK(ObjectBrowser, OnRightNodeExpand, const weld::TreeIter&, rParentIter, 
     if (m_bDisposed)
     {
         return false;
+    }
+
+    if (m_xRightMembersView->iter_has_child(rParentIter))
+    {
+        return true;
     }
 
     auto pParentSymbol
@@ -973,6 +1381,11 @@ IMPL_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, rParentIter, bool)
     if (!pParentSymbol)
     {
         return false;
+    }
+
+    if (m_xLeftTreeView->iter_has_child(rParentIter))
+    {
+        return true;
     }
 
     const auto aAllChildren = m_pDataProvider->GetChildNodes(*pParentSymbol);
