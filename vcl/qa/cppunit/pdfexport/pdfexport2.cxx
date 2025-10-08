@@ -5528,7 +5528,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162194SoftHyphen)
 
     CPPUNIT_ASSERT_EQUAL(u"Waffle"_ustr, aText.at(0).trim());
     CPPUNIT_ASSERT_EQUAL(u"AAA Waf"_ustr, aText.at(1).trim());
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_EQUAL(u"-"_ustr, aText.at(2).trim());
     CPPUNIT_ASSERT_EQUAL(u"fle"_ustr, aText.at(3).trim());
 }
 

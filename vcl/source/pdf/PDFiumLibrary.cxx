@@ -466,8 +466,6 @@ public:
     PDFiumTextPageImpl(FPDF_TEXTPAGE pTextPage);
     ~PDFiumTextPageImpl();
 
-    FPDF_TEXTPAGE getPointer() { return mpTextPage; }
-
     int countChars() override;
     unsigned int getUnicode(int index) override;
     std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, PDFFindFlags nFlags,
@@ -475,6 +473,73 @@ public:
 
     /// Returned rect is no longer upside down and is in mm100.
     basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight) override;
+
+    OUString getText(FPDF_PAGEOBJECT pPageObject)
+    {
+        OUStringBuffer aResult;
+
+        bool containsPreChar = false;
+        bool addLineFeed = false;
+        double posY(0), originX(0.0), originY(0.0);
+
+        // FPDFTextObj_GetText also does a similar loop over the entire
+        // contents of the text page, this is the intended to be the equivalent
+        // of that except for (currently) added recovery of hyphens.
+        int count = FPDFText_CountChars(mpTextPage);
+        for (int i = 0; i < count; ++i)
+        {
+            FPDF_PAGEOBJECT pOwner = FPDFText_GetTextObject(mpTextPage, i);
+            sal_Unicode cUnicode = FPDFText_GetUnicode(mpTextPage, i);
+            if (pOwner == pPageObject)
+            {
+                FPDFText_GetCharOrigin(mpTextPage, i, &originX, &originY);
+
+                if (fabs(posY - originY) > 0 && !containsPreChar && addLineFeed)
+                {
+                    posY = originY;
+                    if (!aResult.isEmpty())
+                        aResult.append("\r\n");
+                }
+                containsPreChar = true;
+                addLineFeed = false;
+
+                switch (cUnicode)
+                {
+                    case 0:
+                        SAL_INFO("vcl.filter", "PDFiumImpl: cannot get unicode for char");
+                        break;
+                    default:
+                        aResult.append(cUnicode);
+                        break;
+                    case 0x2: // oddly pdfium replaces some '-' with 2.
+                    {
+                        int isHyphen = FPDFText_IsHyphen(mpTextPage, i);
+                        if (isHyphen == 1)
+                            aResult.append('-');
+                        else
+                        {
+                            SAL_WARN_IF(isHyphen == -1, "vcl.filter",
+                                        "PDFiumImpl: FPDFText_IsHyphen failure");
+                            aResult.append(cUnicode);
+                        }
+                    }
+                    break;
+                }
+            }
+            else if (cUnicode == ' ' && containsPreChar)
+            {
+                aResult.append(' ');
+                containsPreChar = false;
+                addLineFeed = false;
+            }
+            else
+            {
+                containsPreChar = false;
+                addLineFeed = true;
+            }
+        }
+        return aResult.toString();
+    }
 };
 
 class PDFiumSignatureImpl final : public PDFiumSignature
@@ -1077,9 +1142,8 @@ PDFiumPageObjectImpl::PDFiumPageObjectImpl(FPDF_PAGEOBJECT pPageObject)
 OUString PDFiumPageObjectImpl::getText(std::unique_ptr<PDFiumTextPage> const& rTextPage)
 {
     auto pTextPage = static_cast<PDFiumTextPageImpl*>(rTextPage.get());
-    return getUnicodeString([this, pTextPage](FPDF_WCHAR* buffer, unsigned long length) {
-        return FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), buffer, length);
-    });
+    // FPDFTextObj_GetText may report some hyphens as 0x2
+    return pTextPage->getText(mpPageObject);
 }
 
 PDFPageObjectType PDFiumPageObjectImpl::getType()
