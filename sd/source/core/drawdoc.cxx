@@ -97,6 +97,7 @@ using ::com::sun::star::uno::Reference;
 
 
 SdDrawDocument* SdDrawDocument::s_pDocLockedInsertingLinks = nullptr;
+SdDrawDocument* SdDrawDocument::s_pLast = nullptr;
 
 PresentationSettings::PresentationSettings()
 :   mbAll( true ),
@@ -347,11 +348,14 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         rLayerAdmin.SetControlLayerName(sUNO_LayerName_controls);
     }
 
+    s_pLast = this;
 }
 
 // Destructor
 SdDrawDocument::~SdDrawDocument()
 {
+    s_pLast = nullptr;
+
     Broadcast(SdrHint(SdrHintKind::ModelCleared));
 
     if (mpWorkStartupTimer)
