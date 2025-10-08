@@ -658,6 +658,14 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
     }
 }
 
+void Font::setFontElements(const XlsColor& rColor, bool bWeight)
+{
+    maModel.maColor = rColor;
+    maUsedFlags.mbColorUsed = true;
+    maModel.mbBold = bWeight;
+    maUsedFlags.mbWeightUsed = true;
+}
+
 void Font::importFont( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( mbDxf, "sc", "Font::importFont - unexpected conditional formatting flag" );

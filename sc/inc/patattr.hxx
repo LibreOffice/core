@@ -185,6 +185,7 @@ public:
                                         const OutputDevice* pOutDev = nullptr,
                                         const Fraction* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
+                                        const SfxItemSet* pTableSet = nullptr,
                                         SvtScriptType nScript = SvtScriptType::NONE);
 
     static void fillFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
@@ -192,6 +193,7 @@ public:
                                         const OutputDevice* pOutDev = nullptr,
                                         const Fraction* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
+                                        const SfxItemSet* pTableSet = nullptr,
                                         SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
                                         const Color* pTextConfigColor = nullptr);
 
@@ -199,6 +201,7 @@ public:
                             const SfxItemSet& rItemSet,
                             ScAutoFontColorMode eAutoMode,
                             const SfxItemSet* pCondSet = nullptr,
+                            const SfxItemSet* pTableSet = nullptr,
                             const Color* pBackConfigColor = nullptr,
                             const Color* pTextConfigColor = nullptr);
 
@@ -208,19 +211,21 @@ public:
     void fillColor(model::ComplexColor& rComplexColor,
                     ScAutoFontColorMode eAutoMode,
                     const SfxItemSet* pCondSet = nullptr,
+                    const SfxItemSet* pTableSet = nullptr,
                     const Color* pBackConfigColor = nullptr,
                     const Color* pTextConfigColor = nullptr) const
     {
-        fillColor(rComplexColor, maLocalSfxItemSet, eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
+        fillColor(rComplexColor, maLocalSfxItemSet, eAutoMode, pCondSet, pTableSet, pBackConfigColor, pTextConfigColor);
     }
 
     void fillFontOnly(vcl::Font& rFont,
                     const OutputDevice* pOutDev = nullptr,
                     const Fraction* pScale = nullptr,
                     const SfxItemSet* pCondSet = nullptr,
+                    const SfxItemSet* pTableSet = nullptr,
                     SvtScriptType nScript = SvtScriptType::NONE) const
     {
-        fillFontOnly(rFont, maLocalSfxItemSet, pOutDev, pScale, pCondSet, nScript);
+        fillFontOnly(rFont, maLocalSfxItemSet, pOutDev, pScale, pCondSet, pTableSet, nScript);
     }
 
     /** Fills a font object from the own item set. */
@@ -228,17 +233,18 @@ public:
                     const OutputDevice* pOutDev = nullptr,
                     const Fraction* pScale = nullptr,
                     const SfxItemSet* pCondSet = nullptr,
+                    const SfxItemSet* pTableSet = nullptr,
                     SvtScriptType nScript = SvtScriptType::NONE,
                     const Color* pBackConfigColor = nullptr,
                     const Color* pTextConfigColor = nullptr) const
     {
-        fillFont(rFont, maLocalSfxItemSet, eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor);
+        fillFont(rFont, maLocalSfxItemSet, eAutoMode, pOutDev, pScale, pCondSet, pTableSet, nScript, pBackConfigColor, pTextConfigColor);
     }
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
-    SC_DLLPUBLIC static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr );
+    SC_DLLPUBLIC static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr, const SfxItemSet* pTableSet = nullptr );
     /** Converts all Calc items contained in the own item set to edit engine items and puts them into pEditSet. */
-    SC_DLLPUBLIC void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = nullptr ) const;
+    SC_DLLPUBLIC void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = nullptr, const SfxItemSet* pTableSet = nullptr ) const;
 
     /** Converts all edit engine items contained in rEditSet to Calc items and puts them into rDestSet. */
     SC_DLLPUBLIC static void             GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet );

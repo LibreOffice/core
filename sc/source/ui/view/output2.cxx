@@ -99,6 +99,7 @@ class ScDrawStringsVars
 
     const ScPatternAttr* pPattern;              // attribute
     const SfxItemSet*   pCondSet;               // from conditional formatting
+    const SfxItemSet*   pTableSet;              // from table formatting
 
     vcl::Font           aFont;                  // created from attributes
     FontMetric          aMetric;
@@ -140,7 +141,7 @@ public:
                 //  SetPatternSimple: without Font
 
     void SetPattern(
-        const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
+        const ScPatternAttr* pNew, const SfxItemSet* pSet, const SfxItemSet* pTSet, const ScRefCellValue& rCell,
         SvtScriptType nScript );
 
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
@@ -202,6 +203,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     pOutput     ( pData ),
     pPattern    ( nullptr ),
     pCondSet    ( nullptr ),
+    pTableSet   ( nullptr ),
     nAscentPixel(0),
     eAttrOrient ( SvxCellOrientation::Standard ),
     eAttrHorJust( SvxCellHorJustify::Standard ),
@@ -245,7 +247,7 @@ void ScDrawStringsVars::SetShrinkScale( tools::Long nScale, SvtScriptType nScrip
     if ( !bPixelToLogic )
         aFraction *= pOutput->aZoomY;
     vcl::Font aTmpFont;
-    pPattern->fillFontOnly(aTmpFont, pFmtDevice, &aFraction, pCondSet, nScript);
+    pPattern->fillFontOnly(aTmpFont, pFmtDevice, &aFraction, pCondSet, pTableSet, nScript);
     // only need font height
     tools::Long nNewHeight = aTmpFont.GetFontHeight();
     if ( nNewHeight > 0 )
@@ -297,9 +299,7 @@ static bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW n
     return pNumberFormatter->GetType( nCurrentNumberFormat ) == SvNumFormatType::TEXT;
 }
 
-void ScDrawStringsVars::SetPattern(
-    const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
-    SvtScriptType nScript )
+void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet, const SfxItemSet* pTSet, const ScRefCellValue& rCell, SvtScriptType nScript )
 {
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
@@ -308,6 +308,7 @@ void ScDrawStringsVars::SetPattern(
 
     pPattern = pNew;
     pCondSet = pSet;
+    pTableSet = pTSet;
 
     // evaluate pPattern
 
@@ -329,9 +330,9 @@ void ScDrawStringsVars::SetPattern(
         eColorMode = ScAutoFontColorMode::Print;
 
     if (bPixelToLogic)
-        pPattern->fillFont(aFont, eColorMode, pFmtDevice, nullptr, pCondSet, nScript, &aBackConfigColor, &aTextConfigColor);
+        pPattern->fillFont(aFont, eColorMode, pFmtDevice, nullptr, pCondSet, pTableSet, nScript, &aBackConfigColor, &aTextConfigColor);
     else
-        pPattern->fillFont(aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript, &aBackConfigColor, &aTextConfigColor );
+        pPattern->fillFont(aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, pTableSet, nScript, &aBackConfigColor, &aTextConfigColor );
 
     aFont.SetAlignment(ALIGN_BASELINE);
 
@@ -1543,8 +1544,10 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
     tools::Long nNeededWidth = 0;
     const ScPatternAttr* pPattern = nullptr;
     const SfxItemSet* pCondSet = nullptr;
+    const SfxItemSet* pTableSet = nullptr;
     const ScPatternAttr* pOldPattern = nullptr;
     const SfxItemSet* pOldCondSet = nullptr;
+    const SfxItemSet* pOldTableSet = nullptr;
     SvtScriptType nOldScript = SvtScriptType::NONE;
 
     // alternative pattern instances in case we need to modify the pattern
@@ -1683,6 +1686,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                         ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
                         pPattern = rCellInfo.pPatternAttr;
                         pCondSet = rCellInfo.pConditionSet;
+                        pTableSet = rCellInfo.pTableFormatSet;
 
                         if ( !pPattern )
                         {
@@ -1690,12 +1694,14 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                             // test for null is quicker than using column flags
                             pPattern = mpDoc->GetPattern( nCellX, nCellY, nTab );
                             pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
+                            pTableSet = mpDoc->GetTableFormatSet( nCellX, nCellY, nTab );
                         }
                     }
                     else        // get from document
                     {
                         pPattern = mpDoc->GetPattern( nCellX, nCellY, nTab );
                         pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
+                        pTableSet = mpDoc->GetTableFormatSet( nCellX, nCellY, nTab );
                     }
                     if ( mpDoc->GetPreviewFont() || mpDoc->GetPreviewCellStyle() )
                     {
@@ -1736,17 +1742,18 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                         nScript = ScGlobal::GetDefaultScriptType();
 
                     if ( !ScPatternAttr::areSame(pPattern, pOldPattern) || pCondSet != pOldCondSet ||
-                         nScript != nOldScript || mbSyntaxMode )
+                         pTableSet != pOldTableSet || nScript != nOldScript || mbSyntaxMode )
                     {
-                        if ( StringDiffer(pOldPattern,pPattern) ||
-                             pCondSet != pOldCondSet || nScript != nOldScript || mbSyntaxMode )
+                        if ( StringDiffer(pOldPattern,pPattern) || pCondSet != pOldCondSet ||
+                             pTableSet != pOldTableSet || nScript != nOldScript || mbSyntaxMode )
                         {
-                            aVars.SetPattern(pPattern, pCondSet, aCell, nScript);
+                            aVars.SetPattern(pPattern, pCondSet, pTableSet, aCell, nScript);
                         }
                         else
                             aVars.SetPatternSimple( pPattern, pCondSet );
                         pOldPattern = pPattern;
                         pOldCondSet = pCondSet;
+                        pOldTableSet = pTableSet;
                         nOldScript = nScript;
                     }
 
@@ -2482,7 +2489,7 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle
     }
 }
 
-ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue) :
+ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, bool bCellIsValue) :
     meHorJustAttr( lcl_GetValue<SvxHorJustifyItem, SvxCellHorJustify>(*pPattern, ATTR_HOR_JUSTIFY, pCondSet) ),
     meHorJustContext( meHorJustAttr ),
     meHorJustResult( meHorJustAttr ),
@@ -2501,9 +2508,11 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpEngine(nullptr),
     mpPattern(pPattern),
     mpCondSet(pCondSet),
+    mpTableSet(pTableSet),
     mpPreviewFontSet(nullptr),
     mpOldPattern(nullptr),
     mpOldCondSet(nullptr),
+    mpOldTableSet(nullptr),
     mpOldPreviewFontSet(nullptr),
     mpThisRowInfo(nullptr)
 {}
@@ -2567,7 +2576,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     // syntax highlighting mode is ignored here
     // StringDiffer doesn't look at hyphenate, language items
 
-    if (ScPatternAttr::areSame(mpPattern, mpOldPattern) && mpCondSet == mpOldCondSet && mpPreviewFontSet == mpOldPreviewFontSet )
+    if (ScPatternAttr::areSame(mpPattern, mpOldPattern) && mpCondSet == mpOldCondSet && mpTableSet == mpOldTableSet && mpPreviewFontSet == mpOldPreviewFontSet )
         return;
 
     Color nConfBackColor = GetConfBackgroundColor();
@@ -2575,7 +2584,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     SfxItemSet aSet( mpEngine->GetEmptyItemSet() );
-    mpPattern->FillEditItemSet( &aSet, mpCondSet );
+    mpPattern->FillEditItemSet( &aSet, mpCondSet, mpTableSet );
     if ( mpPreviewFontSet )
     {
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_FONT ) )
@@ -2598,6 +2607,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     mpEngine->SetDefaults( std::move(aSet) );
     mpOldPattern = mpPattern;
     mpOldCondSet = mpCondSet;
+    mpOldTableSet = mpTableSet;
     mpOldPreviewFontSet = mpPreviewFontSet;
 
     EEControlBits nControl = mpEngine->GetControlWord();
@@ -4469,6 +4479,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
     bool bHyphenatorSet = false;
     const ScPatternAttr* pOldPattern = nullptr;
     const SfxItemSet*    pOldCondSet = nullptr;
+    const SfxItemSet*    pOldTableSet = nullptr;
     const SfxItemSet*    pOldPreviewFontSet = nullptr;
     ScRefCellValue aCell;
 
@@ -4556,6 +4567,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
 
                     const ScPatternAttr* pPattern = nullptr;
                     const SfxItemSet* pCondSet = nullptr;
+                    const SfxItemSet* pTableSet = nullptr;
                     if (bDoCell)
                     {
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
@@ -4564,12 +4576,14 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                             ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
                             pPattern = rCellInfo.pPatternAttr;
                             pCondSet = rCellInfo.pConditionSet;
+                            pTableSet = rCellInfo.pTableFormatSet;
                             aCell = rCellInfo.maCell;
                         }
                         else        // get from document
                         {
                             pPattern = mpDoc->GetPattern( nCellX, nCellY, nTab );
                             pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
+                            pTableSet = mpDoc->GetTableFormatSet( nCellX, nCellY, nTab );
                             GetVisibleCell( nCellX, nCellY, nTab, aCell );
                         }
                         if (aCell.isEmpty())
@@ -4592,7 +4606,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         // fdo#32530: Check if the first character is RTL.
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
 
-                        DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
+                        DrawEditParam aParam(pPattern, pCondSet, pTableSet, lcl_SafeIsValue(aCell));
                         const bool bNumberFormatIsText = lcl_isNumberFormatText( mpDoc, nCellX, nCellY, nTab );
                         aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
                                 aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText);
@@ -4612,6 +4626,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         aParam.mpPreviewFontSet = pPreviewFontSet;
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
+                        aParam.mpOldTableSet = pOldTableSet;
                         aParam.mpOldPreviewFontSet = pOldPreviewFontSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
                         if (mpSpellCheckCxt)
@@ -4641,6 +4656,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         // Retrieve parameters for next iteration.
                         pOldPattern = aParam.mpOldPattern;
                         pOldCondSet = aParam.mpOldCondSet;
+                        pOldTableSet = aParam.mpOldTableSet;
                         pOldPreviewFontSet = aParam.mpOldPreviewFontSet;
                         bHyphenatorSet = aParam.mbHyphenatorSet;
                     }

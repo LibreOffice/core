@@ -458,6 +458,12 @@ void ScDocument::FillInfo(
                 {
                     pInfo->pLinesAttr = pLinesAttr;
                 }
+
+                const SfxItemSet* pPoolItem = pTableStyle->GetTableCellItemSet(*pDBData, nCol, nRow, nRowIndex);
+                if (pPoolItem)
+                {
+                    pInfo->pTableFormatSet = pPoolItem;
+                }
             }
 
             ++nRowIndex;

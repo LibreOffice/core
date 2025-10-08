@@ -20,6 +20,89 @@ ScTableStyle::ScTableStyle(const OUString& rName, const std::optional<OUString>&
 {
 }
 
+const SfxItemSet* ScTableStyle::GetTableCellItemSet(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                                    SCROW nRowIndex) const
+{
+    const ScTableStyleParam* pParam = rDBData.GetTableStyleInfo();
+    ScRange aRange;
+    rDBData.GetArea(aRange);
+
+    bool bHasHeader = rDBData.HasHeader();
+    bool bHasTotal = rDBData.HasTotals();
+    if (bHasHeader && mpLastHeaderCellPattern && nRow == aRange.aStart.Row()
+        && nCol == aRange.aEnd.Col())
+    {
+        return &mpLastHeaderCellPattern->GetItemSet();
+    }
+
+    if (bHasHeader && mpFirstHeaderCellPattern && nRow == aRange.aStart.Row()
+        && nCol == aRange.aStart.Col())
+    {
+        return &mpFirstHeaderCellPattern->GetItemSet();
+    }
+
+    if (bHasTotal && mpTotalRowPattern && nRow == aRange.aEnd.Row())
+    {
+        return &mpTotalRowPattern->GetItemSet();
+    }
+
+    if (bHasHeader && mpHeaderRowPattern && nRow == aRange.aStart.Row())
+    {
+        return &mpHeaderRowPattern->GetItemSet();
+    }
+
+    if (pParam->mbFirstColumn && mpFirstColumnPattern && nCol == aRange.aStart.Col())
+    {
+        return &mpFirstColumnPattern->GetItemSet();
+    }
+
+    if (pParam->mbLastColumn && mpLastColumnPattern && nCol == aRange.aEnd.Col())
+    {
+        return &mpLastColumnPattern->GetItemSet();
+    }
+
+    if (!bHasTotal || aRange.aEnd.Row() != nRow)
+    {
+        if (pParam->mbRowStripes && nRowIndex >= 0)
+        {
+            sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
+            bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
+            if (mpSecondRowStripePattern && !bFirstRowStripe)
+            {
+                return &mpSecondRowStripePattern->GetItemSet();
+            }
+
+            if (mpFirstRowStripePattern && bFirstRowStripe)
+            {
+                return &mpFirstRowStripePattern->GetItemSet();
+            }
+        }
+
+        if (pParam->mbColumnStripes)
+        {
+            SCCOL nRelativeCol = nCol - aRange.aStart.Col();
+            sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
+            bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
+            if (mpSecondColumnStripePattern && !bFirstColStripe)
+            {
+                return &mpSecondColumnStripePattern->GetItemSet();
+            }
+
+            if (mpFirstColumnStripePattern && bFirstColStripe)
+            {
+                return &mpFirstColumnStripePattern->GetItemSet();
+            }
+        }
+    }
+
+    if (mpTablePattern)
+    {
+        return &mpTablePattern->GetItemSet();
+    }
+
+    return nullptr;
+}
+
 void ScTableStyle::SetRowStripeSize(sal_Int32 nFirstRowStripeSize, sal_Int32 nSecondRowStripeSize)
 {
     if (nFirstRowStripeSize >= 1)
