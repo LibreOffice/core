@@ -113,11 +113,11 @@ SwLineInfo::~SwLineInfo()
 {
 }
 
-void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
-                                   const SwTextNode& rTextNode )
+void SwLineInfo::InitLineInfo(SwTextNode const& rTextNodeForLineProps)
 {
-    m_oRuler.emplace( rAttrSet.GetTabStops() );
-    if ( rTextNode.GetListTabStopPosition( m_nListTabStopPosition ) )
+    SwAttrSet const& rAttrSetForLineProps{rTextNodeForLineProps.GetSwAttrSet()};
+    m_oRuler.emplace(rAttrSetForLineProps.GetTabStops());
+    if (rTextNodeForLineProps.GetListTabStopPosition(m_nListTabStopPosition))
     {
         m_bListTabStopIncluded = true;
 
@@ -138,7 +138,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         }
     }
 
-    if ( !rTextNode.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
+    if (!rTextNodeForLineProps.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
     {
         // remove default tab stop at position 0
         for ( sal_uInt16 i = 0; i < m_oRuler->Count(); i++ )
@@ -152,7 +152,13 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         }
     }
 
-    m_pSpace = &rAttrSet.GetLineSpacing();
+    m_pSpace = &rAttrSetForLineProps.GetLineSpacing();
+}
+
+void SwLineInfo::CtorInitLineInfo(const SwAttrSet& rAttrSet,
+                                  const SwTextNode& rTextNodeForLineProps)
+{
+    InitLineInfo(rTextNodeForLineProps);
     m_nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
     m_nDefTabStop = std::numeric_limits<SwTwips>::max();
 }
@@ -533,6 +539,7 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* p
       m_aPos( rInf.GetPos() ),
       m_aPaintRect( rInf.GetPaintRect() ),
       m_nSpaceIdx( rInf.GetSpaceIdx() )
+    , m_pLineInfo(rInf.m_pLineInfo)
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
@@ -546,6 +553,7 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
       m_aPos( rInf.GetPos() ),
       m_aPaintRect( rInf.GetPaintRect() ),
       m_nSpaceIdx( rInf.GetSpaceIdx() )
+    , m_pLineInfo(rInf.m_pLineInfo)
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
@@ -798,8 +806,8 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
                                SwRect* pRect, SwRect* pIntersect,
                                const bool bInsideBox ) const
 {
-    const SwAttrSet& rAttrSet = GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet();
-    const SvxLineSpacingItem& rSpace = rAttrSet.GetLineSpacing();
+    assert(m_pLineInfo);
+    SvxLineSpacingItem const& rSpace{*m_pLineInfo->GetLineSpacing()};
     tools::Long nPropLineSpace = rSpace.GetPropLineSpace();
 
     SwTwips nHeight = rPor.Height();

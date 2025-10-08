@@ -114,6 +114,8 @@ public:
     void SetPropFont( const sal_uInt8 nNew ) { m_nPropFont = nNew; }
 
     SwAttrHandler& GetAttrHandler() { return m_aAttrHandler; }
+
+    SwTextNode const& GetTextNodeForLinePropsWordCompat(TextFrameIndex nStart);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

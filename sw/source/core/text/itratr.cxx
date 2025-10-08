@@ -340,13 +340,14 @@ SwAttrIter::SeekNewPos(TextFrameIndex const nNewPos, bool *const o_pIsToEnd)
     bool isToEnd{false};
     if (m_pMergedPara)
     {
-        if (m_pMergedPara->extents.empty())
+        if (m_pMergedPara->mergedText.isEmpty())
         {
             isToEnd = true;
             assert(m_pMergedPara->pLastNode == newPos.first);
         }
         else
         {
+            assert(!m_pMergedPara->extents.empty());
             auto const& rLast{m_pMergedPara->extents.back()};
             isToEnd = rLast.pNode == newPos.first && rLast.nEnd == newPos.second;
             // for text formatting: use *last* node if all text is hidden
@@ -953,6 +954,43 @@ TextFrameIndex SwAttrIter::GetNextLayoutBreakAttr() const
     }
 
     return TextFrameIndex{ nNext };
+}
+
+SwTextNode const&
+SwAttrIter::GetTextNodeForLinePropsWordCompat(TextFrameIndex const nStart)
+{
+    if (m_pMergedPara)
+    {
+        // skip any hidden to find the first non-hidden character on the line
+        TextFrameIndex nHiddenStart{COMPLETE_STRING};
+        TextFrameIndex nHiddenEnd{0};
+        m_pScriptInfo->GetBoundsOfHiddenRange(nStart, nHiddenStart, nHiddenEnd);
+        sal_Int32 nIndex(::std::max(nStart, nHiddenEnd));
+        // now, find the hidden paragraph break that follows the first
+        // non-hidden character on the line
+        for (auto it{m_pMergedPara->extents.begin()}; it != m_pMergedPara->extents.end(); ++it)
+        {
+            if (nIndex < (it->nEnd - it->nStart))
+            {
+                nIndex = 0;
+            }
+            if (nIndex == 0)
+            {
+                if (it->isHiddenParaMerge)
+                {
+                    return *it->pNode;
+                }
+            }
+            else
+            {
+                nIndex = nIndex - (it->nEnd - it->nStart);
+            }
+        }
+        // no hidden paragraph break => use default
+        assert(nIndex == 0 && "view index out of bounds");
+        return *m_pMergedPara->pParaPropsNode;
+    }
+    return *m_pTextNode;
 }
 
 namespace {
