@@ -36,6 +36,7 @@
 #include <viewdata.hxx>
 #include <columnspanset.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/enumrange.hxx>
 
 #define SC_DRAG_MIN     2
 
@@ -43,10 +44,18 @@
 //  (selection left/right must be first because the continuous lines
 //  are partly overwritten later)
 
-#define SC_HDRPAINT_SEL_BOTTOM  4
-#define SC_HDRPAINT_BOTTOM      5
-#define SC_HDRPAINT_TEXT        6
-#define SC_HDRPAINT_COUNT       7
+namespace
+{
+
+enum class HeaderPaintPass
+{
+    SelectionBottom,
+    Bottom,
+    Text,
+    LAST = Text
+};
+
+}
 
 ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
                                   SCCOLROW nNewSize, bool bNewVertical, ScTabView* pTab ) :
@@ -450,23 +459,19 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     ScGridMerger aGrid( GetOutDev(), 1, 1 );
 
-    //  start at SC_HDRPAINT_BOTTOM instead of 0 - selection doesn't get different
-    //  borders, light border at top isn't used anymore
-    //  use SC_HDRPAINT_SEL_BOTTOM for different color
-
-    for (sal_uInt16 nPass = SC_HDRPAINT_SEL_BOTTOM; nPass < SC_HDRPAINT_COUNT; nPass++)
+    for (HeaderPaintPass ePass : o3tl::enumrange<HeaderPaintPass>())
     {
         //  set line color etc. before entry loop
-        switch ( nPass )
+        switch (ePass)
         {
-            case SC_HDRPAINT_SEL_BOTTOM:
+            case HeaderPaintPass::SelectionBottom:
                 // same as non-selected for high contrast
                 GetOutDev()->SetLineColor( bHighContrast ? rStyleSettings.GetShadowColor() : aSelLineColor );
                 break;
-            case SC_HDRPAINT_BOTTOM:
+            case HeaderPaintPass::Bottom:
                 GetOutDev()->SetLineColor( rStyleSettings.GetShadowColor() );
                 break;
-            case SC_HDRPAINT_TEXT:
+            case HeaderPaintPass::Text:
                 // DrawSelectionBackground is used only for high contrast on light background
                 if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bHighContrast && !bDark )
                 {
@@ -523,11 +528,11 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                     bool bMark = bMarkRange && nEntryNo >= nMarkStart && nEntryNo <= nMarkEnd;
                     bool bNextToMark = bMarkRange && nEntryNo + 1 >= nMarkStart && nEntryNo <= nMarkEnd;
 
-                    switch ( nPass )
+                    switch (ePass)
                     {
-                        case SC_HDRPAINT_SEL_BOTTOM:
-                        case SC_HDRPAINT_BOTTOM:
-                            if ( nPass == ( bNextToMark ? SC_HDRPAINT_SEL_BOTTOM : SC_HDRPAINT_BOTTOM ) )
+                        case HeaderPaintPass::SelectionBottom:
+                        case HeaderPaintPass::Bottom:
+                            if (ePass == (bNextToMark ? HeaderPaintPass::SelectionBottom : HeaderPaintPass::Bottom))
                             {
                                 if (bVertical)
                                     aGrid.AddHorLine(/* here we work in pixels */ true, aScrPos.X(), aEndPos.X(), aEndPos.Y());
@@ -549,7 +554,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                             }
                             break;
 
-                        case SC_HDRPAINT_TEXT:
+                        case HeaderPaintPass::Text:
                             if ( nSizePix > 1 )     // minimal check for small columns/rows
                             {
                                 if (bVertical)
