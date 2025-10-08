@@ -405,6 +405,8 @@ private:
 
     ::std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
+    /// The last, still alive SdDrawDocument instance, for debugging.
+    static SdDrawDocument* s_pLast;
 
     SAL_DLLPRIVATE void                UpdatePageObjectsInNotes(sal_uInt16 nStartPos);
     SAL_DLLPRIVATE void                UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPos, sal_Int32 nIncrement);
