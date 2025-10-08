@@ -86,6 +86,9 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
 
     aNormFont = GetFont();
     aNormFont.SetTransparent( true );       //! hard-set WEIGHT_NORMAL ???
+
+    mnDefaultFontHeight = aNormFont.GetFontHeight();
+
     aBoldFont = aNormFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
     aAutoFilterFont = aNormFont;
@@ -495,8 +498,9 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                 break;
         }
 
-        SCCOLROW    nCount=0;
-        tools::Long    nScrPos=nInitScrPos;
+        SCCOLROW nCount = 0;
+        tools::Long nScrPos = nInitScrPos;
+        sal_Int32 nFontHeight = 0;
         do
         {
             if (bVertical)
@@ -557,6 +561,17 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                         case HeaderPaintPass::Text:
                             if ( nSizePix > 1 )     // minimal check for small columns/rows
                             {
+                                sal_Int32 nCurrentFontHeight = std::min(aEndPos.Y() - aScrPos.Y() + 1, mnDefaultFontHeight);
+                                bool bChangedHeight = false;
+                                if (nFontHeight != nCurrentFontHeight)
+                                {
+                                    nFontHeight = nCurrentFontHeight;
+                                    aNormFont.SetFontHeight(nFontHeight);
+                                    aBoldFont.SetFontHeight(nFontHeight);
+                                    aAutoFilterFont.SetFontHeight(nFontHeight);
+                                    bChangedHeight = true;
+                                }
+
                                 if (bVertical)
                                 {
                                     bool bAutoFilterPos = false;
@@ -569,7 +584,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                         }
                                     }
 
-                                    if (bMark != bBoldSet || bAutoFilterPos != bAutoFilterSet)
+                                    if (bMark != bBoldSet || bAutoFilterPos != bAutoFilterSet || bChangedHeight)
                                     {
                                         if (bMark)
                                             SetFont(aBoldFont);
@@ -583,7 +598,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                 }
                                 else
                                 {
-                                    if (bMark != bBoldSet)
+                                    if (bMark != bBoldSet || bChangedHeight)
                                     {
                                         if (bMark)
                                             SetFont(aBoldFont);

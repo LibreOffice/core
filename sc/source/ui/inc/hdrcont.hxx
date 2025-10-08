@@ -65,6 +65,8 @@ private:
 
     bool            bInRefMode;
 
+    tools::Long mnDefaultFontHeight = 0L;
+
     tools::Long            GetScrPos( SCCOLROW nEntryNo ) const;
     SCCOLROW        GetMousePos(const Point& rPos, bool& rBorder) const;
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
