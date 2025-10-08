@@ -148,9 +148,8 @@ void SbiCodeGen::Save()
         p->SetFlag( SbiImageFlags::EXPLICIT );
 
     int nIfaceCount = 0;
-    if( rMod.mnType == css::script::ModuleType::CLASS )
+    if (rMod.isClassModule())
     {
-        rMod.bIsProxyModule = true;
         p->SetFlag( SbiImageFlags::CLASSMODULE );
         GetSbData()->pClassFac->AddClassModule( &rMod );
 
@@ -179,7 +178,6 @@ void SbiCodeGen::Save()
         {
             rMod.mnType = css::script::ModuleType::NORMAL;
         }
-        rMod.bIsProxyModule = false;
     }
 
     // GlobalCode-Flag
