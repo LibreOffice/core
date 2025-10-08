@@ -1593,7 +1593,7 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                                      XML_y, OString::number(std::round(convertMm100ToMasterUnit(aRealPoint2D.Y * 100))));
 
                 pFS->startElementNS(XML_p, XML_text);
-                pFS->write(xText->getString());
+                pFS->writeEscaped(xText->getString());
                 pFS->endElementNS(XML_p, XML_text);
 
                 pFS->endElementNS(XML_p, XML_cm);
