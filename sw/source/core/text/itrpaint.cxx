@@ -70,6 +70,7 @@ void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
     m_bPaintDrop = false;
+    GetInfo().SetLineInfo(&GetLineInfo());
 }
 
 SwLinePortion *SwTextPainter::CalcPaintOfst(const SwRect &rPaint, bool& rbSkippedNumPortions)

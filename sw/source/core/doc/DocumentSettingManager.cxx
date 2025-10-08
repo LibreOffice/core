@@ -261,6 +261,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbApplyTextAttrToEmptyLineAtEndOfParagraph;
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH:
             return mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph;
+        case DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES:
+            return mbHiddenParagraphMarkPerLineProperties;
         case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
             return mbDoNotBreakWrappedTables;
         case DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
@@ -472,6 +474,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph = value;
             break;
 
+        case DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES:
+            mbHiddenParagraphMarkPerLineProperties = value;
+            break;
 
         case DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS:
             mbDoNotMirrorRtlDrawObjs = value;
@@ -1162,6 +1167,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbHiddenParagraphMarkPerLineProperties"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbHiddenParagraphMarkPerLineProperties).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotMirrorRtlDrawObjs"));

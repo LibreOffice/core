@@ -651,6 +651,8 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     {
         xDocumentSettings->setPropertyValue(u"MsWordCompMinLineHeightByFly"_ustr, uno::Any(true));
         xDocumentSettings->setPropertyValue(u"TabOverMargin"_ustr, uno::Any(true));
+        xDocumentSettings->setPropertyValue(u"HiddenParagraphMarkPerLineProperties"_ustr,
+                                uno::Any(true));
     }
 
     // Show changes value
