@@ -92,11 +92,12 @@ struct Extent
     SwTextNode * /*const logically, but need assignment for std::vector*/ pNode;
     sal_Int32 nStart;
     sal_Int32 nEnd;
-    Extent(SwTextNode *const p, sal_Int32 const s, sal_Int32 const e)
-        : pNode(p), nStart(s), nEnd(e)
+    bool isHiddenParaMerge; //< for Word Compatibility Mode
+    Extent(SwTextNode *const p, sal_Int32 const s, sal_Int32 const e, bool const b)
+        : pNode(p), nStart(s), nEnd(e), isHiddenParaMerge(b)
     {
         assert(pNode);
-        assert(nStart != nEnd);
+        assert(nStart != nEnd || isHiddenParaMerge);
     }
 };
 

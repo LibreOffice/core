@@ -24,6 +24,8 @@
 #include <editeng/paravertalignitem.hxx>
 
 #include "pormulti.hxx"
+#include <IDocumentSettingAccess.hxx>
+#include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <tgrditem.hxx>
 #include "porfld.hxx"
@@ -42,9 +44,16 @@ void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )
 
     m_pFrame = pNewFrame;
     m_pInf = pNewInf;
-    m_aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
+
     m_nFrameStart = m_pFrame->getFrameArea().Pos().Y() + m_pFrame->getFramePrintArea().Pos().Y();
     SwTextIter::Init();
+
+    SwTextNode const& rTextNodeForLineProps{
+        (pNode->getIDocumentSettingAccess()->get(DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES)
+        && m_pFrame->getRootFrame()->GetParagraphBreakMode() == ::sw::ParagraphBreakMode::Hidden)
+            ? GetTextNodeForLinePropsWordCompat(m_nStart)
+            : *pNode};
+    m_aLineInf.CtorInitLineInfo(pNode->GetSwAttrSet(), rTextNodeForLineProps);
 
     // Order is important: only execute FillRegister if GetValue!=0
     m_bRegisterOn = pNode->GetSwAttrSet().GetRegister().GetValue()
@@ -116,6 +125,13 @@ const SwLineLayout *SwTextIter::Next()
         if( m_pCurr->GetLen() || ( m_nLineNr>1 && !m_pCurr->IsDummy() ) )
             ++m_nLineNr;
         m_pCurr = m_pCurr->GetNext();
+        if (m_pFrame->GetDoc().getIDocumentSettingAccess().get(
+                DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES)
+            && m_pFrame->getRootFrame()->GetParagraphBreakMode() == ::sw::ParagraphBreakMode::Hidden)
+        {
+            SwTextNode const& rNode{GetTextNodeForLinePropsWordCompat(m_nStart)};
+            m_aLineInf.InitLineInfo(rNode);
+        }
         return m_pCurr;
     }
     else

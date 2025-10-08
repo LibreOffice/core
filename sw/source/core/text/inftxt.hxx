@@ -66,8 +66,9 @@ class SwLineInfo
     bool m_bListTabStopIncluded;
     tools::Long m_nListTabStopPosition;
 
+    void InitLineInfo(SwTextNode const& rTextNodeForLineProps);
     void CtorInitLineInfo( const SwAttrSet& rAttrSet,
-                           const SwTextNode& rTextNode );
+                           const SwTextNode& rTextNodeForLineProps);
 
     SW_DLLPUBLIC SwLineInfo();
     SW_DLLPUBLIC ~SwLineInfo();
@@ -365,6 +366,8 @@ class SwTextPaintInfo : public SwTextSizeInfo
     SwRect      m_aPaintRect; // Original paint rect (from Layout paint)
 
     sal_uInt16 m_nSpaceIdx;
+    SwLineInfo const* m_pLineInfo{nullptr}; // hack: need this to get line props
+
     void DrawText_(const OUString &rText, const SwLinePortion &rPor,
                    const TextFrameIndex nIdx, const TextFrameIndex nLen,
                    const bool bKern, const bool bWrong = false,
@@ -481,6 +484,7 @@ public:
 
     void SetSmartTags(sw::WrongListIterator *const pNew) { m_pSmartTags = pNew; }
     sw::WrongListIterator* GetSmartTags() const { return m_pSmartTags; }
+    void SetLineInfo(SwLineInfo const*const pLineInfo) { m_pLineInfo = pLineInfo; }
 };
 
 class SwTextFormatInfo : public SwTextPaintInfo

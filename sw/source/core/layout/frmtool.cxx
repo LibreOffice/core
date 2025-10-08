@@ -1142,7 +1142,11 @@ static bool IsShown(SwNodeOffset const nIndex,
         }
         for (auto iter = *pIter; iter != *pEnd; ++iter)
         {
-            assert(iter->nStart != iter->nEnd); // TODO possible?
+            if (iter->nStart == iter->nEnd)
+            {
+                assert(iter->isHiddenParaMerge);
+                continue;
+            }
             assert(iter->pNode->GetIndex() == nIndex);
             if (rAnch.GetAnchorContentOffset() < iter->nStart)
             {

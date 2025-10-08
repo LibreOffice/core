@@ -162,6 +162,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_USE_VARIABLE_WIDTH_NBSP,
     HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
     HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
+    HANDLE_HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES,
     HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
     HANDLE_PAINT_HELL_OVER_HEADER_FOOTER,
     HANDLE_MIN_ROW_HEIGHT_INCL_BORDER,
@@ -279,6 +280,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"UseVariableWidthNBSP"_ustr, HANDLE_USE_VARIABLE_WIDTH_NBSP, cppu::UnoType<bool>::get(), 0 },
         { u"ApplyTextAttrToEmptyLineAtEndOfParagraph"_ustr, HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
         { u"ApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"_ustr, HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
+        { u"HiddenParagraphMarkPerLineProperties"_ustr, HANDLE_HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES, cppu::UnoType<bool>::get(), 0 },
         { u"DoNotMirrorRtlDrawObjs"_ustr, HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
         { u"PaintHellOverHeaderFooter"_ustr, HANDLE_PAINT_HELL_OVER_HEADER_FOOTER, cppu::UnoType<bool>::get(), 0 },
         { u"MinRowHeightInclBorder"_ustr, HANDLE_MIN_ROW_HEIGHT_INCL_BORDER, cppu::UnoType<bool>::get(), 0 },
@@ -1124,6 +1126,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES, bTmp);
+            }
+        }
+        break;
         case HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS:
         {
             bool bTmp;
@@ -1792,6 +1804,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH);
+        }
+        break;
+        case HANDLE_HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES);
         }
         break;
         case HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS:

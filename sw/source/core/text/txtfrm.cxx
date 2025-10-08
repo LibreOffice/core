@@ -839,6 +839,7 @@ void SwTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
             (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(e.pNode->GetIndex()) );
             (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
             (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "isHPM" ), "%d", e.isHiddenParaMerge ? 1 : 0 );
             (void)xmlTextWriterEndElement( writer );
         }
         (void)xmlTextWriterEndElement( writer );
@@ -1126,7 +1127,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
 //    assert((bFoundNode || rMerged.extents.empty()) && "text node not found - why is it sending hints to us");
     if (!bInserted)
     {   // must be in a gap
-        rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
+        rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen, false);
         text.insert(nTFIndex, rNode.GetText().subView(nIndex, nLen));
         nInserted = nLen;
         // called from SwRangeRedline::InvalidateRange()
@@ -1235,7 +1236,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                                 sal_Int32 const nOldEnd(it->nEnd);
                                 it->nEnd = nIndex;
                                 it = rMerged.extents.emplace(it+1,
-                                    it->pNode, nIndex + nDeleteHere, nOldEnd);
+                                    it->pNode, nIndex + nDeleteHere, nOldEnd, it->isHiddenParaMerge);
                             }
                             assert(nDeleteHere == nToDelete);
                         }
@@ -1301,7 +1302,7 @@ MapViewToModel(MergedPara const& rMerged, TextFrameIndex const i_nIndex)
         nIndex = nIndex - (pExtent->nEnd - pExtent->nStart);
     }
     assert(nIndex == 0 && "view index out of bounds");
-    return pExtent
+    return (pExtent && pExtent->nStart != pExtent->nEnd) // skip isHiddenParaMerge dummys
         ? std::make_pair(pExtent->pNode, pExtent->nEnd) //1-past-the-end index
         : std::make_pair(const_cast<SwTextNode*>(rMerged.pLastNode), rMerged.pLastNode->Len());
 }
@@ -1443,9 +1444,17 @@ SwTextNode const* SwTextFrame::GetTextNodeForFirstText() const
 {
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
-        return pMerged->extents.empty()
-            ? pMerged->pFirstNode
-            : pMerged->extents.front().pNode;
+    {
+        for (auto const& it : pMerged->extents)
+        {
+            if (it.nStart != it.nEnd) // skip isHiddenParaMerge dummy extents
+            {
+                return it.pNode;
+            }
+            else assert(it.isHiddenParaMerge);
+        }
+        return pMerged->pFirstNode;
+    }
     else
         return static_cast<SwTextNode const*>(SwFrame::GetDep());
 }

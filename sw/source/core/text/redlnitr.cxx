@@ -36,6 +36,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
 #include <bookmark.hxx>
 #include <rootfrm.hxx>
@@ -83,6 +84,10 @@ private:
 public:
     SwPosition const* GetStartPos() const { return m_pStartPos; }
     SwPosition const* GetEndPos() const { return m_pEndPos; }
+    bool IsHiddenParagraphBreak() const
+    {   // only if it is merged *by* hidden break (it could be deleted at the same time)
+        return m_oParagraphBreak.has_value();
+    }
 
     HideIterator(const SwTextNode & rTextNode,
             bool const isHideRedlines, sw::FieldmarkMode const eMode,
@@ -106,6 +111,7 @@ public:
     // Note: caller is responsible for checking for immediately adjacent hides
     bool Next()
     {
+        m_oParagraphBreak.reset();
         SwPosition const* pNextRedlineHide(nullptr);
         assert(m_pEndPos);
         if (m_isHideRedlines)
@@ -293,23 +299,36 @@ void FindParaPropsNodeIgnoreHidden(sw::MergedPara & rMerged,
         pScriptInfo->GetBoundsOfHiddenRange(TextFrameIndex{0}, nHiddenStart, nHiddenEnd);
         if (TextFrameIndex{0} == nHiddenStart)
         {
-            if (nHiddenEnd == TextFrameIndex{rMerged.mergedText.getLength()})
+            // Word compatibilityMode < 15 changes properties per line, so just set the last node here
+            if (rMerged.pLastNode->getIDocumentSettingAccess()->get(
+                    DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES))
             {
                 rMerged.pParaPropsNode = const_cast<SwTextNode*>(rMerged.pLastNode);
             }
-            else
-            {   // this requires MapViewToModel to never return a position at
-                // the end of a node (when all its text is hidden)
-                rMerged.pParaPropsNode = sw::MapViewToModel(rMerged, nHiddenEnd).first;
+            else // Word compatibilityMode 15 works differently!
+            {    // (and this is just an approximation of what it does)
+                if (nHiddenEnd == TextFrameIndex{rMerged.mergedText.getLength()})
+                {
+                    rMerged.pParaPropsNode = const_cast<SwTextNode*>(rMerged.pLastNode);
+                }
+                else
+                {   // this requires MapViewToModel to never return a position at
+                    // the end of a node (when all its text is hidden)
+                    rMerged.pParaPropsNode = sw::MapViewToModel(rMerged, nHiddenEnd).first;
+                }
             }
             return;
         }
     }
-    if (!rMerged.extents.empty())
+    for (auto const& it : rMerged.extents)
     {   // para props from first node that isn't empty (OOo/LO compat)
-        rMerged.pParaPropsNode = rMerged.extents.begin()->pNode;
+        if (it.nStart != it.nEnd) // filter isHiddenParaMerge dummy extents
+        {
+            rMerged.pParaPropsNode = it.pNode;
+            return;
+        }
+        else assert(it.isHiddenParaMerge);
     }
-    else
     {   // if every node is empty, the last one wins (Word compat)
         // (OOo/LO historically used first one)
         rMerged.pParaPropsNode = const_cast<SwTextNode*>(rMerged.pLastNode);
@@ -344,11 +363,22 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         assert(pNode != &rTextNode || &pStart->GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->GetContentIndex() != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
-            extents.emplace_back(pNode, nLastEnd, pStart->GetContentIndex());
+            extents.emplace_back(pNode, nLastEnd, pStart->GetContentIndex(), false);
             mergedText.append(pNode->GetText().subView(nLastEnd, pStart->GetContentIndex() - nLastEnd));
         }
         if (&pEnd->GetNode() != pNode)
         {
+            if (iter.IsHiddenParagraphBreak())
+            {
+                if (!extents.empty() && extents.back().pNode == pNode)
+                {
+                    extents.back().isHiddenParaMerge = true;
+                }
+                else
+                {   // dummy extent - must have "true" on one that has pNode!
+                    extents.emplace_back(pNode, pNode->Len(), pNode->Len(), true);
+                }
+            }
             if (pNode == &rTextNode)
             {
                 pNode->SetRedlineMergeFlag(SwNode::Merge::First);
@@ -465,7 +495,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     }
     if (nLastEnd != pNode->Len())
     {
-        extents.emplace_back(pNode, nLastEnd, pNode->Len());
+        extents.emplace_back(pNode, nLastEnd, pNode->Len(), false);
         mergedText.append(pNode->GetText().subView(nLastEnd, pNode->Len() - nLastEnd));
     }
     if (extents.empty()) // there was no text anywhere
@@ -474,7 +504,9 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     }
     else
     {
-        assert(!mergedText.isEmpty());
+        assert(!mergedText.isEmpty()
+            || ::std::all_of(extents.begin(), extents.end(),
+                    [](auto const& it){ return it.isHiddenParaMerge; }));
     }
     auto pRet{std::make_unique<sw::MergedPara>(rFrame, std::move(extents),
                 mergedText.makeStringAndClear(), &rTextNode, nodes.back())};
