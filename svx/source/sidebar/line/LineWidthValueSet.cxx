@@ -122,11 +122,6 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             pDev->SetFillColor(Color(50,107,197));
             pDev->DrawRect(aBackRect);
         }
-        else
-        {
-            pDev->SetFillColor( COL_TRANSPARENT );
-            pDev->DrawRect(aRect);
-        }
 
         //draw text
         if(nSelItem ==  nItemId )
@@ -160,6 +155,7 @@ void LineWidthValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(80, 12 * 9), MapMode(MapUnit::MapAppFont)));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);
+    SetColor(Application::GetSettings().GetStyleSettings().GetListBoxWindowBackgroundColor());
 }
 
 } // end of namespace svx::sidebar
