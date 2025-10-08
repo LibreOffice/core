@@ -675,21 +675,18 @@ bool SvxLinguData_Impl::AddRemove(
 {
     bool bRet = false;  // modified?
 
-    sal_Int32 nEntries = rConfigured.getLength();
     sal_Int32 nPos = comphelper::findValue(rConfigured, rImplName);
     if (bAdd  &&  nPos < 0)         // add new entry
     {
-        rConfigured.realloc( ++nEntries );
-        OUString *pConfigured = rConfigured.getArray();
-        pConfigured[nEntries - 1] = rImplName;
+        rConfigured.realloc(rConfigured.getLength() + 1);
+        rConfigured.getArray()[rConfigured.getLength() - 1] = rImplName;
         bRet = true;
     }
     else if (!bAdd  &&  nPos >= 0)  // remove existing entry
     {
         OUString *pConfigured = rConfigured.getArray();
-        for (sal_Int32 i = nPos;  i < nEntries - 1;  ++i)
-            pConfigured[i] = pConfigured[i + 1];
-        rConfigured.realloc(--nEntries);
+        std::move(rConfigured.begin() + nPos + 1, rConfigured.end(), pConfigured + nPos);
+        rConfigured.realloc(rConfigured.getLength() - 1);
         bRet = true;
     }
 
