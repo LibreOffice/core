@@ -1012,6 +1012,19 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf81003_DateCellToVbaUDF)
     CPPUNIT_ASSERT_EQUAL(45898.0, pDoc->GetValue(1, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf168750)
+{
+    // A class module's global names must not be visible without instantiated object
+    createScDoc("udf_plus_class_module.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // B1 must have "FALSE", i.e. no errors happened during the load time.
+    // Without the fix, this would fail with
+    // - Unexpected dialog:  Error: BASIC runtime error. Argument is not optional.
+    // Which indicates, that the class module function was unexpectedly called.
+    CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+}
+
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)
 {

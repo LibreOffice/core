@@ -1175,7 +1175,7 @@ void StarBASIC::InitAllModules( StarBASIC const * pBasicNotToInit )
     for (const auto& pModule: pModules)
     {
         OUString aModuleName = pModule->GetName();
-        if( pModule->isProxyModule() )
+        if (pModule->isClassModule())
         {
             aMIDMap[aModuleName] = ClassModuleRunInitItem( pModule.get() );
         }
@@ -1190,7 +1190,7 @@ void StarBASIC::InitAllModules( StarBASIC const * pBasicNotToInit )
     // Call RunInit on standard modules
     for (const auto& pModule: pModules)
     {
-        if( !pModule->isProxyModule() )
+        if (!pModule->isClassModule())
         {
             pModule->RunInit();
         }
@@ -1216,7 +1216,7 @@ void StarBASIC::DeInitAllModules()
     // Deinit own modules
     for (const auto& pModule: pModules)
     {
-        if( pModule->pImage && !pModule->isProxyModule() && dynamic_cast<SbObjModule*>( pModule.get()) == nullptr )
+        if( pModule->pImage && !pModule->isClassModule() && dynamic_cast<SbObjModule*>( pModule.get()) == nullptr )
         {
             pModule->pImage->bInit = false;
         }

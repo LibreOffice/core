@@ -418,7 +418,7 @@ static bool getDefaultVBAMode( StarBASIC* pb )
 
 SbModule::SbModule( const OUString& rName, bool bVBASupport )
     : SbxObject( u"StarBASICModule"_ustr )
-    , mbVBASupport(bVBASupport), mbCompat(bVBASupport), bIsProxyModule(false)
+    , mbVBASupport(bVBASupport), mbCompat(bVBASupport)
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
@@ -626,11 +626,11 @@ void SbModule::Clear()
 SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
 {
     // make sure a search in an uninstantiated class module will fail
-    SbxVariable* pRes = SbxObject::Find( rName, t );
-    if ( bIsProxyModule && !GetSbData()->bRunInit )
+    if (isClassModule() && !GetSbData()->bRunInit)
     {
         return nullptr;
     }
+    SbxVariable* pRes = SbxObject::Find( rName, t );
     if( !pRes && pImage )
     {
         SbiInstance* pInst = GetSbData()->pInst;
@@ -845,6 +845,10 @@ void SbModule::SetSource32( const OUString& r )
                         bool bIsVBA = ( aTok.GetDbl()== 1 );
                         SetVBASupport( bIsVBA );
                         aTok.SetCompatible( bIsVBA );
+                    }
+                    else if (eCurTok == CLASSMODULE)
+                    {
+                        SetModuleType(css::script::ModuleType::CLASS);
                     }
                 }
             }
@@ -1376,7 +1380,7 @@ void StarBASIC::ClearAllModuleVars()
     for (const auto& rModule: pModules)
     {
         // Initialise only, if the startcode was already executed
-        if( rModule->pImage && rModule->pImage->bInit && !rModule->isProxyModule() && dynamic_cast<const SbObjModule*>( rModule.get()) == nullptr )
+        if( rModule->pImage && rModule->pImage->bInit && !rModule->isClassModule() && dynamic_cast<const SbObjModule*>( rModule.get()) == nullptr )
             rModule->ClearPrivateVars();
     }
 

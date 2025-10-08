@@ -30,6 +30,8 @@
 #include <basic/basicdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <com/sun/star/script/ModuleType.hpp>
+
 namespace com::sun::star::script { class XInvocation; }
 
 class SbMethod;
@@ -67,9 +69,8 @@ protected:
     std::unique_ptr<SbClassData> pClassData;
     bool mbVBASupport; // Option VBASupport
     bool mbCompat; // Option Compatible
-    sal_Int32 mnType;
+    sal_Int32 mnType; // css::script::ModuleType
     tools::SvRef<SbUnoObject> pDocObject; // an impl object ( used by Document Modules )
-    bool    bIsProxyModule;
 
     SAL_DLLPRIVATE static void implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
     SAL_DLLPRIVATE void StartDefinitions();
@@ -126,7 +127,7 @@ public:
     SAL_DLLPRIVATE void SetVBASupport( bool bSupport );
     sal_Int32 GetModuleType() const { return mnType; }
     void     SetModuleType( sal_Int32 nType ) { mnType = nType; }
-    bool     isProxyModule() const { return bIsProxyModule; }
+    bool isClassModule() const { return GetModuleType() == css::script::ModuleType::CLASS; }
     SAL_DLLPRIVATE void AddVarName( const OUString& aName );
     SAL_DLLPRIVATE void RemoveVars();
     css::uno::Reference< css::script::XInvocation > const & GetUnoModule();
