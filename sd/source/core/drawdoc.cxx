@@ -20,6 +20,7 @@
 #include <libxml/xmlwriter.h>
 
 #include "PageListWatcher.hxx"
+#include <ViewShellBase.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -39,6 +40,7 @@
 #include <officecfg/Office/Draw.hxx>
 
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <Outliner.hxx>
 #include <sdmod.hxx>
 #include <editeng/editstat.hxx>
@@ -53,6 +55,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -83,6 +87,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <unokywds.hxx>
+#include <unomodel.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XSpellChecker1; }
@@ -516,6 +521,17 @@ void SdDrawDocument::ResizeCurrentPage(
     //     SdPage* pNotesPage = GetSdPage(i, PageKind::Notes);
     //     pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
     // }
+
+    // Notify LOK clients of the current page size change.
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+    {
+        SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pViewShell->GetCurrentDocument());
+        SfxLokHelper::notifyCurrentPageSizeChangedAllViews(pDoc);
+    }
 }
 
 void SdDrawDocument::AdaptPageSize(
@@ -650,6 +666,17 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
             SdPage* pNotesPage = GetSdPage(i, PageKind::Notes);
             pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
         }
+    }
+
+    // Notify LOK clients of the document size change.
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+    {
+        SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pViewShell->GetCurrentDocument());
+        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 }
 
