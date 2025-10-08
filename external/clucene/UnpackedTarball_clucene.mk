@@ -57,6 +57,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/enumarith.patch \
 	external/clucene/patches/clucene-reprobuild.patch.1 \
 	external/clucene/patches/clucene-const.patch.1 \
+	external/clucene/patches/wcsncpy.patch \
 ))
 
 ifneq ($(OS),WNT)

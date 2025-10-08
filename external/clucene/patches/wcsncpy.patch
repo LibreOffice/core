@@ -1,0 +1,11 @@
+--- src/shared/CLucene/util/StringBuffer.cpp
++++ src/shared/CLucene/util/StringBuffer.cpp
+@@ -230,7 +230,7 @@
+ 	  }
+ 
+       //Copy the string value into the buffer at postion 0
+-      _tcsncpy(buffer, value, prependedLength);
++      if (value != buffer) _tcsncpy(buffer, value, prependedLength);
+       //Add the length of the copied string to len to reflect the new length of the string in
+       //the buffer (Note: len is not the bufferlength!)
+       len += prependedLength;
