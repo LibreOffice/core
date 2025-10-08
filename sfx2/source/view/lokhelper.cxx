@@ -793,6 +793,24 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
+void SfxLokHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *pDoc)
+{
+    if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
+        return;
+
+    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
+        {
+            OString aPayload = ".uno:CurrentPageResize"_ostr;
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart)
 {
     if (DisableCallbacks::disabled())
