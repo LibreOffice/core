@@ -11,17 +11,17 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUString STR_DB_LOCAL_NONAME = u"__Anonymous_Sheet_DB__"_ustr;
-inline constexpr OUString STR_DB_GLOBAL_NONAME = u"__Anonymous_DB__"_ustr;
+constexpr OUString STR_DB_LOCAL_NONAME = u"__Anonymous_Sheet_DB__"_ustr;
+constexpr OUString STR_DB_GLOBAL_NONAME = u"__Anonymous_DB__"_ustr;
 
-inline constexpr OUString STR_GLOBAL_RANGE_NAME = u"__Global_Range_Name__"_ustr;
+constexpr OUString STR_GLOBAL_RANGE_NAME = u"__Global_Range_Name__"_ustr;
 
-#define TEXTWIDTH_DIRTY 0xffff
+constexpr sal_uInt32 TEXTWIDTH_DIRTY = 0xffff;
 
-#define DATE_TIME_FACTOR 86400.0
+constexpr double DATE_TIME_FACTOR = 86400.0;
 
 // Device name used to represent the software group interpreter for OpenCL
 // mode. This string gets stored in use configuration as the device name.
-#define OPENCL_SOFTWARE_DEVICE_CONFIG_NAME "Software"
+constexpr std::u16string_view OPENCL_SOFTWARE_DEVICE_CONFIG_NAME(u"Software");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

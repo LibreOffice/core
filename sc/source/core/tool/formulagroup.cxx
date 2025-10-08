@@ -181,7 +181,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 bool FormulaGroupInterpreter::switchOpenCLDevice(std::u16string_view rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
     bool bOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
-    if (!bOpenCLEnabled || (rDeviceId == u"" OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
+    if (!bOpenCLEnabled || (rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
     {
         delete msInstance;
         msInstance = nullptr;
