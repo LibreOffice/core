@@ -285,7 +285,8 @@ tools::Long ScColumn::GetNeededSize(
         vcl::Font aFont;
         aFont.SetKerning(FontKerning::NONE); // like ScDrawStringsVars::SetPattern
         // font color doesn't matter here
-        pPattern->fillFontOnly(aFont, pDev, &aFontZoom, pCondSet, nScript);
+        const SfxItemSet* pTableSet = rDocument.GetTableFormatSet( nCol, nRow, nTab );
+        pPattern->fillFontOnly(aFont, pDev, &aFontZoom, pCondSet, pTableSet, nScript);
         pDev->SetFont(aFont);
     }
 

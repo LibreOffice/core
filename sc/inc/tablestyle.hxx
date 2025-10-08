@@ -173,6 +173,9 @@ public:
         return nullptr;
     }
 
+    const SfxItemSet* GetTableCellItemSet(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                          SCROW nRowIndex) const;
+
     void SetRowStripeSize(sal_Int32 nFirstRowStripeSize, sal_Int32 nSecondRowStripeSize);
     void SetColStripeSize(sal_Int32 nFirstColStripeSize, sal_Int32 nSecondColStripeSize);
 

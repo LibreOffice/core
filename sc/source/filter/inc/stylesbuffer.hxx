@@ -217,6 +217,8 @@ public:
 
     /** Sets font formatting attributes for the passed element. */
     void                importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
+    /** Sets font formatting attributes for OOXML default table styles. */
+    void                setFontElements( const XlsColor& rColor, bool bWeight );
 
     /** Imports the FONT record from the passed stream. */
     void                importFont( SequenceInputStream& rStrm );

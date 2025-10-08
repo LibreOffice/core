@@ -2913,7 +2913,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( !aChars.isEmpty() )
                 {
                     vcl::Font aFont;
-                    pTabViewShell->GetSelectionPattern()->fillFontOnly(aFont, nullptr, nullptr, nullptr,
+                    pTabViewShell->GetSelectionPattern()->fillFontOnly(aFont, nullptr, nullptr, nullptr, nullptr,
                                                                 pTabViewShell->GetSelectionScriptType() );
                     if ( !aFontName.isEmpty() )
                         aFont = vcl::Font( aFontName, Size(1,1) );
@@ -2928,7 +2928,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 // font color doesn't matter here
                 vcl::Font aCurFont;
-                pTabViewShell->GetSelectionPattern()->fillFontOnly(aCurFont, nullptr, nullptr, nullptr,
+                pTabViewShell->GetSelectionPattern()->fillFontOnly(aCurFont, nullptr, nullptr, nullptr, nullptr,
                                                                 pTabViewShell->GetSelectionScriptType());
 
                 SfxAllItemSet aSet( GetPool() );

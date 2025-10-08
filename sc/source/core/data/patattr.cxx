@@ -553,23 +553,56 @@ void getFontIDsByScriptType(SvtScriptType nScript,
 void ScPatternAttr::fillFont(
         vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
         const OutputDevice* pOutDev, const Fraction* pScale,
-        const SfxItemSet* pCondSet, SvtScriptType nScript,
+        const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor)
 {
     model::ComplexColor aComplexColor;
 
     //  determine effective font color
-    ScPatternAttr::fillFontOnly(rFont, rItemSet, pOutDev, pScale, pCondSet, nScript);
-    ScPatternAttr::fillColor(aComplexColor, rItemSet, eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
+    ScPatternAttr::fillFontOnly(rFont, rItemSet, pOutDev, pScale, pCondSet, pTableSet, nScript);
+    ScPatternAttr::fillColor(aComplexColor, rItemSet, eAutoMode, pCondSet, pTableSet, pBackConfigColor, pTextConfigColor);
 
     //  set font effects
     rFont.SetColor(aComplexColor.getFinalColor());
 }
 
+template <class T>
+static const T* lcl_populateresult( TypedWhichId<T> nWhich, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet = nullptr )
+{
+    const T* pItem = nullptr;
+
+    if (pCondSet)
+        pItem = pCondSet->GetItemIfSet(nWhich);
+
+    if (!pItem && pTableSet)
+    {
+        const SfxPoolItem* pThisItem;
+        if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
+            && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
+        {
+            // use the direct cell format value againts the Table style format
+            // if it not a default one (COL_BLACK is the default in case of Table Styles)
+            // on the cell level
+            if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
+                && rSrcSet.GetItem(ATTR_FONT_COLOR)->getColor() == COL_BLACK)
+                pItem = pTableSet->GetItemIfSet(nWhich);
+            else
+                pItem = &rSrcSet.Get(nWhich);
+        }
+        else
+            pItem = pTableSet->GetItemIfSet(nWhich);
+    }
+
+    if (!pItem)
+        pItem = &rSrcSet.Get(nWhich);
+
+    return pItem;
+}
+
 void ScPatternAttr::fillFontOnly(
         vcl::Font& rFont, const SfxItemSet& rItemSet,
         const OutputDevice* pOutDev, const Fraction* pScale,
-        const SfxItemSet* pCondSet, SvtScriptType nScript)
+        const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, SvtScriptType nScript)
 {
     // Read items
 
@@ -596,18 +629,12 @@ void ScPatternAttr::fillFontOnly(
 
     if (pCondSet)
     {
-        pFontAttr = pCondSet->GetItemIfSet( nFontId );
-        if ( !pFontAttr )
-            pFontAttr = &rItemSet.Get( nFontId );
+        pFontAttr = lcl_populateresult( nFontId, rItemSet, pCondSet, pTableSet );
 
-        const SvxFontHeightItem* pFontHeightItem = pCondSet->GetItemIfSet( nHeightId );
-        if ( !pFontHeightItem )
-            pFontHeightItem = &rItemSet.Get( nHeightId );
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult( nHeightId, rItemSet, pCondSet, pTableSet );
         nFontHeight = pFontHeightItem->GetHeight();
 
-        const SvxWeightItem* pFontHWeightItem = pCondSet->GetItemIfSet( nWeightId );
-        if ( !pFontHWeightItem )
-            pFontHWeightItem = &rItemSet.Get( nWeightId );
+        const SvxWeightItem* pFontHWeightItem = lcl_populateresult( nWeightId, rItemSet, pCondSet, pTableSet );
         eWeight = pFontHWeightItem->GetValue();
 
         const SvxPostureItem* pPostureItem = pCondSet->GetItemIfSet( nPostureId );
@@ -662,9 +689,14 @@ void ScPatternAttr::fillFontOnly(
     }
     else    // Everything from rItemSet
     {
-        pFontAttr = &rItemSet.Get( nFontId );
-        nFontHeight = rItemSet.Get( nHeightId ).GetHeight();
-        eWeight = rItemSet.Get( nWeightId ).GetValue();
+        pFontAttr = lcl_populateresult( nFontId, rItemSet, pCondSet, pTableSet );
+
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult( nHeightId, rItemSet, pCondSet, pTableSet );
+        nFontHeight = pFontHeightItem->GetHeight();
+
+        const SvxWeightItem* pFontHWeightItem = lcl_populateresult( nWeightId, rItemSet, pCondSet, pTableSet );
+        eWeight = pFontHWeightItem->GetValue();
+
         eItalic = rItemSet.Get( nPostureId ).GetValue();
         eUnder = rItemSet.Get( ATTR_FONT_UNDERLINE ).GetValue();
         eOver = rItemSet.Get( ATTR_FONT_OVERLINE ).GetValue();
@@ -735,20 +767,13 @@ void ScPatternAttr::fillFontOnly(
     rFont.SetTransparent( true );
 }
 
-void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
+void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
 {
-    model::ComplexColor aComplexColor;
+    const SvxColorItem* pColorItem
+        = lcl_populateresult(ATTR_FONT_COLOR, rItemSet, pCondSet, pTableSet);
 
     Color aColor;
-
-    SvxColorItem const* pColorItem = nullptr;
-
-    if (pCondSet)
-        pColorItem = pCondSet->GetItemIfSet(ATTR_FONT_COLOR);
-
-    if (!pColorItem)
-        pColorItem = &rItemSet.Get(ATTR_FONT_COLOR);
-
+    model::ComplexColor aComplexColor;
     if (pColorItem)
     {
         aComplexColor = pColorItem->getComplexColor();
@@ -765,18 +790,12 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         || eAutoMode == ScAutoFontColorMode::IgnoreAll)
     {
         //  get background color from conditional or own set
+        const SvxBrushItem* pItem
+            = lcl_populateresult(ATTR_BACKGROUND, rItemSet, pCondSet, pTableSet);
+
         Color aBackColor;
-        if ( pCondSet )
-        {
-            const SvxBrushItem* pItem = pCondSet->GetItemIfSet(ATTR_BACKGROUND);
-            if (!pItem)
-                pItem = &rItemSet.Get(ATTR_BACKGROUND);
+        if (pItem)
             aBackColor = pItem->GetColor();
-        }
-        else
-        {
-            aBackColor = rItemSet.Get(ATTR_BACKGROUND).GetColor();
-        }
 
         //  if background color attribute is transparent, use window color for brightness comparisons
         if (aBackColor == COL_TRANSPARENT
@@ -936,15 +955,39 @@ ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nS
 }
 
 template <class T>
-static void lcl_populate( std::optional<T>& rxItem, TypedWhichId<T> nWhich, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )
+static void lcl_populate( std::optional<T>& rxItem, TypedWhichId<T> nWhich, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet = nullptr )
 {
-    const T* pItem = pCondSet->GetItemIfSet( nWhich );
-    if ( !pItem )
-        pItem = &rSrcSet.Get( nWhich );
+    const T* pItem = nullptr;
+
+    if (pCondSet)
+        pItem = pCondSet->GetItemIfSet(nWhich);
+
+    if (!pItem && pTableSet)
+    {
+        const SfxPoolItem* pThisItem;
+        if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
+            && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
+        {
+            // use the direct cell format value againts the Table style format
+            // if it not a default one (COL_BLACK is the default in case of Table Styles)
+            // on the cell level
+            if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
+                && rSrcSet.GetItem(ATTR_FONT_COLOR)->getColor() == COL_BLACK)
+                pItem = pTableSet->GetItemIfSet(nWhich);
+            else
+                pItem = &rSrcSet.Get(nWhich);
+        }
+        else
+            pItem = pTableSet->GetItemIfSet(nWhich);
+    }
+
+    if (!pItem)
+        pItem = &rSrcSet.Get(nWhich);
+
     rxItem.emplace(*pItem);
 }
 
-void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )
+void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet )
 {
     //  Read Items
 
@@ -972,35 +1015,23 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
     if ( pCondSet )
     {
-        lcl_populate(oColorItem, ATTR_FONT_COLOR, rSrcSet, pCondSet);
-        lcl_populate(oFontItem, ATTR_FONT, rSrcSet, pCondSet);
-        lcl_populate(oCjkFontItem, ATTR_CJK_FONT, rSrcSet, pCondSet);
-        lcl_populate(oCtlFontItem, ATTR_CTL_FONT, rSrcSet, pCondSet);
+        lcl_populate(oColorItem, ATTR_FONT_COLOR, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oFontItem, ATTR_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCjkFontItem, ATTR_CJK_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCtlFontItem, ATTR_CTL_FONT, rSrcSet, pCondSet, pTableSet);
 
-        const SvxFontHeightItem* pFontHeightItem = pCondSet->GetItemIfSet( ATTR_FONT_HEIGHT );
-        if (!pFontHeightItem)
-            pFontHeightItem = &rSrcSet.Get( ATTR_FONT_HEIGHT );
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult( ATTR_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet );
         nTHeight = pFontHeightItem->GetHeight();
-        pFontHeightItem = pCondSet->GetItemIfSet( ATTR_CJK_FONT_HEIGHT );
-        if ( !pFontHeightItem )
-            pFontHeightItem = &rSrcSet.Get( ATTR_CJK_FONT_HEIGHT );
+        pFontHeightItem = lcl_populateresult( ATTR_CJK_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet );
         nCjkTHeight = pFontHeightItem->GetHeight();
-        pFontHeightItem = pCondSet->GetItemIfSet( ATTR_CTL_FONT_HEIGHT );
-        if ( !pFontHeightItem )
-            pFontHeightItem = &rSrcSet.Get( ATTR_CTL_FONT_HEIGHT );
+        pFontHeightItem = lcl_populateresult( ATTR_CTL_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet );
         nCtlTHeight = pFontHeightItem->GetHeight();
 
-        const SvxWeightItem* pWeightItem = pCondSet->GetItemIfSet( ATTR_FONT_WEIGHT );
-        if ( !pWeightItem )
-            pWeightItem = &rSrcSet.Get( ATTR_FONT_WEIGHT );
+        const SvxWeightItem* pWeightItem = lcl_populateresult( ATTR_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
         eWeight = pWeightItem->GetValue();
-        pWeightItem = pCondSet->GetItemIfSet( ATTR_CJK_FONT_WEIGHT );
-        if ( !pWeightItem )
-            pWeightItem = &rSrcSet.Get( ATTR_CJK_FONT_WEIGHT );
+        pWeightItem = lcl_populateresult( ATTR_CJK_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
         eCjkWeight = pWeightItem->GetValue();
-        pWeightItem = pCondSet->GetItemIfSet( ATTR_CTL_FONT_WEIGHT );
-        if ( !pWeightItem )
-            pWeightItem = &rSrcSet.Get( ATTR_CTL_FONT_WEIGHT );
+        pWeightItem = lcl_populateresult( ATTR_CTL_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
         eCtlWeight = pWeightItem->GetValue();
 
         const SvxPostureItem* pPostureItem = pCondSet->GetItemIfSet( ATTR_FONT_POSTURE );
@@ -1078,16 +1109,25 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     }
     else        // Everything directly from Pattern
     {
-        oColorItem.emplace(rSrcSet.Get(ATTR_FONT_COLOR));
-        oFontItem.emplace(rSrcSet.Get(ATTR_FONT));
-        oCjkFontItem.emplace(rSrcSet.Get(ATTR_CJK_FONT));
-        oCtlFontItem.emplace(rSrcSet.Get(ATTR_CTL_FONT));
-        nTHeight = rSrcSet.Get( ATTR_FONT_HEIGHT ).GetHeight();
-        nCjkTHeight = rSrcSet.Get( ATTR_CJK_FONT_HEIGHT ).GetHeight();
-        nCtlTHeight = rSrcSet.Get( ATTR_CTL_FONT_HEIGHT ).GetHeight();
-        eWeight = rSrcSet.Get( ATTR_FONT_WEIGHT ).GetValue();
-        eCjkWeight = rSrcSet.Get( ATTR_CJK_FONT_WEIGHT ).GetValue();
-        eCtlWeight = rSrcSet.Get( ATTR_CTL_FONT_WEIGHT ).GetValue();
+        lcl_populate(oColorItem, ATTR_FONT_COLOR, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oFontItem, ATTR_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCjkFontItem, ATTR_CJK_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCtlFontItem, ATTR_CTL_FONT, rSrcSet, pCondSet, pTableSet);
+
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult(ATTR_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet);
+        nTHeight = pFontHeightItem->GetHeight();
+        pFontHeightItem = lcl_populateresult(ATTR_CJK_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet);
+        nCjkTHeight = pFontHeightItem->GetHeight();
+        pFontHeightItem = lcl_populateresult(ATTR_CTL_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet);
+        nCtlTHeight = pFontHeightItem->GetHeight();
+
+        const SvxWeightItem* pWeightItem = lcl_populateresult(ATTR_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
+        eWeight = pWeightItem->GetValue();
+        pWeightItem = lcl_populateresult(ATTR_CJK_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
+        eCjkWeight = pWeightItem->GetValue();
+        pWeightItem = lcl_populateresult(ATTR_CTL_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
+        eCtlWeight = pWeightItem->GetValue();
+
         eItalic = rSrcSet.Get( ATTR_FONT_POSTURE ).GetValue();
         eCjkItalic = rSrcSet.Get( ATTR_CJK_FONT_POSTURE ).GetValue();
         eCtlItalic = rSrcSet.Get( ATTR_CTL_FONT_POSTURE ).GetValue();
@@ -1170,10 +1210,10 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
 }
 
-void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet ) const
+void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet ) const
 {
     if( pEditSet )
-        FillToEditItemSet( *pEditSet, GetItemSet(), pCondSet );
+        FillToEditItemSet( *pEditSet, GetItemSet(), pCondSet, pTableSet );
 }
 
 void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet )
