@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include "xmlbasicscript.hxx"
+#include <config_features.h>
 #include <sal/log.hxx>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
@@ -91,10 +92,12 @@ BasicLibrariesElement::BasicLibrariesElement(SvXMLImport& rImport,
     SAL_WARN_IF(!m_xLibContainer.is(), "xmlscript.xmlflat",
                 "BasicImport::startRootElement: nowhere to import to!");
 
+#if HAVE_FEATURE_SCRIPTING
     if (!m_xLibContainer.is())
     {
         throw xml::sax::SAXException(u"nowhere to import to"_ustr, Reference<XInterface>(), Any());
     }
+#endif
 }
 
 // XElement
