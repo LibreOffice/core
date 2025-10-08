@@ -117,6 +117,7 @@ struct ScCellInfo
     ScCellInfo()
         : pPatternAttr(nullptr)
         , pConditionSet(nullptr)
+        , pTableFormatSet(nullptr)
         , pDataBar(nullptr)
         , pIconSet(nullptr)
         , maBackground()
@@ -152,6 +153,7 @@ struct ScCellInfo
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
+    const SfxItemSet*           pTableFormatSet;
     std::optional<Color>        mxColorScale;
     const ScDataBarInfo*        pDataBar;
     const ScIconSetInfo*        pIconSet;

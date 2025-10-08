@@ -29,6 +29,7 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <table.hxx>
+#include <dbdata.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <subtotal.hxx>
@@ -47,6 +48,7 @@
 #include <externalrefmgr.hxx>
 #include <attrib.hxx>
 #include <formulacell.hxx>
+#include <tablestyle.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 #include <memory>
@@ -788,6 +790,31 @@ const SfxPoolItem* ScDocument::GetEffItem(
         return &rSet.Get( nWhich );
     }
     OSL_FAIL("no pattern");
+    return nullptr;
+}
+
+const SfxItemSet* ScDocument::GetTableFormatSet(SCCOL nCol, SCROW nRow, SCTAB nTab) const
+{
+    const ScDBData* pDBData = GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+    if (pDBData)
+    {
+        const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
+        if (!pTableStyleInfo)
+            return nullptr;
+
+        const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleName);
+        if (!pTableStyle)
+            return nullptr;
+
+        SCROW nNonEmptyRowsBeforePaintRange = -static_cast<SCROW>(pDBData->HasHeader());
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        if (aDBRange.aStart.Row() < nRow)
+        {
+            nNonEmptyRowsBeforePaintRange += this->CountNonFilteredRows(aDBRange.aStart.Row(), nRow - 1, nTab);
+        }
+        return pTableStyle->GetTableCellItemSet(*pDBData, nCol, nRow, nNonEmptyRowsBeforePaintRange);
+    }
     return nullptr;
 }
 

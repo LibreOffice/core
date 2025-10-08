@@ -101,7 +101,19 @@ void DefaultOOXMLTableStyles::importBorders()
     }
 }
 
-void DefaultOOXMLTableStyles::importFonts() {}
+void DefaultOOXMLTableStyles::importFonts()
+{
+    size_t nFonts = sizeof(aFonts) / sizeof(Font);
+    for (size_t i = 0; i < nFonts; ++i)
+    {
+        auto xFont = std::make_shared<oox::xls::Font>(*this, true);
+
+        const Font& rFontInfo = aFonts[i];
+        xFont->setFontElements(maColors[rFontInfo.nThemeColorId], rFontInfo.bBold);
+
+        maFonts.push_back(xFont);
+    }
+}
 
 void DefaultOOXMLTableStyles::importDxfs()
 {
@@ -116,6 +128,9 @@ void DefaultOOXMLTableStyles::importDxfs()
 
         if (aDxfInfo.nBorderId >= 0)
             xDxf->setBorder(maBorders[aDxfInfo.nBorderId]);
+
+        if (aDxfInfo.nFontId >= 0)
+            xDxf->setFont(maFonts[aDxfInfo.nFontId]);
 
         xDxf->finalizeImport();
         maDxfs.push_back(xDxf);
