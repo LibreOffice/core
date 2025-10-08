@@ -524,7 +524,6 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         });
 
     m_pWordsLB->freeze(); // speed up insert
-    int nRow = 0;
     for (OUString const & rStr : aSortedDicEntries)
     {
         sal_Int32 index = 0;
@@ -532,8 +531,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         if (index != -1 && m_pWordsLB == m_xDoubleColumnLB.get())
         {
             OUString sReplace = rStr.getToken(0, '\t', index);
-            m_pWordsLB->set_text(nRow, sReplace, 1);
-            ++nRow;
+            m_pWordsLB->set_text(m_pWordsLB->n_children() - 1, sReplace, 1);
         }
     }
     m_pWordsLB->thaw();
