@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <osl/process.h>
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 #include <o3tl/safeint.hxx>
@@ -31,11 +32,23 @@
 #include <vcl/pdfread.hxx>
 
 #include <Annotation.hxx>
+#include <DrawDocShell.hxx>
+#include <unomodel.hxx>
 
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace css;
@@ -244,5 +257,79 @@ bool SdPdfFilter::Import()
 }
 
 bool SdPdfFilter::Export() { return false; }
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
+{
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
+    uno::Reference<css::frame::XModel2> xModel(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.drawing.DrawingDocument"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference<css::frame::XLoadable> xModelLoad(xModel, uno::UNO_QUERY_THROW);
+    xModelLoad->initNew();
+
+    SdXImpressDocument* pDrawDoc = dynamic_cast<SdXImpressDocument*>(xModel.get());
+
+    bool ret = ImportPDF(rStream, *pDrawDoc->GetDoc());
+
+    if (ret)
+    {
+        utl::TempFileFast aTempFile;
+
+        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
+            comphelper::getProcessServiceFactory());
+        uno::Reference<uno::XInterface> xInterface(
+            xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr),
+            uno::UNO_QUERY);
+
+        css::uno::Sequence<OUString> aUserData{ u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
+                                                u""_ustr,
+                                                u"com.sun.star.comp.Draw.XMLOasisImporter"_ustr,
+                                                u"com.sun.star.comp.Draw.XMLOasisExporter"_ustr,
+                                                u""_ustr,
+                                                u""_ustr,
+                                                u"true"_ustr };
+        uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence({
+            { "UserData", uno::Any(aUserData) },
+        }));
+        css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+
+        uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
+        xInit->initialize(aOuterArgs);
+
+        uno::Reference<document::XFilter> xFODGFilter(xInterface, uno::UNO_QUERY);
+        uno::Reference<document::XExporter> xExporter(xFODGFilter, uno::UNO_QUERY);
+        xExporter->setSourceDocument(xModel);
+
+        uno::Reference<io::XOutputStream> xOutputStream(
+            new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
+
+        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(u"OpenDocument Drawing Flat XML"_ustr) },
+              { "OutputStream", uno::Any(xOutputStream) },
+              { "FilterOptions",
+                uno::Any(
+                    u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr) } }));
+        xFODGFilter->filter(aDescriptor);
+    }
+
+    css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
+    xClose->close(false);
+
+    return ret;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
