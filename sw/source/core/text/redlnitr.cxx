@@ -111,7 +111,6 @@ public:
     // Note: caller is responsible for checking for immediately adjacent hides
     bool Next()
     {
-        m_oParagraphBreak.reset();
         SwPosition const* pNextRedlineHide(nullptr);
         assert(m_pEndPos);
         if (m_isHideRedlines)
@@ -204,6 +203,7 @@ public:
             m_pStartPos = pRed->Start();
             m_pEndPos = pRed->End();
             ++m_RedlineIndex;
+            m_oParagraphBreak.reset();
             return true;
         }
         else if (m_oNextFieldmarkHide)
@@ -211,6 +211,7 @@ public:
             assert(!pNextRedlineHide || *m_oNextFieldmarkHide <= *pNextRedlineHide);
             m_pStartPos = &*m_oNextFieldmarkHide;
             m_pEndPos = &*m_Fieldmark.second;
+            m_oParagraphBreak.reset();
             return true;
         }
         else
@@ -271,6 +272,7 @@ public:
             {
                 m_pStartPos = nullptr;
                 m_pEndPos = nullptr;
+                m_oParagraphBreak.reset();
                 return false;
             }
         }
