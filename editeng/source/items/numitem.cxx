@@ -580,6 +580,21 @@ void SvxNumberFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(OUString(&cBullet, 1).toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("position-and-space-mode"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(mePositionAndSpaceMode).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("first-line-offset"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(nFirstLineOffset).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("abs-l-space"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(nAbsLSpace).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -874,7 +889,7 @@ void SvxNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
             (void)xmlTextWriterStartElement(pWriter, BAD_CAST("aFmts"));
             (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("i"), BAD_CAST(OString::number(i).getStr()));
-            (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", aFmts[i].get());
+            aFmts[i]->dumpAsXml(pWriter);
             (void)xmlTextWriterEndElement(pWriter);
         }
     }
