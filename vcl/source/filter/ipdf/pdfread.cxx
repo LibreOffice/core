@@ -373,13 +373,10 @@ findLinks(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
 
 } // end anonymous namespace
 
-size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
+size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics)
 {
-    std::unique_ptr<SvStream> xStream(
-        ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
-
     // Save the original PDF stream for later use.
-    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(*xStream);
+    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(rStream);
     if (aDataContainer.isEmpty())
         return 0;
 
@@ -432,6 +429,13 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
     }
 
     return rGraphics.size();
+}
+
+size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
+{
+    std::unique_ptr<SvStream> xStream(
+        ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
+    return ImportPDFUnloaded(*xStream, rGraphics);
 }
 }
 
