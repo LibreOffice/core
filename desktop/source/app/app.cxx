@@ -1439,12 +1439,13 @@ int Desktop::Main()
     Reference<XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
 
 #if HAVE_FEATURE_UPDATE_MAR
-    const char* pUpdaterTestEnable = std::getenv("LIBO_UPDATER_TEST_ENABLE");
-    if (pUpdaterTestEnable || officecfg::Office::Update::Update::Enabled::get())
+    if (!rCmdLineArgs.IsHeadless()
+        && (officecfg::Office::Update::Update::Enabled::get()
+            || std::getenv("LIBO_UPDATER_TEST_ENABLE")))
     {
         // check if we just updated
-        const char* pUpdaterRunning = std::getenv("LIBO_UPDATER_TEST_RUNNING");
-        bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get() || pUpdaterRunning;
+        bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get()
+                              || std::getenv("LIBO_UPDATER_TEST_RUNNING");
         if (bUpdateRunning)
         {
             OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
@@ -1482,9 +1483,7 @@ int Desktop::Main()
         osl::DirectoryItem aUpdateFile;
         osl::DirectoryItem::get(Updater::getUpdateFileURL(), aUpdateFile);
 
-        const char* pUpdaterTestUpdate = std::getenv("LIBO_UPDATER_TEST_UPDATE");
-        const char* pForcedUpdateCheck = std::getenv("LIBO_UPDATER_TEST_UPDATE_CHECK");
-        if (pUpdaterTestUpdate || aUpdateFile.is())
+        if (aUpdateFile.is() || std::getenv("LIBO_UPDATER_TEST_UPDATE"))
         {
             OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
             rtl::Bootstrap::expandMacros(aBuildID);
@@ -1506,7 +1505,7 @@ int Desktop::Main()
                 return EXIT_SUCCESS;
             }
         }
-        else if (isTimeForUpdateCheck() || pForcedUpdateCheck)
+        else if (isTimeForUpdateCheck() || std::getenv("LIBO_UPDATER_TEST_UPDATE_CHECK"))
         {
             sal_uInt64 nNow = tools::Time::GetSystemTicks();
             Updater::log("Update Check Time: " + OUString::number(nNow));
