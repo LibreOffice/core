@@ -36,6 +36,7 @@
 #include <com/sun/star/text/XText.hpp>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace css;
 
@@ -46,30 +47,27 @@ SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, sd::DrawDocShell& rDocShell)
 
 SdPdfFilter::~SdPdfFilter() {}
 
-bool SdPdfFilter::Import()
+static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
 {
-    const OUString aFileName(
-        mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
-
     std::vector<vcl::PDFGraphicResult> aGraphics;
-    if (vcl::ImportPDFUnloaded(aFileName, aGraphics) == 0)
+    if (vcl::ImportPDFUnloaded(rStream, aGraphics) == 0)
         return false;
 
-    bool bWasLocked = mrDocument.isLocked();
-    mrDocument.setLock(true);
-    const bool bSavedUndoEnabled = mrDocument.IsUndoEnabled();
-    mrDocument.EnableUndo(false);
-    mrDocument.setPDFDocument(true);
+    bool bWasLocked = rDocument.isLocked();
+    rDocument.setLock(true);
+    const bool bSavedUndoEnabled = rDocument.IsUndoEnabled();
+    rDocument.EnableUndo(false);
+    rDocument.setPDFDocument(true);
 
-    SdrModel& rModel = mrDocument;
+    SdrModel& rModel = rDocument;
 
     // Add as many pages as we need up-front.
-    mrDocument.CreateFirstPages();
+    rDocument.CreateFirstPages();
     sal_uInt16 nPageToDuplicate = 0;
     for (size_t i = 0; i < aGraphics.size() - 1; ++i)
     {
         // duplicating the last page is cheaper than repeatedly duplicating the first one
-        nPageToDuplicate = mrDocument.DuplicatePage(nPageToDuplicate);
+        nPageToDuplicate = rDocument.DuplicatePage(nPageToDuplicate);
     }
 
     for (vcl::PDFGraphicResult const& rPDFGraphicResult : aGraphics)
@@ -81,7 +79,7 @@ bool SdPdfFilter::Import()
         assert(nPageNumber >= 0 && o3tl::make_unsigned(nPageNumber) < aGraphics.size());
 
         // Create the page and insert the Graphic.
-        SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
+        SdPage* pPage = rDocument.GetSdPage(nPageNumber, PageKind::Standard);
         if (!pPage) // failed to duplicate page, out of memory?
             return false;
 
@@ -229,9 +227,20 @@ bool SdPdfFilter::Import()
         }
         pPage->setLinkAnnotations(rPDFGraphicResult.GetLinksInfo());
     }
-    mrDocument.setLock(bWasLocked);
-    mrDocument.EnableUndo(bSavedUndoEnabled);
+    rDocument.setLock(bWasLocked);
+    rDocument.EnableUndo(bSavedUndoEnabled);
     return true;
+}
+
+bool SdPdfFilter::Import()
+{
+    const OUString aFileName(
+        mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
+
+    std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream(
+        aFileName, StreamMode::READ | StreamMode::SHARE_DENYNONE));
+
+    return ImportPDF(*xStream, mrDocument);
 }
 
 bool SdPdfFilter::Export() { return false; }
