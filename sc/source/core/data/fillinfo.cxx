@@ -445,18 +445,17 @@ void ScDocument::FillInfo(
 
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
 
-                const SvxBrushItem* pBackground = pTableStyle->GetItem(*pDBData, nCol, nRow, nRowIndex, ATTR_BACKGROUND);
-
+                const SvxBrushItem* pBackground = pTableStyle->GetFillItem(*pDBData, nCol, nRow, nRowIndex);
                 if (pBackground)
                 {
                     pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
                     pThisRowInfo->bEmptyBack = false;
                 }
 
-                const SvxBoxItem* pLinesAttr = pTableStyle->GetItem(*pDBData, nCol, nRow, nRowIndex, ATTR_BORDER);
+                std::unique_ptr<SvxBoxItem> pLinesAttr = pTableStyle->GetBoxItem(*pDBData, nCol, nRow, nRowIndex);
                 if (pLinesAttr)
                 {
-                    pInfo->pLinesAttr = pLinesAttr;
+                    pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr.get());
                 }
 
                 const SfxItemSet* pPoolItem = pTableStyle->GetTableCellItemSet(*pDBData, nCol, nRow, nRowIndex);
@@ -623,16 +622,16 @@ void ScDocument::FillInfo(
                                 pInfo->bPivotExpandButton = bPivotExpandButton;
                                 pInfo->bPivotPopupButtonMulti = bPivotPopupButtonMulti;
                                 pInfo->bFilterActive = bFilterActive;
-                                if (pInfo->pLinesAttr)
+                                if (pInfo->maLinesAttr)
                                 {
                                     if (pExplicitBackground)
                                     {
-                                        pInfo->pLinesAttr = pExplicitLinesAttr;
+                                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pExplicitLinesAttr);
                                     }
                                 }
                                 else
                                 {
-                                    pInfo->pLinesAttr = pLinesAttr;
+                                    pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr);
                                 }
                                 pInfo->mpTLBRLine   = pTLBRLine;
                                 pInfo->mpBLTRLine   = pBLTRLine;
@@ -756,7 +755,10 @@ void ScDocument::FillInfo(
 
                             // Border
                     if ( const SvxBoxItem* pItem = pCondSet->GetItemIfSet( ATTR_BORDER ) )
-                        pInfo->pLinesAttr = pItem;
+                    {
+                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pItem);
+                        pRowInfo[nArrRow].bEmptyBack = false;
+                    }
 
                     if ( const SvxLineItem* pItem = pCondSet->GetItemIfSet( ATTR_BORDER_TLBR ) )
                         pInfo->mpTLBRLine = pItem;
@@ -1013,7 +1015,7 @@ void ScDocument::FillInfo(
         for( SCCOL nCol = nCol1 - 1; nCol <= nCol2 + 1; ++nCol ) // 1 more left and right
         {
             const ScCellInfo& rInfo = rThisRowInfo.cellInfo( nCol );
-            const SvxBoxItem* pBox = rInfo.pLinesAttr;
+            const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(rInfo.maLinesAttr.getItem());
             const SvxLineItem* pTLBR = rInfo.mpTLBRLine;
             const SvxLineItem* pBLTR = rInfo.mpBLTRLine;
 
