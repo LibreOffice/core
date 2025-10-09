@@ -501,6 +501,7 @@ public:
     SwFormatColl* GetFormatColl() const { return const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn())); }
 
     inline SwFormatColl& GetAnyFormatColl() const;
+    inline SwTextFormatColl& GetTextFormatColl() const;
     void SetCondFormatColl( SwFormatColl* );
     inline SwFormatColl* GetCondFormatColl() const;
 
@@ -726,6 +727,18 @@ inline SwFormatColl& SwContentNode::GetAnyFormatColl() const
     return m_pCondColl
             ? *m_pCondColl
             : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
+}
+
+inline SwTextFormatColl& SwContentNode::GetTextFormatColl() const
+{
+    if (m_pCondColl)
+    {
+        assert(dynamic_cast<SwTextFormatColl*>(m_pCondColl));
+        return *static_cast<SwTextFormatColl*>(m_pCondColl);
+    }
+    auto pRegistered = GetRegisteredIn();
+    assert(dynamic_cast<const SwTextFormatColl*>(pRegistered));
+    return *const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(pRegistered));
 }
 
 inline const SwAttrSet& SwContentNode::GetSwAttrSet() const

@@ -32,12 +32,12 @@ extern const sal_uInt8 StackPos[];
 // FontCache is created in txtinit.cxx TextInit_ and deleted in TextFinit
 SwFontCache *pSwFontCache = nullptr;
 
-SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
+SwFontObj::SwFontObj( const SwTextFormatColl *pOwn, SwViewShell *pSh ) :
     SwCacheObj( pOwn ),
-    m_aSwFont( &static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : nullptr )
+    m_aSwFont( &pOwn->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : nullptr )
 {
     m_aSwFont.AllocFontCacheId( pSh, m_aSwFont.GetActual() );
-    const SwAttrSet& rAttrSet = static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet();
+    const SwAttrSet& rAttrSet = pOwn->GetAttrSet();
     for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         m_pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );
 }
@@ -46,9 +46,8 @@ SwFontObj::~SwFontObj()
 {
 }
 
-SwFontAccess::SwFontAccess( const void *pOwn, SwViewShell *pSh ) :
-    SwCacheAccess( *pSwFontCache, pOwn,
-            static_cast<const SwTextFormatColl*>(pOwn)->IsInSwFntCache() ),
+SwFontAccess::SwFontAccess( const SwTextFormatColl *pOwn, SwViewShell *pSh ) :
+    SwCacheAccess( *pSwFontCache, pOwn, pOwn->IsInSwFntCache() ),
     m_pShell( pSh )
 {
 }
@@ -61,7 +60,7 @@ SwFontObj *SwFontAccess::Get( )
 SwCacheObj *SwFontAccess::NewObj( )
 {
     const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(m_pOwner))->SetInSwFntCache();
-    return new SwFontObj( m_pOwner, m_pShell );
+    return new SwFontObj( static_cast<const SwTextFormatColl*>(m_pOwner), m_pShell );
 }
 
 SAL_DLLPUBLIC_EXPORT void FlushFontCache()

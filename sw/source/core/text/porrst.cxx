@@ -372,7 +372,7 @@ SwTwips SwTextFrame::EmptyHeight() const
     }
     else
     {
-        SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), pSh);
+        SwFontAccess aFontAccess( &rTextNode.GetTextFormatColl(), pSh);
         pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
         pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }

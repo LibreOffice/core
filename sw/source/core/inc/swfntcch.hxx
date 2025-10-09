@@ -26,6 +26,7 @@
 
 class SwViewShell;
 class SfxPoolItem;
+class SwTextFormatColl;
 
 class SwFontCache : public SwCache
 {
@@ -51,7 +52,7 @@ private:
     const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
 
 public:
-    SwFontObj( const void* pOwner, SwViewShell *pSh );
+    SwFontObj( const SwTextFormatColl* pOwner, SwViewShell *pSh );
 
     virtual ~SwFontObj() override;
 
@@ -67,7 +68,7 @@ class SwFontAccess final : public SwCacheAccess
     virtual SwCacheObj *NewObj( ) override;
 
 public:
-    SwFontAccess( const void *pOwner, SwViewShell *pSh );
+    SwFontAccess( const SwTextFormatColl *pOwner, SwViewShell *pSh );
     SwFontObj *Get();
 };
 
