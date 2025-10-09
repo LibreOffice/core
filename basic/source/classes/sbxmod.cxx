@@ -1327,11 +1327,9 @@ void SbModule::implClearIfVarDependsOnDeletedBasic(SbxVariable& rVar, StarBASIC*
     if (rVar.SbxValue::GetType() != SbxOBJECT || dynamic_cast<const SbProcedureProperty*>(&rVar) != nullptr)
         return;
 
-    SbxObject* pObj = dynamic_cast<SbxObject*>(rVar.GetObject());
-    if( pObj == nullptr )
+    SbxObject* p = dynamic_cast<SbxObject*>(rVar.GetObject());
+    if (p == nullptr)
         return;
-
-    SbxObject* p = pObj;
 
     SbModule* pMod = dynamic_cast<SbModule*>( p  );
     if( pMod != nullptr )
@@ -1339,8 +1337,7 @@ void SbModule::implClearIfVarDependsOnDeletedBasic(SbxVariable& rVar, StarBASIC*
 
     while( (p = p->GetParent()) != nullptr )
     {
-        StarBASIC* pBasic = dynamic_cast<StarBASIC*>( p  );
-        if( pBasic != nullptr && pBasic == pDeletedBasic )
+        if (p == pDeletedBasic)
         {
             rVar.SbxValue::Clear();
             break;
