@@ -106,6 +106,17 @@ public:
     // Note: caller is responsible for checking for immediately adjacent hides
     bool Next()
     {
+        // A special case (tdf#168116 hack): the node should hide its paragraph break, but it was
+        // impossible; yet, the last paragraph character (\n) was hidden instead.
+        if (m_oParagraphBreak
+            && m_oParagraphBreak->first.GetNodeIndex() == m_oParagraphBreak->second.GetNodeIndex())
+        {
+            // This is a call to Next after we returned the fake position for the last hidden
+            // paragraph mark. We are done.
+            m_pStartPos = nullptr;
+            m_pEndPos = nullptr;
+            return false;
+        }
         SwPosition const* pNextRedlineHide(nullptr);
         assert(m_pEndPos);
         if (m_isHideRedlines)
@@ -244,29 +255,48 @@ public:
                 }
                 return false;
             };
-            if (m_isHideParagraphBreaks
-                && m_pEndPos->GetNode().IsTextNode() // ooo27109-1.sxw
-                // only merge if next node is also text node
-                && m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->IsTextNode()
-                && hasHiddenItem(*m_pEndPos->GetNode().GetTextNode())
-                // no merge if there's a page break on any node
-                && !hasBreakBefore(*m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->GetTextNode())
-                // first node, see SwTextFrame::GetBreak()
-                && !hasBreakAfter(*m_Start.GetNode().GetTextNode()))
+
+            if (auto pTextNode = m_pEndPos->GetNode().GetTextNode();
+                pTextNode // ooo27109-1.sxw
+                && m_isHideParagraphBreaks
+                && hasHiddenItem(*pTextNode))
             {
-                m_oParagraphBreak.emplace(
-                    SwPosition(*m_pEndPos->GetNode().GetTextNode(), m_pEndPos->GetNode().GetTextNode()->Len()),
-                    SwPosition(*m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex()+1]->GetTextNode(), 0));
-                m_pStartPos = &m_oParagraphBreak->first;
-                m_pEndPos = &m_oParagraphBreak->second;
-                return true;
+                auto pNextNode = m_pEndPos->GetNodes()[m_pEndPos->GetNodeIndex() + 1];
+                if (pNextNode->IsTextNode() // only merge if next node is also text node
+                    // no merge if there's a page break on any node
+                    && !hasBreakBefore(*pNextNode->GetTextNode())
+                    // first node, see SwTextFrame::GetBreak()
+                    && !hasBreakAfter(*m_Start.GetNode().GetTextNode()))
+                {
+                    m_oParagraphBreak.emplace(SwPosition(*pTextNode, pTextNode->Len()),
+                                              SwPosition(*pNextNode->GetTextNode(), 0));
+                    m_pStartPos = &m_oParagraphBreak->first;
+                    m_pEndPos = &m_oParagraphBreak->second;
+                    return true;
+                }
+                // A special case (tdf#168116 hack): a line break immediately before hidden marker,
+                // which itself cannot be hidden. Hide the preceding line break instead.
+                if (pTextNode->Len() > 0
+                    && pTextNode->GetText()[pTextNode->Len() - 1] == '\n')
+                {
+                    SwPosition nodeEnd(*pTextNode, pTextNode->Len());
+                    // Only if we didn't include the line break in the previous result
+                    if (*m_pEndPos < nodeEnd)
+                    {
+                        // This fake m_oParagraphBreak can easily be distinguished from the proper
+                        // one created a few lined above: both positions are inside the same node.
+                        m_oParagraphBreak.emplace(SwPosition(*pTextNode, pTextNode->Len() - 1),
+                                                  nodeEnd);
+                        m_pStartPos = &m_oParagraphBreak->first;
+                        m_pEndPos = &m_oParagraphBreak->second;
+                        return true;
+                    }
+                }
             }
-            else // nothing
-            {
-                m_pStartPos = nullptr;
-                m_pEndPos = nullptr;
-                return false;
-            }
+
+            m_pStartPos = nullptr;
+            m_pEndPos = nullptr;
+            return false;
         }
     }
 };
