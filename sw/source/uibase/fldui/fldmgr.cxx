@@ -518,13 +518,13 @@ SwFieldGroup SwFieldMgr::GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType)
 //  ACCESS over TYP_...
 SwFieldTypesEnum SwFieldMgr::GetTypeId(sal_uInt16 nPos)
 {
-    OSL_ENSURE(nPos < ::GetPackCount(), "forbidden Pos");
+    assert(nPos < ::GetPackCount() && "forbidden Pos");
     return aSwFields[ nPos ].nTypeId;
 }
 
 const OUString & SwFieldMgr::GetTypeStr(sal_uInt16 nPos)
 {
-    OSL_ENSURE(nPos < ::GetPackCount(), "forbidden TypeId");
+    assert(nPos < ::GetPackCount() && "forbidden TypeId");
 
     SwFieldTypesEnum nFieldWh = aSwFields[ nPos ].nTypeId;
 
@@ -1543,11 +1543,11 @@ bool SwFieldMgr::InsertField(
             return true;
 
         default:
-        {   OSL_ENSURE(false, "wrong field type");
+        {   assert(false && "wrong field type");
             return false;
         }
     }
-    OSL_ENSURE(pField, "field not available");
+    assert(pField && "field not available");
 
     //the auto language flag has to be set prior to the language!
     pField->SetAutomaticLanguage(rData.m_bIsAutomaticLanguage);
@@ -1624,7 +1624,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
                             std::unique_ptr<SwField> pTmpField)
 {
     // change format
-    OSL_ENSURE(m_pCurField, "no field at CursorPos");
+    assert(m_pCurField && "no field at CursorPos");
 
     if (!pTmpField)
         pTmpField = m_pCurField->CopyField();
