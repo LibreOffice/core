@@ -1224,7 +1224,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 		$(gb_UnpackedTarball_workdir)/cairo/builddir/src/libcairo-lo.a \
 		$(gb_UnpackedTarball_workdir)/pixman/builddir/pixman/libpixman-1.a, \
 		-L$(gb_UnpackedTarball_workdir)/cairo/builddir/src -lcairo-lo \
-		-L$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs -lpixman-1) \
+		-L$(gb_UnpackedTarball_workdir)/pixman/builddir/pixman -lpixman-1) \
 )
 
 endef
