@@ -264,7 +264,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
     Event.Element >>= aMod;
 
     if( pMod )
-            pMod->SetSource32( aMod );
+            pMod->SetSource( aMod );
     else
             pLib->MakeModule( aName, aMod );
 
@@ -501,7 +501,7 @@ static void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInf
         OUString aModName = pModule->GetName();
         if( !xLib->hasByName( aModName ) )
         {
-            OUString aSource = pModule->GetSource32();
+            OUString aSource = pModule->GetSource();
             uno::Any aSourceAny;
             aSourceAny <<= aSource;
             xLib->insertByName( aModName, aSourceAny );
@@ -1687,7 +1687,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     if( !pMod )
         throw container::NoSuchElementException();
-    uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, u"StarBasic"_ustr, pMod->GetSource32() );
+    uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, u"StarBasic"_ustr, pMod->GetSource() );
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;

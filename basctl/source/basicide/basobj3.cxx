@@ -90,7 +90,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
         }
     }
 
-    OUString aOUSource( pModule->GetSource32() );
+    OUString aOUSource( pModule->GetSource() );
 
     // don't produce too many empty lines...
     sal_Int32 nSourceLen = aOUSource.getLength();

@@ -783,12 +783,12 @@ void ModulWindow::UpdateData()
     if ( !XModule().is() )
         return;
 
-    SetModule( m_xModule->GetSource32() );
+    SetModule( m_xModule->GetSource() );
 
     if ( GetEditView() )
     {
         TextSelection aSel = GetEditView()->GetSelection();
-        setTextEngineText(*GetEditEngine(), m_xModule->GetSource32());
+        setTextEngineText(*GetEditEngine(), m_xModule->GetSource());
         GetEditView()->SetSelection( aSel );
         GetEditEngine()->SetModified( false );
         MarkDocumentModified( GetDocument() );

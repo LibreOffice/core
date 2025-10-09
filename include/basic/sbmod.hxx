@@ -104,8 +104,8 @@ public:
 
     SAL_DLLPRIVATE virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
-    const OUString&  GetSource32() const { return aOUSource;}
-    void             SetSource32( const OUString& r );
+    const OUString&  GetSource() const { return aOUSource;}
+    void             SetSource( const OUString& r );
 
     bool Compile();
     bool IsCompiled() const;

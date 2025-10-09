@@ -274,12 +274,12 @@ void MacroChooser::DeleteMacro()
 
     SbModule* pModule = pMethod->GetModule();
     assert(pModule && "DeleteMacro: No Module?!");
-    OUString aSource( pModule->GetSource32() );
+    OUString aSource( pModule->GetSource() );
     sal_uInt16 nStart, nEnd;
     pMethod->GetLineRange( nStart, nEnd );
     pModule->GetMethods()->Remove( pMethod );
     CutLines( aSource, nStart-1, nEnd-nStart+1 );
-    pModule->SetSource32( aSource );
+    pModule->SetSource( aSource );
 
     // update module in library
     OUString aLibName = pBasic->GetName();

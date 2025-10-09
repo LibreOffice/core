@@ -1034,7 +1034,7 @@ SbModule* StarBASIC::MakeModule( const OUString& rName, const ModuleInfo& mInfo,
         p = new SbModule( rName, isVBAEnabled() );
         break;
     }
-    p->SetSource32( rSrc );
+    p->SetSource( rSrc );
     p->SetParent( this );
     pModules.emplace_back(p);
     SetModified( true );

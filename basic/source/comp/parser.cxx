@@ -110,7 +110,7 @@ const SbiStatement StmntTable [] = {
 };
 
 SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
-        : SbiTokenizer( pm->GetSource32(), pb ),
+        : SbiTokenizer( pm->GetSource(), pb ),
           pStack(nullptr),
           pProc(nullptr),
           pWithVar(nullptr),

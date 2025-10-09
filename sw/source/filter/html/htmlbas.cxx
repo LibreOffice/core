@@ -294,7 +294,7 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
 
             const OUString& rModName = pModule->GetName();
             Strm().WriteOString( SAL_NEWLINE_STRING );   // don't indent!
-            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource32(),
+            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, STARBASIC, OUString(),
                                      &rLibName, &rModName );
         }

@@ -800,7 +800,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 // The setting of the source makes the image invalid
 // and scans the method definitions newly in
 
-void SbModule::SetSource32( const OUString& r )
+void SbModule::SetSource( const OUString& r )
 {
     // Default basic mode to library container mode, but... allow Option VBASupport 0/1 override
     SetVBASupport( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
@@ -1618,14 +1618,14 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         // Old version: image away
         if( nVer == 1 )
         {
-            SetSource32( p->aOUSource );
+            SetSource( p->aOUSource );
         }
         else
             pImage = std::move(p);
     }
     else
     {
-        SetSource32( p->aOUSource );
+        SetSource( p->aOUSource );
     }
     return true;
 }
