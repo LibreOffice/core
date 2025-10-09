@@ -72,7 +72,7 @@ static LanguageType lcl_GetLanguageOfFormat(LanguageType nLng, sal_uLong nFormat
 // Globals
 
 /// field names
-std::vector<OUString>* SwFieldType::s_pFieldNames = nullptr;
+o3tl::enumarray<SwFieldTypesEnum, OUString>* SwFieldType::s_pFieldNames = nullptr;
 
 namespace
 {
@@ -128,7 +128,7 @@ const OUString & SwFieldType::GetTypeStr(SwFieldTypesEnum nTypeId)
     if (!s_pFieldNames)
         GetFieldName_();
 
-    return (*SwFieldType::s_pFieldNames)[static_cast<int>(nTypeId)];
+    return (*SwFieldType::s_pFieldNames)[nTypeId];
 }
 
 // each field references a field type that is unique for each document

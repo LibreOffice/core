@@ -1846,62 +1846,61 @@ LanguageType SwFieldMgr::GetCurrLanguage() const
 
 void SwFieldType::GetFieldName_()
 {
-    static const TranslateId coFieldNms[] =
+    static constexpr o3tl::enumarray<SwFieldTypesEnum, TranslateId> coFieldNms
     {
-        FLD_DATE_STD,
-        FLD_TIME_STD,
-        STR_FILENAMEFLD,
-        STR_DBNAMEFLD,
-        STR_CHAPTERFLD,
-        STR_PAGENUMBERFLD,
-        STR_DOCSTATFLD,
-        STR_AUTHORFLD,
-        STR_SETFLD,
-        STR_GETFLD,
-        STR_FORMELFLD,
-        STR_HIDDENTXTFLD,
-        STR_SETREFFLD,
-        STR_GETREFFLD,
-        STR_DDEFLD,
-        STR_MACROFLD,
-        STR_INPUTFLD,
-        STR_HIDDENPARAFLD,
-        STR_DOCINFOFLD,
-        STR_DBFLD,
-        STR_USERFLD,
-        STR_POSTITFLD,
-        STR_TEMPLNAMEFLD,
-        STR_SEQFLD,
-        STR_DBNEXTSETFLD,
-        STR_DBNUMSETFLD,
-        STR_DBSETNUMBERFLD,
-        STR_CONDTXTFLD,
-        STR_NEXTPAGEFLD,
-        STR_PREVPAGEFLD,
-        STR_EXTUSERFLD,
-        FLD_DATE_FIX,
-        FLD_TIME_FIX,
-        STR_SETINPUTFLD,
-        STR_USRINPUTFLD,
-        STR_SETREFPAGEFLD,
-        STR_GETREFPAGEFLD,
-        STR_INTERNETFLD,
-        STR_JUMPEDITFLD,
-        STR_SCRIPTFLD,
-        STR_AUTHORITY,
-        STR_COMBINED_CHARS,
-        STR_DROPDOWN,
-        STR_CUSTOM_FIELD,
-        STR_PARAGRAPH_SIGNATURE
+        FLD_DATE_STD, /*Date*/
+        FLD_TIME_STD, /*Time*/
+        STR_FILENAMEFLD, /*Filename*/
+        STR_DBNAMEFLD, /*DatabaseName*/
+        STR_CHAPTERFLD, /*Chapter*/
+        STR_PAGENUMBERFLD, /*PageNumber*/
+        STR_DOCSTATFLD, /*DocumentStatistics*/
+        STR_AUTHORFLD, /*Author*/
+        STR_SETFLD, /*Set*/
+        STR_GETFLD, /*Get*/
+        STR_FORMELFLD, /*Formel*/
+        STR_HIDDENTXTFLD, /*HiddenText*/
+        STR_SETREFFLD, /*SetRef*/
+        STR_GETREFFLD, /*GetRef*/
+        STR_DDEFLD, /*DDE*/
+        STR_MACROFLD, /*Macro*/
+        STR_INPUTFLD, /*Input*/
+        STR_HIDDENPARAFLD, /*HiddenParagraph*/
+        STR_DOCINFOFLD, /*DocumentInfo*/
+        STR_DBFLD, /*Database*/
+        STR_USERFLD, /*User*/
+        STR_POSTITFLD, /*Postit*/
+        STR_TEMPLNAMEFLD, /*TemplateName*/
+        STR_SEQFLD, /*Sequence*/
+        STR_DBNEXTSETFLD, /*DatabaseNextSet*/
+        STR_DBNUMSETFLD, /*DatabaseNumberSet*/
+        STR_DBSETNUMBERFLD, /*DatabaseSetNumber*/
+        STR_CONDTXTFLD, /*ConditionalText*/
+        STR_NEXTPAGEFLD, /*NextPage*/
+        STR_PREVPAGEFLD, /*PreviousPage*/
+        STR_EXTUSERFLD, /*ExtendedUser*/
+        FLD_DATE_FIX, /*FixedDate*/
+        FLD_TIME_FIX, /*FixedTime*/
+        STR_SETINPUTFLD, /*SetInput*/
+        STR_USRINPUTFLD, /*UserInput*/
+        STR_SETREFPAGEFLD, /*SetRefPage*/
+        STR_GETREFPAGEFLD, /*GetRefPage*/
+        STR_INTERNETFLD, /*Internet*/
+        STR_JUMPEDITFLD, /*JumpEdit*/
+        STR_SCRIPTFLD, /*Script*/
+        STR_AUTHORITY, /*Authority*/
+        STR_COMBINED_CHARS, /*CombinedChars*/
+        STR_DROPDOWN, /*Dropdown*/
+        STR_CUSTOM_FIELD, /*Custom*/
+        STR_PARAGRAPH_SIGNATURE /*ParagraphSignature*/
     };
 
     // insert infos for fields
-    SwFieldType::s_pFieldNames = new std::vector<OUString>;
-    SwFieldType::s_pFieldNames->reserve(SAL_N_ELEMENTS(coFieldNms));
-    for (const TranslateId & id : coFieldNms)
+    SwFieldType::s_pFieldNames = new o3tl::enumarray<SwFieldTypesEnum, OUString>;
+    for( SwFieldTypesEnum i : o3tl::enumrange<SwFieldTypesEnum>() )
     {
-        const OUString aTmp(SwResId(id));
-        SwFieldType::s_pFieldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
+        const OUString aTmp(SwResId(coFieldNms[i]));
+        (*SwFieldType::s_pFieldNames)[i] = MnemonicGenerator::EraseAllMnemonicChars( aTmp );
     }
 }
 

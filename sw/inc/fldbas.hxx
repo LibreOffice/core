@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
+#include <o3tl/enumarray.hxx>
 #include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
@@ -237,7 +238,7 @@ class SW_DLLPUBLIC SwFieldType : public sw::BroadcastingModify
     SwFieldIds m_nWhich;
 
     friend void FinitUI();     ///< In order to delete pointer!
-    static  std::vector<OUString>* s_pFieldNames;
+    static o3tl::enumarray<SwFieldTypesEnum, OUString>* s_pFieldNames;
 
     static void GetFieldName_();  ///< Sets up FieldNames; fldmgr.cxx!
 
