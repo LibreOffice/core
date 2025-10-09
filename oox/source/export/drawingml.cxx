@@ -3600,6 +3600,13 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     // ST_TextIndentLevelType
     const sal_Int16 nOutLevel = std::min(nLevel, sal_Int16(8));
 
+    // ST_TextMargin: The margin value can't be greater than 51206400 Emu, which is 142240 MM100 ([ISO/IEC 29500-1] 20.1.10.72)
+    sal_Int32 nMaxMarginVal = 142240;
+    if (nParaLeftMargin > nMaxMarginVal)
+        nParaLeftMargin = 0;
+    if (nLeftMargin > nMaxMarginVal)
+        nLeftMargin = 0;
+
     if (nParaLeftMargin) // For Paragraph
         mpFS->startElementNS( XML_a, nElement,
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
