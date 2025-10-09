@@ -4059,6 +4059,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf152839_firstRows)
     CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(230), nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168116)
+{
+    // Given a paragraph with a line break immediately followed by a hidden paragraph mark:
+    createSwDoc("hidden-para-before-table.rtf");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//body");
+    assertXPathChildren(pXmlDoc, "//body", 4);
+    // It must have a "merged" data; without the fix, this failed:
+    assertXPath(pXmlDoc, "//body/txt[1]/merged");
+    // It must only have one line; without the fix, there were two (the second empty):
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout", 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
