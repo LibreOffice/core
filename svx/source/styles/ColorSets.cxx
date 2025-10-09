@@ -180,8 +180,7 @@ namespace
 
 OUString findUniqueName(std::unordered_set<OUString> const& rNames, OUString const& rNewName)
 {
-    auto iterator = rNames.find(rNewName);
-    if (iterator == rNames.cend())
+    if (!rNames.contains(rNewName))
         return rNewName;
 
     int i = 1;
@@ -190,8 +189,7 @@ OUString findUniqueName(std::unordered_set<OUString> const& rNames, OUString con
     {
         aName = rNewName + "_" + OUString::number(i);
         i++;
-        iterator = rNames.find(aName);
-    } while (iterator != rNames.cend());
+    } while (rNames.contains(aName));
 
     return aName;
 }
