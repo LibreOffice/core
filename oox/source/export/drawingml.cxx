@@ -2552,8 +2552,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 break;
         }
 
-    if ((bCheckDirect && GetDirectProperty(rXPropSet, rXPropState, u"CharUnderline"_ustr))
-        || GetProperty(rXPropSet, u"CharUnderline"_ustr))
+    if (GetProperty(rXPropSet, u"CharUnderline"_ustr))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -2611,8 +2610,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if ((bCheckDirect && GetDirectProperty(rXPropSet, rXPropState, u"CharStrikeout"_ustr))
-        || GetProperty(rXPropSet, u"CharStrikeout"_ustr))
+    if (GetProperty(rXPropSet, u"CharStrikeout"_ustr))
     {
         switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
@@ -2722,8 +2720,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     else
     {
         // mso doesn't like text color to be placed after typeface
-        if ((bCheckDirect && GetDirectProperty(rXPropSet, rXPropState, u"CharColor"_ustr))
-            || GetProperty(rXPropSet, u"CharColor"_ustr))
+        if (GetProperty(rXPropSet, u"CharColor"_ustr))
         {
             ::Color color( ColorTransparency, *o3tl::doAccess<sal_uInt32>(mAny) );
             SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
@@ -2815,8 +2812,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     }
 
     if (underline
-        && ((bCheckDirect && GetDirectProperty(rXPropSet, rXPropState, u"CharUnderlineColor"_ustr))
-            || GetProperty(rXPropSet, u"CharUnderlineColor"_ustr)))
+        && (GetProperty(rXPropSet, u"CharUnderlineColor"_ustr)))
     {
         ::Color color(ColorTransparency, *o3tl::doAccess<sal_uInt32>(mAny));
         // if color is automatic, then we shouldn't write information about color but to take color from character
