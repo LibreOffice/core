@@ -1964,6 +1964,11 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     (void)xmlTextWriterEndElement(pWriter);
 
+    if (mxStyleSheetPool)
+    {
+        mxStyleSheetPool->dumpAsXml(pWriter);
+    }
+
     if (mpImpl->mpTheme)
     {
         mpImpl->mpTheme->dumpAsXml(pWriter);

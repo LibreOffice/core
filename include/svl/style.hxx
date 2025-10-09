@@ -83,6 +83,8 @@ class SfxStyleSheetBasePool;
 class SvStream;
 
 namespace svl { class IndexedStyleSheets; }
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 /*
 Everyone changing instances of SfxStyleSheetBasePool or SfxStyleSheetBase
 must broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasts.
@@ -185,6 +187,8 @@ public:
 
     /// Fix for expensive dynamic_cast
     virtual bool isScStyleSheet() const { return false; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /* Class to iterate and search on a SfxStyleSheetBasePool */
@@ -225,6 +229,8 @@ friend class SfxStyleSheetBasePool;
 };
 
 class SfxStyleSheetBasePool_Impl;
+
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public cppu::WeakImplHelper<>
 {
@@ -285,6 +291,8 @@ public:
      * Not an actual public function. Do not call it from non-subclasses.
      */
     void                        Add( const SfxStyleSheetBase& );
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
