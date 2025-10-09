@@ -141,6 +141,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,602fuzzer) \
 	$(call gb_Helper_optional,FUZZERS,lwpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,olefuzzer) \
+	$(call gb_Helper_optional,FUZZERS,pdf2fodgfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,pptfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,rtffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,rtf2pdffuzzer) \

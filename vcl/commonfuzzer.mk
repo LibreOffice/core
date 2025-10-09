@@ -36,6 +36,8 @@ fuzzer_externals = \
     libpng \
     libtiff \
     libwebp \
+    pdfium \
+    md4c \
     openssl \
     expat \
     mythes \
@@ -136,6 +138,7 @@ fuzzer_core_libraries = \
     mtfrenderer \
     canvasfactory \
     vclcanvas \
+    pdfimport \
     xof \
     xmlfa \
     xmlfd \

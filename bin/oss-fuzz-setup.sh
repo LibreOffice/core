@@ -81,6 +81,7 @@ cd $SRC
 curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/gif.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/jpeg.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/pdf.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/png.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/tiff.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/xml.dict \
@@ -111,6 +112,8 @@ mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && 
     zip -q $SRC/bmpfuzzer_seed_corpus.zip afl-testcases/bmp*/full/images/* && \
     zip -q $SRC/pngfuzzer_seed_corpus.zip afl-testcases/png*/full/images/* && \
     zip -q $SRC/webpfuzzer_seed_corpus.zip afl-testcases/webp*/full/images/*
+
+# TTF/OTF/SFT
 # using github's svn view to use svn export as a hack to just export part of the git repo
 # svn support turned off now: https://github.blog/2023-01-20-sunsetting-subversion-support/
 # and git sparse checkout is a total pain
@@ -121,6 +124,15 @@ mkdir -p $SRC/sample-sft-fonts/adobe
 curl --no-progress-meter -S \
     -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.005a/AdobeVFPrototype.otf
 zip -qr $SRC/sftfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
+
+# PDF
+git clone --depth 1 https://github.com/strongcourage/fuzzing-corpus.git && \
+    zip -q -r $SRC/pdffuzzer_seed_corpus.zip fuzzing-corpus/pdf/* && \
+    rm -rf fuzzing-corpus && \
+git clone --depth 1 https://github.com/mozilla/pdf.js pdf.js && \
+    zip -q $SRC/pdffuzzer_seed_corpus.zip pdf.js/test/pdfs/*.pdf && \
+    rm -rf pdf.js
+
 curl --no-progress-meter -S -C - https://storage.googleapis.com/skia-fuzzer/oss-fuzz/svg_seed_corpus.zip -o svgfuzzer_seed_corpus.zip
 curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/corpus/wmffuzzer_seed_corpus.zip \
@@ -170,5 +182,6 @@ cp fodtfuzzer_seed_corpus.zip fodt2pdffuzzer_seed_corpus.zip
 cp rtffuzzer_seed_corpus.zip rtf2pdffuzzer_seed_corpus.zip
 cp fodsfuzzer_seed_corpus.zip fods2xlsfuzzer_seed_corpus.zip
 cp htmlfuzzer_seed_corpus.zip schtmlfuzzer_seed_corpus.zip
+cp pdffuzzer_seed_corpus.zip pdf2fodgfuzzer_seed_corpus.zip
 
 echo end downloading dependencies at `date -u`

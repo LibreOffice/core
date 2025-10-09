@@ -29,3 +29,16 @@
      if (start > 0)
          memmove(str, &str[start], (end - start) + 2);
      if (strlen(str) == 0) {
+@@ -2775,6 +2775,7 @@
+     free(h);
+ }
+ 
++#if 0
+ /* Main program. */
+ int CTL_CDECL main(int argc, char *argv[]) {
+     txCtx h;
+@@ -2826,3 +2827,4 @@
+ 
+     return 0;
+ }
++#endif
