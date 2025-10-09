@@ -528,18 +528,6 @@ const OUString & SwFieldMgr::GetTypeStr(sal_uInt16 nPos)
 
     SwFieldTypesEnum nFieldWh = aSwFields[ nPos ].nTypeId;
 
-    // special treatment for date/time fields (without var/fix)
-    if( SwFieldTypesEnum::Date == nFieldWh )
-    {
-        static OUString g_aDate( SwResId( STR_DATEFLD ) );
-        return g_aDate;
-    }
-    if( SwFieldTypesEnum::Time == nFieldWh )
-    {
-        static OUString g_aTime( SwResId( STR_TIMEFLD ) );
-        return g_aTime;
-    }
-
     return SwFieldType::GetTypeStr( nFieldWh );
 }
 

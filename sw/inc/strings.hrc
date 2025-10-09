@@ -951,8 +951,6 @@
     Description: strings for the types
  --------------------------------------------------------------------*/
 // range document
-#define STR_DATEFLD                             NC_("STR_DATEFLD", "Date")
-#define STR_TIMEFLD                             NC_("STR_TIMEFLD", "Time")
 #define STR_FILENAMEFLD                         NC_("STR_FILENAMEFLD", "File name")
 #define STR_DBNAMEFLD                           NC_("STR_DBNAMEFLD", "Database Name")
 #define STR_CHAPTERFLD                          NC_("STR_CHAPTERFLD", "~Heading")
