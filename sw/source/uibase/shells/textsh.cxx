@@ -513,8 +513,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 if( !bSingleCol && 1 < nCols )
                 {
                     SwFormatCol aFormatCol;
-                    aFormatCol.Init( nCols , (rReq.IsAPI() ? 0
-                                        : DEF_GUTTER_WIDTH), USHRT_MAX );
+                    aFormatCol.Init( nCols , (rReq.IsAPI() ? SwTwips(0) : DEF_GUTTER_WIDTH), USHRT_MAX);
                     aMgr.SetCol(aFormatCol);
                 }
             }

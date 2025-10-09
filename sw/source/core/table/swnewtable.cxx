@@ -1372,7 +1372,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
     }
     for( const auto& rSplit : aBoxes )
     {
-        SwTwips nBase = rSplit.first <= nFirst ? 0 :
+        SwTwips nBase = rSplit.first <= nFirst ? SwTwips(0) :
                         pLines[ rSplit.first - nFirst - 1 ];
         SwTwips nDiff = pLines[ rSplit.second - nFirst ] - nBase;
         for( sal_uInt16 i = 1; i < nCnt; ++i )

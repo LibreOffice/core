@@ -290,7 +290,7 @@ SwTwips SwTextFrame::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
         // the frame is currently locked. We return the previous value.
         return pThis->mnFootnoteLine > 0 ?
                pThis->mnFootnoteLine :
-               IsVertical() ? getFrameArea().Left() : getFrameArea().Bottom();
+               SwTwips(IsVertical() ? getFrameArea().Left() : getFrameArea().Bottom());
     }
 
     SwTwips nRet;
@@ -332,7 +332,7 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
     SwSwapIfSwapped swap(const_cast<SwTextFrame *>(this));
 
     SwTwips nHeight = pRef->IsInFootnoteConnect() ?
-                            1 : pRef->GetFootnoteLine( pFootnoteFrame->GetAttr() );
+                            SwTwips(1) : pRef->GetFootnoteLine( pFootnoteFrame->GetAttr() );
     if( nHeight )
     {
         // As odd as it may seem: the first Footnote on the page may not touch the

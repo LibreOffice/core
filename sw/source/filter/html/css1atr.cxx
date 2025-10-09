@@ -1900,12 +1900,12 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 {
                     bOutXPos = text::RelOrientation::CHAR != rHoriOri.GetRelationOrient();
                     nXPos = text::HoriOrientation::NONE == rHoriOri.GetHoriOrient()
-                                ? rHoriOri.GetPos() : 0;
+                                ? rHoriOri.GetPos() : SwTwips(0);
 
                     const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
                     bOutYPos = text::RelOrientation::CHAR != rVertOri.GetRelationOrient();
                     nYPos = text::VertOrientation::NONE == rVertOri.GetVertOrient()
-                                 ? rVertOri.GetPos() : 0;
+                                 ? rVertOri.GetPos() : SwTwips(0);
                 }
 
                 if( bOutYPos )

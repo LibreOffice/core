@@ -1563,11 +1563,11 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         }
                     }
 
-                    sal_Int32 nAbsPos = lBulletIndent;
+                    SwTwips nAbsPos = lBulletIndent;
                     SwTwips nSpaceSteps = nLvl
-                                            ? nLeftTextPos / nLvl
+                                            ? SwTwips(nLeftTextPos / nLvl)
                                             : lBulletIndent;
-                    for( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
+                    for (sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps)
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
                         aFormat.SetBulletFont( pBullFnt );
@@ -1576,7 +1576,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         // #i93908# clear suffix for bullet lists
                         aFormat.SetListFormat(u""_ustr, u""_ustr, n);
                         aFormat.SetFirstLineOffset( lBulletFirstLineOffset );
-                        aFormat.SetAbsLSpace( nAbsPos );
+                        aFormat.SetAbsLSpace(sal_Int32(nAbsPos));
                         if( !aFormat.GetCharFormat() )
                             aFormat.SetCharFormat( pCFormat );
                         if( bRTL )
@@ -1681,7 +1681,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( bDefStep )
                             aFormat.SetAbsLSpace( nLeftTextPos +
-                                SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl)));
+                                SwTwips(SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl))));
                         else
                             aFormat.SetAbsLSpace( nSpaceSteps * n
                                                 + lNumberIndent );

@@ -653,7 +653,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         else
             bRet = true;
 
-        nGrowVal = o3tl::saturating_add(nGrowVal, aRectFnSet.GetHeight(pFloat->getFrameArea()));
+        nGrowVal = o3tl::saturating_add(nGrowVal, SwTwips(aRectFnSet.GetHeight(pFloat->getFrameArea())));
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
@@ -1652,7 +1652,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
                 // FIXME: apply bHalfContextualSpacing for better portability?
-                nUpper = bContextualSpacing ? 0 : nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
+                nUpper = bContextualSpacing ? SwTwips(0) : nPrevLowerSpace + SwTwips(pAttrs->GetULSpace().GetUpper());
                 SwTwips nAdd = nPrevLineSpacing;
                 // i#11859 - consideration of the line spacing
                 //      for the upper spacing of a text frame
@@ -1883,7 +1883,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid() cons
             GetUpperSpaceAmountConsideredForPrevFrame() +
             ( m_rThis.GetUpper()->GetFormat()->GetDoc().IsSquaredPageMode()
               ? GetUpperSpaceAmountConsideredForPageGrid_( CalcUpperSpace( nullptr, nullptr, false ) )
-              : 0 );
+              : SwTwips(0) );
     }
 
     return nUpperSpaceAmountConsideredForPrevFrameAndPageGrid;

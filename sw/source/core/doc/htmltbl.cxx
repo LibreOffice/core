@@ -1621,7 +1621,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
     SwTwips nCalcTabWidth = 0;
     for( const SwTableLine *pLine : m_pSwTable->GetTabLines() )
         lcl_ResizeLine( pLine, &nCalcTabWidth );
-    SAL_WARN_IF( std::abs( m_nRelTabWidth-nCalcTabWidth ) >= COLFUZZY, "sw.core",
+    SAL_WARN_IF( std::abs(SwTwips(m_nRelTabWidth) - nCalcTabWidth) >= COLFUZZY, "sw.core",
                  "Table width is not equal to the row width" );
 
     // Lock the table format when altering it, or else the box formats

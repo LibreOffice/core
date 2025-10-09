@@ -2183,7 +2183,7 @@ void WW8TabDesc::CalcDefaults()
             }
             if (nCellWidth && ((nCellWidth - pR->nGapHalf*2) < MINLAY) && pR->nGapHalf < nCellWidth)
             {
-                nCellWidth = MINLAY + pR->nGapHalf * 2;
+                nCellWidth = MINLAY + pR->nGapHalf * SwTwips(2);
             }
             pR->nCenter[i + 1] = pR->nCenter[i] + nCellWidth;
         }
@@ -2507,9 +2507,9 @@ void WW8TabDesc::CreateSwTable()
                 nLeft += GetMinLeft();
             else
             {
-                const SwTwips nTableWidth = m_nPreferredWidth ? m_nPreferredWidth : m_nSwWidth;
+                const SwTwips nTableWidth = m_nPreferredWidth ? SwTwips(m_nPreferredWidth) : m_nSwWidth;
                 nLeft += m_pIo->m_aSectionManager.GetTextAreaWidth();
-                nLeft = nLeft - nTableWidth - GetMinLeft();
+                nLeft = nLeft - nTableWidth - SwTwips(GetMinLeft());
             }
             aL.SetLeft(SvxIndentValue::twips(nLeft));
 

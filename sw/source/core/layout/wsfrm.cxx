@@ -2817,7 +2817,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                             }
                         }
                     }
-                    nGrow = pToGrow ? pToGrow->Grow(nReal, reason, bTst, bInfo) : 0;
+                    nGrow = pToGrow ? pToGrow->Grow(nReal, reason, bTst, bInfo) : SwTwips(0);
                 }
 
                 if( SwNeighbourAdjust::GrowAdjust == nAdjust && nGrow < nReal )
@@ -2826,7 +2826,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                 if ( IsFootnoteFrame() && (nGrow != nReal) && GetNext() )
                 {
                     //Footnotes can replace their successor.
-                    SwTwips nSpace = bTst ? 0 : -nDist;
+                    SwTwips nSpace = bTst ? SwTwips(0) : -nDist;
                     if (const SwFrame *pFrame = GetUpper()->Lower())
                     {
                         do
@@ -3089,7 +3089,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 }
             }
         }
-        nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : 0;
+        nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : SwTwips(0);
         if( ( SwNeighbourAdjust::GrowAdjust == nAdjust || SwNeighbourAdjust::AdjustGrow == nAdjust )
             && nReal < nShrink )
             AdjustNeighbourhood( nReal - nShrink );

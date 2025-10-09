@@ -770,7 +770,7 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
             // check, if new y-position is outside document preview
             if ( aNewPaintStartPos.Y() > maPreviewDocRect.Bottom() )
                 aNewPaintStartPos.setY(
-                        std::max( tools::Long(0), maPreviewDocRect.Bottom() - mnPreviewLayoutHeight ) );
+                        std::max( SwTwips(0), maPreviewDocRect.Bottom() - mnPreviewLayoutHeight ) );
         }
     }
 

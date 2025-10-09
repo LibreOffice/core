@@ -758,13 +758,13 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             // +1 for to compensate integer arithmetic rounding errors
             if(bHasHeightWidthSwapped)
             {
-                nXOff = (nSnapWidth - nLogicHeight + 1) / 2;
-                nYOff = (nSnapHeight - nLogicWidth + 1) / 2;
+                nXOff = (nSnapWidth - nLogicHeight + SwTwips(1)) / 2;
+                nYOff = (nSnapHeight - nLogicWidth + SwTwips(1)) / 2;
             }
             else
             {
-                nXOff = (nSnapWidth - nLogicWidth + 1) / 2;
-                nYOff = (nSnapHeight - nLogicHeight + 1) / 2;
+                nXOff = (nSnapWidth - nLogicWidth + SwTwips(1)) / 2;
+                nYOff = (nSnapHeight - nLogicHeight + SwTwips(1)) / 2;
             }
             nLeft += nXOff;
             nRight += nXOff;

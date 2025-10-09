@@ -1998,10 +1998,10 @@ void SwFramePage::RangeModifyHdl()
 
     if (aVal.bAutoHeight && (m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"))
     {
-        SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max(nHeight, SwTwips(1)), nMaxHeight);
+        SwTwips nTmp = std::min(SwTwips(nWidth * nMaxHeight / std::max(nHeight, SwTwips(1))), nMaxHeight);
         m_xWidthED->set_max(m_xWidthED->NormalizePercent(nTmp), FieldUnit::TWIP);
 
-        nTmp = std::min(nHeight * nMaxWidth / std::max(nWidth, SwTwips(1)), nMaxWidth);
+        nTmp = std::min(SwTwips(nHeight * nMaxWidth / std::max(nWidth, SwTwips(1))), nMaxWidth);
         m_xHeightED->set_max(m_xWidthED->NormalizePercent(nTmp), FieldUnit::TWIP);
     }
     else
@@ -2020,9 +2020,9 @@ void SwFramePage::RangeModifyHdl()
         m_xAtHorzPosED->set_value(m_xAtHorzPosED->normalize(aVal.nHPos), FieldUnit::TWIP);
 
     const SwTwips nUpperOffset = (aVal.nAnchorType == RndStdIds::FLY_AS_CHAR)
-        ? m_nUpperBorder : 0;
+        ? m_nUpperBorder : SwTwips(0);
     const SwTwips nLowerOffset = (aVal.nAnchorType == RndStdIds::FLY_AS_CHAR)
-        ? m_nLowerBorder : 0;
+        ? m_nLowerBorder : SwTwips(0);
 
     m_xAtVertPosED->set_range(m_xAtVertPosED->normalize(aVal.nMinVPos + nLowerOffset + nUpperOffset),
                               m_xAtVertPosED->normalize(aVal.nMaxVPos),

@@ -1123,7 +1123,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
         const SwTwips nBaseOfstForFly = ( pFrame->IsTextFrame() && pFly ) ?
                                         static_cast<const SwTextFrame*>(pFrame)->GetBaseOffsetForFly( !bWrapThrough ) :
-                                         0;
+                                        SwTwips(0);
         if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
         {
             bVertic = aRectFnSet.IsVert();
@@ -1141,7 +1141,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 case text::RelOrientation::PRINT_AREA:
                 {
                     aPos += aRectFnSet.GetPos(pFrame->getFramePrintArea());
-                    aPos.setY(aPos.getY() + nBaseOfstForFly);
+                    aPos.setY(SwTwips(aPos.getY()) + nBaseOfstForFly);
                     break;
                 }
                 case text::RelOrientation::PAGE_RIGHT:
@@ -1162,7 +1162,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 }
                 case text::RelOrientation::FRAME:
                 {
-                    aPos.setY(aPos.getY() + nBaseOfstForFly);
+                    aPos.setY(SwTwips(aPos.getY()) + nBaseOfstForFly);
                     break;
                 }
                 default: break;
@@ -1195,7 +1195,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 case text::RelOrientation::PRINT_AREA:
                     aPos.setX(pFrame->getFrameArea().Left() + pFrame->getFramePrintArea().Left() +
                                pFrame->getFramePrintArea().Width());
-                    aPos.setX(aPos.getX() + nBaseOfstForFly);
+                    aPos.setX(SwTwips(aPos.getX()) + nBaseOfstForFly);
                     break;
 
                 case text::RelOrientation::PAGE_LEFT:
@@ -1213,7 +1213,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     break;
 
                 case text::RelOrientation::FRAME:
-                    aPos.setX(aPos.getX() + nBaseOfstForFly);
+                    aPos.setX(SwTwips(aPos.getX()) + nBaseOfstForFly);
                     break;
                 default: break;
             }
@@ -1228,7 +1228,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     break;
                 case text::RelOrientation::PRINT_AREA:
                     aPos += pFrame->getFramePrintArea().Pos();
-                    aPos.setX(aPos.getX() + nBaseOfstForFly);
+                    aPos.setX(SwTwips(aPos.getX()) + nBaseOfstForFly);
                     break;
                 case text::RelOrientation::PAGE_RIGHT:
                     aPos.setX(pPage->getFrameArea().Left() + pPage->getFramePrintArea().Right());
@@ -1241,7 +1241,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     aPos.setX(pPage->getFrameArea().Left());
                     break;
                 case text::RelOrientation::FRAME:
-                    aPos.setX(aPos.getX() + nBaseOfstForFly);
+                    aPos.setX(SwTwips(aPos.getX()) + nBaseOfstForFly);
                     break;
                 default: break;
             }

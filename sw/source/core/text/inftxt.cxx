@@ -769,7 +769,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
         aDrawInf.SetPos( aPoint );
         aDrawInf.SetSize( aSize );
         aDrawInf.SetAscent( rPor.GetAscent() );
-        aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
+        aDrawInf.SetKern(bKern ? rPor.Width() : SwTwips(0));
         aDrawInf.SetWrong( bTmpWrong ? m_pWrongList : nullptr );
         aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? m_pGrammarCheckList : nullptr );
         aDrawInf.SetSmartTags( bTmpSmart ? m_pSmartTags : nullptr );

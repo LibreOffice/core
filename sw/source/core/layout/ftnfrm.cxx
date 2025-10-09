@@ -268,7 +268,7 @@ SwTwips FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const& rInf)
     }
 
     // Writer style: calculate from the page style.
-    return rInf.GetTopDist() + rInf.GetBottomDist() + rInf.GetLineWidth();
+    return SwTwips(rInf.GetTopDist()) + SwTwips(rInf.GetBottomDist()) + SwTwips(rInf.GetLineWidth());
 }
 
 } // namespace sw

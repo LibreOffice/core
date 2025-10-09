@@ -1139,10 +1139,10 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     if (!bInlineAnchored)
                     {
                         aVertOrient.SetPos(
-                            (pObj ? pObj->GetRelativePos().getX() : aVertOrient.GetPos())
+                            (pObj ? SwTwips(pObj->GetRelativePos().getX()) : aVertOrient.GetPos())
                             + aRect.Top());
                         aHoriOrient.SetPos(
-                            (pObj ? pObj->GetRelativePos().getY() : aHoriOrient.GetPos())
+                            (pObj ? SwTwips(pObj->GetRelativePos().getY()) : aHoriOrient.GetPos())
                             + aRect.Left());
 
                         aTextBoxSet.Put(aVertOrient);
@@ -1397,22 +1397,24 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 // case 1: The textbox should be in that position where the shape is.
                 // case 2: The shape has negative offset so that have to be subtracted
                 // case 3: The shape and its parent shape also has negative offset, so subtract
-                aNewVOri.SetPos(
-                    ((pObj->GetRelativePos().getY()) > 0
-                         ? (pShape->GetVertOrient().GetPos() > 0
-                                ? pObj->GetRelativePos().getY()
-                                : pObj->GetRelativePos().getY() - pShape->GetVertOrient().GetPos())
-                         : (pShape->GetVertOrient().GetPos() > 0
-                                ? 0 // Is this can be a variation?
-                                : pObj->GetRelativePos().getY() - pShape->GetVertOrient().GetPos()))
-                    + aRect.Top());
+                aNewVOri.SetPos(((pObj->GetRelativePos().getY()) > 0
+                                     ? (pShape->GetVertOrient().GetPos() > 0
+                                            ? SwTwips(pObj->GetRelativePos().getY())
+                                            : SwTwips(pObj->GetRelativePos().getY())
+                                                  - pShape->GetVertOrient().GetPos())
+                                     : (pShape->GetVertOrient().GetPos() > 0
+                                            ? SwTwips(0) // Is this can be a variation?
+                                            : SwTwips(pObj->GetRelativePos().getY())
+                                                  - pShape->GetVertOrient().GetPos()))
+                                + aRect.Top());
             }
             else
             {
                 // Simple textboxes: vertical position equals to the vertical offset of the shape
-                aNewVOri.SetPos(
-                    ((pShape->GetVertOrient().GetPos()) > 0 ? pShape->GetVertOrient().GetPos() : 0)
-                    + aRect.Top());
+                aNewVOri.SetPos(((pShape->GetVertOrient().GetPos()) > 0
+                                     ? pShape->GetVertOrient().GetPos()
+                                     : SwTwips(0))
+                                + aRect.Top());
             }
 
             // Special cases when the shape is aligned to the line
@@ -1467,11 +1469,11 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 aNewHOri.SetHoriOrient(text::HoriOrientation::NONE);
 
             aNewHOri.SetPos(
-                (bIsGroupObj && pObj ? pObj->GetRelativePos().getX() : aNewHOri.GetPos())
+                (bIsGroupObj && pObj ? SwTwips(pObj->GetRelativePos().getX()) : aNewHOri.GetPos())
                 + aRect.Left());
             SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
             aNewVOri.SetPos(
-                (bIsGroupObj && pObj ? pObj->GetRelativePos().getY() : aNewVOri.GetPos())
+                (bIsGroupObj && pObj ? SwTwips(pObj->GetRelativePos().getY()) : aNewVOri.GetPos())
                 + aRect.Top());
 
             // Get the distance of the child shape inside its parent

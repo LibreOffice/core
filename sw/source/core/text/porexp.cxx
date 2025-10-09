@@ -292,7 +292,7 @@ void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const
 SwTwips SwPostItsPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     // Unbelievable: PostIts are always visible
-    return rInf.OnWin() ? SwViewOption::GetPostItsWidth( rInf.GetOut() ) : 0;
+    return rInf.OnWin() ? SwViewOption::GetPostItsWidth( rInf.GetOut() ) : SwTwips(0);
 }
 
 bool SwPostItsPortion::Format( SwTextFormatInfo &rInf )

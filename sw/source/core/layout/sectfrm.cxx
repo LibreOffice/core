@@ -3086,9 +3086,9 @@ SwTwips SwSectionFrame::CalcUndersize() const
 
 SwTwips SwSectionFrame::Undersize()
 {
-    const auto nRet = CalcUndersize();
+    const SwTwips nRet = CalcUndersize();
     m_bUndersized = (nRet > 0);
-    return nRet <= 0 ? 0 : nRet;
+    return nRet <= 0 ? SwTwips(0) : nRet;
 }
 
 void SwSectionFrame::CalcFootnoteContent()

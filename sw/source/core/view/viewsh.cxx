@@ -1777,7 +1777,7 @@ void SwViewShell::PaintDesktop(const vcl::RenderContext& rRenderContext, const S
 
             const bool bSidebarRight =
                 static_cast<const SwPageFrame*>(pPage)->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT;
-            aPageRect.Pos().AdjustX( -(bSidebarRight ? 0 : nSidebarWidth) );
+            aPageRect.Pos().AdjustX( -(bSidebarRight ? SwTwips(0) : nSidebarWidth) );
             aPageRect.AddWidth(nSidebarWidth );
 
             if ( aPageRect.Overlaps( rRect ) )

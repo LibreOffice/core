@@ -135,11 +135,12 @@
 #include <sfx2/sfxdlg.hxx>
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
+#include <basegfx/units/LengthTypes.hxx>
 
 #include <memory>
 
 /* default (A4 format) width of 210mm - 2 * border size (border on both sides) */
-constexpr tools::Long constOleWidthInMm = 210 - 2 * lMinBorderInMm;
+constexpr SwTwips constOleWidthInMm = SwTwips(210) - SwTwips(2 * lMinBorderInMm);
 
 constexpr Size constOleSize100mm(
     constOleWidthInMm * 100, // convert from mm to 100mm

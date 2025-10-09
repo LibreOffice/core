@@ -1674,7 +1674,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 GetCursor()->GetPoint()->GetNode());
         const SwTwips nWidthOfTabs = pTextNode
                                      ? pTextNode->GetWidthOfLeadingTabs()
-                                     : 0;
+                                     : SwTwips(0);
         GetDoc()->getIDocumentContentOperations().RemoveLeadingWhiteSpace(*GetCursor());
 
         const bool bHtml = dynamic_cast<SwWebDocShell*>( pDocSh ) !=  nullptr;
