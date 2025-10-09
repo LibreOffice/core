@@ -6164,10 +6164,12 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
     if ( !nIsBullet2 )
     {
+        // The margin value can't be greater than 51206400 Emu, which is 142240 MM100 ([ISO/IEC 29500-1] 20.1.10.72)
+        sal_uInt32 nMaxMarginVal = 142240;
         auto const nAbsLSpace = convertMasterUnitToMm100(_nTextOfs);
         auto const nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(_nBulletOfs);
         aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(-nFirstLineOffset));
-        aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nAbsLSpace));
+        aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nAbsLSpace > nMaxMarginVal ? 0 : nAbsLSpace));
     }
     rSet.Put( aLRSpaceItem );
 
