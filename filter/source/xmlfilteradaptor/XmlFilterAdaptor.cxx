@@ -270,7 +270,8 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;
-        if (aMediaMap.find(u"URL"_ustr)->second >>= aBaseURI)
+        auto it = aMediaMap.find(u"URL"_ustr);
+        if (it != aMediaMap.end() && (it->second >>= aBaseURI))
         {
             INetURLObject aURLObj(aBaseURI);
             // base URI in this case is the URI of the actual saving location
