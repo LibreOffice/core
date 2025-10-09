@@ -86,6 +86,7 @@
 
 #include <comphelper/classids.hxx>
 #include <comphelper/memorystream.hxx>
+#include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -250,8 +251,7 @@ uno::Reference<lang::XComponent> XMLShapeExport::checkForPDFShapeReplacement(con
     uno::Reference<graphic::XGraphic> xGraphic;
     xPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
 
-    OUString sOutMimeType;
-    GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
+    OUString sOutMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic);
 
     if (sOutMimeType != "application/pdf")
         return nullptr;
