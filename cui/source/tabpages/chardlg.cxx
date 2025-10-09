@@ -1177,10 +1177,32 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
     SvxCharBasePage::ActivatePage( rSet );
 
     UpdatePreview_Impl();       // instead of asynchronous calling in ctor
+
+    // tdf#161205: Automatically switch between CTL and CJK tabs based on last state
+    if (SvtCJKOptions::IsCJKFontEnabled() && SvtCTLOptions::IsCTLFontEnabled())
+    {
+        if (officecfg::Office::Common::I18N::CTL::PreferCTLFontTab::get())
+        {
+            m_xCJK_CTL->set_current_page(u"nbCTL"_ustr);
+        }
+        else
+        {
+            m_xCJK_CTL->set_current_page(u"nbCJK"_ustr);
+        }
+    }
 }
 
 DeactivateRC SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 {
+    // tdf#161205: Store last-focused CTL/CJK language tab
+    if (SvtCJKOptions::IsCJKFontEnabled() && SvtCTLOptions::IsCTLFontEnabled())
+    {
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::I18N::CTL::PreferCTLFontTab::set(
+            m_xCJK_CTL->get_current_page_ident() == u"nbCTL"_ustr, xChanges);
+        xChanges->commit();
+    }
+
     if ( _pSet )
         FillItemSet( _pSet );
     return DeactivateRC::LeavePage;

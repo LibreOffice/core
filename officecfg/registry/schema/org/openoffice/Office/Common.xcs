@@ -6802,6 +6802,13 @@
             depending on the office locale.</desc>
           </info>
         </prop>
+        <prop oor:name="PreferCTLFontTab" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the CTL font tab is automatically selected when
+            viewing or editing character properties and styles.</desc>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
     </group>
     <group oor:name="SmartTags">

@@ -194,4 +194,49 @@ class formatCharacter(UITestCase):
                 xScalewidth = xDialog.getChild("scalewidthsb")
                 self.assertEqual(get_state_as_dict(xScalewidth)["Text"], "101%")
 
+   def test_tdf161205_cjk_ctl_tab_preserved(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+
+                xNoteBook = xDialog.getChild("nbCJKCTL")
+
+                # Initialize CJK/CTL tab to CJK
+                select_pos(xNoteBook, "0")
+
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+
+                xNoteBook = xDialog.getChild("nbCJKCTL")
+
+                # Dialog should have persisted CJK state
+                self.assertEqual(get_state_as_dict(xNoteBook)["CurrPageId"], "1");
+
+                # Switch to CTL tab
+                select_pos(xNoteBook, "1")
+
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+
+                xNoteBook = xDialog.getChild("nbCJKCTL")
+
+                # Dialog should have persisted CTL state
+                self.assertEqual(get_state_as_dict(xNoteBook)["CurrPageId"], "2");
+
+                # Switch to CJK tab
+                select_pos(xNoteBook, "0")
+
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+
+                xNoteBook = xDialog.getChild("nbCJKCTL")
+
+                # Dialog should have persisted CJK state
+                self.assertEqual(get_state_as_dict(xNoteBook)["CurrPageId"], "1");
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
