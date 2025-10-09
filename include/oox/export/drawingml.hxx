@@ -311,6 +311,9 @@ protected:
     bool GetPropertyAndState( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                   const css::uno::Reference< css::beans::XPropertyState >& rXPropState,
                   const OUString& aName, css::beans::PropertyState& eState );
+    bool GetDirectProperty(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                           const css::uno::Reference<css::beans::XPropertyState>& rXPropState,
+                           const OUString& aName);
     OUString GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
     /** Gets OOXML datetime field type from LO Date format
 
