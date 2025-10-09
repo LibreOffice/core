@@ -2073,6 +2073,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf129808CompatFlagUnset)
     CPPUNIT_ASSERT_LESS(sal_Int32(1150), nHeight2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168116)
+{
+    // Given a paragraph with a line break immediately followed by a hidden paragraph mark:
+    createSwDoc("hidden-para-before-table.rtf");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//body");
+    assertXPathChildren(pXmlDoc, "//body", 4);
+    // It must have a "merged" data; without the fix, this failed:
+    assertXPath(pXmlDoc, "//body/txt[1]/merged");
+    // It must only have one line; without the fix, there were two (the second empty):
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
