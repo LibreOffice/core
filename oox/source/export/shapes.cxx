@@ -1779,7 +1779,6 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     awt::Point aStartPoint, aEndPoint;
     Reference< XShape > rXShapeA;
     Reference< XShape > rXShapeB;
-    PropertyState eState;
     ConnectorType eConnectorType = ConnectorType_STANDARD;
     if (GetProperty(rXPropSet, u"EdgeKind"_ustr))
         mAny >>= eConnectorType;
@@ -1798,10 +1797,10 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
             break;
     }
 
-    if (GetPropertyAndState( rXPropSet, rXPropState, u"EdgeStartPoint"_ustr, eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    if (GetDirectProperty( rXPropSet, rXPropState, u"EdgeStartPoint"_ustr ))
     {
         mAny >>= aStartPoint;
-        if (GetPropertyAndState( rXPropSet, rXPropState, u"EdgeEndPoint"_ustr, eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+        if (GetDirectProperty( rXPropSet, rXPropState, u"EdgeEndPoint"_ustr ))
             mAny >>= aEndPoint;
     }
     if (GetProperty(rXPropSet, u"EdgeStartConnection"_ustr))
