@@ -289,7 +289,7 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
         m_pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );
 }
 
-void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
+void SwAttrHandler::Init( const SfxPoolItem* const* pPoolItem, const SwAttrSet* pAS,
                           const IDocumentSettingAccess& rIDocumentSettingAcces,
                           const SwViewShell* pSh,
                           SwFont& rFnt, bool bVL, bool bVertLayoutLRBT )

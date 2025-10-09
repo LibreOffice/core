@@ -6175,21 +6175,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* ImportDOC()
     return new WW8Reader;
 }
 
-namespace
-{
-    class FontCacheGuard
-    {
-    public:
-        ~FontCacheGuard()
-        {
-            FlushFontCache();
-        }
-    };
-}
-
 bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
 {
-    FontCacheGuard aFontCacheGuard;
     std::unique_ptr<Reader> xReader(ImportDOC());
 
     rtl::Reference<SotStorage> xStorage;

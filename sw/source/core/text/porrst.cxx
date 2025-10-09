@@ -372,8 +372,8 @@ SwTwips SwTextFrame::EmptyHeight() const
     }
     else
     {
-        SwFontAccess aFontAccess( &rTextNode.GetTextFormatColl(), pSh);
-        pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
+        const SwFontObj& rFontAccess = rTextNode.GetTextFormatColl().GetFontObj(pSh);
+        pFnt.reset(new SwFont( rFontAccess.GetFont() ));
         pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }
 
@@ -573,8 +573,8 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                         else
                         {
                             SwViewShell *pSh = getRootFrame()->GetCurrShell();
-                            SwFontAccess aFontAccess( pFormat, pSh );
-                            SwFont aFnt( aFontAccess.Get()->GetFont() );
+                            const SwFontObj& rFontAccess = pFormat->GetFontObj(pSh);
+                            SwFont aFnt( rFontAccess.GetFont() );
 
                             OutputDevice *pOut = nullptr;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||

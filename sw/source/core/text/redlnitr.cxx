@@ -629,18 +629,18 @@ void SwAttrIter::InitFontAndAttrHandler(
         bool const*const pbVertLayoutLRBT)
 {
     // Build a font matching the default paragraph style:
-    SwFontAccess aFontAccess( &rPropsNode.GetTextFormatColl(), m_pViewShell );
+    const SwFontObj& rFontAccess = rPropsNode.GetTextFormatColl().GetFontObj(m_pViewShell);
     // It is possible that Init is called more than once, e.g., in a
     // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
     // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
     // is an alias of m_pFont so it must not be deleted!
     if (m_pFont)
     {
-        *m_pFont = aFontAccess.Get()->GetFont();
+        *m_pFont = rFontAccess.GetFont();
     }
     else
     {
-        m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+        m_pFont = new SwFont( rFontAccess.GetFont() );
     }
 
     // set font to vertical if frame layout is vertical
@@ -658,7 +658,7 @@ void SwAttrIter::InitFontAndAttrHandler(
     // If any further attributes for the paragraph are given in pAttrSet
     // consider them during construction of the default array, and apply
     // them to the font
-    m_aAttrHandler.Init(aFontAccess.Get()->GetDefault(), rTextNode.GetpSwAttrSet(),
+    m_aAttrHandler.Init(rFontAccess.GetDefault(), rTextNode.GetpSwAttrSet(),
            *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont,
            pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout(),
            bVertLayoutLRBT );

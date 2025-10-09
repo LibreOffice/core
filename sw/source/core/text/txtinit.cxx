@@ -36,14 +36,12 @@ SwDropCapCache *pDropCapCache = nullptr;
 void TextInit_()
 {
     pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
-    pSwFontCache = new SwFontCache; // Cache for SwTextFormatColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
     PROTOCOL_INIT
 }
 
 void TextFinit()
 {
     PROTOCOL_STOP
-    delete pSwFontCache;
     delete pFntCache;
     delete pContourCache;
     SwDropPortion::DeleteDropCapCache();

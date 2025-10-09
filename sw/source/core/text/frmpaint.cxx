@@ -537,8 +537,8 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             }
             else
             {
-                SwFontAccess aFontAccess( &rTextNode.GetTextFormatColl(), pSh );
-                pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
+                const SwFontObj& rFontAccess = rTextNode.GetTextFormatColl().GetFontObj(pSh);
+                pFnt.reset(new SwFont( rFontAccess.GetFont() ));
             }
 
             const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
