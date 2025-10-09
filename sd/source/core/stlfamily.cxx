@@ -252,7 +252,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
             SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
             aNames.push_back(pSdStyle->GetApiName());
         }
-        return Sequence< OUString >( &(*aNames.begin()), aNames.size() );
+        return Sequence< OUString >( aNames.data(), aNames.size() );
     }
 }
 
