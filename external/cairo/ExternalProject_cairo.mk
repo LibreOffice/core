@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,cairo,\
 	libpng \
 	meson \
 	zlib \
-	$(if $(filter EMSCRIPTEN,$(OS)),libxml2) \
+	libxml2 \
 ))
 
 # We cannot use environment vars inside the meson cross-build file,
@@ -93,7 +93,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		) \
 		$(if $(SYSTEM_ZLIB),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/zlib") \
 		$(if $(SYSTEM_LIBPNG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libpng") \
-		$(if $(filter EMSCRIPTEN,$(OS)),PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libxml2") \
+		$(if $(SYSTEM_LIBXML),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libxml2") \
 		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 		$(MESON) setup --wrap-mode nofallback builddir \
 			$(if $(debug),-Dstrip=false,-Dstrip=true) \
