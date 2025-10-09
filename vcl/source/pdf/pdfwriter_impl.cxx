@@ -456,23 +456,22 @@ void appendPdfTimeDate(OStringBuffer & rBuffer,
     if (tzDelta == 0)
     {
         rBuffer.append("Z");
+        return;
     }
+
+    if (tzDelta > 0 )
+        rBuffer.append("+");
     else
     {
-        if (tzDelta > 0 )
-            rBuffer.append("+");
-        else
-        {
-            rBuffer.append("-");
-            tzDelta = -tzDelta;
-        }
-
-        rBuffer.append(char('0' + ((tzDelta / 36000) % 10)));
-        rBuffer.append(char('0' + ((tzDelta / 3600) % 10)));
-        rBuffer.append("'");
-        rBuffer.append(char('0' + ((tzDelta / 600) % 6)));
-        rBuffer.append(char('0' + ((tzDelta / 60) % 10)));
+        rBuffer.append("-");
+        tzDelta = -tzDelta;
     }
+
+    rBuffer.append(char('0' + ((tzDelta / 36000) % 10)));
+    rBuffer.append(char('0' + ((tzDelta / 3600) % 10)));
+    rBuffer.append("'");
+    rBuffer.append(char('0' + ((tzDelta / 600) % 6)));
+    rBuffer.append(char('0' + ((tzDelta / 60) % 10)));
 }
 
 const char* getPDFVersionStr(PDFWriter::PDFVersion ePDFVersion)
