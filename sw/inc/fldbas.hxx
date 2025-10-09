@@ -144,7 +144,7 @@ enum class SwFieldTypesEnum : sal_uInt16 {
     Dropdown,
     Custom,     // Unused - necessary for alignment with aSwFields in fldmgr.cxx
     ParagraphSignature,
-    LAST,
+    LAST = ParagraphSignature,
     Unknown = USHRT_MAX // used by SwFieldMgr::GetCurTypeId
 };
 enum class SwFileNameFormat {

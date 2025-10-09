@@ -668,7 +668,7 @@ void SwFieldMgr::GetSubTypes(SwFieldTypesEnum nTypeId, std::vector<OUString>& rT
 //  ACCESS over TYP_...
 sal_uInt16 SwFieldMgr::GetFormatCount(SwFieldTypesEnum nTypeId, bool bHtmlMode) const
 {
-    assert(nTypeId < SwFieldTypesEnum::LAST && "forbidden TypeId");
+    assert(nTypeId <= SwFieldTypesEnum::LAST && "forbidden TypeId");
     {
         const sal_uInt16 nPos = GetPos(nTypeId);
 
@@ -717,7 +717,7 @@ OUString SwFieldMgr::GetFormatStr(const SwField& rField) const
 // determine FormatString to a type
 OUString SwFieldMgr::GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const
 {
-    assert(nTypeId < SwFieldTypesEnum::LAST && "forbidden TypeId");
+    assert(nTypeId <= SwFieldTypesEnum::LAST && "forbidden TypeId");
     const sal_uInt16 nPos = GetPos(nTypeId);
 
     if (nPos == USHRT_MAX)
