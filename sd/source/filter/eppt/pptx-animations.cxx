@@ -220,9 +220,12 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
         SAL_INFO("sd.eppt", "animate value " << i << ": " << aKeyTimes[i]);
         if (aValues[i].hasValue())
         {
+            // ST_TLTimeAnimateValueTime can't be negative ([ISO/IEC 29500-1] 19.7.39)
+            sal_uInt32 nTime = static_cast<sal_uInt32>(std::max(0.0, aKeyTimes[i] * 100000.0));
+
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
                                 sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()), XML_tm,
-                                OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
+                                sax_fastparser::UseIf(OString::number(nTime), nTime != 0));
             pFS->startElementNS(XML_p, XML_val);
             ValuePair aPair;
             if (aValues[i] >>= aPair)
