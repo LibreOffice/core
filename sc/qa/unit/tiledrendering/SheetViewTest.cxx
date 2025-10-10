@@ -478,6 +478,38 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewManager)
     CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, maSheetViewManager.getPreviousSheetView(-99));
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
+{
+    // Check if sheet view holder table is saved into the ODF document
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    save(u"calc8"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//table:table", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
+{
+    // Check if sheet view holder table is saved into the OOXML document
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/x:workbook/x:sheets/x:sheet", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

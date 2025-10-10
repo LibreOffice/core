@@ -1915,6 +1915,9 @@ void ScXMLExport::ExportContent_()
         WriteTheLabelRanges(*pDoc, xSpreadDoc);
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable)
         {
+            // We need to skip tables that hold the data for a sheet view
+            if (pDoc->IsSheetViewHolder(nTable))
+                continue;
             sal_Int64 nStartOffset = -1;
             sal_Int64 nEndOffset = -1;
             if (pSheetData && pDoc->IsStreamValid(static_cast<SCTAB>(nTable)) && !pDoc->GetChangeTrack())

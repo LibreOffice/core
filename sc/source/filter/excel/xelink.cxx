@@ -659,7 +659,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
     {
         // ignored sheets (skipped by export, with invalid Excel sheet index)
-        if( rDoc.IsScenario( nScTab ) )
+        if (rDoc.IsScenario(nScTab) || rDoc.IsSheetViewHolder(nScTab))
         {
             SetFlag( nScTab, ExcTabBufFlags::Ignore );
         }
