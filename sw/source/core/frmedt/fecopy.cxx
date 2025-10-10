@@ -1079,7 +1079,7 @@ SwFEShell::Paste(SwDoc& rClpDoc, bool const bNestedTable)
                 {
                     lcl_InitSelectFlyOrDrawFormat(pFlyFormat, *this, isSelect);
                 }
-                if (isSelect && inserted.size() == 1)
+                if (isSelect && inserted.size() == 1 && inserted.front())
                 {
                     if (inserted.front()->Which() == RES_FLYFRMFMT
                         && GetDoc()->GetNodes()[inserted.front()->GetContent().GetContentIdx()->GetIndex() + 1]->IsGrfNode())
