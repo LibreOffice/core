@@ -504,7 +504,7 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd, debug):
+def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
     return_code = 0
 
     try:
@@ -554,8 +554,12 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
             if assume:
                 args = args.replace(assumeAbs, "-x c++ " + pathAbs)
 
-            if not removefwdd:
+            if not removefwdd and not headersfwd:
+            # Do not suggest forward declarations in headers
                 invocation = "include-what-you-use -Xiwyu --no_fwd_decls -Xiwyu --max_line_length=200 " + args
+            # Suggest headers' replacement with forward declarations
+            elif headersfwd:
+                invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
             # In --fwdecl mode we ask for fw declaration removal suggestions.
             # In this mode obsolete fw declarations are suggested for removal.
             # Later we ignore the header removal suggestions, which may be
@@ -589,8 +593,11 @@ def main(argv):
                     help='The files to be checked')
     parser.add_argument('--recursive', metavar='DIR', nargs=1, type=str,
                     help='Recursively search a directory for source files to check')
-    parser.add_argument('--headers', action='store_true',
+    hgroup = parser.add_mutually_exclusive_group()
+    hgroup.add_argument('--headers', action='store_true',
                     help='Check header files. If omitted, check source files. Use with --recursive.')
+    hgroup.add_argument('--headersfwd', action='store_true',
+                    help='Check header files, suggest fw declaration replacements. If omitted, check source files. Use with --recursive.')
     parser.add_argument('--noexclude', action='store_true',
                     help='Ignore excludelist. Useful to check whether its exclusions are still all valid.')
     parser.add_argument('--ns', action='store_true',
@@ -627,6 +634,18 @@ def main(argv):
                         # used in defines and iwyu (0.21 at least) can not yet understand those properly
                         if (file.endswith(".hxx") or file.endswith(".h")):
                             list_of_files.append(os.path.join(root,file))
+                elif args.headersfwd:
+                    if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
+                        # Peek inside the file to check for code behind #ifdef or similar
+                        # This is the fragile part, skip forward declaration suggestions for such
+                        p1 = subprocess.Popen(['git', 'grep', '-v', '-e', 'INCLUDED', os.path.join(root,file) ], stdout=subprocess.PIPE)
+                        p2 = subprocess.Popen(['grep', '-e', '#if'], stdin=p1.stdout, stdout=subprocess.PIPE)
+                        p1.stdout.close()
+                        output, _ = p2.communicate()
+                        if not output:
+                            list_of_files.append(os.path.join(root,file))
+                        else:
+                            continue
                 else:
                     if (file.endswith(".cxx") or file.endswith(".c")):
                         list_of_files.append(os.path.join(root,file))
@@ -691,7 +710,7 @@ def main(argv):
                         print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d)
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d, headersfwd=args.headersfwd)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
