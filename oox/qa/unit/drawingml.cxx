@@ -786,6 +786,40 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testDOCXVerticalLineRotation)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRotateAngle);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyleDirectFormat)
+{
+    // Given a PPTX file with a slide with an outline shape:
+    // When loading that document:
+    loadFromFile(u"outliner-list-style.pptx");
+
+    // Then make sure that the resulting shape has enough numbering rules, so adding a new paragraph
+    // and increasing indent results in correct behavior of 1499 mm100 / 1.5cm indent:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xShapeText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xShapeText->createEnumeration();
+    xParagraphs->nextElement();
+    uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNumberingRules;
+    xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(2));
+    sal_Int32 nLeftMargin{};
+    aMap["LeftMargin"] >>= nLeftMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2388
+    // - Actual  : 3600
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2388), nLeftMargin);
+    sal_Int32 nFirstLineOffset{};
+    aMap["FirstLineOffset"] >>= nFirstLineOffset;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -889
+    // - Actual  : -800
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-889), nFirstLineOffset);
+    // i.e. the sum of these two were 2800, not 1499, the indent was larger than expected.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

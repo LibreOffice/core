@@ -104,7 +104,8 @@ public:
                                                 const BulletList* pMasterBuList,
                                                 bool bApplyBulletList,
                                                 float fFontSize,
-                                                bool bPushDefaultValues = false ) const;
+                                                bool bPushDefaultValues = false,
+                                                TextListStyle* pTextListStyle = nullptr ) const;
 
     /** Returns the largest character size of this paragraph. If possible the
         masterstyle should have been applied before, otherwise the character

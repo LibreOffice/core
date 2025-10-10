@@ -18,6 +18,7 @@
  */
 
 #include <drawingml/textparagraphproperties.hxx>
+#include <drawingml/textliststyle.hxx>
 
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -410,7 +411,7 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
     const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, bool bApplyBulletMap, float fCharacterSize,
-    bool bPushDefaultValues ) const
+    bool bPushDefaultValues, TextListStyle* pTextListStyle ) const
 {
     PropertySet aPropSet( xPropSet );
     aPropSet.setProperties( maTextParagraphPropertyMap );
@@ -474,6 +475,13 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
                         rioBulletMap.setProperty<sal_Int16>( PROP_BulletRelSize, 100);
                     Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
                     xNumRule->replaceByIndex( getLevel(), Any( aBulletPropSeq ) );
+
+                    if (pTextListStyle)
+                    {
+                        // We got the list style of this shape, then set the other levels of the
+                        // numbering rules, too.
+                        pTextListStyle->pushToNumberingRules(xNumRule, getLevel());
+                    }
                 }
 
                 aPropSet.setProperty( PROP_NumberingRules, xNumRule );
