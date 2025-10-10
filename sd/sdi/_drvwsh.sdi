@@ -160,6 +160,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_INSERT_CANVAS_SLIDE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_HYPERLINK_SETLINK // ole : no, status : no
     [
         ExecMethod = FuTemporary ;

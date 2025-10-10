@@ -328,6 +328,11 @@ interface SlideSorterView
         ExecMethod = ExecMovePageLast ;
         StateMethod = GetStateMovePageLast ;
     ]
+    SID_INSERT_CANVAS_SLIDE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
 }
 
 shell SlideSorterController

@@ -1393,6 +1393,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Done ();
         }
         break;
+        case SID_INSERT_CANVAS_SLIDE:
+        {
+            sal_uInt16 nCanvasPageIndex = GetDoc()->InsertCanvasPage();
+            Cancel(); // Don't know what this does
+            SwitchPage(nCanvasPageIndex);
+            rReq.Done();
+        }
+        break;
 
         case SID_DUPLICATE_PAGE:
         {
