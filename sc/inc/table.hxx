@@ -255,7 +255,7 @@ private:
     bool            mbForceBreaks:1;
     bool            mbTotalsRowBelow:1;
 
-    bool mbIsSheetView : 1 = false;
+    bool mbIsSheetViewHolder : 1 = false;
 
     /** this is touched from formula group threading context */
     std::atomic<bool> bStreamValid;
@@ -1199,11 +1199,11 @@ public:
 
     std::shared_ptr<sc::SheetViewManager> const& GetSheetViewManager() const;
 
-    bool IsSheetView() const { return mbIsSheetView; }
+    bool IsSheetViewHolder() const { return mbIsSheetViewHolder; }
 
-    void SetSheetView(bool bValue)
+    void SetSheetViewHolder(bool bValue)
     {
-        mbIsSheetView = bValue;
+        mbIsSheetViewHolder = bValue;
     }
 
 private:

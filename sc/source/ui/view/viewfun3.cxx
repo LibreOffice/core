@@ -2102,7 +2102,7 @@ void ScViewFunc::RemoveCurrentSheetView()
 
     ScDocument& rDocument = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNumber();
-    if (rDocument.IsSheetView(nTab))
+    if (rDocument.IsSheetViewHolder(nTab))
         return;
 
     auto pSheetManager = rDocument.GetSheetViewManager(nTab);
@@ -2141,7 +2141,7 @@ void ScViewFunc::SelectSheetView(sc::SheetViewID nSelectSheetViewID)
 {
     SCTAB nTab = GetViewData().GetTabNumber();
 
-    if (GetViewData().GetDocument().IsSheetView(nTab))
+    if (GetViewData().GetDocument().IsSheetViewHolder(nTab))
         return;
 
     sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();

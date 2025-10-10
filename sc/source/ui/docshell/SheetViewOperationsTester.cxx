@@ -142,7 +142,7 @@ bool SheetViewOperationsTester::check(Operation eOperation) const
     SCTAB nTab = mpViewData->GetTabNumber();
 
     // Never allow direct changes to the data holder sheet of the sheet view.
-    if (rDocument.IsSheetView(nTab))
+    if (rDocument.IsSheetViewHolder(nTab))
         return false;
 
     sc::SheetViewID nSheetViewID = mpViewData->GetSheetViewID();

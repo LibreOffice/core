@@ -811,7 +811,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {
         SCTAB nSelectedTab = aMark.GetFirstSelected();
         applyFormulaToCell(*this, nCol, nRow, nTab, rString, pData, xModificator, aMark, bMatrixExpand, bRecord, bNumFmtChanged);
-        if (!rDoc.IsSheetView(nSelectedTab))
+        if (!rDoc.IsSheetViewHolder(nSelectedTab))
         {
             auto pManager = rDoc.GetSheetViewManager(nSelectedTab);
 
@@ -837,7 +837,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {
         for (const auto& rTab : aMark)
         {
-            if (!rDoc.IsSheetView(rTab))
+            if (!rDoc.IsSheetViewHolder(rTab))
             {
                 auto pManager = rDoc.GetSheetViewManager(rTab);
                 for (auto const& pSheetView : pManager->getSheetViews())
