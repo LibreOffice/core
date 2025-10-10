@@ -146,6 +146,29 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
             (level), (area), (where), sal_detail_stream, 0); \
     }
 
+#if defined LIBO_INTERNAL_ONLY && defined __GNUC__ && !defined __clang__
+// move cold/seldom-used code out of line, and into a separate linker section
+#define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
+    do { \
+        if (SAL_UNLIKELY(condition)) \
+        { \
+            [&]() __attribute__((noinline,cold)) \
+            { \
+                switch (sal_detail_log_report(level, area)) \
+                { \
+                case SAL_DETAIL_LOG_ACTION_IGNORE: break; \
+                case SAL_DETAIL_LOG_ACTION_LOG: \
+                    SAL_DETAIL_LOG_STREAM_PRIVATE_(level, area, where, stream); \
+                    break; \
+                case SAL_DETAIL_LOG_ACTION_FATAL: \
+                    SAL_DETAIL_LOG_STREAM_PRIVATE_(level, area, where, stream); \
+                    std::abort(); \
+                    break; \
+                } \
+            }(); \
+        } \
+    } while (false)
+#else
 #define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
     do { \
         if (SAL_UNLIKELY(condition)) \
@@ -163,6 +186,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
             } \
         } \
     } while (false)
+#endif
 
 /// @endcond
 
