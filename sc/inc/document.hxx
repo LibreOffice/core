@@ -2404,8 +2404,9 @@ public:
 
     bool HasSheetViews(SCTAB nTab) const;
     SC_DLLPUBLIC std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
-    bool IsSheetView(SCTAB nTab) const;
-    void SetSheetView(SCTAB nTab, bool bSheetView);
+
+    /** Is a holder of the sheet view data */
+    SC_DLLPUBLIC bool IsSheetViewHolder(SCTAB nTab) const;
 
 private:
     ScDocument(const ScDocument& r) = delete;

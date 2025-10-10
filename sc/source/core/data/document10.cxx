@@ -1131,23 +1131,14 @@ sc::BroadcasterState ScDocument::GetBroadcasterState() const
     return aState;
 }
 
-bool ScDocument::IsSheetView(SCTAB nTab) const
+bool ScDocument::IsSheetViewHolder(SCTAB nTab) const
 {
     if (ScTable const* pTable = FetchTable(nTab))
     {
-        return pTable->IsSheetView();
+        return pTable->IsSheetViewHolder();
     }
     return false;
 }
-
-void ScDocument::SetSheetView(SCTAB nTab, bool bSheetView)
-{
-    if (ScTable* pTable = FetchTable(nTab))
-    {
-        pTable->SetSheetView(bSheetView);
-    }
-}
-
 
 std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
 {
@@ -1160,7 +1151,7 @@ std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
             {
                 auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
                 pSheetViewTable->SetVisible(false);
-                pSheetViewTable->SetSheetView(true);
+                pSheetViewTable->SetSheetViewHolder(true);
                 return { nSheetViewID, nSheetViewTab };
             }
         }
@@ -1181,7 +1172,7 @@ std::shared_ptr<sc::SheetViewManager> ScDocument::GetSheetViewManager(SCTAB nTab
 {
     if (ScTable* pTable = FetchTable(nTable))
     {
-        if (!pTable->IsSheetView())
+        if (!pTable->IsSheetViewHolder())
             return pTable->GetSheetViewManager();
     }
     return {};
@@ -1191,7 +1182,7 @@ SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
 {
     if (ScTable* pMainSheet = FetchTable(nTab))
     {
-        if (pMainSheet->IsSheetView() || nID == sc::DefaultSheetViewID)
+        if (pMainSheet->IsSheetViewHolder() || nID == sc::DefaultSheetViewID)
             return nTab;
 
         std::shared_ptr<sc::SheetView> pView = pMainSheet->GetSheetViewManager()->get(nID);
