@@ -4657,6 +4657,8 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
             SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(i));
             bool bIsVisible = true; // default visible
             pSlide->getPropertyValue("Visible") >>= bIsVisible;
+
+            SdPage* pPage = SdPage::getImplementation(pSlide);
             if (!bIsVisible)
             {
                 auto aSlideNode = aJsonWriter.startStruct();
@@ -4664,15 +4666,15 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("hash", sSlideHash);
                 aJsonWriter.put("index", i);
                 aJsonWriter.put("hidden", true);
+                aJsonWriter.put("uniqueID", pPage->GetUniqueID());
             }
             else
             {
-                SdPage* pPage = SdPage::getImplementation(pSlide);
-
                 auto aSlideNode = aJsonWriter.startStruct();
                 std::string sSlideHash = GetInterfaceHash(cppu::getXWeak(pSlide));
                 aJsonWriter.put("hash", sSlideHash);
                 aJsonWriter.put("index", i);
+                aJsonWriter.put("uniqueID", pPage->GetUniqueID());
 
                 if (pPage)
                 {
