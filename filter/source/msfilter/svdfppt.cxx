@@ -1778,7 +1778,13 @@ static bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal
 {
     sal_uInt64 nOldPos = rInput.Tell();
     std::unique_ptr<char[]> pBuf(new char[ nInputSize ]);
-    rInput.ReadBytes(pBuf.get(), nInputSize);
+    auto nRead = rInput.ReadBytes(pBuf.get(), nInputSize);
+    if (nRead < nInputSize)
+    {
+        SAL_WARN("filter.ms", "Parsing error: " << nInputSize <<
+                 " bytes wanted, but " << nRead << " available");
+        nInputSize = nRead;
+    }
     ZCodec aZCodec( 0x8000, 0x8000 );
     aZCodec.BeginCompression();
     SvMemoryStream aSource( pBuf.get(), nInputSize, StreamMode::READ );
