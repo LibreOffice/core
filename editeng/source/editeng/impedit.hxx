@@ -58,6 +58,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <algorithm>
 #include <functional>
 #include <optional>
 #include <memory>
@@ -139,7 +140,7 @@ struct ImplIMEInfos
     {
         nLen = nInputLength;
         pAttribs.reset(new ExtTextInputAttr[nInputLength]);
-        memcpy(pAttribs.get(), pInputAttributes, nInputLength * sizeof(ExtTextInputAttr));
+        std::copy_n(pInputAttributes, nInputLength, pAttribs.get());
     }
 
     void DestroyAttribs()

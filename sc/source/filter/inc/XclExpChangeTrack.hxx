@@ -19,8 +19,10 @@
 
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <stack>
+
 #include <tools/datetime.hxx>
 #include <unotools/securityoptions.hxx>
 #include <chgtrack.hxx>
@@ -316,7 +318,7 @@ public:
     sal_uInt16           GetBufferCount() const
                                     { return static_cast< sal_uInt16 >( (pLast - pBuffer.get()) + 1 ); }
     void                 GetBufferCopy( sal_uInt16* pDest ) const
-                                    { memcpy( pDest, pBuffer.get(), sizeof(sal_uInt16) * GetBufferCount() ); }
+                                    { std::copy_n( pBuffer.get(), GetBufferCount(), pDest ); }
 };
 
 // XclExpChTrTabId - tab id record

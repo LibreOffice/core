@@ -62,6 +62,8 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
+#include <algorithm>
+
 #define IMPL_MIN_NEEDSYSWIN         49
 
 namespace
@@ -1444,7 +1446,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
     if ( pTextAttr )
     {
         pWinData->mpExtOldAttrAry.reset( new ExtTextInputAttr[rText.getLength()] );
-        memcpy( pWinData->mpExtOldAttrAry.get(), pTextAttr, rText.getLength()*sizeof( ExtTextInputAttr ) );
+        std::copy_n(pTextAttr, rText.getLength(), pWinData->mpExtOldAttrAry.get());
     }
     return !ImplCallCommand( pChild, CommandEventId::ExtTextInput, &aData );
 }
