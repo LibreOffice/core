@@ -3307,9 +3307,22 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
     }
 
     // Get next portion's font
-    bool bSeek = false;
-    if (!rInf.IsFull() && // Not the last portion of the line (in case of line break)
-        rInf.GetIdx() + rPortion.GetLen() != TextFrameIndex(rInf.GetText().getLength())) // Not the last portion of the paragraph
+    bool bSeek;
+    if (rPortion.GetNextPortion() && rPortion.GetNextPortion()->IsHolePortion())
+    {
+        // Regardless of rInf.IsFull(), which may be true here, consider the next hole portion.
+        // If it wants to show decorations: do seek; if it doesn't: don't seek (last case allows
+        // to have proper right border at the margin).
+        bSeek = static_cast<SwHolePortion*>(rPortion.GetNextPortion())->ShowUnderline();
+    }
+    else
+    {
+        // The border can be merged when this is not the last portion of the line (in case of line
+        // break), and not the last portion of the paragraph.
+        bSeek = !rInf.IsFull()
+                && rInf.GetIdx() + rPortion.GetLen() != TextFrameIndex(rInf.GetText().getLength());
+    }
+    if (bSeek)
     {
         bSeek = Seek(rInf.GetIdx() + rPortion.GetLen());
     }

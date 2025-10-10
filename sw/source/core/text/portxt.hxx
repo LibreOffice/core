@@ -76,6 +76,8 @@ public:
     virtual SwPositiveSize GetTextSize(const SwTextSizeInfo& rInfo) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
+    bool ShowUnderline() const { return m_bShowUnderline; }
+
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 

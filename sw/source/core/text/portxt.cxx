@@ -246,11 +246,13 @@ static void GetLimitedStringPart(const SwTextFormatInfo& rInf, TextFrameIndex nI
     }
 }
 
-static bool IsMsWordUlTrailSpace(const SwTextFormatInfo& rInf)
+static bool IsPaintTrailingSpaceDecorations(const SwTextFormatInfo& rInf)
 {
+    // We underline (and show background of) the trailing whitespace, when either Word-compatible
+    // trailing blanks are off, or underline Word-compatible trailing space is on.
     const auto& settings = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess();
-    return settings.get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS)
-           && settings.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE);
+    return !settings.get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS)
+           || settings.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE);
 }
 
 SwTextPortion * SwTextPortion::CopyLinePortion(const SwLinePortion &rPortion)
@@ -645,17 +647,28 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 SwTwips nExtraWidth(nTotalExtraWidth);
                 SwTwips nExtraWidthOutOfLine(0);
                 SwTwips nAvailableLineWidth(rInf.GetLineWidth() - Width());
-                const bool bMsWordUlTrailSpace(IsMsWordUlTrailSpace(rInf));
-                if (nExtraWidth > nAvailableLineWidth && bMsWordUlTrailSpace)
+                bool bPaintSpaceDecorations(IsPaintTrailingSpaceDecorations(rInf));
+                if (nExtraWidth > nAvailableLineWidth && bPaintSpaceDecorations)
                 {
                     GetLimitedStringPart(rInf, pGuess->BreakPos(), nTotalExtraLen, GetMaxComp(rInf),
                                          nTotalExtraWidth, nAvailableLineWidth, nExtraLen,
                                          nExtraWidth);
-                    nExtraLenOutOfLine = nTotalExtraLen - nExtraLen;
-                    nExtraWidthOutOfLine = nTotalExtraWidth - nExtraWidth;
+                    if (nExtraLen)
+                    {
+                        nExtraLenOutOfLine = nTotalExtraLen - nExtraLen;
+                        nExtraWidthOutOfLine = nTotalExtraWidth - nExtraWidth;
+                    }
+                    else
+                    {
+                        // Not a single space fits to the available width - don't create decorated
+                        // hole portion
+                        nExtraLen = nTotalExtraLen;
+                        nExtraWidth = nTotalExtraWidth;
+                        bPaintSpaceDecorations = false;
+                    }
                 }
 
-                SwHolePortion* pNew = new SwHolePortion(*this, bMsWordUlTrailSpace);
+                SwHolePortion* pNew = new SwHolePortion(*this, bPaintSpaceDecorations);
                 pNew->SetLen(nExtraLen);
                 pNew->ExtraBlankWidth(nExtraWidth);
                 Insert( pNew );
@@ -1059,13 +1072,12 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     const SwFont* pOrigFont = rInf.GetFont();
     std::unique_ptr<SwFont> pHoleFont;
     std::optional<SwFontSave> oFontSave;
-    if( (!m_bShowUnderline && pOrigFont->GetUnderline() != LINESTYLE_NONE)
-    ||  pOrigFont->GetOverline() != LINESTYLE_NONE
-    ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )
+    if( !m_bShowUnderline && (pOrigFont->GetUnderline() != LINESTYLE_NONE
+                           || pOrigFont->GetOverline() != LINESTYLE_NONE
+                           || pOrigFont->GetStrikeout() != STRIKEOUT_NONE) )
     {
         pHoleFont.reset(new SwFont( *pOrigFont ));
-        if (!m_bShowUnderline)
-            pHoleFont->SetUnderline(LINESTYLE_NONE);
+        pHoleFont->SetUnderline(LINESTYLE_NONE);
         pHoleFont->SetOverline( LINESTYLE_NONE );
         pHoleFont->SetStrikeout( STRIKEOUT_NONE );
         oFontSave.emplace( rInf, pHoleFont.get() );
@@ -1077,6 +1089,11 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     }
     else
     {
+        if (m_bShowUnderline)
+        {
+            rInf.DrawBackBrush(*this);
+            rInf.DrawBorder(*this);
+        }
         // tdf#43244: Paint spaces even at end of line,
         // but only if this paint is not called for pdf export, to keep that pdf export intact
         rInf.DrawText(*this, rInf.GetLen());
