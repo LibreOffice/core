@@ -128,7 +128,9 @@ class SAL_DLLPUBLIC_RTTI SwTransferable final : public TransferableHelper
 
     static bool PasteGrf( const TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
-                                SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA );
+                                SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction,
+                                bool bNeedToSelectBeforePaste, bool * pbCallAutoCaption,
+                                RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA);
 
     static bool PasteImageMap( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh );
@@ -138,7 +140,8 @@ class SAL_DLLPUBLIC_RTTI SwTransferable final : public TransferableHelper
 
     static bool PasteFileName( const TransferableDataHelper& rData,
                             SwWrtShell& rSh, SotClipboardFormatId nFormat, SwPasteSdr nAction,
-                            const Point* pPt, SotExchangeActionFlags nActionFlags, bool * graphicInserted );
+                            const Point* pPt, SotExchangeActionFlags nActionFlags,
+                            bool * pbCallAutoCaption);
 
     static bool PasteDBData( const TransferableDataHelper& rData, SwWrtShell& rSh,
                             SotClipboardFormatId nFormat, bool bLink, const Point* pDragPt,
@@ -146,7 +149,8 @@ class SAL_DLLPUBLIC_RTTI SwTransferable final : public TransferableHelper
 
     static bool PasteFileList( const TransferableDataHelper& rData,
                                 SwWrtShell& rSh, bool bLink,
-                                const Point* pPt, bool bMsg );
+                                const Point* pPt, bool bMsg,
+                                bool * pbCallAutoCaption);
 
     bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT );
 

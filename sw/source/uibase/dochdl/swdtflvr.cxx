@@ -1899,7 +1899,8 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::GDIMETAFILE:
                 bRet = SwTransferable::PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Insert,pPt,
-                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
+                        nActionFlags, nDropAction, bNeedToSelectBeforePaste,
+                        &bCallAutoCaption);
                 break;
 
             case SotClipboardFormatId::XFORMS:
@@ -1918,14 +1919,14 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
                                     : EXCHG_IN_ACTION_LINK == nAction
                                         ? SwPasteSdr::SetAttr
                                         : SwPasteSdr::Insert),
-                                pPt, nActionFlags, nullptr );
+                        pPt, nActionFlags, &bCallAutoCaption);
                 break;
 
             case SotClipboardFormatId::FILE_LIST:
                 // then insert as graphics only
                 bRet = SwTransferable::PasteFileList( rData, rSh,
                                     EXCHG_IN_ACTION_LINK == nAction,
-                                    pPt, bMsg );
+                                    pPt, bMsg, &bCallAutoCaption );
                 break;
 
             case SotClipboardFormatId::SONLK:
@@ -1955,13 +1956,10 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
 
         case EXCHG_OUT_ACTION_INSERT_FILE:
             {
-                bool graphicInserted;
                 bRet = SwTransferable::PasteFileName( rData, rSh, nFormat,
                                             SwPasteSdr::Insert, pPt,
                                             nActionFlags,
-                                            &graphicInserted );
-                if( graphicInserted )
-                    bCallAutoCaption = true;
+                                            &bCallAutoCaption);
             }
             break;
 
@@ -2027,7 +2025,8 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
                 bRet = SwTransferable::PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::SetAttr, pPt,
-                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
+                        nActionFlags, nDropAction, bNeedToSelectBeforePaste,
+                        nullptr/*no caption?*/);
                 break;
             default:
                 OSL_FAIL( "unknown format" );
@@ -2046,7 +2045,8 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_GRAPH:
             bRet = SwTransferable::PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Insert, pPt,
-                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste, nAnchorType );
+                    nActionFlags, nDropAction, bNeedToSelectBeforePaste,
+                    &bCallAutoCaption, nAnchorType);
             break;
 
         case EXCHG_OUT_ACTION_REPLACE_DRAWOBJ:
@@ -2061,7 +2061,8 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_REPLACE_GRAPH:
             bRet = SwTransferable::PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Replace,pPt,
-                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
+                    nActionFlags, nDropAction, bNeedToSelectBeforePaste,
+                    nullptr/*no caption for replace?*/);
             break;
 
         case EXCHG_OUT_ACTION_INSERT_INTERACTIVE:
@@ -2837,7 +2838,9 @@ bool SwTransferable::PasteSdrFormat(  const TransferableDataHelper& rData,
 
 bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
-                                SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, RndStdIds nAnchorType )
+        SotExchangeActionFlags const nActionFlags, sal_Int8 const nDropAction,
+        bool const bNeedToSelectBeforePaste, bool *const pbCallAutoCaption,
+        RndStdIds const nAnchorType)
 {
     bool bRet = false;
 
@@ -3045,6 +3048,14 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
 
         if( nActionFlags & SotExchangeActionFlags::InsertTargetUrl )
             SwTransferable::PasteTargetURL( rData, rSh, SwPasteSdr::NONE, nullptr, false );
+
+        if (nAction == SwPasteSdr::Insert)
+        {
+            if (pbCallAutoCaption)
+            {   // only possible if selected
+                *pbCallAutoCaption = true;
+            }
+        }
     }
     else if( bCheckForImageMap )
     {
@@ -3145,13 +3156,10 @@ bool SwTransferable::PasteFileName( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat,
                                     SwPasteSdr nAction, const Point* pPt,
                                     SotExchangeActionFlags nActionFlags,
-                                    bool * graphicInserted)
+                                    bool *const pbCallAutoCaption)
 {
     bool bRet = SwTransferable::PasteGrf( rData, rSh, nFormat, nAction,
-                                            pPt, nActionFlags, 0, false);
-    if (graphicInserted != nullptr) {
-        *graphicInserted = bRet;
-    }
+                    pPt, nActionFlags, 0, false, pbCallAutoCaption);
     if( !bRet )
     {
         OUString sFile, sDesc;
@@ -3344,7 +3352,8 @@ bool SwTransferable::PasteDBData( const TransferableDataHelper& rData,
 
 bool SwTransferable::PasteFileList( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, bool bLink,
-                                    const Point* pPt, bool bMsg )
+                                    const Point* pPt, bool bMsg,
+                                    bool *const pbCallAutoCaption)
 {
     bool bRet = false;
     FileList aFileList;
@@ -3361,7 +3370,9 @@ bool SwTransferable::PasteFileList( const TransferableDataHelper& rData,
             TransferableDataHelper aData( pHlp );
 
             if( SwTransferable::PasteFileName( aData, rSh, SotClipboardFormatId::SIMPLE_FILE, nAct,
-                                            pPt, SotExchangeActionFlags::NONE, nullptr ))
+                    pPt, SotExchangeActionFlags::NONE,
+                    // only caption a single image (PasteGrf only sets true for Insert)
+                    aFileList.Count() == 1 ? pbCallAutoCaption : nullptr))
             {
                 if( bLink )
                 {
@@ -3844,7 +3855,7 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
 
     const SelectionType nSelection = rShell.GetSelectionType();
 
-    SwTrnsfrActionAndUndo aAction( &rShell );
+    ::std::optional<SwTrnsfrActionAndUndo> oAction(&rShell);
 
     bool bKillPaMs = false;
 
@@ -3900,9 +3911,13 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     }
 
     bool bRet = true;
+    SwFrameFormat const* pNewFlyToCaption{nullptr};
     // m_pWrtShell is nullptr when the source document is closed already.
     if (!m_pWrtShell || lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
-        bRet = rShell.Paste(m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
+    {
+        ::std::tie(bRet, pNewFlyToCaption) = rShell.Paste(
+            m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
+    }
 
     if( bKillPaMs )
         rShell.KillPams();
@@ -3910,6 +3925,13 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     // If Smart Paste then insert blank
     if( bRet && bSmart && ((bInWrd && !bEndWrd )|| bSttWrd) )
         rShell.SwEditShell::Insert(' ');
+
+    oAction.reset(); // inserting caption does not work when ActionPend()
+
+    if (pNewFlyToCaption)
+    {
+        rShell.GetView().AutoCaption(GRAPHIC_CAP);
+    }
 
     return bRet;
 }

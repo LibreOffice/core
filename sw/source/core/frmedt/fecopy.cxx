@@ -833,7 +833,8 @@ namespace {
     }
 }
 
-bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
+::std::pair<bool, SwFrameFormat const*>
+SwFEShell::Paste(SwDoc& rClpDoc, bool const bNestedTable)
 {
     CurrShell aCurr( this );
     // then till end of the nodes array
@@ -853,6 +854,8 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
     SwTableNode *const pSrcNd = aCpyPam.GetMarkNode().GetTableNode();
 
     bool bRet = true;
+    SwFrameFormat const* pNewFlyToCaption{nullptr};
+
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
     GetDoc()->getIDocumentFieldsAccess().LockExpFields();
@@ -1064,6 +1067,14 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 {
                     lcl_SelectFlyFormat(pFlyFormat, *this);
                 }
+                if (/*isSelect && */inserted.size() == 1 && inserted.front())
+                {
+                    if (inserted.front()->Which() == RES_FLYFRMFMT
+                        && GetDoc()->GetNodes()[inserted.front()->GetContent().GetContentIdx()->GetIndex() + 1]->IsGrfNode())
+                    {
+                        pNewFlyToCaption = inserted.front();
+                    }
+                }
             }
             else
             {
@@ -1154,7 +1165,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
     GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     EndAllAction();
 
-    return bRet;
+    return {bRet, pNewFlyToCaption};
 }
 
 void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage)

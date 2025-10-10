@@ -257,7 +257,9 @@ public:
 
     /// Copy and Paste methods for internal clipboard.
     SW_DLLPUBLIC void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr );
-    SW_DLLPUBLIC bool Paste( SwDoc& rClpDoc, bool bNestedTable = false );
+    // @return possibly a pasted fly frame to be captioned
+    SW_DLLPUBLIC ::std::pair<bool, SwFrameFormat const*>
+        Paste(SwDoc& rClpDoc, bool bNestedTable = false);
 
     /// Paste some pages into another doc - used in mailmerge.
     SW_DLLPUBLIC void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);

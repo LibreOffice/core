@@ -683,6 +683,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
             {
                 SwStartNode *pSttNd = rDoc.GetNodes()[nNdIdx]->GetStartNode();
                 assert(pSttNd && "No StartNode in InsertLabel.");
+                assert(!rDoc.GetNodes()[nNdIdx+1]->IsGrfNode() && !rDoc.GetNodes()[nNdIdx+1]->IsOLENode()); // these need to be SwLabelType::Object
                 SwNodeOffset nNode;
                 if( bBefore )
                 {
