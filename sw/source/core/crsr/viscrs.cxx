@@ -142,7 +142,7 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
 
 }
 
-::std::pair<SwRect, bool> SwVisibleCursor::SetPos()
+SwRect SwVisibleCursor::SetPos()
 {
     SwRect aRect;
     tools::Long nTmpY = m_rState.m_aCursorHeight.getY();
@@ -214,16 +214,14 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
         m_pCursorShell->IsSelection() )
         aRect.Width( 0 );
 
-    bool bIsCursorPosChanged = m_aTextCursor.GetPos() != aRect.Pos();
-
     m_aTextCursor.SetSize( aRect.SSize() );
     m_aTextCursor.SetPos( aRect.Pos() );
-    return { aRect, bIsCursorPosChanged };
+    return aRect;
 }
 
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
-    auto const [aRect, bIsCursorPosChanged] {SetPos()};
+    const SwRect aRect = SetPos();
 
     if (SfxViewShell* pNotifyViewShell = comphelper::LibreOfficeKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
     {
@@ -255,7 +253,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
-        else if ( bIsCursorPosChanged || m_pCursorShell->IsTableMode())
+        else
         {
             SfxLokHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
                 *pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);

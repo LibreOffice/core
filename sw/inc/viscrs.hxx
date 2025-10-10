@@ -63,7 +63,7 @@ public:
 
     bool IsVisible() const { return m_bIsVisible; }
     void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
-    ::std::pair<SwRect, bool> SetPos();
+    SwRect SetPos();
     void SetPosAndShow(SfxViewShell const * pViewShell);
     const vcl::Cursor& GetTextCursor() const;
 
