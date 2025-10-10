@@ -248,6 +248,20 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             rRequest.Done();
             break;
 
+        case SID_INSERT_CANVAS_SLIDE:
+        {
+            SdDrawDocument* pDoc = pShell->GetDoc();
+            sal_uInt16 nCanvasPageIndex = pDoc->InsertCanvasPage();
+            SdPage* pCanvasPage = static_cast<SdPage*>(pDoc->GetPage(nCanvasPageIndex));
+
+            view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+            PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
+            mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
+            mrSlideSorter.GetController().GetPageSelector().SelectPage(pCanvasPage);
+            rRequest.Done();
+        }
+        break;
+
         case SID_DELETE_PAGE:
         case SID_DELETE_MASTER_PAGE:
         case SID_DELETE: // we need SID_CUT to handle the delete key

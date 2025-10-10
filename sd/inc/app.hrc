@@ -346,6 +346,7 @@
 #define SID_NOTES_MASTER_MODE               (SID_SD_START+350)
     // FREE
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
+#define SID_INSERT_CANVAS_SLIDE             (SID_SD_START+353)
     // FREE
 #define SID_INSERT_FLD_PAGE_TITLE           (SID_SD_START+356)
 #define SID_INSERT_FLD_DATE_VAR             (SID_SD_START+357)

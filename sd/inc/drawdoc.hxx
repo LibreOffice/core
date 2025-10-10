@@ -999,6 +999,9 @@ public:
         bool bIsPageObj,
         const sal_Int32 nInsertPosition);
 
+
+    SAL_DLLPRIVATE sal_uInt16 InsertCanvasPage ();
+
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
     SAL_DLLPRIVATE void getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont );

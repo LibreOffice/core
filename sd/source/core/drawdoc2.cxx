@@ -56,6 +56,7 @@
 #include <DrawDocShell.hxx>
 
 #include "PageListWatcher.hxx"
+#include <strings.hxx>
 #include <unokywds.hxx>
 
 using namespace ::sd;
@@ -1442,6 +1443,22 @@ void SdDrawDocument::SetupNewPage (
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
+}
+
+sal_uInt16 SdDrawDocument::InsertCanvasPage()
+{
+    sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
+    SdPage* pLastStandardPage = GetSdPage(nLastPageNum - 1, PageKind::Standard);
+
+    sal_uInt16 nCanvasPageNum = CreatePage(pLastStandardPage, PageKind::Standard, u"Canvas Page"_ustr, u"Canvas notes page"_ustr, AutoLayout::AUTOLAYOUT_NONE, AutoLayout::AUTOLAYOUT_NONE, false, true, pLastStandardPage->GetPageNum() + 2);
+
+    SdPage* pCanvasPage = GetSdPage(nCanvasPageNum, PageKind::Standard);
+
+    const Size aCanvasSize(500000, 500000);
+
+    ResizeCurrentPage(pCanvasPage, aCanvasSize, PageKind::Standard);
+
+    return pCanvasPage->GetPageNum() / 2;
 }
 
 sd::UndoManager* SdDrawDocument::GetUndoManager() const

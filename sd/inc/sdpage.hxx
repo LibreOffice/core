@@ -122,6 +122,7 @@ friend class sd::UndoAttrObject;
     rtl_TextEncoding meCharSet;           ///< Text encoding
     sal_uInt16  mnPaperBin;               ///< PaperBin
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
+    bool    mbIsCanvasPage;               ///< whether the page is a canvas page
 
     // PDF link annotations for read-only pdfium
     std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinkAnnotations;
@@ -399,6 +400,9 @@ public:
     static OUString autoLayoutToString(AutoLayout nLayoutId);
 
     static sal_uInt16 mnLastPageId;
+
+    bool IsCanvasPage() const { return mbIsCanvasPage; }
+    void SetCanvasPage() { mbIsCanvasPage = true; }
 
 private:
     bool mbIsPrecious;
