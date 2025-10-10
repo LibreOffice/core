@@ -972,6 +972,13 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
         const SwViewColors aViewColors(*m_pColorConfig);
         SwViewOption aViewOption = *GetViewOption(/*Web=*/false);
 
+        if (aViewColors.m_aSpellColor != aViewOption.GetSpellColor()
+            || aViewColors.m_aGrammarColor != aViewOption.GetGrammarColor())
+        {
+            SwModule::CheckSpellChanges(/*OnlineSpelling=*/false, /*IsSpellWrongAgain=*/true,
+                                        /*bIsSpellAllAgain=*/false, /*bSmartTags=*/false);
+        }
+
         // if not LOKit, then update the module defaults (for reload/open/new etc.)
         if (!bKit && aViewColors != aViewOption.GetColorConfig())
         {
