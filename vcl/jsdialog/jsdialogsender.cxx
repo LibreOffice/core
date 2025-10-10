@@ -295,7 +295,7 @@ void JSDialogNotifyIdle::Invoke()
 
 void JSDialogNotifyIdle::clearQueue() { m_aMessageQueue.clear(); }
 
-JSDialogSender::~JSDialogSender() COVERITY_NOEXCEPT_FALSE
+JSDialogSender::~JSDialogSender()
 {
     sendClose();
 

@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 
-vcl::unohelper::DragAndDropClient::~DragAndDropClient() COVERITY_NOEXCEPT_FALSE {}
+vcl::unohelper::DragAndDropClient::~DragAndDropClient() {}
 
 void vcl::unohelper::DragAndDropClient::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& /*dge*/ )
 {

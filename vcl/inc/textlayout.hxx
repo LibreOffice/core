@@ -61,7 +61,7 @@ namespace vcl
                                  DrawTextFlags nStyle);
 
     protected:
-        SAL_DLLPRIVATE ~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE;
+        SAL_DLLPRIVATE ~TextLayoutCommon();
 
     private:
         SAL_DLLPRIVATE OUString GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);

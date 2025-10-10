@@ -17,7 +17,7 @@ class VCL_DLLPUBLIC BuilderPage
 public:
     BuilderPage(weld::Widget* pParent, weld::DialogController* pController,
                 const OUString& rUIXMLDescription, const OUString& rID, bool bIsMobile = false);
-    virtual ~BuilderPage() COVERITY_NOEXCEPT_FALSE;
+    virtual ~BuilderPage();
 
     /* The title of the page, in an Assistant the dialog may append this page title to the
        dialog title.

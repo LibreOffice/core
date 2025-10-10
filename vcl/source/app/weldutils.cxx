@@ -34,7 +34,7 @@ void BuilderPage::Activate() {}
 
 void BuilderPage::Deactivate() {}
 
-BuilderPage::~BuilderPage() COVERITY_NOEXCEPT_FALSE {}
+BuilderPage::~BuilderPage() {}
 
 namespace weld
 {
@@ -44,7 +44,7 @@ bool DialogController::runAsync(const std::shared_ptr<DialogController>& rContro
     return rController->getDialog()->runAsync(rController, func);
 }
 
-DialogController::~DialogController() COVERITY_NOEXCEPT_FALSE {}
+DialogController::~DialogController() {}
 
 Dialog* GenericDialogController::getDialog() { return m_xDialog.get(); }
 
@@ -55,7 +55,7 @@ GenericDialogController::GenericDialogController(weld::Widget* pParent, const OU
 {
 }
 
-GenericDialogController::~GenericDialogController() COVERITY_NOEXCEPT_FALSE {}
+GenericDialogController::~GenericDialogController() {}
 
 Dialog* MessageDialogController::getDialog() { return m_xDialog.get(); }
 

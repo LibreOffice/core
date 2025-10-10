@@ -62,7 +62,7 @@ void ImplMultiTextLineInfo::Clear()
 
 namespace vcl
 {
-    TextLayoutCommon::~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE
+    TextLayoutCommon::~TextLayoutCommon()
     {}
 
     OUString TextLayoutCommon::GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth)

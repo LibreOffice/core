@@ -2881,7 +2881,7 @@ public:
     void set_help_id(const OUString& rHelpId) { getDialog()->set_help_id(rHelpId); }
     OUString get_help_id() const { return getConstDialog()->get_help_id(); }
     void response(int nResponse) { getDialog()->response(nResponse); }
-    virtual ~DialogController() COVERITY_NOEXCEPT_FALSE;
+    virtual ~DialogController();
 };
 
 class VCL_DLLPUBLIC GenericDialogController : public DialogController
@@ -2894,7 +2894,7 @@ public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OUString& rDialogId, bool bMobile = false);
     virtual Dialog* getDialog() override;
-    virtual ~GenericDialogController() COVERITY_NOEXCEPT_FALSE override;
+    virtual ~GenericDialogController() override;
 };
 
 class VCL_DLLPUBLIC MessageDialogController : public DialogController

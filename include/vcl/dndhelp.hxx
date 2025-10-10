@@ -41,7 +41,7 @@ namespace vcl::unohelper
 class VCL_DLLPUBLIC DragAndDropClient
 {
 public:
-    virtual ~DragAndDropClient() COVERITY_NOEXCEPT_FALSE;
+    virtual ~DragAndDropClient();
 
     // css::datatransfer::dnd::XDragGestureListener
     /// @throws css::uno::RuntimeException
