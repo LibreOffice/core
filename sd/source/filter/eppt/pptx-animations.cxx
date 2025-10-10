@@ -935,9 +935,11 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         {
             const char* sType = convertTextAnimationType(xIterate->getIterateType());
 
+            // ST_TLTime should be unsigned int ([ISO/IEC 29500-1] 19.7.38)
+            sal_uInt32 nTime = static_cast<sal_uInt32>(xIterate->getIterateInterval() * 1000);
+
             mpFS->startElementNS(XML_p, XML_iterate, XML_type, sType);
-            mpFS->singleElementNS(XML_p, XML_tmAbs, XML_val,
-                                  OString::number(xIterate->getIterateInterval() * 1000));
+            mpFS->singleElementNS(XML_p, XML_tmAbs, XML_val, OString::number(nTime));
             mpFS->endElementNS(XML_p, XML_iterate);
         }
     }
