@@ -258,7 +258,9 @@ public:
     /// Copy and Paste methods for internal clipboard.
     /// bDeleteRedlines: if content inside a delete redline should be stripped away in rClpDoc.
     SW_DLLPUBLIC void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr, bool bDeleteRedlines = true );
-    SW_DLLPUBLIC bool Paste( SwDoc& rClpDoc, bool bNestedTable = false );
+    // @return possibly a pasted fly frame to be captioned
+    SW_DLLPUBLIC ::std::pair<bool, SwFrameFormat const*>
+        Paste(SwDoc& rClpDoc, bool bNestedTable = false);
 
     /// Paste some pages into another doc - used in mailmerge.
     SW_DLLPUBLIC void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
