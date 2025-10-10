@@ -84,13 +84,12 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
             rStream.Seek(p);
         });
 
-    sal_uInt16  aMagic16;
-    sal_uInt16  aLength;
-
     sal_uInt64 aSize = rStream.TellEnd();
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     rStream.SetEndian( SvStreamEndian::BIG );
+
+    sal_uInt16 aMagic16(0);
     rStream.ReadUInt16( aMagic16 );
 
     // Compare JPEG magic bytes
@@ -104,9 +103,8 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     while(true)
     {
         sal_uInt8 aMarker = 0xD9;
-        sal_Int32 aCount;
 
-        for (aCount = 0; aCount < 7; aCount++)
+        for (sal_Int32 aCount = 0; aCount < 7; aCount++)
         {
             rStream.ReadUChar( aMarker );
             if (aMarker != 0xFF)
@@ -119,6 +117,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
             }
         }
 
+        sal_uInt16 aLength(0);
         rStream.ReadUInt16( aLength );
 
         if (aLength < 8 || aLength > rStream.remainingSize())
