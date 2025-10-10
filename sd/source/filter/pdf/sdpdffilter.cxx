@@ -289,8 +289,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
     {
         utl::TempFileFast aTempFile;
 
-        SvFileStream aOutputStream("/tmp/outputthing.fodg", StreamMode::READWRITE);
-
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
             comphelper::getProcessServiceFactory());
         uno::Reference<uno::XInterface> xInterface(
@@ -316,7 +314,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
         uno::Reference<document::XExporter> xExporter(xFODGFilter, uno::UNO_QUERY);
         xExporter->setSourceDocument(xModel);
 
-        uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
+        uno::Reference<io::XOutputStream> xOutputStream(
+            new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
 
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
             { { "FilterName", uno::Any(u"OpenDocument Drawing Flat XML"_ustr) },
