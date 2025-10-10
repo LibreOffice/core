@@ -4710,7 +4710,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         {
                             pItObj = pNotesPage->GetObj(nNote);
 
-                            if (pItObj &&
+                            if (pItObj && pItObj->HasText() &&
                                 (pItObj->GetObjIdentifier() == SdrObjKind::Text
                                  || pItObj->GetObjIdentifier() == SdrObjKind::TitleText
                                  || pItObj->GetObjIdentifier() == SdrObjKind::OutlineText))
