@@ -5594,7 +5594,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nDestinationInstance ) ) // Schriftgrad in Point
     {
-        sal_uInt32 nHeight = rManager.ScalePoint( nVal );
+        constexpr sal_uInt32 MIN_FONT_HEIGHT_PT = 2;
+        sal_uInt32 nHeight = rManager.ScalePoint(std::max(nVal, MIN_FONT_HEIGHT_PT));
+
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
