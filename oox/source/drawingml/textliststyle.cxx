@@ -19,6 +19,9 @@
 
 #include <drawingml/textliststyle.hxx>
 #include <sal/log.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
+using namespace css;
 
 namespace oox::drawingml {
 
@@ -64,6 +67,44 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
 {
     applyStyleList( rTextListStyle.getAggregationListStyle(), getAggregationListStyle() );
     applyStyleList( rTextListStyle.getListStyle(), getListStyle() );
+}
+
+void TextListStyle::pushToNumberingRules(const uno::Reference<container::XIndexReplace>& xNumRules,
+                                         size_t nIgnoreLevel)
+{
+    TextParagraphPropertiesArray& rListStyle = getListStyle();
+    size_t nLevels = xNumRules->getCount();
+    if (rListStyle.size() < nLevels)
+    {
+        nLevels = rListStyle.size();
+    }
+
+    for (size_t nLevel = 0; nLevel < nLevels; ++nLevel)
+    {
+        if (nLevel == nIgnoreLevel)
+        {
+            continue;
+        }
+
+        comphelper::SequenceAsHashMap aMap(xNumRules->getByIndex(nLevel));
+        TextParagraphProperties& rLevel = rListStyle[nLevel];
+        bool bChanged = false;
+        if (rLevel.getParaLeftMargin())
+        {
+            aMap["LeftMargin"] <<= *rLevel.getParaLeftMargin();
+            bChanged = true;
+        }
+        if (rLevel.getFirstLineIndentation())
+        {
+            aMap["FirstLineOffset"] <<= *rLevel.getFirstLineIndentation();
+            bChanged = true;
+        }
+
+        if (bChanged)
+        {
+            xNumRules->replaceByIndex(nLevel, aMap.getAsConstAny(true));
+        }
+    }
 }
 
 #ifdef DBG_UTIL

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 
+#include <com/sun/star/container/XIndexReplace.hpp>
+
 #include <drawingml/textparagraphproperties.hxx>
 #include <array>
 
@@ -56,6 +58,10 @@ public:
      *  @return true if list style has its own noninherited properties.
      */
     bool hasListStyleOnImport() const { return mbHasListStyleOnImport; }
+
+    /// Set properties on xNumRules based on maListStyle, for all levels except nIgnoreLevel.
+    void pushToNumberingRules(const css::uno::Reference<css::container::XIndexReplace>& xNumRules,
+                              size_t nIgnoreLevel);
 
 #ifdef DBG_UTIL
     void dump() const;
