@@ -18,6 +18,7 @@
  */
 
 #include <systools/win32/uwinapi.h>
+#include <aclapi.h>
 
 #include "file_url.hxx"
 #include "filetime.hxx"
@@ -1521,6 +1522,56 @@ oslFileError SAL_CALL osl_getFileStatus(
     // https://learn.microsoft.com/en-us/windows/desktop/FileIO/file-attribute-constants
     if (pStatus->uAttributes & FILE_ATTRIBUTE_DIRECTORY)
         pStatus->uAttributes &= ~sal_uInt64(FILE_ATTRIBUTE_READONLY);
+
+    // tdf#150118: if there is no Read Only attribute set, lets check if the user has write access on the file
+    if ( (pStatus->uAttributes & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_DIRECTORY)) == 0 )
+    {
+        HANDLE hProcessToken = nullptr;
+        OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_QUERY, &hProcessToken);
+
+        HANDLE hImpersonationToken = nullptr;
+        DuplicateToken(hProcessToken, SecurityImpersonation, &hImpersonationToken);
+
+        PSECURITY_DESCRIPTOR pSD = nullptr;
+        // https://learn.microsoft.com/en-us/windows/win32/api/aclapi/nf-aclapi-getnamedsecurityinfow
+        DWORD aResult = GetNamedSecurityInfoW(
+            o3tl::toW(sFullPath.getStr()), SE_FILE_OBJECT,
+            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
+            nullptr, nullptr, nullptr, nullptr, &pSD);
+
+        if (aResult == ERROR_SUCCESS)
+        {
+            GENERIC_MAPPING mapping
+                = { FILE_GENERIC_READ, FILE_GENERIC_WRITE, FILE_GENERIC_EXECUTE, FILE_ALL_ACCESS };
+            DWORD grantedAccess = 0;
+            BOOL accessStatus = TRUE;
+
+            // https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-accesscheck
+            BOOL bResult = AccessCheck(pSD, hImpersonationToken, FILE_GENERIC_WRITE, &mapping,
+                                       nullptr, nullptr, &grantedAccess, &accessStatus);
+
+            if (bResult)
+            {
+                if (!accessStatus)
+                {
+                    // User does NOT have write access: set Read Only attribute
+                    pStatus->uAttributes |= sal_uInt64(FILE_ATTRIBUTE_READONLY);
+                }
+            }
+            else
+            {
+                SAL_WARN("AccessCheck API failed with: ", oslTranslateFileError(GetLastError()));
+            }
+            LocalFree(pSD); // free memory
+        }
+        else
+        {
+            SAL_WARN("GetNamedSecurityInfoW API failed with: ", aResult);
+        }
+        CloseHandle(hImpersonationToken); // free memory
+        CloseHandle(hProcessToken); // free memory
+    }
+
     pStatus->uValidFields |= osl_FileStatus_Mask_Attributes;
 
     pStatus->uFileSize = static_cast<sal_uInt64>(pItemImpl->FindData.nFileSizeLow) + (static_cast<sal_uInt64>(pItemImpl->FindData.nFileSizeHigh) << 32);
