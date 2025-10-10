@@ -26,8 +26,10 @@ extern "C" void* com_sun_star_comp_Draw_VisioImportFilter_get_implementation() {
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    (void)TestFODGExportPDF(aStream);
-    return 0;
+    bool bPDFLoaded = TestFODGExportPDF(aStream);
+    // if the pdf didn't load then reject so that input will not be added to the corpus
+    // we're not interested in input that doesn't go on to exercise the fodg export
+    return bPDFLoaded ? 0 : -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
