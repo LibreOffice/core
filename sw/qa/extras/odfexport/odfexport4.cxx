@@ -1507,6 +1507,18 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(uno::Any(false),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+
+        // tdf#168777: Add a line with trailing spaces; the line must have 'show-underline' set,
+        // because Writer's default was always painting all decorations on the trailing blanks.
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->Insert("foo" + RepeatedUChar(' ', 1000));
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//SwLineLayout", 1);
+        assertXPath(pXmlDoc, "//SwLineLayout/SwLinePortion", 1);
+        assertXPath(pXmlDoc, "//SwLineLayout/SwHolePortion", 2);
+        // First hole portion is in the main text area, the second on margins and beyond
+        assertXPath(pXmlDoc, "//SwLineLayout/SwHolePortion[1]", "show-underline", u"true");
+        assertXPath(pXmlDoc, "//SwLineLayout/SwHolePortion[2]", "show-underline", u"false");
     }
 }
 

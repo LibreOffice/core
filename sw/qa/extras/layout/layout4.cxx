@@ -994,14 +994,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf57187_Tdf158900)
                 u"PortionType::Break");
 
     // tdf#158900: Check that the break after a long line with trailing spaces is kept on same line.
-    // Without the fix in place, this would fail: the line had only 2 portions (text + hole),
+    // Without the fix in place, this would fail: the line had only text and hole portions,
     // and the break was on a separate third line
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*", 3);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*", 4);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[1]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[2]", "type",
                 u"PortionType::Hole");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[2]", "show-underline",
+                u"true");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[3]", "type",
+                u"PortionType::Hole");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[3]", "show-underline",
+                u"false");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[4]", "type",
                 u"PortionType::Break");
 }
 
@@ -1742,10 +1748,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf162614)
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt", "offset", u"0");
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/infos/bounds", "height", u"276");
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/infos/prtBounds", "height", u"276");
-    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*", 2);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*", 3);
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[1]", "type", u"PortionType::Text");
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[1]", "portion", u"Table2.B1");
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[2]", "type", u"PortionType::Hole");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[2]", "show-underline", u"true");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[3]", "type", u"PortionType::Hole");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[3]", "show-underline", u"false");
 
     // Two top-level tables on page 2
     assertXPath(pXmlDoc, "//page[2]/body/tab", 2);
