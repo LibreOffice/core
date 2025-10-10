@@ -846,6 +846,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertCanvasSlide" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">New Canvas Slide</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ImportFromFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Page from File...</value>
