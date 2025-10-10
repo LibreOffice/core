@@ -401,13 +401,18 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 
     if( nPolyCount )
     {
-        rPolyPoly.mpImplPolyPolygon->mvPolyAry.resize(nPolyCount);
+        rPolyPoly.mpImplPolyPolygon->mvPolyAry.reserve(nPolyCount);
 
         tools::Polygon aTempPoly;
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         {
             ReadPolygon( rIStream, aTempPoly );
-            rPolyPoly.mpImplPolyPolygon->mvPolyAry[i] = aTempPoly;
+            if (aTempPoly.GetSize() == 0)
+            {
+                SAL_WARN("tools", "Parsing error: polygon with 0 points, ignoring");
+                continue;
+            }
+            rPolyPoly.mpImplPolyPolygon->mvPolyAry.push_back(aTempPoly);
         }
     }
     else
