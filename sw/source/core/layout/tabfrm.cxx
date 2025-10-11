@@ -4789,125 +4789,139 @@ void SwRowFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterEndElement(writer);
 }
 
+static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* pFrame,
+                                           const SwRectFnSet& aRectFnSet)
+{
+    if (pFrame->IsHiddenNow())
+        return 0;
+    tools::Long nHeight = 0;
+    // #i26945# - consider follow text frames
+    const SwSortedObjs* pObjs( nullptr );
+    bool bIsFollow( false );
+    if ( pTmp->IsTextFrame() && static_cast<const SwTextFrame*>(pTmp)->IsFollow() )
+    {
+        const SwFrame* pMaster;
+        // #i46450# Master does not necessarily have
+        // to exist if this function is called from JoinFrame() ->
+        // Cut() -> Shrink()
+        const SwTextFrame* pTmpFrame = static_cast<const SwTextFrame*>(pTmp);
+        if ( pTmpFrame->GetPrev() && pTmpFrame->GetPrev()->IsTextFrame() &&
+             static_cast<const SwTextFrame*>(pTmpFrame->GetPrev())->GetFollow() &&
+             static_cast<const SwTextFrame*>(pTmpFrame->GetPrev())->GetFollow() != pTmp )
+             pMaster = nullptr;
+        else
+             pMaster = pTmpFrame->FindMaster();
+
+        if ( pMaster )
+        {
+            pObjs = static_cast<const SwTextFrame*>(pTmp)->FindMaster()->GetDrawObjs();
+            bIsFollow = true;
+        }
+    }
+    else
+    {
+        pObjs = pTmp->GetDrawObjs();
+    }
+    if ( pObjs )
+    {
+        for (SwAnchoredObject* pAnchoredObj : *pObjs)
+        {
+            // #i26945# - if <pTmp> is follow, the
+            // anchor character frame has to be <pTmp>.
+            if ( bIsFollow &&
+                 pAnchoredObj->FindAnchorCharFrame() != pTmp )
+            {
+                continue;
+            }
+            // #i26945# - consider also drawing objects
+            {
+                // OD 30.09.2003 #i18732# - only objects, which follow
+                // the text flow have to be considered.
+                const SwFrameFormat* pFrameFormat = pAnchoredObj->GetFrameFormat();
+                bool bFollowTextFlow = pFrameFormat->GetFollowTextFlow().GetValue();
+                bool bIsFarAway = pAnchoredObj->GetObjRect().Top() != FAR_AWAY;
+                const SwPageFrame* pPageFrm = pTmp->FindPageFrame();
+                bool bIsAnchoredToTmpFrm = false;
+                if ( pPageFrm && pPageFrm->IsPageFrame() && pAnchoredObj->GetPageFrame())
+                    bIsAnchoredToTmpFrm = pAnchoredObj->GetPageFrame() == pPageFrm ||
+                    (pPageFrm->GetFormatPage().GetPhyPageNum() == pAnchoredObj->GetPageFrame()->GetFormatPage().GetPhyPageNum() + 1);
+                const bool bConsiderObj =
+                    (pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
+                    bIsFarAway &&
+                    bFollowTextFlow && bIsAnchoredToTmpFrm;
+                bool bWrapThrough = pFrameFormat->GetSurround().GetValue() == text::WrapTextMode_THROUGH;
+                bool bInBackground = !pFrameFormat->GetOpaque().GetValue();
+                // Legacy render requires in-background setting, the new mode does not.
+                bool bConsiderFollowTextFlow = bInBackground
+                                               || !pFrameFormat->getIDocumentSettingAccess().get(
+                                                   DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
+                if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough && bConsiderFollowTextFlow)
+                {
+                    // Ignore wrap-through objects when determining the cell height.
+                    // Normally FollowTextFlow requires a resize of the cell, but not in case of
+                    // wrap-through.
+                    continue;
+                }
+
+                if ( bConsiderObj )
+                {
+                    const SwFormatFrameSize &rSz = pFrameFormat->GetFrameSize();
+                    if( !rSz.GetHeightPercent() )
+                    {
+                        const SwTwips nDistOfFlyBottomToAnchorTop =
+                            aRectFnSet.GetHeight(pAnchoredObj->GetObjRect()) +
+                                ( aRectFnSet.IsVert() ?
+                                  pAnchoredObj->GetCurrRelPos().X() :
+                                  pAnchoredObj->GetCurrRelPos().Y() );
+
+                        const SwTwips nFrameDiff =
+                            aRectFnSet.YDiff(
+                                aRectFnSet.GetTop(pTmp->getFrameArea()),
+                                aRectFnSet.GetTop(pFrame->getFrameArea()) );
+
+                        nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop + nFrameDiff -
+                                        aRectFnSet.GetHeight(pFrame->getFrameArea()) );
+
+                        // #i56115# The first height calculation
+                        // gives wrong results if pFrame->getFramePrintArea().Y() > 0. We do
+                        // a second calculation based on the actual rectangles of
+                        // pFrame and pAnchoredObj, and use the maximum of the results.
+                        // I do not want to remove the first calculation because
+                        // if clipping has been applied, using the GetCurrRelPos
+                        // might be the better option to calculate nHeight.
+                        const SwTwips nDistOfFlyBottomToAnchorTop2 = aRectFnSet.YDiff(
+                                                                        aRectFnSet.GetBottom(pAnchoredObj->GetObjRect()),
+                                                                        aRectFnSet.GetBottom(pFrame->getFrameArea()) );
+
+                        nHeight = std::max( nHeight, tools::Long(nDistOfFlyBottomToAnchorTop2 ));
+                    }
+                }
+            }
+        }
+    }
+    return nHeight;
+}
+
 tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
 {
     SwRectFnSet aRectFnSet(pFrame);
-    tools::Long nHeight = 0;
-    const SwFrame* pTmp = pFrame->IsSctFrame() ?
-            static_cast<const SwSectionFrame*>(pFrame)->ContainsContent() : pFrame;
-    while( pTmp )
+    if (pFrame->IsSctFrame())
     {
-        // #i26945# - consider follow text frames
-        const SwSortedObjs* pObjs( nullptr );
-        bool bIsFollow( false );
-        if ( pTmp->IsTextFrame() && static_cast<const SwTextFrame*>(pTmp)->IsFollow() )
+        if (pFrame->IsHiddenNow())
+            return 0;
+        tools::Long nHeight = 0;
+        const SwFrame* pTmp = static_cast<const SwSectionFrame*>(pFrame)->ContainsContent();
+        while (pTmp)
         {
-            const SwFrame* pMaster;
-            // #i46450# Master does not necessarily have
-            // to exist if this function is called from JoinFrame() ->
-            // Cut() -> Shrink()
-            const SwTextFrame* pTmpFrame = static_cast<const SwTextFrame*>(pTmp);
-            if ( pTmpFrame->GetPrev() && pTmpFrame->GetPrev()->IsTextFrame() &&
-                 static_cast<const SwTextFrame*>(pTmpFrame->GetPrev())->GetFollow() &&
-                 static_cast<const SwTextFrame*>(pTmpFrame->GetPrev())->GetFollow() != pTmp )
-                 pMaster = nullptr;
-            else
-                 pMaster = pTmpFrame->FindMaster();
-
-            if ( pMaster )
-            {
-                pObjs = static_cast<const SwTextFrame*>(pTmp)->FindMaster()->GetDrawObjs();
-                bIsFollow = true;
-            }
+            nHeight += CalcHeightWithFlys_Impl(pTmp, pFrame, aRectFnSet);
+            pTmp = pTmp->FindNextCnt();
+            if (!static_cast<const SwSectionFrame*>(pFrame)->IsAnLower(pTmp))
+                break;
         }
-        else
-        {
-            pObjs = pTmp->GetDrawObjs();
-        }
-        if ( pObjs )
-        {
-            for (SwAnchoredObject* pAnchoredObj : *pObjs)
-            {
-                // #i26945# - if <pTmp> is follow, the
-                // anchor character frame has to be <pTmp>.
-                if ( bIsFollow &&
-                     pAnchoredObj->FindAnchorCharFrame() != pTmp )
-                {
-                    continue;
-                }
-                // #i26945# - consider also drawing objects
-                {
-                    // OD 30.09.2003 #i18732# - only objects, which follow
-                    // the text flow have to be considered.
-                    const SwFrameFormat* pFrameFormat = pAnchoredObj->GetFrameFormat();
-                    bool bFollowTextFlow = pFrameFormat->GetFollowTextFlow().GetValue();
-                    bool bIsFarAway = pAnchoredObj->GetObjRect().Top() != FAR_AWAY;
-                    const SwPageFrame* pPageFrm = pTmp->FindPageFrame();
-                    bool bIsAnchoredToTmpFrm = false;
-                    if ( pPageFrm && pPageFrm->IsPageFrame() && pAnchoredObj->GetPageFrame())
-                        bIsAnchoredToTmpFrm = pAnchoredObj->GetPageFrame() == pPageFrm ||
-                        (pPageFrm->GetFormatPage().GetPhyPageNum() == pAnchoredObj->GetPageFrame()->GetFormatPage().GetPhyPageNum() + 1);
-                    const bool bConsiderObj =
-                        (pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
-                        bIsFarAway &&
-                        bFollowTextFlow && bIsAnchoredToTmpFrm;
-                    bool bWrapThrough = pFrameFormat->GetSurround().GetValue() == text::WrapTextMode_THROUGH;
-                    bool bInBackground = !pFrameFormat->GetOpaque().GetValue();
-                    // Legacy render requires in-background setting, the new mode does not.
-                    bool bConsiderFollowTextFlow = bInBackground
-                                                   || !pFrameFormat->getIDocumentSettingAccess().get(
-                                                       DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
-                    if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough && bConsiderFollowTextFlow)
-                    {
-                        // Ignore wrap-through objects when determining the cell height.
-                        // Normally FollowTextFlow requires a resize of the cell, but not in case of
-                        // wrap-through.
-                        continue;
-                    }
-
-                    if ( bConsiderObj )
-                    {
-                        const SwFormatFrameSize &rSz = pFrameFormat->GetFrameSize();
-                        if( !rSz.GetHeightPercent() )
-                        {
-                            const SwTwips nDistOfFlyBottomToAnchorTop =
-                                aRectFnSet.GetHeight(pAnchoredObj->GetObjRect()) +
-                                    ( aRectFnSet.IsVert() ?
-                                      pAnchoredObj->GetCurrRelPos().X() :
-                                      pAnchoredObj->GetCurrRelPos().Y() );
-
-                            const SwTwips nFrameDiff =
-                                aRectFnSet.YDiff(
-                                    aRectFnSet.GetTop(pTmp->getFrameArea()),
-                                    aRectFnSet.GetTop(pFrame->getFrameArea()) );
-
-                            nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop + nFrameDiff -
-                                            aRectFnSet.GetHeight(pFrame->getFrameArea()) );
-
-                            // #i56115# The first height calculation
-                            // gives wrong results if pFrame->getFramePrintArea().Y() > 0. We do
-                            // a second calculation based on the actual rectangles of
-                            // pFrame and pAnchoredObj, and use the maximum of the results.
-                            // I do not want to remove the first calculation because
-                            // if clipping has been applied, using the GetCurrRelPos
-                            // might be the better option to calculate nHeight.
-                            const SwTwips nDistOfFlyBottomToAnchorTop2 = aRectFnSet.YDiff(
-                                                                            aRectFnSet.GetBottom(pAnchoredObj->GetObjRect()),
-                                                                            aRectFnSet.GetBottom(pFrame->getFrameArea()) );
-
-                            nHeight = std::max( nHeight, tools::Long(nDistOfFlyBottomToAnchorTop2 ));
-                        }
-                    }
-                }
-            }
-        }
-        if( !pFrame->IsSctFrame() )
-            break;
-        pTmp = pTmp->FindNextCnt();
-        if( !static_cast<const SwSectionFrame*>(pFrame)->IsAnLower( pTmp ) )
-            break;
+        return nHeight;
     }
-    return nHeight;
+    // Not a section frame
+    return CalcHeightWithFlys_Impl(pFrame, pFrame, aRectFnSet);
 }
 
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrame& rCell, const SwBorderAttrs& rAttrs )
