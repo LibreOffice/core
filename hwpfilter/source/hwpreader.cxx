@@ -39,6 +39,7 @@
 
 #include <iostream>
 #include <locale.h>
+#include <o3tl/sorted_vector.hxx>
 #include <sal/types.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -70,6 +71,8 @@ struct HwpReaderPrivate
         pPn = nullptr;
         pField = nullptr;
     }
+    // track what paras are current getting parsed to detect parse loop
+    o3tl::sorted_vector<HWPPara*> aParaParseStack;
     bool bFirstPara;
     bool bInBody;
     bool bInHeader;
@@ -4647,6 +4650,13 @@ void HwpReader::makeOutline(Outline const * hbox)
 
 void HwpReader::parsePara(HWPPara * para)
 {
+    bool bAlreadyParsing = !d->aParaParseStack.insert(para).second;
+    if (bAlreadyParsing)
+    {
+        SAL_WARN("filter.hwp", "attempt to parse para while already parsing it");
+        return;
+    }
+
     bool bParaStart = false;
     while (para)
     {
@@ -4691,8 +4701,9 @@ void HwpReader::parsePara(HWPPara * para)
         bParaStart = false;
         para = para->Next();
     }
-}
 
+    d->aParaParseStack.erase(para);
+}
 
 void HwpReader::startEl(const OUString& el)
 {
