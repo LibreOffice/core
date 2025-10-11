@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" style:flow-with-text="true"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <table:table>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>In this cell, below, there is a section with a shape:</text:p>
+      <text:section text:name="Sect1">
+       <text:p><draw:custom-shape text:anchor-type="char" draw:name="Shape1" draw:style-name="gr1" svg:width="5cm" svg:height="5cm" svg:x="0" svg:y="0">
+         <draw:enhanced-geometry draw:type="rectangle"/>
+        </draw:custom-shape></text:p>
+      </text:section>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

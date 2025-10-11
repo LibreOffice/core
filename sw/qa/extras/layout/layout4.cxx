@@ -1443,6 +1443,33 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf160958_orphans)
     assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf167326)
+{
+    // A document with a table with a section with a to-char no-wrap keep-inside-boundaries shape
+    createSwDoc("tdf167326.fodt");
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//tab", 1);
+    OUString height = getXPath(pExportDump, "//tab/infos/bounds", "height");
+    // Expected height: ~3388 = shape 2836 + 2 * text ~276
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3000), height.toInt32());
+
+    // Hide the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Sect1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//tab", 1);
+    height = getXPath(pExportDump, "//tab/infos/bounds", "height");
+    // Expected height: ~276 = 1 * text ~276
+    // Without the fix, this was ~3111, because calculation of table cell's height considered
+    // height of section's shape, not taking its visibility into account.
+    CPPUNIT_ASSERT_LESS(sal_Int32(500), height.toInt32());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf161368)
 {
     // Given a document with a text body width of 116 mm, greater than 65535 twips (115.6 mm)
