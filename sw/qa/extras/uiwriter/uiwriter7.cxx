@@ -2598,8 +2598,13 @@ struct PortionItem
 
 class PortionHandler : public SwPortionHandler
 {
-public:
     std::vector<PortionItem> mPortionItems;
+
+public:
+    PortionItem& get(size_t i) { return mPortionItems[i]; }
+
+    std::vector<PortionItem> const& getItems() const { return mPortionItems; }
+
     explicit PortionHandler()
         : SwPortionHandler()
     {
@@ -2654,13 +2659,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
 
     {
         // Input Field - "One Two Three Four Five" = 25 chars
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, aHandler.mPortionItems[0].msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aHandler.mPortionItems[0].mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, aHandler.mPortionItems[0].mnTextType);
+        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, aHandler.get(0).msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aHandler.get(0).mnLength);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, aHandler.get(0).mnTextType);
 
-        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, aHandler.mPortionItems[1].msItemType);
+        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, aHandler.get(1).msItemType);
 
-        CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, aHandler.mPortionItems[2].msItemType);
+        CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, aHandler.get(2).msItemType);
     }
 
     aHandler.clear();
@@ -2670,13 +2675,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
 
     {
         // Input Field - "ThisIsAllOneWord" = 18 chars
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, aHandler.mPortionItems[0].msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(18), aHandler.mPortionItems[0].mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, aHandler.mPortionItems[0].mnTextType);
+        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, aHandler.get(0).msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(18), aHandler.get(0).mnLength);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, aHandler.get(0).mnTextType);
 
-        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, aHandler.mPortionItems[1].msItemType);
+        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, aHandler.get(1).msItemType);
 
-        CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, aHandler.mPortionItems[2].msItemType);
+        CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, aHandler.get(2).msItemType);
     }
 
     aHandler.clear();
@@ -2690,35 +2695,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
     {
         // Text "The purpose of this report is to summarize the results of the existing bug in the LO suite"
         // = 91 chars
-        auto& rPortionItem = aHandler.mPortionItems[0];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(91), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(0);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(91), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        }
 
         // NEW LINE
-        rPortionItem = aHandler.mPortionItems[1];
-        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        {
+            auto const& rPortionItem = aHandler.get(1);
+            CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        }
 
         // Input Field: "ThisIsAllOneWord" = 18 chars
         // which is 16 chars + 2 hidden chars (start & end input field) = 18 chars
         // If this is correct then the input field is in one piece
-        rPortionItem = aHandler.mPortionItems[2];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(18), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(2);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(18), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
+        }
 
         // Text "."
-        rPortionItem = aHandler.mPortionItems[3];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(3);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        }
 
         // NEW LINE
-        rPortionItem = aHandler.mPortionItems[4];
-        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        {
+            auto const& rPortionItem = aHandler.get(4);
+            CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        }
 
-        rPortionItem = aHandler.mPortionItems[5];
-        CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, rPortionItem.msItemType);
+        {
+            auto const& rPortionItem = aHandler.get(5);
+            CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, rPortionItem.msItemType);
+        }
     }
 
     aHandler.clear();
@@ -2728,7 +2745,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
     {
         printf("Portions:\n");
 
-        for (const auto& rPortionItem : aHandler.mPortionItems)
+        for (const auto& rPortionItem : aHandler.getItems())
         {
             printf("-- Type: %s length: %" SAL_PRIdINT32 " text type: %d\n",
                    rPortionItem.msItemType.toUtf8().getStr(), rPortionItem.mnLength,
@@ -2737,46 +2754,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
 
         // Text "The purpose of this report is to summarize the results of the existing bug in the LO suite"
         // 91 chars
-        auto& rPortionItem = aHandler.mPortionItems[0];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(91), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(0);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(91), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        }
 
         // The input field here has more words ("One Two Three Four Five")
         // and it should break after "Two".
         // Input Field: "One Two" = 7 chars + 1 start input field hidden character = 8 chars
-        rPortionItem = aHandler.mPortionItems[1];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(1);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(8), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
+        }
 
-        rPortionItem = aHandler.mPortionItems[2];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::Hole, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(2);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::Hole, rPortionItem.mnTextType);
+        }
 
         // NEW LINE
-        rPortionItem = aHandler.mPortionItems[3];
-        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        {
+            auto const& rPortionItem = aHandler.get(3);
+            CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        }
 
         // Input Field:  "Three Four Five" = 16 chars + 1 end input field hidden character = 16 chars
-        rPortionItem = aHandler.mPortionItems[4];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(4);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
+        }
 
         // Text "."
-        rPortionItem = aHandler.mPortionItems[5];
-        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        {
+            auto const& rPortionItem = aHandler.get(5);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        }
 
         // NEW LINE
-        rPortionItem = aHandler.mPortionItems[6];
-        CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        {
+            auto const& rPortionItem = aHandler.get(6);
+            CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
+        }
 
-        rPortionItem = aHandler.mPortionItems[7];
-        CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, rPortionItem.msItemType);
+        {
+            auto const& rPortionItem = aHandler.get(7);
+            CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, rPortionItem.msItemType);
+        }
     }
 #endif
 }
