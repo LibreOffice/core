@@ -580,7 +580,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             mxConfigurationController->requestResourceActivation(
                 xId,
                 ResourceActivationMode::REPLACE);
-            RunOnResourceActivation(xId, std::bind(&asyncUpdateEditMode, this, eEMode));
+            RunOnResourceActivation(xId, [this, eEMode](bool) { asyncUpdateEditMode(this, eEMode); });
         }
         else
         {
