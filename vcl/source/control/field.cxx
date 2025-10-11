@@ -429,6 +429,17 @@ void ImplUpdateSeparators( std::u16string_view rOldDecSep, std::u16string_view r
         pEdit->SetUpdateMode( bUpdateMode );
 }
 
+sal_Int64 clipDoubleAgainstMinMax(double n, sal_Int64 nMin, sal_Int64 nMax)
+{
+    // caution: precision loss in double cast
+    if (n <= static_cast<double>(nMin))
+        return nMin;
+    else if (n >= static_cast<double>(nMax))
+        return nMax;
+    else
+        return static_cast<sal_Int64>(std::round(n));
+}
+
 } // namespace
 
 FormatterBase::FormatterBase(Edit* pField)
@@ -770,11 +781,12 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 
 sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
 {
-    if (nValue > mnMax)
-        nValue = mnMax;
-    else if (nValue < mnMin)
-        nValue = mnMin;
-    return nValue;
+    return std::clamp(nValue, GetMin(), GetMax());
+}
+
+sal_Int64 NumericFormatter::ClipDoubleAgainstMinMax(double nValue) const
+{
+    return clipDoubleAgainstMinMax(nValue, GetMin(), GetMax());
 }
 
 namespace
@@ -1023,17 +1035,8 @@ namespace vcl
     {
         double nDouble = nonValueDoubleToValueDouble(vcl::ConvertDoubleValue(
                     static_cast<double>(nValue), mnBaseValue, nDecDigits, eInUnit, eOutUnit));
-        sal_Int64 nLong ;
 
-        // caution: precision loss in double cast
-        if ( nDouble <= double(SAL_MIN_INT64) )
-            nLong = SAL_MIN_INT64;
-        else if ( nDouble >= double(SAL_MAX_INT64) )
-            nLong = SAL_MAX_INT64;
-        else
-            nLong = static_cast<sal_Int64>( std::round(nDouble) );
-
-        return nLong;
+        return clipDoubleAgainstMinMax(nDouble, SAL_MIN_INT64, SAL_MAX_INT64);
     }
 }
 
@@ -1217,13 +1220,7 @@ void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
     if (!vcl::TextToValue(rStr, rValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         return;
 
-    double nTempVal = rValue;
-    // caution: precision loss in double cast
-    if ( nTempVal > GetMax() )
-        nTempVal = static_cast<double>(GetMax());
-    else if ( nTempVal < GetMin())
-        nTempVal = static_cast<double>(GetMin());
-    rOutStr = CreateFieldText( static_cast<sal_Int64>(std::round(nTempVal)) );
+    rOutStr = CreateFieldText(ClipDoubleAgainstMinMax(rValue));
 }
 
 MetricFormatter::MetricFormatter(Edit* pEdit)
@@ -1316,14 +1313,8 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
     if (!vcl::TextToValue(rStr, nTempValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         nTempValue = static_cast<double>(mnLastValue);
 
-    // caution: precision loss in double cast
-    if (nTempValue > mnMax)
-        nTempValue = static_cast<double>(mnMax);
-    else if (nTempValue < mnMin)
-        nTempValue = static_cast<double>(mnMin);
-
     // convert to requested units
-    return vcl::ConvertValue(static_cast<sal_Int64>(std::round(nTempValue)), 0, GetDecimalDigits(), meUnit, eOutUnit);
+    return vcl::ConvertValue(ClipDoubleAgainstMinMax(nTempValue), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 sal_Int64 MetricFormatter::GetValueFromString(const OUString& rStr) const
@@ -1659,13 +1650,7 @@ void CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rO
     sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), true ) )
         return;
-
-    sal_Int64 nTempVal = nValue;
-    if ( nTempVal > GetMax() )
-        nTempVal = GetMax();
-    else if ( nTempVal < GetMin())
-        nTempVal = GetMin();
-    rOutStr = CreateFieldText( nTempVal );
+    rOutStr = CreateFieldText(ClipAgainstMinMax(nValue));
 }
 
 CurrencyFormatter::CurrencyFormatter(Edit* pField)

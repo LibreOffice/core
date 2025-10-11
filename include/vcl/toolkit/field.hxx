@@ -103,6 +103,7 @@ public:
     sal_Int64               GetMax() const { return mnMax; }
 
     sal_Int64               ClipAgainstMinMax(sal_Int64 nValue) const;
+    sal_Int64               ClipDoubleAgainstMinMax(double nValue) const;
 
     void                    SetFirst( sal_Int64 nNewFirst )   { mnFirst = nNewFirst; }
     sal_Int64               GetFirst() const                  { return mnFirst; }
