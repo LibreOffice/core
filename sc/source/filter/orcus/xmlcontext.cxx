@@ -37,8 +37,6 @@ namespace com::sun::star::ucb
 class XCommandEnvironment;
 }
 
-#define BUFFER_SIZE 4096
-
 using namespace com::sun::star;
 
 namespace
@@ -149,6 +147,7 @@ void loadContentFromURL(const OUString& rURL, std::string& rStrm)
     std::ostringstream aStrmBuf;
     uno::Sequence<sal_Int8> aBytes;
     size_t nBytesRead = 0;
+    constexpr size_t BUFFER_SIZE = 4096;
     do
     {
         nBytesRead = xStrm->readBytes(aBytes, BUFFER_SIZE);
