@@ -82,7 +82,7 @@ bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& 
                 break;
 
             // fdo#80009 such nonsense could be written via WW8 import fdo#77454
-            if (abs(nVal) > 400000)
+            if (nVal == SAL_MIN_INT32 || abs(nVal) > 400000)
             {
                 SAL_INFO("xmloff.style", "ignoring excessive clip " << OUString(aToken));
                 nVal = 0;
