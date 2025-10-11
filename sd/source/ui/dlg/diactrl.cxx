@@ -127,7 +127,7 @@ IMPL_LINK(SdPagesField, spin_button_input, const OUString&, rText, std::optional
     else if (fResult < SAL_MIN_INT32)
         fResult = SAL_MIN_INT32;
 
-    return std::optional<int>(fResult);
+    return std::optional<int>(std::round(fResult));
 }
 
 IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)

@@ -390,7 +390,7 @@ namespace weld
         else if (fResult < SAL_MIN_INT32)
             fResult = SAL_MIN_INT32;
 
-        return std::optional<int>(fResult);
+        return std::optional<int>(std::round(fResult));
     }
 
     EntryTreeView::EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView)

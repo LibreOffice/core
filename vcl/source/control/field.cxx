@@ -1223,7 +1223,7 @@ void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
         nTempVal = static_cast<double>(GetMax());
     else if ( nTempVal < GetMin())
         nTempVal = static_cast<double>(GetMin());
-    rOutStr = CreateFieldText( static_cast<sal_Int64>(nTempVal) );
+    rOutStr = CreateFieldText( static_cast<sal_Int64>(std::round(nTempVal)) );
 }
 
 MetricFormatter::MetricFormatter(Edit* pEdit)
@@ -1323,7 +1323,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
         nTempValue = static_cast<double>(mnMin);
 
     // convert to requested units
-    return vcl::ConvertValue(static_cast<sal_Int64>(nTempValue), 0, GetDecimalDigits(), meUnit, eOutUnit);
+    return vcl::ConvertValue(static_cast<sal_Int64>(std::round(nTempValue)), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 sal_Int64 MetricFormatter::GetValueFromString(const OUString& rStr) const

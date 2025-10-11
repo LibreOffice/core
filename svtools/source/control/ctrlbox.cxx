@@ -1410,7 +1410,7 @@ int FontSizeBox::get_value() const
         else if (fResult > nMax)
             fResult = nMax;
     }
-    return fResult;
+    return std::round(fResult);
 }
 
 SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
