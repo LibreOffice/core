@@ -1444,7 +1444,7 @@ bool SwJumpFieldPortion::DescribePDFControl(const SwTextPaintInfo& rInf) const
     if (m_nFormat != SwJumpEditFormat::Text)
         return false;
 
-    vcl::PDFWriter::EditWidget aDescriptor;
+    vcl::pdf::PDFWriter::EditWidget aDescriptor;
 
     aDescriptor.Border = true;
     aDescriptor.BorderColor = COL_BLACK;

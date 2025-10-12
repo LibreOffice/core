@@ -120,20 +120,20 @@ namespace toolkitform
 
         /** (default-)creates a PDF widget according to a given FormComponentType
         */
-        std::unique_ptr<vcl::PDFWriter::AnyWidget> createDefaultWidget( sal_Int16 _nFormComponentType )
+        std::unique_ptr<vcl::pdf::PDFWriter::AnyWidget> createDefaultWidget( sal_Int16 _nFormComponentType )
         {
             switch ( _nFormComponentType )
             {
             case FormComponentType::COMMANDBUTTON:
-                return std::make_unique<vcl::PDFWriter::PushButtonWidget>();
+                return std::make_unique<vcl::pdf::PDFWriter::PushButtonWidget>();
             case FormComponentType::CHECKBOX:
-                return std::make_unique<vcl::PDFWriter::CheckBoxWidget>();
+                return std::make_unique<vcl::pdf::PDFWriter::CheckBoxWidget>();
             case FormComponentType::RADIOBUTTON:
-                return std::make_unique<vcl::PDFWriter::RadioButtonWidget>();
+                return std::make_unique<vcl::pdf::PDFWriter::RadioButtonWidget>();
             case FormComponentType::LISTBOX:
-                return std::make_unique<vcl::PDFWriter::ListBoxWidget>();
+                return std::make_unique<vcl::pdf::PDFWriter::ListBoxWidget>();
             case FormComponentType::COMBOBOX:
-                return std::make_unique<vcl::PDFWriter::ComboBoxWidget>();
+                return std::make_unique<vcl::pdf::PDFWriter::ComboBoxWidget>();
 
             case FormComponentType::TEXTFIELD:
             case FormComponentType::FILECONTROL:
@@ -142,7 +142,7 @@ namespace toolkitform
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
-                return std::make_unique<vcl::PDFWriter::EditWidget>();
+                return std::make_unique<vcl::pdf::PDFWriter::EditWidget>();
             }
             return nullptr;
         }
@@ -311,10 +311,10 @@ namespace toolkitform
 
     /** creates a PDF compatible control descriptor for the given control
     */
-    std::unique_ptr<vcl::PDFWriter::AnyWidget> describePDFControl( const Reference< XControl >& _rxControl,
+    std::unique_ptr<vcl::pdf::PDFWriter::AnyWidget> describePDFControl( const Reference< XControl >& _rxControl,
         vcl::PDFExtOutDevData& i_pdfExportData )
     {
-        std::unique_ptr<vcl::PDFWriter::AnyWidget> Descriptor;
+        std::unique_ptr<vcl::pdf::PDFWriter::AnyWidget> Descriptor;
         OSL_ENSURE( _rxControl.is(), "describePDFControl: invalid (NULL) control!" );
         if ( !_rxControl.is() )
             return Descriptor;
@@ -494,9 +494,9 @@ namespace toolkitform
             // special widget properties
 
             // edits
-            if ( Descriptor->getType() == vcl::PDFWriter::Edit )
+            if ( Descriptor->getType() == vcl::pdf::PDFWriter::Edit )
             {
-                vcl::PDFWriter::EditWidget* pEditWidget = static_cast< vcl::PDFWriter::EditWidget* >( Descriptor.get() );
+                vcl::pdf::PDFWriter::EditWidget* pEditWidget = static_cast< vcl::pdf::PDFWriter::EditWidget* >( Descriptor.get() );
 
                 // multiline (already flagged in the TextStyle)
                 pEditWidget->MultiLine = bool( Descriptor->TextStyle & DrawTextFlags::MultiLine );
@@ -533,7 +533,7 @@ namespace toolkitform
                     case FormComponentType::NUMERICFIELD:
                     {
 
-                        pEditWidget->Format = vcl::PDFWriter::Number;
+                        pEditWidget->Format = vcl::pdf::PDFWriter::Number;
 
                         static constexpr OUString FM_PROP_CURRENCYSYMBOL = u"CurrencySymbol"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_CURRENCYSYMBOL ) )
@@ -564,7 +564,7 @@ namespace toolkitform
                     } break;
                     case FormComponentType::TIMEFIELD:
                     {
-                        pEditWidget->Format = vcl::PDFWriter::Time;
+                        pEditWidget->Format = vcl::pdf::PDFWriter::Time;
 
                         static constexpr OUString FM_PROP_TIMEFORMAT = u"TimeFormat"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_TIMEFORMAT ) )
@@ -592,7 +592,7 @@ namespace toolkitform
                     } break;
                     case FormComponentType::DATEFIELD:
                     {
-                        pEditWidget->Format = vcl::PDFWriter::Date;
+                        pEditWidget->Format = vcl::pdf::PDFWriter::Date;
 
                         static constexpr OUString FM_PROP_DATEFORMAT = u"DateFormat"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_DATEFORMAT ) )
@@ -642,9 +642,9 @@ namespace toolkitform
             }
 
             // buttons
-            if ( Descriptor->getType() == vcl::PDFWriter::PushButton )
+            if ( Descriptor->getType() == vcl::pdf::PDFWriter::PushButton )
             {
-                vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< vcl::PDFWriter::PushButtonWidget* >( Descriptor.get() );
+                vcl::pdf::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< vcl::pdf::PDFWriter::PushButtonWidget* >( Descriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 if( ! (xModelProps->getPropertyValue(u"ButtonType"_ustr) >>= eButtonType) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property ButtonType");
@@ -711,9 +711,9 @@ namespace toolkitform
 
             // check boxes
             static constexpr OUString FM_PROP_STATE = u"State"_ustr;
-            if ( Descriptor->getType() == vcl::PDFWriter::CheckBox )
+            if ( Descriptor->getType() == vcl::pdf::PDFWriter::CheckBox )
             {
-                vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );
+                vcl::pdf::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< vcl::pdf::PDFWriter::CheckBoxWidget* >( Descriptor.get() );
                 sal_Int16 nState = 0;
                 if( ! (xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_STATE);
@@ -738,9 +738,9 @@ namespace toolkitform
 
 
             // radio buttons
-            if ( Descriptor->getType() == vcl::PDFWriter::RadioButton )
+            if ( Descriptor->getType() == vcl::pdf::PDFWriter::RadioButton )
             {
-                vcl::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< vcl::PDFWriter::RadioButtonWidget* >( Descriptor.get() );
+                vcl::pdf::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< vcl::pdf::PDFWriter::RadioButtonWidget* >( Descriptor.get() );
                 sal_Int16 nState = 0;
                 if( ! (xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_STATE);
@@ -765,9 +765,9 @@ namespace toolkitform
 
 
             // list boxes
-            if ( Descriptor->getType() == vcl::PDFWriter::ListBox )
+            if ( Descriptor->getType() == vcl::pdf::PDFWriter::ListBox )
             {
-                vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
+                vcl::pdf::PDFWriter::ListBoxWidget* pListWidget = static_cast< vcl::pdf::PDFWriter::ListBoxWidget* >( Descriptor.get() );
 
                 // drop down
                 if( ! (xModelProps->getPropertyValue( u"Dropdown"_ustr ) >>= pListWidget->DropDown) )
@@ -795,9 +795,9 @@ namespace toolkitform
 
 
             // combo boxes
-            if ( Descriptor->getType() == vcl::PDFWriter::ComboBox )
+            if ( Descriptor->getType() == vcl::pdf::PDFWriter::ComboBox )
             {
-                vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< vcl::PDFWriter::ComboBoxWidget* >( Descriptor.get() );
+                vcl::pdf::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< vcl::pdf::PDFWriter::ComboBoxWidget* >( Descriptor.get() );
 
                 // entries
                 getStringItemVector( xModelProps, pComboWidget->Entries );

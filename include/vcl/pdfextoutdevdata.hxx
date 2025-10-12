@@ -106,10 +106,10 @@ public:
     PDFExtOutDevData( const OutputDevice& rOutDev );
     virtual ~PDFExtOutDevData() override;
 
-    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf );
-    void ResetSyncData(PDFWriter * pWriterIfRemoveTransparencies);
+    bool PlaySyncPageAct( pdf::PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf );
+    void ResetSyncData(pdf::PDFWriter * pWriterIfRemoveTransparencies);
 
-    void PlayGlobalActions( PDFWriter& rWriter );
+    void PlayGlobalActions( pdf::PDFWriter& rWriter );
 
     bool    GetIsExportNotes() const { return mbExportNotes;}
     void        SetIsExportNotes( const bool bExportNotes );
@@ -240,7 +240,7 @@ public:
 
     /** provides detailed information about a destination range which previously has been registered using RegisterDest.
     */
-    void        DescribeRegisteredDest( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType = PDFWriter::DestAreaType::XYZ );
+    void        DescribeRegisteredDest( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, pdf::PDFWriter::DestAreaType eType = pdf::PDFWriter::DestAreaType::XYZ );
 
 //<---i56629
 
@@ -260,7 +260,7 @@ public:
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32 CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::DestAreaType::XYZ );
+    sal_Int32 CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr = -1, pdf::PDFWriter::DestAreaType eType = pdf::PDFWriter::DestAreaType::XYZ );
     /** Create a new link on a page
 
     @param rRect
@@ -436,7 +436,7 @@ public:
     @param eVal
     the value to set the attribute to
      */
-    void SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal );
+    void SetStructureAttribute( pdf::PDFWriter::StructAttribute eAttr, pdf::PDFWriter::StructAttributeValue eVal );
     /** set a structure attribute on the current structural element
 
     SetStructureAttributeNumerical sets an attribute of the current structural element
@@ -450,7 +450,7 @@ public:
     @param nValue
     the value to set the attribute to
      */
-    void SetStructureAttributeNumerical( PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
+    void SetStructureAttributeNumerical( pdf::PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
     /** set the bounding box of a structural element
 
     SetStructureBoundingBox sets the BBox attribute to a new value. Since the BBox
@@ -501,7 +501,7 @@ public:
     the duration of the transitional effect in milliseconds;
     set 0 to disable transitional effects
     */
-    void SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec );
+    void SetPageTransition( pdf::PDFWriter::PageTransition eType, sal_uInt32 nMilliSec );
 
     /** create a new form control
 
@@ -512,7 +512,7 @@ public:
     @param rControlType
     a descendant of AnyWidget determining the control's properties
      */
-    void    CreateControl( const PDFWriter::AnyWidget& rControlType );
+    void    CreateControl( const pdf::PDFWriter::AnyWidget& rControlType );
 };
 
 }

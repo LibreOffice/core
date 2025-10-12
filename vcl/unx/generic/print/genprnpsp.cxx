@@ -798,12 +798,12 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     i_rController.jobStarted();
 
     // setup PDFWriter context
-    vcl::PDFWriter::PDFWriterContext aContext;
-    aContext.Version            = vcl::PDFWriter::PDFVersion::PDF_1_4;
+    vcl::pdf::PDFWriter::PDFWriterContext aContext;
+    aContext.Version            = vcl::pdf::PDFWriter::PDFVersion::PDF_1_4;
     aContext.Tagged             = false;
     aContext.DocumentLocale     = Application::GetSettings().GetLanguageTag().getLocale();
     aContext.ColorMode          = i_rController.getPrinter()->GetPrinterOptions().IsConvertToGreyscales()
-    ? vcl::PDFWriter::DrawGreyscale : vcl::PDFWriter::DrawColor;
+    ? vcl::pdf::PDFWriter::DrawGreyscale : vcl::pdf::PDFWriter::DrawColor;
 
     // prepare doc info
     aContext.DocumentInfo.Title              = i_rJobName;
@@ -811,10 +811,10 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     aContext.DocumentInfo.Producer           = i_rAppName;
 
     // define how we handle metafiles in PDFWriter
-    vcl::PDFWriter::PlayMetafileContext aMtfContext;
+    vcl::pdf::PDFWriter::PlayMetafileContext aMtfContext;
     aMtfContext.m_bOnlyLosslessCompression = true;
 
-    std::shared_ptr<vcl::PDFWriter> xWriter;
+    std::shared_ptr<vcl::pdf::PDFWriter> xWriter;
     std::vector< PDFPrintFile > aPDFFiles;
     VclPtr<Printer> xPrinter( i_rController.getPrinter() );
     int nAllPages = i_rController.getFilteredPageCount();
@@ -882,12 +882,12 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 aContext.URL = aPDFUrl;
 
                 // create and initialize PDFWriter
-                xWriter = std::make_shared<vcl::PDFWriter>( aContext, uno::Reference< beans::XMaterialHolder >() );
+                xWriter = std::make_shared<vcl::pdf::PDFWriter>( aContext, uno::Reference< beans::XMaterialHolder >() );
             }
 
             xWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
                               TenMuToPt( aNewParm.maPageSize.Height() ),
-                              vcl::PDFWriter::Orientation::Portrait );
+                              vcl::pdf::PDFWriter::Orientation::Portrait );
 
             xWriter->PlayMetafile( aPageFile, aMtfContext );
         }

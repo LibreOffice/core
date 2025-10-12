@@ -1040,21 +1040,21 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     };
     const OUString aText = comphelper::string::removeAny(aPam.GetText(), aForbidden);
 
-    std::unique_ptr<vcl::PDFWriter::AnyWidget> pDescriptor;
+    std::unique_ptr<vcl::pdf::PDFWriter::AnyWidget> pDescriptor;
     switch (pContentControl->GetType())
     {
         case SwContentControlType::RICH_TEXT:
         case SwContentControlType::PLAIN_TEXT:
         {
-            pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
-            auto pEditWidget = static_cast<vcl::PDFWriter::EditWidget*>(pDescriptor.get());
+            pDescriptor = std::make_unique<vcl::pdf::PDFWriter::EditWidget>();
+            auto pEditWidget = static_cast<vcl::pdf::PDFWriter::EditWidget*>(pDescriptor.get());
             pEditWidget->MultiLine = true;
             break;
         }
         case SwContentControlType::CHECKBOX:
         {
-            pDescriptor = std::make_unique<vcl::PDFWriter::CheckBoxWidget>();
-            auto pCheckBoxWidget = static_cast<vcl::PDFWriter::CheckBoxWidget*>(pDescriptor.get());
+            pDescriptor = std::make_unique<vcl::pdf::PDFWriter::CheckBoxWidget>();
+            auto pCheckBoxWidget = static_cast<vcl::pdf::PDFWriter::CheckBoxWidget*>(pDescriptor.get());
             pCheckBoxWidget->Checked = pContentControl->GetChecked();
             // If it's checked already, then leave the default "Yes" OnValue unchanged, so the
             // appropriate appearance is found by PDF readers.
@@ -1067,8 +1067,8 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         }
         case SwContentControlType::DROP_DOWN_LIST:
         {
-            pDescriptor = std::make_unique<vcl::PDFWriter::ListBoxWidget>();
-            auto pListWidget = static_cast<vcl::PDFWriter::ListBoxWidget*>(pDescriptor.get());
+            pDescriptor = std::make_unique<vcl::pdf::PDFWriter::ListBoxWidget>();
+            auto pListWidget = static_cast<vcl::pdf::PDFWriter::ListBoxWidget*>(pDescriptor.get());
             pListWidget->DropDown = true;
             sal_Int32 nIndex = 0;
             bool bTextFound = false;
@@ -1093,8 +1093,8 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         }
         case SwContentControlType::COMBO_BOX:
         {
-            pDescriptor = std::make_unique<vcl::PDFWriter::ComboBoxWidget>();
-            auto pComboWidget = static_cast<vcl::PDFWriter::ComboBoxWidget*>(pDescriptor.get());
+            pDescriptor = std::make_unique<vcl::pdf::PDFWriter::ComboBoxWidget>();
+            auto pComboWidget = static_cast<vcl::pdf::PDFWriter::ComboBoxWidget*>(pDescriptor.get());
             for (const auto& rItem : pContentControl->GetListItems())
             {
                 pComboWidget->Entries.push_back(rItem.m_aDisplayText);
@@ -1103,9 +1103,9 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         }
         case SwContentControlType::DATE:
         {
-            pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
-            auto pEditWidget = static_cast<vcl::PDFWriter::EditWidget*>(pDescriptor.get());
-            pEditWidget->Format = vcl::PDFWriter::Date;
+            pDescriptor = std::make_unique<vcl::pdf::PDFWriter::EditWidget>();
+            auto pEditWidget = static_cast<vcl::pdf::PDFWriter::EditWidget*>(pDescriptor.get());
+            pEditWidget->Format = vcl::pdf::PDFWriter::Date;
             // GetDateFormat() uses a syntax that works with SvNumberFormatter::PutEntry(), PDF's
             // AFDate_FormatEx() uses a similar syntax, but uses lowercase characters in case of
             // "Y", "M" and "D" at least.

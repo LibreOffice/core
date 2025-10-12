@@ -147,7 +147,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
         aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
-    aSigBuffer.append(" /M (" + vcl::PDFWriter::GetDateTime(&rSigningContext)
+    aSigBuffer.append(" /M (" + vcl::pdf::PDFWriter::GetDateTime(&rSigningContext)
                       + ")"
 
                         // Byte range: we can write offset1-length1 and offset2 right now, will

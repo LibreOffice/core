@@ -46,7 +46,7 @@ private:
     DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
-    explicit ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrorCodes);
+    explicit ImplErrorDialog(weld::Window* pParent, const std::set<vcl::pdf::PDFWriter::ErrorCode>& rErrorCodes);
 };
 
 
