@@ -180,7 +180,7 @@ void SalInstance::DoQuit()
         std::abort();
 }
 
-SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE {}
+SalTimer::~SalTimer() {}
 
 void SalBitmap::DropScaledCache()
 {

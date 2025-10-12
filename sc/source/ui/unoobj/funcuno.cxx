@@ -70,7 +70,7 @@ private:
 
 public:
     explicit ScTempDocSource( ScTempDocCache& rDocCache );
-    ~ScTempDocSource() COVERITY_NOEXCEPT_FALSE;
+    ~ScTempDocSource();
 
     ScDocument*     GetDocument();
 };
@@ -97,7 +97,7 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
     }
 }
 
-ScTempDocSource::~ScTempDocSource() COVERITY_NOEXCEPT_FALSE
+ScTempDocSource::~ScTempDocSource()
 {
     if ( !pTempDoc )
         rCache.SetInUse( false );

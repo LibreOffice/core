@@ -70,7 +70,7 @@ protected:
     inline bool HasUserEvents_NoLock() const;
 public:
     SalUserEventList();
-    virtual ~SalUserEventList() COVERITY_NOEXCEPT_FALSE;
+    virtual ~SalUserEventList();
 
     inline const SalFrameSet& getFrames() const;
     inline SalFrame* anyFrame() const;

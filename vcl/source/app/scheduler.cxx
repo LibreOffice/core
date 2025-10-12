@@ -787,7 +787,7 @@ Task::Task( const Task& rTask )
         Start();
 }
 
-Task::~Task() COVERITY_NOEXCEPT_FALSE
+Task::~Task()
 {
     if ( !IsStatic() )
     {

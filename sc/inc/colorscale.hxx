@@ -61,7 +61,7 @@ public:
     SC_DLLPUBLIC ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument& rDoc, const ScColorScaleEntry& rEntry);
-    SC_DLLPUBLIC ~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE;
+    SC_DLLPUBLIC ~ScColorScaleEntry();
 
     const Color& GetColor() const { return maColor;}
     void SetColor(const Color&);

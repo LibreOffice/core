@@ -38,7 +38,7 @@ namespace slideshow::internal
                               "SlideAnimations::SlideAnimations(): Invalid SlideShowContext" );
         }
 
-        SlideAnimations::~SlideAnimations() COVERITY_NOEXCEPT_FALSE
+        SlideAnimations::~SlideAnimations()
         {
             if( !mpRootNode )
                 return;

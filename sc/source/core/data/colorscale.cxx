@@ -209,7 +209,7 @@ void ScColorScaleEntry::ImplDestroy()
         mpCell->EndListeningTo(mpCell->GetDocument());
 }
 
-ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
+ScColorScaleEntry::~ScColorScaleEntry()
 {
     suppress_fun_call_w_exception(ImplDestroy());
 }

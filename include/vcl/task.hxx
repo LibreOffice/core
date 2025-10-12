@@ -75,7 +75,7 @@ protected:
 public:
     Task( const char *pDebugName );
     Task( const Task& rTask );
-    virtual ~Task() COVERITY_NOEXCEPT_FALSE;
+    virtual ~Task();
     Task& operator=( const Task& rTask );
 
     void            SetPriority(TaskPriority ePriority);

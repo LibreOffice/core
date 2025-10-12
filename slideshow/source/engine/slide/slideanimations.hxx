@@ -49,7 +49,7 @@ namespace slideshow::internal
              */
             SlideAnimations( SlideShowContext      aContext,
                              const ::basegfx::B2DVector& rSlideSize );
-            ~SlideAnimations() COVERITY_NOEXCEPT_FALSE;
+            ~SlideAnimations();
 
             /** Import animations from a SMIL root animation node.
 
