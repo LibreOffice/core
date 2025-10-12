@@ -298,7 +298,6 @@ namespace
 
     HyperlinkData::HyperlinkData(const css::uno::Reference<css::beans::XPropertySet>& rPropSet)
     {
-        const css::uno::Reference<css::beans::XPropertyState> xPropState(rPropSet, UNO_QUERY);
         const auto xPropSetInfo(rPropSet->getPropertySetInfo());
 
         if (xPropSetInfo->hasPropertyByName(gsTextPortionType))
@@ -309,9 +308,16 @@ namespace
                 return;
         }
 
-        if (xPropSetInfo->hasPropertyByName(gsHyperLinkURL)
-            && (!xPropState.is()
-                || PropertyState_DIRECT_VALUE == xPropState->getPropertyState(gsHyperLinkURL)))
+        auto hasDirectProperty
+            = [&xPropSetInfo,
+               xPropState = rPropSet.query<beans::XPropertyState>()](const OUString& prop)
+        {
+            return xPropSetInfo->hasPropertyByName(prop)
+                   && (!xPropState.is()
+                       || xPropState->getPropertyState(prop) == beans::PropertyState_DIRECT_VALUE);
+        };
+
+        if (hasDirectProperty(gsHyperLinkURL))
         {
             rPropSet->getPropertyValue(gsHyperLinkURL) >>= href;
         }
@@ -319,39 +325,27 @@ namespace
         if (href.isEmpty())
             return;
 
-        if (xPropSetInfo->hasPropertyByName(gsHyperLinkName)
-            && (!xPropState.is()
-                || PropertyState_DIRECT_VALUE == xPropState->getPropertyState(gsHyperLinkName)))
+        if (hasDirectProperty(gsHyperLinkName))
         {
             rPropSet->getPropertyValue(gsHyperLinkName) >>= name;
         }
 
-        if (xPropSetInfo->hasPropertyByName(gsHyperLinkTarget)
-            && (!xPropState.is()
-                || PropertyState_DIRECT_VALUE == xPropState->getPropertyState(gsHyperLinkTarget)))
+        if (hasDirectProperty(gsHyperLinkTarget))
         {
             rPropSet->getPropertyValue(gsHyperLinkTarget) >>= targetFrame;
         }
 
-        if (xPropSetInfo->hasPropertyByName(gsServerMap)
-            && (!xPropState.is()
-                || PropertyState_DIRECT_VALUE == xPropState->getPropertyState(gsServerMap)))
+        if (hasDirectProperty(gsServerMap))
         {
             serverMap = *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsServerMap));
         }
 
-        if (xPropSetInfo->hasPropertyByName(gsUnvisitedCharStyleName)
-            && (!xPropState.is()
-                || PropertyState_DIRECT_VALUE
-                       == xPropState->getPropertyState(gsUnvisitedCharStyleName)))
+        if (hasDirectProperty(gsUnvisitedCharStyleName))
         {
             rPropSet->getPropertyValue(gsUnvisitedCharStyleName) >>= ustyleName;
         }
 
-        if (xPropSetInfo->hasPropertyByName(gsVisitedCharStyleName)
-            && (!xPropState.is()
-                || PropertyState_DIRECT_VALUE
-                       == xPropState->getPropertyState(gsVisitedCharStyleName)))
+        if (hasDirectProperty(gsVisitedCharStyleName))
         {
             rPropSet->getPropertyValue(gsVisitedCharStyleName) >>= vstyleName;
         }
