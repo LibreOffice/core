@@ -281,9 +281,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
     uno::Reference<css::frame::XLoadable> xModelLoad(xModel, uno::UNO_QUERY_THROW);
     xModelLoad->initNew();
 
-    SdXImpressDocument* pDrawDoc = dynamic_cast<SdXImpressDocument*>(xModel.get());
+    SdXImpressDocument& rDrawDoc = dynamic_cast<SdXImpressDocument&>(*xModel);
 
-    bool ret = ImportPDF(rStream, *pDrawDoc->GetDoc());
+    bool ret = ImportPDF(rStream, *rDrawDoc.GetDoc());
 
     if (ret)
     {
