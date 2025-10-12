@@ -13,6 +13,8 @@
 #ifndef CONFIG_OAUTH2_H
 #define CONFIG_OAUTH2_H
 
+/* 49152..65535 is ephemeral port number range recommended by IANA */
+#define OAUTH2_REDIRECT_URI_PREFIX "http://localhost:49153/LibreOffice/oauth2/"
 
 /* Google Drive settings */
 #define GDRIVE_BASE_URL "https://www.googleapis.com/drive/v3"
@@ -20,7 +22,7 @@
 #define GDRIVE_CLIENT_SECRET ""
 #define GDRIVE_AUTH_URL "https://accounts.google.com/o/oauth2/v2/auth"
 #define GDRIVE_TOKEN_URL "https://oauth2.googleapis.com/token"
-#define GDRIVE_REDIRECT_URI "urn:ietf:wg:oauth:2.0:oob"
+#define GDRIVE_REDIRECT_URI OAUTH2_REDIRECT_URI_PREFIX "GDRIVE/"
 #define GDRIVE_SCOPE "https://www.googleapis.com/auth/drive.file"
 
 
@@ -42,6 +44,10 @@
 #define ONEDRIVE_TOKEN_URL "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 #define ONEDRIVE_REDIRECT_URI "http://localhost/LibreOffice"
 #define ONEDRIVE_SCOPE "Files.ReadWrite offline_access"
+
+#if defined _WIN32
+#define OAUTH2REQUEST_SUPPORTED
+#endif
 
 #endif
 

@@ -17,6 +17,7 @@ $(eval $(call gb_Library_set_include,uui,\
 $(eval $(call gb_Library_set_componentfile,uui,uui/util/uui,services))
 
 $(eval $(call gb_Library_use_external,uui,boost_headers))
+$(eval $(call gb_Library_use_external,uui,curl))
 
 $(eval $(call gb_Library_use_custom_headers,uui,\
     officecfg/registry \
@@ -51,6 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/iahndl-filter \
 	uui/source/iahndl-ioexceptions \
 	uui/source/iahndl-locking \
+	$(if $(filter MSC,$(COM)),uui/source/iahndl-oauth2-win) \
 	uui/source/iahndl-ssl \
 	uui/source/interactionhandler \
 	uui/source/lockfailed \

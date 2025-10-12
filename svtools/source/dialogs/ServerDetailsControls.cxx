@@ -306,6 +306,13 @@ void CmisDetailsContainer::set_visible( bool bShow )
         m_pDialog->m_xRepositoryBox->hide();
         m_pDialog->m_xEDRoot->hide();
         m_pDialog->m_xFTRoot->hide();
+#if defined OAUTH2REQUEST_SUPPORTED
+        if (m_sBinding == GDRIVE_BASE_URL || m_sBinding == ONEDRIVE_BASE_URL)
+        {
+            m_pDialog->m_xFTShare->hide();
+            m_pDialog->m_xEDShare->hide();
+        }
+#endif
     }
     else
     {
@@ -320,6 +327,15 @@ void CmisDetailsContainer::set_visible( bool bShow )
     DetailsContainer::set_visible( bShow );
     m_pDialog->m_xEDPort->set_sensitive( !bShow );
     m_pDialog->m_xFTPort->set_sensitive( !bShow );
+}
+
+bool CmisDetailsContainer::enablePassword()
+{
+#if defined OAUTH2REQUEST_SUPPORTED
+    if (m_sBinding == GDRIVE_BASE_URL || m_sBinding == ONEDRIVE_BASE_URL)
+        return false;
+#endif
+    return DetailsContainer::enablePassword();
 }
 
 INetURLObject CmisDetailsContainer::getUrl( )

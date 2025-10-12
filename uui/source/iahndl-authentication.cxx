@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <config_oauth2.h>
+
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest.hpp>
@@ -51,6 +55,7 @@
 #include "passworddlg.hxx"
 
 #include "iahndl.hxx"
+#include "iahndl-oauth2.hxx"
 
 #include <memory>
 
@@ -762,16 +767,29 @@ UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
         const OUString & url,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
-    uno::Reference<awt::XWindow> xParent = getParentXWindow();
-    AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);
-    int retCode = dlg.run();
+    OUString code;
+#if defined OAUTH2REQUEST_SUPPORTED
+    if (url.indexOf(OAUTH2_REDIRECT_URI_PREFIX) >= 0)
+    {
+        OAuth2Request request(url);
+        request.run();
+        code = request.getRetCode();
+    }
+    else
+#endif
+    {
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);
+        if (dlg.run() == RET_OK)
+            code = dlg.GetCode();
+    }
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< ucb::XInteractionAuthFallback > xAuthFallback;
     getContinuations(rContinuations, &xAbort, &xAuthFallback);
 
-    if( retCode == RET_OK && xAuthFallback.is( ) )
+    if (!code.isEmpty() && xAuthFallback.is())
     {
-        xAuthFallback->setCode(dlg.GetCode());
+        xAuthFallback->setCode(code);
         xAuthFallback->select( );
     }
 }
