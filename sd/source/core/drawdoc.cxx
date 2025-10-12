@@ -158,24 +158,28 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetSwapGraphics();
     }
 
-    // Set measuring unit (of the application) and scale (of SdMod)
-    sal_Int32 nX, nY;
     SdOptions* pOptions = SdModule::get()->GetSdOptions(meDocType);
-    nX = officecfg::Office::Draw::Zoom::ScaleX::get();
-    nY = officecfg::Office::Draw::Zoom::ScaleY::get();
     SvtSysLocale aSysLocale;
-
-    // Allow UI scale only for draw documents.
-    if( eType == DocumentType::Draw )
-        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
-            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get()), Fraction( nX, nY ) );  // user-defined
-        else
-            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( nX, nY ) );  // user-defined
+    // Set measuring unit (of the application) and scale (of SdMod)
+    if (comphelper::IsFuzzing())
+        SetUIUnit(FieldUnit::CM, Fraction(1, 1));
     else
-        if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
-            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get()), Fraction( 1, 1 ) );    // default
+    {
+        sal_Int32 nX = officecfg::Office::Draw::Zoom::ScaleX::get();
+        sal_Int32 nY = officecfg::Office::Draw::Zoom::ScaleY::get();
+
+        // Allow UI scale only for draw documents.
+        if( eType == DocumentType::Draw )
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get()), Fraction( nX, nY ) );  // user-defined
+            else
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( nX, nY ) );  // user-defined
         else
-            SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( 1, 1 ) );    // default
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get()), Fraction( 1, 1 ) );    // default
+            else
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( 1, 1 ) );    // default
+    }
 
     SetScaleUnit(MapUnit::Map100thMM);
     SetDefaultFontHeight(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100));
