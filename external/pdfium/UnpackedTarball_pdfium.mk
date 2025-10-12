@@ -27,6 +27,9 @@ ifeq ($(OS),WNT)
 pdfium_patches += pdfium-vs2019-arm64_no-__umulh.patch.1
 endif
 
+# TODO, attempt upstream
+pdfium_patches += ofz451333752.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
