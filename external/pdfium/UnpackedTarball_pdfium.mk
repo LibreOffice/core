@@ -24,6 +24,9 @@ pdfium_patches += freebsd.patch
 
 pdfium_patches += system-abseil.diff
 
+# TODO, attempt upstream
+pdfium_patches += ofz451333752.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
