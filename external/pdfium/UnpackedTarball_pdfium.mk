@@ -22,6 +22,9 @@ pdfium_patches += system-abseil.diff
 # expose this mapping information
 pdfium_patches += tounicodeinfo.patch.1
 
+# TODO, attempt upstream
+pdfium_patches += ofz451333752.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
