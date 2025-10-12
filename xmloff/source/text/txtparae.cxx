@@ -290,8 +290,7 @@ namespace
         HyperlinkData() = default;
         HyperlinkData(const css::uno::Reference<css::beans::XPropertySet>& rPropSet);
 
-        bool operator==(const HyperlinkData&);
-        bool operator!=(const HyperlinkData& rOther) { return !operator==(rOther); }
+        bool operator==(const HyperlinkData&) const;
 
         bool addHyperlinkAttributes(SvXMLExport& rExport);
         void exportEvents(SvXMLExport& rExport);
@@ -355,7 +354,7 @@ namespace
         }
     }
 
-    bool HyperlinkData::operator==(const HyperlinkData& rOther)
+    bool HyperlinkData::operator==(const HyperlinkData& rOther) const
     {
         if (href != rOther.href || name != rOther.name || targetFrame != rOther.targetFrame
             || ustyleName != rOther.ustyleName || vstyleName != rOther.vstyleName
