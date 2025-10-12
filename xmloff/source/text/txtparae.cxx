@@ -300,6 +300,15 @@ namespace
     {
         const css::uno::Reference<css::beans::XPropertyState> xPropState(rPropSet, UNO_QUERY);
         const auto xPropSetInfo(rPropSet->getPropertySetInfo());
+
+        if (xPropSetInfo->hasPropertyByName(gsTextPortionType))
+        {
+            // No hyperlink for Ruby portions; the hyperlink will be added for their inner Text
+            if (OUString type;
+                (rPropSet->getPropertyValue(gsTextPortionType) >>= type) && type == gsRuby)
+                return;
+        }
+
         if (xPropSetInfo->hasPropertyByName(gsHyperLinkURL)
             && (!xPropState.is()
                 || PropertyState_DIRECT_VALUE == xPropState->getPropertyState(gsHyperLinkURL)))
