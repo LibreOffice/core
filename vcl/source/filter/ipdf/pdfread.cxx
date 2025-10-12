@@ -417,6 +417,11 @@ size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGrap
         Graphic aGraphic(pGfxLink, nPageIndex);
 
         auto pPage = pPdfDocument->openPage(nPageIndex);
+        if (!pPage)
+        {
+            SAL_WARN("vcl.filter", "ImportPDF: unable to open page: " << nPageIndex);
+            continue;
+        }
 
         std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations
             = findAnnotations(pPage, aPageSize);
