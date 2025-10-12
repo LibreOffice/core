@@ -384,8 +384,7 @@ namespace
     {
         if (href.isEmpty())
         {
-            // hyperlink without a URL does not make sense
-            OSL_ENSURE(false, "hyperlink without a URL --> no export to ODF");
+            // End of hyperlink
             return false;
         }
 
