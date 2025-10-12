@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Rubies" style:family="text">
+   <style:text-properties fo:font-size="6pt" style:text-underline-style="none" style:font-size-asian="6pt" style:font-size-complex="6pt" style:text-emphasize="none"/>
+  </style:style>
+  <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
+   <style:text-properties fo:color="#000080" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Ru1" style:family="ruby">
+   <style:ruby-properties style:ruby-align="left" style:ruby-position="above"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p><text:ruby text:style-name="Ru1"><text:ruby-base><text:a xlink:type="simple" xlink:href="https://en.wiktionary.org/wiki/一日#Japanese" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">一日</text:a></text:ruby-base><text:ruby-text>ついたち</text:ruby-text></text:ruby></text:p>
+  </office:text>
+ </office:body>
+</office:document>

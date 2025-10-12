@@ -1556,6 +1556,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166011ee)
                 u"latin");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168817)
+{
+    // A ruby text with a hyperlink
+    // Without the fix, it failed an assertion on save, and produced invalid XML that couldn't load
+    loadAndReload("ruby+hyperlink.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Check that only one instance of respective elements are produced
+    assertXPath(pXmlDoc, "//text:p", 1);
+    assertXPath(pXmlDoc, "//text:ruby", 1);
+    assertXPath(pXmlDoc, "//text:a", 1);
+    // Check the generated markup
+    assertXPath(pXmlDoc, "//text:p/text:ruby/text:ruby-base/text:a", "href",
+                u"https://en.wiktionary.org/wiki/一日#Japanese");
+    assertXPathContent(pXmlDoc, "//text:p/text:ruby/text:ruby-base/text:a", u"一日");
+    assertXPathContent(pXmlDoc, "//text:p/text:ruby/text:ruby-text", u"ついたち");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
