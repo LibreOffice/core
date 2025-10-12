@@ -12,7 +12,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
-
+#include <o3tl/deleter.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
@@ -626,7 +626,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     m_aTargetsBox.connect_row_activated(LINK(this, SfxAutoRedactDialog, DoubleClickEditHdl));
 }
 
-SfxAutoRedactDialog::~SfxAutoRedactDialog()
+void SfxAutoRedactDialog::ImplDestroy()
 {
     if (m_aTableTargets.empty())
     {
@@ -670,6 +670,8 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
         //TODO: Warn the user with a message box
     }
 }
+
+SfxAutoRedactDialog::~SfxAutoRedactDialog() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 bool SfxAutoRedactDialog::hasTargets() const
 {

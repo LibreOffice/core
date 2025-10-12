@@ -520,6 +520,8 @@ namespace vcl
 
     private:
 
+        void ImplDestroy();
+
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
         const bool      m_bRTLEnabled;
@@ -570,10 +572,15 @@ namespace vcl
         m_rReferenceDevice.SetFont( aRefFont );
     }
 
-    ReferenceDeviceTextLayout::~ReferenceDeviceTextLayout()
+    void ReferenceDeviceTextLayout::ImplDestroy()
     {
         m_rReferenceDevice.Pop();
         m_rTargetDevice.Pop();
+    }
+
+    ReferenceDeviceTextLayout::~ReferenceDeviceTextLayout()
+    {
+        suppress_fun_call_w_exception(ImplDestroy());
     }
 
     namespace

@@ -60,6 +60,7 @@ private:
     void            UpdateFromRadioButtons();
     void            CheckTravel();
     void            SetField();
+    void            ImplDestroy();
 
 public:
     SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh);

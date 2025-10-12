@@ -295,13 +295,15 @@ void JSDialogNotifyIdle::Invoke()
 
 void JSDialogNotifyIdle::clearQueue() { m_aMessageQueue.clear(); }
 
-JSDialogSender::~JSDialogSender()
+void JSDialogSender::ImplDestroy()
 {
     sendClose();
 
     if (mpIdleNotify)
         mpIdleNotify->Stop();
 }
+
+JSDialogSender::~JSDialogSender() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 void JSDialogSender::sendFullUpdate(bool bForce)
 {

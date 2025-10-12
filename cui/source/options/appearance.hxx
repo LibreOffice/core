@@ -84,6 +84,7 @@ private:
     void UpdateBmpControlsState();
     void UpdateColorDropdown();
     void FillItemsList();
+    void ImplDestroy();
     ColorConfigEntry GetActiveEntry();
 
 public:

@@ -71,11 +71,16 @@ SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
     UpdateFromRadioButtons();
 }
 
-SwJavaEditDialog::~SwJavaEditDialog()
+void SwJavaEditDialog::ImplDestroy()
 {
     m_pSh->EnterStdMode();
     m_pMgr.reset();
     m_pFileDlg.reset();
+}
+
+SwJavaEditDialog::~SwJavaEditDialog()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl, weld::Button&, void)

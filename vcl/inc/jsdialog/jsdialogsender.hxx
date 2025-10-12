@@ -35,6 +35,8 @@ class JSDialogSender
 {
     std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;
 
+    void ImplDestroy();
+
 protected:
     bool m_bCanClose; // specifies if can send a close message
 

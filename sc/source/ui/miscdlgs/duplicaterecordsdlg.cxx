@@ -50,7 +50,7 @@ ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
     Init();
 }
 
-ScDuplicateRecordsDlg::~ScDuplicateRecordsDlg()
+void ScDuplicateRecordsDlg::ImplDestroy()
 {
     auto pChange(comphelper::ConfigurationChanges::create());
     officecfg::Office::Calc::Misc::HandleDuplicateRecords::RemoveDuplicateRows::set(
@@ -65,6 +65,8 @@ ScDuplicateRecordsDlg::~ScDuplicateRecordsDlg()
         m_xRadioRemove->get_active(), pChange);
     pChange->commit();
 }
+
+ScDuplicateRecordsDlg::~ScDuplicateRecordsDlg() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 void ScDuplicateRecordsDlg::SetDialogData(bool bToggle)
 {

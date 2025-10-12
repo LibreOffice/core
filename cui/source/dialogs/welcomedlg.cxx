@@ -59,7 +59,7 @@ WelcomeDialog::WelcomeDialog(weld::Window* pParent, const bool bIsFirstStart)
     OnActivatePage(sNewsTab);
 }
 
-WelcomeDialog::~WelcomeDialog()
+void WelcomeDialog::ImplDestroy()
 {
     m_xTabCtrl->set_current_page(sNewsTab); // ensure next start with the first page
     if (!m_xShowAgain->get_active())
@@ -70,6 +70,8 @@ WelcomeDialog::~WelcomeDialog()
         xChanges->commit();
     }
 }
+
+WelcomeDialog::~WelcomeDialog() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 void WelcomeDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {

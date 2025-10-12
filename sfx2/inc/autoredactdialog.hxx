@@ -105,6 +105,8 @@ class SfxAutoRedactDialog final : public SfxDialogController
     /// Clear all targets both visually and from the targets vector
     void clearTargets();
 
+    void ImplDestroy();
+
 public:
     SfxAutoRedactDialog(weld::Window* pParent);
     virtual ~SfxAutoRedactDialog() override;

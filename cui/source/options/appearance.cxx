@@ -159,12 +159,14 @@ void SvxAppearanceTabPage::LoadSchemeList()
         m_xSchemeList->set_active_text(pColorConfig->GetCurrentSchemeName());
 }
 
-SvxAppearanceTabPage::~SvxAppearanceTabPage()
+void SvxAppearanceTabPage::ImplDestroy()
 {
     if (m_bRestartRequired)
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
                                         svtools::RESTART_REASON_THEME_CHANGE);
 }
+
+SvxAppearanceTabPage::~SvxAppearanceTabPage() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 std::unique_ptr<SfxTabPage> SvxAppearanceTabPage::Create(weld::Container* pPage,
                                                          weld::DialogController* pController,

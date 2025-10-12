@@ -69,6 +69,7 @@ private:
     DuplicatesResponse maResponse;
 
     void InsertEntry(const OUString& rTxt, bool bToggle);
+    void ImplDestroy();
 
     DECL_LINK(OrientationHdl, weld::Toggleable&, void);
     DECL_LINK(HeaderCkbHdl, weld::Toggleable&, void);

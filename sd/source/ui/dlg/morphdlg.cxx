@@ -60,7 +60,7 @@ MorphDlg::MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObjec
 
 MorphDlg::~MorphDlg()
 {
-    SaveSettings();
+    suppress_fun_call_w_exception(SaveSettings());
 }
 
 void MorphDlg::LoadSettings()

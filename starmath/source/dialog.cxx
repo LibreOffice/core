@@ -208,11 +208,16 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::Dialo
     Reset(&rOptions);
 }
 
-SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
+static void ImplDestroy()
 {
     if (SmViewShell *pViewSh = SmGetActiveView())
         if (SmEditWindow* pEdit = pViewSh->GetEditWindow())
             pEdit->UpdateStatus();
+}
+
+SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 OUString SmPrintOptionsTabPage::GetAllStrings()

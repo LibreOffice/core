@@ -29,6 +29,8 @@ private:
     DECL_LINK(OnActionClick, weld::Button&, void);
     DECL_LINK(OnNextClick, weld::Button&, void);
 
+    void ImplDestroy();
+
 public:
     WelcomeDialog(weld::Window* pParent, const bool bIsFirstStart);
     virtual ~WelcomeDialog() override;
