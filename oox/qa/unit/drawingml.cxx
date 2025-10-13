@@ -31,6 +31,7 @@
 #include <com/sun/star/util/XTheme.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -786,7 +787,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testDOCXVerticalLineRotation)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRotateAngle);
 }
 
-CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyleDirectFormat)
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
 {
     // Given a PPTX file with a slide with an outline shape:
     // When loading that document:
@@ -818,6 +819,27 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyleDirectForm
     // - Actual  : -800
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-889), nFirstLineOffset);
     // i.e. the sum of these two were 2800, not 1499, the indent was larger than expected.
+
+    // Also check that the master slide's outliner has the correct numbering rules:
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xMasterPage(
+        xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY);
+    // First would be the title shape.
+    uno::Reference<text::XTextRange> xMasterShape(xMasterPage->getByIndex(1), uno::UNO_QUERY);
+    xShapeText.set(xMasterShape->getText(), uno::UNO_QUERY);
+    xParagraphs = xShapeText->createEnumeration();
+    // As a sample, check the 2nd paragraph's level 3 left margin.
+    xParagraphs->nextElement();
+    xParagraph.set(xParagraphs->nextElement(), uno::UNO_QUERY);
+    xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+    aMap = comphelper::SequenceAsHashMap(xNumberingRules->getByIndex(2));
+    nLeftMargin = 0;
+    aMap["LeftMargin"] >>= nLeftMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2388
+    // - Actual  : 3600
+    // i.e. the master was wrong, re-export to PPTX could not write the correct numbering rules.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2388), nLeftMargin);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
