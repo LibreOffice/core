@@ -1234,10 +1234,8 @@ namespace basctl
         sal_Int32 i = 1;
         while ( !bValid )
         {
-            aObjectName = aBaseName
-                        + OUString::number( i );
-
-            if ( aUsedNamesCheck.find( aObjectName ) == aUsedNamesCheck.end() )
+            aObjectName = aBaseName + OUString::number( i );
+            if ( !aUsedNamesCheck.contains(aObjectName) )
                 bValid = true;
 
             ++i;

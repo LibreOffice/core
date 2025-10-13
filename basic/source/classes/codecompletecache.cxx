@@ -134,8 +134,7 @@ void CodeCompleteDataCache::InsertGlobalVar( const OUString& sVarName, const OUS
 
 void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType )
 {
-    CodeCompleteVarScopes::const_iterator aIt = aVarScopes.find( sProcName );
-    if( aIt == aVarScopes.end() ) //new procedure
+    if( !aVarScopes.contains(sProcName) ) //new procedure
     {
         CodeCompleteVarTypes aTypes;
         aTypes.emplace( sVarName, sVarType );

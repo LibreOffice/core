@@ -1202,14 +1202,7 @@ script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& Mod
 
 sal_Bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
 {
-    bool bRes = false;
-    ModuleInfoMap::iterator it = mModuleInfo.find( ModuleName );
-
-    if ( it != mModuleInfo.end() )
-    {
-        bRes = true;
-    }
-    return bRes;
+    return mModuleInfo.contains(ModuleName);
 }
 
 void SAL_CALL SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, const script::ModuleInfo& ModuleInfo )

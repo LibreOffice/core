@@ -120,7 +120,7 @@ namespace dxcanvas
 
     bool DXCanvasItem::isDeviceUsable( const DeviceInfo& rDeviceInfo ) const
     {
-        return maValues.find(rDeviceInfo) == maValues.end();
+        return !maValues.contains(rDeviceInfo);
     }
 
     bool DXCanvasItem::isDenylistCurrentDevice() const
