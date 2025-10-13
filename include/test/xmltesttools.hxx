@@ -100,7 +100,7 @@ protected:
     }
     /**
      * Assert that pXPath exists, returns exactly one node, and the pXPath's attribute's value
-     * is ASCII case-insensively equals to the rExpected value.
+     * is ASCII case-insensitively equals to the rExpected value.
      */
     void          assertXPathInsensitive(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute,
                                          std::u16string_view rExpectedValue);
