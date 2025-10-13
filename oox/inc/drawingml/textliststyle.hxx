@@ -61,7 +61,7 @@ public:
 
     /// Set properties on xNumRules based on maListStyle, for all levels except nIgnoreLevel.
     void pushToNumberingRules(const css::uno::Reference<css::container::XIndexReplace>& xNumRules,
-                              size_t nIgnoreLevel);
+                              std::optional<size_t> nIgnoreLevel);
 
 #ifdef DBG_UTIL
     void dump() const;

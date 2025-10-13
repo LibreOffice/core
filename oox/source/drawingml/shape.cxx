@@ -71,6 +71,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -914,6 +915,45 @@ Degree100 lcl_MSORotateAngleToAPIAngle(const sal_Int32 nMSORotationAngle)
     // API RotateAngle has opposite direction than nMSORotationAngle, thus 'minus'.
     return NormAngle36000(-nAngle);
 }
+
+void PushMasterTextListStyleToMasterShapeParagraphs(TextListStyle& rMasterTextListStyle, const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<text::XTextRange> xShapeText(xShape, UNO_QUERY);
+    if (!xShapeText.is())
+    {
+        return;
+    }
+
+    uno::Reference<container::XEnumerationAccess> xText(xShapeText->getText(), uno::UNO_QUERY);
+    if (!xText.is())
+    {
+        return;
+    }
+
+    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+    if (!xParagraphs.is())
+    {
+        return;
+    }
+
+    while (xParagraphs->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        if (!xParagraph.is())
+        {
+            continue;
+        }
+
+        uno::Reference<container::XIndexReplace> xNumberingRules;
+        if (!(xParagraph->getPropertyValue("NumberingRules") >>= xNumberingRules))
+        {
+            continue;
+        }
+
+        rMasterTextListStyle.pushToNumberingRules(xNumberingRules, std::nullopt);
+        xParagraph->setPropertyValue("NumberingRules", uno::Any(xNumberingRules));
+    }
+}
 }
 
 Reference< XShape > const & Shape::createAndInsert(
@@ -1286,6 +1326,7 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
+    bool bPlaceholderWithCustomPrompt = pPlaceholder && pPlaceholder->getCustomPrompt();
     if (xSet.is())
     {
         if (bTopWriterLine && !maSize.Width)
@@ -2208,6 +2249,13 @@ Reference< XShape > const & Shape::createAndInsert(
                     lcl_copyCharPropsToShape(mxShape, mpTextBody, rFilterBase);
                 }
             }
+        }
+        else if (mpTextBody && aServiceName == "com.sun.star.presentation.OutlinerShape"
+                 && mpMasterTextListStyle && !bPlaceholderWithCustomPrompt)
+        {
+            // If mpTextBody is not empty, then the insertAt() above inserts formatted text. If it's
+            // empty, then we format the existing text of the outliner shape here.
+            PushMasterTextListStyleToMasterShapeParagraphs(*mpMasterTextListStyle, mxShape);
         }
         else if (mbTextBox)
         {

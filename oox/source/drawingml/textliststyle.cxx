@@ -70,7 +70,7 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
 }
 
 void TextListStyle::pushToNumberingRules(const uno::Reference<container::XIndexReplace>& xNumRules,
-                                         size_t nIgnoreLevel)
+                                         std::optional<size_t> oIgnoreLevel)
 {
     TextParagraphPropertiesArray& rListStyle = getListStyle();
     size_t nLevels = xNumRules->getCount();
@@ -81,7 +81,7 @@ void TextListStyle::pushToNumberingRules(const uno::Reference<container::XIndexR
 
     for (size_t nLevel = 0; nLevel < nLevels; ++nLevel)
     {
-        if (nLevel == nIgnoreLevel)
+        if (oIgnoreLevel && nLevel == *oIgnoreLevel)
         {
             continue;
         }
@@ -96,7 +96,14 @@ void TextListStyle::pushToNumberingRules(const uno::Reference<container::XIndexR
         }
         if (rLevel.getFirstLineIndentation())
         {
-            aMap["FirstLineOffset"] <<= *rLevel.getFirstLineIndentation();
+            sal_Int32 nFirstLineIndentation = *rLevel.getFirstLineIndentation();
+            if (nFirstLineIndentation > 0)
+            {
+                // The opposite of this would be exported as <style:list-level-properties
+                // text:min-label-width="..."> to ODF, where negative values are not allowed.
+                nFirstLineIndentation = 0;
+            }
+            aMap["FirstLineOffset"] <<= nFirstLineIndentation;
             bChanged = true;
         }
 
