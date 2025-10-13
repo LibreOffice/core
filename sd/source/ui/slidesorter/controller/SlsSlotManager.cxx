@@ -251,7 +251,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_INSERT_CANVAS_SLIDE:
         {
             SdDrawDocument* pDoc = pShell->GetDoc();
-            sal_uInt16 nCanvasPageIndex = pDoc->InsertCanvasPage();
+            sal_uInt16 nCanvasPageIndex = pDoc->GetOrInsertCanvasPage();
             SdPage* pCanvasPage = static_cast<SdPage*>(pDoc->GetPage(nCanvasPageIndex));
 
             view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);

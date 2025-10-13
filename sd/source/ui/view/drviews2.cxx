@@ -1401,7 +1401,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
         case SID_INSERT_CANVAS_SLIDE:
         {
-            sal_uInt16 nCanvasPageIndex = GetDoc()->InsertCanvasPage();
+            sal_uInt16 nCanvasPageIndex = GetDoc()->GetOrInsertCanvasPage();
             Cancel(); // Don't know what this does
             SwitchPage(nCanvasPageIndex);
             rReq.Done();

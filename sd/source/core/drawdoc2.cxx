@@ -457,6 +457,9 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
         SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
+
+    if (hasCanvasPage())
+        updateCanvasPreviewsGrid();
 }
 
 // Override SfxBaseModel::getUnoModel and return a more concrete type
@@ -471,6 +474,9 @@ void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
     FmFormModel::DeletePage(nPgNum);
 
     UpdatePageObjectsInNotes(nPgNum);
+
+    if (hasCanvasPage())
+        updateCanvasPreviewsGrid();
 }
 
 // Remove page
@@ -493,6 +499,9 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
+
+    if (hasCanvasPage())
+        updateCanvasPreviewsGrid();
 
     return pPage;
 }
@@ -1445,8 +1454,11 @@ void SdDrawDocument::SetupNewPage (
     }
 }
 
-sal_uInt16 SdDrawDocument::InsertCanvasPage()
+sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 {
+    if (hasCanvasPage())
+        return mpCanvasPage->GetPageNum() / 2;
+
     sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
     SdPage* pLastStandardPage = GetSdPage(nLastPageNum - 1, PageKind::Standard);
 
@@ -1457,6 +1469,10 @@ sal_uInt16 SdDrawDocument::InsertCanvasPage()
     const Size aCanvasSize(500000, 500000);
 
     ResizeCurrentPage(pCanvasPage, aCanvasSize, PageKind::Standard);
+    pCanvasPage->SetCanvasPage();
+    mpCanvasPage = pCanvasPage;
+
+    populatePagePreviewsGrid();
 
     return pCanvasPage->GetPageNum() / 2;
 }
@@ -1466,4 +1482,71 @@ sd::UndoManager* SdDrawDocument::GetUndoManager() const
     return mpDocSh ? dynamic_cast< sd::UndoManager* >(mpDocSh->GetUndoManager()) : nullptr;
 }
 
+static int calculateGridColumns(const sal_uInt16 nCnt)
+{
+    int n = static_cast<int>(nCnt);
+    int srqtN = std::round(std::sqrt(n));
+
+    return (n % srqtN) ? srqtN + 1 : srqtN;
+}
+
+void SdDrawDocument::populatePagePreviewsGrid()
+{
+    sal_uInt16 nPageCnt = GetSdPageCount(PageKind::Standard) - 1; // don't count the canvas page
+    sal_uInt16 nTotalCol = static_cast<sal_uInt16>(calculateGridColumns(nPageCnt));
+    sal_uInt16 nTotalRow = nPageCnt / nTotalCol + (nPageCnt % nTotalCol ? 1 : 0);
+
+    // width and height of a standard 16:9 page
+    sal_uInt16 nWidth = 28000;
+    sal_uInt16 nHeight = 15750;
+
+    // the factor by which width & height will be divided
+    sal_uInt8 nFactor = 3;
+
+    // TODO: this should also vary based on the available space
+    sal_uInt16 nGapWidth = 500;
+    sal_uInt16 nGapHeight = 500;
+
+    ::tools::Long nPreviewWidth;
+    ::tools::Long nPreviewHeight;
+    ::tools::Long nTotalGridWidth;
+    ::tools::Long nTotalGridHeight;
+    do
+    {
+        nTotalGridWidth = (nTotalCol - 1) * nGapWidth;
+        nTotalGridHeight = (nTotalRow - 1) * nGapHeight;
+        nPreviewWidth = (nWidth / nFactor);
+        nPreviewHeight = (nHeight / nFactor);
+        nTotalGridWidth += nPreviewWidth * nTotalCol;
+        nTotalGridHeight += nPreviewHeight * nTotalRow;
+        nFactor++;
+    }
+    while (nTotalGridWidth >= mpCanvasPage->GetWidth() ||
+            nTotalGridHeight >= mpCanvasPage->GetHeight());
+
+    ::tools::Long nY = (mpCanvasPage->GetHeight() - nTotalGridHeight) / 2;
+    for (sal_uInt16 nRow = 0; nRow < nTotalRow; nRow++)
+    {
+        ::tools::Long nX = (mpCanvasPage->GetWidth() - nTotalGridWidth) / 2;
+        for (sal_uInt16 nCol = 0; nCol < nTotalCol; nCol++)
+        {
+            sal_uInt16 nCurrentPageIndex = nTotalCol * nRow + nCol;
+            if (nCurrentPageIndex == nPageCnt)
+                return;
+            SdPage* pPage = GetSdPage(nCurrentPageIndex, PageKind::Standard);
+            if (pPage->IsCanvasPage()) break;
+            const sal_uInt16 nPageNum = pPage->GetPageNum();
+            mpCanvasPage->CreatePresObj(PresObjKind::PagePreview, true, ::tools::Rectangle(Point(nX, nY), Size(nPreviewWidth, nPreviewHeight)), OUString(), nPageNum);
+            nX += nPreviewWidth + nGapWidth;
+        }
+        nY += nPreviewHeight + nGapHeight;
+    }
+}
+
+void SdDrawDocument::updateCanvasPreviewsGrid()
+{
+    SdrPage* pPage = mpCanvasPage.get();
+    pPage->ClearSdrObjList();
+    populatePagePreviewsGrid();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
