@@ -27,8 +27,6 @@
 #include <vcl/event.hxx>
 
 
-#define CORNER_SPACE    5
-
 namespace rptui
 {
 
@@ -44,7 +42,8 @@ OEndMarker::~OEndMarker()
 
 void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    Fraction aCornerSpace(tools::Long(CORNER_SPACE));
+    constexpr tools::Long CORNER_SPACE = 5;
+    Fraction aCornerSpace(CORNER_SPACE);
     aCornerSpace *= rRenderContext.GetMapMode().GetScaleX();
     const tools::Long nCornerSpace = tools::Long(aCornerSpace);
 
