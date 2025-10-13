@@ -22,13 +22,13 @@
 
 #include <sal/config.h>
 
+#include <map>
 #include <string_view>
 
-#include <connectivity/dbexception.hxx>
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <connectivity/FValue.hxx>
+#include <connectivity/standardsqlstate.hxx>
 
 namespace com::sun::star {
 
@@ -73,6 +73,8 @@ namespace task {
 }
 
 class SvStream;
+namespace dbtools { class SQLExceptionInfo; }
+namespace connectivity { class ORowSetValue; }
 
 namespace dbtools
 {

@@ -30,8 +30,10 @@
 
 #include <basctl/basctldllpublic.hxx>
 #include <basic/basmgr.hxx>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>

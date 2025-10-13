@@ -23,7 +23,10 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <rtl/math.hxx>
 
 #include <algorithm>

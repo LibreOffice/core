@@ -27,6 +27,7 @@
 
 #include <cppcanvas/vclfactory.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
 

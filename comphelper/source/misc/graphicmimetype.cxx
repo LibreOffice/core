@@ -32,6 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/salctype.hxx>
 
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>

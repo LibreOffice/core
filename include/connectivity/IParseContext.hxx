@@ -20,7 +20,8 @@
 #define INCLUDED_CONNECTIVITY_IPARSECONTEXT_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+
+namespace com::sun::star::lang { struct Locale; }
 
 namespace connectivity
 {

@@ -20,10 +20,12 @@
 #ifndef INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 #define INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 
-#include <com/sun/star/util/Date.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <rtl/ustring.hxx>
 
+namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::util { struct Date; }
 
 namespace com::sun::star
 {

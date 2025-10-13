@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
 #include <memory>
@@ -28,6 +27,7 @@ namespace com::sun::star::rendering
 {
     class  XBitmap;
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
 /* Definition of Bitmap interface */

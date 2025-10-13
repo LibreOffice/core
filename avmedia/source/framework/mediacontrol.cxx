@@ -25,6 +25,8 @@
 #include <vcl/weld.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
+#include <com/sun/star/media/ZoomLevel.hpp>
+
 namespace avmedia
 {
 

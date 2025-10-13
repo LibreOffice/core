@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/standardsqlstate.hxx>
 
 using namespace dbaccess;
 using namespace ::connectivity;

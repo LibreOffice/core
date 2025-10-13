@@ -26,12 +26,12 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <rtl/ref.hxx>
 #include <comphelper/proparrhlp.hxx>
 
 namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 namespace com::sun::star::sdbc { class XResultSetMetaData; }
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace connectivity::parse
 {

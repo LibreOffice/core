@@ -27,6 +27,8 @@
 #include <comphelper/singletonref.hxx>
 #include <tools/lazydelete.hxx>
 
+#include <com/sun/star/lang/Locale.hpp>
+
 #include <map>
 #include <memory>
 #include <mutex>

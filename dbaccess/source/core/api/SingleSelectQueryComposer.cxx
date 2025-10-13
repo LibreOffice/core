@@ -47,6 +47,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <connectivity/PColumn.hxx>
 #include <connectivity/predicateinput.hxx>
 #include <comphelper/diagnose_ex.hxx>

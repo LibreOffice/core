@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/helperhittest3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b3dpolygon.hxx>
 #include <polygn3d.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>

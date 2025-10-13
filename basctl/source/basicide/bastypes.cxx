@@ -31,6 +31,7 @@
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
 
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <sal/log.hxx>

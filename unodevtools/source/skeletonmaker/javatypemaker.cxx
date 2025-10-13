@@ -27,6 +27,8 @@
 #include <codemaker/codemaker.hxx>
 #include <codemaker/commonjava.hxx>
 #include <codemaker/global.hxx>
+#include <codemaker/unotype.hxx>
+#include <rtl/strbuf.hxx>
 
 #include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"

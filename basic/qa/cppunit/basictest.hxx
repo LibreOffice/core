@@ -12,6 +12,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sbmod.hxx>
+#include <comphelper/errcode.hxx>
 
 class MacroSnippet
 {

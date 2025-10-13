@@ -29,6 +29,7 @@
 #include <odbc/OResultSetMetaData.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/FValue.hxx>
 #include <strings.hrc>

@@ -29,7 +29,9 @@
 #include <vcl/canvastools.hxx>
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //#define OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
 #ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL

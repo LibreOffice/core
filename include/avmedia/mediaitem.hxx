@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svl/poolitem.hxx>
-#include <com/sun/star/media/ZoomLevel.hpp>
 #include <avmedia/avmediadllapi.h>
 #include <memory>
 #include <string_view>
@@ -32,6 +31,7 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XStream; }
+namespace com::sun::star::media { enum class ZoomLevel; }
 namespace com::sun::star::text { struct GraphicCrop; }
 class Graphic;
 

@@ -23,6 +23,7 @@
 #include <basegfx/range/b2drangeclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 #include <o3tl/vector_pool.hxx>
 

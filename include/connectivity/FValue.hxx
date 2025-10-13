@@ -21,20 +21,20 @@
 #define INCLUDED_CONNECTIVITY_FVALUE_HXX
 
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <utility>
 
 namespace com::sun::star::sdb { class XColumn; }
 namespace com::sun::star::sdbc { class XRow; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::util { struct Date; }
+namespace com::sun::star::util { struct DateTime; }
+namespace com::sun::star::util { struct Time; }
 
 namespace connectivity
 {

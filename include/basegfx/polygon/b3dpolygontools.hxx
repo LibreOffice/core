@@ -22,8 +22,6 @@
 #include <vector>
 #include <functional>
 
-#include <basegfx/point/b3dpoint.hxx>
-#include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
@@ -31,6 +29,8 @@ namespace basegfx
     class B3DPolyPolygon;
     class B3DPolygon;
     class B3DRange;
+    class B3DPoint;
+    class B3DVector;
 }
 
 namespace basegfx::utils

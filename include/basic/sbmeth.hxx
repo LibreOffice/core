@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <comphelper/errcode.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbdef.hxx>
 #include <basic/basicdllapi.h>
 
+class ErrCode;
 class SbModule;
 
 class BASIC_DLLPUBLIC SbMethod : public SbxMethod

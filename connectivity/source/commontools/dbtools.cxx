@@ -71,6 +71,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/FValue.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>

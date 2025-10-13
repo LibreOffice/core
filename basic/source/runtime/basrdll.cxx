@@ -20,6 +20,7 @@
 #include <memory>
 #include <mutex>
 
+#include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld.hxx>

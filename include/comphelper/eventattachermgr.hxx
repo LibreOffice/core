@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 #define INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 
-#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star {
@@ -31,6 +30,7 @@ namespace script {
     class XEventAttacherManager;
 }
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
 namespace comphelper

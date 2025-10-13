@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>

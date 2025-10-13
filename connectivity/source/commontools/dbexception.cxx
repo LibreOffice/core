@@ -18,6 +18,7 @@
  */
 
 #include <connectivity/dbexception.hxx>
+#include <connectivity/standardsqlstate.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>

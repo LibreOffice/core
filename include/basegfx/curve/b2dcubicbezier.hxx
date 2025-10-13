@@ -20,13 +20,16 @@
 #pragma once
 
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
+
+#include <vector>
 
 namespace basegfx
 {
     class B2DPolygon;
 }
+namespace basegfx { class B2DRange; }
+namespace basegfx { class B2DVector; }
 
 namespace basegfx
 {

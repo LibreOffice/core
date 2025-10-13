@@ -21,10 +21,14 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/time.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
 // implementation of XToolkitExperimental profiling API
 

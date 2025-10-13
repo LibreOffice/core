@@ -24,7 +24,6 @@
 #include <basic/sbmod.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include <comphelper/errcode.hxx>
 
 #include <basic/sbdef.hxx>
 #include <basic/basicdllapi.h>
@@ -32,6 +31,8 @@
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::script { struct ModuleInfo; }
 
+class ErrCode;
+class ErrCodeMsg;
 class SbMethod;
 
 class BASIC_DLLPUBLIC StarBASIC final : public SbxObject

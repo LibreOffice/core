@@ -13,12 +13,12 @@
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
+namespace com::sun::star::beans { class XPropertyChangeListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper {

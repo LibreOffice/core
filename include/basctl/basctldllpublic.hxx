@@ -12,9 +12,34 @@
 #include <sal/config.h>
 
 #include "basctldllapi.h"
-#include "scriptdocument.hxx"
-#include <sfx2/dispatch.hxx>
-#include <vcl/weld.hxx>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+
+#include <functional>
+#include <string_view>
+
+class SfxDispatcher;
+
+namespace basctl
+{
+class ScriptDocument;
+}
+namespace com::sun::star::script
+{
+class XLibraryContainer;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace weld
+{
+class Dialog;
+}
+namespace weld
+{
+class Widget;
+}
 
 namespace basctl
 {

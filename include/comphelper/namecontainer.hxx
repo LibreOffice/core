@@ -20,13 +20,19 @@
 #ifndef INCLUDED_COMPHELPER_NAMECONTAINER_HXX
 #define INCLUDED_COMPHELPER_NAMECONTAINER_HXX
 
-#include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::container
 {
 class XNameContainer;
+}
+namespace com::sun::star::uno
+{
+class Type;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 namespace comphelper

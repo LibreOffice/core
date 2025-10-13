@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/hash.hxx>
@@ -30,12 +31,14 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>
+#include <rtl/ref.hxx>
 #include <string.h>
 
 #if HAVE_FEATURE_GPGME

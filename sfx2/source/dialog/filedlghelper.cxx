@@ -49,6 +49,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <comphelper/fileurl.hxx>

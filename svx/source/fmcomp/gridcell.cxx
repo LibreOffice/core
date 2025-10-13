@@ -64,6 +64,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/sqlnode.hxx>

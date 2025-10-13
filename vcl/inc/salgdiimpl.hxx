@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 
+#include <basegfx/vector/b2enums.hxx>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
 

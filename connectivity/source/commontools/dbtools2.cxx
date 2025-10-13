@@ -20,6 +20,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbcharset.hxx>
+#include <connectivity/dbexception.hxx>
 #include <SQLStatementHelper.hxx>
 #include <unotools/confignode.hxx>
 #include <resource/sharedresources.hxx>

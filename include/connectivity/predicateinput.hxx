@@ -22,8 +22,8 @@
 
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/uno/Any.hxx>
 
+namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::i18n { class XLocaleData4; }
 namespace com::sun::star::sdbc { class XConnection; }

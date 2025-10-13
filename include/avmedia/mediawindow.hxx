@@ -20,14 +20,13 @@
 #pragma once
 
 #include <vector>
-#include <tools/gen.hxx>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/media/XPlayerListener.hpp>
 #include <comphelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 #include <avmedia/avmediadllapi.h>
 
+namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::media {
@@ -35,6 +34,7 @@ namespace com::sun::star::media {
     class XPlayerNotifier;
 }
 
+namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 namespace weld { class Window; }
 class KeyEvent;
@@ -43,6 +43,8 @@ class CommandEvent;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 enum class PointerStyle;
+class Point;
+class Size;
 
 namespace avmedia
 {

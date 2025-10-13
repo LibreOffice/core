@@ -27,6 +27,7 @@
 #include <codemaker/unotype.hxx>
 
 #include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

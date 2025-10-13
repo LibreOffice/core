@@ -21,12 +21,13 @@
 #define INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 
 #include <unordered_map>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 namespace comphelper{
 

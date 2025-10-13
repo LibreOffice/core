@@ -23,9 +23,8 @@
 
 #include <string_view>
 
-#include <codemaker/unotype.hxx>
-
 namespace rtl { class OString; }
+namespace codemaker::UnoType { enum class Sort; }
 
 namespace codemaker::java {
 

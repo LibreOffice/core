@@ -98,6 +98,7 @@
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <connectivity/dbexception.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

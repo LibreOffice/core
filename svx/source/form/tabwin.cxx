@@ -24,6 +24,7 @@
 #include <svl/itemset.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/processfactory.hxx>

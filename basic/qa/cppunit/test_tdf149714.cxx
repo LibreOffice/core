@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
+#include <comphelper/errcode.hxx>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <unotest/directories.hxx>

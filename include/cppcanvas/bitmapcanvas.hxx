@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <basegfx/vector/b2isize.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <memory>
 
+namespace basegfx { class B2ISize; }
 
 /* Definition of BitmapCanvas */
 

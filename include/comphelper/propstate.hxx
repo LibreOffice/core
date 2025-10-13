@@ -22,7 +22,6 @@
 
 #include <config_options.h>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/uno/Sequence.h>
 
 
 #include <cppuhelper/propshlp.hxx>

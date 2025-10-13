@@ -35,7 +35,9 @@
 #include <basobj.hxx>
 #include <localizationmgr.hxx>
 #include <dlged.hxx>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

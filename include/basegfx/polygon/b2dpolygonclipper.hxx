@@ -19,14 +19,15 @@
 
 #pragma once
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
     class B2DRange;
 }
+
+namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DPolygon; }
 
 namespace basegfx::utils
 {

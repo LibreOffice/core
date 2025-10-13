@@ -20,6 +20,7 @@
 #include <basctl/basctldllpublic.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editview.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
 #include <unotools/charclass.hxx>

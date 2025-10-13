@@ -31,6 +31,8 @@
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <unotools/resmgr.hxx>
 #include <sfx2/app.hxx>

@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>

@@ -22,11 +22,11 @@
 
 #include <config_options.h>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/accessibility/TextSegment.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
+namespace com::sun::star::accessibility { struct TextSegment; }
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { struct Boundary; }

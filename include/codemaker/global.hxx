@@ -25,8 +25,8 @@
 
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 
+namespace rtl { class OStringBuffer; }
 typedef ::std::vector< ::rtl::OString >             StringVector;
 
 

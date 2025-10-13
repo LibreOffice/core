@@ -21,9 +21,7 @@
 #define INCLUDED_COMPHELPER_XMLSECHELPER_HXX
 
 #include <comphelper/comphelperdllapi.h>
-
-#include <com/sun/star/security/CertificateKind.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
 #include <vector>
 
@@ -35,6 +33,18 @@ class XXMLSecurityContext;
 namespace com::sun::star::security
 {
 class XCertificate;
+}
+namespace com::sun::star::security
+{
+enum class CertificateKind;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 namespace comphelper::xmlsec

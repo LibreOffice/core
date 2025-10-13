@@ -10,6 +10,7 @@
 
 #include <basegfx/polygon/WaveLine.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 namespace basegfx
 {

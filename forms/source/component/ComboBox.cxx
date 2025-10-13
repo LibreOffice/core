@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>

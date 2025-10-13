@@ -11,8 +11,12 @@
 #pragma once
 
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+
+namespace basegfx
+{
+class B2DPolygon;
+}
 
 namespace basegfx
 {

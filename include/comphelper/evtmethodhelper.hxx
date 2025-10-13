@@ -19,8 +19,17 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::uno
+{
+class Type;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
 namespace comphelper
 {

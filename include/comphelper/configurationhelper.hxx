@@ -20,12 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_CONFIGURATIONHELPER_HXX
 #define INCLUDED_COMPHELPER_CONFIGURATIONHELPER_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
 

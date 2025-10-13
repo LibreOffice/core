@@ -17,10 +17,12 @@
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumeration.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 
 namespace basctl
 {

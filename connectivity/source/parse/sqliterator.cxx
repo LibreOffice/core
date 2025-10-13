@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <connectivity/dbexception.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sqlparse.hxx>

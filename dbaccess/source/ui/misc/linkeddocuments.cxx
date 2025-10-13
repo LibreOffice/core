@@ -41,6 +41,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
 
 namespace dbaui

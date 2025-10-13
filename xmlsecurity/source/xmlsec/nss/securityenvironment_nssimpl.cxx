@@ -34,6 +34,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <vector>
 #include <memory>
 #include <osl/thread.h>

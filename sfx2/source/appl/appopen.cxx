@@ -62,6 +62,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

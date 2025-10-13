@@ -20,11 +20,11 @@
 #pragma once
 
 #include <config_options.h>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
 
+namespace basegfx { class B2DPolygon; }
 namespace basegfx { class B2DPolyPolygon; }
 namespace basegfx { class B2DPoint; }
 

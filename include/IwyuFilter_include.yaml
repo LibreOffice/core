@@ -139,6 +139,7 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
     include/comphelper/OAccessible.hxx:
     # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext2.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
     include/comphelper/accessibleselectionhelper.hxx:
@@ -174,12 +175,22 @@ excludelist:
     - com/sun/star/task/XInteractionDisapprove.hpp
     - com/sun/star/task/XInteractionRequest.hpp
     - com/sun/star/task/XInteractionRetry.hpp
+    include/comphelper/indexedpropertyvalues.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexContainer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
     include/comphelper/SelectionMultiplex.hxx:
     # base class has to be a complete type
     - com/sun/star/view/XSelectionChangeListener.hpp
     include/comphelper/MasterPropertySetInfo.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp
+    include/comphelper/memorystream.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/io/XStream.hpp
+    - com/sun/star/io/XSeekableInputStream.hpp
+    - com/sun/star/io/XTruncate.hpp
     include/comphelper/numberedcollection.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XUntitledNumbers.hpp
@@ -196,6 +207,9 @@ excludelist:
     include/comphelper/propertystatecontainer.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyState.hpp
+    include/comphelper/propmultiplex2.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
     include/comphelper/seekableinput.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
@@ -204,6 +218,7 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XSeekable.hpp
+    - com/sun/star/io/XOutputStream.hpp
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

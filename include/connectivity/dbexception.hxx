@@ -21,9 +21,8 @@
 #define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
 #include <config_options.h>
-#include <connectivity/standardsqlstate.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 namespace com::sun::star
 {
@@ -38,6 +37,8 @@ namespace com::sun::star
         class SQLException;
     }
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace dbtools { enum class StandardSQLState; }
 
 namespace dbtools
 {

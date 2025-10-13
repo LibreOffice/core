@@ -21,15 +21,21 @@
 
 #include "basctldllapi.h"
 
-#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/io/XInputStreamProvider.hpp>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 #include <vector>
 
 class BasicManager;
+
+namespace com::sun::star::container { class XNameContainer; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::io { class XInputStreamProvider; }
+namespace com::sun::star::script { class XStorageBasedLibraryContainer; }
+namespace com::sun::star::task { class XStatusIndicator; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
 namespace basctl

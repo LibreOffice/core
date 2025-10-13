@@ -19,12 +19,13 @@
 
 #pragma once
 
-#include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 
 #include <memory>
 #include <utility>
 #include <vector>
+
+namespace rtl { template <class reference_type> class Reference; }
 
 class TypeManager;
 

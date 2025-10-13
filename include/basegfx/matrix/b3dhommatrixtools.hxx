@@ -20,11 +20,14 @@
 #pragma once
 
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/matrix/b3dhommatrix.hxx>
 
 namespace com::sun::star::drawing
 {
 struct HomogenMatrix;
+}
+namespace basegfx
+{
+class B3DHomMatrix;
 }
 
 namespace basegfx::utils

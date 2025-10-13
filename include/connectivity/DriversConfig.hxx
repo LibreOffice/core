@@ -25,11 +25,12 @@
 #include <map>
 #include <string_view>
 
-#include <com/sun/star/uno/Sequence.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <comphelper/singletonref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <unotools/confignode.hxx>
+
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 namespace connectivity
 {

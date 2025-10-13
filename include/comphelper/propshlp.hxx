@@ -26,7 +26,11 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/unoimplbase.hxx>
-#include <cppuhelper/propshlp.hxx>
+
+namespace cppu
+{
+class IPropertyArrayHelper;
+}
 
 namespace comphelper
 {

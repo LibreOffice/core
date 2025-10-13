@@ -11,6 +11,7 @@
 #include <sal/config.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <set>
 #include <vector>

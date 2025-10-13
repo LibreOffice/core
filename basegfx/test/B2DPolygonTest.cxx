@@ -23,6 +23,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 namespace basegfx
 {

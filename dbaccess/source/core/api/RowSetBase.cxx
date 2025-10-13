@@ -33,6 +33,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/standardsqlstate.hxx>
 #include <o3tl/safeint.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

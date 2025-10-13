@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 #include <memory>
 
 namespace basegfx
@@ -34,6 +34,7 @@ namespace com::sun::star::rendering
     struct ViewState;
 }
 
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 /* Definition of BitmapCanvas */
 

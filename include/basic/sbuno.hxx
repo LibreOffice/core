@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Type.hxx>
 #include <basic/sbxvar.hxx>
 #include <basic/basicdllapi.h>
 
 namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { class Type; }
 namespace com::sun::star::beans { struct Property; }
 
 class SbxObject;

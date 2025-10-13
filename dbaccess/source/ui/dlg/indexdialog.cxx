@@ -31,6 +31,7 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <osl/diagnose.h>
 
 namespace dbaui

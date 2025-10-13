@@ -23,12 +23,15 @@
 #include <comphelper/comphelperdllapi.h>
 #include <string_view>
 #include <vector>
-#include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/hash.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace comphelper { enum class DocPasswordRequestType; }
 
 namespace comphelper {
 

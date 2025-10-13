@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <i18nlangtag/languagetag.hxx>

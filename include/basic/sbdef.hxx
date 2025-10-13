@@ -22,9 +22,9 @@
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <unotools/resmgr.hxx>
 
 class ErrCode;
+struct TranslateId;
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx

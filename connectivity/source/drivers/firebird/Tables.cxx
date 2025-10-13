@@ -15,9 +15,11 @@
 #include <TConnection.hxx>
 
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <comphelper/types.hxx>
 
