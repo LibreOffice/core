@@ -1158,7 +1158,7 @@
       </node>
       <node oor:name=".uno:InsertDateFieldVar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Date (variable)</value>
+          <value xml:lang="en-US">Dat~e (variable)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1182,7 +1182,7 @@
       </node>
       <node oor:name=".uno:InsertTimeFieldVar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Time (variable)</value>
+          <value xml:lang="en-US">Time (~variable)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
