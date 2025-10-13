@@ -889,7 +889,20 @@ bool ThemeExport::writeColorSet(model::Theme const& rTheme)
             model::ThemeColorType eColorType = iterator->second;
             Color aColor = pColorSet->getColor(eColorType);
             mpFS->startElementNS(XML_a, nToken);
-            mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
+            if (!aColor.IsTransparent())
+                mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val,
+                                      I32SHEX(sal_Int32(aColor.GetRGBColor())));
+            else
+            {
+                mpFS->startElementNS(XML_a, XML_srgbClr, XML_val,
+                                     I32SHEX(sal_Int32(aColor.GetRGBColor())));
+
+                // drawingML alpha is a percentage on a 0..100000 scale.
+                sal_Int32 nAlpha = aColor.GetAlpha() * oox::drawingml::MAX_PERCENT / 255;
+                mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OUString::number(nAlpha));
+
+                mpFS->endElementNS(XML_a, XML_srgbClr);
+            }
             mpFS->endElementNS(XML_a, nToken);
         }
     }
