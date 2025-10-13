@@ -81,8 +81,6 @@ struct SFX2_DLLPUBLIC LokMouseEventData
     {}
 };
 
-#include <boost/property_tree/ptree_fwd.hpp>
-
 namespace com::sun::star::ui { struct ContextChangeEventObject; };
 
 class SFX2_DLLPUBLIC SfxLokHelper
