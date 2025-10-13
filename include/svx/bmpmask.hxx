@@ -47,7 +47,7 @@ class SvxBmpMask;
 
 class SvxBmpMaskSelectItem final : public SfxControllerItem
 {
-    SvxBmpMask  &rBmpMask;
+    SvxBmpMask  &m_rBmpMask;
 
     virtual void StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState ) override;
