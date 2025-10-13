@@ -13,3 +13,18 @@
  namespace {
  
  // See PDF Reference 1.7, page 170, table 3.36.
+diff -urN pdfium-old/core/fpdfdoc/cpdf_nametree.cpp pdfium/core/fpdfdoc/cpdf_nametree.cpp
+--- core/fpdfdoc/cpdf_nametree.cpp	2025-10-13 21:48:18.759905514 +0200
++++ core/fpdfdoc/cpdf_nametree.cpp	2025-10-13 22:00:01.912909396 +0200
+@@ -18,7 +18,11 @@
+ #include "core/fxcrt/check.h"
+ #include "core/fxcrt/ptr_util.h"
+ #include "core/fxcrt/stl_util.h"
++#ifdef USE_SYSTEM_ABSEIL
++#include <absl/container/flat_hash_set.h>
++#else
+ #include "third_party/abseil-cpp/absl/container/flat_hash_set.h"
++#endif
+ 
+ namespace {
+ 
