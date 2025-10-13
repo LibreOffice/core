@@ -421,10 +421,9 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         }
 
         std::vector<OUString> aFormats;
-        const size_t nArrLen = pDoc->GetFrameFormats()->size();
-        for( size_t i = 0; i < nArrLen; ++i )
+        for( const auto& pSwFrameFormat : (*pDoc->GetFrameFormats()) )
         {
-            const SwFrameFormat* pFormat = (*pDoc->GetFrameFormats())[ i ];
+            const SwFrameFormat* pFormat = pSwFrameFormat;
             if(pFormat->IsDefault() || pFormat->IsAuto())
                 continue;
             aFormats.push_back(pFormat->GetName().toString());
@@ -445,11 +444,13 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         Sequence<OUString> aListBoxEntries(aFormats.size());
         OUString* pEntries = aListBoxEntries.getArray();
         sal_Int16 nSelect = 0;
-        for( size_t i = 0; i < aFormats.size(); ++i )
+        sal_Int16 i = 0;
+        for( const auto& a : aFormats )
         {
-            pEntries[i] = aFormats[i];
+            pEntries[i] = a;
             if(pEntries[i] == sGraphicFormat)
                 nSelect = i;
+            ++i;
         }
         try
         {
