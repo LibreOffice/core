@@ -93,7 +93,7 @@ SheetViewID SheetViewManager::getPreviousSheetView(SheetViewID nID)
     {
         startIndex = sal_Int32(maViews.size()) - 1;
     }
-    // If we assume currnet ID is valid, so set the start to current + 1 to search
+    // If we assume current ID is valid, so set the start to current + 1 to search
     // for then next valid sheet view in the for loop.
     else if (isValidSheetViewID(nID))
     {
