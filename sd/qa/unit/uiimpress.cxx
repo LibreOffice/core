@@ -178,7 +178,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
 {
     createSdImpressDoc("odp/tdf161430.odp");
 
-    OString aJson = R"json(
+    static constexpr OUString aJson = uR"json(
 {
     "Transforms": {
         "SlideCommands": [
@@ -206,12 +206,11 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
         ]
     }
 }
-)json"_ostr;
+)json"_ustr;
 
     //transform
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"DataJson"_ustr,
-                                      uno::Any(OStringToOUString(aJson, RTL_TEXTENCODING_UTF8))),
+        comphelper::makePropertyValue(u"DataJson"_ustr, aJson),
     };
     dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
 

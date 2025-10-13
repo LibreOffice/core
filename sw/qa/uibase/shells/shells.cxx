@@ -591,7 +591,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
 {
     createSwDoc("docStructureChartExampleOriginal.odt");
-    OString aJson = R"json(
+    static constexpr OUString aJson = uR"json(
 {
     "Transforms": [
         {"Charts.ByEmbedIndex.0": [
@@ -660,12 +660,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
         }}
     ]
 }
-)json"_ostr;
+)json"_ustr;
 
     //transform
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"DataJson"_ustr,
-                                      uno::Any(OStringToOUString(aJson, RTL_TEXTENCODING_UTF8))),
+        comphelper::makePropertyValue(u"DataJson"_ustr, aJson),
     };
     dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
 
@@ -780,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
 {
     createSwDoc("docStructureChartExampleOriginal.odt");
-    OString aJson = R"json(
+    static constexpr OUString aJson = uR"json(
 {
     "Transforms": [
         { "DocumentProperties": {
@@ -852,11 +851,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
         } }
     ]
 }
-)json"_ostr;
+)json"_ustr;
 
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"DataJson"_ustr,
-                                      uno::Any(OStringToOUString(aJson, RTL_TEXTENCODING_UTF8))),
+        comphelper::makePropertyValue(u"DataJson"_ustr, aJson),
     };
     dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
 
