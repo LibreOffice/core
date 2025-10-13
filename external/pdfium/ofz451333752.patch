@@ -29,10 +29,10 @@
  
    const ByteString type = pXObject->GetDict()->GetByteStringFor("Subtype");
    if (type == "Form") {
-+    if (!m_RecursionState->PushForm(pXObject.Get()))
++    if (!recursion_state_->PushForm(pXObject.Get()))
 +        return;
      AddForm(std::move(pXObject), name);
-+    m_RecursionState->PopForm();
++    recursion_state_->PopForm();
      return;
    }
  
