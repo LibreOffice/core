@@ -1,17 +1,4 @@
 -*- Mode: diff -*-
-diff --git a/core/fpdfdoc/cpdf_metadata.cpp b/core/fpdfdoc/cpdf_metadata.cpp
-index 31564f45f..5858549ef 100644
---- a/core/fpdfdoc/cpdf_metadata.cpp
-+++ b/core/fpdfdoc/cpdf_metadata.cpp
-@@ -87,7 +87,7 @@ std::vector<UnsupportedFeature> CPDF_Metadata::CheckForSharedForm() const {
-   CFX_XMLParser parser(stream);
-   std::unique_ptr<CFX_XMLDocument> doc = parser.Parse();
-   if (!doc)
--    return {};
-+    return std::vector<UnsupportedFeature>();
- 
-   std::vector<UnsupportedFeature> unsupported;
-   CheckForSharedFormInternal(/*depth=*/0, doc->GetRoot(), &unsupported);
 diff --git a/core/fxge/cfx_face.cpp b/core/fxge/cfx_face.cpp
 index 7d9cd0f44..0d0a311aa 100644
 --- a/core/fxge/cfx_face.cpp
@@ -25,58 +12,6 @@ index 7d9cd0f44..0d0a311aa 100644
  }
  
  FX_RECT CFX_Face::GetCharBBox(uint32_t code, int glyph_index) {
-diff --git a/core/fpdfdoc/cpdf_action.cpp b/core/fpdfdoc/cpdf_action.cpp
-index a5b687d76..076a260d5 100644
---- a/core/fpdfdoc/cpdf_action.cpp
-+++ b/core/fpdfdoc/cpdf_action.cpp
-@@ -21,7 +21,7 @@
- 
- namespace {
- 
--constexpr auto kActionTypeStrings = fxcrt::ToArray<const char*>({
-+std::array<const char*, 18> kActionTypeStrings = {
-     "GoTo",
-     "GoToR",
-     "GoToE",
-@@ -40,7 +40,7 @@ constexpr auto kActionTypeStrings = fxcrt::ToArray<const char*>({
-     "Rendition",
-     "Trans",
-     "GoTo3DView",
--});
-+};
- 
- }  // namespace
- 
-diff --git a/core/fpdfdoc/cpdf_dest.cpp b/core/fpdfdoc/cpdf_dest.cpp
-index 8026a75d5..34c20d62f 100644
---- a/core/fpdfdoc/cpdf_dest.cpp
-+++ b/core/fpdfdoc/cpdf_dest.cpp
-@@ -21,9 +21,9 @@ namespace {
- 
- // These arrays are indexed by the PDFDEST_VIEW_* constants.
- 
--constexpr auto kZoomModes =
--    fxcrt::ToArray<const char*>({"Unknown", "XYZ", "Fit", "FitH", "FitV",
--                                 "FitR", "FitB", "FitBH", "FitBV"});
-+std::array<const char*, 9>  kZoomModes = {
-+    "Unknown", "XYZ", "Fit", "FitH", "FitV",
-+                                 "FitR", "FitB", "FitBH", "FitBV"};
- 
- constexpr auto kZoomModeMaxParamCount =
-     fxcrt::ToArray<const uint8_t>({0, 3, 0, 1, 1, 4, 0, 1, 1});
---- pdfium/fpdfsdk/fpdf_annot.cpp.orig	2024-08-15 10:01:30.443712200 +0200
-+++ pdfium/fpdfsdk/fpdf_annot.cpp	2024-08-15 10:04:41.161274500 +0200
-@@ -1079,8 +1079,8 @@
-   if (appearanceMode < 0 || appearanceMode >= FPDF_ANNOT_APPEARANCEMODE_COUNT)
-     return false;
- 
--  static constexpr auto kModeKeyForMode =
--      fxcrt::ToArray<const char*>({"N", "R", "D"});
-+  static constexpr std::array<const char*, 3UL> kModeKeyForMode
-+      ({"N", "R", "D"});
-   static_assert(kModeKeyForMode.size() == FPDF_ANNOT_APPEARANCEMODE_COUNT,
-                 "length of kModeKeyForMode should be equal to "
-                 "FPDF_ANNOT_APPEARANCEMODE_COUNT");
 --- a/core/fxcrt/fx_memory_wrappers.h	2025-02-13 13:38:35.761778900 +0100
 +++ b/core/fxcrt/fx_memory_wrappers.h	2025-02-13 13:38:48.136654800 +0100
 @@ -33,9 +33,6 @@
@@ -89,3 +24,147 @@ index 8026a75d5..34c20d62f 100644
  
    using value_type = T;
    using pointer = T*;
+diff --git a/core/fpdfapi/edit/cpdf_pagecontentgenerator.cpp b/core/fpdfapi/edit/cpdf_pagecontentgenerator.cpp
+index a8e9e6090..0c341ab7f 100644
+--- a/core/fpdfapi/edit/cpdf_pagecontentgenerator.cpp
++++ b/core/fpdfapi/edit/cpdf_pagecontentgenerator.cpp
+@@ -289,7 +289,7 @@ void CloneResourcesDictEntries(CPDF_Document* doc,
+           pdfium::Contains(kResourceKeys, key)) {
+         RetainPtr<const CPDF_Object> direct_object = object->GetDirect();
+         if (direct_object) {
+-          entries_to_maybe_clone.emplace_back(key, std::move(direct_object));
++          entries_to_maybe_clone.push_back(KeyAndObject{key, std::move(direct_object)});
+         }
+       }
+     }
+diff --git a/core/fxcrt/numerics/safe_conversions_impl.h b/core/fxcrt/numerics/safe_conversions_impl.h
+index b51078761..5e5d9fca7 100644
+--- a/core/fxcrt/numerics/safe_conversions_impl.h
++++ b/core/fxcrt/numerics/safe_conversions_impl.h
+@@ -373,7 +373,7 @@ INTEGER_FOR_DIGITS_AND_SIGN(uint64_t);
+ 
+ template <size_t Size, bool IsSigned>
+ using IntegerForDigitsAndSign =
+-    IntegerForDigitsAndSignImpl<Size, IsSigned>::type;
++    typename IntegerForDigitsAndSignImpl<Size, IsSigned>::type;
+ 
+ // WARNING: We have no IntegerForSizeAndSign<16, *>. If we ever add one to
+ // support 128-bit math, then the ArithmeticPromotion template below will need
+@@ -437,7 +437,7 @@ struct BigEnoughPromotionImpl<Lhs, Rhs, true, false> {
+ };
+ 
+ template <typename Lhs, typename Rhs>
+-using BigEnoughPromotion = BigEnoughPromotionImpl<Lhs, Rhs>::type;
++using BigEnoughPromotion = typename BigEnoughPromotionImpl<Lhs, Rhs>::type;
+ 
+ template <typename Lhs, typename Rhs>
+ inline constexpr bool kIsBigEnoughPromotionContained =
+@@ -480,7 +480,7 @@ struct FastIntegerArithmeticPromotionImpl<Lhs, Rhs> {
+ 
+ template <typename Lhs, typename Rhs>
+ using FastIntegerArithmeticPromotion =
+-    FastIntegerArithmeticPromotionImpl<Lhs, Rhs>::type;
++    typename FastIntegerArithmeticPromotionImpl<Lhs, Rhs>::type;
+ 
+ template <typename Lhs, typename Rhs>
+ inline constexpr bool kIsFastIntegerArithmeticPromotionContained =
+@@ -494,7 +494,7 @@ struct ArithmeticOrIntegralConstant {
+ template <typename T>
+   requires IntegralConstantLike<T>
+ struct ArithmeticOrIntegralConstant<T> {
+-  using type = T::value_type;
++  using type = typename T::value_type;
+ };
+ 
+ // Extracts the underlying type from an enum.
+@@ -556,7 +556,7 @@ struct UnderlyingTypeImpl<StrictNumeric<T>> {
+   using type = T;
+ };
+ template <typename T>
+-using UnderlyingType = UnderlyingTypeImpl<T>::type;
++using UnderlyingType = typename UnderlyingTypeImpl<T>::type;
+ 
+ template <typename T>
+ inline constexpr bool kIsNumeric = std::is_arithmetic_v<UnderlyingType<T>>;
+diff --git a/core/fpdfdoc/cpdf_nametree.cpp b/core/fpdfdoc/cpdf_nametree.cpp
+index 47fae4b61..65e3e1c40 100644
+--- a/core/fpdfdoc/cpdf_nametree.cpp
++++ b/core/fpdfdoc/cpdf_nametree.cpp
+@@ -191,7 +191,7 @@ bool UpdateNodesAndLimitsUponDeletion(CPDF_Dictionary* pNode,
+ }
+ 
+ bool IsTraversedObject(const CPDF_Object* obj,
+-                       absl::flat_hash_set<uint32_t>* seen_obj_nums) {
++                       std::set<uint32_t>* seen_obj_nums) {
+   uint32_t obj_num = obj->GetObjNum();
+   if (!obj_num) {
+     return false;
+@@ -202,7 +202,7 @@ bool IsTraversedObject(const CPDF_Object* obj,
+ }
+ 
+ bool IsArrayWithTraversedObject(const CPDF_Array* array,
+-                                absl::flat_hash_set<uint32_t>* seen_obj_nums) {
++                                std::set<uint32_t>* seen_obj_nums) {
+   if (IsTraversedObject(array, seen_obj_nums)) {
+     return true;
+   }
+@@ -227,7 +227,7 @@ RetainPtr<const CPDF_Object> SearchNameNodeByNameInternal(
+     int nLevel,
+     size_t* nIndex,
+     NodeToInsert* node_to_insert,
+-    absl::flat_hash_set<uint32_t>* seen_obj_nums) {
++    std::set<uint32_t>* seen_obj_nums) {
+   if (nLevel > kNameTreeMaxRecursion) {
+     return nullptr;
+   }
+@@ -317,7 +317,7 @@ RetainPtr<const CPDF_Object> SearchNameNodeByName(
+     const WideString& csName,
+     NodeToInsert* node_to_insert) {
+   size_t nIndex = 0;
+-  absl::flat_hash_set<uint32_t> seen_obj_nums;
++  std::set<uint32_t> seen_obj_nums;
+   return SearchNameNodeByNameInternal(pNode, csName, 0, &nIndex, node_to_insert,
+                                       &seen_obj_nums);
+ }
+@@ -398,7 +398,7 @@ std::optional<IndexSearchResult> SearchNameNodeByIndex(
+ // Get the total number of key-value pairs in the tree with root |pNode|.
+ size_t CountNamesInternal(const CPDF_Dictionary* pNode,
+                           int nLevel,
+-                          absl::flat_hash_set<const CPDF_Dictionary*>& seen) {
++                          std::set<const CPDF_Dictionary*>& seen) {
+   if (nLevel > kNameTreeMaxRecursion) {
+     return 0;
+   }
+@@ -535,7 +535,7 @@ RetainPtr<const CPDF_Array> CPDF_NameTree::LookupNamedDest(
+ }
+ 
+ size_t CPDF_NameTree::GetCount() const {
+-  absl::flat_hash_set<const CPDF_Dictionary*> seen;
++  std::set<const CPDF_Dictionary*> seen;
+   return CountNamesInternal(root_.Get(), 0, seen);
+ }
+ 
+diff --git a/core/fxcrt/span.h b/core/fxcrt/span.h
+index bad07b723..b960f90b4 100644
+--- a/core/fxcrt/span.h
++++ b/core/fxcrt/span.h
+@@ -791,9 +791,6 @@ class GSL_POINTER span {
+   template <typename OtherElementType,
+             size_t OtherExtent,
+             typename OtherInternalPtrType>
+-    requires((OtherExtent == dynamic_extent || extent == OtherExtent) &&
+-             std::equality_comparable_with<const element_type,
+-                                           const OtherElementType>)
+   friend constexpr bool operator==(
+       span lhs,
+       span<OtherElementType, OtherExtent, OtherInternalPtrType> rhs) {
+@@ -826,9 +823,6 @@ class GSL_POINTER span {
+   template <typename OtherElementType,
+             size_t OtherExtent,
+             typename OtherInternalPtrType>
+-    requires((OtherExtent == dynamic_extent || extent == OtherExtent) &&
+-             std::three_way_comparable_with<const element_type,
+-                                            const OtherElementType>)
+   friend constexpr auto operator<=>(
+       span lhs,
+       span<OtherElementType, OtherExtent, OtherInternalPtrType> rhs) {

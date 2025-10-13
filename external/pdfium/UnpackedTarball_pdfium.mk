@@ -22,9 +22,6 @@ pdfium_patches += tounicodeinfo.patch.1
 
 pdfium_patches += system-fast_float.diff
 
-# https://pdfium-review.googlesource.com/c/pdfium/+/130970
-pdfium_patches += retrieve-MIME-type-from-PDF-attachments.patch.1
-
 ifeq ($(OS),WNT)
 pdfium_patches += pdfium-vs2019-arm64_no-__umulh.patch.1
 endif
@@ -49,9 +46,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/bigint/BigUnsignedInABase.cc third_party/bigint/BigUnsignedInABase.cpp && \
     mv core/fxcrt/debug/alias.cc core/fxcrt/debug/alias.cpp && \
     mv core/fxcrt/win/win_util.cc core/fxcrt/win/win_util.cpp && \
-    mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
-    mv third_party/abseil-cpp/absl/types/bad_optional_access.cc third_party/abseil-cpp/absl/types/bad_optional_access.cpp && \
-    mv third_party/abseil-cpp/absl/types/bad_variant_access.cc third_party/abseil-cpp/absl/types/bad_variant_access.cpp \
+    mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:

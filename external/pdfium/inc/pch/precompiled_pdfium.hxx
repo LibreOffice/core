@@ -31,6 +31,7 @@
 #include <agg_vcgen_stroke.h>
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cassert>
 #include <cfloat>
 #include <climits>
@@ -62,6 +63,7 @@
 #include <tuple>
 #include <type_traits>
 #include <utility>
+#include <variant>
 #include <vector>
 #include <wchar.h>
 #endif // PCH_LEVEL >= 1
@@ -298,6 +300,7 @@
 #include <core/fxcrt/compiler_specific.h>
 #include <core/fxcrt/containers/adapters.h>
 #include <core/fxcrt/containers/contains.h>
+#include <core/fxcrt/containers/unique_ptr_adapters.h>
 #include <core/fxcrt/css/cfx_css.h>
 #include <core/fxcrt/css/cfx_csscolorvalue.h>
 #include <core/fxcrt/css/cfx_csscomputedstyle.h>
@@ -478,7 +481,7 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
-#include <third_party/abseil-cpp/absl/types/variant.h>
+#include <third_party/abseil-cpp/absl/container/flat_hash_set.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>

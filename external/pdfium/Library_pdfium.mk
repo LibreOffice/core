@@ -101,13 +101,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_renderpage \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_signature \
-	UnpackedTarball/pdfium/constants/annotation_common \
-	UnpackedTarball/pdfium/constants/appearance \
-	UnpackedTarball/pdfium/constants/form_fields \
-	UnpackedTarball/pdfium/constants/page_object \
-	UnpackedTarball/pdfium/constants/stream_dict_common \
-	UnpackedTarball/pdfium/constants/transparency \
-	UnpackedTarball/pdfium/constants/font_encodings \
 ))
 
 # fdrm
@@ -135,7 +128,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # fpdfapi
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/Adobe-CNS1-UCS2_5 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/B5pc-H_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/B5pc-V_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/CNS-EUC-H_0 \
@@ -149,8 +141,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/UniCNS-UCS2-H_3 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/UniCNS-UCS2-V_3 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/UniCNS-UTF16-H_0 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/CNS1/cmaps_cns1 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/Adobe-GB1-UCS2_5 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/GB-EUC-H_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/GB-EUC-V_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/GBK-EUC-H_2 \
@@ -163,7 +153,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/GBpc-EUC-V_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/UniGB-UCS2-H_4 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/UniGB-UCS2-V_4 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/GB1/cmaps_gb1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/83pv-RKSJ-H_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/90ms-RKSJ-H_2 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/90ms-RKSJ-V_2 \
@@ -172,7 +161,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/90pv-RKSJ-H_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/Add-RKSJ-H_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/Add-RKSJ-V_1 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/Adobe-Japan1-UCS2_4 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/EUC-H_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/EUC-V_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/Ext-RKSJ-H_2 \
@@ -183,8 +171,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/UniJIS-UCS2-H_4 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/UniJIS-UCS2-V_4 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/V_1 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/Japan1/cmaps_japan1 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/Adobe-Korea1-UCS2_2 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/KSC-EUC-H_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/KSC-EUC-V_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/KSCms-UHC-HW-H_1 \
@@ -195,7 +181,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/UniKS-UCS2-H_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/UniKS-UCS2-V_1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/UniKS-UTF16-H_0 \
-    UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/cmaps_korea1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/fpdf_cmaps \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pagecontentgenerator \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_npagetooneexporter \
@@ -553,14 +538,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/agg23/agg_vcgen_dash \
     UnpackedTarball/pdfium/third_party/agg23/agg_vcgen_stroke \
 ))
-
-ifneq ($(SYSTEM_ABSEIL),TRUE)
-# third_party/abseil-cpp
-$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/types/bad_optional_access \
-    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/types/bad_variant_access \
-))
-endif
 
 ifneq ($(SYSTEM_OPENJPEG2),TRUE)
 # third_party/fx_libopenjpeg
