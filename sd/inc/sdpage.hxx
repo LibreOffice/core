@@ -168,7 +168,7 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt = OUString());
+    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt = OUString(), const sal_uInt16 nPagePreviewNum = 0xffff);
     SD_DLLPUBLIC rtl::Reference<SdrObject> CreateDefaultPresObj(PresObjKind eObjKind);
     SD_DLLPUBLIC void DestroyDefaultPresObj(PresObjKind eObjKind);
     SD_DLLPUBLIC SdrObject* GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
