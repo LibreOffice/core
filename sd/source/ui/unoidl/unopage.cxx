@@ -1494,6 +1494,9 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
             case PresObjKind::Handout:
                 aShapeType += "HandoutShape";
                 break;
+            case PresObjKind::PagePreview:
+                aShapeType += "PageShape";
+                break;
             case PresObjKind::Notes:
                 aShapeType += "NotesShape";
                 break;
