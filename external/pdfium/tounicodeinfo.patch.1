@@ -1,7 +1,7 @@
 diff -ru pdfium.orig/fpdfsdk/fpdf_edittext.cpp pdfium/fpdfsdk/fpdf_edittext.cpp
 --- pdfium.orig/fpdfsdk/fpdf_edittext.cpp	2025-08-21 16:56:03.855282337 +0100
 +++ pdfium/fpdfsdk/fpdf_edittext.cpp	2025-08-21 17:18:56.347453326 +0100
-@@ -958,6 +958,26 @@
+@@ -960,6 +960,26 @@
    return true;
  }
  
@@ -20,14 +20,14 @@ diff -ru pdfium.orig/fpdfsdk/fpdf_edittext.cpp pdfium/fpdfsdk/fpdf_edittext.cpp
 +
 +  // SAFETY: caller ensures `buffer` points to at least `buflen` bytes.
 +  *out_buflen = DecodeStreamMaybeCopyAndReturnLength(
-+      pStream, UNSAFE_BUFFERS(pdfium::make_span(buffer, buflen)));
++      pStream, UNSAFE_BUFFERS(pdfium::span(buffer, buflen)));
 +
 +  return true;
 +}
 +
  FPDF_EXPORT int FPDF_CALLCONV FPDFFont_GetIsEmbedded(FPDF_FONT font) {
    auto* cfont = CPDFFontFromFPDFFont(font);
-   if (!cfont)
+   if (!cfont) {
 diff -ru pdfium.orig/public/fpdf_edit.h pdfium/public/fpdf_edit.h
 --- pdfium.orig/public/fpdf_edit.h	2025-08-21 16:56:03.860206877 +0100
 +++ pdfium/public/fpdf_edit.h	2025-08-21 17:15:06.289917550 +0100
