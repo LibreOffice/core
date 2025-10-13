@@ -4683,10 +4683,16 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
         for (sal_Int32 i = 0; i < nSlideCount; ++i)
         {
             SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(i));
+            SdPage* pPage = SdPage::getImplementation(pSlide);
+            if (!pPage)
+            {
+                SAL_WARN("sd", "slide: " << i << " is disposed, skipping");
+                continue;
+            }
+
             bool bIsVisible = true; // default visible
             pSlide->getPropertyValue("Visible") >>= bIsVisible;
 
-            SdPage* pPage = SdPage::getImplementation(pSlide);
             if (!bIsVisible)
             {
                 auto aSlideNode = aJsonWriter.startStruct();
@@ -4704,25 +4710,22 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("index", i);
                 aJsonWriter.put("uniqueID", pPage->GetUniqueID());
 
-                if (pPage)
+                auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
+                aJsonWriter.put("name", aName);
+
+                const Size aSlizeSize = const_cast<SdXImpressDocument*>(this)->getPartSize(i);
+                aJsonWriter.put("slideWidth", aSlizeSize.getWidth());
+                aJsonWriter.put("slideHeight", aSlizeSize.getHeight());
+
+                if (bAllyState)
                 {
-                    auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
-                    aJsonWriter.put("name", aName);
-
-                    const Size aSlizeSize = const_cast<SdXImpressDocument*>(this)->getPartSize(i);
-                    aJsonWriter.put("slideWidth", aSlizeSize.getWidth());
-                    aJsonWriter.put("slideHeight", aSlizeSize.getHeight());
-
-                    if (bAllyState)
+                    OUStringBuffer aHtml;
+                    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+                    if (pOutliner)
                     {
-                        OUStringBuffer aHtml;
-                        SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
-                        if (pOutliner)
-                        {
-                            SdHTMLFilter::ExportPage(pOutliner, pPage, aHtml);
-                            aJsonWriter.put("a11y", aHtml.makeStringAndClear());
-                            pOutliner->Clear();
-                        }
+                        SdHTMLFilter::ExportPage(pOutliner, pPage, aHtml);
+                        aJsonWriter.put("a11y", aHtml.makeStringAndClear());
+                        pOutliner->Clear();
                     }
                 }
 
@@ -4730,7 +4733,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("empty", bIsDrawPageEmpty);
 
                 // Notes
-                SdPage* pNotesPage = pPage ? mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes) : nullptr;
+                SdPage* pNotesPage = mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes);
                 if (pNotesPage)
                 {
                     SdrObject* pItObj = nullptr;
