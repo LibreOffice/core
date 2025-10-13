@@ -119,55 +119,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="vscrollbar-policy">always</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="searchfinds">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="model">liststore</property>
-                <property name="headers-visible">False</property>
-                <property name="headers-clickable">False</property>
-                <property name="search-column">0</property>
-                <property name="show-expanders">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn0"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="searchfinds-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfind|extended_tip|searchfinds">Lists the positions in the document that the searched term is found.</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkBox" id="searchresultscontainer">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -233,6 +184,55 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="vscrollbar-policy">always</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTreeView" id="searchfinds">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore</property>
+                <property name="headers-visible">False</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
+                <property name="show-expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn0"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="searchfinds-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfind|extended_tip|searchfinds">Lists the positions in the document that the searched term is found.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
