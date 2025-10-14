@@ -20,13 +20,13 @@
 ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShellOri)
     : GenericDialogController(pParent, u"modules/scalc/ui/dataform.ui"_ustr, u"DataFormDialog"_ustr)
     , m_rTabViewShell(rTabViewShellOri)
-    , aColLength(0)
-    , nCurrentRow(0)
-    , nStartCol(0)
-    , nEndCol(0)
-    , nStartRow(0)
-    , nEndRow(0)
-    , nTab(0)
+    , m_aColLength(0)
+    , m_nCurrentRow(0)
+    , m_nStartCol(0)
+    , m_nEndCol(0)
+    , m_nStartRow(0)
+    , m_nEndRow(0)
+    , m_nTab(0)
     , m_xBtnNew(m_xBuilder->weld_button(u"new"_ustr))
     , m_xBtnDelete(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xBtnRestore(m_xBuilder->weld_button(u"restore"_ustr))
@@ -37,12 +37,12 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
     , m_xGrid(m_xBuilder->weld_grid(u"grid"_ustr))
     , m_xFixedText(m_xBuilder->weld_label(u"label"_ustr))
 {
-    sNewRecord = m_xFixedText->get_label();
+    m_sNewRecord = m_xFixedText->get_label();
 
     //read header from current document, and add new controls
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
 
-    pDoc = &rViewData.GetDocument();
+    m_pDoc = &rViewData.GetDocument();
 
     {
         ScRange aRange;
@@ -50,15 +50,15 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
         ScAddress aStart = aRange.aStart;
         ScAddress aEnd = aRange.aEnd;
 
-        nStartCol = aStart.Col();
-        nEndCol = aEnd.Col();
-        nStartRow   = aStart.Row();
-        nEndRow = aEnd.Row();
+        m_nStartCol = aStart.Col();
+        m_nEndCol = aEnd.Col();
+        m_nStartRow = aStart.Row();
+        m_nEndRow = aEnd.Row();
 
-        nTab = rViewData.CurrentTabForData();
+        m_nTab = rViewData.CurrentTabForData();
         bool bNoSelection(false);
         //if there is no selection
-        if ((nStartCol == nEndCol) && (nStartRow == nEndRow))
+        if ((m_nStartCol == m_nEndCol) && (m_nStartRow == m_nEndRow))
             bNoSelection = true;
 
         if (bNoSelection)
@@ -66,12 +66,12 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             //find last not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                nEndCol++;
-                OUString aColName = pDoc->GetString(nEndCol, nStartRow, nTab);
-                int nColWidth = pDoc->GetColWidth( nEndCol, nTab );
+                m_nEndCol++;
+                OUString aColName = m_pDoc->GetString(m_nEndCol, m_nStartRow, m_nTab);
+                int nColWidth = m_pDoc->GetColWidth(m_nEndCol, m_nTab);
                 if (aColName.isEmpty() && nColWidth)
                 {
-                    nEndCol--;
+                    m_nEndCol--;
                     break;
                 }
             }
@@ -79,15 +79,15 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             //find first not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                if (nStartCol <= 0)
+                if (m_nStartCol <= 0)
                     break;
-                nStartCol--;
+                m_nStartCol--;
 
-                OUString aColName = pDoc->GetString(nStartCol, nStartRow, nTab);
-                int nColWidth = pDoc->GetColWidth( nEndCol, nTab );
+                OUString aColName = m_pDoc->GetString(m_nStartCol, m_nStartRow, m_nTab);
+                int nColWidth = m_pDoc->GetColWidth(m_nEndCol, m_nTab);
                 if (aColName.isEmpty() && nColWidth)
                 {
-                    nStartCol++;
+                    m_nStartCol++;
                     break;
                 }
             }
@@ -95,23 +95,23 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             //skip leading hide column
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                int nColWidth = pDoc->GetColWidth( nStartCol, nTab );
+                int nColWidth = m_pDoc->GetColWidth(m_nStartCol, m_nTab);
                 if (nColWidth)
                     break;
-                nStartCol++;
+                m_nStartCol++;
             }
 
-            if (nEndCol < nStartCol)
-                nEndCol = nStartCol;
+            if (m_nEndCol < m_nStartCol)
+                m_nEndCol = m_nStartCol;
 
             //find last not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
-                nEndRow++;
-                OUString aColName = pDoc->GetString(nStartCol, nEndRow, nTab);
+                m_nEndRow++;
+                OUString aColName = m_pDoc->GetString(m_nStartCol, m_nEndRow, m_nTab);
                 if (aColName.isEmpty())
                 {
-                    nEndRow--;
+                    m_nEndRow--;
                     break;
                 }
             }
@@ -119,34 +119,34 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             //find first not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
-                if (nStartRow <= 0)
+                if (m_nStartRow <= 0)
                     break;
-                nStartRow--;
+                m_nStartRow--;
 
-                OUString aColName = pDoc->GetString(nStartCol, nStartRow, nTab);
+                OUString aColName = m_pDoc->GetString(m_nStartCol, m_nStartRow, m_nTab);
                 if (aColName.isEmpty())
                 {
-                    nStartRow++;
+                    m_nStartRow++;
                     break;
                 }
             }
 
-            if (nEndRow < nStartRow)
-                nEndRow = nStartRow;
+            if (m_nEndRow < m_nStartRow)
+                m_nEndRow = m_nStartRow;
         }
 
-        nCurrentRow = nStartRow + 1;
+        m_nCurrentRow = m_nStartRow + 1;
 
-        aColLength = nEndCol - nStartCol + 1;
+        m_aColLength = m_nEndCol - m_nStartCol + 1;
 
         //new the controls
-        m_aEntries.reserve(aColLength);
+        m_aEntries.reserve(m_aColLength);
 
         sal_Int32 nGridRow = 0;
-        for(sal_uInt16 nIndex = 0; nIndex < aColLength; ++nIndex)
+        for (sal_uInt16 nIndex = 0; nIndex < m_aColLength; ++nIndex)
         {
-            OUString aFieldName = pDoc->GetString(nIndex + nStartCol, nStartRow, nTab);
-            int nColWidth = pDoc->GetColWidth( nIndex + nStartCol, nTab );
+            OUString aFieldName = m_pDoc->GetString(nIndex + m_nStartCol, m_nStartRow, m_nTab);
+            int nColWidth = m_pDoc->GetColWidth(nIndex + m_nStartCol, m_nTab);
             if (nColWidth)
             {
                 m_aEntries.emplace_back(new ScDataFormFragment(m_xGrid.get(), nGridRow));
@@ -171,7 +171,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
 
     FillCtrls();
 
-    m_xSlider->vadjustment_configure(0, nEndRow - nStartRow + 1, 1, 10, 1);
+    m_xSlider->vadjustment_configure(0, m_nEndRow - m_nStartRow + 1, 1, 10, 1);
 
     m_xBtnNew->connect_clicked(LINK( this, ScDataFormDlg, Impl_NewHdl));
     m_xBtnPrev->connect_clicked(LINK( this, ScDataFormDlg, Impl_PrevHdl));
@@ -192,13 +192,13 @@ ScDataFormDlg::~ScDataFormDlg()
 
 void ScDataFormDlg::FillCtrls()
 {
-    for (sal_uInt16 i = 0; i < aColLength; ++i)
+    for (sal_uInt16 i = 0; i < m_aColLength; ++i)
     {
         if (m_aEntries[i])
         {
-            if (nCurrentRow<=nEndRow && pDoc)
+            if (m_nCurrentRow <= m_nEndRow && m_pDoc)
             {
-                OUString aFieldName(pDoc->GetString(i + nStartCol, nCurrentRow, nTab));
+                OUString aFieldName(m_pDoc->GetString(i + m_nStartCol, m_nCurrentRow, m_nTab));
                 m_aEntries[i]->m_xEdit->set_text(aFieldName);
             }
             else
@@ -206,18 +206,17 @@ void ScDataFormDlg::FillCtrls()
         }
     }
 
-    if (nCurrentRow <= nEndRow)
+    if (m_nCurrentRow <= m_nEndRow)
     {
-        OUString sLabel =
-            OUString::number(static_cast<sal_Int32>(nCurrentRow - nStartRow)) +
-            " / " +
-            OUString::number(static_cast<sal_Int32>(nEndRow - nStartRow));
+        OUString sLabel = OUString::number(static_cast<sal_Int32>(m_nCurrentRow - m_nStartRow))
+                          + " / "
+                          + OUString::number(static_cast<sal_Int32>(m_nEndRow - m_nStartRow));
         m_xFixedText->set_label(sLabel);
     }
     else
-        m_xFixedText->set_label(sNewRecord);
+        m_xFixedText->set_label(m_sNewRecord);
 
-    m_xSlider->vadjustment_set_value(nCurrentRow-nStartRow-1);
+    m_xSlider->vadjustment_set_value(m_nCurrentRow - m_nStartRow - 1);
 }
 
 IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, weld::Entry&, rEdit, void)
@@ -230,7 +229,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 {
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
-    if ( !pDoc )
+    if (!m_pDoc)
         return;
 
     bool bHasData = std::any_of(m_aEntries.begin(), m_aEntries.end(),
@@ -239,12 +238,13 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
     if ( !bHasData )
         return;
 
-    m_rTabViewShell.DataFormPutData(nCurrentRow, nStartRow, nStartCol, nEndRow, nEndCol, m_aEntries, aColLength);
-    nCurrentRow++;
-    if (nCurrentRow >= nEndRow + 2)
+    m_rTabViewShell.DataFormPutData(m_nCurrentRow, m_nStartRow, m_nStartCol, m_nEndRow, m_nEndCol,
+                                    m_aEntries, m_aColLength);
+    m_nCurrentRow++;
+    if (m_nCurrentRow >= m_nEndRow + 2)
     {
-        nEndRow++;
-        m_xSlider->vadjustment_set_upper(nEndRow - nStartRow + 1);
+        m_nEndRow++;
+        m_xSlider->vadjustment_set_upper(m_nEndRow - m_nStartRow + 1);
     }
     SetButtonState();
     FillCtrls();
@@ -254,10 +254,10 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, weld::Button&, void)
 {
-    if (pDoc)
+    if (m_pDoc)
     {
-        if ( nCurrentRow > nStartRow +1 )
-            nCurrentRow--;
+        if (m_nCurrentRow > m_nStartRow + 1)
+            m_nCurrentRow--;
 
         SetButtonState();
         FillCtrls();
@@ -266,10 +266,10 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, weld::Button&, void)
 {
-    if (pDoc)
+    if (m_pDoc)
     {
-        if ( nCurrentRow <= nEndRow)
-            nCurrentRow++;
+        if (m_nCurrentRow <= m_nEndRow)
+            m_nCurrentRow++;
 
         SetButtonState();
         FillCtrls();
@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, weld::Button&, void)
 {
-    if (pDoc)
+    if (m_pDoc)
     {
         FillCtrls();
     }
@@ -288,12 +288,12 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, weld::Button&, void)
 {
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
-    if (!pDoc)
+    if (!m_pDoc)
         return;
 
-    ScRange aRange(nStartCol, nCurrentRow, nTab, nEndCol, nCurrentRow, nTab);
-    pDoc->DeleteRow(aRange);
-    nEndRow--;
+    ScRange aRange(m_nStartCol, m_nCurrentRow, m_nTab, m_nEndCol, m_nCurrentRow, m_nTab);
+    m_pDoc->DeleteRow(aRange);
+    m_nEndRow--;
 
     SetButtonState();
     rDocSh.GetUndoManager()->Clear();
@@ -311,14 +311,14 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl, weld::Button&, void)
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl, weld::ScrolledWindow&, void)
 {
     auto nOffset = m_xSlider->vadjustment_get_value();
-    nCurrentRow = nStartRow + nOffset + 1;
+    m_nCurrentRow = m_nStartRow + nOffset + 1;
     SetButtonState();
     FillCtrls();
 }
 
 void ScDataFormDlg::SetButtonState()
 {
-    if (nCurrentRow > nEndRow)
+    if (m_nCurrentRow > m_nEndRow)
     {
         m_xBtnDelete->set_sensitive( false );
         m_xBtnNext->set_sensitive( false );
@@ -329,7 +329,7 @@ void ScDataFormDlg::SetButtonState()
         m_xBtnNext->set_sensitive(true);
     }
 
-    if (nCurrentRow == nStartRow + 1)
+    if (m_nCurrentRow == m_nStartRow + 1)
         m_xBtnPrev->set_sensitive( false );
     else
         m_xBtnPrev->set_sensitive(true);

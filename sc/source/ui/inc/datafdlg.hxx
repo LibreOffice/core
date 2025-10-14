@@ -22,17 +22,17 @@ class ScDocument;
 class ScDataFormDlg : public weld::GenericDialogController
 {
 private:
-    OUString        sNewRecord;
+    OUString m_sNewRecord;
 
     ScTabViewShell& m_rTabViewShell;
-    ScDocument*     pDoc;
-    sal_uInt16      aColLength;
-    SCROW           nCurrentRow;
-    SCCOL           nStartCol;
-    SCCOL           nEndCol;
-    SCROW           nStartRow;
-    SCROW           nEndRow;
-    SCTAB           nTab;
+    ScDocument* m_pDoc;
+    sal_uInt16 m_aColLength;
+    SCROW m_nCurrentRow;
+    SCCOL m_nStartCol;
+    SCCOL m_nEndCol;
+    SCROW m_nStartRow;
+    SCROW m_nEndRow;
+    SCTAB m_nTab;
 
     std::unique_ptr<weld::Button> m_xBtnNew;
     std::unique_ptr<weld::Button> m_xBtnDelete;
