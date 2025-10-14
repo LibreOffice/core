@@ -402,4 +402,13 @@ OUString qtToVclStringWithAccelerator(const QString& rText)
     return toOUString(sModified.replace("&&", "&"));
 }
 
+QString toRichTextTooltip(const OUString& rText)
+{
+    if (rText.isEmpty())
+        return QString();
+
+    return QStringLiteral(u"<html>") + toQString(rText).toHtmlEscaped()
+           + QStringLiteral(u"</html>");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

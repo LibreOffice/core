@@ -184,6 +184,13 @@ QString vclToQtStringWithAccelerator(const OUString& rText);
  */
 OUString qtToVclStringWithAccelerator(const QString& rText);
 
+/**
+ * Returns a rich text (HTML) representation of the given text, to be
+ * used for tooltips, in order to ensure they are wrapped (see tdf#162297 and tdf#166805).
+ * For empty strings, an empty string is returned.
+ */
+QString toRichTextTooltip(const OUString& rText);
+
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      const QString& rString)
