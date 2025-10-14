@@ -613,7 +613,7 @@ bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yM
 
 OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const LanguageTag& rPrefLang);
 
-void AnalyzeTTF(const TrueTypeFont* pTTFont, FontWeight& weight);
+FontWeight AnalyzeTTFWeight(const TrueTypeFont* pTTFont);
 
 /*- private definitions */
 

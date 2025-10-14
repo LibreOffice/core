@@ -343,20 +343,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
 
         rDFA.SetFamilyType(matchFamilyName(rDFA.GetFamilyName()));
 
-        switch( aInfo.weight )
-        {
-            case FW_THIN:       rDFA.SetWeight(WEIGHT_THIN); break;
-            case FW_EXTRALIGHT: rDFA.SetWeight(WEIGHT_ULTRALIGHT); break;
-            case FW_LIGHT:      rDFA.SetWeight(WEIGHT_LIGHT); break;
-            case FW_MEDIUM:     rDFA.SetWeight(WEIGHT_MEDIUM); break;
-            case FW_SEMIBOLD:   rDFA.SetWeight(WEIGHT_SEMIBOLD); break;
-            case FW_BOLD:       rDFA.SetWeight(WEIGHT_BOLD); break;
-            case FW_EXTRABOLD:  rDFA.SetWeight(WEIGHT_ULTRABOLD); break;
-            case FW_BLACK:      rDFA.SetWeight(WEIGHT_BLACK); break;
-
-            case FW_NORMAL:
-            default:            rDFA.SetWeight(WEIGHT_NORMAL); break;
-        }
+        rDFA.SetWeight(AnalyzeTTFWeight(pTTFont));
 
         switch( aInfo.width )
         {

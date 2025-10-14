@@ -558,7 +558,7 @@ bool EmbeddedFontsManager::analyzeTTF(const void* data, tools::Long size, FontWe
     if (OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) != SFErrCodes::Ok)
         return false;
 
-    AnalyzeTTF(font, weight);
+    weight = AnalyzeTTFWeight(font);
     CloseTTFont(font);
 
     return true;
