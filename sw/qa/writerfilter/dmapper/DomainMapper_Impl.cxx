@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -23,17 +23,23 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <vcl/scheduler.hxx>
+#include <editeng/fhgtitem.hxx>
+
+#include <docsh.hxx>
+#include <ndtxt.hxx>
+#include <swtable.hxx>
+#include <txatbase.hxx>
 
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx.
-class Test : public UnoApiTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -477,6 +483,38 @@ CPPUNIT_TEST_FIXTURE(Test, testIfField)
     // Without the accompanying fix in place, this test would have failed, the document failed to
     // load.
     loadFromFile(u"if-field.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFieldCharHeightHeaderToC)
+{
+    // Given a document with a header that has a field with a custom font size, while the document
+    // ends with a table of contents:
+    // When importing that document:
+    createSwDoc("field-char-height-header-toc.docx");
+
+    // Then make sure the custom font size is not lost:
+    SwDocShell* pDocShell = getSwDocShell();
+    // Navigate to the start of the only table's B1 cell.
+    SwDoc* pDoc = pDocShell->GetDoc();
+    sw::TableFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rTableFormats.size());
+    SwTableFormat* pTableFormat = rTableFormats[0];
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    const SwTableBox* pCell = pTable->GetTableBox(u"B1"_ustr);
+    // Get the font size there.
+    const SwStartNode* pStartNode = pCell->GetSttNd();
+    SwNodeIndex aNodeIndex(*pStartNode);
+    ++aNodeIndex;
+    const SwTextNode* pTextNode = aNodeIndex.GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(0, RES_TXTATR_AUTOFMT);
+    // Without the accompanying fix in place, this test would have failed, there was no direct
+    // formatting, so we got 12pt from style instead of the wanted 24pt.
+    CPPUNIT_ASSERT(pAttr);
+    const SwFormatAutoFormat& rAutoFormat
+        = static_txtattr_cast<SwTextAttrEnd*>(pAttr)->GetAutoFormat();
+    const SvxFontHeightItem& rFontHeightItem
+        = rAutoFormat.GetStyleHandle()->Get(RES_CHRATR_FONTSIZE);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(480), rFontHeightItem.GetHeight());
 }
 }
 

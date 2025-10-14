@@ -274,6 +274,8 @@ struct SubstreamContext
     // inline paragraph: hidden paragraph mark by w:specVanish
     bool bIsInlineParagraph = false;
     bool bIsPreviousInlineParagraph = false;
+
+    css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -674,8 +676,6 @@ private:
 
     bool                            m_bIsLastSectionGroup;
     bool                            m_bUsingEnhancedFields;
-
-    css::uno::Reference< css::text::XTextCursor > m_xTOCMarkerCursor;
 
     ::std::set<::std::pair<PagePartType, PageType>> m_HeaderFooterSeen;
 
