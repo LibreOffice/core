@@ -594,6 +594,7 @@
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="value">0.5</property>
+                <property name="digits">2</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>

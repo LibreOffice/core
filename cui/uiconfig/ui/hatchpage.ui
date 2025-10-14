@@ -177,6 +177,7 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">distanceadjustment</property>
                 <property name="truncate-multiline">True</property>
+                <property name="digits">2</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="distancemtr-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="hatchpage|extended_tip|distancemtr">Enter the amount of space that you want to have between the hatch lines.</property>

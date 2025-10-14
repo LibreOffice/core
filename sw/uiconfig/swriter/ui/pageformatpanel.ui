@@ -93,6 +93,7 @@
             <property name="hexpand">True</property>
             <property name="text">0</property>
             <property name="truncate-multiline">True</property>
+            <property name="digits">2</property>
             <accessibility>
               <relation type="labelled-by" target="width"/>
             </accessibility>
@@ -115,6 +116,7 @@
             <property name="hexpand">True</property>
             <property name="text">0</property>
             <property name="truncate-multiline">True</property>
+            <property name="digits">2</property>
             <accessibility>
               <relation type="labelled-by" target="height"/>
             </accessibility>

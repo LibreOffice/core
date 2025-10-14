@@ -102,6 +102,7 @@
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustmentPOS1</property>
+            <property name="digits">2</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="verticalpos-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|verticalpos">Vertical</property>
