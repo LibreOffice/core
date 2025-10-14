@@ -1004,7 +1004,8 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     OUString nameToCIDMapUrl = fileUrl + u".nametocidmap";
     OUString toMergedMapUrl = fileUrl + u".tomergedmap";
 
-    OString version, Notice, FullName, FamilyName, CIDFontName, CIDFontVersion, srcFontType;
+    OString version, Notice, FullName, FamilyName, CIDFontName, CIDFontVersion, srcFontType,
+        glyphTag;
     OString brokenFontName;
     FontName = postScriptName.toUtf8();
     std::map<sal_Int32, OString> glyphIndexToName;
@@ -1043,6 +1044,8 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         if (extractEntry(sLine, "Weight", Weight))
             continue;
         if (extractEntry(sLine, "sup.srcFontType", srcFontType))
+            continue;
+        if (extractEntry(sLine, "## glyph[tag]", glyphTag))
             continue;
         if (extractEntry(sLine, "FontName", FontName))
         {
@@ -1143,7 +1146,12 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     cidFontInfo.WriteLine(Concat2View("Trademark\t(" + Trademark + ")"));
     cidFontInfo.Close();
 
-    bNameKeyed = srcFontType.endsWith("(name-keyed)");
+    /*
+      ## glyph[tag] {cid,iFD}
+      or
+      ## glyph[tag] {name,encoding}
+    */
+    bNameKeyed = glyphTag == "{name,encoding}";
 
     if (bNameKeyed)
     {
