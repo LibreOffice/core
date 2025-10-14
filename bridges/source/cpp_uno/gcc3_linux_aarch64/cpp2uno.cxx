@@ -588,7 +588,7 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
         = reinterpret_cast<void (*)(unsigned char const *, unsigned char const *)>
             (dlsym(RTLD_DEFAULT, "__clear_cache"));
     (*clear_cache)(begin, end);
-#elif defined __clang_major__ && __clang_major__ < 21
+#elif (defined __clang_major__ && __clang_major__ < 21) || (defined ANDROID && __NDK_MAJOR__ <= 29)
     // GCC clarified with
     // <http://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a90b0cdd444f6dde1084a439862cf507f6d3b2ae>
     // "extend.texi (__clear_cache): Correct signature" that __builtin___clear_cache takes void*
