@@ -35,7 +35,7 @@ namespace vcl
 {
 VCL_DLLPUBLIC FieldUnit EnglishStringToMetric(std::u16string_view rEnglishMetricString);
 
-VCL_DLLPUBLIC bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
+VCL_DLLPUBLIC bool TextToValue(std::u16string_view rStr, double& rValue, sal_Int64 nBaseValue,
                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                FieldUnit eUnit);
 VCL_DLLPUBLIC FieldUnit GetTextMetricUnit(std::u16string_view aStr);

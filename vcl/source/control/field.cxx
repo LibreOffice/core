@@ -149,58 +149,56 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
     }
 }
 
-bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
-                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
-                                 bool bCurrency = false )
+// Takes a string with a number, which may be an integer, a floating-point with locale-specified
+// decimal separator, or a fraction (and if allowed, where negatives can be represented in currency
+// format - in parentheses); pre-processes the string to be a floating-point scaled by nDecDigits;
+// returns a pair { scaled_whole_part_string, decimal_part_string }.
+std::pair<OUString, OUString> ToScaledWholeAndDec(std::u16string_view aStr, sal_uInt16 nDecDigits,
+                                                  const LocaleDataWrapper& rLocaleDataWrapper,
+                                                  bool bCurrency)
 {
-    OUString            aStr = rStr;
+    // remove leading and trailing spaces
+    aStr = o3tl::trim(aStr);
     OUStringBuffer      aStr1, aStr2, aStrNum, aStrDenom;
     bool                bNegative = false;
     bool                bFrac = false;
-    sal_Int32           nDecPos, nFracDivPos;
-    sal_Int64           nValue;
 
     // react on empty string
-    if ( rStr.isEmpty() )
-        return false;
-
-    // remove leading and trailing spaces
-    aStr = aStr.trim();
-
+    if (aStr.empty())
+        return {};
 
     // find position of decimal point
-    nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSep() );
-    if (nDecPos < 0 && !rLocaleDataWrapper.getNumDecimalSepAlt().isEmpty())
-        nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSepAlt() );
-    // find position of fraction
-    nFracDivPos = aStr.indexOf( '/' );
+    auto nDecPos = aStr.find(rLocaleDataWrapper.getNumDecimalSep());
+    if (nDecPos == std::u16string_view::npos && !rLocaleDataWrapper.getNumDecimalSepAlt().isEmpty())
+        nDecPos = aStr.find( rLocaleDataWrapper.getNumDecimalSepAlt() );
 
     // parse fractional strings
-    if (nFracDivPos > 0)
+    if (auto nFracDivPos = aStr.find('/');
+        nFracDivPos > 0 && nFracDivPos != std::u16string_view::npos)
     {
         bFrac = true;
-        sal_Int32 nFracNumPos = aStr.lastIndexOf(' ', nFracDivPos);
+        auto nFracNumPos = aStr.rfind(' ', nFracDivPos);
 
         // If in "a b/c" format.
-        if(nFracNumPos != -1 )
+        if (nFracNumPos != std::u16string_view::npos)
         {
-            aStr1.append(aStr.subView(0, nFracNumPos));
-            aStrNum.append(aStr.subView(nFracNumPos+1, nFracDivPos-nFracNumPos-1));
-            aStrDenom.append(aStr.subView(nFracDivPos+1));
+            aStr1.append(aStr.substr(0, nFracNumPos));
+            aStrNum.append(aStr.substr(nFracNumPos+1, nFracDivPos-nFracNumPos-1));
+            aStrDenom.append(aStr.substr(nFracDivPos+1));
         }
         // "a/b" format, or not a fraction at all
         else
         {
-            aStrNum.append(aStr.subView(0, nFracDivPos));
-            aStrDenom.append(aStr.subView(nFracDivPos+1));
+            aStrNum.append(aStr.substr(0, nFracDivPos));
+            aStrDenom.append(aStr.substr(nFracDivPos+1));
         }
 
     }
     // parse decimal strings
-    else if ( nDecPos >= 0)
+    else if (nDecPos != std::u16string_view::npos)
     {
-        aStr1.append(aStr.subView(0, nDecPos));
-        aStr2.append(aStr.subView(nDecPos+1));
+        aStr1.append(aStr.substr(0, nDecPos));
+        aStr2.append(aStr.substr(nDecPos+1));
     }
     else
         aStr1 = aStr;
@@ -208,11 +206,11 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     // negative?
     if ( bCurrency )
     {
-        if ( aStr.startsWith("(") && aStr.endsWith(")") )
+        if ( aStr.starts_with('(') && aStr.ends_with(')') )
             bNegative = true;
         if ( !bNegative )
         {
-            for (sal_Int32 i=0; i < aStr.getLength(); i++ )
+            for (size_t i = 0; i < aStr.size(); i++)
             {
                 if ( (aStr[i] >= '0') && (aStr[i] <= '9') )
                     break;
@@ -223,13 +221,13 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                 }
             }
         }
-        if (!bNegative && !aStr.isEmpty())
+        if (!bNegative && !aStr.empty())
         {
             sal_uInt16 nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  || // $1- || 1-$
                  (nFormat == 7) || (nFormat == 10) )  // 1$- || 1 $-
             {
-                for (sal_Int32 i = aStr.getLength()-1; i > 0; --i )
+                for (size_t i = aStr.size() - 1; i > 0; --i)
                 {
                     if ( (aStr[i] >= '0') && (aStr[i] <= '9') )
                         break;
@@ -290,9 +288,9 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 
 
     if ( !bFrac && aStr1.isEmpty() && aStr2.isEmpty() )
-        return false;
+        return {};
     else if ( bFrac && aStr1.isEmpty() && (aStrNum.isEmpty() || aStrDenom.isEmpty()) )
-        return false;
+        return {};
 
     if ( aStr1.isEmpty() )
         aStr1 = "0";
@@ -306,12 +304,12 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         aStr1.setLength(0);
         sal_Int64 nNum = o3tl::toInt64(aStrNum);
         sal_Int64 nDenom = o3tl::toInt64(aStrDenom);
-        if (nDenom == 0) return false; // Division by zero
+        if (nDenom == 0) return {}; // Division by zero
         double nFrac2Dec = nWholeNum + static_cast<double>(nNum)/nDenom; // Convert to double for floating point precision
         OUStringBuffer aStrFrac(OUString::number(nFrac2Dec));
         // Reconvert division result to string and parse
         nDecPos = aStrFrac.indexOf('.');
-        if ( nDecPos >= 0)
+        if (nDecPos != std::u16string_view::npos)
         {
             aStr1.append(aStrFrac.getStr(), nDecPos);
             aStr2.append(aStrFrac.getStr()+nDecPos+1);
@@ -320,28 +318,36 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
             aStr1 = std::move(aStrFrac);
     }
 
-    // prune and round fraction
-    bool bRound = false;
-    if (aStr2.getLength() > nDecDigits)
+    if (nDecDigits)
     {
-        if (aStr2[nDecDigits] >= '5')
-            bRound = true;
-        comphelper::string::truncateToLength(aStr2, nDecDigits);
+        const sal_Int32 moveTo1 = std::min(static_cast<sal_Int32>(nDecDigits), aStr2.getLength());
+        aStr1.append(aStr2.subView(0, moveTo1) + RepeatedUChar('0', nDecDigits - moveTo1));
+        aStr2.remove(0, moveTo1);
     }
-    if (aStr2.getLength() < nDecDigits)
-        comphelper::string::padToLength(aStr2, nDecDigits, '0');
 
-    aStr = aStr1 + aStr2;
+    return { aStr1.makeStringAndClear(), aStr2.makeStringAndClear() };
+}
+
+bool ImplNumericGetValue(std::u16string_view rStr, sal_Int64& rValue, sal_uInt16 nDecDigits,
+                         const LocaleDataWrapper& rLocaleDataWrapper, bool bCurrency = false)
+{
+    const auto [whole, dec] = ToScaledWholeAndDec(rStr, nDecDigits, rLocaleDataWrapper, bCurrency);
+    if (whole.isEmpty() && dec.isEmpty())
+        return false;
+
+    // prune and round fraction
+    const bool bRound = !dec.isEmpty() && dec[0] >= '5';
 
     // check range
-    nValue = aStr.toInt64();
+    sal_Int64 nValue = whole.toInt64();
+    const bool bNegative = whole.startsWith("-");
     if( nValue == 0 )
     {
         // check if string is equivalent to zero
         sal_Int32 nIndex = bNegative ? 1 : 0;
-        while (nIndex < aStr.getLength() && aStr[nIndex] == '0')
+        while (nIndex < whole.getLength() && whole[nIndex] == '0')
             ++nIndex;
-        if( nIndex < aStr.getLength() )
+        if (nIndex < whole.getLength())
         {
             rValue = bNegative ? SAL_MIN_INT64 : SAL_MAX_INT64;
             return true;
@@ -357,6 +363,18 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 
     rValue = nValue;
 
+    return true;
+}
+
+// The returned double is scaled according to nDecDigits, same way as ImplNumericGetValue
+bool ImplNumericGetDoubleValue(std::u16string_view rStr, double& rValue, sal_uInt16 nDecDigits,
+                               const LocaleDataWrapper& rLocaleDataWrapper)
+{
+    const auto [whole, dec] = ToScaledWholeAndDec(rStr, nDecDigits, rLocaleDataWrapper, false);
+    if (whole.isEmpty() && dec.isEmpty())
+        return false;
+
+    rValue = o3tl::toDouble(Concat2View(whole + "." + dec));
     return true;
 }
 
@@ -627,7 +645,7 @@ void NumericFormatter::SetUserValue( sal_Int64 nNewValue )
     ImplSetUserValue( nNewValue );
 }
 
-sal_Int64 NumericFormatter::GetValueFromString(const OUString& rStr) const
+sal_Int64 NumericFormatter::GetValueFromString(std::u16string_view rStr) const
 {
     sal_Int64 nTempValue;
 
@@ -900,7 +918,7 @@ void NumericBox::Modify()
     ComboBox::Modify();
 }
 
-void NumericBox::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
+void NumericBox::ImplNumericReformat( std::u16string_view rStr, sal_Int64& rValue,
                                                 OUString& rOutStr )
 {
     if (ImplNumericGetValue(rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper()))
@@ -1194,20 +1212,19 @@ namespace vcl
 
 namespace vcl
 {
-    bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
+    bool TextToValue(std::u16string_view rStr, double& rValue, sal_Int64 nBaseValue,
                      sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit)
     {
         // Get value
-        sal_Int64 nValue;
-        if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
+        double nValue;
+        if (!ImplNumericGetDoubleValue(rStr, nValue, nDecDigits, rLocaleDataWrapper))
             return false;
 
         // Determine unit
         FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
 
         // Recalculate unit
-        // caution: conversion to double loses precision
-        rValue = vcl::ConvertDoubleValue(static_cast<double>(nValue), nBaseValue, nDecDigits, eEntryUnit, eUnit);
+        rValue = vcl::ConvertDoubleValue(nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit);
 
         return true;
     }
@@ -1215,7 +1232,7 @@ namespace vcl
     FieldUnit GetTextMetricUnit(std::u16string_view aStr) { return ImplMetricGetUnit(aStr); }
 }
 
-void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
+void MetricFormatter::ImplMetricReformat( std::u16string_view rStr, double& rValue, OUString& rOutStr )
 {
     if (!vcl::TextToValue(rStr, rValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         return;
@@ -1306,7 +1323,7 @@ void MetricFormatter::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
     NumericFormatter::SetUserValue( nNewValue );
 }
 
-sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const
+sal_Int64 MetricFormatter::GetValueFromStringUnit(std::u16string_view rStr, FieldUnit eOutUnit) const
 {
     double nTempValue;
     // caution: precision loss in double cast
@@ -1317,7 +1334,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
     return vcl::ConvertValue(ClipDoubleAgainstMinMax(nTempValue), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
-sal_Int64 MetricFormatter::GetValueFromString(const OUString& rStr) const
+sal_Int64 MetricFormatter::GetValueFromString(std::u16string_view rStr) const
 {
     return GetValueFromStringUnit(rStr, FieldUnit::NONE);
 }
@@ -1638,14 +1655,14 @@ static bool ImplCurrencyProcessKeyInput( const KeyEvent& rKEvt,
     return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 
-static bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
+static bool ImplCurrencyGetValue( std::u16string_view rStr, sal_Int64& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // fetch number
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, true );
 }
 
-void CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
+void CurrencyFormatter::ImplCurrencyReformat(std::u16string_view rStr, OUString& rOutStr)
 {
     sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), true ) )
@@ -1675,7 +1692,7 @@ OUString CurrencyFormatter::CreateFieldText( sal_Int64 nValue ) const
                                                IsUseThousandSep() );
 }
 
-sal_Int64 CurrencyFormatter::GetValueFromString(const OUString& rStr) const
+sal_Int64 CurrencyFormatter::GetValueFromString(std::u16string_view rStr) const
 {
     sal_Int64 nTempValue;
     if ( ImplCurrencyGetValue( rStr, nTempValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
