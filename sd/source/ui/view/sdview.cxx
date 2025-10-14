@@ -1160,11 +1160,15 @@ void View::OnBeginPasteOrDrop( PasteOrDropInfos* pInfo )
     if (!pOutliner)
         return;
 
-    // Turn character attributes of the paragraph of the insert position into
+    // Turn character attributes of the table paragraph of the insert position into
     // character-level attributes, so they are not lost when OnEndPasteOrDrop()
-    // sets the paragraph stylesheet.
-    SfxItemSet aSet(pOutliner->GetParaAttribs(pInfo->nStartPara));
-    pOutliner->SetCharAttribs(pInfo->nStartPara, aSet);
+    // sets the paragraph stylesheet. (tdf#115783)
+    const SdrTableObj* pTableObj = dynamic_cast<const SdrTableObj*>(pOutliner->GetTextObj());
+    if (pTableObj)
+    {
+        SfxItemSet aSet(pOutliner->GetParaAttribs(pInfo->nStartPara));
+        pOutliner->SetCharAttribs(pInfo->nStartPara, aSet);
+    }
 }
 
 /** this is called after a paste or drop operation, make sure that the newly inserted paragraphs
