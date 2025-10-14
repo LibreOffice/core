@@ -153,7 +153,7 @@ protected:
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
 
-    virtual sal_Int64       GetValueFromString(const OUString& rStr) const;
+    virtual sal_Int64       GetValueFromString(std::u16string_view rStr) const;
 
 private:
     sal_uInt16              mnDecimalDigits;
@@ -196,10 +196,10 @@ protected:
 
     SAL_DLLPRIVATE                         MetricFormatter(Edit* pEdit);
 
-    SAL_DLLPRIVATE void     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplMetricReformat( std::u16string_view rStr, double& rValue, OUString& rOutStr );
 
-    SAL_DLLPRIVATE virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
-    SAL_DLLPRIVATE sal_Int64               GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
+    SAL_DLLPRIVATE virtual sal_Int64       GetValueFromString(std::u16string_view rStr) const override;
+    SAL_DLLPRIVATE sal_Int64               GetValueFromStringUnit(std::u16string_view rStr, FieldUnit eOutUnit) const;
 
 private:
     OUString                maCustomUnitText;
@@ -262,8 +262,8 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyFormatter : public NumericFormatte
 {
 protected:
                             CurrencyFormatter(Edit* pEdit);
-    SAL_DLLPRIVATE void     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
-    virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
+    SAL_DLLPRIVATE void     ImplCurrencyReformat( std::u16string_view rStr, OUString& rOutStr );
+    virtual sal_Int64       GetValueFromString(std::u16string_view rStr) const override;
 
 public:
     virtual                 ~CurrencyFormatter() override;
@@ -508,7 +508,7 @@ public:
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericBox final : public ComboBox, public NumericFormatter
 {
-    SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplNumericReformat( std::u16string_view rStr, sal_Int64& rValue, OUString& rOutStr );
 public:
     explicit                NumericBox( vcl::Window* pParent, WinBits nWinStyle );
 
