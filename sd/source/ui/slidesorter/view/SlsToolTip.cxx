@@ -44,11 +44,16 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
     maHiddenTimer.SetTimeout(HelpSettings::GetTipDelay());
 }
 
-ToolTip::~ToolTip()
+void ToolTip::ImplDestroy()
 {
     maShowTimer.Stop();
     maHiddenTimer.Stop();
     Hide();
+}
+
+ToolTip::~ToolTip()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)

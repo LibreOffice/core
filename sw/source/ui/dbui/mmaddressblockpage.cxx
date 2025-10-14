@@ -553,9 +553,14 @@ void SwCustomizeAddressBlockDialog::UpdateFields()
     m_xDragED->UpdateFields();
 }
 
-SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
+void SwCustomizeAddressBlockDialog::ImplDestroy()
 {
     m_xDragED->EndDropTarget();
+}
+
+SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl, weld::Button&, void)

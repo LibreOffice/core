@@ -66,6 +66,7 @@ private:
     Timer maHiddenTimer;
 
     void DoShow();
+    void ImplDestroy();
 
     DECL_LINK(DelayTrigger, Timer*, void);
 };

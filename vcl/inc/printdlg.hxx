@@ -218,6 +218,7 @@ namespace vcl
 
         css::beans::PropertyValue* getValueForWindow(weld::Widget*) const;
 
+        void ImplDestroy();
         void preparePreview( bool i_bMayUseCache );
         void setupPaperSidesBox();
         void storeToSettings();

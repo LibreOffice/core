@@ -775,10 +775,15 @@ GtkSalTimer::GtkSalTimer()
 {
 }
 
-GtkSalTimer::~GtkSalTimer()
+void GtkSalTimer::ImplDestroy()
 {
     GetGtkInstance()->RemoveTimer();
     Stop();
+}
+
+GtkSalTimer::~GtkSalTimer()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 bool GtkSalTimer::Expired()

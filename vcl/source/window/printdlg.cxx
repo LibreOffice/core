@@ -714,12 +714,17 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     m_xDialog->set_centered_on_parent(true);
 }
 
-PrintDialog::~PrintDialog()
+void PrintDialog::ImplDestroy()
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::set(mxRangeExpander->get_expanded(), batch);
     officecfg::Office::Common::Print::Dialog::LayoutSectionExpanded::set(mxLayoutExpander->get_expanded(), batch);
     batch->commit();
+}
+
+PrintDialog::~PrintDialog()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void PrintDialog::setupPaperSidesBox()

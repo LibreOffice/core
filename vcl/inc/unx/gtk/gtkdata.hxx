@@ -206,6 +206,8 @@ int getButtonPriority(std::u16string_view rType);
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
+
+    void ImplDestroy();
 public:
     GtkSalTimer();
     virtual ~GtkSalTimer() override;

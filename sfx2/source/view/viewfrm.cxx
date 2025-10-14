@@ -307,7 +307,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 ReadOnlyUIGuard(SfxViewFrame* pFrame, SfxObjectShell* p_Sh)
                     : m_pFrame(pFrame), m_pSh(p_Sh), m_bSetRO(p_Sh->IsReadOnlyUI())
                 {}
-                ~ReadOnlyUIGuard() COVERITY_NOEXCEPT_FALSE
+                void ImplDestroy()
                 {
                     if (m_bSetRO != m_pSh->IsReadOnlyUI())
                     {
@@ -324,6 +324,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             m_pSh->EnableSetModified(isEnableSetModified);
                         }
                     }
+                }
+                ~ReadOnlyUIGuard()
+                {
+                    suppress_fun_call_w_exception(ImplDestroy());
                 }
             } aReadOnlyUIGuard(this, pSh);
 

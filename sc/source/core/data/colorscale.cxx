@@ -203,10 +203,15 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument& rDoc, const ScColorScaleEntry& 
     }
 }
 
-ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
+void ScColorScaleEntry::ImplDestroy()
 {
     if(mpCell)
         mpCell->EndListeningTo(mpCell->GetDocument());
+}
+
+ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )

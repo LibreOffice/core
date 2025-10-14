@@ -225,6 +225,7 @@ private:
 
     sal_Int32       GetSelectedItem_Impl() const;
     void            UpdateImageButtons_Impl();
+    void            ImplDestroy();
 
 public:
     SwCustomizeAddressBlockDialog(weld::Widget* pParent, SwMailMergeConfigItem& rConfig, DialogType);

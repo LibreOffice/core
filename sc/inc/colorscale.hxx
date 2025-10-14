@@ -52,6 +52,8 @@ private:
 
     void setListener();
 
+    void ImplDestroy();
+
 public:
     SC_DLLPUBLIC ScColorScaleEntry(double nVal, const Color& rCol,
                                    ScColorScaleEntryType eType = COLORSCALE_VALUE,
