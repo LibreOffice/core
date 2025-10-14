@@ -53,6 +53,7 @@ private:
     // If bit 'n' is 1 then we're in a numbered list at that level
     // (n=0 is what pptx calls level 1)
     uint16_t*              mpListNumberingMask;
+    bool                   mbHaveNum;
 };
 
 }

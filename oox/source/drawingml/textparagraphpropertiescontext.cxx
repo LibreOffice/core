@@ -82,6 +82,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
 , mrTextParagraphProperties( rTextParagraphProperties )
 , mrBulletList( rTextParagraphProperties.getBulletList() )
 , mpListNumberingMask( pListNumberingMask )
+, mbHaveNum( false )
 {
     OUString sValue;
 
@@ -191,6 +192,8 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         mrBulletList.setBulletAspectRatio( lclGetGraphicAspectRatio(mxBlipProps->mxFillGraphic) );
     }
 
+    if( !mbHaveNum )
+        markListUnnumbered();
     if( mrBulletList.is() )
         rPropertyMap.setProperty( PROP_IsNumbering, true);
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
@@ -289,10 +292,13 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case A_TOKEN( buAutoNum ):      // CT_TextAutonumberBullet
         {
+            bool bStartingNumList = markListNumbered();
+            mbHaveNum = true;
+
             try {
                 sal_Int32 nType = rAttribs.getToken( XML_type, 0 );
                 sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, -1 );
-                if( nStartAt >= 0 )
+                if( nStartAt >= 0 || bStartingNumList )
                 {
                     mrTextParagraphProperties.setRestartNumbering(true);
                 }
