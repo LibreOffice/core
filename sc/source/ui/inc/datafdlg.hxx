@@ -24,7 +24,7 @@ class ScDataFormDlg : public weld::GenericDialogController
 private:
     OUString        sNewRecord;
 
-    ScTabViewShell* pTabViewShell;
+    ScTabViewShell& m_rTabViewShell;
     ScDocument*     pDoc;
     sal_uInt16      aColLength;
     SCROW           nCurrentRow;
@@ -46,7 +46,7 @@ private:
     std::vector<std::unique_ptr<ScDataFormFragment>> m_aEntries;
 
 public:
-    ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShell);
+    ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShell);
     virtual ~ScDataFormDlg() override;
 
     void FillCtrls();

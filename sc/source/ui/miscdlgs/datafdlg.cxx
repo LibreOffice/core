@@ -17,9 +17,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
-ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShellOri)
+ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShellOri)
     : GenericDialogController(pParent, u"modules/scalc/ui/dataform.ui"_ustr, u"DataFormDialog"_ustr)
-    , pTabViewShell(pTabViewShellOri)
+    , m_rTabViewShell(rTabViewShellOri)
     , aColLength(0)
     , nCurrentRow(0)
     , nStartCol(0)
@@ -40,8 +40,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
     sNewRecord = m_xFixedText->get_label();
 
     //read header from current document, and add new controls
-    OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
-    ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScViewData& rViewData = m_rTabViewShell.GetViewData();
 
     pDoc = &rViewData.GetDocument();
 
@@ -229,7 +228,7 @@ IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, weld::Entry&, rEdit, void)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 {
-    ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScViewData& rViewData = m_rTabViewShell.GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
     if ( !pDoc )
         return;
@@ -240,7 +239,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
     if ( !bHasData )
         return;
 
-    pTabViewShell->DataFormPutData(nCurrentRow, nStartRow, nStartCol, nEndRow, nEndCol, m_aEntries, aColLength);
+    m_rTabViewShell.DataFormPutData(nCurrentRow, nStartRow, nStartCol, nEndRow, nEndCol, m_aEntries, aColLength);
     nCurrentRow++;
     if (nCurrentRow >= nEndRow + 2)
     {
@@ -287,7 +286,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, weld::Button&, void)
 {
-    ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScViewData& rViewData = m_rTabViewShell.GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
     if (!pDoc)
         return;

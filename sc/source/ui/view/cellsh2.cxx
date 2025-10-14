@@ -369,7 +369,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(
-                    pTabViewShell->GetFrameWeld(), pTabViewShell));
+                    pTabViewShell->GetFrameWeld(), *pTabViewShell));
 
                 pDlg->Execute();
 

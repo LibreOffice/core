@@ -286,12 +286,12 @@ VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCell
 }
 
 VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(weld::Window* pParent,
-    ScTabViewShell* pTabViewShell)
+    ScTabViewShell& rTabViewShell)
 {
     // for dataform
     using AbstractScDataFormDlg_Impl
         = ScreenshottedDialog_Impl_Sync<AbstractScDataFormDlg, ScDataFormDlg>;
-    return VclPtr<AbstractScDataFormDlg_Impl>::Create(pParent, pTabViewShell);
+    return VclPtr<AbstractScDataFormDlg_Impl>::Create(pParent, rTabViewShell);
 }
 
 namespace

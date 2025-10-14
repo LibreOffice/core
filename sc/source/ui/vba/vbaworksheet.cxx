@@ -871,7 +871,7 @@ ScVbaWorksheet::ShowDataForm( )
     {
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(pTabViewShell->GetFrameWeld(),
-                                                                        pTabViewShell));
+                                                                        *pTabViewShell));
         pDlg->Execute();
     }
 }

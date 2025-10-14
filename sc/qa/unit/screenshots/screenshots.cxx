@@ -213,7 +213,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         {
             ////FIXME: looks butt-ugly w/ empty file, move it elsewhere, where
             ////we actually have some data
-            pReturnDialog = mpFact->CreateScDataFormDlg(mpViewShell->GetFrameWeld(), mpViewShell);
+            pReturnDialog = mpFact->CreateScDataFormDlg(mpViewShell->GetFrameWeld(), *mpViewShell);
             break;
         }
 
