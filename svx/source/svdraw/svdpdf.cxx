@@ -995,9 +995,11 @@ static void rewriteBrokenFontName(std::string_view brokenName, std::string_view 
 // https://ccjktype.fonts.adobe.com/2012/01/leveraging-afdko-part-3.html
 static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
                      const OUString& postScriptName, bool& bNameKeyed,
-                     std::map<int, int>& nameIndexToGlyph, OString& FontName, OString& Weight)
+                     std::map<int, int>& nameIndexToGlyph, OString& FontName, OString& Weight,
+                     OString& FSType)
 {
     bNameKeyed = false;
+    FSType = "0"_ostr;
 
     OUString infoUrl = fileUrl + u".1";
     OUString cidFontInfoUrl = fileUrl + u".cidfontinfo";
@@ -1040,6 +1042,8 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         if (extractEntry(sLine, "FullName", FullName))
             continue;
         if (extractEntry(sLine, "FamilyName", FamilyName))
+            continue;
+        if (extractEntry(sLine, "FSType", FSType))
             continue;
         if (extractEntry(sLine, "Weight", Weight))
             continue;
@@ -1147,7 +1151,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     cidFontInfo.WriteLine("Ordering\t(Identity)");
     cidFontInfo.WriteLine("Supplement\t0");
     cidFontInfo.WriteLine("XUID\t\t[1 11 9273828]");
-    cidFontInfo.WriteLine("FSType\t\t4");
+    cidFontInfo.WriteLine(Concat2View("FSType\t\t" + FSType));
     cidFontInfo.WriteLine(Concat2View("AdobeCopyright\t(" + AdobeCopyright + ")"));
     cidFontInfo.WriteLine(Concat2View("Trademark\t(" + Trademark + ")"));
     cidFontInfo.Close();
@@ -1259,14 +1263,11 @@ const char cmapsuffix[] = "endcmap\n"
                           "end\n"
                           "end\n";
 
-static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& FeaturesUrl,
+static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features,
                                  std::string_view FontName,
                                  const std::vector<uint8_t>& toUnicodeData, bool bNameKeyed,
-                                 std::map<int, int>& nameIndexToGlyph, bool& bFeatures,
-                                 SubSetInfo& rSubSetInfo)
+                                 std::map<int, int>& nameIndexToGlyph, SubSetInfo& rSubSetInfo)
 {
-    bFeatures = false;
-
     SvFileStream CMap(CMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
 
     CMap.WriteBytes(cmapprefix, std::size(cmapprefix) - 1);
@@ -1409,7 +1410,6 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
     {
         std::map<OString, sal_Int32>& charsToGlyph = rSubSetInfo.aComponents.back().charsToGlyph;
 
-        SvFileStream Features(FeaturesUrl, StreamMode::READWRITE | StreamMode::TRUNC);
         Features.WriteLine("languagesystem DFLT dflt;");
         Features.WriteLine("feature liga {");
         for (const auto& ligature : ligatureGlyphToChars)
@@ -1427,9 +1427,6 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
             Features.WriteLine(ligatureLine);
         }
         Features.WriteLine("} liga;");
-        Features.Close();
-
-        bFeatures = true;
     }
 }
 
@@ -1630,29 +1627,37 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     // Convert to Type 1 CID keyed
     std::map<int, int> nameIndexToGlyph;
     bool bNameKeyed = false;
-    OString FontName, Weight;
+    OString FontName, Weight, FSType;
     if (!toPfaCID(rSubSetInfo, fileUrl, postScriptName, bNameKeyed, nameIndexToGlyph, FontName,
-                  Weight))
+                  Weight, FSType))
     {
         return EmbeddedFontInfo();
     }
+
+    OUString FeaturesUrl = fileUrl + u".Features";
+    SvFileStream Features(FeaturesUrl, StreamMode::READWRITE | StreamMode::TRUNC);
 
     const OUString& pfaCIDUrl = rSubSetInfo.aComponents.back().pfaCIDUrl;
 
     // Build CMap from pdfium toUnicodeData, etc.
     OUString CMapUrl = fileUrl + u".CMap";
-    OUString FeaturesUrl = fileUrl + u".Features";
-    bool bFeatures = false, bCMap = true;
+    bool bCMap = true;
     if (!toUnicodeData.empty())
     {
-        buildCMapAndFeatures(CMapUrl, FeaturesUrl, FontName, toUnicodeData, bNameKeyed,
-                             nameIndexToGlyph, bFeatures, rSubSetInfo);
+        buildCMapAndFeatures(CMapUrl, Features, FontName, toUnicodeData, bNameKeyed,
+                             nameIndexToGlyph, rSubSetInfo);
     }
     else
     {
         SAL_WARN("sd.filter", "There is no CMap, pdfium is missing unicodedata");
         bCMap = false;
     }
+
+    Features.WriteLine("table OS/2 {");
+    Features.WriteLine(Concat2View("  FSType " + FSType + ";"));
+    Features.WriteLine("} OS/2;");
+
+    Features.Close();
 
     // Create FontMenuName
     OUString FontMenuNameDBUrl = fileUrl + u".FontMenuNameDBUrl";
@@ -1669,9 +1674,8 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
 
     // Otherwise not merged font, just a single subset
     OUString otfUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(fontFileName, u".otf");
-    OUString features = bFeatures ? FeaturesUrl : OUString();
     OUString cmap = bCMap ? CMapUrl : OUString();
-    if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, cmap, features))
+    if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, cmap, FeaturesUrl))
         return { longFontName, otfUrl, toOfficeWeight(Weight) };
     SAL_WARN("sd.filter", "conversion failed");
     return EmbeddedFontInfo();
