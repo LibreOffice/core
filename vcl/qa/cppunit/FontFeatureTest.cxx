@@ -146,16 +146,16 @@ void FontFeatureTest::testGetFontFeaturesOpenType()
     for (vcl::font::Feature const& rFeature : rFontFeatures)
         aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
 
-    CPPUNIT_ASSERT_EQUAL(size_t(17), rFontFeatures.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(15), rFontFeatures.size());
 
-    CPPUNIT_ASSERT_EQUAL(u"calt calt dnom liga numr pnum ss01 ss02 "
+    CPPUNIT_ASSERT_EQUAL(u"dnom liga numr pnum ss01 ss02 "
                          "ss03 ss04 ss05 ss06 ss07 ss08 kern kern "
                          "ss05 "_ustr,
                          aFeaturesString);
 
     // Check ss01 feature
     {
-        vcl::font::Feature& rFeature = rFontFeatures[6];
+        vcl::font::Feature& rFeature = rFontFeatures[4];
         CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("ss01"), rFeature.m_nCode);
 
         vcl::font::FeatureDefinition& rFeatureDefinition = rFeature.m_aDefinition;

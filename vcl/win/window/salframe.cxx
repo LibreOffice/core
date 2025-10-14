@@ -6117,6 +6117,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             break;
 
         case WM_THEMECHANGED:
+            UpdateDarkMode(hWnd);
             GetSalData()->mbThemeChanged = true;
             break;
 

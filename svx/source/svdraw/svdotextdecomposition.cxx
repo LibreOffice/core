@@ -625,6 +625,7 @@ namespace
                 meValues.emplace_back("URL", pURLField->GetURL());
                 meValues.emplace_back("Representation", pURLField->GetRepresentation());
                 meValues.emplace_back("TargetFrame", pURLField->GetTargetFrame());
+                meValues.emplace_back("AltText", pURLField->GetName());
                 meValues.emplace_back("SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat())));
                 xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
             }

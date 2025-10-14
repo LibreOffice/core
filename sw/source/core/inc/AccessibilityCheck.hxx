@@ -49,7 +49,7 @@ public:
     }
 
     void check() override;
-    void checkObject(SwNode* pNode, SdrObject* pObject);
+    void checkObject(SwNode* pNode, SwFrameFormat const&);
     void checkNode(SwNode* pNode);
     void checkDocumentProperties();
 };

@@ -2311,7 +2311,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (pHLItem->GetInsertMode() == HLINK_FIELD)
                 {
                     InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
-                                   pHLItem->GetTargetFrame());
+                                   pHLItem->GetTargetFrame(), pHLItem->GetIntName());
                 }
                 else if (pHLItem->GetInsertMode() == HLINK_BUTTON)
                 {
@@ -2325,7 +2325,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (pOlView || comphelper::LibreOfficeKit::isActive())
                     {
                         InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
-                                       pHLItem->GetTargetFrame());
+                                       pHLItem->GetTargetFrame(), pHLItem->GetIntName());
                     }
                     else
                     {

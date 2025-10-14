@@ -1965,6 +1965,10 @@
     <string>@MACOSX_XCODE_BUILD_VERSION@</string>
     <key>DTSDKBuild</key>
     <string>@MACOSX_SDK_BUILD_VERSION@</string>
+    <key>CFBundleSupportedPlatforms</key>
+    <array>
+        <string>MacOSX</string>
+    </array>
 </dict>
 </plist>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab: -->

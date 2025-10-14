@@ -265,6 +265,7 @@ namespace framework
             Timer                                                          m_aAsyncLayoutTimer;
             comphelper::OMultiTypeInterfaceContainerHelper2                m_aListenerContainer; // container for ALL Listener
             rtl::Reference< ToolbarLayoutManager >                         m_xToolbarManager;
+            bool                                                           m_bInSetCurrentUIVisibility;
 
         friend class detail::InfoHelperBuilder;
     };

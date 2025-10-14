@@ -1594,6 +1594,10 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     }
     if (TextFrameIndex(1) == nLength || pPor->InFieldGrp())
     {
+        if (pPor->IsBreakPortion())
+        {
+            return nCurrStart;
+        }
         if ( nWidth )
         {
             // no quick return for as-character frames, we want to peek inside
@@ -1642,8 +1646,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         }
         else
         {
-            if ( pPor->IsPostItsPortion() || pPor->IsBreakPortion() ||
-                 pPor->InToxRefGrp() )
+            if (pPor->IsPostItsPortion() || pPor->InToxRefGrp())
             {
                 SwPostItsPortion* pPostItsPortion = pPor->IsPostItsPortion() ? dynamic_cast<SwPostItsPortion*>(pPor) : nullptr;
                 if (pPostItsPortion)

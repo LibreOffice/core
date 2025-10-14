@@ -1,15 +1,3 @@
---- src/psaux/psobjs.c.orig	2023-02-04 23:00:05.000000000 +0900
-+++ src/psaux/psobjs.c	2023-02-22 16:28:26.632283841 +0900
-@@ -200,7 +200,8 @@
-     /* add the object to the base block and adjust offset */
-     table->elements[idx] = FT_OFFSET( table->block, table->cursor );
-     table->lengths [idx] = length;
--    FT_MEM_COPY( table->block + table->cursor, object, length );
-+    if (length != 0)
-+      FT_MEM_COPY( table->block + table->cursor, object, length );
- 
-     table->cursor += length;
-     return FT_Err_Ok;
 --- src/truetype/ttgxvar.c
 +++ src/truetype/ttgxvar.c
 @@ -1045,7 +1045,7 @@

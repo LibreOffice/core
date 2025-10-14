@@ -117,7 +117,7 @@
     <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
    </text:sequence-decls>
-   <text:p text:style-name="Standard"><text:a xlink:type="simple" xlink:href="https://www.mozilla.org/en-US/firefox/119.0/releasenotes/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://www.mozilla.org/en-US<draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="char" svg:x="5.318cm" svg:y="0.056cm" svg:width="6.364cm" svg:height="6.364cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
+   <text:p text:style-name="Standard"><text:a xlink:type="simple" xlink:href="https://www.mozilla.org/en-US/firefox/119.0/releasenotes/" office:name="Firefox119" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://www.mozilla.org/en-US<draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="char" svg:x="5.318cm" svg:y="0.056cm" svg:width="6.364cm" svg:height="6.364cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAABGdBTUEAANbY1E9YMgAAABl0
         RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAFpSURBVHjaYvz//z8DtQBAADER
         o+jjZGuibAQIICZiDOK/cgzFwEnrV/4HYXS1AAHERIxBR58yMiAb2DtzM1b1AAHERIxBIIBu
@@ -131,7 +131,7 @@
       </draw:image>
       <svg:title>house</svg:title>
      </draw:frame>/firefox/119.0/releasenotes/</text:a></text:p>
-   <text:p text:style-name="P1"><text:a xlink:type="simple" xlink:href="https://www.mozilla.org/en-US/firefox/118.0/releasenotes/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://www.mozilla.org/en-US/firefox/118.0/releasenotes/</text:a></text:p>
+   <text:p text:style-name="P1"><text:a xlink:type="simple" xlink:href="https://www.mozilla.org/en-US/firefox/118.0/releasenotes/" office:name="Firefox118" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://www.mozilla.org/en-US/firefox/118.0/releasenotes/</text:a></text:p>
   </office:text>
  </office:body>
 </office:document>

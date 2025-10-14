@@ -95,6 +95,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 aHLinkItem.SetName(pUrlField->GetRepresentation());
                 aHLinkItem.SetURL(pUrlField->GetURL());
                 aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
+                aHLinkItem.SetIntName(pUrlField->GetName());
             }
             else
             {

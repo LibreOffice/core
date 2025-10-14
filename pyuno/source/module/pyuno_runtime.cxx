@@ -142,6 +142,9 @@ static PyTypeObject RuntimeImpl_Type =
 #if PY_VERSION_HEX >= 0x030C00A1
     , 0 // tp_watched
 #endif
+#if PY_VERSION_HEX >= 0x030D00A4
+    , 0 // tp_versions_used
+#endif
 #endif
 #endif
 };

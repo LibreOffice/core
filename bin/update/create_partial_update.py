@@ -22,6 +22,7 @@ def waitforlock(lockfile):
             break
         except OSError:
             print("waiting for lockfile/msiexec already running, sleeping 10s")
+            sys.stdout.flush()
             time.sleep(10)
 
 def releaselock(lockfile):

@@ -131,7 +131,7 @@
     <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
    </text:sequence-decls>
-   <text:h text:style-name="P3" text:outline-level="1"><text:a xlink:type="simple" xlink:href="http://example.com/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:bookmark-start text:name="__RefHeading___Toc17_3815242785"/><text:span text:style-name="T6">foo foo </text:span><text:soft-page-break/><text:span text:style-name="T6">foo foo</text:span></text:a><text:bookmark-end text:name="__RefHeading___Toc17_3815242785"/></text:h>
+   <text:h text:style-name="P3" text:outline-level="1"><text:a xlink:type="simple" xlink:href="http://example.com/" office:name="quadfoo" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:bookmark-start text:name="__RefHeading___Toc17_3815242785"/><text:span text:style-name="T6">foo foo </text:span><text:soft-page-break/><text:span text:style-name="T6">foo foo</text:span></text:a><text:bookmark-end text:name="__RefHeading___Toc17_3815242785"/></text:h>
    <text:p text:style-name="Text_20_body"><text:soft-page-break/><text:span text:style-name="T4"><text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc17_3815242785">foo foo foo foo</text:bookmark-ref></text:span><text:soft-page-break/></text:p>
   </office:text>
  </office:body>

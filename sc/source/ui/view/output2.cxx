@@ -888,7 +888,7 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
     if ( !aURL.isEmpty() && pPDFData )
     {
         vcl::PDFExtOutDevBookmarkEntry aBookmark;
-        aBookmark.nLinkId = pPDFData->CreateLink(rRect, aCellText);
+        aBookmark.nLinkId = pPDFData->CreateLink(rRect, u""_ustr);
         aBookmark.aBookmark = aURL;
         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
         rBookmarks.push_back( aBookmark );
