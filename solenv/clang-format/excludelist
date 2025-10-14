@@ -8665,7 +8665,6 @@ sc/source/ui/inc/csvgrid.hxx
 sc/source/ui/inc/csvruler.hxx
 sc/source/ui/inc/csvsplits.hxx
 sc/source/ui/inc/csvtablebox.hxx
-sc/source/ui/inc/datafdlg.hxx
 sc/source/ui/inc/dataprovider.hxx
 sc/source/ui/inc/datastream.hxx
 sc/source/ui/inc/datatransformation.hxx
