@@ -312,13 +312,11 @@ void ImpSdrPdfImport::CollectFonts()
                     SAL_WARN("sd.filter", "ttf not written");
                 else
                     SAL_INFO("sd.filter", "ttf written to: " << fileUrl);
-                // TODO: Only the PFB case will rename later subsets of the same font name to
-                // separate font names to keep the various subsets from clobbering each other.
-                if (!bTTF)
+                std::vector<uint8_t> aToUnicodeData;
+                if (!pPageObject->getFontToUnicode(font, aToUnicodeData))
+                    SAL_WARN("sd.filter", "that's maybe worrying");
+                if (!bTTF || !aToUnicodeData.empty())
                 {
-                    std::vector<uint8_t> aToUnicodeData;
-                    if (!pPageObject->getFontToUnicode(font, aToUnicodeData))
-                        SAL_WARN("sd.filter", "that's maybe worrying");
                     EmbeddedFontInfo fontInfo
                         = convertToOTF(*pSubSetInfo, fileUrl, sFontName, sPostScriptName,
                                        sFontFileName, aToUnicodeData);
