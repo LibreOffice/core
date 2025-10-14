@@ -442,7 +442,7 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBox&, rLb, void )
     // If last listbox is enabled add one item
     if (m_aSortWin.m_aSortKeyItems.back()->m_xLbSort.get() == &rLb)
     {
-        if ( aSelEntry != aStrUndefined )
+        if (rLb.get_active() >= 0 && aSelEntry != aStrUndefined)
         {
             SetLastSortKey( nSortKeyCount );
             return;
