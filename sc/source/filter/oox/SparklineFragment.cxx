@@ -229,6 +229,10 @@ void SparklineGroupsContext::onCharacters(const OUString& rChars)
     {
         ScDocument& rDocument = getScDocument();
         auto& rLastGroup = m_aSparklineGroups.back();
+        if (rLastGroup.getSparklines().empty())
+        {
+            return;
+        }
         auto& rLastSparkline = rLastGroup.getSparklines().back();
         ScRangeList aRange;
         if (ScRangeStringConverter::GetRangeListFromString(aRange, rChars, rDocument,
