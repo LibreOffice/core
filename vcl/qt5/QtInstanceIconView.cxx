@@ -330,11 +330,11 @@ bool QtInstanceIconView::handleToolTipEvent(const QHelpEvent& rHelpEvent)
 
     SolarMutexGuard g;
     const QtInstanceTreeIter aIter(aIndex);
-    const QString sToolTip = toQString(signal_query_tooltip(aIter));
+    const OUString sToolTip = signal_query_tooltip(aIter);
     if (sToolTip.isEmpty())
         return QtInstanceWidget::handleToolTipEvent(rHelpEvent);
 
-    QToolTip::showText(rHelpEvent.globalPos(), sToolTip, m_pListView,
+    QToolTip::showText(rHelpEvent.globalPos(), toRichTextTooltip(sToolTip), m_pListView,
                        m_pListView->visualRect(aIndex));
     return true;
 }

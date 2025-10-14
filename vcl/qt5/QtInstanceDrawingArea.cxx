@@ -178,7 +178,7 @@ bool QtInstanceDrawingArea::handleToolTipEvent(const QHelpEvent& rHelpEvent)
         return QtInstanceWidget::handleToolTipEvent(rHelpEvent);
 
     const QPoint aPos = getQWidget()->mapToGlobal(toQRect(aHelpArea).topLeft());
-    QToolTip::showText(aPos, toQString(sToolTipText), getQWidget());
+    QToolTip::showText(aPos, toRichTextTooltip(sToolTipText), getQWidget());
     return true;
 }
 

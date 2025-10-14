@@ -1182,11 +1182,11 @@ bool QtInstanceTreeView::handleViewPortToolTipEvent(const QHelpEvent& rHelpEvent
 
     SolarMutexGuard g;
     const QtInstanceTreeIter aIter(aIndex);
-    const QString sToolTip = toQString(signal_query_tooltip(aIter));
+    const OUString sToolTip = signal_query_tooltip(aIter);
     if (sToolTip.isEmpty())
         return false;
 
-    QToolTip::showText(rHelpEvent.globalPos(), sToolTip, m_pTreeView,
+    QToolTip::showText(rHelpEvent.globalPos(), toRichTextTooltip(sToolTip), m_pTreeView,
                        m_pTreeView->visualRect(aIndex));
     return true;
 }

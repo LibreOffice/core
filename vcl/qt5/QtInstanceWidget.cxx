@@ -17,6 +17,7 @@
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtGui/QMouseEvent>
+#include <QtGui/QTextDocumentFragment>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
 
@@ -582,7 +583,7 @@ void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
         return;
     }
 
-    getQWidget()->setToolTip(toQString(rTip));
+    getQWidget()->setToolTip(toRichTextTooltip(rTip));
 }
 
 OUString QtInstanceWidget::get_tooltip_text() const
@@ -596,7 +597,8 @@ OUString QtInstanceWidget::get_tooltip_text() const
         return sToolTipText;
     }
 
-    return toOUString(getQWidget()->toolTip());
+    // convert HTML tooltip to plain text
+    return toOUString(QTextDocumentFragment::fromHtml(getQWidget()->toolTip()).toPlainText());
 }
 
 void QtInstanceWidget::set_cursor_data(void*) { assert(false && "Not implemented yet"); }
@@ -832,7 +834,8 @@ bool QtInstanceWidget::handleToolTipEvent(const QHelpEvent& rHelpEvent)
     if (sExtendedTip.isEmpty())
         return false;
 
-    QToolTip::showText(rHelpEvent.globalPos(), sExtendedTip, getQWidget());
+    QToolTip::showText(rHelpEvent.globalPos(), toRichTextTooltip(toOUString(sExtendedTip)),
+                       getQWidget());
     return true;
 }
 
