@@ -123,8 +123,6 @@ Size ImplImage::getSizePixel()
             maSizePixel = maBitmap.GetSizePixel();
             aRet = maSizePixel;
         }
-        else
-            SAL_WARN_IF(!bOptional, "vcl", "Failed to load stock icon " << maStockName);
     }
     return aRet;
 }
