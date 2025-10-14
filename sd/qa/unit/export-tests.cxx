@@ -1032,6 +1032,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
     loadFromFile(u"pdf/sample.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     const SdrPage* pPage = GetPage(1);
@@ -1054,6 +1055,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
     loadFromFile(u"pdf/textheight1.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     xmlDocUniquePtr pXml = parseLayout();
@@ -1075,6 +1077,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
     loadFromFile(u"pdf/differentfonts.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     xmlDocUniquePtr pXml = parseLayout();
@@ -1137,6 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1183,6 +1187,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
     loadFromFile(u"pdf/ErrareHumanumEst.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     const SdrPage* pPage = GetPage(1);

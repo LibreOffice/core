@@ -2803,6 +2803,12 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
         // gallery elements may not support com.sun.star.document.Settings so throws from createInstance
     }
 
+    if (decomposePDF())
+    {
+        mbEmbedFonts = true;
+        mbEmbedUsedOnly = true;
+    }
+
     XMLFontAutoStylePool* pPool = new XMLFontAutoStylePool(*this);
 
     pPool->addModelFonts(Reference<beans::XPropertySet>(GetModel(), UNO_QUERY));
