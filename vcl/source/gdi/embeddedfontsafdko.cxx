@@ -80,8 +80,11 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
         return false;
 
     OString srcFontPathA(srcFontPath.toUtf8());
-    h->src.stm.filename = const_cast<char*>(srcFontPathA.getStr());
     OString destFilePathA(destFilePath.toUtf8());
+
+    SAL_INFO("vcl.fonts", "tx -dump " << srcFontPathA << " " << destFilePathA);
+
+    h->src.stm.filename = const_cast<char*>(srcFontPathA.getStr());
     h->dst.stm.filename = const_cast<char*>(destFilePathA.getStr());
     bool result = convertTx(h);
     txFree(h);
