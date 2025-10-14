@@ -251,7 +251,7 @@ void UnoApiHierarchy::addNode(std::u16string_view sQualifiedNameView, TypeClass 
         sParentPath = sCurrentPath;
         sCurrentPath = sCurrentPath.isEmpty() ? sPart : sCurrentPath + u"." + sPart;
 
-        // Find the list of childern for the current parent
+        // Find the list of children for the current parent
         auto& rChildren = m_hierarchyCache[sParentPath];
 
         // Avoid adding duplicate nodes
