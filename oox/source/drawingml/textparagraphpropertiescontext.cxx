@@ -76,10 +76,12 @@ double  lclGetGraphicAspectRatio( const Reference< XGraphic >& rxGraphic )
 // CT_TextParagraphProperties
 TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper const & rParent,
                                                                 const AttributeList& rAttribs,
-                                                                TextParagraphProperties& rTextParagraphProperties )
+                                                                TextParagraphProperties& rTextParagraphProperties,
+                                                                uint16_t* pListNumberingMask)
 : ContextHandler2( rParent )
 , mrTextParagraphProperties( rTextParagraphProperties )
 , mrBulletList( rTextParagraphProperties.getBulletList() )
+, mpListNumberingMask( pListNumberingMask )
 {
     OUString sValue;
 
@@ -197,6 +199,52 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 
     if( mrTextParagraphProperties.getParaAdjust() )
         rPropertyMap.setProperty( PROP_ParaAdjust, *mrTextParagraphProperties.getParaAdjust());
+}
+
+bool TextParagraphPropertiesContext::markListNumbered()
+{
+    sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
+
+    // We only track list state in some situations
+    if (mpListNumberingMask == nullptr)
+    {
+        return false;
+    }
+
+    uint16_t nOldMask = *mpListNumberingMask;
+    // The bit that represents this level  (..0001000)
+    uint16_t nOurBit = static_cast<uint16_t>(1) << nLevel;
+
+    uint16_t nTmp = nOldMask;
+    // Clears all bits at our level and lower (..0000xxx)
+    nTmp &= nOurBit - 1;
+    // and put our bit in (..0001xxx)
+    nTmp |= nOurBit;
+
+    *mpListNumberingMask = nTmp;
+
+    return (nOldMask & nOurBit) == 0;
+}
+
+void TextParagraphPropertiesContext::markListUnnumbered()
+{
+    sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
+
+    // We only track list state in some situations
+    if (mpListNumberingMask == nullptr)
+    {
+        return;
+    }
+
+    uint16_t nOldMask = *mpListNumberingMask;
+    // The bit that represents this level  (..0001000)
+    uint16_t nOurBit = static_cast<uint16_t>(1) << nLevel;
+
+    uint16_t nTmp = nOldMask;
+    // Clears all bits at our level and lower (..0000xxx)
+    nTmp &= nOurBit - 1;
+
+    *mpListNumberingMask = nTmp;
 }
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
