@@ -479,7 +479,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Toggleable&, voi
     TriState eState = m_xTsbPixel->get_state();
     if (eState == TRISTATE_TRUE)
     {
-        int nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) / 10;
+        auto nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) / 10;
         m_xMtrFldAmount->set_sensitive(true);
         m_xMtrFldAmount->set_unit(FieldUnit::CUSTOM);
         m_xMtrFldAmount->set_digits(0);
@@ -491,7 +491,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Toggleable&, voi
     }
     else if( eState == TRISTATE_FALSE )
     {
-        int nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) * 10;
+        auto nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) * 10;
         m_xMtrFldAmount->set_sensitive(true);
         m_xMtrFldAmount->set_unit(eFUnit);
         m_xMtrFldAmount->set_digits(2);

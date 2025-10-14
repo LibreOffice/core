@@ -1687,7 +1687,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, weld::ComboBox&, voi
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_Int16 nDesired = m_xWordSpacing->get_value(FieldUnit::PERCENT);
+    auto nDesired = m_xWordSpacing->get_value(FieldUnit::PERCENT);
     if (nDesired < m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT))
         m_xWordSpacingMinimum->set_value(nDesired, FieldUnit::PERCENT);
     if (nDesired > m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT))
@@ -1696,7 +1696,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingHdl_Impl, weld::MetricSpinButton
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingMinimumHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_Int16 nMinimum = m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT);
+    auto nMinimum = m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT);
     if (nMinimum > m_xWordSpacing->get_value(FieldUnit::PERCENT))
         m_xWordSpacing->set_value(nMinimum, FieldUnit::PERCENT);
     if (nMinimum > m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT))
@@ -1705,7 +1705,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingMinimumHdl_Impl, weld::MetricSpi
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingMaximumHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_Int16 nMaximum = m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT);
+    auto nMaximum = m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT);
     if (nMaximum < m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT))
         m_xWordSpacingMinimum->set_value(nMaximum, FieldUnit::PERCENT);
     if (nMaximum < m_xWordSpacing->get_value(FieldUnit::PERCENT))

@@ -165,7 +165,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, weld::Toggleable&, void 
 
 IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nVal = mxMFLeftIndent->get_value(FieldUnit::NONE);
+    auto nVal = mxMFLeftIndent->get_value(FieldUnit::NONE);
     ScIndentItem aItem(static_cast<sal_uInt16>(CalcToUnit(nVal, MapUnit::MapTwip)));
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_INDENT,

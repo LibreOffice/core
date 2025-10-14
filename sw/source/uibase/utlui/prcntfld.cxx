@@ -157,8 +157,8 @@ void SwPercentField::set_min(sal_Int64 nNewMin, FieldUnit eInUnit)
             eInUnit = m_eOldUnit;
         m_nOldMin = Convert(nNewMin, eInUnit, m_eOldUnit);
 
-        int nPercent = Convert(nNewMin, eInUnit, FieldUnit::PERCENT);
-        m_pField->set_min(std::max(1, nPercent), FieldUnit::NONE);
+        sal_Int64 nPercent = Convert(nNewMin, eInUnit, FieldUnit::PERCENT);
+        m_pField->set_min(std::max<sal_Int64>(1, nPercent), FieldUnit::NONE);
     }
 }
 
