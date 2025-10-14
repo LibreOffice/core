@@ -19,6 +19,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -2054,6 +2055,31 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166647_userpaint)
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pViewShell->GetActualPage()->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)
+{
+    createSdImpressDoc("pptx/tdf168835.pptx");
+    checkCurrentPageNumber(1);
+
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    checkCurrentPageNumber(2);
+
+    insertStringToObject(0, u"Title of the second slide", /*bUseEscape*/ true);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+
+    CPPUNIT_ASSERT_EQUAL(u"Title of the second slide"_ustr, xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(44.0f, xShape->getPropertyValue(u"CharHeight"_ustr).get<float>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                         xShape->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr,
+                         xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

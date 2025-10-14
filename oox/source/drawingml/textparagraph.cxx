@@ -63,7 +63,6 @@ TextCharacterProperties TextParagraph::getCharacterStyle (
     if (pTextParagraphStyle)
         aTextCharacterStyle.assignUsed(pTextParagraphStyle->getTextCharacterProperties());
     aTextCharacterStyle.assignUsed(maProperties.getTextCharacterProperties());
-    aTextCharacterStyle.assignUsed(maEndProperties);
     return aTextCharacterStyle;
 }
 
