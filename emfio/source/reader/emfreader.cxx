@@ -1625,7 +1625,7 @@ namespace emfio
                                         else
                                         {
                                             // just use Bitmap
-                                            aBitmapEx = aBitmap;
+                                            aBitmapEx = std::move(aBitmap);
                                         }
                                     }
                                 }
