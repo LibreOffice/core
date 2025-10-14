@@ -359,8 +359,8 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
         for (auto const & rPair : rAutoStyleEntry.m_aXmlProperties)
         {
             if (rPair.first == "font-name" ||
-                rPair.first == "font-weight-asian" ||
-                rPair.first == "font-weight-complex")
+                rPair.first == "font-name-asian" ||
+                rPair.first == "font-name-complex")
             {
                 if (rPair.second.has<OUString>())
                 {
