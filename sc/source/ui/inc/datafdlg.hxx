@@ -25,7 +25,7 @@ private:
     OUString m_sNewRecord;
 
     ScTabViewShell& m_rTabViewShell;
-    ScDocument* m_pDoc;
+    ScDocument& m_rDoc;
     sal_uInt16 m_aColLength;
     SCROW m_nCurrentRow;
     SCCOL m_nStartCol;

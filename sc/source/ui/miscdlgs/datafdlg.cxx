@@ -20,6 +20,7 @@
 ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShellOri)
     : GenericDialogController(pParent, u"modules/scalc/ui/dataform.ui"_ustr, u"DataFormDialog"_ustr)
     , m_rTabViewShell(rTabViewShellOri)
+    , m_rDoc(m_rTabViewShell.GetViewData().GetDocument())
     , m_aColLength(0)
     , m_nCurrentRow(0)
     , m_nStartCol(0)
@@ -41,8 +42,6 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
 
     //read header from current document, and add new controls
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
-
-    m_pDoc = &rViewData.GetDocument();
 
     {
         ScRange aRange;
@@ -67,8 +66,8 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
                 m_nEndCol++;
-                OUString aColName = m_pDoc->GetString(m_nEndCol, m_nStartRow, m_nTab);
-                int nColWidth = m_pDoc->GetColWidth(m_nEndCol, m_nTab);
+                OUString aColName = m_rDoc.GetString(m_nEndCol, m_nStartRow, m_nTab);
+                int nColWidth = m_rDoc.GetColWidth(m_nEndCol, m_nTab);
                 if (aColName.isEmpty() && nColWidth)
                 {
                     m_nEndCol--;
@@ -83,8 +82,8 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
                     break;
                 m_nStartCol--;
 
-                OUString aColName = m_pDoc->GetString(m_nStartCol, m_nStartRow, m_nTab);
-                int nColWidth = m_pDoc->GetColWidth(m_nEndCol, m_nTab);
+                OUString aColName = m_rDoc.GetString(m_nStartCol, m_nStartRow, m_nTab);
+                int nColWidth = m_rDoc.GetColWidth(m_nEndCol, m_nTab);
                 if (aColName.isEmpty() && nColWidth)
                 {
                     m_nStartCol++;
@@ -95,7 +94,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             //skip leading hide column
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                int nColWidth = m_pDoc->GetColWidth(m_nStartCol, m_nTab);
+                int nColWidth = m_rDoc.GetColWidth(m_nStartCol, m_nTab);
                 if (nColWidth)
                     break;
                 m_nStartCol++;
@@ -108,7 +107,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
                 m_nEndRow++;
-                OUString aColName = m_pDoc->GetString(m_nStartCol, m_nEndRow, m_nTab);
+                OUString aColName = m_rDoc.GetString(m_nStartCol, m_nEndRow, m_nTab);
                 if (aColName.isEmpty())
                 {
                     m_nEndRow--;
@@ -123,7 +122,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
                     break;
                 m_nStartRow--;
 
-                OUString aColName = m_pDoc->GetString(m_nStartCol, m_nStartRow, m_nTab);
+                OUString aColName = m_rDoc.GetString(m_nStartCol, m_nStartRow, m_nTab);
                 if (aColName.isEmpty())
                 {
                     m_nStartRow++;
@@ -145,8 +144,8 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShel
         sal_Int32 nGridRow = 0;
         for (sal_uInt16 nIndex = 0; nIndex < m_aColLength; ++nIndex)
         {
-            OUString aFieldName = m_pDoc->GetString(nIndex + m_nStartCol, m_nStartRow, m_nTab);
-            int nColWidth = m_pDoc->GetColWidth(nIndex + m_nStartCol, m_nTab);
+            OUString aFieldName = m_rDoc.GetString(nIndex + m_nStartCol, m_nStartRow, m_nTab);
+            int nColWidth = m_rDoc.GetColWidth(nIndex + m_nStartCol, m_nTab);
             if (nColWidth)
             {
                 m_aEntries.emplace_back(new ScDataFormFragment(m_xGrid.get(), nGridRow));
@@ -196,9 +195,9 @@ void ScDataFormDlg::FillCtrls()
     {
         if (m_aEntries[i])
         {
-            if (m_nCurrentRow <= m_nEndRow && m_pDoc)
+            if (m_nCurrentRow <= m_nEndRow)
             {
-                OUString aFieldName(m_pDoc->GetString(i + m_nStartCol, m_nCurrentRow, m_nTab));
+                OUString aFieldName(m_rDoc.GetString(i + m_nStartCol, m_nCurrentRow, m_nTab));
                 m_aEntries[i]->m_xEdit->set_text(aFieldName);
             }
             else
@@ -229,8 +228,6 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 {
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
-    if (!m_pDoc)
-        return;
 
     bool bHasData = std::any_of(m_aEntries.begin(), m_aEntries.end(),
         [](const std::unique_ptr<ScDataFormFragment>& rElem) { return (rElem != nullptr) && (!rElem->m_xEdit->get_text().isEmpty()); });
@@ -254,45 +251,34 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, weld::Button&, void)
 {
-    if (m_pDoc)
-    {
-        if (m_nCurrentRow > m_nStartRow + 1)
-            m_nCurrentRow--;
+    if (m_nCurrentRow > m_nStartRow + 1)
+        m_nCurrentRow--;
 
-        SetButtonState();
-        FillCtrls();
-    }
+    SetButtonState();
+    FillCtrls();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, weld::Button&, void)
 {
-    if (m_pDoc)
-    {
-        if (m_nCurrentRow <= m_nEndRow)
-            m_nCurrentRow++;
+    if (m_nCurrentRow <= m_nEndRow)
+        m_nCurrentRow++;
 
-        SetButtonState();
-        FillCtrls();
-    }
+    SetButtonState();
+    FillCtrls();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, weld::Button&, void)
 {
-    if (m_pDoc)
-    {
-        FillCtrls();
-    }
+    FillCtrls();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, weld::Button&, void)
 {
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
-    if (!m_pDoc)
-        return;
 
     ScRange aRange(m_nStartCol, m_nCurrentRow, m_nTab, m_nEndCol, m_nCurrentRow, m_nTab);
-    m_pDoc->DeleteRow(aRange);
+    m_rDoc.DeleteRow(aRange);
     m_nEndRow--;
 
     SetButtonState();
