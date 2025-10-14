@@ -334,6 +334,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if (xPDFModelReplacement)
     {
         aShapeInfo.xPDFModelReplacement = std::move(xPDFModelReplacement);
+        GetExport().GetFontAutoStylePool()->addModelFonts(uno::Reference<beans::XPropertySet>(aShapeInfo.xPDFModelReplacement, uno::UNO_QUERY));
         aShapeInfo.xCustomShapeReplacement = GetPDFShape(aShapeInfo.xPDFModelReplacement);
     }
     else

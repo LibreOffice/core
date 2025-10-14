@@ -1124,7 +1124,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
 
     // ensure the expected font name
     assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P4']/"
-                         "style:text-properties[@fo:font-family='AcademyEngravedLetPlain']");
+                         "style:text-properties[@style:font-name='AcademyEngravedLetPlain']");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTest)
