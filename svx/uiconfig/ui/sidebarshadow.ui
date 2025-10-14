@@ -135,6 +135,7 @@
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment3</property>
+            <property name="digits">1</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -166,6 +167,7 @@
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment4</property>
+            <property name="digits">1</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
