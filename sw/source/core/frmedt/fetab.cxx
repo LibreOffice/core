@@ -323,9 +323,8 @@ bool SwFEShell::DeleteCol()
             ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->FindTableNode()
             : static_cast<SwNoTextFrame*>(pFrame)->GetNode()->FindTableNode();
 
-        for (size_t i = 0; i < aBoxes.size(); ++i)
+        for (SwTableBox *pBox : aBoxes)
         {
-            SwTableBox *pBox = aBoxes[i];
             if ( pBox->GetSttNd() )
             {
                 SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
@@ -1370,9 +1369,8 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
         aBoxes.insert( pBox );
     }
 
-    for (size_t i = 0; i < aBoxes.size(); ++i)
+    for (SwTableBox *pBox : aBoxes)
     {
-        SwTableBox *pBox = aBoxes[i];
         if ( pBox->GetSttNd() )
         {
             SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
@@ -1469,9 +1467,8 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     else
     {
         const SwTableSortBoxes& rTBoxes = pTableNode->GetTable().GetTabSortBoxes();
-        for (size_t n = 0; n < rTBoxes.size(); ++n)
+        for (SwTableBox* pBox : rTBoxes)
         {
-            SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.insert( pBox );
         }
     }
@@ -1508,9 +1505,8 @@ bool SwFEShell::GetTableAutoFormat( SwTableAutoFormat& rGet )
     else
     {
         const SwTableSortBoxes& rTBoxes = pTableNd->GetTable().GetTabSortBoxes();
-        for (size_t n = 0; n < rTBoxes.size(); ++n)
+        for (SwTableBox* pBox : rTBoxes)
         {
-            SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.insert( pBox );
         }
     }
