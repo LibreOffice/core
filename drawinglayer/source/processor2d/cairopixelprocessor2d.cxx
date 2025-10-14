@@ -17,6 +17,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/CairoFormats.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -49,6 +50,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/utils/bgradient.hxx>
@@ -59,6 +61,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <unordered_map>
 #include <dlfcn.h>
+#include "vclhelperbufferdevice.hxx"
 
 using namespace com::sun::star;
 
@@ -3449,6 +3452,61 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         maBColorModifierStack.pop();
 }
 
+void CairoPixelProcessor2D::processPatternFillPrimitive2D(
+    const primitive2d::PatternFillPrimitive2D& rPrimitive)
+{
+    const basegfx::B2DRange& rReferenceRange = rPrimitive.getReferenceRange();
+    if (rReferenceRange.isEmpty() || rReferenceRange.getWidth() <= 0.0
+        || rReferenceRange.getHeight() <= 0.0)
+        return;
+    basegfx::B2DPolyPolygon aMask = rPrimitive.getMask();
+    aMask.transform(getViewInformation2D().getObjectToViewTransformation());
+    const basegfx::B2DRange aMaskRange(aMask.getB2DRange());
+    if (aMaskRange.isEmpty() || aMaskRange.getWidth() <= 0.0 || aMaskRange.getHeight() <= 0.0)
+        return;
+    sal_uInt32 nTileWidth, nTileHeight;
+    rPrimitive.getTileSize(nTileWidth, nTileHeight, getViewInformation2D());
+    if (nTileWidth == 0 || nTileHeight == 0)
+        return;
+    Bitmap aTileImage = rPrimitive.createTileImage(nTileWidth, nTileHeight);
+    tools::Rectangle aMaskRect = vcl::unotools::rectangleFromB2DRectangle(aMaskRange);
+    // Unless smooth edges are needed, simply use clipping.
+    if (basegfx::utils::isRectangle(aMask) || !getViewInformation2D().getUseAntiAliasing())
+    {
+        mpTargetOutputDevice->Push(vcl::PushFlags::CLIPREGION);
+        mpTargetOutputDevice->IntersectClipRegion(vcl::Region(aMask));
+        mpTargetOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+        mpTargetOutputDevice->Pop();
+        return;
+    }
+
+    impBufferDevice aBufferDevice(*mpTargetOutputDevice, aMaskRange);
+    if (!aBufferDevice.isVisible())
+        return;
+    // remember last OutDev and set to content
+    OutputDevice* pLastOutputDevice = mpTargetOutputDevice;
+    mpTargetOutputDevice = &aBufferDevice.getContent();
+    // if the tile is a single pixel big, just flood fill with that pixel color
+    if (nTileWidth == 1 && nTileHeight == 1)
+    {
+        Color col = aTileImage.GetPixelColor(0, 0);
+        mpTargetOutputDevice->SetLineColor(col);
+        mpTargetOutputDevice->SetFillColor(col);
+        mpTargetOutputDevice->DrawRect(aMaskRect);
+    }
+    else
+        mpTargetOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+    // back to old OutDev
+    mpTargetOutputDevice = pLastOutputDevice;
+    // draw mask
+    VirtualDevice& rMask = aBufferDevice.getTransparence();
+    rMask.SetLineColor();
+    rMask.SetFillColor(COL_BLACK);
+    rMask.DrawPolyPolygon(aMask);
+    // dump buffer to outdev
+    aBufferDevice.paint();
+}
+
 void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
     const primitive2d::PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D)
 {
@@ -4466,6 +4524,12 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processFillGradientPrimitive2D(
                 static_cast<const primitive2d::FillGradientPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D:
+        {
+            processPatternFillPrimitive2D(
+                static_cast<const drawinglayer::primitive2d::PatternFillPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D:

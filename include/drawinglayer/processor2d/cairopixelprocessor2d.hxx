@@ -49,6 +49,7 @@ class TextLayouterDevice;
 class SvgLinearGradientPrimitive2D;
 class SvgRadialGradientPrimitive2D;
 class SvgGradientHelper;
+class PatternFillPrimitive2D;
 }
 
 namespace basegfx
@@ -127,6 +128,7 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
     void processFillGradientPrimitive2D(
         const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    void processPatternFillPrimitive2D(const primitive2d::PatternFillPrimitive2D& rPrimitive);
     void processFillGraphicPrimitive2D(
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
     void processPolyPolygonRGBAPrimitive2D(
