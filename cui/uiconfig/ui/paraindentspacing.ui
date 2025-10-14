@@ -175,6 +175,7 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentspinED_INDENT</property>
+                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -188,6 +189,7 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentspinED_INDENT1</property>
+                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -201,6 +203,7 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentspinED_INDENT2</property>
+                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -291,6 +294,7 @@
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustmentED_DIST</property>
+                        <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -304,6 +308,7 @@
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustmentED_DIST1</property>
+                        <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
