@@ -968,8 +968,18 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
     }
     else if ( pBrdCst == m_pColorConfig.get() )
     {
-        //invalidate only the current view in tiled rendering mode, or all views otherwise
         const bool bKit = comphelper::LibreOfficeKit::isActive();
+        const SwViewColors aViewColors(*m_pColorConfig);
+        SwViewOption aViewOption = *GetViewOption(/*Web=*/false);
+
+        // if not LOKit, then update the module defaults (for reload/open/new etc.)
+        if (!bKit && aViewColors != aViewOption.GetColorConfig())
+        {
+            aViewOption.SetColorConfig(aViewColors);
+            ApplyUsrPref(aViewOption, /*SwView=*/nullptr);
+        }
+
+        //invalidate only the current view in tiled rendering mode, or all views otherwise
         SfxViewShell* pViewShell = bKit ? SfxViewShell::Current() : SfxViewShell::GetFirst();
         while(pViewShell)
         {
@@ -980,7 +990,6 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
                 {
                     SwViewOption aNewOptions = *pSwView->GetWrtShell().GetViewOptions();
                     aNewOptions.SetThemeName(svtools::ColorConfig::GetCurrentSchemeName());
-                    SwViewColors aViewColors(*m_pColorConfig);
                     aNewOptions.SetColorConfig(aViewColors);
                     const bool bChanged(aNewOptions != *pSwView->GetWrtShell().GetViewOptions());
                     if (bChanged)
