@@ -2707,7 +2707,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     uno::Reference<text::XTextCursor> xCursor;
                     if (m_StreamStateStack.top().bParaHadField
-                        && !IsInComments() && !m_xTOCMarkerCursor.is())
+                        && !IsInComments() && !m_StreamStateStack.top().xTOCMarkerCursor.is())
                     {
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
@@ -7518,7 +7518,7 @@ void DomainMapper_Impl::handleToc
             const auto xTextCursor = xTextAppend->getText()->createTextCursor();
             if (xTextCursor)
                 xTextCursor->gotoEnd(false);
-            m_xTOCMarkerCursor = xTextCursor;
+            m_StreamStateStack.top().xTOCMarkerCursor = xTextCursor;
         }
         else
         {
@@ -7528,7 +7528,7 @@ void DomainMapper_Impl::handleToc
 
             // init [xTOCMarkerCursor]
             uno::Reference< text::XText > xText = xTextAppend->getText();
-            m_xTOCMarkerCursor = xText->createTextCursor();
+            m_StreamStateStack.top().xTOCMarkerCursor = xText->createTextCursor();
 
             // create header of the TOC with the TOC title inside
             createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, u"com.sun.star.text.IndexHeaderSection", true);
