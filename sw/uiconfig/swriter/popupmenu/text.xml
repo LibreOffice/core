@@ -24,14 +24,14 @@
   <menu:menuitem menu:id=".uno:EditCurIndex"/>
   <menu:menuitem menu:id=".uno:RemoveTableOf"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:UpdateSelectedField"/>
-  <menu:menuitem menu:id=".uno:ConvertSelectedField"/>
+  <menu:menuitem menu:id=".uno:UpdateSelectedField" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:ConvertSelectedField" menu:style="text"/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
-  <menu:menuitem menu:id=".uno:ContentControlProperties"/>
+  <menu:menuitem menu:id=".uno:ContentControlProperties" menu:style="text"/>
   <menu:menuitem menu:id=".uno:DeleteContentControl"/>
-  <menu:menuitem menu:id=".uno:EditFootnote"/>
-  <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
-  <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
+  <menu:menuitem menu:id=".uno:EditFootnote" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:IndexEntryDialog" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog" menu:style="text"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
@@ -83,7 +83,7 @@
   <menu:menuitem menu:id=".uno:InsertAnnotation"/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
-  <menu:menuitem menu:id=".uno:ReinstateTrackedChange"/>
+  <menu:menuitem menu:id=".uno:ReinstateTrackedChange" menu:style="text"/>
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
   <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
   <menu:menuseparator/>

@@ -15,9 +15,9 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menu menu:id=".uno:PasteSpecialMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:PasteNestedTable"/>
-      <menu:menuitem menu:id=".uno:PasteRowsBefore"/>
-      <menu:menuitem menu:id=".uno:PasteColumnsBefore"/>
+      <menu:menuitem menu:id=".uno:PasteNestedTable" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:PasteRowsBefore" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:PasteColumnsBefore" menu:style="text"/>
       <menu:menuitem menu:id=".uno:PasteUnformatted"/>
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
     </menu:menupopup>
@@ -34,11 +34,11 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
       <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
-      <menu:menuitem menu:id=".uno:InsertRowDialog"/>
+      <menu:menuitem menu:id=".uno:InsertRowDialog" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
       <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
-      <menu:menuitem menu:id=".uno:InsertColumnDialog"/>
+      <menu:menuitem menu:id=".uno:InsertColumnDialog" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:TableDeleteMenu">
@@ -50,12 +50,12 @@
   </menu:menu>
   <menu:menu menu:id=".uno:TableAutoFitMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SetRowHeight"/>
+      <menu:menuitem menu:id=".uno:SetRowHeight" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SetMinimalRowHeight"/>
       <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
       <menu:menuitem menu:id=".uno:DistributeRows"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SetColumnWidth"/>
+      <menu:menuitem menu:id=".uno:SetColumnWidth" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SetMinimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
@@ -128,18 +128,18 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertFormula"/>
   <menu:menuitem menu:id=".uno:InsertAnnotation"/>
-  <menu:menuitem menu:id=".uno:UpdateSelectedField"/>
-  <menu:menuitem menu:id=".uno:ConvertSelectedField"/>
+  <menu:menuitem menu:id=".uno:UpdateSelectedField" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:ConvertSelectedField" menu:style="text"/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
   <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ContentControlProperties"/>
-  <menu:menuitem menu:id=".uno:EditFootnote"/>
-  <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
-  <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
+  <menu:menuitem menu:id=".uno:ContentControlProperties" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:EditFootnote" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:IndexEntryDialog" menu:style="text"/>
+  <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog" menu:style="text"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>

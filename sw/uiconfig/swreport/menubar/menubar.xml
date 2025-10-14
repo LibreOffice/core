@@ -57,7 +57,7 @@
           <menu:menuitem menu:id=".uno:ExportDirectToEPUB" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:SendToMenu">
+      <menu:menu menu:id=".uno:SendToMenu" menu:style="text">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SendMail" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsOOo" menu:style="text"/>
@@ -102,7 +102,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SelectAll" menu:style="text"/>
-      <menu:menu menu:id=".uno:SelectionModeMenu">
+      <menu:menu menu:id=".uno:SelectionModeMenu" menu:style="text">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SelectionModeDefault" menu:style="radio"/>
           <menu:menuitem menu:id=".uno:SelectionModeBlock" menu:style="radio"/>
@@ -137,9 +137,9 @@
       <menu:menuitem menu:id=".uno:EditHyperlink"/>
       <menu:menu menu:id=".uno:EditLinksMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:EditFootnote"/>
-          <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
-          <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
+          <menu:menuitem menu:id=".uno:EditFootnote" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:IndexEntryDialog" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:FieldDialog" menu:style="text"/>
@@ -173,20 +173,20 @@
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
-      <menu:menu menu:id=".uno:ZoomMenu">
+      <menu:menu menu:id=".uno:ZoomMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Zoom50Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom50Percent" menu:style="text"/>
           <menu:menuitem menu:id=".uno:Zoom75Percent"/>
           <menu:menuitem menu:id=".uno:Zoom100Percent"/>
           <menu:menuitem menu:id=".uno:Zoom150Percent"/>
-          <menu:menuitem menu:id=".uno:Zoom200Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom200Percent" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:Zoom"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:InsertMenu">
+  <menu:menu menu:id=".uno:InsertMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertBreak"/>
       <menu:menuitem menu:id=".uno:InsertScript"/>
@@ -198,7 +198,7 @@
           <menu:menuitem menu:id=".uno:Gallery"/>
           <menu:menu menu:id=".uno:Scan">
             <menu:menupopup>
-              <menu:menuitem menu:id=".uno:TwainSelect"/>
+              <menu:menuitem menu:id=".uno:TwainSelect" menu:style="text"/>
               <menu:menuitem menu:id=".uno:TwainTransfer"/>
             </menu:menupopup>
           </menu:menu>
@@ -249,15 +249,15 @@
       <menu:menuitem menu:id=".uno:InsertReferenceField" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
-      <menu:menu menu:id=".uno:FormattingMarkMenu">
+      <menu:menu menu:id=".uno:FormattingMarkMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertNonBreakingSpace"/>
-          <menu:menuitem menu:id=".uno:InsertHardHyphen"/>
-          <menu:menuitem menu:id=".uno:InsertSoftHyphen"/>
-          <menu:menuitem menu:id=".uno:InsertZWSP"/>
-          <menu:menuitem menu:id=".uno:InsertWJ"/>
-          <menu:menuitem menu:id=".uno:InsertLRM"/>
-          <menu:menuitem menu:id=".uno:InsertRLM"/>
+          <menu:menuitem menu:id=".uno:InsertNonBreakingSpace" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertHardHyphen" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertSoftHyphen" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertZWSP" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertWJ" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertLRM" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertRLM" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -276,7 +276,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertPageHeader"/>
           <menu:menuitem menu:id=".uno:InsertPageFooter"/>
-          <menu:menuitem menu:id=".uno:UseHeaderFooterMenu"/>
+          <menu:menuitem menu:id=".uno:UseHeaderFooterMenu" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -384,7 +384,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Crop"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:ExternalEdit"/>
+          <menu:menuitem menu:id=".uno:ExternalEdit" menu:style="text"/>
           <menu:menuitem menu:id=".uno:ChangePicture"/>
           <menu:menuitem menu:id=".uno:CompressGraphic"/>
           <menu:menuitem menu:id=".uno:SaveGraphic"/>
@@ -475,8 +475,8 @@
           <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
           <menu:menuitem menu:id=".uno:RotateLeft"/>
           <menu:menuitem menu:id=".uno:RotateRight"/>
-          <menu:menuitem menu:id=".uno:Rotate180"/>
-          <menu:menuitem menu:id=".uno:RotateReset"/>
+          <menu:menuitem menu:id=".uno:Rotate180" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:RotateReset" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:FlipVertical"/>
           <menu:menuitem menu:id=".uno:FlipHorizontal"/>
@@ -499,11 +499,11 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
           <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
-          <menu:menuitem menu:id=".uno:InsertRowDialog"/>
+          <menu:menuitem menu:id=".uno:InsertRowDialog" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
           <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
-          <menu:menuitem menu:id=".uno:InsertColumnDialog"/>
+          <menu:menuitem menu:id=".uno:InsertColumnDialog" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:TableDeleteMenu">
@@ -523,12 +523,12 @@
       </menu:menu>
       <menu:menu menu:id=".uno:TableAutoFitMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:SetRowHeight"/>
+          <menu:menuitem menu:id=".uno:SetRowHeight" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SetMinimalRowHeight"/>
           <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
           <menu:menuitem menu:id=".uno:DistributeRows"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:SetColumnWidth"/>
+          <menu:menuitem menu:id=".uno:SetColumnWidth" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SetMinimalColumnWidth"/>
           <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
           <menu:menuitem menu:id=".uno:DistributeColumns"/>
@@ -550,10 +550,10 @@
       <menu:menuitem menu:id=".uno:HeadingRowsRepeat" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RowSplit" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menu menu:id=".uno:TableConvertMenu">
+      <menu:menu menu:id=".uno:TableConvertMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ConvertTextToTable"/>
-          <menu:menuitem menu:id=".uno:ConvertTableToText"/>
+          <menu:menuitem menu:id=".uno:ConvertTextToTable" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ConvertTableToText" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertFormula"/>
@@ -666,7 +666,7 @@
           <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:MacroSignature"/>
+          <menu:menuitem menu:id=".uno:MacroSignature" menu:style="text"/>
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
@@ -687,18 +687,18 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HelpIndex"/>
       <menu:menuitem menu:id=".uno:ExtendedHelp"/>
-      <menu:menuitem menu:id=".uno:Documentation"/>
-      <menu:menuitem menu:id=".uno:TipOfTheDay"/>
+      <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:QuestionAnswers"/>
       <menu:menuitem menu:id=".uno:SendFeedback"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SafeMode"/>
+      <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:GetInvolved"/>
+      <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Donation"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShowLicense"/>
+      <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
       <menu:menuitem menu:id=".uno:About"/>
     </menu:menupopup>
   </menu:menu>

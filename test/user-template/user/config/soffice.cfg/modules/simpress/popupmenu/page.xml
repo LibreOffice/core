@@ -36,7 +36,7 @@
       <menu:menuitem menu:id=".uno:GridFront"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:SnapLinesMenu">
+  <menu:menu menu:id=".uno:SnapLinesMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HelplinesVisible"/>
       <menu:menuitem menu:id=".uno:HelplinesUse"/>

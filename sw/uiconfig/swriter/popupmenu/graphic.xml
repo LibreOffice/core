@@ -13,7 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:Crop"/>
-  <menu:menuitem menu:id=".uno:ExternalEdit"/>
+  <menu:menuitem menu:id=".uno:ExternalEdit" menu:style="text"/>
   <menu:menuitem menu:id=".uno:ChangePicture"/>
   <menu:menuitem menu:id=".uno:CompressGraphic"/>
   <menu:menu menu:id=".uno:ProtectGraphicMenu">
@@ -65,8 +65,8 @@
       <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
       <menu:menuitem menu:id=".uno:RotateRight"/>
       <menu:menuitem menu:id=".uno:RotateLeft"/>
-      <menu:menuitem menu:id=".uno:Rotate180"/>
-      <menu:menuitem menu:id=".uno:RotateReset"/>
+      <menu:menuitem menu:id=".uno:Rotate180" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:RotateReset" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FlipVertical"/>
       <menu:menuitem menu:id=".uno:FlipHorizontal"/>

@@ -149,16 +149,16 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Zoom"/>
-            <menu:menu menu:id=".uno:ZoomMenu">
+            <menu:menu menu:id=".uno:ZoomMenu" menu:style="text">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:ZoomPage"/>
                 <menu:menuitem menu:id=".uno:ZoomPageWidth"/>
                 <menu:menuitem menu:id=".uno:ZoomOptimal"/>
-                <menu:menuitem menu:id=".uno:Zoom50Percent"/>
+                <menu:menuitem menu:id=".uno:Zoom50Percent" menu:style="text"/>
                 <menu:menuitem menu:id=".uno:Zoom75Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom100Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom150Percent"/>
-                <menu:menuitem menu:id=".uno:Zoom200Percent"/>
+                <menu:menuitem menu:id=".uno:Zoom200Percent" menu:style="text"/>
                 <menu:menuseparator/>
               </menu:menupopup>
             </menu:menu>
@@ -256,7 +256,7 @@
                     <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
                     <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:MacroSignature"/>
+                    <menu:menuitem menu:id=".uno:MacroSignature" menu:style="text"/>
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
                 </menu:menupopup>
             </menu:menu>
@@ -277,18 +277,18 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
-            <menu:menuitem menu:id=".uno:Documentation"/>
-            <menu:menuitem menu:id=".uno:TipOfTheDay"/>
+            <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
+            <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:QuestionAnswers"/>
             <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SafeMode"/>
+            <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:GetInvolved"/>
+            <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
             <menu:menuitem menu:id=".uno:Donation"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShowLicense"/>
+            <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
     </menu:menu>

@@ -8,7 +8,7 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
-  <menu:menu menu:id=".uno:InsertMenu">
+  <menu:menu menu:id=".uno:InsertMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:NewModule"/>
       <menu:menuitem menu:id=".uno:NewDialog"/>

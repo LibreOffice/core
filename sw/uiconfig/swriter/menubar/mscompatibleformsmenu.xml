@@ -15,14 +15,14 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MSCompatContentControls">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertContentControl"/>
-          <menu:menuitem menu:id=".uno:InsertPlainTextContentControl"/>
-          <menu:menuitem menu:id=".uno:InsertPictureContentControl"/>
-          <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
-          <menu:menuitem menu:id=".uno:InsertComboBoxContentControl"/>
-          <menu:menuitem menu:id=".uno:InsertDropdownContentControl"/>
-          <menu:menuitem menu:id=".uno:InsertDateContentControl"/>
-          <menu:menuitem menu:id=".uno:ContentControlProperties"/>
+          <menu:menuitem menu:id=".uno:InsertContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertPlainTextContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertPictureContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertCheckboxContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertComboBoxContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertDropdownContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertDateContentControl" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ContentControlProperties" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:MSCompatLegacyControls">

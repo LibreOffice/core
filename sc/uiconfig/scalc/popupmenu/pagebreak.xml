@@ -38,7 +38,7 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
-  <menu:menu menu:id=".uno:FormatStylesMenu">
+  <menu:menu menu:id=".uno:FormatStylesMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuseparator/>

@@ -41,7 +41,7 @@
       <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=30"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:NavigateMenu">
+  <menu:menu menu:id=".uno:NavigateMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:FirstSlide"/>
       <menu:menuitem menu:id=".uno:PreviousSlide"/>
@@ -49,7 +49,7 @@
       <menu:menuitem menu:id=".uno:LastSlide"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:SlideMoveMenu">
+  <menu:menu menu:id=".uno:SlideMoveMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:MoveSlideFirst"/>
       <menu:menuitem menu:id=".uno:MoveSlideUp"/>

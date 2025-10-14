@@ -35,7 +35,7 @@
       <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>
-      <menu:menu menu:id=".uno:SendToMenu">
+      <menu:menu menu:id=".uno:SendToMenu" menu:style="text">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SendMail" menu:style="text"/>
           <menu:menuitem menu:id=".uno:DBSendReportAsMail" menu:style="text"/>
@@ -96,7 +96,7 @@
       <menu:menuitem menu:id=".uno:DBPreview"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:InsertMenu">
+  <menu:menu menu:id=".uno:InsertMenu" menu:style="text">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:DBNewForm"/>
       <menu:menuitem menu:id=".uno:DBNewReport"/>
@@ -127,7 +127,7 @@
           <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:MacroSignature"/>
+          <menu:menuitem menu:id=".uno:MacroSignature" menu:style="text"/>
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
@@ -147,18 +147,18 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HelpIndex"/>
       <menu:menuitem menu:id=".uno:ExtendedHelp"/>
-      <menu:menuitem menu:id=".uno:Documentation"/>
-      <menu:menuitem menu:id=".uno:TipOfTheDay"/>
+      <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:QuestionAnswers"/>
       <menu:menuitem menu:id=".uno:SendFeedback"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SafeMode"/>
+      <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:GetInvolved"/>
+      <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Donation"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShowLicense"/>
+      <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
       <menu:menuitem menu:id=".uno:About"/>
     </menu:menupopup>
   </menu:menu>

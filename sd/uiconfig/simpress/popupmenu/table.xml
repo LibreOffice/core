@@ -18,11 +18,11 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
       <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
-      <menu:menuitem menu:id=".uno:InsertRowDialog"/>
+      <menu:menuitem menu:id=".uno:InsertRowDialog" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
       <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
-      <menu:menuitem menu:id=".uno:InsertColumnDialog"/>
+      <menu:menuitem menu:id=".uno:InsertColumnDialog" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:TableDeleteMenu">
@@ -34,12 +34,12 @@
   </menu:menu>
   <menu:menu menu:id=".uno:TableAutoFitMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SetRowHeight"/>
+      <menu:menuitem menu:id=".uno:SetRowHeight" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SetMinimalRowHeight"/>
       <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
       <menu:menuitem menu:id=".uno:DistributeRows"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SetColumnWidth"/>
+      <menu:menuitem menu:id=".uno:SetColumnWidth" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SetMinimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:DistributeColumns"/>

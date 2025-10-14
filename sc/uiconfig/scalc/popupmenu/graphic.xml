@@ -13,7 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:Crop"/>
-  <menu:menuitem menu:id=".uno:ExternalEdit"/>
+  <menu:menuitem menu:id=".uno:ExternalEdit" menu:style="text"/>
   <menu:menuitem menu:id=".uno:ChangePicture"/>
   <menu:menuitem menu:id=".uno:CompressGraphic"/>
   <menu:menu menu:id=".uno:ProtectGraphicMenu">
