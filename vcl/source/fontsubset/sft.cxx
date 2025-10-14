@@ -2011,15 +2011,14 @@ OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const L
     return aResult;
 }
 
-void AnalyzeTTF(const TrueTypeFont* ttf, FontWeight& weight)
+FontWeight AnalyzeTTFWeight(const TrueTypeFont* ttf)
 {
     sal_uInt32 table_size;
     const sal_uInt8* table = ttf->table(O_OS2, table_size);
     if (table_size >= 42)
     {
         sal_uInt16 weightOS2 = GetUInt16(table, OS2_usWeightClass_offset);
-        weight = ImplWeightToSal(weightOS2);
-        return;
+        return ImplWeightToSal(weightOS2);
     }
 
     // Fallback to inferring from the style name (name ID 2).
@@ -2047,10 +2046,10 @@ void AnalyzeTTF(const TrueTypeFont* ttf, FontWeight& weight)
         SAL_WARN("vcl.fonts", "Unhandled font style: " << sStyle);
     }
 
-    if (bBold)
-        weight = WEIGHT_BOLD;
     (void)bItalic; // we might need to use this in a similar scenario where
                    // italic cannot be found
+
+    return bBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
 }
 
 } // namespace vcl
