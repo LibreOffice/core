@@ -542,6 +542,36 @@ void XMLFontAutoStylePool::exportXML()
     GetExport().exportFonts(aFontAutoStyles);
 }
 
+void XMLFontAutoStylePool::addModelFonts(const uno::Reference<css::beans::XPropertySet>& xProps)
+{
+    if ( xProps.is() ) {
+        Sequence<Any> aAnySeq;
+        if( xProps->getPropertyValue(u"Fonts"_ustr) >>= aAnySeq )
+        {
+            if( aAnySeq.getLength() % 5 == 0 )
+            {
+                int nLen = aAnySeq.getLength() / 5;
+                int nSeqIndex = 0;
+                for( int i = 0; i < nLen; i++ )
+                {
+                    OUString sFamilyName, sStyleName;
+                    sal_Int16 eFamily(FAMILY_DONTKNOW),
+                        ePitch(PITCH_DONTKNOW),
+                        eCharSet(RTL_TEXTENCODING_DONTKNOW);
+
+                    aAnySeq[nSeqIndex++] >>= sFamilyName;
+                    aAnySeq[nSeqIndex++] >>= sStyleName;
+                    aAnySeq[nSeqIndex++] >>= eFamily;
+                    aAnySeq[nSeqIndex++] >>= ePitch;
+                    aAnySeq[nSeqIndex++] >>= eCharSet;
+
+                    Add( sFamilyName, sStyleName, FontFamily( eFamily ), FontPitch( ePitch ), rtl_TextEncoding( eCharSet ) );
+                }
+            }
+        }
+    }
+}
+
 static OUString getFreeFontName(uno::Reference<embed::XStorage> const & rxStorage, OUString const & rFamilyName)
 {
     OUString sName;

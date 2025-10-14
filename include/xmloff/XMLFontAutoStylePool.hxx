@@ -30,6 +30,11 @@
 #include <unordered_map>
 #include <memory>
 
+namespace com::sun::star {
+    namespace uno { template<typename T> class Reference; }
+    namespace beans { class XPropertySet; struct PropertyValue; }
+}
+
 class XMLFontAutoStylePool_Impl;
 class SvXMLExport;
 
@@ -63,6 +68,8 @@ public:
             rtl_TextEncoding eEnc )const;
 
     void exportXML();
+
+    void addModelFonts(const css::uno::Reference<css::beans::XPropertySet>& xProps);
 };
 
 #endif // INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
