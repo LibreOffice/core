@@ -1689,6 +1689,14 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     basegfx::B2DHomMatrix aTextMatrix(maCurrentMatrix);
 
     aTextRect *= aTextMatrix;
+
+    if (!std::isfinite(aTextRect.getMinX()) || !std::isfinite(aTextRect.getMaxX())
+        || !std::isfinite(aTextRect.getMinY()) || !std::isfinite(aTextRect.getMaxY()))
+    {
+        SAL_WARN("sd.filter", "unusable text rectangle: " << aTextRect);
+        return;
+    }
+
     const tools::Rectangle aRect = PointsToLogic(aTextRect.getMinX(), aTextRect.getMaxX(),
                                                  aTextRect.getMinY(), aTextRect.getMaxY());
 
