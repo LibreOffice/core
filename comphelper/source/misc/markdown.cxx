@@ -24,12 +24,6 @@ bool IsMarkdownData(OUString& rData)
     static std::unique_ptr<icu::RegexPattern> patternHeadings(
         icu::RegexPattern::compile(uR"(^\s*#{1,6}\s+.*)", UREGEX_MULTILINE, status));
 
-    static std::unique_ptr<icu::RegexPattern> patternOLists(
-        icu::RegexPattern::compile(uR"(^\s*\d+\.\s+.+)", UREGEX_MULTILINE, status));
-
-    static std::unique_ptr<icu::RegexPattern> patternULists(
-        icu::RegexPattern::compile(uR"(^\s*[-*+]\s+.*)", UREGEX_MULTILINE, status));
-
     static std::unique_ptr<icu::RegexPattern> patternLinks(
         icu::RegexPattern::compile(uR"(\[.*?\]\(.*?\))", 0, status));
 
@@ -58,8 +52,6 @@ bool IsMarkdownData(OUString& rData)
         return false;
 
     return patternHeadings->matcher(ustr, status)->find()
-           || patternOLists->matcher(ustr, status)->find()
-           || patternULists->matcher(ustr, status)->find()
            || patternLinks->matcher(ustr, status)->find()
            || patternCode->matcher(ustr, status)->find()
            || patternItalic->matcher(ustr, status)->find()
