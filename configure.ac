@@ -3904,11 +3904,9 @@ if test $_os = Darwin; then
         if test "$enable_macosx_code_signing" = yes; then
             # By default use the first suitable certificate (?).
 
-            # https://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
-            # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
-            # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
-            # the App Store, the "3rd Party Mac Developer" one. I think it works best to the
-            # "Developer ID Application" one.
+            # https://developer.apple.com/documentation/xcode/creating-distribution-signed-code-for-the-mac#Confirm-your-code-signing-identity
+            # For distribution outside the Mac App Store, use the "Developer ID Application" one.
+            # For distribution in the App Store, please use "Apple Distribution" one.
             identity="Developer ID Application:"
         else
             identity=$enable_macosx_code_signing
