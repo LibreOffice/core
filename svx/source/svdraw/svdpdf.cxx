@@ -1264,6 +1264,44 @@ const char cmapsuffix[] = "endcmap\n"
                           "end\n"
                           "end\n";
 
+namespace
+{
+struct ToUnicodeData
+{
+    std::vector<OString> bfcharlines;
+    std::vector<OString> bfcharranges;
+
+    ToUnicodeData(const std::vector<uint8_t>& toUnicodeData)
+    {
+        SvMemoryStream aInCMap(const_cast<uint8_t*>(toUnicodeData.data()), toUnicodeData.size(),
+                               StreamMode::READ);
+
+        OString sLine;
+        while (aInCMap.ReadLine(sLine))
+        {
+            if (sLine.endsWith("beginbfchar"))
+            {
+                while (aInCMap.ReadLine(sLine))
+                {
+                    if (sLine.endsWith("endbfchar"))
+                        break;
+                    bfcharlines.push_back(sLine);
+                }
+            }
+            else if (sLine.endsWith("beginbfrange"))
+            {
+                while (aInCMap.ReadLine(sLine))
+                {
+                    if (sLine.endsWith("endbfrange"))
+                        break;
+                    bfcharranges.push_back(sLine);
+                }
+            }
+        }
+    }
+};
+}
+
 static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features,
                                  std::string_view FontName,
                                  const std::vector<uint8_t>& toUnicodeData, bool bNameKeyed,
@@ -1273,34 +1311,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
 
     CMap.WriteBytes(cmapprefix, std::size(cmapprefix) - 1);
 
-    SvMemoryStream aInCMap(const_cast<uint8_t*>(toUnicodeData.data()), toUnicodeData.size(),
-                           StreamMode::READ);
-
-    std::vector<OString> bfcharlines;
-    std::vector<OString> bfcharranges;
-
-    OString sLine;
-    while (aInCMap.ReadLine(sLine))
-    {
-        if (sLine.endsWith("beginbfchar"))
-        {
-            while (aInCMap.ReadLine(sLine))
-            {
-                if (sLine.endsWith("endbfchar"))
-                    break;
-                bfcharlines.push_back(sLine);
-            }
-        }
-        else if (sLine.endsWith("beginbfrange"))
-        {
-            while (aInCMap.ReadLine(sLine))
-            {
-                if (sLine.endsWith("endbfrange"))
-                    break;
-                bfcharranges.push_back(sLine);
-            }
-        }
-    }
+    ToUnicodeData tud(toUnicodeData);
 
     sal_Int32 mergeOffset = 1; //Leave space for notdef
     for (const auto& count : rSubSetInfo.aComponents)
@@ -1309,11 +1320,11 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
     std::map<sal_Int32, OString> ligatureGlyphToChars;
     std::vector<sal_Int32> glyphs;
 
-    if (!bfcharranges.empty())
+    if (!tud.bfcharranges.empty())
     {
         std::vector<OString> cidranges;
 
-        for (const auto& charrange : bfcharranges)
+        for (const auto& charrange : tud.bfcharranges)
         {
             assert(charrange[0] == '<');
             sal_Int32 nEnd = charrange.indexOf('>', 1);
@@ -1339,7 +1350,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
                 OStringBuffer aBuffer("<");
                 appendFourByteHex(aBuffer, nGlyphRangeStart);
                 aBuffer.append("> " + sChars);
-                bfcharlines.push_back(aBuffer.toString());
+                tud.bfcharlines.push_back(aBuffer.toString());
                 continue;
             }
 
@@ -1359,7 +1370,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
                 aBuffer.append("> <");
                 appendFourByteHex(aBuffer, nCharRangeStart);
                 aBuffer.append(">");
-                bfcharlines.push_back(aBuffer.toString());
+                tud.bfcharlines.push_back(aBuffer.toString());
                 continue;
             }
 
@@ -1386,11 +1397,11 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
         }
     }
 
-    if (!bfcharlines.empty())
+    if (!tud.bfcharlines.empty())
     {
-        OString beginline = OString::number(bfcharlines.size()) + " begincidchar";
+        OString beginline = OString::number(tud.bfcharlines.size()) + " begincidchar";
         CMap.WriteLine(beginline);
-        for (const auto& charline : bfcharlines)
+        for (const auto& charline : tud.bfcharlines)
         {
             assert(charline[0] == '<');
             sal_Int32 nEnd = charline.indexOf('>', 1);
@@ -1420,7 +1431,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
         }
         CMap.WriteLine("endcidchar");
 
-        rSubSetInfo.aComponents.back().nGlyphCount = bfcharlines.size();
+        rSubSetInfo.aComponents.back().nGlyphCount = tud.bfcharlines.size();
     }
 
     CMap.WriteBytes(cmapsuffix, std::size(cmapsuffix) - 1);
