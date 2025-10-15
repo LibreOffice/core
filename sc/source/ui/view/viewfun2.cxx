@@ -83,6 +83,7 @@
 #include <mergecellsdialog.hxx>
 #include <sheetevents.hxx>
 #include <columnspanset.hxx>
+#include <SheetViewManager.hxx>
 
 #include <vector>
 #include <memory>
@@ -2549,12 +2550,12 @@ void ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 }
 
-bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
+bool ScViewFunc::DeleteTables(const vector<SCTAB>& rTabs, bool bRecord)
 {
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
     ScDocument& rDoc    = pDocSh->GetDocument();
     bool bVbaEnabled = rDoc.IsInVBAMode();
-    SCTAB       nNewTab = TheTabs.front();
+    SCTAB nNewTab = rTabs.front();
     weld::WaitObject aWait(GetViewData().GetDialogParent());
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
@@ -2574,7 +2575,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
         OUString aOldName;
         bool isFirstTab = true;
-        for(SCTAB nTab : TheTabs)
+        for (SCTAB nTab : rTabs)
         {
             if (isFirstTab)
             {
@@ -2628,25 +2629,52 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
     bool bDelDone = false;
 
-    for(int i=TheTabs.size()-1; i>=0; --i)
+    std::vector<ScTable*> aSheetViewHolderTablesToDelete;
+
+    for (sal_Int32 i = rTabs.size() - 1; i >= 0; --i)
     {
+        SCTAB nTab = rTabs[i];
         OUString sCodeName;
-        bool bHasCodeName = rDoc.GetCodeName( TheTabs[i], sCodeName );
-        if (rDoc.DeleteTab(TheTabs[i]))
+        bool bHasCodeName = rDoc.GetCodeName(nTab, sCodeName);
+
+        // If we delete the current viewed table, make sure that we exit any sheet views
+        if (GetViewData().GetTabNumber() == nTab && GetViewData().GetSheetViewID() != sc::DefaultSheetViewID)
+            GetViewData().SetSheetViewID(sc::DefaultSheetViewID);
+
+        if (auto pManager = rDoc.GetSheetViewManager(nTab))
+        {
+            for (auto const& pSheetView : pManager->getSheetViews())
+            {
+                aSheetViewHolderTablesToDelete.push_back(pSheetView->getTablePointer());
+            }
+        }
+
+        if (rDoc.DeleteTab(nTab))
         {
             bDelDone = true;
             if( bVbaEnabled && bHasCodeName )
             {
                 VBA_DeleteModule( *pDocSh, sCodeName );
             }
-            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[i] ) );
+            pDocSh->Broadcast(ScTablesHint(SC_TAB_DELETED, nTab));
         }
     }
+
+    // Delete sheet view holder tables if it's table has been deleted
+    for (auto* pTable : aSheetViewHolderTablesToDelete)
+    {
+        SCTAB nTab = pTable->GetTab();
+        if (rDoc.DeleteTab(nTab))
+        {
+            pDocSh->Broadcast(ScTablesHint(SC_TAB_DELETED, nTab));
+        }
+    }
+
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoDeleteTab>( GetViewData().GetDocShell(), TheTabs,
-                                            std::move(pUndoDoc), std::move(pUndoData) ));
+                    std::make_unique<ScUndoDeleteTab>(GetViewData().GetDocShell(), rTabs,
+                                            std::move(pUndoDoc), std::move(pUndoData)));
     }
 
     if (bDelDone)

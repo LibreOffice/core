@@ -101,6 +101,7 @@
 
 #include <mtvelements.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <SheetViewManager.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -715,6 +716,30 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             for (auto & pTab : maTabs)
                 if (pTab)
                     pTab->UpdateDeleteTab(aCxt);
+
+            // Delete sheet views holders
+            if (ScTable* pTable = FetchTable(nTab))
+            {
+                if (pTable->IsSheetViewHolder())
+                {
+                    assert(pTable->GetDefaultViewTable() && "Sheet view holder but the pointer to the table is nullptr");
+                    auto pSheetViewManager = pTable->GetDefaultViewTable()->GetSheetViewManager();
+                    assert(pSheetViewManager && "Sheet view holder but the table has no SheetViewManager");
+                    pSheetViewManager->remove(pTable->GetSheetViewID());
+                }
+                else
+                {
+                    auto pManager = pTable->GetSheetViewManager();
+                    if (pManager)
+                    {
+                        for (auto const& pSheetView : pManager->getSheetViews())
+                        {
+                            // Set the table pointer to null as the table will be deleted
+                            pSheetView->getTablePointer()->RemoveSheetViewTablePointer();
+                        }
+                    }
+                }
+            }
 
             // tdf#149502 make sure ScTable destructor called after the erase is finished, when
             // maTabs[x].nTab==x is true again, as it should be always true.

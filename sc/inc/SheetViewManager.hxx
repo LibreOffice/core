@@ -50,6 +50,9 @@ public:
     /** Remove the sheet view with the ID. True if successful. */
     bool remove(SheetViewID nID);
 
+    /** Remove all sheet views. */
+    void removeAll();
+
     /** Return the list of sheet views. */
     std::vector<std::shared_ptr<SheetView>> const& getSheetViews() const { return maViews; }
 
