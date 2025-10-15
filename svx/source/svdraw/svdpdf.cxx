@@ -1313,9 +1313,8 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
 
     if (!bfcharranges.empty())
     {
-        assert(!bNameKeyed);
-        OString beginline = OString::number(bfcharranges.size()) + " begincidrange";
-        CMap.WriteLine(beginline);
+        std::vector<OString> cidranges;
+
         for (const auto& charrange : bfcharranges)
         {
             assert(charrange[0] == '<');
@@ -1331,29 +1330,62 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
 
             sal_Int32 nGlyphRangeLen = nGlyphRangeEnd - nGlyphRangeStart;
 
-            assert(nGlyphRangeLen > 0);
+            assert(nGlyphRangeLen >= 0);
 
             OString sChars(o3tl::trim(remainder.subView(nEnd + 1)));
             assert(sChars[0] == '<' && sChars[sChars.getLength() - 1] == '>');
+
+            // move simple single glyph->char ranges to bfcharlines instead
+            if (nGlyphRangeLen == 0)
+            {
+                OStringBuffer aBuffer("<");
+                appendFourByteHex(aBuffer, nGlyphRangeStart);
+                aBuffer.append("> " + sChars);
+                bfcharlines.push_back(aBuffer.toString());
+                continue;
+            }
+
             OString sContents = sChars.copy(1, sChars.getLength() - 2);
-            //TODO, it might be that there are cases of ligatures here too in
-            //which case I presume that it can only be with a range of a single
-            //glyph(?). If that's how it works, then we could push the entry
-            //instead into bfcharlines.
+            //The assumption that is that cases of ligatures are with a range
+            //of a single glyph(?). In which case we have pushed such entries
+            //into bfcharlines above.
             assert(sContents.getLength() == 4);
             sal_Int32 nCharRangeStart = o3tl::toInt32(sContents, 16);
+            sal_Int32 nCharRangeEnd = nCharRangeStart + nGlyphRangeLen;
+
+            // move simple single glyph->char ranges to bfcharlines instead
+            if (nCharRangeStart == nCharRangeEnd)
+            {
+                OStringBuffer aBuffer("<");
+                appendFourByteHex(aBuffer, nGlyphRangeStart);
+                aBuffer.append("> <");
+                appendFourByteHex(aBuffer, nCharRangeStart);
+                aBuffer.append(">");
+                bfcharlines.push_back(aBuffer.toString());
+                continue;
+            }
+
             OStringBuffer aBuffer("<");
             appendFourByteHex(aBuffer, nCharRangeStart);
             aBuffer.append("> <");
-            sal_Int32 nCharRangeEnd = nCharRangeStart + nGlyphRangeLen;
             appendFourByteHex(aBuffer, nCharRangeEnd);
             aBuffer.append("> "_ostr + OString::number(nGlyphRangeStart));
             OString cidrangeline = aBuffer.toString();
+            cidranges.push_back(cidrangeline);
             rSubSetInfo.aComponents.back().glyphRangesToChars[nGlyphRangeStart]
                 = Range(nCharRangeStart, nCharRangeEnd);
-            CMap.WriteLine(cidrangeline);
         }
-        CMap.WriteLine("endcidrange");
+
+        if (!cidranges.empty())
+        {
+            // searching for real world examples where this occurs
+            assert(!bNameKeyed);
+            OString beginline = OString::number(cidranges.size()) + " begincidrange";
+            CMap.WriteLine(beginline);
+            for (const auto& rLine : cidranges)
+                CMap.WriteLine(rLine);
+            CMap.WriteLine("endcidrange");
+        }
     }
 
     if (!bfcharlines.empty())
