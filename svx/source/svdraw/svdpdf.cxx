@@ -987,6 +987,12 @@ static void rewriteBrokenFontName(std::string_view brokenName, std::string_view 
             continue;
         }
         output.WriteLine(sLine);
+        if (sLine.startsWith("%%BeginData"))
+        {
+            // Write the rest direct as-is and quit
+            output.WriteStream(input);
+            break;
+        }
     }
 }
 
