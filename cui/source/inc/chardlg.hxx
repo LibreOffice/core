@@ -163,10 +163,8 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 private:
     static const WhichRangesContainer pEffectsRanges;
-    bool                       m_bOrigFontColor;
     bool                       m_bNewFontColor;
     bool                       m_bEnableNoneFontColor;
-    Color                      m_aOrigFontColor;
 
     weld::TriStateEnabled m_aOutlineState;
     weld::TriStateEnabled m_aShadowState;

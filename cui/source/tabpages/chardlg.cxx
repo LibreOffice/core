@@ -1321,7 +1321,6 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 
 SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, u"cui/ui/effectspage.ui"_ustr, u"EffectsPage"_ustr, rInSet)
-    , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
     , m_xFontColorFT(m_xBuilder->weld_label(u"fontcolorft"_ustr))
@@ -1531,7 +1530,6 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
-    m_bOrigFontColor = false;
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
@@ -1581,8 +1579,6 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
                                                   FieldUnit::PERCENT);
             }
 
-            m_aOrigFontColor = aColor;
-            m_bOrigFontColor = true;
             break;
         }
     }
@@ -1608,9 +1604,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
             aSelectedColor.m_aColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
         }
 
-        if (m_bOrigFontColor)
-            bChanged = aSelectedColor.m_aColor != m_aOrigFontColor;
-        if (m_bEnableNoneFontColor && bChanged && aSelectedColor.m_aColor == COL_NONE_COLOR)
+        if (m_bEnableNoneFontColor && aSelectedColor.m_aColor == COL_NONE_COLOR)
             bChanged = false;
     }
 
