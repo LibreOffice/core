@@ -540,6 +540,33 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotCaptureDrawObjsDrawObjNoCapture)
     // i.e. the draw object was captured inside the page frame, but it was not in Word.
     CPPUNIT_ASSERT_GREATER(nDrawObjLeft, nPageLeft);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedOverlap)
+{
+    // Given a document with an outer inline table, an inner floating table, the floating table's
+    // overlap is set to 'never':
+    createSwDoc("floattable-nested-overlap.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure the content fits two pages and the floating table is split:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwPageFrame* pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    // Without the accompanying fix in place, this test would have failed, the content was laid out
+    // on 3 pages in Writer.
+    CPPUNIT_ASSERT(!pPage2->GetNext());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

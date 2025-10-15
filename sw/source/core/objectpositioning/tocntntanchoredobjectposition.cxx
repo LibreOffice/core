@@ -1290,6 +1290,16 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
                 // A fly overlapping with a fly from another upper is fine.
                 continue;
             }
+
+            bool bAnchoredObjFlyAnchorInTable
+                = pAnchoredObjFlyAnchor && pAnchoredObjFlyAnchor->IsInTab();
+            SwFlyAtContentFrame* pAnchoredObjSplitFly = pAnchoredObjFly->DynCastFlyAtContentFrame();
+            if (pAnchoredObjSplitFly && pAnchoredObjSplitFly->GetPrecede() == pFlyFrame
+                && bAnchoredObjFlyAnchorInTable)
+            {
+                // A follow fly will move to the next page anyway, ignore.
+                continue;
+            }
         }
 
         css::text::WrapTextMode eWrap = pAnchoredObj->GetFrameFormat()->GetSurround().GetSurround();
