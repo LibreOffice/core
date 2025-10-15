@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
@@ -1571,6 +1572,61 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168817)
                 u"https://en.wiktionary.org/wiki/一日#Japanese");
     assertXPathContent(pXmlDoc, "//text:p/text:ruby/text:ruby-base/text:a", u"一日");
     assertXPathContent(pXmlDoc, "//text:p/text:ruby/text:ruby-text", u"ついたち");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf164677)
+{
+    // Several sections, which only differ in separator line properties: test that the properties
+    // correctly roundtrip. Before the fix, export code didn't see the difference between sections'
+    // properties, and generated a single section autostyle, so all the sections got identical
+    // properties after reload:
+    loadAndReload("colored-sections-separators.fodt");
+    auto xTextSections = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextSections->getElementNames().getLength());
+
+    // Red thin solid separator
+    auto aSect = xTextSections->getByName(u"SectionRedThinSolid"_ustr);
+    auto xColumn = getProperty<uno::Reference<text::XTextColumns>>(aSect, u"TextColumns"_ustr);
+    CPPUNIT_ASSERT(getProperty<bool>(xColumn, u"SeparatorLineIsOn"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(30),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::ColumnSeparatorStyle::SOLID,
+                         getProperty<sal_Int16>(xColumn, u"SeparatorLineStyle"_ustr));
+
+    // Blue thin solid separator
+    aSect = xTextSections->getByName(u"SectionBlueThinSolid"_ustr);
+    xColumn = getProperty<uno::Reference<text::XTextColumns>>(aSect, u"TextColumns"_ustr);
+    CPPUNIT_ASSERT(getProperty<bool>(xColumn, u"SeparatorLineIsOn"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(30),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::ColumnSeparatorStyle::SOLID,
+                         getProperty<sal_Int16>(xColumn, u"SeparatorLineStyle"_ustr));
+
+    // Blue thick solid separator
+    aSect = xTextSections->getByName(u"SectionBlueThickSolid"_ustr);
+    xColumn = getProperty<uno::Reference<text::XTextColumns>>(aSect, u"TextColumns"_ustr);
+    CPPUNIT_ASSERT(getProperty<bool>(xColumn, u"SeparatorLineIsOn"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(300),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::ColumnSeparatorStyle::SOLID,
+                         getProperty<sal_Int16>(xColumn, u"SeparatorLineStyle"_ustr));
+
+    // Blue thick dotted separator
+    aSect = xTextSections->getByName(u"SectionBlueThickDotted"_ustr);
+    xColumn = getProperty<uno::Reference<text::XTextColumns>>(aSect, u"TextColumns"_ustr);
+    CPPUNIT_ASSERT(getProperty<bool>(xColumn, u"SeparatorLineIsOn"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(300),
+                         getProperty<sal_Int32>(xColumn, u"SeparatorLineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::ColumnSeparatorStyle::DOTTED,
+                         getProperty<sal_Int16>(xColumn, u"SeparatorLineStyle"_ustr));
 }
 
 } // end of anonymous namespace
