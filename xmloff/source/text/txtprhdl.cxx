@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -657,6 +658,7 @@ XMLTextColumnsPropertyHandler::~XMLTextColumnsPropertyHandler ()
 {
 }
 
+// Cf. XMLTextColumnsExport::exportXML
 bool XMLTextColumnsPropertyHandler::equals(
         const Any& r1,
         const Any& r2 ) const
@@ -673,6 +675,44 @@ bool XMLTextColumnsPropertyHandler::equals(
     if( xColumns1->getColumnCount() != xColumns2->getColumnCount() ||
           xColumns1->getReferenceValue() != xColumns2->getReferenceValue() )
         return false;
+
+    // Check properties of service TextColumns
+    auto xPropSet1 = r1.query<beans::XPropertySet>();
+    auto xPropSet2 = r2.query<beans::XPropertySet>();
+    if (xPropSet1.is() != xPropSet2.is())
+        return false;
+    if (xPropSet1) // here implies xPropSet2
+    {
+        Any aVal;
+        auto cfPropValues = [&xPropSet1, &xPropSet2, &aVal](const OUString& prop)
+        {
+            aVal = xPropSet1->getPropertyValue(prop);
+            return aVal == xPropSet2->getPropertyValue(prop);
+        };
+
+        if (!cfPropValues(u"IsAutomatic"_ustr))
+            return false;
+        if (aVal == true)
+            if (!cfPropValues(u"AutomaticDistance"_ustr))
+                return false;
+
+        if (!cfPropValues(u"SeparatorLineIsOn"_ustr))
+            return false;
+        if (aVal == true)
+        {
+            if (!cfPropValues(u"SeparatorLineWidth"_ustr))
+                return false;
+            if (!cfPropValues(u"SeparatorLineColor"_ustr))
+                return false;
+            if (!cfPropValues(u"SeparatorLineRelativeHeight"_ustr))
+                return false;
+            // Optional? XMLTextColumnsExport::exportXML accesses it without precautions.
+            if (!cfPropValues(u"SeparatorLineStyle"_ustr))
+                return false;
+            if (!cfPropValues(u"SeparatorLineVerticalAlignment"_ustr))
+                return false;
+        }
+    }
 
     const Sequence < TextColumn > aColumns1 = xColumns1->getColumns();
     const Sequence < TextColumn > aColumns2 = xColumns2->getColumns();

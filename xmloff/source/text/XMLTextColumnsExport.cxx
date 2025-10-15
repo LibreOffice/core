@@ -58,6 +58,7 @@ XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
 {
 }
 
+// Cf. XMLTextColumnsPropertyHandler::equals
 void XMLTextColumnsExport::exportXML( const Any& rAny )
 {
     Reference < XTextColumns > xColumns;

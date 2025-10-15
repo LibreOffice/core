@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="SectRedThinSolid" style:family="section">
+   <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+    <style:columns fo:column-count="2" fo:column-gap="1cm">
+     <style:column-sep style:width="0.3mm" style:color="#ff0000" style:height="100%" style:style="solid"/>
+     <style:column style:rel-width="32767*" fo:start-indent="0pt" fo:end-indent="5mm"/>
+     <style:column style:rel-width="32768*" fo:start-indent="5mm" fo:end-indent="0pt"/>
+    </style:columns>
+   </style:section-properties>
+  </style:style>
+  <style:style style:name="SectBlueThinSolid" style:family="section">
+   <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+    <style:columns fo:column-count="2" fo:column-gap="1cm">
+     <style:column-sep style:width="0.3mm" style:color="#0000ff" style:height="100%" style:style="solid"/>
+     <style:column style:rel-width="32767*" fo:start-indent="0pt" fo:end-indent="5mm"/>
+     <style:column style:rel-width="32768*" fo:start-indent="5mm" fo:end-indent="0pt"/>
+    </style:columns>
+   </style:section-properties>
+  </style:style>
+  <style:style style:name="SectBlueThickSolid" style:family="section">
+   <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+    <style:columns fo:column-count="2" fo:column-gap="1cm">
+     <style:column-sep style:width="3mm" style:color="#0000ff" style:height="100%" style:style="solid"/>
+     <style:column style:rel-width="32767*" fo:start-indent="0pt" fo:end-indent="5mm"/>
+     <style:column style:rel-width="32768*" fo:start-indent="5mm" fo:end-indent="0pt"/>
+    </style:columns>
+   </style:section-properties>
+  </style:style>
+  <style:style style:name="SectBlueThickDotted" style:family="section">
+   <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+    <style:columns fo:column-count="2" fo:column-gap="1cm">
+     <style:column-sep style:width="3mm" style:color="#0000ff" style:height="100%" style:style="dotted"/>
+     <style:column style:rel-width="32767*" fo:start-indent="0pt" fo:end-indent="5mm"/>
+     <style:column style:rel-width="32768*" fo:start-indent="5mm" fo:end-indent="0pt"/>
+    </style:columns>
+   </style:section-properties>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p>Section 1</text:p>
+   <text:section text:style-name="SectRedThinSolid" text:name="SectionRedThinSolid">
+    <text:p>Red thin solid separator</text:p>
+   </text:section>
+   <text:p>Section 2</text:p>
+   <text:section text:style-name="SectBlueThinSolid" text:name="SectionBlueThinSolid">
+    <text:p>Blue thin solid separator</text:p>
+   </text:section>
+   <text:p>Section 3</text:p>
+   <text:section text:style-name="SectBlueThickSolid" text:name="SectionBlueThickSolid">
+    <text:p>Blue thick solid separator</text:p>
+   </text:section>
+   <text:p>Section 4</text:p>
+   <text:section text:style-name="SectBlueThickDotted" text:name="SectionBlueThickDotted">
+    <text:p>Blue thick dotted separator</text:p>
+   </text:section>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>
