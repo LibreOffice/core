@@ -34,6 +34,8 @@ bool SheetViewManager::remove(SheetViewID nID)
     return false;
 }
 
+void SheetViewManager::removeAll() { maViews.clear(); }
+
 std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
 {
     if (isValidSheetViewID(nID))

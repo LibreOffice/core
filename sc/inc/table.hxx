@@ -253,7 +253,8 @@ private:
     bool            mbForceBreaks:1;
     bool            mbTotalsRowBelow:1;
 
-    bool mbIsSheetViewHolder : 1 = false;
+    sc::SheetViewID mnSheetViewID = sc::InvalidSheetViewID;
+    ScTable* mpSheetViewFor = nullptr;
 
     /** this is touched from formula group threading context */
     std::atomic<bool> bStreamValid;
@@ -1189,11 +1190,25 @@ public:
 
     std::shared_ptr<sc::SheetViewManager> const& GetSheetViewManager() const;
 
-    bool IsSheetViewHolder() const { return mbIsSheetViewHolder; }
+    bool IsSheetViewHolder() const { return bool(mpSheetViewFor); }
 
-    void SetSheetViewHolder(bool bValue)
+    ScTable* GetDefaultViewTable() const { return mpSheetViewFor; }
+
+    sc::SheetViewID GetSheetViewID() const
     {
-        mbIsSheetViewHolder = bValue;
+        return mnSheetViewID;
+    }
+
+
+    void SetSheetViewHolder(sc::SheetViewID nID, ScTable* pDefaultViewTable)
+    {
+        mnSheetViewID = nID;
+        mpSheetViewFor = pDefaultViewTable;
+    }
+
+    void RemoveSheetViewTablePointer()
+    {
+        mpSheetViewFor = nullptr;
     }
 
 private:

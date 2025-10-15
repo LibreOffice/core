@@ -2086,6 +2086,9 @@ void ScViewFunc::MakeNewSheetView()
     GetViewData().GetDocShell().Broadcast(ScTablesHint(SC_TAB_INSERTED, nSheetViewTab));
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScTablesChanged));
 
+    // Need to make sure we return to the main sheet, to make sure we are not at a different location after inserting
+    SetTabNo(nTab);
+
     SheetViewChanged();
 }
 

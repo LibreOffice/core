@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "scdllapi.h"
 #include "types.hxx"
 #include <rtl/ustring.hxx>
 
@@ -21,7 +22,7 @@ namespace sc
  * A sheet view is a special view of a sheet that can be filtered and sorted
  * independently from other views of the sheet.
  **/
-class SheetView
+class SC_DLLPUBLIC SheetView
 {
 private:
     ScTable* mpTable = nullptr;

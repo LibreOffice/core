@@ -510,6 +510,194 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
     assertXPath(pXmlDoc, "/x:workbook/x:sheets/x:sheet", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
+{
+    // Create a new sheet (in addition to the existing one), and create 2 sheet views of the new sheet.
+    // After that, delete the sheet and the 2 sheet view holder tables should also be deleted.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    // Setup views
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // Insert a new sheet - "NewTab"
+    uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
+        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(sal_Int16(1)) } }));
+
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgsInsert);
+
+    {
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->getSheetViews().size());
+
+        // Check we have the correct table selected
+        CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"NewTab"_ustr, rDocument.GetAllTableNames()[0]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[1]);
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+    }
+
+    // Create first sheet views
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    {
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+        auto pSheetView1 = pSheetViewManager->get(0);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView1->getTableNumber());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"NewTab"_ustr, rDocument.GetAllTableNames()[0]);
+        CPPUNIT_ASSERT_EQUAL(u"NewTab_2"_ustr, rDocument.GetAllTableNames()[1]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[2]);
+    }
+
+    // Create second sheet views
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    {
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(4), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"NewTab"_ustr, rDocument.GetAllTableNames()[0]);
+        CPPUNIT_ASSERT_EQUAL(u"NewTab_3"_ustr, rDocument.GetAllTableNames()[1]);
+        CPPUNIT_ASSERT_EQUAL(u"NewTab_2"_ustr, rDocument.GetAllTableNames()[2]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[3]);
+
+        // Sheet view must be present
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+
+        auto pSheetView1 = pSheetViewManager->get(0);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(2), pSheetView1->getTableNumber());
+
+        auto pSheetView2 = pSheetViewManager->get(1);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView2->getTableNumber());
+    }
+
+    // Delete the table - index 0
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(0)) } }));
+
+    dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
+
+    {
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[0]);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
+{
+    // Delete the sheet view holder table directly
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    // Setup views
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    {
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->getSheetViews().size());
+    }
+
+    // Create first sheet views
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    {
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+        auto pSheetView1 = pSheetViewManager->get(0);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView1->getTableNumber());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[0]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1_2"_ustr, rDocument.GetAllTableNames()[1]);
+    }
+
+    // Create second sheet views
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    {
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[0]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1_3"_ustr, rDocument.GetAllTableNames()[1]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1_2"_ustr, rDocument.GetAllTableNames()[2]);
+
+        // Sheet view must be present
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+
+        auto pSheetView1 = pSheetViewManager->get(0);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(2), pSheetView1->getTableNumber());
+
+        auto pSheetView2 = pSheetViewManager->get(1);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView2->getTableNumber());
+    }
+
+    // Unhide the sheet view holder tables (or they won't be deleted)
+    {
+        uno::Sequence<beans::PropertyValue> aArgs(
+            comphelper::InitPropertySequence({ { "aTableName", uno::Any(u"Hoja1_3"_ustr) } }));
+        dispatchCommand(mxComponent, u".uno:Show"_ustr, aArgs);
+    }
+    {
+        uno::Sequence<beans::PropertyValue> aArgs(
+            comphelper::InitPropertySequence({ { "aTableName", uno::Any(u"Hoja1_2"_ustr) } }));
+        dispatchCommand(mxComponent, u".uno:Show"_ustr, aArgs);
+    }
+
+    // Delete the table
+    {
+        uno::Sequence<beans::PropertyValue> aArgs(
+            comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(2)) } }));
+
+        dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
+    }
+
+    {
+        CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[0]);
+        CPPUNIT_ASSERT_EQUAL(u"Hoja1_2"_ustr, rDocument.GetAllTableNames()[1]);
+
+        // Sheet view must be present
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+
+        auto pSheetView1 = pSheetViewManager->get(0);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView1->getTableNumber());
+
+        // Not deleted but the sheet view is now null
+        auto pSheetView2 = pSheetViewManager->get(1);
+        CPPUNIT_ASSERT(!pSheetView2);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
