@@ -1409,7 +1409,17 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
         // font declarations
         if( mnExportFlags & SvXMLExportFlags::FONTDECLS )
+        {
+            if (mnExportFlags & SvXMLExportFlags::AUTOSTYLES && decomposePDF())
+            {
+                // We will call collectAutoStyles anyway, but do it now before
+                // we export the fonts so we can export embedded fonts used in
+                // the decomposed pdf
+                collectAutoStyles();
+            }
+
             ExportFontDecls_();
+        }
 
         // styles
         if( mnExportFlags & SvXMLExportFlags::STYLES )
