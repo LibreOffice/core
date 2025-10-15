@@ -1210,6 +1210,31 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
     CPPUNIT_ASSERT_EQUAL(u"Errare humanum est"_ustr, sText);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    //cannot overwrite font file that windows has already open, fix in a later
+    //patch
+#if !defined _WIN32
+    loadFromFile(u"pdf/sciencejournalsource.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // The PT Serif embedded font should have been extracted and embedded into the fodg,
+    // ensure we have the bold variant
+    assertXPath(pXmlDoc, "/office:document/office:font-face-decls/style:font-face[@style:name='PT "
+                         "Serif']/svg:font-face-src/svg:font-face-uri[@loext:font-weight='bold' "
+                         "and @loext:font-style='normal']/office:binary-data");
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");
