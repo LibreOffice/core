@@ -37,7 +37,7 @@
 #define HELPTEXTMARGIN_QUICK    3
 #define HELPTEXTMARGIN_BALLOON  6
 
-#define HELPTEXTMAXLEN        150
+#define HELPTEXTMAXLEN        100
 
 static void ImplShowHelpWindow(vcl::Window* pParent, HelpWinStyle eHelpWinStyle,
                                QuickHelpFlags nStyle, const OUString& rHelpText,
