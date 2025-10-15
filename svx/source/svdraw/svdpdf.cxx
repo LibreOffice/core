@@ -1272,6 +1272,7 @@ struct ToUnicodeData
     std::vector<OString> bfcharlines;
     std::vector<OString> bfcharranges;
 
+    // For the pdf provided mapping from the font to unicode
     ToUnicodeData(const std::vector<uint8_t>& toUnicodeData)
     {
         SvMemoryStream aInCMap(const_cast<uint8_t*>(toUnicodeData.data()), toUnicodeData.size(),
@@ -1300,19 +1301,40 @@ struct ToUnicodeData
             }
         }
     }
+
+    // For name keyed fonts without toUnicode data where we
+    // can assume the font encoding is Adobe Standard and
+    // reverse map from the name indexes so we can forward
+    // map to unicode
+    ToUnicodeData(std::map<int, int>& nameIndexToGlyph)
+    {
+        for (const auto & [ adobe, glyphid ] : nameIndexToGlyph)
+        {
+            if (glyphid == 0)
+                continue;
+
+            const char cChar(adobe);
+            OUString sUni(&cChar, 1, RTL_TEXTENCODING_ADOBE_STANDARD);
+            sal_Unicode mappedChar = sUni.toChar();
+
+            OStringBuffer aBuffer("<");
+            appendFourByteHex(aBuffer, adobe);
+            aBuffer.append("> <");
+            appendFourByteHex(aBuffer, mappedChar);
+            aBuffer.append(">");
+            bfcharlines.push_back(aBuffer.toString());
+        }
+    }
 };
 }
 
 static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features,
-                                 std::string_view FontName,
-                                 const std::vector<uint8_t>& toUnicodeData, bool bNameKeyed,
+                                 std::string_view FontName, ToUnicodeData& tud, bool bNameKeyed,
                                  std::map<int, int>& nameIndexToGlyph, SubSetInfo& rSubSetInfo)
 {
     SvFileStream CMap(CMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
 
     CMap.WriteBytes(cmapprefix, std::size(cmapprefix) - 1);
-
-    ToUnicodeData tud(toUnicodeData);
 
     sal_Int32 mergeOffset = 1; //Leave space for notdef
     for (const auto& count : rSubSetInfo.aComponents)
@@ -1689,8 +1711,16 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSu
     bool bCMap = true;
     if (!toUnicodeData.empty())
     {
-        buildCMapAndFeatures(CMapUrl, Features, FontName, toUnicodeData, bNameKeyed,
-                             nameIndexToGlyph, rSubSetInfo);
+        ToUnicodeData tud(toUnicodeData);
+        buildCMapAndFeatures(CMapUrl, Features, FontName, tud, bNameKeyed, nameIndexToGlyph,
+                             rSubSetInfo);
+    }
+    else if (bNameKeyed)
+    {
+        SAL_INFO("sd.filter", "There is no CMap, assuming Adobe Standard encoding.");
+        ToUnicodeData tud(nameIndexToGlyph);
+        buildCMapAndFeatures(CMapUrl, Features, FontName, tud, bNameKeyed, nameIndexToGlyph,
+                             rSubSetInfo);
     }
     else
     {
