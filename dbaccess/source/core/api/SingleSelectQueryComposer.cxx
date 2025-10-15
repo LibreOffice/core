@@ -888,7 +888,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
             size_t nFoundSelectColumnPos = aFind - aSelectColumns->begin();
             if ( aFind != aSelectColumns->end() )
             {
-                if ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
+                if ( aUsedSelectColumns.contains( nFoundSelectColumnPos ) )
                 {   // we found a column name which exists twice
                     // so we start after the first found
                     do
@@ -896,9 +896,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
                         aFind = ::connectivity::findRealName(++aFind,aSelectColumns->end(),sColumnName,aCaseCompare);
                         nFoundSelectColumnPos = aFind - aSelectColumns->begin();
                     }
-                    while   (   ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
-                                &&  ( aFind != aSelectColumns->end() )
-                            );
+                    while ( aUsedSelectColumns.contains( nFoundSelectColumnPos ) && aFind != aSelectColumns->end() );
                 }
                 if ( aFind != aSelectColumns->end() )
                 {
