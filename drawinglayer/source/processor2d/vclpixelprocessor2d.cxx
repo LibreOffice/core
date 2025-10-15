@@ -1085,6 +1085,16 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
         return;
     }
 
+    // if the tile is a single pixel big, just flood fill with that pixel color
+    if (nTileWidth == 1 && nTileHeight == 1)
+    {
+        Color col = aTileImage.GetPixelColor(0, 0);
+        mpOutputDevice->SetLineColor(col);
+        mpOutputDevice->SetFillColor(col);
+        mpOutputDevice->DrawPolyPolygon(aMask);
+        return;
+    }
+
     impBufferDevice aBufferDevice(*mpOutputDevice, aMaskRange);
 
     if (!aBufferDevice.isVisible())
@@ -1094,23 +1104,12 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     OutputDevice* pLastOutputDevice = mpOutputDevice;
     mpOutputDevice = &aBufferDevice.getContent();
 
-    // if the tile is a single pixel big, just flood fill with that pixel color
-    if (nTileWidth == 1 && nTileHeight == 1)
-    {
-        Color col = aTileImage.GetPixelColor(0, 0);
-        mpOutputDevice->SetLineColor(col);
-        mpOutputDevice->SetFillColor(col);
-        mpOutputDevice->DrawRect(aMaskRect);
-    }
-    else
-    {
-        Wallpaper aWallpaper(aTileImage);
-        aWallpaper.SetColor(COL_TRANSPARENT);
-        Point aPaperPt(aMaskRect.getX() % nTileWidth, aMaskRect.getY() % nTileHeight);
-        tools::Rectangle aPaperRect(aPaperPt, aTileImage.GetSizePixel());
-        aWallpaper.SetRect(aPaperRect);
-        mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
-    }
+    Wallpaper aWallpaper(aTileImage);
+    aWallpaper.SetColor(COL_TRANSPARENT);
+    Point aPaperPt(aMaskRect.getX() % nTileWidth, aMaskRect.getY() % nTileHeight);
+    tools::Rectangle aPaperRect(aPaperPt, aTileImage.GetSizePixel());
+    aWallpaper.SetRect(aPaperRect);
+    mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
 
     // back to old OutDev
     mpOutputDevice = pLastOutputDevice;

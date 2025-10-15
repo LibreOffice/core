@@ -3480,22 +3480,23 @@ void CairoPixelProcessor2D::processPatternFillPrimitive2D(
         return;
     }
 
-    impBufferDevice aBufferDevice(*mpTargetOutputDevice, aMaskRange);
-    if (!aBufferDevice.isVisible())
-        return;
-    // remember last OutDev and set to content
-    OutputDevice* pLastOutputDevice = mpTargetOutputDevice;
-    mpTargetOutputDevice = &aBufferDevice.getContent();
     // if the tile is a single pixel big, just flood fill with that pixel color
     if (nTileWidth == 1 && nTileHeight == 1)
     {
         Color col = aTileImage.GetPixelColor(0, 0);
         mpTargetOutputDevice->SetLineColor(col);
         mpTargetOutputDevice->SetFillColor(col);
-        mpTargetOutputDevice->DrawRect(aMaskRect);
+        mpTargetOutputDevice->DrawPolyPolygon(aMask);
+        return;
     }
-    else
-        mpTargetOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+
+    impBufferDevice aBufferDevice(*mpTargetOutputDevice, aMaskRange);
+    if (!aBufferDevice.isVisible())
+        return;
+    // remember last OutDev and set to content
+    OutputDevice* pLastOutputDevice = mpTargetOutputDevice;
+    mpTargetOutputDevice = &aBufferDevice.getContent();
+    mpTargetOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
     // back to old OutDev
     mpTargetOutputDevice = pLastOutputDevice;
     // draw mask
