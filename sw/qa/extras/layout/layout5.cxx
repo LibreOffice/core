@@ -1973,6 +1973,34 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167540)
     verify_me();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf72341GrowAllScripts)
+{
+    createSwDoc();
+
+    auto* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->Insert(u"AAAAאאאא"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect*/ false, 7, /*bBasicCall*/ false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect*/ true, 2, /*bBasicCall*/ false);
+
+    for (size_t i = 0; i < 4; ++i)
+    {
+        dispatchCommand(mxComponent, u".uno:Grow"_ustr, {});
+    }
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect*/ false, 1, /*bBasicCall*/ false);
+    pWrtShell->Insert(u"אאאא"_ustr);
+
+    auto pXmlDoc = parseLayoutDump();
+
+    auto nWidthAlephResized
+        = getXPath(pXmlDoc, "//SwLineLayout/SwMultiPortion[1]", "width").toInt32();
+    auto nWidthAlephInitial
+        = getXPath(pXmlDoc, "//SwLineLayout/SwMultiPortion[2]", "width").toInt32();
+
+    CPPUNIT_ASSERT_GREATER(nWidthAlephInitial, nWidthAlephResized);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
