@@ -134,6 +134,15 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
     if include == "box2d/box2d.h" and "box2d/b2_world.h" in toAdd:
         return True
 
+    # Skip forward declaration of versioned namespaces
+    # see https://gerrit.libreoffice.org/c/core/+/72972
+    # for an example of breakage caused by this
+    if include == "unicode/regex.h":
+        for item in toAdd:
+            match = re.search(r'namespace icu.* class RegexMatcher', item)
+            if match:
+                return True
+
     noRemove = (
         # <https://www.openoffice.org/tools/CodingGuidelines.sxw> insists on not
         # removing this.

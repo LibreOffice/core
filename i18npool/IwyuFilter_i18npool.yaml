@@ -82,8 +82,6 @@ excludelist:
     # Base class needs complete type
     - com/sun/star/util/XTextSearch2.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    # contains versioned namespace so cannot forward declare
-    - unicode/regex.h
     i18npool/source/collator/collator_unicode.cxx:
     # Config options are used in #ifdef
     - config_locales.h
