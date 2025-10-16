@@ -797,7 +797,8 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window* pParent, TheExtensionMa
     , m_nProgress(0)
     , m_aIdle( "UpdateRequiredDialog m_aIdle TimeOutHdl" )
     , m_rManager(rManager)
-    , m_xExtensionBox(new ExtensionBox(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xExtensionBox(
+          new ExtensionBox(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true), rManager))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xUpdateNeeded(m_xBuilder->weld_label(u"updatelabel"_ustr))
     , m_xUpdateBtn(m_xBuilder->weld_button(u"ok"_ustr))
@@ -806,8 +807,6 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window* pParent, TheExtensionMa
     , m_xProgressText(m_xBuilder->weld_label(u"progresslabel"_ustr))
     , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progress"_ustr))
 {
-    m_xExtensionBox->setExtensionManager(&rManager);
-
     m_xUpdateBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
     m_xCloseBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
     m_xCancelBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );

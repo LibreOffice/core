@@ -155,7 +155,8 @@ class ExtensionBox : public weld::CustomWidgetController
 
     void Init();
 public:
-    explicit ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll);
+    explicit ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll,
+                          TheExtensionManager& rManager);
     virtual ~ExtensionBox() override;
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -184,8 +185,6 @@ public:
 
     void prepareChecking();
     void checkEntries();
-
-    void setExtensionManager(TheExtensionManager* pManager) { m_pManager = pManager; }
 
     //These functions are used for automatic testing
 public:

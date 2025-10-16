@@ -177,8 +177,8 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 {
 }
 
-
-ExtensionBox::ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll)
+ExtensionBox::ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll,
+                           TheExtensionManager& rManager)
     : m_bHasScrollBar( false )
     , m_bNeedsRecalc( true )
     , m_bInCheckMode( false )
@@ -192,7 +192,7 @@ ExtensionBox::ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll)
     , m_aLockedImage(StockImage::Yes, RID_BMP_LOCKED)
     , m_aWarningImage(StockImage::Yes, RID_BMP_WARNING)
     , m_aDefaultImage(StockImage::Yes, RID_BMP_EXTENSION)
-    , m_pManager( nullptr )
+    , m_pManager(&rManager)
     , m_xScrollBar(std::move(xScroll))
 {
 }

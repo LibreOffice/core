@@ -41,11 +41,10 @@ namespace dp_gui {
 ExtensionBoxWithButtons::ExtensionBoxWithButtons(ExtMgrDialog* pParentDialog,
                                                  std::unique_ptr<weld::ScrolledWindow> xScroll,
                                                  TheExtensionManager& rManager)
-    : ExtensionBox(std::move(xScroll))
+    : ExtensionBox(std::move(xScroll), rManager)
     , m_bInterfaceLocked(false)
     , m_pParent(pParentDialog)
 {
-    setExtensionManager(&rManager);
 }
 
 void ExtensionBoxWithButtons::RecalcAll()
