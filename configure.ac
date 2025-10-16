@@ -2930,9 +2930,9 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2019/2022/2022preview>],
+    AS_HELP_STRING([--with-visual-studio=<2022>],
         [Specify which Visual Studio version to use in case several are
-         installed. Currently 2019 (default) and 2022 are supported.]),
+         installed. Currently 2022 (default) is supported.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
@@ -4397,12 +4397,8 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2019)
-        vsversion=16;;
     2022)
         vsversion=17;;
-    2022preview)
-        vsversion=17.14;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -4419,8 +4415,8 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # Default version is 2019
-        vsversions="16"
+        # Default version is 2022
+        vsversions="17"
     fi
 }
 
@@ -4524,10 +4520,6 @@ find_msvc()
             vcnumwithdot=$vcnumwithdot.0
         fi
         case "$vcnumwithdot" in
-        16.0)
-            vcyear=2019
-            vctoolset=v142
-            ;;
         17.0 | 17.14)
             vcyear=2022
             vctoolset=v143
@@ -4724,30 +4716,16 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
-    # ERROR if VS version < 16.5
-    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.5])
+    # ERROR if VS version < 17.0
+    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2022 version 17.0])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-        // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
+        // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros>
+        // and <https://learn.microsoft.com/en-us/cpp/overview/compiler-versions> for mapping
         // between Visual Studio versions and _MSC_VER:
-        #if _MSC_VER < 1925
+        #if _MSC_VER < 1930
         #error
         #endif
     ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no])])
-
-    # WARN if VS version < 16.10
-    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.10])
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-        #if _MSC_VER < 1929
-        #error
-        #endif
-    ]])],[vs2019_recommended_version=yes],[vs2019_recommended_version=no])
-
-    if test $vs2019_recommended_version = yes; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_WARN([no])
-        add_warning "You should have at least Visual Studio 2019 version 16.10 to avoid build problems. Otherwise, you may face problems with the build of some modules including dragonbox."
-    fi
 
     # we used to build 64bit bits for 32bit windows (explorer shell extension, activex, similar)
     # dating back when there was no 64bit version of LibreOffice yet (pre 5.0)
@@ -16333,7 +16311,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, open "Visual Studio 2019" or "Visual Studio 2022", and then click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"]
+ [go to Start menu, open "Visual Studio 2022", and then click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above
