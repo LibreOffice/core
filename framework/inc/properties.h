@@ -34,12 +34,15 @@ inline constexpr OUString FRAME_PROPNAME_ASCII_URL = u"URL"_ustr;
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
-#define FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER       0
-#define FRAME_PROPHANDLE_ISHIDDEN                       1
-#define FRAME_PROPHANDLE_LAYOUTMANAGER                  2
-#define FRAME_PROPHANDLE_TITLE                          3
-#define FRAME_PROPHANDLE_INDICATORINTERCEPTION          4
-#define FRAME_PROPHANDLE_URL 5
+enum class FramePropHandle : sal_Int32
+{
+    DispatchRecorderSupplier = 0,
+    IsHidden = 1,
+    LayoutManager = 2,
+    Title = 3,
+    IndicatorInterception = 4,
+    Url = 5
+};
 
 /** properties for "LayoutManager" class */
 

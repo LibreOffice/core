@@ -327,8 +327,7 @@ private:
      *          The owner of this class has to be sure, that no new property
      *          clashes with an existing one.
      */
-    void impl_addPropertyInfo(const css::beans::Property& aProperty);
-
+    void impl_addPropertyInfo(const OUString& rName, FramePropHandle eHandle, const css::uno::Type& rType, sal_Int16 nAttributes);
     /** mark the object as "dead".
      */
     void impl_disablePropertySet();
@@ -517,38 +516,35 @@ void XFrameImpl::initListeners()
     // set information about all supported properties
     impl_setPropertyChangeBroadcaster(*this);
     impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER,
-            FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER,
-            cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
+        FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER,
+        FramePropHandle::DispatchRecorderSupplier,
+        cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
+        css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION,
-            FRAME_PROPHANDLE_INDICATORINTERCEPTION,
-            cppu::UnoType<css::task::XStatusIndicator>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
+        FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION,
+        FramePropHandle::IndicatorInterception,
+        cppu::UnoType<css::task::XStatusIndicator>::get(),
+        css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_ISHIDDEN,
-            FRAME_PROPHANDLE_ISHIDDEN,
-            cppu::UnoType<bool>::get(),
-            css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY));
+        FRAME_PROPNAME_ASCII_ISHIDDEN,
+        FramePropHandle::IsHidden,
+        cppu::UnoType<bool>::get(),
+        css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
     impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_LAYOUTMANAGER,
-            FRAME_PROPHANDLE_LAYOUTMANAGER,
-            cppu::UnoType<css::frame::XLayoutManager>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
+        FRAME_PROPNAME_ASCII_LAYOUTMANAGER,
+        FramePropHandle::LayoutManager,
+        cppu::UnoType<css::frame::XLayoutManager>::get(),
+        css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_TITLE,
-            FRAME_PROPHANDLE_TITLE,
-            cppu::UnoType<OUString>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
-    impl_addPropertyInfo(css::beans::Property(FRAME_PROPNAME_ASCII_URL, FRAME_PROPHANDLE_URL,
-                                              cppu::UnoType<OUString>::get(),
-                                              css::beans::PropertyAttribute::TRANSIENT));
+        FRAME_PROPNAME_ASCII_TITLE,
+        FramePropHandle::Title,
+        cppu::UnoType<OUString>::get(),
+        css::beans::PropertyAttribute::TRANSIENT);
+    impl_addPropertyInfo(
+        FRAME_PROPNAME_ASCII_URL,
+        FramePropHandle::Url,
+        cppu::UnoType<OUString>::get(),
+        css::beans::PropertyAttribute::TRANSIENT);
 }
 
 /*-************************************************************************************************************
@@ -2735,9 +2731,9 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
                   properties have a unique handle. That must be guaranteed
                   inside method initListeners()!
     */
-    switch (nHandle)
+    switch (static_cast<FramePropHandle>(nHandle))
     {
-        case FRAME_PROPHANDLE_TITLE :
+        case FramePropHandle::Title :
                 {
                     OUString sExternalTitle;
                     aValue >>= sExternalTitle;
@@ -2745,11 +2741,11 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
                 }
                 break;
 
-        case FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER :
+        case FramePropHandle::DispatchRecorderSupplier :
                 aValue >>= m_xDispatchRecorderSupplier;
                 break;
 
-        case FRAME_PROPHANDLE_LAYOUTMANAGER :
+        case FramePropHandle::LayoutManager :
                 {
                     css::uno::Reference< css::frame::XLayoutManager2 > xOldLayoutManager = m_xLayoutManager;
                     css::uno::Reference< css::frame::XLayoutManager2 > xNewLayoutManager;
@@ -2766,7 +2762,7 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
                 }
                 break;
 
-        case FRAME_PROPHANDLE_INDICATORINTERCEPTION :
+        case FramePropHandle::IndicatorInterception :
                 {
                     css::uno::Reference< css::task::XStatusIndicator > xProgress;
                     aValue >>= xProgress;
@@ -2774,7 +2770,7 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
                 }
                 break;
 
-        case FRAME_PROPHANDLE_URL:
+        case FramePropHandle::Url:
         {
             aValue >>= m_aURL;
         }
@@ -2796,25 +2792,25 @@ css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
                   inside method initListeners()!
     */
     css::uno::Any aValue;
-    switch (nHandle)
+    switch (static_cast<FramePropHandle>(nHandle))
     {
-        case FRAME_PROPHANDLE_TITLE :
+        case FramePropHandle::Title :
                 aValue <<= getTitle ();
                 break;
 
-        case FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER :
+        case FramePropHandle::DispatchRecorderSupplier :
                 aValue <<= m_xDispatchRecorderSupplier;
                 break;
 
-        case FRAME_PROPHANDLE_ISHIDDEN :
+        case FramePropHandle::IsHidden :
                 aValue <<= m_bIsHidden;
                 break;
 
-        case FRAME_PROPHANDLE_LAYOUTMANAGER :
+        case FramePropHandle::LayoutManager :
                 aValue <<= m_xLayoutManager;
                 break;
 
-        case FRAME_PROPHANDLE_INDICATORINTERCEPTION :
+        case FramePropHandle::IndicatorInterception :
                 {
                     css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xIndicatorInterception.get(),
                                                                                  css::uno::UNO_QUERY);
@@ -2822,7 +2818,7 @@ css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
                 }
                 break;
 
-        case FRAME_PROPHANDLE_URL:
+        case FramePropHandle::Url:
         {
             aValue <<= m_aURL;
         }
@@ -2841,15 +2837,14 @@ void XFrameImpl::impl_setPropertyChangeBroadcaster(XFrameImpl& xBroadcaster)
     m_xBroadcaster = &xBroadcaster;
 }
 
-void XFrameImpl::impl_addPropertyInfo(const css::beans::Property& aProperty)
+void XFrameImpl::impl_addPropertyInfo(const OUString& rName, FramePropHandle eHandle, const css::uno::Type& rType, sal_Int16 nAttributes)
 {
     SolarMutexGuard g;
-
-    TPropInfoHash::const_iterator pIt = m_lProps.find(aProperty.Name);
+    css::beans::Property aProperty(rName, static_cast<sal_Int32>(eHandle), rType, nAttributes);
+    TPropInfoHash::const_iterator pIt = m_lProps.find(rName);
     if (pIt != m_lProps.end())
         throw css::beans::PropertyExistException();
-
-    m_lProps[aProperty.Name] = aProperty;
+    m_lProps[rName] = aProperty;
 }
 
 void XFrameImpl::impl_disablePropertySet()
