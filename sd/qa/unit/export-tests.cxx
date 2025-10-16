@@ -1223,6 +1223,48 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
                          "and @loext:font-style='normal']/office:binary-data");
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/pattern-stroke.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // ensure the stroke color is this redish color, and not gray which is what it
+    // defaults to if the stroke pattern isn't taken into account.
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='gr1']/"
+                         "style:graphic-properties[@svg:stroke-color='#ed1b2d']");
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/pattern-fill.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // ensure the stroke color is this redish color, and not gray which is what it
+    // defaults to if the stroke pattern isn't taken into account.
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='gr1']/"
+                         "style:graphic-properties[@style:repeat='repeat' and "
+                         "@draw:fill-image-width='1.27cm' and @draw:fill-image-height='1.27cm' and "
+                         "@draw:fill-image-name='Bitmap_20_1']");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");
