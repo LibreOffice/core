@@ -979,6 +979,51 @@ static bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
     return true;
 }
 
+namespace
+{
+/// Assuming rRow has no text in it, checks if any of the empty cells is a floating table anchor.
+bool EmptyRowContainsSplitFlysAnchor(const RowSequence_t& rRow)
+{
+    for (const CellSequence_t& rCell : rRow)
+    {
+        uno::Reference<beans::XPropertySet> xCellStart(rCell[0], uno::UNO_QUERY);
+        if (!xCellStart.is()
+            || !xCellStart->getPropertySetInfo()->hasPropertyByName(u"TextParagraph"_ustr))
+        {
+            continue;
+        }
+
+        uno::Reference<container::XContentEnumerationAccess> xCEA(
+            xCellStart->getPropertyValue(u"TextParagraph"_ustr), uno::UNO_QUERY);
+        if (!xCEA.is())
+        {
+            continue;
+        }
+
+        uno::Reference<container::XEnumeration> xEnumeration
+            = xCEA->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+        while (xEnumeration->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xEnumeration->nextElement(), uno::UNO_QUERY);
+            if (!xPropertySet.is()
+                || !xPropertySet->getPropertySetInfo()->hasPropertyByName(u"IsSplitAllowed"_ustr))
+            {
+                continue;
+            }
+
+            bool bIsSplitAllowed{};
+            xPropertySet->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
+            if (bIsSplitAllowed)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+}
+
 /// Are all cells in this row empty?
 static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
 {
@@ -1020,6 +1065,14 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
         TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "compareRegionStarts() failed");
         return false;
     }
+
+    if (EmptyRowContainsSplitFlysAnchor(rRowSeq))
+    {
+        // Not really empty: handle as if it would have text, otherwise the anchored floating table
+        // is not laid out correctly.
+        return false;
+    }
+
     return true;
 }
 
