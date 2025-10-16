@@ -241,12 +241,6 @@ ExtensionBox::~ExtensionBox()
     m_oCollator.reset();
 }
 
-sal_Int32 ExtensionBox::getItemCount() const
-{
-    return static_cast< sal_Int32 >( m_vEntries.size() );
-}
-
-
 sal_Int32 ExtensionBox::getSelIndex() const
 {
     assert(m_nActive >= -1);

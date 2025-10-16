@@ -190,12 +190,8 @@ public:
 public:
     enum { ENTRY_NOTFOUND = -1 };
 
-    /** @return  The count of the entries in the list box. */
-    sal_Int32 getItemCount() const;
-
     /** @return  The index of the first selected entry in the list box.
-        When nothing is selected, which is the case when getItemCount returns '0',
-        then this function returns ENTRY_NOTFOUND */
+        When nothing is selected, then this function returns ENTRY_NOTFOUND. */
     sal_Int32 getSelIndex() const;
 };
 

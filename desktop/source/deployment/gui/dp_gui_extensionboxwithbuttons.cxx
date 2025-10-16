@@ -154,7 +154,7 @@ bool ExtensionBoxWithButtons::Command(const CommandEvent& rCEvt)
 
 OUString ExtensionBoxWithButtons::ShowPopupMenu(const Point& rPos, const tools::Long nPos)
 {
-    if ( nPos >= static_cast<tools::Long>(getItemCount()) )
+    if (nPos >= GetEntryCount())
         return u"CMD_NONE"_ustr;
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"desktop/ui/extensionmenu.ui"_ustr));

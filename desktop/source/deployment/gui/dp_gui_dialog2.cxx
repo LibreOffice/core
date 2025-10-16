@@ -606,7 +606,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
         m_xAddBtn->set_tooltip_text(u""_ustr);
     }
 
-    m_xUpdateBtn->set_sensitive( !bLockInterface && m_xExtensionBox->getItemCount() );
+    m_xUpdateBtn->set_sensitive(!bLockInterface && m_xExtensionBox->GetEntryCount());
     m_xExtensionBox->enableButtons( !bLockInterface );
 
     clearEventID();
