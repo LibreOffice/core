@@ -271,6 +271,40 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
     }
 }
 
+// A test that tests some parts of numbered list behaviour
+// it's really the numbering we're interested in here
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, numberedList)
+{
+    const OUString sText[] = {
+        "Click to add Title",
+        "1.",
+        "Outer, one",
+        "2.",
+        "Outer, two",
+        "a.",
+        "Second level, a",
+        "b.",
+        "Second level, b",
+        "Blank second level",
+        "a.",
+        "Second level restart, a",
+        "b.",
+        "Second level restart, b",
+        "3.",
+        "Outer, three",
+        "4.",
+        "Outer, four",
+    };
+
+    xmlDocUniquePtr pXmlDoc = load("pptx/NumberedList-12ab-ab-34.pptx");
+    const OString sXPathBase = "/metafile/push[1]/push[1]/textarray["_ostr;
+
+    for (size_t i = 0; i < std::size(sText); i++)
+    {
+        assertXPathContent(pXmlDoc, sXPathBase + OString::number(i + 1) + "]/text", sText[i]);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
 {
     xmlDocUniquePtr pXmlDoc = load("pptx/tdf146731.pptx");
