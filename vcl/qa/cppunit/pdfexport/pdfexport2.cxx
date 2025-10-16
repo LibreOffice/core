@@ -6318,6 +6318,36 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTextBoxRuby)
     CPPUNIT_ASSERT_EQUAL(u"other"_ustr, aText.at(16).trim());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
+{
+    saveAsPDF(u"tdf166044-cont-footnote-one-pgnum.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(32, nPageObjectCount);
+
+    auto pContNoticeObject = pPdfPage->getObject(29);
+    CPPUNIT_ASSERT(pContNoticeObject);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pContNoticeObject->getType());
+
+    // Without the fix, this assert would fail with:
+    // - Expected: ມະນດ
+    // - Actual  : ມະນດ2
+    CPPUNIT_ASSERT_EQUAL(u"ມະນດ"_ustr, pContNoticeObject->getText(pTextPage));
+
+    auto pPgNumObject = pPdfPage->getObject(30);
+    CPPUNIT_ASSERT(pPgNumObject);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPgNumObject->getType());
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pPgNumObject->getText(pTextPage));
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
