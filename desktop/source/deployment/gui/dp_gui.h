@@ -21,7 +21,7 @@
 
 namespace dp_gui {
 
-enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
+enum class PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
 } // namespace dp_gui
 

@@ -720,7 +720,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, weld::Button&, void)
             acceptLicense( pEntry->m_xPackage );
         else
         {
-            const bool bEnable( pEntry->m_eState != REGISTERED );
+            const bool bEnable(pEntry->m_eState != PackageState::REGISTERED);
             enablePackage( pEntry->m_xPackage, bEnable );
         }
     }

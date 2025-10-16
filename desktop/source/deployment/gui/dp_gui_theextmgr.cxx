@@ -317,7 +317,7 @@ void TheExtensionManager::createPackageList()
                 getDialogHelper()->addPackageToList( xPackage );
                 // When the package is enabled, we can stop here, otherwise we have to look for
                 // another version of this package
-                if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
+                if ((eState == PackageState::REGISTERED) || (eState == PackageState::NOT_AVAILABLE))
                     break;
             }
         }
@@ -345,19 +345,19 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
         {
             ::beans::Ambiguous< sal_Bool > const & reg = option.Value;
             if ( reg.IsAmbiguous )
-                return AMBIGUOUS;
+                return PackageState::AMBIGUOUS;
             else
-                return reg.Value ? REGISTERED : NOT_REGISTERED;
+                return reg.Value ? PackageState::REGISTERED : PackageState::NOT_REGISTERED;
         }
         else
-            return NOT_AVAILABLE;
+            return PackageState::NOT_AVAILABLE;
     }
     catch ( const uno::RuntimeException & ) {
         throw;
     }
     catch (const uno::Exception &) {
         TOOLS_WARN_EXCEPTION( "desktop", "" );
-        return NOT_AVAILABLE;
+        return PackageState::NOT_AVAILABLE;
     }
 }
 

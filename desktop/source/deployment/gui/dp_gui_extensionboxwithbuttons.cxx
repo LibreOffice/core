@@ -85,7 +85,8 @@ void ExtensionBoxWithButtons::SetButtonStatus(const TEntry_Impl& rEntry)
     bool bShowOptionBtn = true;
 
     rEntry->m_bHasButtons = false;
-    if ( ( rEntry->m_eState == REGISTERED ) || ( rEntry->m_eState == NOT_AVAILABLE ) )
+    if ((rEntry->m_eState == PackageState::REGISTERED)
+        || (rEntry->m_eState == PackageState::NOT_AVAILABLE))
     {
         m_pParent->enableButtontoEnable( false );
     }
@@ -95,8 +96,9 @@ void ExtensionBoxWithButtons::SetButtonStatus(const TEntry_Impl& rEntry)
         bShowOptionBtn = false;
     }
 
-    if ( ( !rEntry->m_bUser || ( rEntry->m_eState == NOT_AVAILABLE ) || rEntry->m_bMissingDeps )
-         && !rEntry->m_bMissingLic )
+    if ((!rEntry->m_bUser || (rEntry->m_eState == PackageState::NOT_AVAILABLE)
+         || rEntry->m_bMissingDeps)
+        && !rEntry->m_bMissingLic)
     {
         m_pParent->enableEnableButton( false );
     }
@@ -171,9 +173,9 @@ OUString ExtensionBoxWithButtons::ShowPopupMenu(const Point& rPos, const tools::
     {
         if ( GetEntryData( nPos )->m_bUser )
         {
-            if ( GetEntryData( nPos )->m_eState == REGISTERED )
+            if (GetEntryData(nPos)->m_eState == PackageState::REGISTERED)
                 xPopup->append(u"CMD_DISABLE"_ustr, DpResId(RID_CTX_ITEM_DISABLE));
-            else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+            else if (GetEntryData(nPos)->m_eState != PackageState::NOT_AVAILABLE)
                 xPopup->append(u"CMD_ENABLE"_ustr, DpResId(RID_CTX_ITEM_ENABLE));
         }
         if (!officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())

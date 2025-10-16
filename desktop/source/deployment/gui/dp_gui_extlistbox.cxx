@@ -104,9 +104,9 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
         if ( xGraphic.is() )
             m_aIcon = Image( xGraphic );
 
-        if ( eState == AMBIGUOUS )
+        if (eState == PackageState::AMBIGUOUS)
             m_sErrorText = DpResId( RID_STR_ERROR_UNKNOWN_STATUS );
-        else if ( eState == NOT_REGISTERED )
+        else if (eState == PackageState::NOT_REGISTERED)
             checkDependencies();
     }
     catch (const deployment::ExtensionRemovedException &) {}
@@ -379,7 +379,8 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (rEntry->m_bActive)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
-    else if ((rEntry->m_eState != REGISTERED) && (rEntry->m_eState != NOT_AVAILABLE))
+    else if ((rEntry->m_eState != PackageState::REGISTERED)
+             && (rEntry->m_eState != PackageState::NOT_AVAILABLE))
         rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
     else
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
@@ -516,7 +517,8 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
         else
             rRenderContext.DrawImage(aPos, Size(SMALL_ICON_SIZE, SMALL_ICON_SIZE), m_aSharedImage);
     }
-    if ((rEntry->m_eState == AMBIGUOUS ) || rEntry->m_bMissingDeps || rEntry->m_bMissingLic)
+    if ((rEntry->m_eState == PackageState::AMBIGUOUS) || rEntry->m_bMissingDeps
+        || rEntry->m_bMissingLic)
     {
         aPos = rRect.TopRight() + Point(-(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2 * SMALL_ICON_SIZE), TOP_OFFSET);
         rRenderContext.DrawImage(aPos, Size(SMALL_ICON_SIZE, SMALL_ICON_SIZE), m_aWarningImage);
@@ -935,10 +937,10 @@ void ExtensionBox::updateEntry(const uno::Reference<deployment::XPackage>& xPack
             entry->m_sVersion = xPackage->getVersion();
             entry->m_sDescription = xPackage->getDescription();
 
-            if ( eState == REGISTERED )
+            if (eState == PackageState::REGISTERED)
                 entry->m_bMissingLic = false;
 
-            if ( eState == AMBIGUOUS )
+            if (eState == PackageState::AMBIGUOUS)
                 entry->m_sErrorText = DpResId( RID_STR_ERROR_UNKNOWN_STATUS );
             else if ( ! entry->m_bMissingLic )
                 entry->m_sErrorText.clear();
