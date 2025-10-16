@@ -49,11 +49,6 @@ namespace dp_gui {
 
 class TheExtensionManager;
 
-
-struct Entry_Impl;
-
-typedef std::shared_ptr< Entry_Impl > TEntry_Impl;
-
 struct Entry_Impl
 {
     bool            m_bActive       :1;
@@ -86,6 +81,8 @@ struct Entry_Impl
     sal_Int32 CompareTo(const CollatorWrapper& rCollator, const Entry_Impl& rEntry) const;
     void checkDependencies();
 };
+
+typedef std::shared_ptr<Entry_Impl> TEntry_Impl;
 
 class ExtensionBox_Impl;
 
