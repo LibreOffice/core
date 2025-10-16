@@ -32,13 +32,13 @@ class ExtensionBoxWithButtons : public ExtensionBox
 {
     bool m_bInterfaceLocked;
 
-    ExtMgrDialog* m_pParent;
+    ExtMgrDialog& m_rParent;
 
     void SetButtonStatus(const TEntry_Impl& rEntry);
     OUString ShowPopupMenu(const Point& rPos, const tools::Long nPos);
 
 public:
-    explicit ExtensionBoxWithButtons(ExtMgrDialog* pParentDialog,
+    explicit ExtensionBoxWithButtons(ExtMgrDialog& rParentDialog,
                                      std::unique_ptr<weld::ScrolledWindow> xScroll,
                                      TheExtensionManager& rManager);
 

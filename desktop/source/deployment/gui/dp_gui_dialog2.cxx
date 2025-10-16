@@ -220,7 +220,7 @@ ExtMgrDialog::ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager)
     , m_aIdle( "ExtMgrDialog m_aIdle TimeOutHdl" )
     , m_rManager(rManager)
     , m_xExtensionBox(new ExtensionBoxWithButtons(
-          this, m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true), rManager))
+          *this, m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true), rManager))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xOptionsBtn(m_xBuilder->weld_button(u"optionsbtn"_ustr))
     , m_xAddBtn(m_xBuilder->weld_button(u"addbtn"_ustr))

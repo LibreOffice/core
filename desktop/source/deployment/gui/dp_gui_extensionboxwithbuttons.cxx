@@ -38,12 +38,12 @@ using namespace ::com::sun::star;
 
 namespace dp_gui {
 
-ExtensionBoxWithButtons::ExtensionBoxWithButtons(ExtMgrDialog* pParentDialog,
+ExtensionBoxWithButtons::ExtensionBoxWithButtons(ExtMgrDialog& rParentDialog,
                                                  std::unique_ptr<weld::ScrolledWindow> xScroll,
                                                  TheExtensionManager& rManager)
     : ExtensionBox(std::move(xScroll), rManager)
     , m_bInterfaceLocked(false)
-    , m_pParent(pParentDialog)
+    , m_rParent(rParentDialog)
 {
 }
 
@@ -57,9 +57,9 @@ void ExtensionBoxWithButtons::RecalcAll()
     }
     else
     {
-        m_pParent->enableOptionsButton( false );
-        m_pParent->enableRemoveButton( false );
-        m_pParent->enableEnableButton( false );
+        m_rParent.enableOptionsButton(false);
+        m_rParent.enableRemoveButton(false);
+        m_rParent.enableEnableButton(false);
     }
 
     ExtensionBox::RecalcAll();
@@ -83,11 +83,11 @@ void ExtensionBoxWithButtons::SetButtonStatus(const TEntry_Impl& rEntry)
     if ((rEntry->m_eState == PackageState::REGISTERED)
         || (rEntry->m_eState == PackageState::NOT_AVAILABLE))
     {
-        m_pParent->enableButtontoEnable( false );
+        m_rParent.enableButtontoEnable(false);
     }
     else
     {
-        m_pParent->enableButtontoEnable( true );
+        m_rParent.enableButtontoEnable(true);
         bShowOptionBtn = false;
     }
 
@@ -95,32 +95,32 @@ void ExtensionBoxWithButtons::SetButtonStatus(const TEntry_Impl& rEntry)
          || rEntry->m_bMissingDeps)
         && !rEntry->m_bMissingLic)
     {
-        m_pParent->enableEnableButton( false );
+        m_rParent.enableEnableButton(false);
     }
     else
     {
-        m_pParent->enableEnableButton( !rEntry->m_bLocked );
+        m_rParent.enableEnableButton(!rEntry->m_bLocked);
         rEntry->m_bHasButtons = true;
     }
 
     if ( rEntry->m_bHasOptions && bShowOptionBtn )
     {
-        m_pParent->enableOptionsButton( true );
+        m_rParent.enableOptionsButton(true);
         rEntry->m_bHasButtons = true;
     }
     else
     {
-        m_pParent->enableOptionsButton( false );
+        m_rParent.enableOptionsButton(false);
     }
 
     if ( rEntry->m_bUser || rEntry->m_bShared )
     {
-        m_pParent->enableRemoveButton( !rEntry->m_bLocked );
+        m_rParent.enableRemoveButton(!rEntry->m_bLocked);
         rEntry->m_bHasButtons = true;
     }
     else
     {
-        m_pParent->enableRemoveButton( false );
+        m_rParent.enableRemoveButton(false);
     }
 }
 
@@ -134,19 +134,19 @@ bool ExtensionBoxWithButtons::Command(const CommandEvent& rCEvt)
     OUString sCommand = ShowPopupMenu(aMousePos, nPos);
 
     if (sCommand == "CMD_ENABLE")
-        m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, true );
+        m_rParent.enablePackage(GetEntryData(nPos)->m_xPackage, true);
     else if (sCommand == "CMD_DISABLE")
-        m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, false );
+        m_rParent.enablePackage(GetEntryData(nPos)->m_xPackage, false);
     else if (sCommand == "CMD_UPDATE")
-        m_pParent->updatePackage( GetEntryData( nPos )->m_xPackage );
+        m_rParent.updatePackage(GetEntryData(nPos)->m_xPackage);
     else if (sCommand == "CMD_REMOVE")
-        m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
+        m_rParent.removePackage(GetEntryData(nPos)->m_xPackage);
     else if (sCommand == "CMD_SHOW_LICENSE")
     {
-        m_pParent->incBusy();
-        ShowLicenseDialog aLicenseDlg(m_pParent->getDialog(), GetEntryData(nPos)->m_xPackage);
+        m_rParent.incBusy();
+        ShowLicenseDialog aLicenseDlg(m_rParent.getDialog(), GetEntryData(nPos)->m_xPackage);
         aLicenseDlg.run();
-        m_pParent->decBusy();
+        m_rParent.decBusy();
     }
 
     return true;
@@ -204,9 +204,9 @@ void ExtensionBoxWithButtons::enableButtons(bool bEnable)
     }
     else
     {
-        m_pParent->enableEnableButton( false );
-        m_pParent->enableOptionsButton( false );
-        m_pParent->enableRemoveButton( false );
+        m_rParent.enableEnableButton(false);
+        m_rParent.enableOptionsButton(false);
+        m_rParent.enableRemoveButton(false);
     }
 }
 
