@@ -186,7 +186,6 @@ public:
     void prepareChecking();
     void checkEntries();
 
-    //These functions are used for automatic testing
 public:
     enum { ENTRY_NOTFOUND = -1 };
 
