@@ -100,6 +100,7 @@ gtk4allowlist="libgtk-4.so.1 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libatk
 qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libxcb.so.1 libxcb-icccm.so.4 ${gobjectallowlist}"
 qt6allowlist="libQt6Core.so.6 libQt6Gui.so.6 libQt6Multimedia.so.6 libQt6MultimediaWidgets.so.6 libQt6Network.so.6 libQt6Widgets.so.6 libcairo.so.2 libxcb.so.1"
 kf5allowlist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
+kf6allowlist="libKF6ConfigCore.so.6 libKF6CoreAddons.so.6 libKF6I18n.so.6 libKF6KIOCore.so.6 libKF6KIOFileWidgets.so.6 libKF6KIOWidgets.so.6 libKF6WindowSystem.so.6"
 avahiallowlist="libavahi-common.so.3 libavahi-client.so.3 ${gdbusallowlist}"
 kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
 dconfallowlist="libdconf.so.1 libgio-2.0.so.0 ${gobjectallowlist}"
@@ -139,6 +140,11 @@ local file="$1"
         */libvclplug_kf5lo.so|*/libkf5be1lo.so)
             if [ "$ENABLE_KF5" = TRUE ]; then
                 allowlist="${allowlist} ${qt5allowlist} ${kf5allowlist}"
+            fi
+        ;;
+        */libvclplug_kf6lo.so)
+            if [ "$ENABLE_KF6" = TRUE ]; then
+                allowlist="${allowlist} ${qt6allowlist} ${kf6allowlist}"
             fi
         ;;
         */libvclplug_gtk3lo.so|*/updater)
