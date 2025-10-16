@@ -104,7 +104,6 @@ public:
 class ExtensionBox_Impl : public weld::CustomWidgetController
 {
     bool m_bHasScrollBar : 1;
-    bool m_bHasActive : 1;
     bool m_bNeedsRecalc : 1;
     bool m_bInCheckMode : 1;
     bool m_bAdjustActive : 1;
@@ -173,7 +172,7 @@ public:
     TEntry_Impl const & GetEntryData( tools::Long nPos ) { return m_vEntries[ nPos ]; }
     tools::Long            GetEntryCount() const { return static_cast<tools::Long>(m_vEntries.size()); }
     tools::Rectangle       GetEntryRect( const tools::Long nPos ) const;
-    bool            HasActive() const { return m_bHasActive; }
+    bool            HasActive() const { return m_nActive >= 0; }
     tools::Long            PointToPos( const Point& rPos );
     virtual void    RecalcAll();
     void            RemoveUnlocked();

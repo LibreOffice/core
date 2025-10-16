@@ -181,12 +181,11 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 // ExtensionBox_Impl
 ExtensionBox_Impl::ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll)
     : m_bHasScrollBar( false )
-    , m_bHasActive( false )
     , m_bNeedsRecalc( true )
     , m_bInCheckMode( false )
     , m_bAdjustActive( false )
     , m_bInDelete( false )
-    , m_nActive( 0 )
+    , m_nActive(-1)
     , m_nTopIndex( 0 )
     , m_nStdHeight( 0 )
     , m_nActiveHeight( 0 )
@@ -251,13 +250,8 @@ sal_Int32 ExtensionBox_Impl::getItemCount() const
 
 sal_Int32 ExtensionBox_Impl::getSelIndex() const
 {
-    if ( m_bHasActive )
-    {
-        assert(m_nActive >= -1);
-        return static_cast< sal_Int32 >( m_nActive );
-    }
-    else
-        return ENTRY_NOTFOUND;
+    assert(m_nActive >= -1);
+    return static_cast<sal_Int32>(m_nActive);
 }
 
 
@@ -311,7 +305,7 @@ tools::Rectangle ExtensionBox_Impl::GetEntryRect( const tools::Long nPos ) const
         aSize.setHeight( m_nStdHeight );
 
     Point aPos( 0, -m_nTopIndex + nPos * m_nStdHeight );
-    if ( m_bHasActive && ( nPos < m_nActive ) )
+    if (m_nActive >= 0 && nPos < m_nActive)
         aPos.AdjustY(m_nActiveHeight - m_nStdHeight );
 
     return tools::Rectangle( aPos, aSize );
@@ -346,18 +340,17 @@ void ExtensionBox_Impl::selectEntry( const tools::Long nPos )
         if ( m_bInCheckMode )
             return;
 
-        if ( m_bHasActive )
+        if (m_nActive >= 0)
         {
             if ( nPos == m_nActive )
                 return;
 
-            m_bHasActive = false;
             m_vEntries[ m_nActive ]->m_bActive = false;
+            m_nActive = -1;
         }
 
         if ( ( nPos >= 0 ) && ( o3tl::make_unsigned(nPos) < m_vEntries.size() ) )
         {
-            m_bHasActive = true;
             m_nActive = nPos;
             m_vEntries[ nPos ]->m_bActive = true;
 
@@ -538,12 +531,12 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
 
 void ExtensionBox_Impl::RecalcAll()
 {
-    if ( m_bHasActive )
+    if (m_nActive >= 0)
         CalcActiveHeight( m_nActive );
 
     SetupScrollBar();
 
-    if ( m_bHasActive )
+    if (m_nActive >= 0)
     {
         tools::Rectangle aEntryRect = GetEntryRect( m_nActive );
 
@@ -594,7 +587,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 
     tools::Long nSelect = 0;
 
-    if ( m_bHasActive )
+    if (HasActive())
     {
         tools::Long nPageSize = GetOutputSizePixel().Height() / m_nStdHeight;
         if ( nPageSize < 2 )
@@ -659,7 +652,7 @@ tools::Long ExtensionBox_Impl::GetTotalHeight() const
 {
     tools::Long nHeight = m_vEntries.size() * m_nStdHeight;
 
-    if ( m_bHasActive )
+    if (HasActive())
     {
         nHeight += m_nActiveHeight - m_nStdHeight;
     }
@@ -715,7 +708,7 @@ tools::Long ExtensionBox_Impl::PointToPos( const Point& rPos )
 {
     tools::Long nPos = ( rPos.Y() + m_nTopIndex ) / m_nStdHeight;
 
-    if ( m_bHasActive && ( nPos > m_nActive ) )
+    if (m_nActive >= 0 && (nPos > m_nActive))
     {
         if ( rPos.Y() + m_nTopIndex <= m_nActive*m_nStdHeight + m_nActiveHeight )
             nPos = m_nActive;
@@ -767,7 +760,7 @@ bool ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !rMEvt.IsLeft() )
         return false;
 
-    if (rMEvt.IsMod1() && m_bHasActive)
+    if (rMEvt.IsMod1() && m_nActive >= 0)
         selectEntry(ExtensionBox_Impl::ENTRY_NOTFOUND);   // Selecting a not existing entry will deselect the current one
     else
     {
@@ -929,7 +922,7 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
             pEntry->m_sErrorText = DpResId(RID_STR_ERROR_MISSING_LICENSE);
 
         //access to m_nActive must be guarded
-        if (!m_bInCheckMode && m_bHasActive && (m_nActive >= nPos))
+        if (!m_bInCheckMode && (m_nActive >= nPos))
             m_nActive += 1;
     }
 
@@ -1000,7 +993,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
             if ( IsReallyVisible() )
                 invalidate = true;
 
-            if ( m_bHasActive )
+            if (m_nActive >= 0)
             {
                 if ( nPos < m_nActive )
                     m_nActive -= 1;
@@ -1008,10 +1001,11 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                           ( nPos == static_cast<tools::Long>(m_vEntries.size()) ) )
                     m_nActive -= 1;
 
-                m_bHasActive = false;
+                const tools::Long nActive = m_nActive;
+                m_nActive = -1;
                 //clear before calling out of this method
                 aGuard.clear();
-                selectEntry( m_nActive );
+                selectEntry(nActive);
             }
         }
     }
@@ -1101,7 +1095,6 @@ void ExtensionBox_Impl::checkEntries()
                     {
                         nChangedActivePos = nPos;
                         m_nActive = -1;
-                        m_bHasActive = false;
                     }
                     m_vRemovedEntries.push_back(*iIndex);
                     (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener);
