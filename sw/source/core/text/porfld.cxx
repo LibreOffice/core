@@ -452,6 +452,17 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
                 SetHasFollow( true );
             }
 
+            // tdf#166044: QuoVadis portions with a continuation notice rely on
+            // m_bHasFollow to indicate which portion is responsible for printing
+            // the destination page number. Initially, this is the otherwise-empty
+            // pField. Sometimes SwLineLayout::CalcLine() will cut this extra
+            // field, but that isn't always possible. Set m_bHasFollow on this
+            // portion to avoid printing the page number more than once.
+            if (IsQuoVadisPortion())
+            {
+                SetHasFollow(true);
+            }
+
             // For a newly created field, nNextOffset contains the Offset
             // of its start of the original string
             // If a FollowField is created when formatting, this FollowField's
