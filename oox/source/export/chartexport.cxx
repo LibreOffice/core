@@ -2914,12 +2914,14 @@ void ChartExport::exportDataTable( )
 void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    if (aSplitDataSeries.empty())
+    {
+        // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
+        aSplitDataSeries.push_back({});
+    }
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        if (!splitDataSeries.hasElements())
-            continue;
-
         sal_Int32 nTypeId = XML_areaChart;
         if (mbIs3DChart)
             nTypeId = XML_area3DChart;
@@ -2927,7 +2929,9 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
 
         exportGrouping();
         bool bPrimaryAxes = true;
-        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
+        if (splitDataSeries.hasElements())
+            exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
+
         createAxes(bPrimaryAxes, false);
         //exportAxesId(bPrimaryAxes);
 
@@ -2942,12 +2946,14 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
         nTypeId = XML_bar3DChart;
     FSHelperPtr pFS = GetFS();
 
-    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    if (aSplitDataSeries.empty())
+    {
+        // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
+        aSplitDataSeries.push_back({});
+    }
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        if (!splitDataSeries.hasElements())
-            continue;
-
         pFS->startElement(FSNS(XML_c, nTypeId));
         // bar direction
         bool bVertical = false;
@@ -2963,7 +2969,8 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
         exportVaryColors(xChartType);
 
         bool bPrimaryAxes = true;
-        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
+        if (splitDataSeries.hasElements())
+            exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
         Reference< XPropertySet > xTypeProp(xChartType, uno::UNO_QUERY);
 
@@ -3038,18 +3045,21 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
 void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    if (aSplitDataSeries.empty())
+    {
+        // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
+        aSplitDataSeries.push_back({});
+    }
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        if (!splitDataSeries.hasElements())
-            continue;
-
         pFS->startElement(FSNS(XML_c, XML_bubbleChart));
 
         exportVaryColors(xChartType);
 
         bool bPrimaryAxes = true;
-        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
+        if (splitDataSeries.hasElements())
+            exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
         createAxes(bPrimaryAxes, false);
 
@@ -3150,12 +3160,14 @@ void writeDataLabelsRange(const FSHelperPtr& pFS, const XmlFilterBase* pFB, Data
 void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    if (aSplitDataSeries.empty())
+    {
+        // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
+        aSplitDataSeries.push_back({});
+    }
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        if (!splitDataSeries.hasElements())
-            continue;
-
         sal_Int32 nTypeId = XML_lineChart;
         if( mbIs3DChart )
             nTypeId = XML_line3DChart;
@@ -3166,7 +3178,8 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
         exportVaryColors(xChartType);
         // TODO: show marker symbol in series?
         bool bPrimaryAxes = true;
-        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
+        if (splitDataSeries.hasElements())
+            exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
         // show marker?
         sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
@@ -3282,16 +3295,19 @@ void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xCh
 void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    if (aSplitDataSeries.empty())
+    {
+        // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
+        aSplitDataSeries.push_back({});
+    }
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        if (!splitDataSeries.hasElements())
-            continue;
-
         pFS->startElement(FSNS(XML_c, XML_stockChart));
 
         bool bPrimaryAxes = true;
-        exportCandleStickSeries(splitDataSeries, bPrimaryAxes);
+        if (splitDataSeries.hasElements())
+            exportCandleStickSeries(splitDataSeries, bPrimaryAxes);
 
         // export stock properties
         Reference< css::chart::XStatisticDisplay > xStockPropProvider(mxDiagram, uno::UNO_QUERY);
