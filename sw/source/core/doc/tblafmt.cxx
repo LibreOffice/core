@@ -243,7 +243,7 @@ SwAutoFormatProps::SwAutoFormatProps()
     m_aCrossedOut = std::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT );
     m_aContour = std::make_unique<SvxContourItem>(false, RES_CHRATR_CONTOUR );
     m_aShadowed = std::make_unique<SvxShadowedItem>(false, RES_CHRATR_SHADOWED );
-    m_aColor = std::make_unique<SvxColorItem>(RES_CHRATR_COLOR );
+    m_aColor = std::make_unique<SvxColorItem>(COL_AUTO, RES_CHRATR_COLOR );
     m_aBox = std::make_unique<SvxBoxItem>(RES_BOX );
     m_aTLBR = std::make_unique<SvxLineItem>(0 );
     m_aBLTR = std::make_unique<SvxLineItem>(0 );
