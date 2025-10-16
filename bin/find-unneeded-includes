@@ -514,6 +514,25 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/typelib/") \
             or path.startswith("include/uno/")
 
+# Don't bother with non-linux specific paths,
+# useful for automatically checking headers
+def isNonLinuxPath(path):
+    return path.startswith("avmedia/source/win/") \
+        or path.startswith("avmedia/source/macavf/") \
+        or path.startswith("include/apple_remote/")
+
+def isNonLinuxFile(path):
+    NonLinuxFiles = (
+        "include/comphelper/windowserrorstring.hxx",
+        "include/comphelper/windowsdebugoutput.hxx",
+        "include/comphelper/windowsStart.hxx",
+        "include/drawinglayer/processor2d/d2dpixelprocessor2d.hxx",
+        "include/static/unoembindhelpers/PrimaryBindings.hxx",
+        "include/version.hrc",
+        "include/vcl/winscheduler.hxx",
+    )
+    if path in NonLinuxFiles:
+        return True
 
 def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
     return_code = 0
@@ -528,7 +547,7 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
             t.start()
 
         for path in sorted(paths):
-            if isInUnoIncludeFile(path):
+            if isInUnoIncludeFile(path) or isNonLinuxFile(path) or isNonLinuxPath(path):
                 continue
 
             # IWYU fails on these with #error: don't use this in new code
