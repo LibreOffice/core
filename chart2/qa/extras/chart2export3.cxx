@@ -686,6 +686,28 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testBarChartSecondaryAxisXLSX)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOf2Barchart);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testEmptyCharts)
+{
+    loadFromFile(u"odt/testEmptyCharts.odt");
+    save(u"Office Open XML Text"_ustr);
+
+    // Make sure each chart exists in the respective XML
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart");
+
+    pXmlDoc = parseExport(u"word/charts/chart2.xml"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart");
+
+    pXmlDoc = parseExport(u"word/charts/chart3.xml"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bubbleChart");
+
+    pXmlDoc = parseExport(u"word/charts/chart4.xml"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart");
+
+    pXmlDoc = parseExport(u"word/charts/chart5.xml"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148142)
 {
     // The document contains a line chart with "Between tick marks" X axis position.
