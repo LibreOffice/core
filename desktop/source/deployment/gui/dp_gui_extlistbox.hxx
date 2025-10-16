@@ -134,7 +134,6 @@ class ExtensionBox_Impl : public weld::CustomWidgetController
     std::vector< TEntry_Impl > m_vEntries;
     std::vector< TEntry_Impl > m_vRemovedEntries;
 
-    std::unique_ptr<css::lang::Locale> m_pLocale;
     std::optional<CollatorWrapper>   m_oCollator;
 
     //Holds weak references to extensions to which is we have added an XEventListener

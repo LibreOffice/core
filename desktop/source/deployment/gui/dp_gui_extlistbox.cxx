@@ -219,9 +219,9 @@ void ExtensionBox_Impl::Init()
 
     m_xRemoveListener = new ExtensionRemovedListener( this );
 
-    m_pLocale.reset( new lang::Locale( Application::GetSettings().GetLanguageTag().getLocale() ) );
     m_oCollator.emplace( ::comphelper::getProcessComponentContext() );
-    m_oCollator->loadDefaultCollator( *m_pLocale, i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
+    m_oCollator->loadDefaultCollator(Application::GetSettings().GetLanguageTag().getLocale(),
+                                     i18n::CollatorOptions::CollatorOptions_IGNORE_CASE);
 }
 
 ExtensionBox_Impl::~ExtensionBox_Impl()
@@ -240,7 +240,6 @@ ExtensionBox_Impl::~ExtensionBox_Impl()
 
     m_xRemoveListener.clear();
 
-    m_pLocale.reset();
     m_oCollator.reset();
 }
 
