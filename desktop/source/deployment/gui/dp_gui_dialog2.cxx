@@ -407,7 +407,6 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
 ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     : GenericDialogController(pParent, u"desktop/ui/extensionmanager.ui"_ustr, u"ExtensionManagerDialog"_ustr)
     , DialogHelper(pManager->getContext(), m_xDialog.get())
-    , m_sAddPackages(DpResId(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
     , m_bStartProgress(false)
@@ -634,7 +633,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     aDlgHelper.SetContext(sfx2::FileDialogHelper::ExtensionManager);
-    aDlgHelper.SetTitle( m_sAddPackages );
+    aDlgHelper.SetTitle(DpResId(RID_STR_ADD_PACKAGES));
 
     // collect and set filter list:
     typedef std::map< OUString, OUString > t_string2string;

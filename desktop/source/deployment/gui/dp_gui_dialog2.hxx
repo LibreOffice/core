@@ -88,7 +88,6 @@ public:
 class ExtMgrDialog : public weld::GenericDialogController
                    , public DialogHelper
 {
-    const OUString       m_sAddPackages;
     OUString             m_sProgressText;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;
