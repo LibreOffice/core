@@ -1155,12 +1155,6 @@ void MacabRecords::iterator::operator++ ()
 }
 
 
-bool MacabRecords::iterator::operator!= (const sal_Int32 i) const
-{
-    return(id != i);
-}
-
-
 bool MacabRecords::iterator::operator== (const sal_Int32 i) const
 {
     return(id == i);

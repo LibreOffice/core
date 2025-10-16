@@ -114,7 +114,6 @@ namespace connectivity::macab
                     iterator& operator= (MacabRecords *_records);
                     iterator();
                     void operator++ ();
-                    bool operator!= (const sal_Int32 i) const;
                     bool operator== (const sal_Int32 i) const;
                     MacabRecord *operator* () const;
             };
