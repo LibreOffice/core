@@ -118,9 +118,9 @@ Entry_Impl::~Entry_Impl()
 {}
 
 
-sal_Int32 Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl& rEntry ) const
+sal_Int32 Entry_Impl::CompareTo(const CollatorWrapper& rCollator, const TEntry_Impl& rEntry) const
 {
-    sal_Int32 eCompare = pCollator->compareString( m_sTitle, rEntry->m_sTitle );
+    sal_Int32 eCompare = rCollator.compareString(m_sTitle, rEntry->m_sTitle);
     if ( eCompare == 0 )
     {
         eCompare = m_sVersion.compareTo( rEntry->m_sVersion );
@@ -824,7 +824,7 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const tools::Lo
 
     if ( nStart == nEnd )
     {
-        eCompare = rEntry->CompareTo( &*m_oCollator, m_vEntries[ nStart ] );
+        eCompare = rEntry->CompareTo(*m_oCollator, m_vEntries[nStart]);
         if ( eCompare < 0 )
             return false;
         else if ( eCompare == 0 )
@@ -845,7 +845,7 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const tools::Lo
     }
 
     const tools::Long nMid = nStart + ( ( nEnd - nStart ) / 2 );
-    eCompare = rEntry->CompareTo( &*m_oCollator, m_vEntries[ nMid ] );
+    eCompare = rEntry->CompareTo(*m_oCollator, m_vEntries[nMid]);
 
     if ( eCompare < 0 )
         return FindEntryPos( rEntry, nStart, nMid-1, nPos );

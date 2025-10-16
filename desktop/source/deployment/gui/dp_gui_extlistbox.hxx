@@ -83,7 +83,7 @@ struct Entry_Impl
                const PackageState eState, const bool bReadOnly);
    ~Entry_Impl();
 
-    sal_Int32 CompareTo(const CollatorWrapper *pCollator, const TEntry_Impl& rEntry) const;
+    sal_Int32 CompareTo(const CollatorWrapper& rCollator, const TEntry_Impl& rEntry) const;
     void checkDependencies();
 };
 
