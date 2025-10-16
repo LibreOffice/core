@@ -114,10 +114,19 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                 if (pDBData)
                 {
                     const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
-                    rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pDBData->HasTotals(),
-                                                   pParam->mbFirstColumn, pParam->mbLastColumn,
-                                                   pParam->mbRowStripes, pParam->mbColumnStripes,
-                                                   pDBData->HasAutoFilter()));
+                    if (pParam)
+                    {
+                        rSet.Put(ScDatabaseSettingItem(
+                            pDBData->HasHeader(), pDBData->HasTotals(), pParam->mbFirstColumn,
+                            pParam->mbLastColumn, pParam->mbRowStripes, pParam->mbColumnStripes,
+                            pDBData->HasAutoFilter()));
+                    }
+                    else
+                    {
+                        rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pDBData->HasTotals(),
+                                                       false, false, false, false,
+                                                       pDBData->HasAutoFilter()));
+                    }
                 }
                 break;
         }
