@@ -38,18 +38,14 @@ using namespace ::com::sun::star;
 
 namespace dp_gui {
 
-ExtensionBoxWithButtons::ExtensionBoxWithButtons(std::unique_ptr<weld::ScrolledWindow> xScroll)
+ExtensionBoxWithButtons::ExtensionBoxWithButtons(ExtMgrDialog* pParentDialog,
+                                                 std::unique_ptr<weld::ScrolledWindow> xScroll,
+                                                 TheExtensionManager& rManager)
     : ExtensionBox(std::move(xScroll))
     , m_bInterfaceLocked(false)
-    , m_pParent(nullptr)
+    , m_pParent(pParentDialog)
 {
-}
-
-void ExtensionBoxWithButtons::InitFromDialog(ExtMgrDialog* pParentDialog)
-{
-    setExtensionManager(&pParentDialog->getExtensionManager());
-
-    m_pParent = pParentDialog;
+    setExtensionManager(&rManager);
 }
 
 void ExtensionBoxWithButtons::RecalcAll()

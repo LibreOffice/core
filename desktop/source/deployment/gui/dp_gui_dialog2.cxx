@@ -219,8 +219,8 @@ ExtMgrDialog::ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager)
     , m_nProgress(0)
     , m_aIdle( "ExtMgrDialog m_aIdle TimeOutHdl" )
     , m_rManager(rManager)
-    , m_xExtensionBox(
-          new ExtensionBoxWithButtons(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xExtensionBox(new ExtensionBoxWithButtons(
+          this, m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true), rManager))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xOptionsBtn(m_xBuilder->weld_button(u"optionsbtn"_ustr))
     , m_xAddBtn(m_xBuilder->weld_button(u"addbtn"_ustr))
@@ -237,8 +237,6 @@ ExtMgrDialog::ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager)
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
     , m_xSearchEntry(m_xBuilder->weld_entry(u"search"_ustr))
 {
-    m_xExtensionBox->InitFromDialog(this);
-
     m_xEnableBtn->set_help_id(HID_EXTENSION_MANAGER_LISTBOX_ENABLE);
 
     m_xOptionsBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );

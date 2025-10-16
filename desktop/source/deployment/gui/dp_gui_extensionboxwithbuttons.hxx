@@ -38,9 +38,9 @@ class ExtensionBoxWithButtons : public ExtensionBox
     OUString ShowPopupMenu(const Point& rPos, const tools::Long nPos);
 
 public:
-    explicit ExtensionBoxWithButtons(std::unique_ptr<weld::ScrolledWindow> xScroll);
-
-    void InitFromDialog(ExtMgrDialog* pParentDialog);
+    explicit ExtensionBoxWithButtons(ExtMgrDialog* pParentDialog,
+                                     std::unique_ptr<weld::ScrolledWindow> xScroll,
+                                     TheExtensionManager& rManager);
 
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool Command(const CommandEvent& rCEvt) override;
