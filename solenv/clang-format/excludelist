@@ -2932,6 +2932,7 @@ desktop/source/deployment/dp_xml.cxx
 desktop/source/deployment/gui/dp_gui.h
 desktop/source/deployment/gui/dp_gui_dialog2.cxx
 desktop/source/deployment/gui/dp_gui_dialog2.hxx
+desktop/source/deployment/gui/dp_gui_extensionboxwithbuttons.cxx
 desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx
 desktop/source/deployment/gui/dp_gui_extensioncmdqueue.hxx
 desktop/source/deployment/gui/dp_gui_extlistbox.cxx

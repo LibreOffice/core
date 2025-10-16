@@ -59,6 +59,7 @@ $(eval $(call gb_Library_set_componentfile,deploymentgui,desktop/source/deployme
 $(eval $(call gb_Library_add_exception_objects,deploymentgui,\
     desktop/source/deployment/gui/dp_gui_dependencydialog \
     desktop/source/deployment/gui/dp_gui_dialog2 \
+    desktop/source/deployment/gui/dp_gui_extensionboxwithbuttons \
     desktop/source/deployment/gui/dp_gui_extensioncmdqueue \
     desktop/source/deployment/gui/dp_gui_extlistbox \
     desktop/source/deployment/gui/dp_gui_service \
