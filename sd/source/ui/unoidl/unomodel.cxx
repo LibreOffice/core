@@ -4709,6 +4709,10 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                     auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
                     aJsonWriter.put("name", aName);
 
+                    const Size aSlizeSize = const_cast<SdXImpressDocument*>(this)->getPartSize(i);
+                    aJsonWriter.put("slideWidth", aSlizeSize.getWidth());
+                    aJsonWriter.put("slideHeight", aSlizeSize.getHeight());
+
                     if (bAllyState)
                     {
                         OUStringBuffer aHtml;
