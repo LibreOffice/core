@@ -186,11 +186,10 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     h->dst.stm.filename = const_cast<char*>(tmpdestfile.getStr());
     setMode(h, mode_t1);
     bool result = convertTx(h);
+    mergeFontsFree(h);
 
     remove(destFilePathA.getStr());
-    rename(h->dst.stm.filename, destFilePathA.getStr());
-
-    mergeFontsFree(h);
+    rename(tmpdestfile.getStr(), destFilePathA.getStr());
 
     return result;
 }
