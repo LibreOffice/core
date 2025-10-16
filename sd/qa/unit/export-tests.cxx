@@ -1121,7 +1121,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
     loadFromFile(u"pdf/BasicHindi.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
     save(u"OpenDocument Drawing Flat XML"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
