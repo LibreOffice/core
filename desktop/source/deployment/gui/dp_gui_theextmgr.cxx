@@ -127,14 +127,14 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
         if ( !m_xUpdReqDialog )
         {
             m_xUpdReqDialog.reset(new UpdateRequiredDialog(Application::GetFrameWeld(m_xParent), this));
-            m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xUpdReqDialog, this, m_xContext));
+            m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xUpdReqDialog, *this, m_xContext));
             createPackageList();
         }
     }
     else if ( !m_xExtMgrDialog )
     {
         m_xExtMgrDialog = std::make_shared<ExtMgrDialog>(Application::GetFrameWeld(m_xParent), this);
-        m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xExtMgrDialog, this, m_xContext));
+        m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xExtMgrDialog, *this, m_xContext));
         m_xExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
     }

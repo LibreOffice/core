@@ -199,7 +199,7 @@ typedef std::shared_ptr< ExtensionCmd > TExtensionCmd;
 class ExtensionCmdQueue::Thread: public salhelper::Thread
 {
 public:
-    Thread(DialogHelper& rDialogHelper, TheExtensionManager* pManager,
+    Thread(DialogHelper& rDialogHelper, TheExtensionManager& rManager,
            uno::Reference<uno::XComponentContext> xContext);
 
     void addExtension( const OUString &rExtensionURL,
@@ -240,7 +240,7 @@ private:
     std::queue< TExtensionCmd >              m_queue;
 
     DialogHelper& m_rDialogHelper;
-    TheExtensionManager *m_pManager;
+    TheExtensionManager& m_rManager;
 
     const OUString   m_sEnablingPackages;
     const OUString   m_sDisablingPackages;
@@ -574,14 +574,12 @@ void ProgressCmdEnv::pop()
     update_( uno::Any() ); // no message
 }
 
-
-ExtensionCmdQueue::Thread::Thread( DialogHelper& rDialogHelper,
-                                   TheExtensionManager *pManager,
-                                   uno::Reference< uno::XComponentContext > xContext ) :
+ExtensionCmdQueue::Thread::Thread(DialogHelper& rDialogHelper, TheExtensionManager& rManager,
+                                  uno::Reference<uno::XComponentContext> xContext) :
     salhelper::Thread( "dp_gui_extensioncmdqueue" ),
     m_xContext(std::move( xContext )),
     m_rDialogHelper(rDialogHelper),
-    m_pManager( pManager ),
+    m_rManager(rManager),
     m_sEnablingPackages( DpResId( RID_STR_ENABLING_PACKAGES ) ),
     m_sDisablingPackages( DpResId( RID_STR_DISABLING_PACKAGES ) ),
     m_sAddingPackages( DpResId( RID_STR_ADDING_PACKAGES ) ),
@@ -847,7 +845,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     }
 
     rCmdEnv->setWarnUser( bWarnUser );
-    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference<deployment::XExtensionManager> xExtMgr = m_rManager.getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
         m_sAddingPackages.replaceAll("%EXTENSION_NAME", sName));
@@ -875,7 +873,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
 void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                                                   const uno::Reference< deployment::XPackage > &xPackage )
 {
-    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference<deployment::XExtensionManager> xExtMgr = m_rManager.getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
         m_sRemovingPackages.replaceAll("%EXTENSION_NAME",
@@ -962,7 +960,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
     if ( !xPackage.is() )
         return;
 
-    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference<deployment::XExtensionManager> xExtMgr = m_rManager.getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
         m_sEnablingPackages.replaceAll("%EXTENSION_NAME",
@@ -985,7 +983,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
     if ( !xPackage.is() )
         return;
 
-    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference<deployment::XExtensionManager> xExtMgr = m_rManager.getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
         m_sDisablingPackages.replaceAll("%EXTENSION_NAME",
@@ -1008,7 +1006,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
     if ( !xPackage.is() )
         return;
 
-    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference<deployment::XExtensionManager> xExtMgr = m_rManager.getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
         m_sAcceptLicense.replaceAll("%EXTENSION_NAME",
@@ -1037,9 +1035,9 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
     m_wakeup.notify_all();
 }
 
-ExtensionCmdQueue::ExtensionCmdQueue(DialogHelper& rDialogHelper, TheExtensionManager* pManager,
+ExtensionCmdQueue::ExtensionCmdQueue(DialogHelper& rDialogHelper, TheExtensionManager& rManager,
                                      const uno::Reference<uno::XComponentContext>& rContext)
-    : m_thread(new Thread(rDialogHelper, pManager, rContext))
+    : m_thread(new Thread(rDialogHelper, rManager, rContext))
 {
     m_thread->launch();
 }
