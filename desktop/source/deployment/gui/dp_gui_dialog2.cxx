@@ -81,8 +81,8 @@ constexpr OUStringLiteral BUNDLED_PACKAGE_MANAGER = u"bundled";
 //                             DialogHelper
 
 DialogHelper::DialogHelper(const uno::Reference< uno::XComponentContext > &xContext,
-                           weld::Window* pWindow)
-    : m_pWindow(pWindow)
+                           weld::Dialog* pDialog)
+    : m_pDialog(pDialog)
     , m_nEventID(nullptr)
 {
     m_xContext = xContext;
@@ -108,7 +108,7 @@ bool DialogHelper::continueOnSharedExtension(const uno::Reference<deployment::XP
         const SolarMutexGuard guard;
         incBusy();
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            m_pWindow, VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
+            m_pDialog, VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
         bHadWarning = true;
 
         bool bRet = RET_OK == xBox->run();

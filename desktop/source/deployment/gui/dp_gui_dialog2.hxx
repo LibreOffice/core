@@ -46,17 +46,16 @@ class TheExtensionManager;
 class DialogHelper
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    weld::Window*   m_pWindow;
+    weld::Dialog* m_pDialog;
     ImplSVEvent *   m_nEventID;
     TopLevelWindowLocker m_aBusy;
 
 public:
-                    DialogHelper(const css::uno::Reference< css::uno::XComponentContext > &,
-                                 weld::Window* pWindow);
+    DialogHelper(const css::uno::Reference<css::uno::XComponentContext>&, weld::Dialog* pDialog);
     virtual        ~DialogHelper();
 
     void            openWebBrowser(const OUString& rURL, const OUString& rTitle);
-    weld::Window*   getFrameWeld() const { return m_pWindow; }
+    weld::Window*   getFrameWeld() const { return m_pDialog; }
     void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller );
     void            clearEventID() { m_nEventID = nullptr; }
 
@@ -76,7 +75,7 @@ public:
     bool continueOnSharedExtension(const css::uno::Reference<css::deployment::XPackage>&,
                                    TranslateId pResID, bool& bHadWarning);
 
-    void            incBusy() { m_aBusy.incBusy(m_pWindow); }
+    void            incBusy() { m_aBusy.incBusy(m_pDialog); }
     void            decBusy() { m_aBusy.decBusy(); }
     bool            isBusy() const { return m_aBusy.isBusy(); }
     bool            installExtensionWarn(std::u16string_view rExtensionURL);
