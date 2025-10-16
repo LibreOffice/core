@@ -320,7 +320,7 @@ bool areSameSugaredType(clang::QualType type1, clang::QualType type2) {
         return false;
     }
     if (auto const t = llvm::dyn_cast<clang::TagType>(type1)) {
-        return t->getOriginalDecl()->getCanonicalDecl() == llvm::dyn_cast<clang::TagType>(type2)->getOriginalDecl()->getCanonicalDecl();
+        return t->getDecl()->getCanonicalDecl() == llvm::dyn_cast<clang::TagType>(type2)->getDecl()->getCanonicalDecl();
     }
     if (auto const t = llvm::dyn_cast<clang::TypedefType>(type1)) {
         return t->getDecl() == llvm::dyn_cast<clang::TypedefType>(type2)->getDecl();

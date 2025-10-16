@@ -302,7 +302,7 @@ inline clang::TagDecl const * getDefinitionOrSelf(clang::TagDecl const * decl) {
 
 inline clang::RecordDecl const * getDecl(clang::RecordType const * type) {
 #if CLANG_VERSION >= 220000
-    return llvm::cast<clang::RecordDecl>(type->getOriginalDecl()->getCanonicalDecl());
+    return llvm::cast<clang::RecordDecl>(type->getDecl()->getCanonicalDecl());
 #else
     return type->getDecl();
 #endif
@@ -310,7 +310,7 @@ inline clang::RecordDecl const * getDecl(clang::RecordType const * type) {
 
 inline clang::EnumDecl const * getDecl(clang::EnumType const * type) {
 #if CLANG_VERSION >= 220000
-    return type->getOriginalDecl()->getCanonicalDecl();
+    return type->getDecl()->getCanonicalDecl();
 #else
     return type->getDecl();
 #endif
@@ -318,7 +318,7 @@ inline clang::EnumDecl const * getDecl(clang::EnumType const * type) {
 
 inline clang::CXXRecordDecl const * getDecl(clang::InjectedClassNameType const * type) {
 #if CLANG_VERSION >= 220000
-    return type->getOriginalDecl()->getCanonicalDecl();
+    return type->getDecl()->getCanonicalDecl();
 #else
     return type->getDecl();
 #endif
