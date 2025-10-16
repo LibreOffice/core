@@ -786,9 +786,10 @@ void ExtMgrDialog::Close()
 }
 
 //UpdateRequiredDialog
-UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionManager *pManager)
-    : GenericDialogController(pParent, u"desktop/ui/updaterequireddialog.ui"_ustr, u"UpdateRequiredDialog"_ustr)
-    , DialogHelper(pManager->getContext(), m_xDialog.get())
+UpdateRequiredDialog::UpdateRequiredDialog(weld::Window* pParent, TheExtensionManager& rManager)
+    : GenericDialogController(pParent, u"desktop/ui/updaterequireddialog.ui"_ustr,
+                              u"UpdateRequiredDialog"_ustr)
+    , DialogHelper(rManager.getContext(), m_xDialog.get())
     , m_sCloseText(DpResId(RID_STR_CLOSE_BTN))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
@@ -797,7 +798,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionMa
     , m_bHasLockedEntries(false)
     , m_nProgress(0)
     , m_aIdle( "UpdateRequiredDialog m_aIdle TimeOutHdl" )
-    , m_pManager(pManager)
+    , m_rManager(rManager)
     , m_xExtensionBox(new ExtensionBox(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xUpdateNeeded(m_xBuilder->weld_label(u"updatelabel"_ustr))
@@ -807,7 +808,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionMa
     , m_xProgressText(m_xBuilder->weld_label(u"progresslabel"_ustr))
     , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progress"_ustr))
 {
-    m_xExtensionBox->setExtensionManager(pManager);
+    m_xExtensionBox->setExtensionManager(&rManager);
 
     m_xUpdateBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
     m_xCloseBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
@@ -837,7 +838,7 @@ void UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     // We will only add entries to the list with unsatisfied dependencies
     if ( !bLicenseMissing && !checkDependencies( xPackage ) )
     {
-        m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
+        m_bHasLockedEntries |= m_rManager.isReadOnly(xPackage);
         const SolarMutexGuard aGuard;
         m_xUpdateBtn->set_sensitive(true);
         m_xExtensionBox->addEntry( xPackage );
@@ -987,7 +988,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, weld::Button&, void)
         }
     }
 
-    m_pManager->getCmdQueue()->checkForUpdates( std::move(vUpdateEntries) );
+    m_rManager.getCmdQueue()->checkForUpdates(std::move(vUpdateEntries));
 }
 
 
@@ -1131,7 +1132,7 @@ void UpdateRequiredDialog::disableAllEntries()
     for ( tools::Long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nIndex );
-        m_pManager->getCmdQueue()->enableExtension( pEntry->m_xPackage, false );
+        m_rManager.getCmdQueue()->enableExtension(pEntry->m_xPackage, false);
     }
 
     decBusy();

@@ -185,7 +185,7 @@ class UpdateRequiredDialog : public weld::GenericDialogController
     bool                 m_bHasLockedEntries;
     sal_Int32            m_nProgress;
     Idle                 m_aIdle;
-    TheExtensionManager *m_pManager;
+    TheExtensionManager& m_rManager;
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
@@ -210,7 +210,7 @@ class UpdateRequiredDialog : public weld::GenericDialogController
     void            disableAllEntries();
 
 public:
-    UpdateRequiredDialog(weld::Window * pParent, TheExtensionManager *pManager);
+    UpdateRequiredDialog(weld::Window* pParent, TheExtensionManager& rManager);
     virtual        ~UpdateRequiredDialog() override;
 
     virtual short   run() override;

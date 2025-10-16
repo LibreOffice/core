@@ -126,7 +126,8 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     {
         if ( !m_xUpdReqDialog )
         {
-            m_xUpdReqDialog.reset(new UpdateRequiredDialog(Application::GetFrameWeld(m_xParent), this));
+            m_xUpdReqDialog.reset(
+                new UpdateRequiredDialog(Application::GetFrameWeld(m_xParent), *this));
             m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xUpdReqDialog, *this, m_xContext));
             createPackageList();
         }
