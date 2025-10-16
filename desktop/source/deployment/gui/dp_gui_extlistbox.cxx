@@ -286,20 +286,16 @@ void ExtensionBox::CalcActiveHeight(const tools::Long nPos)
         m_nActiveHeight += 2;
 }
 
-tools::Rectangle ExtensionBox::GetEntryRect(const tools::Long nPos) const
+tools::Rectangle ExtensionBox::GetActiveEntryRect() const
 {
+    assert(m_nActive >= 0 && "No active entry");
+
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     Size aSize( GetOutputSizePixel() );
+    aSize.setHeight(m_nActiveHeight);
 
-    if ( m_vEntries[ nPos ]->m_bActive )
-        aSize.setHeight( m_nActiveHeight );
-    else
-        aSize.setHeight( m_nStdHeight );
-
-    Point aPos( 0, -m_nTopIndex + nPos * m_nStdHeight );
-    if (m_nActive >= 0 && nPos < m_nActive)
-        aPos.AdjustY(m_nActiveHeight - m_nStdHeight );
+    Point aPos(0, -m_nTopIndex + m_nActive * m_nStdHeight);
 
     return tools::Rectangle( aPos, aSize );
 }
@@ -531,7 +527,7 @@ void ExtensionBox::RecalcAll()
 
     if (m_nActive >= 0)
     {
-        tools::Rectangle aEntryRect = GetEntryRect( m_nActive );
+        tools::Rectangle aEntryRect = GetActiveEntryRect();
 
         if ( m_bAdjustActive )
         {
