@@ -76,7 +76,7 @@ struct Entry_Impl
 
     Entry_Impl(const css::uno::Reference<css::deployment::XPackage> &xPackage,
                const PackageState eState, const bool bReadOnly);
-   ~Entry_Impl();
+    ~Entry_Impl();
 
     sal_Int32 CompareTo(const CollatorWrapper& rCollator, const Entry_Impl& rEntry) const;
     void checkDependencies();
