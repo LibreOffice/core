@@ -192,7 +192,7 @@ ExtensionBox::ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll,
     , m_aLockedImage(StockImage::Yes, RID_BMP_LOCKED)
     , m_aWarningImage(StockImage::Yes, RID_BMP_WARNING)
     , m_aDefaultImage(StockImage::Yes, RID_BMP_EXTENSION)
-    , m_pManager(&rManager)
+    , m_rManager(rManager)
     , m_xScrollBar(std::move(xScroll))
 {
 }
@@ -875,7 +875,7 @@ void ExtensionBox::addEntry(const uno::Reference<deployment::XPackage>& xPackage
                             bool bLicenseMissing)
 {
     PackageState eState = TheExtensionManager::getPackageState( xPackage );
-    bool         bLocked = m_pManager->isReadOnly( xPackage );
+    bool bLocked = m_rManager.isReadOnly(xPackage);
 
     TEntry_Impl pEntry = std::make_shared<Entry_Impl>( xPackage, eState, bLocked );
 
@@ -904,7 +904,7 @@ void ExtensionBox::addEntry(const uno::Reference<deployment::XPackage>& xPackage
             }
         }
 
-        pEntry->m_bHasOptions = m_pManager->supportsOptions(xPackage);
+        pEntry->m_bHasOptions = m_rManager.supportsOptions(xPackage);
         pEntry->m_bUser = (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER);
         pEntry->m_bShared = (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER);
         pEntry->m_bNew = m_bInCheckMode;
@@ -931,7 +931,7 @@ void ExtensionBox::updateEntry(const uno::Reference<deployment::XPackage>& xPack
         if ( entry->m_xPackage == xPackage )
         {
             PackageState eState = TheExtensionManager::getPackageState( xPackage );
-            entry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
+            entry->m_bHasOptions = m_rManager.supportsOptions(xPackage);
             entry->m_eState = eState;
             entry->m_sTitle = xPackage->getDisplayName();
             entry->m_sVersion = xPackage->getVersion();

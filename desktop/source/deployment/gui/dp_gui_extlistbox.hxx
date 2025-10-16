@@ -119,7 +119,7 @@ class ExtensionBox : public weld::CustomWidgetController
 
     rtl::Reference<ExtensionRemovedListener> m_xRemoveListener;
 
-    TheExtensionManager      *m_pManager;
+    TheExtensionManager& m_rManager;
     //This mutex is used for synchronizing access to m_vEntries.
     //Currently it is used to synchronize adding, removing entries and
     //functions like getItemName, getItemDescription, etc. to prevent
