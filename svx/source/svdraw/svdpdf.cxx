@@ -31,6 +31,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
+#include <svx/xflbmsxy.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlnwtit.hxx>
@@ -125,7 +126,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mpVD->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
-    mpVD->SetFillColor();
 
     // Get TextBounds relative to baseline
     vcl::Font aFnt = mpVD->GetFont();
@@ -379,7 +379,7 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
     for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
     {
         auto pPageObject = pPdfPage->getObject(nPageObjectIndex);
-        ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
+        ImportPdfObject(pPageObject, pPdfPage, pTextPage, nPageObjectIndex);
         if (pProgrInfo && pActionsToReport)
         {
             (*pActionsToReport)++;
@@ -552,10 +552,29 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 
     if (bFill)
     {
-        if (mpVD->IsFillColor())
+        bool doFill
+            = mpVD->GetDrawMode() != DrawModeFlags::NoFill && (moFillColor || moFillPattern);
+        if (doFill && moFillColor)
+            doFill = !moFillColor->IsTransparent();
+        if (doFill)
         {
-            mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_SOLID));
-            mpFillAttr->Put(XFillColorItem(OUString(), mpVD->GetFillColor()));
+            if (moFillColor)
+            {
+                mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_SOLID));
+                mpFillAttr->Put(XFillColorItem(OUString(), *moFillColor));
+            }
+            else
+            {
+                assert(moFillPattern && "pattern should exist");
+                mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
+                mpFillAttr->Put(XFillBitmapItem(OUString(), Graphic(*moFillPattern)));
+                mpFillAttr->Put(XFillBmpStretchItem(false));
+                mpFillAttr->Put(XFillBmpTileItem(true));
+                mpFillAttr->Put(
+                    XFillBmpSizeXItem(convertPointToMm100(moFillPattern->GetSizePixel().Width())));
+                mpFillAttr->Put(
+                    XFillBmpSizeYItem(convertPointToMm100(moFillPattern->GetSizePixel().Height())));
+            }
         }
         else
         {
@@ -877,6 +896,7 @@ void ImpSdrPdfImport::checkClip()
 bool ImpSdrPdfImport::isClip() const { return !maClip.getB2DRange().isEmpty(); }
 void ImpSdrPdfImport::ImportPdfObject(
     std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage, int nPageObjectIndex)
 {
     if (!pPageObject)
@@ -886,10 +906,10 @@ void ImpSdrPdfImport::ImportPdfObject(
     switch (ePageObjectType)
     {
         case vcl::pdf::PDFPageObjectType::Text:
-            ImportText(pPageObject, pTextPage, nPageObjectIndex);
+            ImportText(pPageObject, pPage, pTextPage, nPageObjectIndex);
             break;
         case vcl::pdf::PDFPageObjectType::Path:
-            ImportPath(pPageObject, nPageObjectIndex);
+            ImportPath(pPageObject, pPage, nPageObjectIndex);
             break;
         case vcl::pdf::PDFPageObjectType::Image:
             ImportImage(pPageObject, nPageObjectIndex);
@@ -898,7 +918,7 @@ void ImpSdrPdfImport::ImportPdfObject(
             SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
             break;
         case vcl::pdf::PDFPageObjectType::Form:
-            ImportForm(pPageObject, pTextPage, nPageObjectIndex);
+            ImportForm(pPageObject, pPage, pTextPage, nPageObjectIndex);
             break;
         default:
             SAL_WARN("sd.filter", "Unknown PDF page object #" << nPageObjectIndex << " of type: "
@@ -908,6 +928,7 @@ void ImpSdrPdfImport::ImportPdfObject(
 }
 
 void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                                  std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                                  int /*nPageObjectIndex*/)
 {
@@ -921,7 +942,7 @@ void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     {
         auto pFormObject = pPageObject->getFormObject(nIndex);
 
-        ImportPdfObject(pFormObject, pTextPage, -1);
+        ImportPdfObject(pFormObject, pPage, pTextPage, -1);
     }
 
     // Restore the old one.
@@ -1753,7 +1774,39 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSu
     return EmbeddedFontInfo();
 }
 
+// There isn't, as far as I know, a way to stroke with a pattern at the moment,
+// so extract some sensible color if this is a stroke pattern
+Color ImpSdrPdfImport::getStrokeColor(
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage)
+{
+    if (std::unique_ptr<vcl::pdf::PDFiumBitmap> bitmap
+        = pPageObject->getRenderedStrokePattern(*mpPdfDocument, *pPage))
+    {
+        Bitmap aBitmap(bitmap->createBitmapFromBuffer());
+        return aBitmap.GetPixelColor(aBitmap.GetSizePixel().Width() / 2,
+                                     aBitmap.GetSizePixel().Height() / 2);
+    }
+    return pPageObject->getStrokeColor();
+}
+
+// Typically for a fill pattern you want to use some pattern fill equivalent
+// but if that's not possible then this fallback can be useful
+Color ImpSdrPdfImport::getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage)
+{
+    if (std::unique_ptr<vcl::pdf::PDFiumBitmap> bitmap
+        = pPageObject->getRenderedFillPattern(*mpPdfDocument, *pPage))
+    {
+        Bitmap aBitmap(bitmap->createBitmapFromBuffer());
+        return aBitmap.GetPixelColor(aBitmap.GetSizePixel().Width() / 2,
+                                     aBitmap.GetSizePixel().Height() / 2);
+    }
+    return pPageObject->getFillColor();
+}
+
 void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                                  std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                                  int /*nPageObjectIndex*/)
 {
@@ -1843,7 +1896,8 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     }
     if (bUse)
     {
-        Color aColor = bFill ? pPageObject->getFillColor() : pPageObject->getStrokeColor();
+        Color aColor
+            = bFill ? getFillColor(pPageObject, pPage) : getStrokeColor(pPageObject, pPage);
         if (aColor != COL_TRANSPARENT)
             aTextColor = aColor.GetRGBColor();
     }
@@ -1979,6 +2033,7 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
 }
 
 void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                                  int /*nPageObjectIndex*/)
 {
     auto aPathMatrix = pPageObject->getMatrix();
@@ -2074,12 +2129,20 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
             mpVD->SetDrawMode(DrawModeFlags::NoFill);
     }
 
-    mpVD->SetFillColor(pPageObject->getFillColor());
+    if (std::unique_ptr<vcl::pdf::PDFiumBitmap> bitmap
+        = pPageObject->getRenderedFillPattern(*mpPdfDocument, *pPage))
+    {
+        moFillPattern = bitmap->createBitmapFromBuffer();
+        moFillColor.reset();
+    }
+    else
+    {
+        moFillColor = pPageObject->getFillColor();
+        moFillPattern.reset();
+    }
 
     if (bStroke)
-    {
-        mpVD->SetLineColor(pPageObject->getStrokeColor());
-    }
+        mpVD->SetLineColor(getStrokeColor(pPageObject, pPage));
     else
         mpVD->SetLineColor(COL_TRANSPARENT);
 

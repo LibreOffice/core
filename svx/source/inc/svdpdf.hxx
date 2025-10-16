@@ -107,6 +107,8 @@ class ImpSdrPdfImport final
     sal_Int32 mnLineWidth;
     static constexpr css::drawing::LineCap gaLineCap = css::drawing::LineCap_BUTT;
     XDash maDash;
+    std::optional<Color> moFillColor;
+    std::optional<Bitmap> moFillPattern;
 
     bool mbMov;
     bool mbSize;
@@ -145,17 +147,25 @@ class ImpSdrPdfImport final
     void checkClip();
     bool isClip() const;
 
+    Color getStrokeColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                         std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage);
+    Color getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                       std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage);
+
     void ImportPdfObject(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                         std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                          std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                          int nPageObjectIndex);
     void ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                     int nPageObjectIndex);
     void ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                      int nPageObjectIndex);
     void ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                    int nPageObjectIndex);
+                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage, int nPageObjectIndex);
     void ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                     int nPageObjectIndex);
     void InsertTextObject(const Point& rPos, const Size& rSize, const OUString& rStr,

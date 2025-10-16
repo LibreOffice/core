@@ -425,8 +425,12 @@ public:
     bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
+    std::unique_ptr<PDFiumBitmap> getRenderedFillPattern(PDFiumDocument& rDoc,
+                                                         PDFiumPage& rPage) override;
     Color getStrokeColor() override;
     double getStrokeWidth() override;
+    std::unique_ptr<PDFiumBitmap> getRenderedStrokePattern(PDFiumDocument& rDoc,
+                                                           PDFiumPage& rPage) override;
     // Path
     int getPathSegmentCount() override;
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index) override;
@@ -1368,6 +1372,36 @@ std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getImageBitmap()
 {
     std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
     FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(mpPageObject);
+    if (pBitmap)
+    {
+        pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
+    }
+    return pPDFiumBitmap;
+}
+
+std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getRenderedStrokePattern(PDFiumDocument& rDoc,
+                                                                             PDFiumPage& rPage)
+{
+    auto& rDocImpl = static_cast<PDFiumDocumentImpl&>(rDoc);
+    auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
+    std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+    FPDF_BITMAP pBitmap = FPDFPageObj_GetRenderedStrokePattern(
+        rDocImpl.getPointer(), rPageImpl.getPointer(), mpPageObject);
+    if (pBitmap)
+    {
+        pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
+    }
+    return pPDFiumBitmap;
+}
+
+std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getRenderedFillPattern(PDFiumDocument& rDoc,
+                                                                           PDFiumPage& rPage)
+{
+    auto& rDocImpl = static_cast<PDFiumDocumentImpl&>(rDoc);
+    auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
+    std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+    FPDF_BITMAP pBitmap = FPDFPageObj_GetRenderedFillPattern(rDocImpl.getPointer(),
+                                                             rPageImpl.getPointer(), mpPageObject);
     if (pBitmap)
     {
         pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
