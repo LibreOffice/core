@@ -73,10 +73,8 @@ public:
     virtual void    checkEntries() = 0;
 
     static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
-           bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
-                                               weld::Widget* pParent,
-                                               TranslateId pResID,
-                                               bool &bHadWarning );
+    bool continueOnSharedExtension(const css::uno::Reference<css::deployment::XPackage>&,
+                                   TranslateId pResID, bool& bHadWarning);
 
     void            incBusy() { m_aBusy.incBusy(m_pWindow); }
     void            decBusy() { m_aBusy.decBusy(); }

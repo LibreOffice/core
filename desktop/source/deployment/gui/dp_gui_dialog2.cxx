@@ -298,17 +298,15 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
     return xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER;
 }
 
-bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
-                                              weld::Widget* pParent,
-                                              TranslateId pResID,
-                                              bool &bHadWarning )
+bool DialogHelper::continueOnSharedExtension(const uno::Reference<deployment::XPackage>& xPackage,
+                                             TranslateId pResID, bool& bHadWarning)
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
         incBusy();
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                                                  VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+            m_pWindow, VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
         bHadWarning = true;
 
         bool bRet = RET_OK == xBox->run();
@@ -569,12 +567,14 @@ void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
 
     if ( bEnable )
     {
-        if (!continueOnSharedExtension(xPackage, m_xDialog.get(), RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning))
+        if (!continueOnSharedExtension(xPackage, RID_STR_WARNING_ENABLE_SHARED_EXTENSION,
+                                       m_bEnableWarning))
             return;
     }
     else
     {
-        if (!continueOnSharedExtension(xPackage, m_xDialog.get(), RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning))
+        if (!continueOnSharedExtension(xPackage, RID_STR_WARNING_DISABLE_SHARED_EXTENSION,
+                                       m_bDisableWarning))
             return;
     }
 
@@ -593,7 +593,8 @@ void ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
             return;
     }
 
-    if (!continueOnSharedExtension(xPackage, m_xDialog.get(), RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning))
+    if (!continueOnSharedExtension(xPackage, RID_STR_WARNING_REMOVE_SHARED_EXTENSION,
+                                   m_bDeleteWarning))
         return;
 
     m_pManager->getCmdQueue()->removeExtension( xPackage );
