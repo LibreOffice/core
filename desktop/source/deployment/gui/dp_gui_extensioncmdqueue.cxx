@@ -1048,11 +1048,9 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
     m_wakeup.notify_all();
 }
 
-
-ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,
-                                      TheExtensionManager *pManager,
-                                      const uno::Reference< uno::XComponentContext > &rContext )
-  : m_thread( new Thread( pDialogHelper, pManager, rContext ) )
+ExtensionCmdQueue::ExtensionCmdQueue(DialogHelper& rDialogHelper, TheExtensionManager* pManager,
+                                     const uno::Reference<uno::XComponentContext>& rContext)
+    : m_thread(new Thread(&rDialogHelper, pManager, rContext))
 {
     m_thread->launch();
 }

@@ -60,9 +60,8 @@ public:
     /**
        Create an instance.
     */
-    ExtensionCmdQueue( DialogHelper * pDialogHelper,
-                       TheExtensionManager *pManager,
-                       const css::uno::Reference< css::uno::XComponentContext > & rContext);
+    ExtensionCmdQueue(DialogHelper& rDialogHelper, TheExtensionManager* pManager,
+                      const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
     ~ExtensionCmdQueue();
 
