@@ -110,7 +110,7 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> x
 
 void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 {
-    setExtensionManager(pParentDialog->getExtensionManager());
+    setExtensionManager(&pParentDialog->getExtensionManager());
 
     m_pParent = pParentDialog;
 }
@@ -402,9 +402,10 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
 }
 
 //                             ExtMgrDialog
-ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
-    : GenericDialogController(pParent, u"desktop/ui/extensionmanager.ui"_ustr, u"ExtensionManagerDialog"_ustr)
-    , DialogHelper(pManager->getContext(), m_xDialog.get())
+ExtMgrDialog::ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager)
+    : GenericDialogController(pParent, u"desktop/ui/extensionmanager.ui"_ustr,
+                              u"ExtensionManagerDialog"_ustr)
+    , DialogHelper(rManager.getContext(), m_xDialog.get())
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
     , m_bStartProgress(false)
@@ -415,7 +416,7 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     , m_bClosed(false)
     , m_nProgress(0)
     , m_aIdle( "ExtMgrDialog m_aIdle TimeOutHdl" )
-    , m_pManager(pManager)
+    , m_rManager(rManager)
     , m_xExtensionBox(new ExtBoxWithBtns_Impl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xOptionsBtn(m_xBuilder->weld_button(u"optionsbtn"_ustr))
@@ -525,7 +526,7 @@ void ExtMgrDialog::updateList()
 {
     // re-creates the list of packages with addEntry selecting the packages
     prepareChecking();
-    m_pManager->createPackageList();
+    m_rManager.createPackageList();
     checkEntries();
 }
 
@@ -578,7 +579,7 @@ void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
             return;
     }
 
-    m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
+    m_rManager.getCmdQueue()->enableExtension(xPackage, bEnable);
 }
 
 
@@ -597,7 +598,7 @@ void ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
                                    m_bDeleteWarning))
         return;
 
-    m_pManager->getCmdQueue()->removeExtension( xPackage );
+    m_rManager.getCmdQueue()->removeExtension(xPackage);
 }
 
 
@@ -607,15 +608,16 @@ void ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
         return;
 
     // get the extension with highest version
-    uno::Sequence<uno::Reference<deployment::XPackage> > seqExtensions =
-    m_pManager->getExtensionManager()->getExtensionsWithSameIdentifier(
-        dp_misc::getIdentifier(xPackage), xPackage->getName(), uno::Reference<ucb::XCommandEnvironment>());
+    uno::Sequence<uno::Reference<deployment::XPackage>> seqExtensions
+        = m_rManager.getExtensionManager()->getExtensionsWithSameIdentifier(
+            dp_misc::getIdentifier(xPackage), xPackage->getName(),
+            uno::Reference<ucb::XCommandEnvironment>());
     uno::Reference<deployment::XPackage> extension =
         dp_misc::getExtensionWithHighestVersion(seqExtensions);
     OSL_ASSERT(extension.is());
     std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries { extension };
 
-    m_pManager->getCmdQueue()->checkForUpdates( std::move(vEntries) );
+    m_rManager.getCmdQueue()->checkForUpdates(std::move(vEntries));
 }
 
 
@@ -624,7 +626,7 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
     if ( !xPackage.is() )
         return false;
 
-    m_pManager->getCmdQueue()->acceptLicense( xPackage );
+    m_rManager.getCmdQueue()->acceptLicense(xPackage);
 
     return true;
 }
@@ -641,8 +643,8 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     t_string2string title2filter;
     OUStringBuffer supportedFilters;
 
-    const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes(
-        m_pManager->getExtensionManager()->getSupportedPackageTypes() );
+    const uno::Sequence<uno::Reference<deployment::XPackageTypeInfo>> packageTypes(
+        m_rManager.getExtensionManager()->getSupportedPackageTypes());
 
     for ( uno::Reference< deployment::XPackageTypeInfo > const & xPackageType : packageTypes )
     {
@@ -753,9 +755,9 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
     bool bCallClose = true;
 
     //only suggest restart if modified and this is the first close attempt
-    if (!m_bClosed && m_pManager->isModified())
+    if (!m_bClosed && m_rManager.isModified())
     {
-        m_pManager->clearModified();
+        m_rManager.clearModified();
 
         //only suggest restart if we're actually running, e.g. not from standalone unopkg gui
         if (dp_misc::office_is_running())
@@ -886,7 +888,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, weld::Button&, void)
 
     if ( aFileList.hasElements() )
     {
-        m_pManager->installPackage( aFileList[0] );
+        m_rManager.installPackage(aFileList[0]);
     }
 
     decBusy();
@@ -934,7 +936,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleSearch, weld::Entry&, void)
 IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, weld::Button&, void)
 {
 #if ENABLE_EXTENSION_UPDATE
-    m_pManager->checkUpdates();
+    m_rManager.checkUpdates();
 #else
     (void) this;
 #endif
@@ -976,7 +978,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
 
 void ExtMgrDialog::Close()
 {
-    m_pManager->terminateDialog();
+    m_rManager.terminateDialog();
     m_bClosed = true;
 }
 

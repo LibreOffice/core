@@ -97,7 +97,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     bool                 m_bClosed;
     sal_Int32            m_nProgress;
     Idle                 m_aIdle;
-    TheExtensionManager *m_pManager;
+    TheExtensionManager& m_rManager;
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
@@ -133,7 +133,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     DECL_LINK( startProgress, void *, void );
 
 public:
-    ExtMgrDialog(weld::Window * pParent, TheExtensionManager *pManager);
+    ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager);
     virtual ~ExtMgrDialog() override;
 
     virtual void    showProgress( bool bStart ) override;
@@ -154,7 +154,7 @@ public:
 
     void Close();
 
-    TheExtensionManager*    getExtensionManager() const { return m_pManager; }
+    TheExtensionManager& getExtensionManager() const { return m_rManager; }
 
     void updateList();
     virtual void    prepareChecking() override;
