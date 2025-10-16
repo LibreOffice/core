@@ -39,8 +39,8 @@ struct ImplSVEvent;
 
 namespace dp_gui {
 
-class ExtBoxWithBtns_Impl;
-class ExtensionBox_Impl;
+class ExtensionBoxWithButtons;
+class ExtensionBox;
 class TheExtensionManager;
 
 class DialogHelper
@@ -101,7 +101,7 @@ class ExtMgrDialog : public weld::GenericDialogController
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
-    std::unique_ptr<ExtBoxWithBtns_Impl> m_xExtensionBox;
+    std::unique_ptr<ExtensionBoxWithButtons> m_xExtensionBox;
     std::unique_ptr<weld::CustomWeld> m_xExtensionBoxWnd;
     std::unique_ptr<weld::Button> m_xOptionsBtn;
     std::unique_ptr<weld::Button> m_xAddBtn;
@@ -189,7 +189,7 @@ class UpdateRequiredDialog : public weld::GenericDialogController
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
-    std::unique_ptr<ExtensionBox_Impl> m_xExtensionBox;
+    std::unique_ptr<ExtensionBox> m_xExtensionBox;
     std::unique_ptr<weld::CustomWeld> m_xExtensionBoxWnd;
     std::unique_ptr<weld::Label> m_xUpdateNeeded;
     std::unique_ptr<weld::Button> m_xUpdateBtn;

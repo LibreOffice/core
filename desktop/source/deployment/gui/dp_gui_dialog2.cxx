@@ -77,8 +77,7 @@ constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";
 constexpr OUString SHARED_PACKAGE_MANAGER = u"shared"_ustr;
 constexpr OUStringLiteral BUNDLED_PACKAGE_MANAGER = u"bundled";
 
-// ExtBoxWithBtns_Impl
-class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
+class ExtensionBoxWithButtons : public ExtensionBox
 {
     bool            m_bInterfaceLocked;
 
@@ -88,7 +87,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     OUString        ShowPopupMenu( const Point &rPos, const tools::Long nPos );
 
 public:
-    explicit ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll);
+    explicit ExtensionBoxWithButtons(std::unique_ptr<weld::ScrolledWindow> xScroll);
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
@@ -101,25 +100,25 @@ public:
     void            enableButtons( bool bEnable );
 };
 
-ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll)
-    : ExtensionBox_Impl(std::move(xScroll))
+ExtensionBoxWithButtons::ExtensionBoxWithButtons(std::unique_ptr<weld::ScrolledWindow> xScroll)
+    : ExtensionBox(std::move(xScroll))
     , m_bInterfaceLocked(false)
     , m_pParent(nullptr)
 {
 }
 
-void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
+void ExtensionBoxWithButtons::InitFromDialog(ExtMgrDialog* pParentDialog)
 {
     setExtensionManager(&pParentDialog->getExtensionManager());
 
     m_pParent = pParentDialog;
 }
 
-void ExtBoxWithBtns_Impl::RecalcAll()
+void ExtensionBoxWithButtons::RecalcAll()
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
+    if (nActive != ExtensionBox::ENTRY_NOTFOUND)
     {
         SetButtonStatus( GetEntryData( nActive) );
     }
@@ -130,20 +129,20 @@ void ExtBoxWithBtns_Impl::RecalcAll()
         m_pParent->enableEnableButton( false );
     }
 
-    ExtensionBox_Impl::RecalcAll();
+    ExtensionBox::RecalcAll();
 }
 
 
 //This function may be called with nPos < 0
-void ExtBoxWithBtns_Impl::selectEntry( const tools::Long nPos )
+void ExtensionBoxWithButtons::selectEntry(const tools::Long nPos)
 {
     if ( HasActive() && ( nPos == getSelIndex() ) )
         return;
 
-    ExtensionBox_Impl::selectEntry( nPos );
+    ExtensionBox::selectEntry(nPos);
 }
 
-void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
+void ExtensionBoxWithButtons::SetButtonStatus(const TEntry_Impl& rEntry)
 {
     bool bShowOptionBtn = true;
 
@@ -190,10 +189,10 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
     }
 }
 
-bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
+bool ExtensionBoxWithButtons::Command(const CommandEvent& rCEvt)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
-        return ExtensionBox_Impl::Command(rCEvt);
+        return ExtensionBox::Command(rCEvt);
 
     const Point aMousePos(rCEvt.GetMousePosPixel());
     const auto nPos = PointToPos(aMousePos);
@@ -218,7 +217,7 @@ bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
     return true;
 }
 
-OUString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Long nPos )
+OUString ExtensionBoxWithButtons::ShowPopupMenu(const Point& rPos, const tools::Long nPos)
 {
     if ( nPos >= static_cast<tools::Long>(getItemCount()) )
         return u"CMD_NONE"_ustr;
@@ -251,21 +250,21 @@ OUString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Lo
     return xPopup->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1, 1)));
 }
 
-bool ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
+bool ExtensionBoxWithButtons::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (m_bInterfaceLocked)
         return false;
-    return ExtensionBox_Impl::MouseButtonDown(rMEvt);
+    return ExtensionBox::MouseButtonDown(rMEvt);
 }
 
-void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
+void ExtensionBoxWithButtons::enableButtons(bool bEnable)
 {
     m_bInterfaceLocked = ! bEnable;
 
     if ( bEnable )
     {
         sal_Int32 nIndex = getSelIndex();
-        if ( nIndex != ExtensionBox_Impl::ENTRY_NOTFOUND )
+        if (nIndex != ExtensionBox::ENTRY_NOTFOUND)
             SetButtonStatus( GetEntryData( nIndex ) );
     }
     else
@@ -417,7 +416,8 @@ ExtMgrDialog::ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager)
     , m_nProgress(0)
     , m_aIdle( "ExtMgrDialog m_aIdle TimeOutHdl" )
     , m_rManager(rManager)
-    , m_xExtensionBox(new ExtBoxWithBtns_Impl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xExtensionBox(
+          new ExtensionBoxWithButtons(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xOptionsBtn(m_xBuilder->weld_button(u"optionsbtn"_ustr))
     , m_xAddBtn(m_xBuilder->weld_button(u"addbtn"_ustr))
@@ -869,7 +869,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, weld::Button&, void)
 {
     const sal_Int32 nActive = m_xExtensionBox->getSelIndex();
 
-    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
+    if (nActive != ExtensionBox::ENTRY_NOTFOUND)
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
@@ -898,7 +898,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, weld::Button&, void)
 {
     const sal_Int32 nActive = m_xExtensionBox->getSelIndex();
 
-    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
+    if (nActive != ExtensionBox::ENTRY_NOTFOUND)
     {
         TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nActive );
         removePackage( pEntry->m_xPackage );
@@ -909,7 +909,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, weld::Button&, void)
 {
     const sal_Int32 nActive = m_xExtensionBox->getSelIndex();
 
-    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
+    if (nActive != ExtensionBox::ENTRY_NOTFOUND)
     {
         TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nActive );
 
@@ -995,7 +995,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionMa
     , m_nProgress(0)
     , m_aIdle( "UpdateRequiredDialog m_aIdle TimeOutHdl" )
     , m_pManager(pManager)
-    , m_xExtensionBox(new ExtensionBox_Impl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
+    , m_xExtensionBox(new ExtensionBox(m_xBuilder->weld_scrolled_window(u"scroll"_ustr, true)))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, u"extensions"_ustr, *m_xExtensionBox))
     , m_xUpdateNeeded(m_xBuilder->weld_label(u"updatelabel"_ustr))
     , m_xUpdateBtn(m_xBuilder->weld_button(u"ok"_ustr))

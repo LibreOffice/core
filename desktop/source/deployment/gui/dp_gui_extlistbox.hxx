@@ -84,16 +84,14 @@ struct Entry_Impl
 
 typedef std::shared_ptr<Entry_Impl> TEntry_Impl;
 
-class ExtensionBox_Impl;
-
+class ExtensionBox;
 
 class ExtensionRemovedListener : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
-    ExtensionBox_Impl*   m_pParent;
+    ExtensionBox* m_pParent;
 
 public:
-
-    explicit ExtensionRemovedListener( ExtensionBox_Impl *pParent ) { m_pParent = pParent; }
+    explicit ExtensionRemovedListener(ExtensionBox* pParent) { m_pParent = pParent; }
     virtual ~ExtensionRemovedListener() override;
 
 
@@ -101,7 +99,7 @@ public:
     virtual void SAL_CALL disposing(css::lang::EventObject const& evt) override;
 };
 
-class ExtensionBox_Impl : public weld::CustomWidgetController
+class ExtensionBox : public weld::CustomWidgetController
 {
     bool m_bHasScrollBar : 1;
     bool m_bNeedsRecalc : 1;
@@ -157,8 +155,8 @@ class ExtensionBox_Impl : public weld::CustomWidgetController
 
     void Init();
 public:
-    explicit ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll);
-    virtual ~ExtensionBox_Impl() override;
+    explicit ExtensionBox(std::unique_ptr<weld::ScrolledWindow> xScroll);
+    virtual ~ExtensionBox() override;
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseMove( const MouseEvent& rMEvt ) override;
