@@ -22,6 +22,7 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -1351,6 +1352,43 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153196)
     // - Expected: 0
     // - Actual  : 4265
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRightMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf168567)
+{
+    createSwDoc("tdf168567.docx");
+
+    // Access the first table in the doc
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xRows = xTable->getRows();
+    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
+
+    sal_Int32 nLastRow = xRows->getCount() - 1;
+
+    // Check if all cells in the last row contain `Content Controls`(SDTs)
+    for (sal_Int32 col = 0; col < xTable->getColumns()->getCount(); col++)
+    {
+        uno::Reference<text::XText> xCell(xCellRange->getCellByPosition(col, nLastRow),
+                                          uno::UNO_QUERY);
+
+        uno::Reference<container::XEnumerationAccess> xParaAccess(xCell, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xParaAccess->createEnumeration();
+
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                 uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+
+        // Check if it's a content control
+        // Without the fix the last cell will result false
+        OUString aPortionType;
+        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+    }
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
