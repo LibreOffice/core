@@ -22,6 +22,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/constexprliteral \
     compilerplugins/clang/test/constmethod \
     compilerplugins/clang/test/constmove \
+    compilerplugins/clang/test/constparams \
     compilerplugins/clang/test/consttobool \
     compilerplugins/clang/test/cow_wrapper \
     compilerplugins/clang/test/cppunitassertequals \
