@@ -4625,6 +4625,9 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
     {
         if (bNewLine)
         {
+            if (!m_pImpl->m_pSdtHelper->isFieldStartRangeSet())
+                m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+
             m_pImpl->m_pSdtHelper->createPlainTextControl();
             finishParagraph();
             return;
