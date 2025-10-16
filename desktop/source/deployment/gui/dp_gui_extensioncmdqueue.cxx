@@ -199,9 +199,8 @@ typedef std::shared_ptr< ExtensionCmd > TExtensionCmd;
 class ExtensionCmdQueue::Thread: public salhelper::Thread
 {
 public:
-    Thread( DialogHelper *pDialogHelper,
-            TheExtensionManager *pManager,
-            uno::Reference< uno::XComponentContext > xContext );
+    Thread(DialogHelper& rDialogHelper, TheExtensionManager* pManager,
+           uno::Reference<uno::XComponentContext> xContext);
 
     void addExtension( const OUString &rExtensionURL,
                        const OUString &rRepository,
@@ -240,7 +239,7 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
     std::queue< TExtensionCmd >              m_queue;
 
-    DialogHelper *m_pDialogHelper;
+    DialogHelper& m_rDialogHelper;
     TheExtensionManager *m_pManager;
 
     const OUString   m_sEnablingPackages;
@@ -576,12 +575,12 @@ void ProgressCmdEnv::pop()
 }
 
 
-ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
+ExtensionCmdQueue::Thread::Thread( DialogHelper& rDialogHelper,
                                    TheExtensionManager *pManager,
                                    uno::Reference< uno::XComponentContext > xContext ) :
     salhelper::Thread( "dp_gui_extensioncmdqueue" ),
     m_xContext(std::move( xContext )),
-    m_pDialogHelper( pDialogHelper ),
+    m_rDialogHelper(rDialogHelper),
     m_pManager( pManager ),
     m_sEnablingPackages( DpResId( RID_STR_ENABLING_PACKAGES ) ),
     m_sDisablingPackages( DpResId( RID_STR_DISABLING_PACKAGES ) ),
@@ -593,9 +592,7 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     m_bStopped( false ),
     m_bWorking( false )
 {
-    OSL_ASSERT( pDialogHelper );
 }
-
 
 void ExtensionCmdQueue::Thread::addExtension( const OUString &rExtensionURL,
                                               const OUString &rRepository,
@@ -704,7 +701,7 @@ void ExtensionCmdQueue::Thread::execute()
         if ( nSize == 0 )
             continue;
 
-        ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialogHelper, m_sDefaultCmd ) );
+        ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, &m_rDialogHelper, m_sDefaultCmd ) );
 
         // Do not lock the following part with addExtension. addExtension may be called in the main thread.
         // If the message box "Do you want to install the extension (or similar)" is shown and then
@@ -794,16 +791,13 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
-                if (m_pDialogHelper)
-                    m_pDialogHelper->incBusy();
+                m_rDialogHelper.incBusy();
 
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(currentCmdEnv->activeDialog(),
                                                           VclMessageType::Warning, VclButtonsType::Ok, msg));
-                if (m_pDialogHelper)
-                    xBox->set_title(m_pDialogHelper->getFrameWeld()->get_title());
+                xBox->set_title(m_rDialogHelper.getFrameWeld()->get_title());
                 xBox->run();
-                if (m_pDialogHelper)
-                    m_pDialogHelper->decBusy();
+                m_rDialogHelper.decBusy();
                 //Continue with installation of the remaining extensions
             }
             {
@@ -911,17 +905,16 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 {
     const SolarMutexGuard guard;
 
-    if (m_pDialogHelper)
-        m_pDialogHelper->incBusy();
+    m_rDialogHelper.incBusy();
 
     std::vector< UpdateData > vData;
-    UpdateDialog aUpdateDialog(m_xContext, m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, std::move(vExtensionList), &vData);
+    UpdateDialog aUpdateDialog(m_xContext, m_rDialogHelper.getFrameWeld(),
+                               std::move(vExtensionList), &vData);
 
     aUpdateDialog.notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
     bool bOk = aUpdateDialog.run() == RET_OK;
-    if (m_pDialogHelper)
-        m_pDialogHelper->decBusy();
+    m_rDialogHelper.decBusy();
 
     if (bOk && !vData.empty())
     {
@@ -938,12 +931,10 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         short nDialogResult = RET_OK;
         if ( !dataDownload.empty() )
         {
-            if (m_pDialogHelper)
-                m_pDialogHelper->incBusy();
-            UpdateInstallDialog aDlg(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, dataDownload, m_xContext);
+            m_rDialogHelper.incBusy();
+            UpdateInstallDialog aDlg(m_rDialogHelper.getFrameWeld(), dataDownload, m_xContext);
             nDialogResult = aDlg.run();
-            if (m_pDialogHelper)
-                m_pDialogHelper->decBusy();
+            m_rDialogHelper.decBusy();
             aUpdateDialog.notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
         }
         else
@@ -954,8 +945,9 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         {
             for (auto const& data : vData)
             {
-                if ( m_pDialogHelper && ( !data.sWebsiteURL.isEmpty() ) )
-                    m_pDialogHelper->openWebBrowser( data.sWebsiteURL, m_pDialogHelper->getFrameWeld()->get_title() );
+                if (!data.sWebsiteURL.isEmpty())
+                    m_rDialogHelper.openWebBrowser(data.sWebsiteURL,
+                                                   m_rDialogHelper.getFrameWeld()->get_title());
             }
         }
     }
@@ -980,8 +972,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
     try
     {
         xExtMgr->enableExtension( xPackage, xAbortChannel, rCmdEnv );
-        if ( m_pDialogHelper )
-            m_pDialogHelper->updatePackageInfo( xPackage );
+        m_rDialogHelper.updatePackageInfo(xPackage);
     }
     catch ( const ::ucb::CommandAbortedException & )
     {}
@@ -1004,8 +995,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
     try
     {
         xExtMgr->disableExtension( xPackage, xAbortChannel, rCmdEnv );
-        if ( m_pDialogHelper )
-            m_pDialogHelper->updatePackageInfo( xPackage );
+        m_rDialogHelper.updatePackageInfo(xPackage);
     }
     catch ( const ::ucb::CommandAbortedException & )
     {}
@@ -1028,8 +1018,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
     try
     {
         xExtMgr->checkPrerequisitesAndEnable( xPackage, xAbortChannel, rCmdEnv );
-        if ( m_pDialogHelper )
-            m_pDialogHelper->updatePackageInfo( xPackage );
+        m_rDialogHelper.updatePackageInfo(xPackage);
     }
     catch ( const ::ucb::CommandAbortedException & )
     {}
@@ -1050,7 +1039,7 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
 
 ExtensionCmdQueue::ExtensionCmdQueue(DialogHelper& rDialogHelper, TheExtensionManager* pManager,
                                      const uno::Reference<uno::XComponentContext>& rContext)
-    : m_thread(new Thread(&rDialogHelper, pManager, rContext))
+    : m_thread(new Thread(rDialogHelper, pManager, rContext))
 {
     m_thread->launch();
 }
