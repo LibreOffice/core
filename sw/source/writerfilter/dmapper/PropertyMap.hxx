@@ -31,6 +31,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include "PropertyIds.hxx"
 #include <unofootnote.hxx>
+#include <unoxstyle.hxx>
+
 #include <memory>
 #include <optional>
 #include <map>

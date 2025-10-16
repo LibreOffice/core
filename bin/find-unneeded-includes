@@ -539,6 +539,13 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
                 # code on Linux.
                 if "assumeFilename" in moduleRules.keys() and not path.endswith("cxx"):
                     assume = moduleRules["assumeFilename"]
+                    # Check for lower level assume file name
+                    if "customAssumeFilenames" in moduleRules:
+                        customAssumeRules = moduleRules["customAssumeFilenames"]
+                        for dirName in customAssumeRules.keys():
+                            if path.startswith(dirName):
+                                assume = customAssumeRules[dirName]
+
                 if assume:
                     assumeAbs = os.path.abspath(assume)
                     compileFile = assumeAbs

@@ -56,6 +56,7 @@
 #include <unoidx.hxx>
 #include <unobookmark.hxx>
 #include <unofield.hxx>
+#include <unoframe.hxx>
 #include <map>
 
 class SwXTextDocument;

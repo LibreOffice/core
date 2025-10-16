@@ -1,5 +1,10 @@
 ---
 assumeFilename: vcl/source/app/svapp.cxx
+customAssumeFilenames:
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
+    vcl/inc/qt5: vcl/qt5/QtInstance.cxx
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt6
+    vcl/inc/qt6: vcl/qt6/QtInstance.cxx
 excludelist:
     vcl/inc/unx/saldisp.hxx:
     # Don't replace with generated header
