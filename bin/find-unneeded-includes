@@ -39,38 +39,6 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         if hdl in toAdd:
             return True
 
-    # Avoid debug STL.
-    debugStl = {
-        "array": ("debug/array", ),
-        "bitset": ("debug/bitset", ),
-        "deque": ("debug/deque", ),
-        "forward_list": ("debug/forward_list", ),
-        "list": ("debug/list", ),
-        "map": ("debug/map.h", "debug/multimap.h"),
-        "set": ("debug/set.h", "debug/multiset.h"),
-        "unordered_map": ("debug/unordered_map", ),
-        "unordered_set": ("debug/unordered_set", ),
-        "vector": ("debug/vector", ),
-    }
-    for k, values in debugStl.items():
-        if include == k:
-            for value in values:
-                if value in toAdd:
-                    return True
-
-    # Avoid proposing to use libstdc++ internal headers.
-    bits = {
-        "exception": "bits/exception.h",
-        "memory": "bits/shared_ptr.h",
-        "functional": "bits/std_function.h",
-        "cmath": "bits/std_abs.h",
-        "ctime": "bits/types/clock_t.h",
-        "cstdint": "bits/stdint-uintn.h",
-    }
-    for k, v in bits.items():
-        if include == k and v in toAdd:
-            return True
-
     # Avoid proposing o3tl fw declaration
     o3tl = {
         "o3tl/typed_flags_set.hxx" : "namespace o3tl { template <typename T> struct typed_flags; }",
