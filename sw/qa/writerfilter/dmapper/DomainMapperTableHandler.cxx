@@ -23,6 +23,10 @@
 
 #include <frmatr.hxx>
 #include <swtable.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <sortedobjs.hxx>
 
 using namespace ::com::sun::star;
 
@@ -301,6 +305,33 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableRedline)
     // - Actual  : rgba[ffffff00]
     // i.e. the cell background was white, should be gray.
     CPPUNIT_ASSERT_EQUAL(Color(0xD0D8E8), rCellBackground.GetColor());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHidemark)
+{
+    // Given a document with an inline table, then a floating table inside, the outer table's cell
+    // has "hide mark" set to true:
+    // When loading the document:
+    createSwDoc("floattable-hidemark.docx");
+
+    // Then make sure the resulting layout is correct:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwPageFrame* pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the follow fly was on page 1, not page 2.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    CPPUNIT_ASSERT(!pPage2->GetNext());
 }
 }
 
