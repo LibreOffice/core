@@ -135,6 +135,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/scalc/ui/duplicaterecordsdlg.ui"_ustr,
         u"modules/scalc/ui/gotosheetdialog.ui"_ustr,
         u"modules/scalc/ui/groupbydate.ui"_ustr,
+        u"modules/scalc/ui/groupdialog.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
         u"modules/scalc/ui/insertcells.ui"_ustr,
         u"modules/scalc/ui/movecopysheet.ui"_ustr,
