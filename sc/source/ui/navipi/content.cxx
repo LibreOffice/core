@@ -387,15 +387,18 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
                 pParentWindow->SetCurrentTable( aPos.Tab() );
                 pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
                 // Check whether the comment is currently visible and toggle its visibility
-                ScDocument* pSrcDoc = GetSourceDocument();
-                if (ScPostIt* pNote = pSrcDoc ? pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()) : nullptr)
+                if (!comphelper::LibreOfficeKit::isActive())
                 {
-                    bool bVisible = pNote->IsCaptionShown();
-                    // Effectivelly set the visibility of the comment
-                    GetManualOrCurrent()->GetDocFunc().ShowNote(aPos, !bVisible);
-                    // Put the note in edit mode
-                    ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
-                    pScTabViewShell->EditNote();
+                    ScDocument* pSrcDoc = GetSourceDocument();
+                    if (ScPostIt* pNote = pSrcDoc ? pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()) : nullptr)
+                    {
+                        bool bVisible = pNote->IsCaptionShown();
+                        // Effectivelly set the visibility of the comment
+                        GetManualOrCurrent()->GetDocFunc().ShowNote(aPos, !bVisible);
+                        // Put the note in edit mode
+                        ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
+                        pScTabViewShell->EditNote();
+                    }
                 }
             }
             break;
