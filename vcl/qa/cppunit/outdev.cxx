@@ -1856,6 +1856,58 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawRectAlpha2)
     CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(1, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygonAlpha1)
+{
+    Size aSize(100, 100);
+    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
+    pVDev->SetOutputSizePixel(aSize, /*bErase*/ true, /*bAlphaMaskTransparent*/ true);
+
+    // create a square polypolygon
+    tools::Polygon aPolygon(4);
+    aPolygon.SetPoint(Point(0, 0), 0);
+    aPolygon.SetPoint(Point(0, 100), 1);
+    aPolygon.SetPoint(Point(100, 100), 2);
+    aPolygon.SetPoint(Point(0, 0), 3);
+    tools::PolyPolygon aPolyPolygon(aPolygon);
+    aPolyPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(aPolyPolygon.getB2DPolyPolygon());
+
+    const Color RED_OPAQUE(ColorAlpha, 255, 255, 0, 0); // opaque red
+
+    pVDev->SetLineColor(RED_OPAQUE);
+    pVDev->SetFillColor(RED_OPAQUE);
+    pVDev->DrawPolyPolygon(aB2DPolyPolygon);
+
+    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(1, 1)));
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygonAlpha2)
+{
+    Size aSize(100, 100);
+    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
+    pVDev->SetOutputSizePixel(aSize, /*bErase*/ true, /*bAlphaMaskTransparent*/ true);
+
+    // create a square polypolygon
+    tools::Polygon aPolygon(4);
+    aPolygon.SetPoint(Point(0, 0), 0);
+    aPolygon.SetPoint(Point(0, 100), 1);
+    aPolygon.SetPoint(Point(100, 100), 2);
+    aPolygon.SetPoint(Point(0, 0), 3);
+    tools::PolyPolygon aPolyPolygon(aPolygon);
+    aPolyPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(aPolyPolygon.getB2DPolyPolygon());
+
+    const Color RED_TRANSPARENT(ColorAlpha, 127, 255, 0, 0); // 50% transparent red
+
+    pVDev->SetLineColor(RED_TRANSPARENT);
+    pVDev->SetFillColor(RED_TRANSPARENT);
+    pVDev->DrawPolyPolygon(aB2DPolyPolygon);
+
+    CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(1, 1)));
+}
+
 static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
 {
     MetaAction* pAction = rMtf.GetAction(nIndex);

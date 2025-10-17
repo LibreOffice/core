@@ -305,7 +305,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                 bSuccess = mpGraphics->DrawPolyLine(
                     aTransform,
                     rPolygon,
-                    0.0,
+                    (255 - GetLineColor().GetAlpha()) / 255.0,
                     0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
