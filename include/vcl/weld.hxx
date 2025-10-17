@@ -85,6 +85,8 @@ class VCL_DLLPUBLIC Widget
 {
     friend class ::LOKTrigger;
 
+    int m_nBlockNotify = 0;
+
 protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
@@ -96,6 +98,10 @@ protected:
     Link<const MouseEvent&, bool> m_aMousePressHdl;
     Link<const MouseEvent&, bool> m_aMouseMotionHdl;
     Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
+
+    void disable_notify_events() { ++m_nBlockNotify; }
+    bool notify_events_disabled() const { return m_nBlockNotify != 0; }
+    void enable_notify_events() { --m_nBlockNotify; }
 
     void signal_focus_in() { m_aFocusInHdl.Call(*this); }
     void signal_focus_out() { m_aFocusOutHdl.Call(*this); }

@@ -202,7 +202,6 @@ private:
     bool m_bEventListener;
     bool m_bKeyEventListener;
     bool m_bMouseEventListener;
-    int m_nBlockNotify;
     int m_nFreezeCount;
 
 protected:
@@ -357,12 +356,6 @@ public:
     virtual ~SalInstanceWidget() override;
 
     vcl::Window* getWidget() const;
-
-    void disable_notify_events();
-
-    bool notify_events_disabled() const;
-
-    void enable_notify_events();
 
     virtual void queue_resize() override;
 
@@ -1861,6 +1854,10 @@ public:
     virtual bool changed_by_hover() const override;
 
     virtual ~SalInstanceTreeView() override;
+
+    // public version of protected weld::Widget methods
+    void disableNotifyEvents() { disable_notify_events(); }
+    void enableNotifyEvents() { enable_notify_events(); }
 };
 
 class SalInstanceExpander : public SalInstanceWidget, public virtual weld::Expander

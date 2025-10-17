@@ -365,7 +365,6 @@ SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* p
     , m_bEventListener(false)
     , m_bKeyEventListener(false)
     , m_bMouseEventListener(false)
-    , m_nBlockNotify(0)
     , m_nFreezeCount(0)
 {
 }
@@ -652,12 +651,6 @@ SalInstanceWidget::~SalInstanceWidget()
 }
 
 vcl::Window* SalInstanceWidget::getWidget() const { return m_xWidget; }
-
-void SalInstanceWidget::disable_notify_events() { ++m_nBlockNotify; }
-
-bool SalInstanceWidget::notify_events_disabled() const { return m_nBlockNotify != 0; }
-
-void SalInstanceWidget::enable_notify_events() { --m_nBlockNotify; }
 
 OUString SalInstanceWidget::strip_mnemonic(const OUString& rLabel) const
 {
@@ -6882,7 +6875,7 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
     if (!bNavigation)
         return;
 
-    m_pTreeView->disable_notify_events();
+    m_pTreeView->disableNotifyEvents();
     auto& rListBox = m_pTreeView->getTreeView();
     if (!rListBox.FirstSelected())
     {
@@ -6893,7 +6886,7 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
         rListBox.KeyInput(rKeyEvent);
     m_xEntry->set_text(m_xTreeView->get_selected_text());
     m_xEntry->select_region(0, -1);
-    m_pTreeView->enable_notify_events();
+    m_pTreeView->enableNotifyEvents();
     m_bTreeChange = true;
     m_pEntry->fire_signal_changed();
     m_bTreeChange = false;
