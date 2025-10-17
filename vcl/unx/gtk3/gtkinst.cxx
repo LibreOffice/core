@@ -16000,7 +16000,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void remove_selection() override
+    virtual void do_remove_selection() override
     {
         disable_notify_events();
 

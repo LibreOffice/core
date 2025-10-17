@@ -1026,7 +1026,7 @@ void QtInstanceTreeView::set_selection_mode(SelectionMode eMode)
 
 int QtInstanceTreeView::count_selected_rows() const { return get_selected_rows().size(); }
 
-void QtInstanceTreeView::remove_selection() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::do_remove_selection() { assert(false && "Not implemented yet"); }
 
 bool QtInstanceTreeView::changed_by_hover() const
 {

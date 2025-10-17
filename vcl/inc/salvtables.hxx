@@ -1800,7 +1800,7 @@ public:
 
     virtual void connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink) override;
 
-    virtual void remove_selection() override;
+    virtual void do_remove_selection() override;
 
     virtual bool is_selected(const weld::TreeIter& rIter) const override;
 

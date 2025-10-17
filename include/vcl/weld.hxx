@@ -1074,6 +1074,8 @@ protected:
         return m_aGetSizeHdl.Call(get_size_args(rDevice, rId));
     }
 
+    virtual void do_remove_selection() = 0;
+
 public:
     virtual void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
     {
@@ -1428,8 +1430,14 @@ public:
 
     virtual void set_selection_mode(SelectionMode eMode) = 0;
     virtual int count_selected_rows() const = 0;
+
     // remove the selected nodes
-    virtual void remove_selection() = 0;
+    void remove_selection()
+    {
+        disable_notify_events();
+        do_remove_selection();
+        enable_notify_events();
+    }
 
     // only meaningful is call this from a "changed" callback, true if the change
     // was due to mouse hovering over the entry

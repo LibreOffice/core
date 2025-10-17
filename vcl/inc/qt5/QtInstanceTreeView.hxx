@@ -184,7 +184,7 @@ public:
 
     virtual void set_selection_mode(SelectionMode eMode) override;
     virtual int count_selected_rows() const override;
-    virtual void remove_selection() override;
+    virtual void do_remove_selection() override;
 
     virtual bool changed_by_hover() const override;
 

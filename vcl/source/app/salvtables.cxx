@@ -4846,9 +4846,8 @@ void SalInstanceTreeView::connect_visible_range_changed(const Link<weld::TreeVie
     m_xTreeView->SetScrolledHdl(LINK(this, SalInstanceTreeView, VisibleRangeChangedHdl));
 }
 
-void SalInstanceTreeView::remove_selection()
+void SalInstanceTreeView::do_remove_selection()
 {
-    disable_notify_events();
     SvTreeListEntry* pSelected = m_xTreeView->FirstSelected();
     while (pSelected)
     {
@@ -4856,7 +4855,6 @@ void SalInstanceTreeView::remove_selection()
         m_xTreeView->RemoveEntry(pSelected);
         pSelected = pNextSelected;
     }
-    enable_notify_events();
 }
 
 bool SalInstanceTreeView::is_selected(const weld::TreeIter& rIter) const
