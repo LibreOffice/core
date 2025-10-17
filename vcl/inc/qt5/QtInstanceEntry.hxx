@@ -30,7 +30,7 @@ public:
     virtual void select_region(int nStartPos, int nEndPos) override;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
     virtual void replace_selection(const OUString& rText) override;
-    virtual void set_position(int nCursorPos) override;
+    virtual void do_set_position(int nCursorPos) override;
     virtual int get_position() const override;
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;

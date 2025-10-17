@@ -624,7 +624,7 @@ public:
 
     virtual void replace_selection(const OUString& rText) override;
 
-    virtual void set_position(int nCursorPos) override;
+    virtual void do_set_position(int nCursorPos) override;
 
     virtual int get_position() const override;
 

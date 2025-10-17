@@ -3340,14 +3340,12 @@ void SalInstanceEntry::replace_selection(const OUString& rText)
     m_xEntry->ReplaceSelected(rText);
 }
 
-void SalInstanceEntry::set_position(int nCursorPos)
+void SalInstanceEntry::do_set_position(int nCursorPos)
 {
-    disable_notify_events();
     if (nCursorPos < 0)
         m_xEntry->SetCursorAtLast();
     else
         m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
-    enable_notify_events();
 }
 
 int SalInstanceEntry::get_position() const { return m_xEntry->GetSelection().Max(); }

@@ -13200,7 +13200,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_position(int nCursorPos) override
+    virtual void do_set_position(int nCursorPos) override
     {
         disable_notify_events();
         gtk_editable_set_position(m_pEditable, nCursorPos);

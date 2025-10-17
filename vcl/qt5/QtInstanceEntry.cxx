@@ -90,7 +90,7 @@ void QtInstanceEntry::replace_selection(const OUString& rText)
     GetQtInstance().RunInMainThread([&] { m_pLineEdit->insert(toQString(rText)); });
 }
 
-void QtInstanceEntry::set_position(int nCursorPos)
+void QtInstanceEntry::do_set_position(int nCursorPos)
 {
     SolarMutexGuard g;
     if (nCursorPos == -1)

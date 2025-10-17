@@ -2021,6 +2021,7 @@ protected:
     }
 
     virtual void do_set_text(const OUString& rText) = 0;
+    virtual void do_set_position(int nCursorPos) = 0;
 
 public:
     void set_text(const OUString& rText)
@@ -2040,8 +2041,15 @@ public:
     // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;
+
     // nCursorPos can be -1 to set to the end
-    virtual void set_position(int nCursorPos) = 0;
+    void set_position(int nCursorPos)
+    {
+        disable_notify_events();
+        do_set_position(nCursorPos);
+        enable_notify_events();
+    }
+
     virtual int get_position() const = 0;
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
