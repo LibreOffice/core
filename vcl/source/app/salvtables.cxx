@@ -3141,12 +3141,10 @@ SalInstanceCheckButton::SalInstanceCheckButton(CheckBox* pButton, SalInstanceBui
     m_xCheckButton->SetToggleHdl(LINK(this, SalInstanceCheckButton, ToggleHdl));
 }
 
-void SalInstanceCheckButton::set_state(TriState eState)
+void SalInstanceCheckButton::do_set_state(TriState eState)
 {
-    disable_notify_events();
     m_xCheckButton->EnableTriState(eState == TRISTATE_INDET);
     m_xCheckButton->SetState(eState);
-    enable_notify_events();
 }
 
 TriState SalInstanceCheckButton::get_state() const { return m_xCheckButton->GetState(); }

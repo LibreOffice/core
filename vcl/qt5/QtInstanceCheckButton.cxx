@@ -20,7 +20,7 @@ QtInstanceCheckButton::QtInstanceCheckButton(QCheckBox* pCheckBox)
     connect(m_pCheckBox, &QCheckBox::toggled, this, &QtInstanceCheckButton::handleToggled);
 }
 
-void QtInstanceCheckButton::set_state(TriState eState)
+void QtInstanceCheckButton::do_set_state(TriState eState)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {

@@ -23,7 +23,7 @@ class QtInstanceCheckButton : public QtInstanceWidget, public virtual weld::Chec
 public:
     QtInstanceCheckButton(QCheckBox* pCheckBox);
 
-    virtual void set_state(TriState eState) override;
+    virtual void do_set_state(TriState eState) override;
     virtual TriState get_state() const override;
 
     virtual void set_label(const OUString& rText) override;

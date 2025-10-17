@@ -12492,7 +12492,7 @@ public:
     {
     }
 
-    virtual void set_state(TriState eState) override
+    virtual void do_set_state(TriState eState) override
     {
         disable_notify_events();
         const bool bInconsistent = eState == TRISTATE_INDET;

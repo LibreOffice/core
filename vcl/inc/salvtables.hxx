@@ -1226,7 +1226,7 @@ private:
 public:
     SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void set_state(TriState eState) override;
+    virtual void do_set_state(TriState eState) override;
 
     virtual TriState get_state() const override;
 

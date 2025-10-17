@@ -1900,10 +1900,19 @@ public:
 
 class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
 {
+protected:
+    virtual void do_set_state(TriState eState) = 0;
+
 public:
     // must override Toggleable::get_state to support TRISTATE_INDET
     virtual TriState get_state() const override = 0;
-    virtual void set_state(TriState eState) = 0;
+
+    void set_state(TriState eState)
+    {
+        disable_notify_events();
+        do_set_state(eState);
+        enable_notify_events();
+    }
 
     virtual void set_active(bool bActive) override final
     {
