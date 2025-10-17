@@ -821,7 +821,7 @@ sal_Bool DocumentDigitalSignatures::trustUntrustedCertificate(
     OUString aSubjectName(comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(), xCertificate->getCertificateKind()));
     OUString aMsg(XsResId(STR_TRUST_UNTRUSTED_PUBKEY));
     aMsg = aMsg.replaceFirst("%{data}", aSubjectName);
-    std::unique_ptr<weld::MessageDialog> m_xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Error, VclButtonsType::YesNo, aMsg));
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Warning, VclButtonsType::YesNo, aMsg));
     m_xQueryBox->set_default_response(RET_NO);
     return m_xQueryBox->run() == RET_YES;
 }
