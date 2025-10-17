@@ -718,7 +718,7 @@ public:
     virtual void do_remove(int pos) override;
     virtual void do_remove(const weld::TreeIter& rIter) override;
 
-    virtual void clear() override;
+    virtual void do_clear() override;
 
     void drag_start();
     void drag_end();

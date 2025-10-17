@@ -1090,6 +1090,7 @@ protected:
     virtual void do_unselect(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
+    virtual void do_clear() = 0;
     virtual void do_remove_selection() = 0;
 
 public:
@@ -1512,7 +1513,13 @@ public:
         m_aCustomSort = func;
     }
 
-    virtual void clear() = 0;
+    void clear()
+    {
+        disable_notify_events();
+        do_clear();
+        enable_notify_events();
+    }
+
     virtual int get_height_rows(int nRows) const = 0;
 
     virtual void columns_autosize() = 0;

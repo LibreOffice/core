@@ -4054,12 +4054,10 @@ void SalInstanceTreeView::swap(int pos1, int pos2)
     pModel->Move(pEntry1, pEntry2);
 }
 
-void SalInstanceTreeView::clear()
+void SalInstanceTreeView::do_clear()
 {
-    disable_notify_events();
     m_xTreeView->Clear();
     m_aUserData.clear();
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::select_all() { unselect(-1); }

@@ -941,7 +941,7 @@ void QtInstanceTreeView::set_sort_column(int nColumn)
     GetQtInstance().RunInMainThread([&] { m_pModel->sort(nColumn); });
 }
 
-void QtInstanceTreeView::clear()
+void QtInstanceTreeView::do_clear()
 {
     SolarMutexGuard g;
 

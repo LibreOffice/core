@@ -171,7 +171,7 @@ public:
     virtual int get_sort_column() const override;
     virtual void set_sort_column(int nColumn) override;
 
-    virtual void clear() override;
+    virtual void do_clear() override;
     virtual int get_height_rows(int nRows) const override;
 
     virtual void columns_autosize() override;

@@ -1613,7 +1613,7 @@ public:
 
     virtual void swap(int pos1, int pos2) override;
 
-    virtual void clear() override;
+    virtual void do_clear() override;
 
     virtual void select_all() override;
     virtual void unselect_all() override;

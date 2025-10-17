@@ -1816,9 +1816,9 @@ void JSTreeView::do_remove(const weld::TreeIter& rIter)
     sendUpdate();
 }
 
-void JSTreeView::clear()
+void JSTreeView::do_clear()
 {
-    SalInstanceTreeView::clear();
+    SalInstanceTreeView::do_clear();
     sendUpdate();
 }
 
