@@ -217,6 +217,13 @@ OUString stripPostScriptStyle(const OUString& postScriptName, FontWeight& eWeigh
     }
     return sFontName;
 }
+
+OUString getFileUrlForTemporaryFont(sal_Int64 prefix, std::u16string_view name,
+                                    std::u16string_view suffix)
+{
+    return EmbeddedFontsManager::getFileUrlForTemporaryFont(
+        Concat2View(OUString::number(prefix) + name), suffix);
+}
 }
 
 // Possibly there is some alternative route to query pdfium for all fonts without
@@ -306,8 +313,8 @@ void ImpSdrPdfImport::CollectFonts()
                 bool bTTF = EmbeddedFontsManager::analyzeTTF(aFontData.data(), aFontData.size(),
                                                              eFontWeight);
                 SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
-                OUString fileUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(
-                    sFontFileName, bTTF ? u".ttf" : u".t1");
+                OUString fileUrl = getFileUrlForTemporaryFont(getPrefix(), sFontFileName,
+                                                              bTTF ? u".ttf" : u".t1");
                 if (!writeFontFile(fileUrl, aFontData))
                     SAL_WARN("sd.filter", "ttf not written");
                 else
@@ -318,8 +325,8 @@ void ImpSdrPdfImport::CollectFonts()
                 if (!bTTF || !aToUnicodeData.empty())
                 {
                     EmbeddedFontInfo fontInfo
-                        = convertToOTF(*pSubSetInfo, fileUrl, sFontName, sPostScriptName,
-                                       sFontFileName, aToUnicodeData);
+                        = convertToOTF(getPrefix(), *pSubSetInfo, fileUrl, sFontName,
+                                       sPostScriptName, sFontFileName, aToUnicodeData);
                     fileUrl = fontInfo.sFontFile;
                     sFontName = fontInfo.sFontName;
                     eFontWeight = fontInfo.eFontWeight;
@@ -1498,7 +1505,7 @@ static OUString buildFontMenuName(const OUString& FontMenuNameDBUrl,
 }
 
 // https://adobe-type-tools.github.io/font-tech-notes/pdfs/5900.RFMFAH_Tutorial.pdf
-static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
+static EmbeddedFontInfo mergeFontSubsets(sal_Int64 prefix, const OUString& mergedFontUrl,
                                          const OUString& FontMenuNameDBUrl,
                                          const OUString& postScriptName,
                                          const OUString& longFontName, std::string_view Weight,
@@ -1644,7 +1651,7 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
         Features.Close();
     }
 
-    OUString otfUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(postScriptName, u".otf");
+    OUString otfUrl = getFileUrlForTemporaryFont(prefix, postScriptName, u".otf");
     OUString features = !ligatureGlyphToChars.empty() ? mergedFeaturesUrl : OUString();
     if (EmbeddedFontsManager::makeotf(mergedFontUrl, otfUrl, FontMenuNameDBUrl, mergedCMapUrl,
                                       features))
@@ -1654,8 +1661,8 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
 }
 
 //static
-EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
-                                               const OUString& fontName,
+EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSubSetInfo,
+                                               const OUString& fileUrl, const OUString& fontName,
                                                const OUString& postScriptName,
                                                std::u16string_view fontFileName,
                                                const std::vector<uint8_t>& toUnicodeData)
@@ -1703,13 +1710,13 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     if (rSubSetInfo.aComponents.size() > 1)
     {
         OUString mergedFontUrl
-            = EmbeddedFontsManager::getFileUrlForTemporaryFont(postScriptName, u".merged.pfa.cid");
-        return mergeFontSubsets(mergedFontUrl, FontMenuNameDBUrl, postScriptName, longFontName,
-                                Weight, rSubSetInfo);
+            = getFileUrlForTemporaryFont(prefix, postScriptName, u".merged.pfa.cid");
+        return mergeFontSubsets(prefix, mergedFontUrl, FontMenuNameDBUrl, postScriptName,
+                                longFontName, Weight, rSubSetInfo);
     }
 
     // Otherwise not merged font, just a single subset
-    OUString otfUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(fontFileName, u".otf");
+    OUString otfUrl = getFileUrlForTemporaryFont(prefix, fontFileName, u".otf");
     OUString cmap = bCMap ? CMapUrl : OUString();
     if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, cmap, FeaturesUrl))
         return { longFontName, otfUrl, toOfficeWeight(Weight) };
