@@ -491,6 +491,8 @@ MetaPolygonAction::MetaPolygonAction( tools::Polygon aPoly ) :
 
 void MetaPolygonAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maPoly.GetBoundRect())))
+        return;
     pOut->DrawPolygon( maPoly );
 }
 
