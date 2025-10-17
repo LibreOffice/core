@@ -889,7 +889,18 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
     xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, uno::Any(u"bar"_ustr));
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
-    xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xField, /*bAbsorb=*/false);
+
+    // Also add an unnamed field
+    uno::Reference<text::XDependentTextField> xUnnamedField(
+        xFactory->createInstance(u"com.sun.star.text.TextField.User"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xUnnamedMaster(
+        xFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY);
+    xUnnamedMaster->setPropertyValue(u"Name"_ustr, uno::Any(u""_ustr));
+    xUnnamedField->attachTextFieldMaster(xUnnamedMaster);
+    xUnnamedField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, uno::Any(u""_ustr));
+    xText->insertTextContent(xCursor, xUnnamedField, /*bAbsorb=*/false);
 
     // Export to docx.
     save(u"Office Open XML Text"_ustr);
@@ -904,8 +915,11 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
     // Make sure that not only the variables, but also their values are written.
     pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "//w:docVars/w:docVar", "name", u"foo");
-    assertXPath(pXmlDoc, "//w:docVars/w:docVar", "val", u"bar");
+    assertXPath(pXmlDoc, "//w:docVars/w:docVar[1]", "name", u"foo");
+    assertXPath(pXmlDoc, "//w:docVars/w:docVar[1]", "val", u"bar");
+    // Except the field with empty name, which mustn't get written, Word can't import it
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Variable with empty name shouldn't be exported", 0,
+                                 countXPathNodes(pXmlDoc, "//w:docVars/w:docVar[2]"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
