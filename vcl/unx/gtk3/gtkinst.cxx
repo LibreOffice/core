@@ -16986,7 +16986,7 @@ private:
 #endif
     }
 
-    virtual void remove(int pos) override
+    virtual void do_remove(int pos) override
     {
         disable_notify_events();
         GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);

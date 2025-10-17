@@ -209,7 +209,7 @@ void QtInstanceIconView::set_item_accessible_name(int nPos, const OUString& rNam
     });
 }
 
-void QtInstanceIconView::remove(int) { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::do_remove(int) { assert(false && "Not implemented yet"); }
 
 tools::Rectangle QtInstanceIconView::get_rect(int) const
 {

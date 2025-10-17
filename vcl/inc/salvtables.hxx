@@ -1965,7 +1965,7 @@ public:
 
     virtual OUString get_id(int pos) const override;
 
-    virtual void remove(int pos) override;
+    virtual void do_remove(int pos) override;
 
     const OUString* getEntryData(int index) const;
 

@@ -5603,12 +5603,10 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
     }
 }
 
-void SalInstanceIconView::remove(int pos)
+void SalInstanceIconView::do_remove(int pos)
 {
-    disable_notify_events();
     SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
     m_xIconView->RemoveEntry(pEntry);
-    enable_notify_events();
 }
 
 const OUString* SalInstanceIconView::getEntryData(int index) const

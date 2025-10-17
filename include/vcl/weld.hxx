@@ -1510,6 +1510,7 @@ protected:
     }
 
     virtual void do_clear() = 0;
+    virtual void do_remove(int pos) = 0;
 
 public:
     virtual int get_item_width() const = 0;
@@ -1584,7 +1585,14 @@ public:
     virtual void set_text(int pos, const OUString& rText) = 0;
     virtual void set_id(int pos, const OUString& rId) = 0;
     virtual void set_item_accessible_name(int pos, const OUString& rName) = 0;
-    virtual void remove(int pos) = 0;
+
+    void remove(int pos)
+    {
+        disable_notify_events();
+        do_remove(pos);
+        enable_notify_events();
+    }
+
     virtual tools::Rectangle get_rect(int pos) const = 0;
 
     //via iter
