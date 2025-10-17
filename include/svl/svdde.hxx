@@ -277,6 +277,10 @@ class SVL_DLLPUBLIC DdeService
 {
     friend class    DdeInternal;
 
+public:
+    // Eventually creating a new item. return false -> Topic creation failed
+    virtual bool MakeTopic(const OUString& rItem) = 0;
+
 protected:
     OUString Topics();
     OUString Formats();

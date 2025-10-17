@@ -33,6 +33,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 
+#include <o3tl/test_info.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -73,7 +74,7 @@ public:
     explicit ImplDdeService( const OUString& rNm )
         : DdeService( rNm )
     {}
-    virtual bool MakeTopic( const OUString& );
+    virtual bool MakeTopic( const OUString& ) override;
 
     virtual OUString  Topics();
 
@@ -106,7 +107,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
 {
     // Workaround for Event after Main() under OS/2
     // happens when exiting starts the App again
-    if ( !Application::IsInExecute() )
+    if ( !Application::IsInExecute() && !o3tl::IsRunningUnitTest() )
         return false;
 
     // The Topic rNm is sought, do we have it?
@@ -443,7 +444,7 @@ void SfxAppData_Impl::DeInitDDE()
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
     //OV: DDE is disconnected in server mode!
-    if( pImpl->maDocTopics.empty() )
+    if (!pImpl->pDdeService)
         return;
 
     // prevent double submit
@@ -521,19 +522,22 @@ DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 
 bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
-    aSeq = css::uno::Sequence< sal_Int8 >(
-                            static_cast<sal_Int8 const *>(pData->getData()), pData->getSize() );
-    bool bRet;
-    if( aSeq.getLength() )
+    if (pData->getSize())
     {
         css::uno::Any aValue;
-        aValue <<= aSeq;
-        OUString sMimeType( SotExchange::GetFormatMimeType( pData->GetFormat() ));
-        bRet = pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
+        if (pData->GetFormat() == SotClipboardFormatId::STRING)
+        {
+            aValue <<= OUString(reinterpret_cast<const sal_Unicode*>(pData->getData()));
+        }
+        else
+        {
+            aValue <<= css::uno::Sequence(static_cast<sal_Int8 const*>(pData->getData()),
+                                          pData->getSize());
+        }
+        return pSh->DdeSetData(GetCurItem(), SotExchange::GetFormatMimeType(pData->GetFormat()),
+                               aValue);
     }
-    else
-        bRet = false;
-    return bRet;
+    return false;
 }
 
 bool SfxDdeDocTopic_Impl::Execute( const OUString* pStr )

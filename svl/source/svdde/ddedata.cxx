@@ -53,7 +53,7 @@ DdeData::DdeData( const OUString& s )
     xImp.reset(new DdeDataImp);
     xImp->hData = nullptr;
     xImp->pData = s.getStr();
-    xImp->nData = s.getLength()+1;
+    xImp->nData = (s.getLength() + 1) * sizeof(sal_Unicode);
     xImp->nFmt = SotClipboardFormatId::STRING;
 }
 

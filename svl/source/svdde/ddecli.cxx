@@ -26,29 +26,14 @@
 #include <osl/thread.h>
 #include <comphelper/solarmutex.hxx>
 
-namespace {
+#include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/XToolkitExperimental.hpp>
 
-DdeInstData * theDdeInstData;
-
-}
-
-DdeInstData* ImpGetInstData()
+DdeInstData& ImpGetInstData()
 {
+    static DdeInstData theDdeInstData;
     return theDdeInstData;
 }
-
-DdeInstData* ImpInitInstData()
-{
-    theDdeInstData = new DdeInstData;
-    return theDdeInstData;
-}
-
-void ImpDeinitInstData()
-{
-    delete theDdeInstData;
-    theDdeInstData = nullptr;
-}
-
 
 struct DdeImp
 {
@@ -64,8 +49,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
     const std::vector<DdeConnection*> &rAll = DdeConnection::GetConnections();
     DdeConnection*      self = nullptr;
 
-    DdeInstData* pInst = ImpGetInstData();
-    assert(pInst);
+    const DdeInstData& rInst = ImpGetInstData();
 
     for ( size_t i = 0; i < rAll.size(); ++i)
     {
@@ -97,7 +81,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
                 self->pImp->hConv = DdeReconnect( hConv );
                 self->pImp->nStatus = self->pImp->hConv
                     ? DMLERR_NO_ERROR
-                    : DdeGetLastError( pInst->hDdeInstCli );
+                    : DdeGetLastError( rInst.hDdeInstCli );
                 iter = self->aTransactions.end();
                 nRet = nullptr;
                 bFound = true;
@@ -144,17 +128,15 @@ DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
     pImp->nStatus  = DMLERR_NO_ERROR;
     pImp->hConv    = nullptr;
 
-    DdeInstData* pInst = ImpGetInstData();
-    if( !pInst )
-        pInst = ImpInitInstData();
-    pInst->nRefCount++;
-    pInst->nInstanceCli++;
-    if ( !pInst->hDdeInstCli )
+    DdeInstData& rInst = ImpGetInstData();
+    rInst.nRefCount++;
+    rInst.nInstanceCli++;
+    if ( !rInst.hDdeInstCli )
     {
         pImp->nStatus = DMLERR_SYS_ERROR;
         if ( !officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         {
-            pImp->nStatus = DdeInitializeW( &pInst->hDdeInstCli,
+            pImp->nStatus = DdeInitializeW( &rInst.hDdeInstCli,
                                             DdeInternal::CliCallback,
                                             APPCLASS_STANDARD | APPCMD_CLIENTONLY |
                                             CBF_FAIL_ALLSVRXACTIONS |
@@ -163,45 +145,50 @@ DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
         }
     }
 
-    pService = new DdeString( pInst->hDdeInstCli, rService );
-    pTopic   = new DdeString( pInst->hDdeInstCli, rTopic );
+    pService = new DdeString( rInst.hDdeInstCli, rService );
+    pTopic   = new DdeString( rInst.hDdeInstCli, rTopic );
 
     if ( pImp->nStatus == DMLERR_NO_ERROR )
     {
-        pImp->hConv = DdeConnect( pInst->hDdeInstCli,pService->getHSZ(),pTopic->getHSZ(), nullptr);
+        pImp->hConv = DdeConnect( rInst.hDdeInstCli,pService->getHSZ(),pTopic->getHSZ(), nullptr);
         if( !pImp->hConv )
-            pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
+            pImp->nStatus = DdeGetLastError( rInst.hDdeInstCli );
     }
 
-    pInst->aConnections.push_back( this );
+    rInst.aConnections.push_back( this );
 }
 
 DdeConnection::~DdeConnection()
 {
     if ( pImp->hConv )
+    {
         DdeDisconnect( pImp->hConv );
+        // DdeDisconnect sends a XTYP_DISCONNECT transaction to server. DdeUninitialize below will
+        // wait until it's finished. If server happens to be this app, it would deadlock unless we
+        // allow to process messages here:
+        auto xTk = css::awt::Toolkit::create(comphelper::getProcessComponentContext());
+        if (auto xTkExperimental = xTk.query<css::awt::XToolkitExperimental>())
+            xTkExperimental->processEventsToIdle();
+    }
 
     delete pService;
     delete pTopic;
 
-    DdeInstData* pInst = ImpGetInstData();
-    assert(pInst);
+    DdeInstData& rInst = ImpGetInstData();
 
-    std::vector<DdeConnection*>::iterator it(std::find(pInst->aConnections.begin(),
-                                                        pInst->aConnections.end(),
+    std::vector<DdeConnection*>::iterator it(std::find(rInst.aConnections.begin(),
+                                                        rInst.aConnections.end(),
                                                         this));
-    if (it != pInst->aConnections.end())
-        pInst->aConnections.erase(it);
+    if (it != rInst.aConnections.end())
+        rInst.aConnections.erase(it);
 
-    pInst->nInstanceCli--;
-    pInst->nRefCount--;
-    if ( !pInst->nInstanceCli && pInst->hDdeInstCli )
+    rInst.nInstanceCli--;
+    rInst.nRefCount--;
+    if ( !rInst.nInstanceCli && rInst.hDdeInstCli )
     {
-        if( DdeUninitialize( pInst->hDdeInstCli ) )
+        if( DdeUninitialize( rInst.hDdeInstCli ) )
         {
-            pInst->hDdeInstCli = 0;
-            if( pInst->nRefCount == 0 )
-                ImpDeinitInstData();
+            rInst.hDdeInstCli = 0;
         }
     }
 }
@@ -214,9 +201,9 @@ bool DdeConnection::IsConnected()
         return true;
     else
     {
-        DdeInstData* pInst = ImpGetInstData();
+        const DdeInstData& rInst = ImpGetInstData();
         pImp->hConv = DdeReconnect( pImp->hConv );
-        pImp->nStatus = pImp->hConv ? DMLERR_NO_ERROR : DdeGetLastError( pInst->hDdeInstCli );
+        pImp->nStatus = pImp->hConv ? DMLERR_NO_ERROR : DdeGetLastError( rInst.hDdeInstCli );
         return pImp->nStatus == DMLERR_NO_ERROR;
     }
 }
@@ -233,17 +220,14 @@ OUString DdeConnection::GetServiceName() const
 
 const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 {
-    DdeInstData* pInst = ImpGetInstData();
-    assert(pInst);
-    return pInst->aConnections;
+    return ImpGetInstData().aConnections;
 }
 
 DdeTransaction::DdeTransaction( DdeConnection& d, const OUString& rItemName,
                                 tools::Long n )
     : rDde( d )
 {
-    DdeInstData* pInst = ImpGetInstData();
-    pName = new DdeString( pInst->hDdeInstCli, rItemName );
+    pName = new DdeString( ImpGetInstData().hDdeInstCli, rItemName );
     nTime = n;
     nId   = 0;
     nType = 0;
@@ -256,8 +240,7 @@ DdeTransaction::~DdeTransaction()
 {
     if ( nId && rDde.pImp->hConv )
     {
-        DdeInstData* pInst = ImpGetInstData();
-        DdeAbandonTransaction( pInst->hDdeInstCli, rDde.pImp->hConv, nId );
+        DdeAbandonTransaction( ImpGetInstData().hDdeInstCli, rDde.pImp->hConv, nId );
     }
 
     delete pName;
@@ -271,7 +254,7 @@ void DdeTransaction::Execute()
     DWORD   nData = static_cast<DWORD>(aDdeData.getSize());
     SotClipboardFormatId nIntFmt = aDdeData.xImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
-    DdeInstData* pInst = ImpGetInstData();
+    const DdeInstData& rInst = ImpGetInstData();
 
     if ( nType == XTYP_EXECUTE )
         hItem = nullptr;
@@ -287,7 +270,7 @@ void DdeTransaction::Execute()
                                                hItem, nExtFmt, static_cast<UINT>(nType),
                                                static_cast<DWORD>(nTime), nullptr );
 
-        rDde.pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
+        rDde.pImp->nStatus = DdeGetLastError( rInst.hDdeInstCli );
         if( hData && nType == XTYP_REQUEST )
         {
             {
@@ -303,7 +286,7 @@ void DdeTransaction::Execute()
     else
     {
         if ( nId && rDde.pImp->hConv )
-            DdeAbandonTransaction( pInst->hDdeInstCli, rDde.pImp->hConv, nId);
+            DdeAbandonTransaction( rInst.hDdeInstCli, rDde.pImp->hConv, nId);
         nId = 0;
         bBusy = true;
         DWORD result;
@@ -313,7 +296,7 @@ void DdeTransaction::Execute()
                                             &result );
         nId = result;
         rDde.pImp->nStatus = hRet ? DMLERR_NO_ERROR
-                                  : DdeGetLastError( pInst->hDdeInstCli );
+                                  : DdeGetLastError( rInst.hDdeInstCli );
     }
 }
 
