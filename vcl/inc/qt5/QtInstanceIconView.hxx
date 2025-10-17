@@ -58,7 +58,7 @@ public:
                                                           = nullptr) const override;
     virtual bool get_selected(weld::TreeIter* pIter) const override;
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
-    virtual void set_cursor(const weld::TreeIter& rIter) override;
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
     virtual bool get_iter_first(weld::TreeIter& rIter) const override;
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
     virtual OUString get_text(const weld::TreeIter& rIter) const override;

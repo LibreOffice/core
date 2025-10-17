@@ -5519,12 +5519,10 @@ bool SalInstanceIconView::get_cursor(weld::TreeIter* pIter) const
     return pEntry != nullptr;
 }
 
-void SalInstanceIconView::set_cursor(const weld::TreeIter& rIter)
+void SalInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    disable_notify_events();
     m_xIconView->SetCurEntry(rVclIter.iter);
-    enable_notify_events();
 }
 
 bool SalInstanceIconView::get_iter_first(weld::TreeIter& rIter) const

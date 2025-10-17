@@ -1511,6 +1511,7 @@ protected:
 
     virtual void do_clear() = 0;
     virtual void do_remove(int pos) = 0;
+    virtual void do_set_cursor(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_item(const TreeIter& rIter) = 0;
 
 public:
@@ -1600,7 +1601,14 @@ public:
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
     virtual bool get_selected(TreeIter* pIter) const = 0;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
-    virtual void set_cursor(const TreeIter& rIter) = 0;
+
+    void set_cursor(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_set_cursor(rIter);
+        enable_notify_events();
+    }
+
     virtual bool get_iter_first(TreeIter& rIter) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;

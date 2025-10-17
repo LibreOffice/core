@@ -235,7 +235,7 @@ bool QtInstanceIconView::get_cursor(weld::TreeIter*) const
     return false;
 }
 
-void QtInstanceIconView::set_cursor(const weld::TreeIter& rIter)
+void QtInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 
