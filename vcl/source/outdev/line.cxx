@@ -54,23 +54,11 @@ void OutputDevice::SetLineColor( const Color& rColor )
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
 
-    if( aColor.IsTransparent() )
+    if( maLineColor != aColor )
     {
-        if ( mbLineColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = false;
-            maLineColor = COL_TRANSPARENT;
-        }
-    }
-    else
-    {
-        if( maLineColor != aColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = true;
-            maLineColor = aColor;
-        }
+        mbInitLineColor = true;
+        mbLineColor = true;
+        maLineColor = aColor;
     }
 }
 

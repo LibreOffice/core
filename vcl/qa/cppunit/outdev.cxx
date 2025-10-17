@@ -502,27 +502,6 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDefaultLineColor)
     CPPUNIT_ASSERT_EQUAL(Color(), rColor);
 }
 
-CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentLineColor)
-{
-    // Create a virtual device, and connect a metafile to it.
-    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
-
-    GDIMetaFile aMtf;
-    aMtf.Record(pVDev.get());
-
-    CPPUNIT_ASSERT(pVDev->IsLineColor());
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetLineColor());
-
-    pVDev->SetLineColor(COL_TRANSPARENT);
-    CPPUNIT_ASSERT(!pVDev->IsLineColor());
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, pVDev->GetLineColor());
-    MetaAction* pAction = aMtf.GetAction(0);
-    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
-    auto pLineAction = static_cast<MetaLineColorAction*>(pAction);
-    const Color& rColor = pLineAction->GetColor();
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rColor);
-}
-
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testLineColor)
 {
     // Create a virtual device, and connect a metafile to it.
@@ -1845,6 +1824,36 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygon)
                                      pPolyPolygonAction->GetPolyPolygon());
         */
     }
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawRectAlpha1)
+{
+    Size aSize(100, 100);
+    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
+    pVDev->SetOutputSizePixel(aSize, true, true);
+
+    const Color RED_OPAQUE(ColorAlpha, 255, 255, 0, 0); // opaque red
+    pVDev->SetLineColor(RED_OPAQUE);
+    pVDev->SetFillColor(RED_OPAQUE);
+    pVDev->DrawRect(tools::Rectangle(0, 0, 100, 100));
+
+    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(1, 1)));
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawRectAlpha2)
+{
+    Size aSize(100, 100);
+    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
+    pVDev->SetOutputSizePixel(aSize, true, true);
+
+    const Color RED_TRANSPARENT(ColorAlpha, 127, 255, 0, 0); // 50% transparent red
+    pVDev->SetLineColor(RED_TRANSPARENT);
+    pVDev->SetFillColor(RED_TRANSPARENT);
+    pVDev->DrawRect(tools::Rectangle(0, 0, 100, 100));
+
+    CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(1, 1)));
 }
 
 static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
