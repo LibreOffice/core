@@ -13177,7 +13177,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void select_region(int nStartPos, int nEndPos) override
+    virtual void do_select_region(int nStartPos, int nEndPos) override
     {
         disable_notify_events();
         gtk_editable_select_region(m_pEditable, nStartPos, nEndPos);

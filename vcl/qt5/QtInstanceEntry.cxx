@@ -57,7 +57,7 @@ void QtInstanceEntry::set_max_length(int nChars)
     GetQtInstance().RunInMainThread([&] { m_pLineEdit->setMaxLength(nChars); });
 }
 
-void QtInstanceEntry::select_region(int nStartPos, int nEndPos)
+void QtInstanceEntry::do_select_region(int nStartPos, int nEndPos)
 {
     SolarMutexGuard g;
 

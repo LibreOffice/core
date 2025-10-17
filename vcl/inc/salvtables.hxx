@@ -618,7 +618,7 @@ public:
 
     virtual void set_max_length(int nChars) override;
 
-    virtual void select_region(int nStartPos, int nEndPos) override;
+    virtual void do_select_region(int nStartPos, int nEndPos) override;
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 

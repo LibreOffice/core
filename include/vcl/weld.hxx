@@ -2021,6 +2021,7 @@ protected:
     }
 
     virtual void do_set_text(const OUString& rText) = 0;
+    virtual void do_select_region(int nStartPos, int nEndPos) = 0;
     virtual void do_set_position(int nCursorPos) = 0;
 
 public:
@@ -2036,8 +2037,15 @@ public:
     virtual int get_width_chars() const = 0;
     // The maximum length of the entry. Use 0 for no maximum
     virtual void set_max_length(int nChars) = 0;
+
     // nEndPos can be -1 in order to select all text
-    virtual void select_region(int nStartPos, int nEndPos) = 0;
+    void select_region(int nStartPos, int nEndPos)
+    {
+        disable_notify_events();
+        do_select_region(nStartPos, nEndPos);
+        enable_notify_events();
+    }
+
     // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;

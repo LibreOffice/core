@@ -3318,13 +3318,11 @@ int SalInstanceEntry::get_width_chars() const { return m_xEntry->GetWidthInChars
 
 void SalInstanceEntry::set_max_length(int nChars) { m_xEntry->SetMaxTextLen(nChars); }
 
-void SalInstanceEntry::select_region(int nStartPos, int nEndPos)
+void SalInstanceEntry::do_select_region(int nStartPos, int nEndPos)
 {
-    disable_notify_events();
     tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
     tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
     m_xEntry->SetSelection(Selection(nStart, nEnd));
-    enable_notify_events();
 }
 
 bool SalInstanceEntry::get_selection_bounds(int& rStartPos, int& rEndPos)
