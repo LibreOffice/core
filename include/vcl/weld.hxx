@@ -1511,6 +1511,7 @@ protected:
 
     virtual void do_clear() = 0;
     virtual void do_remove(int pos) = 0;
+    virtual void do_scroll_to_item(const TreeIter& rIter) = 0;
 
 public:
     virtual int get_item_width() const = 0;
@@ -1604,7 +1605,13 @@ public:
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;
     virtual bool iter_next_sibling(TreeIter& rIter) const = 0;
-    virtual void scroll_to_item(const TreeIter& rIter) = 0;
+
+    void scroll_to_item(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_scroll_to_item(rIter);
+        enable_notify_events();
+    }
 
     // call func on each selected element until func returns true or we run out of elements
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;

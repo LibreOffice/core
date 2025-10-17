@@ -17267,7 +17267,7 @@ public:
         return gtk_tree_model_iter_next(pModel, &rGtkIter.iter);
     }
 
-    virtual void scroll_to_item(const weld::TreeIter& rIter) override
+    virtual void do_scroll_to_item(const weld::TreeIter& rIter) override
     {
         assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();

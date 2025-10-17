@@ -5541,15 +5541,13 @@ bool SalInstanceIconView::iter_next_sibling(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
-void SalInstanceIconView::scroll_to_item(const weld::TreeIter& rIter)
+void SalInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
 {
     assert(m_xIconView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_xIconView->MakeVisible(rVclIter.iter);
-    enable_notify_events();
 }
 
 void SalInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIter&)>& func)

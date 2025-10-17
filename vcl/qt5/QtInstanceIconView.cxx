@@ -276,7 +276,7 @@ bool QtInstanceIconView::iter_next_sibling(weld::TreeIter&) const
     return false;
 }
 
-void QtInstanceIconView::scroll_to_item(const weld::TreeIter& rIter)
+void QtInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pListView->scrollTo(modelIndex(rIter)); });
