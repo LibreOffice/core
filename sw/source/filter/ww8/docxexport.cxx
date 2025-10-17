@@ -971,9 +971,9 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
     constexpr OUString aPrefix(u"com.sun.star.text.fieldmaster.User."_ustr);
     for (const auto& rMasterName : std::as_const(aMasterNames))
     {
-        if (!rMasterName.startsWith(aPrefix))
+        if (!rMasterName.startsWith(aPrefix) || rMasterName.getLength() == aPrefix.getLength())
         {
-            // Not a user field.
+            // Not a user field or user field has empty name.
             continue;
         }
 

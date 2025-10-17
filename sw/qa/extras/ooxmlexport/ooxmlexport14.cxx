@@ -898,7 +898,18 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
     xField->getTextFieldMaster()->setPropertyValue("Content", uno::Any(OUString("bar")));
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
-    xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xField, /*bAbsorb=*/false);
+
+    // Also add an unnamed field
+    uno::Reference<text::XDependentTextField> xUnnamedField(
+        xFactory->createInstance(u"com.sun.star.text.TextField.User"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xUnnamedMaster(
+        xFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY);
+    xUnnamedMaster->setPropertyValue(u"Name"_ustr, uno::Any(u""_ustr));
+    xUnnamedField->attachTextFieldMaster(xUnnamedMaster);
+    xUnnamedField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, uno::Any(u""_ustr));
+    xText->insertTextContent(xCursor, xUnnamedField, /*bAbsorb=*/false);
 
     // Export to docx.
     save("Office Open XML Text");
@@ -913,8 +924,11 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
     // Make sure that not only the variables, but also their values are written.
     pXmlDoc = parseExport("word/settings.xml");
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "//w:docVars/w:docVar"_ostr, "name"_ostr, "foo");
-    assertXPath(pXmlDoc, "//w:docVars/w:docVar"_ostr, "val"_ostr, "bar");
+    assertXPath(pXmlDoc, "//w:docVars/w:docVar[1]"_ostr, "name", "foo");
+    assertXPath(pXmlDoc, "//w:docVars/w:docVar[1]"_ostr, "val", "bar");
+    // Except the field with empty name, which mustn't get written, Word can't import it
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Variable with empty name shouldn't be exported", 0,
+                                 countXPathNodes(pXmlDoc, "//w:docVars/w:docVar[2]"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
