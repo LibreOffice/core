@@ -119,7 +119,7 @@ OUString QtInstanceIconView::get_selected_id() const
     return sId;
 }
 
-void QtInstanceIconView::clear()
+void QtInstanceIconView::do_clear()
 {
     SolarMutexGuard g;
 

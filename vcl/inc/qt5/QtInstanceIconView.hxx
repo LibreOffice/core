@@ -38,7 +38,7 @@ public:
 
     virtual OUString get_selected_id() const override;
 
-    virtual void clear() override;
+    virtual void do_clear() override;
 
     virtual int count_selected_items() const override;
 

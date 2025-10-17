@@ -1509,6 +1509,8 @@ protected:
         return m_aQueryTooltipHdl.Call(rIter);
     }
 
+    virtual void do_clear() = 0;
+
 public:
     virtual int get_item_width() const = 0;
     virtual void set_item_width(int width) = 0;
@@ -1563,7 +1565,12 @@ public:
 
     virtual OUString get_selected_id() const = 0;
 
-    virtual void clear() = 0;
+    void clear()
+    {
+        disable_notify_events();
+        do_clear();
+        enable_notify_events();
+    }
 
     virtual int count_selected_items() const = 0;
 

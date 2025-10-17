@@ -1904,9 +1904,9 @@ void JSIconView::insert_separator(int pos, const OUString* pId)
     sendUpdate();
 }
 
-void JSIconView::clear()
+void JSIconView::do_clear()
 {
-    SalInstanceIconView::clear();
+    SalInstanceIconView::do_clear();
     sendUpdate();
 }
 

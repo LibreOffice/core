@@ -1981,7 +1981,7 @@ public:
 
     virtual tools::Rectangle get_rect(int pos) const override;
 
-    virtual void clear() override;
+    virtual void do_clear() override;
 
     virtual ~SalInstanceIconView() override;
 };

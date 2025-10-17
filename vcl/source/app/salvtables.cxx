@@ -5666,12 +5666,10 @@ tools::Rectangle SalInstanceIconView::get_rect(int pos) const
     return m_xIconView->GetBoundingRect(aEntry);
 }
 
-void SalInstanceIconView::clear()
+void SalInstanceIconView::do_clear()
 {
-    disable_notify_events();
     m_xIconView->Clear();
     m_aUserData.clear();
-    enable_notify_events();
 }
 
 SalInstanceIconView::~SalInstanceIconView()

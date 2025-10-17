@@ -17098,7 +17098,7 @@ public:
         return OUString();
     }
 
-    virtual void clear() override
+    virtual void do_clear() override
     {
         disable_notify_events();
         gtk_tree_store_clear(m_pTreeStore);
