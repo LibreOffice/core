@@ -45,7 +45,7 @@ OUString QtInstanceTextView::get_text() const
     return sText;
 }
 
-void QtInstanceTextView::select_region(int nStartPos, int nEndPos)
+void QtInstanceTextView::do_select_region(int nStartPos, int nEndPos)
 {
     SolarMutexGuard g;
 

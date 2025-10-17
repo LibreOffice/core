@@ -1428,7 +1428,7 @@ public:
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
-    virtual void select_region(int nStartPos, int nEndPos) override;
+    virtual void do_select_region(int nStartPos, int nEndPos) override;
 
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;

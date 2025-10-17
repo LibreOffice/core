@@ -18076,7 +18076,7 @@ public:
         return rStartPos != rEndPos;
     }
 
-    virtual void select_region(int nStartPos, int nEndPos) override
+    virtual void do_select_region(int nStartPos, int nEndPos) override
     {
         disable_notify_events();
         GtkTextIter start, end;

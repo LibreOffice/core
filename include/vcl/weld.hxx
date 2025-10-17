@@ -2498,11 +2498,20 @@ protected:
 
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
+    virtual void do_select_region(int nStartPos, int nEndPos) = 0;
+
 public:
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
+
     // if nStartPos or nEndPos is -1 the max available text pos will be used
-    virtual void select_region(int nStartPos, int nEndPos) = 0;
+    void select_region(int nStartPos, int nEndPos)
+    {
+        disable_notify_events();
+        do_select_region(nStartPos, nEndPos);
+        enable_notify_events();
+    }
+
     // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;

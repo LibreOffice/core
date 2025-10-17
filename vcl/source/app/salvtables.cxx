@@ -5973,13 +5973,11 @@ bool SalInstanceTextView::get_selection_bounds(int& rStartPos, int& rEndPos)
     return rSelection.Len();
 }
 
-void SalInstanceTextView::select_region(int nStartPos, int nEndPos)
+void SalInstanceTextView::do_select_region(int nStartPos, int nEndPos)
 {
-    disable_notify_events();
     tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
     tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
     m_xTextView->SetSelection(Selection(nStart, nEnd));
-    enable_notify_events();
 }
 
 void SalInstanceTextView::set_editable(bool bEditable) { m_xTextView->SetReadOnly(!bEditable); }
