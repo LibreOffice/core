@@ -17,11 +17,12 @@
 
 #include <config_features.h>
 
-#if HAVE_FEATURE_PDFIMPORT
-
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
+
+#if HAVE_FEATURE_AFDKO
+
 #include "afdko.hxx"
 
 static bool convertTx(txCtx h)
@@ -62,10 +63,12 @@ static bool convertTx(txCtx h)
 
     return true;
 }
+#endif
 
 // System afdko could be used by calling: tx -dump src dest here
 bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl)
 {
+#if HAVE_FEATURE_AFDKO
     OUString srcFontPath, destFilePath;
     if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(srcFontUrl, srcFontPath)
         || osl::FileBase::E_None
@@ -89,11 +92,17 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
     bool result = convertTx(h);
     txFree(h);
     return result;
+#else
+    (void)srcFontUrl;
+    (void)destFileUrl;
+    return false;
+#endif
 }
 
 // System afdko could be used by calling: tx -t1 src dest here
 bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& destFileUrl)
 {
+#if HAVE_FEATURE_AFDKO
     OUString srcFontPath, destFilePath;
     if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(srcFontUrl, srcFontPath)
         || osl::FileBase::E_None
@@ -116,12 +125,18 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     bool result = convertTx(h);
     txFree(h);
     return result;
+#else
+    (void)srcFontUrl;
+    (void)destFileUrl;
+    return false;
+#endif
 }
 
 // System afdko could be used by calling: mergefonts -cid cidfontinfo destfile [glyphaliasfile mergefontfile]+ here
 bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUString& destFileUrl,
                                       const std::vector<std::pair<OUString, OUString>>& fonts)
 {
+#if HAVE_FEATURE_AFDKO
     OUString cidFontInfoPath, destFilePath;
     if (osl::FileBase::E_None
             != osl::FileBase::getSystemPathFromFileURL(cidFontInfoUrl, cidFontInfoPath)
@@ -192,8 +207,15 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     rename(tmpdestfile.getStr(), destFilePathA.getStr());
 
     return result;
+#else
+    (void)cidFontInfoUrl;
+    (void)destFileUrl;
+    (void)fonts;
+    return false;
+#endif
 }
 
+#if HAVE_FEATURE_AFDKO
 static void* cb_memory(ctlMemoryCallbacks* /*cb*/, void* old, size_t size)
 {
     if (size == 0)
@@ -207,12 +229,14 @@ static void* cb_memory(ctlMemoryCallbacks* /*cb*/, void* old, size_t size)
 
     return malloc(size);
 }
+#endif
 
 // System afdko could be used by calling: makeotf[exe] -mf fontMenuNameDB -f srcFont -o destFile -ch charMap [-ff features]
 bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& destFileUrl,
                                    const OUString& fontMenuNameDBUrl, const OUString& charMapUrl,
                                    const OUString& featuresUrl)
 {
+#if HAVE_FEATURE_AFDKO
     OUString srcFontPath, destFilePath, charMapPath, fontMenuNameDBPath, featuresPath;
     if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(srcFontUrl, srcFontPath)
         || osl::FileBase::E_None
@@ -267,8 +291,14 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
               nullptr, nullptr, 0, 0, 0, 0, 0, -1, -1, 0, nullptr);
 
     return true;
-}
-
+#else
+    (void)srcFontUrl;
+    (void)destFileUrl;
+    (void)fontMenuNameDBUrl;
+    (void)charMapUrl;
+    (void)featuresUrl;
+    return false;
 #endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

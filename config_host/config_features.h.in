@@ -7,6 +7,12 @@
 #ifndef CONFIG_FEATURES_H
 #define CONFIG_FEATURES_H
 
+/* AFDKO - Whether to have functionality to convert and merge
+ * embedded fonts of documents
+ */
+
+#define HAVE_FEATURE_AFDKO 0
+
 /* AVMEDIA - Whether to have functionality to display and manipulate
  * embedded AV media in documents
  */
