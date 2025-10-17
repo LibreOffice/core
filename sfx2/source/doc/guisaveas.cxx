@@ -1958,6 +1958,8 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                 SfxResId(STR_ERROR_NOMATCHINGDEFUALTCERT)));
             xBox->run();
             return;
+#else
+            (void)aModelData;
 #endif
         };
         SignWithDefaultSignature();
