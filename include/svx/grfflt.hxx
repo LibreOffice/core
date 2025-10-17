@@ -22,6 +22,9 @@
 
 #include <svx/svxdllapi.h>
 
+#include <functional>
+
+class Graphic;
 class GraphicObject;
 class SfxRequest;
 class SfxItemSet;

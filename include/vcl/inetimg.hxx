@@ -24,6 +24,7 @@
 #include <sot/formats.hxx>
 #include <utility>
 
+class SvStream;
 
 class INetImage
 {

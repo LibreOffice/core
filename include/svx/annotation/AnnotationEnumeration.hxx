@@ -22,9 +22,19 @@
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
 
+#include <vector>
+
 namespace com::sun::star::office
 {
 class XAnnotationEnumeration;
+}
+namespace rtl
+{
+template <class reference_type> class Reference;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 namespace sdr::annotation

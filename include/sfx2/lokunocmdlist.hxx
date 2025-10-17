@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/dllapi.h>
+#include <string_view>
 #include <map>
 
 enum class PayloadType

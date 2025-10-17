@@ -11,7 +11,9 @@
 
 #include <sal/config.h>
 
-#include <libxml/tree.h>
+#include <rtl/ustring.hxx>
+
+#include <libxml/parser.h>
 #include <libxml/xmlwriter.h>
 
 #include <new>

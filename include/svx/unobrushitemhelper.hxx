@@ -22,6 +22,8 @@
 #include <svx/svxdllapi.h>
 #include <editeng/brushitem.hxx>
 
+class SfxItemSet;
+
 // Helper function definitions for UNO API fallbacks to replace SvxBrushItem. The
 // idea is to have fallbacks to create a SvxBrushItem if needed for backwards compatibility
 // if needed from the SfxItemSet and vice versa. This is used in cases where e.g. UNO API

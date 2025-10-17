@@ -13,7 +13,9 @@
 #include <map>
 #include <memory>
 
-#include <vcl/vclevent.hxx>
+// hack needed for treelistbox.hxx inclusion here
+#define VCL_INTERNALS
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
@@ -25,7 +27,6 @@ class CheckBox;
 class ComboBox;
 class Dialog;
 class Edit;
-class IconView;
 class ListBox;
 class RadioButton;
 class TabControl;
@@ -39,7 +40,7 @@ class VclExpander;
 class VclDrawingArea;
 class VclMultiLineEdit;
 class MenuButton;
-namespace vcl { class Window; }
+enum class VclEventId;
 namespace weld { class CustomWidgetController; }
 
 typedef std::map<OUString, OUString> StringMap;

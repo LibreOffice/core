@@ -24,6 +24,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 
+class SfxItemSet;
 
 class SvxGrafToolBoxControl : public SfxToolBoxControl
 {

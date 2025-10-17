@@ -23,6 +23,7 @@
 
 #include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <map>
 #include <vector>
 

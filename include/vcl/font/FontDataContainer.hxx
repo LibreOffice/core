@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <sal/types.h>
 #include <vector>
 
 namespace font

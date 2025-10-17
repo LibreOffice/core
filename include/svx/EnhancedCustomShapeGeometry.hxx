@@ -25,6 +25,8 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <span>
+
 struct SvxMSDffVertPair
 {
     sal_Int32   nValA;
