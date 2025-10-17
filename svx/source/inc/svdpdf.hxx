@@ -25,7 +25,6 @@
 #include <memory>
 #include <map>
 
-#include <config_features.h>
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
@@ -173,8 +172,6 @@ class ImpSdrPdfImport final
 
     void DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
 
-#if HAVE_FEATURE_PDFIMPORT
-
     static ImportedFontMap CollectFonts(sal_Int64 nPrefix, vcl::pdf::PDFiumDocument& rPdfDocument);
 
     sal_Int64 getPrefix() const { return reinterpret_cast<sal_Int64>(this); }
@@ -185,8 +182,6 @@ class ImpSdrPdfImport final
                                          std::u16string_view fontFileName,
                                          const std::vector<uint8_t>& toUnicodeData,
                                          const vcl::pdf::PDFiumFont& font);
-
-#endif
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrPdfImport(const ImpSdrPdfImport&) = delete;

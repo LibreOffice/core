@@ -12843,6 +12843,7 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
     # which doesn't currently have --with-system support
     if test "$ENABLE_PDFIMPORT" = "TRUE"; then
         BUILD_TYPE="$BUILD_TYPE AFDKO"
+        AC_DEFINE(HAVE_FEATURE_AFDKO)
     fi
 fi
 AC_SUBST(SYSTEM_OPENJPEG2)

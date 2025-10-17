@@ -19,7 +19,6 @@
 
 #include <svdpdf.hxx>
 
-#include <config_features.h>
 #include <tools/UnitConversion.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
@@ -121,7 +120,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 
     mnPageCount = mpPdfDocument->getPageCount();
 
-#if HAVE_FEATURE_PDFIMPORT
     const std::shared_ptr<GfxLink> xGrfLink = rGraphic.GetSharedGfxLink();
     if (xGrfLink)
         mxImportedFonts = xGrfLink->getImportedFonts();
@@ -132,7 +130,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
         if (xGrfLink)
             xGrfLink->setImportedFonts(mxImportedFonts);
     }
-#endif
 
     // Same as SdModule
     mpVD = VclPtr<VirtualDevice>::Create();
@@ -148,8 +145,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 }
 
 ImpSdrPdfImport::~ImpSdrPdfImport() = default;
-
-#if HAVE_FEATURE_PDFIMPORT
 
 namespace
 {
@@ -380,8 +375,6 @@ ImportedFontMap ImpSdrPdfImport::CollectFonts(sal_Int64 nPrefix,
 
     return aImportedFonts;
 }
-
-#endif
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                 int nPageIndex)
@@ -825,8 +818,6 @@ void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     // Restore the old one.
     maCurrentMatrix = aOldMatrix;
 }
-
-#if HAVE_FEATURE_PDFIMPORT
 
 static bool extractEntry(std::string_view line, std::string_view key, OString& ret)
 {
@@ -1705,8 +1696,6 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSu
     SAL_WARN("sd.filter", "conversion failed");
     return EmbeddedFontInfo();
 }
-
-#endif
 
 // There isn't, as far as I know, a way to stroke with a pattern at the moment,
 // so extract some sensible color if this is a stroke pattern
