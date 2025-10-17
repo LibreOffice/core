@@ -401,6 +401,12 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         const bool bAlignFormulas = rWrtSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
         pPref->SetAlignMathObjectsToBaseline( bAlignFormulas );
 
+        // tdf#99205: The itemset doesn't contain SID_AUTOSPELL_CHECK,
+        // and m_pUsrPref was created before a view existed; bOnlineSpell might be default value
+        // so pull the globally-shared value from the view
+        const bool bOnlineSpell = rWrtSh.GetViewOptions()->IsOnlineSpell();
+        aViewOpt.SetOnlineSpell(bOnlineSpell);
+
         // don't align formulas in documents that are currently loading
         if (bAlignFormulas && !rWrtSh.GetDoc()->IsInReading())
             rWrtSh.AlignAllFormulasToBaseline();
