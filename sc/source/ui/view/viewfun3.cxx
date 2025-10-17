@@ -66,6 +66,8 @@
 #include <SheetViewManager.hxx>
 #include <uiitems.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <sfx2/lokhelper.hxx>
+
 
 using namespace com::sun::star;
 
@@ -2065,7 +2067,13 @@ void ScViewFunc::SheetViewChanged()
 {
     ScDocShell& rDocSh = GetViewData().GetDocShell();
     ScDocument& rDocument = GetViewData().GetDocument();
-    rDocSh.PostPaint(0,0,0, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB, PaintPartFlags::All);
+    rDocSh.PostPaint(0, 0, 0, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB, PaintPartFlags::All);
+
+    if (ScTabViewShell* pViewShell = GetViewData().GetViewShell())
+    {
+        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewShell->GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(pViewShell, pModel);
+    }
 }
 
 void ScViewFunc::MakeNewSheetView()

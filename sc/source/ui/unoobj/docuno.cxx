@@ -523,6 +523,10 @@ static OString getTabViewRenderState(const ScTabViewShell& rTabViewShell)
     OString aThemeName = OUStringToOString(rViewRenderingOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
     aState.append(aThemeName);
 
+    sc::SheetViewID nSheetViewID = rTabViewShell.GetViewData().GetSheetViewID();
+    if (nSheetViewID >= 0)
+        aState.append(";VS:" + OString::number(nSheetViewID));
+
     return aState.makeStringAndClear();
 }
 
@@ -546,7 +550,7 @@ static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
             continue;
 
         ScViewData& rData = pTabViewShell->GetViewData();
-        if (rData.CurrentTabForData() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY &&
+        if (rData.GetTabNumber() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY &&
             getTabViewRenderState(*pTabViewShell) == rViewRenderState)
         {
             return &rData;
@@ -575,7 +579,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
     // and hence avoid grid-offset recomputation on all shapes which is not cheap.
     ScViewData* pViewData = lcl_getViewMatchingDocZoomTab(aFracX, aFracY,
-            pActiveViewData->CurrentTabForData(), pViewShell->GetDocId(),
+            pActiveViewData->GetTabNumber(), pViewShell->GetDocId(),
             getTabViewRenderState(*pViewShell));
     if (!pViewData)
         pViewData = pActiveViewData;

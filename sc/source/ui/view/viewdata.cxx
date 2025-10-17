@@ -2437,12 +2437,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
     if (nForTab == -1)
-        nForTab = GetTabNumber();
-    bool bForCurTab = (nForTab == GetTabNumber());
+        nForTab = CurrentTabForData();
+    bool bForCurTab = (nForTab == CurrentTabForData());
     if (!bForCurTab && (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size()))))
     {
         SAL_WARN("sc.viewdata", "ScViewData::GetScrPos :  invalid nForTab = " << nForTab);
-        nForTab = GetTabNumber();
+        nForTab = CurrentTabForData();
         bForCurTab = true;
     }
 
@@ -4444,6 +4444,14 @@ SCTAB ScViewData::CurrentTabForData() const
         SAL_WARN("sc.ui","ScViewData::CurrentTabForData - invalid tab: " << nTab);
     }
     return GetTabNumber();
+}
+
+void ScViewData::SetSheetViewID(sc::SheetViewID nID)
+{
+    pThisTab->mnSheetViewID = nID;
+
+    CalcPPT();
+    RecalcPixPos();
 }
 
 sc::SheetViewID ScViewData::GetSheetViewIDForSheet(SCTAB nTab) const
