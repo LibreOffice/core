@@ -1941,13 +1941,6 @@ void ImpSdrPdfImport::MapScaling()
     mnMapScalingOfs = nCount;
 }
 
-static BitmapEx createBitmap(const Size& rSize, bool bGrayScale)
-{
-    if (bGrayScale)
-        return BitmapEx(Bitmap(rSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256)));
-    return BitmapEx(rSize, vcl::PixelFormat::N24_BPP);
-}
-
 void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                   int /*nPageObjectIndex*/)
 {
@@ -1965,33 +1958,6 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
         return;
     }
 
-    const unsigned char* pBuf = bitmap->getBuffer();
-    const int nWidth = bitmap->getWidth();
-    const int nHeight = bitmap->getHeight();
-    const int nStride = bitmap->getStride();
-    BitmapEx aBitmap(createBitmap(Size(nWidth, nHeight), format == vcl::pdf::PDFBitmapType::Gray));
-
-    switch (format)
-    {
-        case vcl::pdf::PDFBitmapType::Gray:
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N8BitPal, nHeight, nStride);
-            break;
-        case vcl::pdf::PDFBitmapType::BGR:
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight, nStride);
-            break;
-        case vcl::pdf::PDFBitmapType::BGRx:
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
-            break;
-        case vcl::pdf::PDFBitmapType::BGRA:
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
-            break;
-        default:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
-                                                      << ", stride: " << nStride
-                                                      << ", format: " << static_cast<int>(format));
-            break;
-    }
-
     basegfx::B2DRectangle aBounds = pPageObject->getBounds();
     float left = aBounds.getMinX();
     // Upside down.
@@ -2003,6 +1969,7 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     aRect.AdjustRight(1);
     aRect.AdjustBottom(1);
 
+    BitmapEx aBitmap = bitmap->createBitmapFromBuffer();
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(*mpModel, Graphic(aBitmap), aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
