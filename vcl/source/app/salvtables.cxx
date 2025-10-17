@@ -2225,8 +2225,6 @@ SalInstanceAssistant::~SalInstanceAssistant()
 
 IMPL_LINK_NOARG(SalInstanceAssistant, OnRoadmapItemSelected, LinkParamNone*, void)
 {
-    if (notify_events_disabled())
-        return;
     auto nCurItemId = m_xWizard->GetCurrentRoadmapItemID();
     int nPageIndex(find_id(nCurItemId));
     if (!signal_jump_page(get_page_ident(nPageIndex)) && nCurItemId != m_xWizard->GetCurLevel())
@@ -3069,12 +3067,7 @@ IMPL_LINK_NOARG(SalInstanceMenuButton, MenuSelectHdl, ::MenuButton*, void)
     signal_selected(m_xMenuButton->GetCurItemIdent());
 }
 
-IMPL_LINK_NOARG(SalInstanceMenuButton, ActivateHdl, ::MenuButton*, void)
-{
-    if (notify_events_disabled())
-        return;
-    signal_toggled();
-}
+IMPL_LINK_NOARG(SalInstanceMenuButton, ActivateHdl, ::MenuButton*, void) { signal_toggled(); }
 
 IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
 {
@@ -3132,17 +3125,10 @@ SalInstanceRadioButton::~SalInstanceRadioButton()
     m_xRadioButton->SetToggleHdl(Link<::RadioButton&, void>());
 }
 
-IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
-{
-    if (notify_events_disabled())
-        return;
-    signal_toggled();
-}
+IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void) { signal_toggled(); }
 
 IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void)
 {
-    if (notify_events_disabled())
-        return;
     if (rEvent.GetId() == VclEventId::PushbuttonToggle)
         signal_toggled();
 }
@@ -3177,8 +3163,6 @@ SalInstanceCheckButton::~SalInstanceCheckButton()
 
 IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
 {
-    if (notify_events_disabled())
-        return;
     m_xCheckButton->EnableTriState(false);
     signal_toggled();
 }
@@ -3268,19 +3252,9 @@ public:
 };
 }
 
-IMPL_LINK_NOARG(SalInstanceCalendar, SelectHdl, ::Calendar*, void)
-{
-    if (notify_events_disabled())
-        return;
-    signal_selected();
-}
+IMPL_LINK_NOARG(SalInstanceCalendar, SelectHdl, ::Calendar*, void) { signal_selected(); }
 
-IMPL_LINK_NOARG(SalInstanceCalendar, ActivateHdl, ::Calendar*, void)
-{
-    if (notify_events_disabled())
-        return;
-    signal_activated();
-}
+IMPL_LINK_NOARG(SalInstanceCalendar, ActivateHdl, ::Calendar*, void) { signal_activated(); }
 
 SalInstanceImage::SalInstanceImage(FixedImage* pImage, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership)
@@ -3512,8 +3486,6 @@ IMPL_LINK_NOARG(SalInstanceEntry, ChangeHdl, Edit&, void) { signal_changed(); }
 
 IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 {
-    if (notify_events_disabled())
-        return;
     if (rEvent.GetId() == VclEventId::EditSelectionChanged
         || rEvent.GetId() == VclEventId::EditCaretChanged)
         signal_cursor_position();
@@ -5120,7 +5092,7 @@ SalInstanceTreeView::~SalInstanceTreeView()
 
 IMPL_LINK(SalInstanceTreeView, TooltipHdl, SvTreeListEntry*, pEntry, OUString)
 {
-    if (pEntry && !notify_events_disabled())
+    if (pEntry)
         return signal_query_tooltip(SalInstanceTreeIter(pEntry));
 
     return {};
@@ -5194,15 +5166,11 @@ IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int
 
 IMPL_LINK_NOARG(SalInstanceTreeView, VisibleRangeChangedHdl, SvTreeListBox*, void)
 {
-    if (notify_events_disabled())
-        return;
     signal_visible_range_changed();
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, ModelChangedHdl, SvTreeListBox*, void)
 {
-    if (notify_events_disabled())
-        return;
     signal_model_changed();
 }
 
@@ -5250,15 +5218,11 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
 
 IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, SvTreeListBox*, void)
 {
-    if (notify_events_disabled())
-        return;
     signal_selection_changed();
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
 {
-    if (notify_events_disabled())
-        return;
     if (m_xTreeView->GetSelectionMode() == SelectionMode::Single
         && !m_xTreeView->GetHoverSelection())
         return;
@@ -5267,8 +5231,6 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
 
 IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
 {
-    if (notify_events_disabled())
-        return false;
     return !signal_row_activated();
 }
 
@@ -5448,7 +5410,7 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
 
 IMPL_LINK(SalInstanceIconView, TooltipHdl, SvTreeListEntry*, pEntry, OUString)
 {
-    if (pEntry && !notify_events_disabled())
+    if (pEntry)
         return signal_query_tooltip(SalInstanceTreeIter(pEntry));
 
     return {};
@@ -5726,15 +5688,11 @@ SalInstanceIconView::~SalInstanceIconView()
 
 IMPL_LINK_NOARG(SalInstanceIconView, SelectHdl, SvTreeListBox*, void)
 {
-    if (notify_events_disabled())
-        return;
     signal_selection_changed();
 }
 
 IMPL_LINK_NOARG(SalInstanceIconView, DeSelectHdl, SvTreeListBox*, void)
 {
-    if (notify_events_disabled())
-        return;
     if (m_xIconView->GetSelectionMode() == SelectionMode::Single)
         return;
     signal_selection_changed();
@@ -5742,8 +5700,6 @@ IMPL_LINK_NOARG(SalInstanceIconView, DeSelectHdl, SvTreeListBox*, void)
 
 IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
 {
-    if (notify_events_disabled())
-        return false;
     return !signal_item_activated();
 }
 
@@ -6138,8 +6094,6 @@ IMPL_LINK_NOARG(SalInstanceTextView, ChangeHdl, Edit&, void) { signal_changed();
 
 IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
 {
-    if (notify_events_disabled())
-        return;
     if (rEvent.GetId() == VclEventId::EditSelectionChanged
         || rEvent.GetId() == VclEventId::EditCaretChanged)
         signal_cursor_position();

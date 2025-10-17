@@ -691,7 +691,12 @@ class VCL_DLLPUBLIC Assistant : virtual public Dialog
     Link<const OUString&, bool> m_aJumpPageHdl;
 
 protected:
-    bool signal_jump_page(const OUString& rIdent) { return m_aJumpPageHdl.Call(rIdent); }
+    bool signal_jump_page(const OUString& rIdent)
+    {
+        if (notify_events_disabled())
+            return true;
+        return m_aJumpPageHdl.Call(rIdent);
+    }
 
 public:
     virtual int get_current_page() const = 0;
@@ -999,8 +1004,20 @@ protected:
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
 protected:
-    void signal_selection_changed() { m_aSelectionChangedHdl.Call(*this); }
-    bool signal_row_activated() { return m_aRowActivatedHdl.Call(*this); }
+    void signal_selection_changed()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aSelectionChangedHdl.Call(*this);
+    }
+
+    bool signal_row_activated()
+    {
+        if (notify_events_disabled())
+            return true;
+        return m_aRowActivatedHdl.Call(*this);
+    }
+
     void signal_column_clicked(int nColumn) { m_aColumnClickedHdl.Call(nColumn); }
     bool signal_expanding(const TreeIter& rIter)
     {
@@ -1010,8 +1027,19 @@ protected:
     {
         return !m_aCollapsingHdl.IsSet() || m_aCollapsingHdl.Call(rIter);
     }
-    void signal_visible_range_changed() { m_aVisibleRangeChangedHdl.Call(*this); }
-    void signal_model_changed() { m_aModelChangedHdl.Call(*this); }
+    void signal_visible_range_changed()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aVisibleRangeChangedHdl.Call(*this);
+    }
+
+    void signal_model_changed()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aModelChangedHdl.Call(*this);
+    }
 
     void signal_toggled(const iter_col& rIterCol) { m_aRadioToggleHdl.Call(rIterCol); }
 
@@ -1025,7 +1053,13 @@ protected:
     void signal_popup_menu(const CommandEvent& rCommand) { m_aPopupMenuHdl.Call(rCommand); }
 
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
-    OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
+
+    OUString signal_query_tooltip(const TreeIter& rIter)
+    {
+        if (notify_events_disabled())
+            return {};
+        return m_aQueryTooltipHdl.Call(rIter);
+    }
 
     Link<render_args, void> m_aRenderHdl;
     void signal_custom_render(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
@@ -1454,10 +1488,24 @@ protected:
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
     Link<const encoded_image_query&, bool> m_aGetPropertyTreeElemHdl;
 
-    void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
-    bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
+    void signal_selection_changed()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aSelectionChangeHdl.Call(*this);
+    }
+
+    bool signal_item_activated()
+    {
+        if (notify_events_disabled())
+            return true;
+        return m_aItemActivatedHdl.Call(*this);
+    }
+
     OUString signal_query_tooltip(const TreeIter& rIter) const
     {
+        if (notify_events_disabled())
+            return {};
         return m_aQueryTooltipHdl.Call(rIter);
     }
 
@@ -1600,7 +1648,12 @@ protected:
     Link<Toggleable&, void> m_aToggleHdl;
     TriState m_eSavedValue = TRISTATE_FALSE;
 
-    void signal_toggled() { m_aToggleHdl.Call(*this); }
+    void signal_toggled()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aToggleHdl.Call(*this);
+    }
 
 public:
     virtual void set_active(bool active) = 0;
@@ -1788,7 +1841,13 @@ protected:
     friend class ::LOKTrigger;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
-    void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
+
+    void signal_cursor_position()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aCursorPositionHdl.Call(*this);
+    }
 
 public:
     virtual void set_text(const OUString& rText) = 0;
@@ -2042,8 +2101,19 @@ class VCL_DLLPUBLIC Calendar : virtual public Widget
     Link<Calendar&, void> m_aActivatedHdl;
 
 protected:
-    void signal_selected() { m_aSelectedHdl.Call(*this); }
-    void signal_activated() { m_aActivatedHdl.Call(*this); }
+    void signal_selected()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aSelectedHdl.Call(*this);
+    }
+
+    void signal_activated()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aActivatedHdl.Call(*this);
+    }
 
 public:
     void connect_selected(const Link<Calendar&, void>& rLink) { m_aSelectedHdl = rLink; }
@@ -2418,7 +2488,14 @@ protected:
     Link<TextView&, void> m_aCursorPositionHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
-    void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
+
+    void signal_cursor_position()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aCursorPositionHdl.Call(*this);
+    }
+
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
 public:
