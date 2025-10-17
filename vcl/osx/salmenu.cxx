@@ -817,10 +817,10 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
 
 AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( sal_uInt16 i_nItemId )
 {
-    for( size_t i = 0; i < maButtons.size(); ++i )
+    for (auto& rButton : maButtons)
     {
-        if( maButtons[i].maButton.mnId == i_nItemId )
-            return &maButtons[i];
+        if (rButton.maButton.mnId == i_nItemId)
+            return &rButton;
     }
     return nullptr;
 }
