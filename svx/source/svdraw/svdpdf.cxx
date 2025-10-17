@@ -129,7 +129,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
     mpVD->SetFillColor();
-    maOldLineColor.SetRed(mpVD->GetLineColor().GetRed() + 1);
 
     // Get TextBounds relative to baseline
     vcl::Font aFnt = mpVD->GetFont();
@@ -519,8 +518,6 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
         {
             mpLineAttr->Put(XLineWidthItem(0));
         }
-
-        maOldLineColor = mpVD->GetLineColor();
 
         if (mpVD->IsLineColor())
         {

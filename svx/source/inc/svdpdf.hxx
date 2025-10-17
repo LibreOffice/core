@@ -106,7 +106,6 @@ class ImpSdrPdfImport final
     std::unique_ptr<SfxItemSet> mpTextAttr;
     SdrModel* mpModel;
     SdrLayerID mnLayer;
-    Color maOldLineColor;
     sal_Int32 mnLineWidth;
     static constexpr css::drawing::LineCap gaLineCap = css::drawing::LineCap_BUTT;
     XDash maDash;
