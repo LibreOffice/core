@@ -1935,7 +1935,7 @@ public:
 
     virtual int count_selected_items() const override;
 
-    virtual void select(int pos) override;
+    virtual void do_select(int pos) override;
 
     virtual void do_unselect(int pos) override;
 

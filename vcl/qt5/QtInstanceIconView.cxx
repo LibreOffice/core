@@ -152,7 +152,7 @@ OUString QtInstanceIconView::get_id(int nPos) const
     return sId;
 }
 
-void QtInstanceIconView::select(int nPos)
+void QtInstanceIconView::do_select(int nPos)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread(

@@ -45,7 +45,7 @@ public:
     virtual OUString get_selected_text() const override;
 
     virtual OUString get_id(int nPos) const override;
-    virtual void select(int nPos) override;
+    virtual void do_select(int nPos) override;
     virtual void do_unselect(int nPos) override;
     virtual void set_image(int nPos, VirtualDevice& rDevice) override;
     virtual void set_text(int nPos, const OUString& rText) override;

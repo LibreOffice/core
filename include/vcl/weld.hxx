@@ -1509,6 +1509,7 @@ protected:
         return m_aQueryTooltipHdl.Call(rIter);
     }
 
+    virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
     virtual void do_clear() = 0;
     virtual void do_remove(int pos) = 0;
@@ -1582,7 +1583,13 @@ public:
 
     //by index. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual OUString get_id(int pos) const = 0;
-    virtual void select(int pos) = 0;
+
+    void select(int pos)
+    {
+        disable_notify_events();
+        do_select(pos);
+        enable_notify_events();
+    }
 
     void unselect(int pos)
     {

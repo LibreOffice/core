@@ -5452,12 +5452,11 @@ OUString SalInstanceIconView::get_selected_text() const
 
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
 
-void SalInstanceIconView::select(int pos)
+void SalInstanceIconView::do_select(int pos)
 {
     assert(m_xIconView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     if (pos == -1 || (pos == 0 && n_children() == 0))
         m_xIconView->SelectAll(false);
     else
@@ -5466,7 +5465,6 @@ void SalInstanceIconView::select(int pos)
         m_xIconView->Select(pEntry, true);
         m_xIconView->MakeVisible(pEntry);
     }
-    enable_notify_events();
 }
 
 void SalInstanceIconView::do_unselect(int pos)

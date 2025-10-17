@@ -1910,9 +1910,9 @@ void JSIconView::do_clear()
     sendUpdate();
 }
 
-void JSIconView::select(int pos)
+void JSIconView::do_select(int pos)
 {
-    SalInstanceIconView::select(pos);
+    SalInstanceIconView::do_select(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     (*pMap)[ACTION_TYPE ""_ostr] = "select";

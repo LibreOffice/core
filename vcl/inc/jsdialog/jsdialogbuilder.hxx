@@ -749,7 +749,7 @@ public:
     virtual void insert_separator(int pos, const OUString* pId) override;
 
     virtual void do_clear() override;
-    virtual void select(int pos) override;
+    virtual void do_select(int pos) override;
     virtual void do_unselect(int pos) override;
 
     // OnDemandRenderingHandler
