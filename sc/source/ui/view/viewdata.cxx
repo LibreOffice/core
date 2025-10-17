@@ -2512,12 +2512,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
     if (nForTab == -1)
-        nForTab = GetTabNumber();
-    bool bForCurTab = (nForTab == GetTabNumber());
+        nForTab = CurrentTabForData();
+    bool bForCurTab = (nForTab == CurrentTabForData());
     if (!bForCurTab && (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size()))))
     {
         SAL_WARN("sc.viewdata", "ScViewData::GetScrPos :  invalid nForTab = " << nForTab);
-        nForTab = GetTabNumber();
+        nForTab = CurrentTabForData();
         bForCurTab = true;
     }
 
@@ -2614,7 +2614,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nScrPosY = 0x7FFFFFFF;
                 else
                 {
-                    nTSize = mrDoc.GetRowHeight( nY, mnTabNumber );
+                    nTSize = mrDoc.GetRowHeight( nY, CurrentTabForData() );
                     if (nTSize)
                     {
                         tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -2623,7 +2623,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     else if ( nY < mrDoc.MaxRow() )
                     {
                         // skip multiple hidden rows (forward only for now)
-                        SCROW nNext = mrDoc.FirstVisibleRow(nY + 1, mrDoc.MaxRow(), mnTabNumber);
+                        SCROW nNext = mrDoc.FirstVisibleRow(nY + 1, mrDoc.MaxRow(), CurrentTabForData());
                         if ( nNext > mrDoc.MaxRow() )
                             nY = mrDoc.MaxRow();
                         else
@@ -4500,6 +4500,14 @@ SCTAB ScViewData::CurrentTabForData() const
         SAL_WARN("sc.ui","ScViewData::CurrentTabForData - invalid tab: " << nTab);
     }
     return GetTabNumber();
+}
+
+void ScViewData::SetSheetViewID(sc::SheetViewID nID)
+{
+    pThisTab->mnSheetViewID = nID;
+
+    CalcPPT();
+    RecalcPixPos();
 }
 
 sc::SheetViewID ScViewData::GetSheetViewIDForSheet(SCTAB nTab) const

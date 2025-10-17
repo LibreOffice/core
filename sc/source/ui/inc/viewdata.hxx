@@ -414,10 +414,7 @@ public:
      */
     SC_DLLPUBLIC SCTAB CurrentTabForData() const;
 
-    void SetSheetViewID(sc::SheetViewID nID)
-    {
-        pThisTab->mnSheetViewID = nID;
-    }
+    void SetSheetViewID(sc::SheetViewID nID);
 
     sc::SheetViewID GetSheetViewID() const
     {
