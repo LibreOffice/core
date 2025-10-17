@@ -161,9 +161,17 @@ static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
 
             std::vector<DdeTopic*>& rTopics = elem->GetTopics();
 
-            for (auto const& topic : rTopics)
-                if( topic->GetName() == sTopic )
-                    return topic;
+            auto cfName = [&sTopic](const DdeTopic* p) { return p->GetName() == sTopic; };
+            auto it = std::find_if(rTopics.begin(), rTopics.end(), cfName);
+            if (it == rTopics.end())
+            {
+                // Topic not found?
+                // then we try once to create it
+                if (elem->MakeTopic(sTopic))
+                    it = std::find_if(rTopics.begin(), rTopics.end(), cfName);
+            }
+            if (it != rTopics.end())
+                return *it;
             break;
         }
     }

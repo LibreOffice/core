@@ -108,9 +108,7 @@ public:
     DdeInstData& operator=(const DdeInstData&) = delete;
 };
 
-DdeInstData* ImpGetInstData();
-DdeInstData* ImpInitInstData();
-void ImpDeinitInstData();
+DdeInstData& ImpGetInstData();
 
 #endif // INCLUDED_SVL_SOURCE_SVDDE_DDEIMP_HXX
 

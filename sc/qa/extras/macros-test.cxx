@@ -13,6 +13,7 @@
 #include <svx/svdpage.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/svapp.hxx>
 
 #include <conditio.hxx>
 #include <document.hxx>
@@ -37,6 +38,7 @@ class ScMacrosTest : public ScModelTestBase
 {
 public:
     ScMacrosTest();
+    virtual void setUp() override;
 };
 
 // I suppose you could say this test doesn't really belong here, OTOH
@@ -1082,9 +1084,35 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf168750)
     CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
+#if defined(_WIN32) // DDE calls work only on Windows currently
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testDdePoke)
+{
+    // Get a document with a text in A1, and use its Basic macro to send that text into the
+    // same document's B2 using DDEPoke call:
+    createScDoc("DdePoke.fods");
+    ScDocument* pDoc = getScDoc();
+    // A1 has a text:
+    CPPUNIT_ASSERT_EQUAL(u"Hello from Sender"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    // B2 is empty initially:
+    CPPUNIT_ASSERT(pDoc->GetString(ScAddress(1, 1, 0)).isEmpty());
+
+    executeMacro(u"vnd.sun.star.script:Standard.Module1.SendDataWithDDEPoke"
+                 "?language=Basic&location=document"_ustr);
+
+    // B2 has the expected text now:
+    CPPUNIT_ASSERT_EQUAL(u"Hello from Sender"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+}
+#endif
+
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)
 {
+}
+
+void ScMacrosTest::setUp()
+{
+    Application::SetAppName("CppunitTest_sc_macros_test");
+    ScModelTestBase::setUp();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
