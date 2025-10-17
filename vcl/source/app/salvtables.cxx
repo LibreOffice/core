@@ -4082,12 +4082,11 @@ int SalInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
     return m_xTreeView->GetModel()->GetChildList(rVclIter.iter).size();
 }
 
-void SalInstanceTreeView::select(int pos)
+void SalInstanceTreeView::do_select(int pos)
 {
     assert(m_xTreeView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     if (pos == -1 || (pos == 0 && n_children() == 0))
         m_xTreeView->SelectAll(false);
     else
@@ -4097,7 +4096,6 @@ void SalInstanceTreeView::select(int pos)
         m_xTreeView->Select(pEntry, true);
         m_xTreeView->MakeVisible(pEntry);
     }
-    enable_notify_events();
 }
 
 int SalInstanceTreeView::get_cursor_index() const
@@ -4138,12 +4136,11 @@ bool SalInstanceTreeView::is_selected(int pos) const
     return m_xTreeView->IsSelected(pEntry);
 }
 
-void SalInstanceTreeView::unselect(int pos)
+void SalInstanceTreeView::do_unselect(int pos)
 {
     assert(m_xTreeView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     if (pos == -1)
         m_xTreeView->SelectAll(true);
     else
@@ -4151,7 +4148,6 @@ void SalInstanceTreeView::unselect(int pos)
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->Select(pEntry, false);
     }
-    enable_notify_events();
 }
 
 std::vector<int> SalInstanceTreeView::get_selected_rows() const
@@ -4670,15 +4666,13 @@ void SalInstanceTreeView::remove(const weld::TreeIter& rIter)
     enable_notify_events();
 }
 
-void SalInstanceTreeView::select(const weld::TreeIter& rIter)
+void SalInstanceTreeView::do_select(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_xTreeView->Select(rVclIter.iter, true);
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
@@ -4692,13 +4686,11 @@ void SalInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
     enable_notify_events();
 }
 
-void SalInstanceTreeView::unselect(const weld::TreeIter& rIter)
+void SalInstanceTreeView::do_unselect(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode() && "don't unselect when frozen");
-    disable_notify_events();
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_xTreeView->Select(rVclIter.iter, false);
-    enable_notify_events();
 }
 
 int SalInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const

@@ -162,9 +162,9 @@ int QtInstanceTreeView::get_selected_index() const
     return nIndex;
 }
 
-void QtInstanceTreeView::select(int nPos) { select(treeIter(nPos)); }
+void QtInstanceTreeView::do_select(int nPos) { do_select(treeIter(nPos)); }
 
-void QtInstanceTreeView::unselect(int nPos) { unselect(treeIter(nPos)); }
+void QtInstanceTreeView::do_unselect(int nPos) { do_unselect(treeIter(nPos)); }
 
 void QtInstanceTreeView::remove(int nPos) { remove(treeIter(nPos)); }
 
@@ -519,7 +519,7 @@ void QtInstanceTreeView::remove(const weld::TreeIter& rIter)
     });
 }
 
-void QtInstanceTreeView::select(const weld::TreeIter& rIter)
+void QtInstanceTreeView::do_select(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 
@@ -533,7 +533,7 @@ void QtInstanceTreeView::select(const weld::TreeIter& rIter)
     });
 }
 
-void QtInstanceTreeView::unselect(const weld::TreeIter& rIter)
+void QtInstanceTreeView::do_unselect(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 

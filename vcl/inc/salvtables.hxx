@@ -1622,7 +1622,7 @@ public:
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
 
-    virtual void select(int pos) override;
+    virtual void do_select(int pos) override;
 
     virtual int get_cursor_index() const override;
 
@@ -1632,7 +1632,7 @@ public:
 
     virtual bool is_selected(int pos) const override;
 
-    virtual void unselect(int pos) override;
+    virtual void do_unselect(int pos) override;
 
     virtual std::vector<int> get_selected_rows() const override;
 
@@ -1757,11 +1757,11 @@ public:
 
     virtual void remove(const weld::TreeIter& rIter) override;
 
-    virtual void select(const weld::TreeIter& rIter) override;
+    virtual void do_select(const weld::TreeIter& rIter) override;
 
     virtual void scroll_to_row(const weld::TreeIter& rIter) override;
 
-    virtual void unselect(const weld::TreeIter& rIter) override;
+    virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
 

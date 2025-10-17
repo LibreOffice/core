@@ -15231,7 +15231,7 @@ public:
         return gtk_tree_model_iter_n_children(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
     }
 
-    virtual void select(int pos) override
+    virtual void do_select(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
@@ -15283,7 +15283,7 @@ public:
         return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), &iter);
     }
 
-    virtual void unselect(int pos) override
+    virtual void do_unselect(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
@@ -16021,7 +16021,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void select(const weld::TreeIter& rIter) override
+    virtual void do_select(const weld::TreeIter& rIter) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
@@ -16042,7 +16042,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void unselect(const weld::TreeIter& rIter) override
+    virtual void do_unselect(const weld::TreeIter& rIter) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();

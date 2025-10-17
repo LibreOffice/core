@@ -692,9 +692,9 @@ public:
     virtual void set_sensitive(int pos, bool bSensitive, int col = -1) override;
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
 
-    using SalInstanceTreeView::select;
+    using SalInstanceTreeView::do_select;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
-    virtual void select(int pos) override;
+    virtual void do_select(int pos) override;
 
     virtual weld::TreeView* get_drag_source() const override;
 

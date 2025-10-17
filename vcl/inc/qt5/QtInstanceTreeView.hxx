@@ -54,8 +54,8 @@ public:
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
     virtual int get_selected_index() const override;
-    virtual void select(int nPos) override;
-    virtual void unselect(int nPos) override;
+    virtual void do_select(int nPos) override;
+    virtual void do_unselect(int nPos) override;
     virtual void remove(int nPos) override;
     virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
@@ -103,8 +103,8 @@ public:
     virtual bool iter_has_child(const weld::TreeIter& rIter) const override;
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
     virtual void remove(const weld::TreeIter& rIter) override;
-    virtual void select(const weld::TreeIter& rIter) override;
-    virtual void unselect(const weld::TreeIter& rIter) override;
+    virtual void do_select(const weld::TreeIter& rIter) override;
+    virtual void do_unselect(const weld::TreeIter& rIter) override;
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr,
                           int nCol = -1) override;

@@ -1074,6 +1074,10 @@ protected:
         return m_aGetSizeHdl.Call(get_size_args(rDevice, rId));
     }
 
+    virtual void do_select(int pos) = 0;
+    virtual void do_unselect(int pos) = 0;
+    virtual void do_select(const TreeIter& rIter) = 0;
+    virtual void do_unselect(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
 
@@ -1158,8 +1162,20 @@ public:
     //by index
     virtual int get_selected_index() const = 0;
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    virtual void select(int pos) = 0;
-    virtual void unselect(int pos) = 0;
+    void select(int pos)
+    {
+        disable_notify_events();
+        do_select(pos);
+        enable_notify_events();
+    }
+
+    void unselect(int pos)
+    {
+        disable_notify_events();
+        do_unselect(pos);
+        enable_notify_events();
+    }
+
     virtual void remove(int pos) = 0;
     // col index -1 gets the first text column
     virtual OUString get_text(int row, int col = -1) const = 0;
@@ -1258,9 +1274,22 @@ public:
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
     virtual void remove(const TreeIter& rIter) = 0;
+
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    virtual void select(const TreeIter& rIter) = 0;
-    virtual void unselect(const TreeIter& rIter) = 0;
+    void select(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_select(rIter);
+        enable_notify_events();
+    }
+
+    void unselect(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_unselect(rIter);
+        enable_notify_events();
+    }
+
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
     // col index -1 sets the first text column
