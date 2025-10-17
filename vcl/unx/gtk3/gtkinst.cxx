@@ -17045,7 +17045,8 @@ public:
         gtk_icon_view_set_item_width(m_pIconView, width);
     }
 
-    virtual void insert(int pos, const OUString* pText, const OUString* pId, const OUString* pIconName, weld::TreeIter* pRet) override
+    virtual void do_insert(int pos, const OUString* pText, const OUString* pId,
+                           const OUString* pIconName, weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;
@@ -17058,7 +17059,8 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString* pText, const OUString* pId, const Bitmap* pIcon, weld::TreeIter* pRet) override
+    virtual void do_insert(int pos, const OUString* pText, const OUString* pId, const Bitmap* pIcon,
+                           weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;

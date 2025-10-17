@@ -5341,10 +5341,9 @@ void SalInstanceIconView::thaw()
     SalInstanceWidget::thaw();
 }
 
-void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                                 const Image& rImage, weld::TreeIter* pRet)
+void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUString* pId,
+                                    const Image& rImage, weld::TreeIter* pRet)
 {
-    disable_notify_events();
     auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
     void* pUserData;
     if (pId)
@@ -5370,22 +5369,20 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
         pVclRetIter->iter = pEntry;
     }
-
-    enable_notify_events();
 }
 
-void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                                 const OUString* pIconName, weld::TreeIter* pRet)
+void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUString* pId,
+                                    const OUString* pIconName, weld::TreeIter* pRet)
 {
     const Image aImage = pIconName ? createImage(*pIconName) : Image();
-    insert(pos, pStr, pId, aImage, pRet);
+    do_insert(pos, pStr, pId, aImage, pRet);
 }
 
-void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                                 const Bitmap* pIcon, weld::TreeIter* pRet)
+void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUString* pId,
+                                    const Bitmap* pIcon, weld::TreeIter* pRet)
 {
     const Image aImage = pIcon ? Image(*pIcon) : Image();
-    insert(pos, pStr, pId, aImage, pRet);
+    do_insert(pos, pStr, pId, aImage, pRet);
 }
 
 void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)

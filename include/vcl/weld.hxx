@@ -1509,6 +1509,12 @@ protected:
         return m_aQueryTooltipHdl.Call(rIter);
     }
 
+    virtual void do_insert(int pos, const OUString* pStr, const OUString* pId,
+                           const OUString* pIconName, TreeIter* pRet)
+        = 0;
+    virtual void do_insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
+                           TreeIter* pRet)
+        = 0;
     virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
     virtual void do_clear() = 0;
@@ -1520,13 +1526,21 @@ public:
     virtual int get_item_width() const = 0;
     virtual void set_item_width(int width) = 0;
 
-    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
-                        const OUString* pIconName, TreeIter* pRet)
-        = 0;
+    void insert(int pos, const OUString* pStr, const OUString* pId, const OUString* pIconName,
+                TreeIter* pRet)
+    {
+        disable_notify_events();
+        do_insert(pos, pStr, pId, pIconName, pRet);
+        enable_notify_events();
+    }
 
-    virtual void insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
-                        TreeIter* pRet)
-        = 0;
+    void insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
+                TreeIter* pRet)
+    {
+        disable_notify_events();
+        do_insert(pos, pStr, pId, pIcon, pRet);
+        enable_notify_events();
+    }
 
     virtual void insert_separator(int pos, const OUString* pId) = 0;
 

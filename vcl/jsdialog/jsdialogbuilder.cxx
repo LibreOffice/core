@@ -1884,17 +1884,17 @@ JSIconView::JSIconView(JSDialogSender* pSender, ::IconView* pIconView, SalInstan
 {
 }
 
-void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                        const OUString* pIconName, weld::TreeIter* pRet)
+void JSIconView::do_insert(int pos, const OUString* pStr, const OUString* pId,
+                           const OUString* pIconName, weld::TreeIter* pRet)
 {
-    SalInstanceIconView::insert(pos, pStr, pId, pIconName, pRet);
+    SalInstanceIconView::do_insert(pos, pStr, pId, pIconName, pRet);
     sendUpdate();
 }
 
-void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
-                        weld::TreeIter* pRet)
+void JSIconView::do_insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
+                           weld::TreeIter* pRet)
 {
-    SalInstanceIconView::insert(pos, pStr, pId, pIcon, pRet);
+    SalInstanceIconView::do_insert(pos, pStr, pId, pIcon, pRet);
     sendUpdate();
 }
 

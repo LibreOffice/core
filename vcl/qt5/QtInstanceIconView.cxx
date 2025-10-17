@@ -45,8 +45,8 @@ int QtInstanceIconView::get_item_width() const
 
 void QtInstanceIconView::set_item_width(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
-                                const QPixmap* pIcon, weld::TreeIter* pRet)
+void QtInstanceIconView::do_insert(int nPos, const OUString* pStr, const OUString* pId,
+                                   const QPixmap* pIcon, weld::TreeIter* pRet)
 {
     assert(!pRet && "Support for pRet param not implemented yet");
     (void)pRet;
@@ -74,26 +74,26 @@ void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* 
     });
 }
 
-void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
-                                const OUString* pIconName, weld::TreeIter* pRet)
+void QtInstanceIconView::do_insert(int nPos, const OUString* pStr, const OUString* pId,
+                                   const OUString* pIconName, weld::TreeIter* pRet)
 {
     std::optional<QPixmap> oPixmap;
     if (pIconName)
         oPixmap = loadQPixmapIcon(*pIconName);
 
     const QPixmap* pPixmapIcon = oPixmap.has_value() ? &oPixmap.value() : nullptr;
-    insert(nPos, pStr, pId, pPixmapIcon, pRet);
+    do_insert(nPos, pStr, pId, pPixmapIcon, pRet);
 }
 
-void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
-                                const Bitmap* pIcon, weld::TreeIter* pRet)
+void QtInstanceIconView::do_insert(int nPos, const OUString* pStr, const OUString* pId,
+                                   const Bitmap* pIcon, weld::TreeIter* pRet)
 {
     std::optional<QPixmap> oPixmap;
     if (pIcon)
         oPixmap = toQPixmap(*pIcon);
 
     const QPixmap* pPixmapIcon = oPixmap.has_value() ? &oPixmap.value() : nullptr;
-    insert(nPos, pStr, pId, pPixmapIcon, pRet);
+    do_insert(nPos, pStr, pId, pPixmapIcon, pRet);
 }
 
 void QtInstanceIconView::insert_separator(int, const OUString*)

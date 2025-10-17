@@ -28,11 +28,11 @@ public:
     virtual int get_item_width() const override;
     virtual void set_item_width(int width) override;
 
-    virtual void insert(int nPos, const OUString* pStr, const OUString* pId,
-                        const OUString* pIconName, weld::TreeIter* pRet) override;
+    virtual void do_insert(int nPos, const OUString* pStr, const OUString* pId,
+                           const OUString* pIconName, weld::TreeIter* pRet) override;
 
-    virtual void insert(int nPos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
-                        weld::TreeIter* pRet) override;
+    virtual void do_insert(int nPos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
+                           weld::TreeIter* pRet) override;
 
     virtual void insert_separator(int pos, const OUString* pId) override;
 
@@ -76,8 +76,8 @@ protected:
     virtual bool handleToolTipEvent(const QHelpEvent& rHelpEvent) override;
 
 private:
-    void insert(int nPos, const OUString* pStr, const OUString* pId, const QPixmap* pIcon,
-                weld::TreeIter* pRet);
+    void do_insert(int nPos, const OUString* pStr, const OUString* pId, const QPixmap* pIcon,
+                   weld::TreeIter* pRet);
 
     QModelIndex modelIndex(int nPos) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter) const;
