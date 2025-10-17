@@ -74,7 +74,7 @@ public:
     virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;
     virtual void set_font_color(int nPos, const Color& rColor) override;
-    virtual void scroll_to_row(int nRow) override;
+    virtual void do_scroll_to_row(int nRow) override;
     virtual bool is_selected(int nPos) const override;
     virtual int get_cursor_index() const override;
     virtual void set_cursor(int pos) override;
@@ -127,7 +127,7 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& rImage,
                            int nCol = -1) override;
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
-    virtual void scroll_to_row(const weld::TreeIter& rIter) override;
+    virtual void do_scroll_to_row(const weld::TreeIter& rIter) override;
     virtual bool is_selected(const weld::TreeIter& rIter) const override;
 
     virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent,

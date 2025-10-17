@@ -15265,7 +15265,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void scroll_to_row(int pos) override
+    virtual void do_scroll_to_row(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
@@ -16030,7 +16030,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void scroll_to_row(const weld::TreeIter& rIter) override
+    virtual void do_scroll_to_row(const weld::TreeIter& rIter) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();

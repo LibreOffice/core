@@ -1076,8 +1076,10 @@ protected:
 
     virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
+    virtual void do_scroll_to_row(int row) = 0;
     virtual void do_select(const TreeIter& rIter) = 0;
     virtual void do_unselect(const TreeIter& rIter) = 0;
+    virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
 
@@ -1203,9 +1205,16 @@ public:
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) = 0;
+
     // scroll to make 'row' visible, this will also expand all parent rows of 'row' as necessary to
     // make 'row' visible
-    virtual void scroll_to_row(int row) = 0;
+    void scroll_to_row(int row)
+    {
+        disable_notify_events();
+        do_scroll_to_row(row);
+        enable_notify_events();
+    }
+
     virtual bool is_selected(int pos) const = 0;
     virtual int get_cursor_index() const = 0;
     virtual void set_cursor(int pos) = 0;
@@ -1317,9 +1326,16 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
+
     // scroll to make rIter visible, this will also expand all parent rows of rIter as necessary to
     // make rIter visible
-    virtual void scroll_to_row(const TreeIter& rIter) = 0;
+    void scroll_to_row(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_scroll_to_row(rIter);
+        enable_notify_events();
+    }
+
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
     virtual void move_subtree(TreeIter& rNode, const TreeIter* pNewParent, int nIndexInNewParent)

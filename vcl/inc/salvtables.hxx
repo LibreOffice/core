@@ -1628,7 +1628,7 @@ public:
 
     virtual void set_cursor(int pos) override;
 
-    virtual void scroll_to_row(int pos) override;
+    virtual void do_scroll_to_row(int pos) override;
 
     virtual bool is_selected(int pos) const override;
 
@@ -1759,7 +1759,7 @@ public:
 
     virtual void do_select(const weld::TreeIter& rIter) override;
 
-    virtual void scroll_to_row(const weld::TreeIter& rIter) override;
+    virtual void do_scroll_to_row(const weld::TreeIter& rIter) override;
 
     virtual void do_unselect(const weld::TreeIter& rIter) override;
 

@@ -4119,15 +4119,13 @@ void SalInstanceTreeView::set_cursor(int pos)
     enable_notify_events();
 }
 
-void SalInstanceTreeView::scroll_to_row(int pos)
+void SalInstanceTreeView::do_scroll_to_row(int pos)
 {
     assert(m_xTreeView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
     m_xTreeView->MakeVisible(pEntry);
-    enable_notify_events();
 }
 
 bool SalInstanceTreeView::is_selected(int pos) const
@@ -4675,15 +4673,13 @@ void SalInstanceTreeView::do_select(const weld::TreeIter& rIter)
     m_xTreeView->Select(rVclIter.iter, true);
 }
 
-void SalInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
+void SalInstanceTreeView::do_scroll_to_row(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_xTreeView->MakeVisible(rVclIter.iter);
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::do_unselect(const weld::TreeIter& rIter)

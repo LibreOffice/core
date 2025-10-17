@@ -278,7 +278,7 @@ void QtInstanceTreeView::set_font_color(int nPos, const Color& rColor)
     set_font_color(treeIter(nPos), rColor);
 }
 
-void QtInstanceTreeView::scroll_to_row(int nRow) { scroll_to_row(treeIter(nRow)); }
+void QtInstanceTreeView::do_scroll_to_row(int nRow) { scroll_to_row(treeIter(nRow)); }
 
 bool QtInstanceTreeView::is_selected(int nPos) const { return is_selected(treeIter(nPos)); }
 
@@ -711,7 +711,7 @@ void QtInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Color
     });
 }
 
-void QtInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
+void QtInstanceTreeView::do_scroll_to_row(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 
