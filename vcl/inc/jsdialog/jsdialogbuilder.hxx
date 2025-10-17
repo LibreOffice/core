@@ -673,7 +673,7 @@ public:
                bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
-    virtual void replace_selection(const OUString& rText) override;
+    virtual void do_replace_selection(const OUString& rText) override;
 };
 
 class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>

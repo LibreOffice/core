@@ -75,7 +75,7 @@ bool QtInstanceTextView::get_selection_bounds(int& rStartPos, int& rEndPos)
     return bHasSelection;
 }
 
-void QtInstanceTextView::replace_selection(const OUString& rText)
+void QtInstanceTextView::do_replace_selection(const OUString& rText)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pTextEdit->insertPlainText(toQString(rText)); });

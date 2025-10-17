@@ -1422,7 +1422,7 @@ public:
 
     virtual void set_text(const OUString& rText) override;
 
-    virtual void replace_selection(const OUString& rText) override;
+    virtual void do_replace_selection(const OUString& rText) override;
 
     virtual OUString get_text() const override;
 

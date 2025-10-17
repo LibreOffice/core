@@ -5956,11 +5956,9 @@ void SalInstanceTextView::set_text(const OUString& rText)
     enable_notify_events();
 }
 
-void SalInstanceTextView::replace_selection(const OUString& rText)
+void SalInstanceTextView::do_replace_selection(const OUString& rText)
 {
-    disable_notify_events();
     m_xTextView->ReplaceSelected(rText);
-    enable_notify_events();
 }
 
 OUString SalInstanceTextView::get_text() const { return m_xTextView->GetText(); }

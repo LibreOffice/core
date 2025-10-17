@@ -2499,6 +2499,7 @@ protected:
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
     virtual void do_select_region(int nStartPos, int nEndPos) = 0;
+    virtual void do_replace_selection(const OUString& rText) = 0;
 
 public:
     virtual void set_text(const OUString& rText) = 0;
@@ -2514,7 +2515,14 @@ public:
 
     // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
-    virtual void replace_selection(const OUString& rText) = 0;
+
+    void replace_selection(const OUString& rText)
+    {
+        disable_notify_events();
+        do_replace_selection(rText);
+        enable_notify_events();
+    }
+
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
     virtual void set_monospace(bool bMonospace) = 0;

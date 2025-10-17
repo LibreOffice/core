@@ -18058,7 +18058,7 @@ public:
         return sRet;
     }
 
-    virtual void replace_selection(const OUString& rText) override
+    virtual void do_replace_selection(const OUString& rText) override
     {
         disable_notify_events();
         gtk_text_buffer_delete_selection(m_pTextBuffer, false, gtk_text_view_get_editable(m_pTextView));

@@ -26,7 +26,7 @@ public:
     virtual OUString get_text() const override;
     virtual void do_select_region(int nStartPos, int nEndPos) override;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
-    virtual void replace_selection(const OUString& rText) override;
+    virtual void do_replace_selection(const OUString& rText) override;
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;
     virtual void set_monospace(bool bMonospace) override;
