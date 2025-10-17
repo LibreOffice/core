@@ -710,9 +710,9 @@ public:
     virtual void expand_row(const weld::TreeIter& rIter) override;
     virtual void collapse_row(const weld::TreeIter& rIter) override;
 
-    virtual void set_cursor(const weld::TreeIter& rIter) override;
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
     void set_cursor_without_notify(const weld::TreeIter& rIter);
-    virtual void set_cursor(int pos) override;
+    virtual void do_set_cursor(int pos) override;
 
     using SalInstanceTreeView::do_remove;
     virtual void do_remove(int pos) override;

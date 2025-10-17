@@ -297,7 +297,7 @@ int QtInstanceTreeView::get_cursor_index() const
     return nIndex;
 }
 
-void QtInstanceTreeView::set_cursor(int nPos) { set_cursor(treeIter(nPos)); }
+void QtInstanceTreeView::do_set_cursor(int nPos) { do_set_cursor(treeIter(nPos)); }
 
 int QtInstanceTreeView::find_text(const OUString& rText) const
 {
@@ -380,7 +380,7 @@ bool QtInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
     return bRet;
 }
 
-void QtInstanceTreeView::set_cursor(const weld::TreeIter& rIter)
+void QtInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 

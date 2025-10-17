@@ -1626,7 +1626,7 @@ public:
 
     virtual int get_cursor_index() const override;
 
-    virtual void set_cursor(int pos) override;
+    virtual void do_set_cursor(int pos) override;
 
     virtual void do_scroll_to_row(int pos) override;
 
@@ -1737,7 +1737,7 @@ public:
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
 
-    virtual void set_cursor(const weld::TreeIter& rIter) override;
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
 
     virtual bool get_iter_first(weld::TreeIter& rIter) const override;
 

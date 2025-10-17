@@ -15250,7 +15250,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_cursor(int pos) override
+    virtual void do_set_cursor(int pos) override
     {
         disable_notify_events();
         GtkTreePath* path;
@@ -15855,7 +15855,7 @@ public:
         return nRet;
     }
 
-    virtual void set_cursor(const weld::TreeIter& rIter) override
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override
     {
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

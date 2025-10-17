@@ -4101,9 +4101,8 @@ int SalInstanceTreeView::get_cursor_index() const
     return SvTreeList::GetRelPos(pEntry);
 }
 
-void SalInstanceTreeView::set_cursor(int pos)
+void SalInstanceTreeView::do_set_cursor(int pos)
 {
-    disable_notify_events();
     if (pos == -1)
         m_xTreeView->SetCurEntry(nullptr);
     else
@@ -4111,7 +4110,6 @@ void SalInstanceTreeView::set_cursor(int pos)
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->SetCurEntry(pEntry);
     }
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::do_scroll_to_row(int pos)
@@ -4577,12 +4575,10 @@ bool SalInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
     return pEntry != nullptr;
 }
 
-void SalInstanceTreeView::set_cursor(const weld::TreeIter& rIter)
+void SalInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    disable_notify_events();
     m_xTreeView->SetCurEntry(rVclIter.iter);
-    enable_notify_events();
 }
 
 bool SalInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const

@@ -1822,20 +1822,17 @@ void JSTreeView::clear()
     sendUpdate();
 }
 
-void JSTreeView::set_cursor_without_notify(const weld::TreeIter& rIter)
-{
-    SalInstanceTreeView::set_cursor(rIter);
-}
+void JSTreeView::set_cursor_without_notify(const weld::TreeIter& rIter) { set_cursor(rIter); }
 
-void JSTreeView::set_cursor(const weld::TreeIter& rIter)
+void JSTreeView::do_set_cursor(const weld::TreeIter& rIter)
 {
-    SalInstanceTreeView::set_cursor(rIter);
+    SalInstanceTreeView::do_set_cursor(rIter);
     sendUpdate();
 }
 
-void JSTreeView::set_cursor(int pos)
+void JSTreeView::do_set_cursor(int pos)
 {
-    SalInstanceTreeView::set_cursor(pos);
+    SalInstanceTreeView::do_set_cursor(pos);
     sendUpdate();
 }
 

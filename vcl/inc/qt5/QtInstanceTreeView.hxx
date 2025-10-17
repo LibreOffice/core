@@ -77,7 +77,7 @@ public:
     virtual void do_scroll_to_row(int nRow) override;
     virtual bool is_selected(int nPos) const override;
     virtual int get_cursor_index() const override;
-    virtual void set_cursor(int pos) override;
+    virtual void do_set_cursor(int pos) override;
 
     virtual int find_text(const OUString& rText) const override;
     virtual OUString get_id(int nPos) const override;
@@ -88,7 +88,7 @@ public:
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
     virtual bool get_selected(weld::TreeIter* pIter) const override;
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
-    virtual void set_cursor(const weld::TreeIter& rIter) override;
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
     virtual bool get_iter_first(weld::TreeIter& rIter) const override;
     virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;

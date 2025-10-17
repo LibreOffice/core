@@ -1083,6 +1083,8 @@ protected:
     virtual void do_unselect(int pos) = 0;
     virtual void do_remove(int pos) = 0;
     virtual void do_scroll_to_row(int row) = 0;
+    virtual void do_set_cursor(int pos) = 0;
+    virtual void do_set_cursor(const TreeIter& rIter) = 0;
     virtual void do_remove(const TreeIter& rIter) = 0;
     virtual void do_select(const TreeIter& rIter) = 0;
     virtual void do_unselect(const TreeIter& rIter) = 0;
@@ -1240,7 +1242,13 @@ public:
 
     virtual bool is_selected(int pos) const = 0;
     virtual int get_cursor_index() const = 0;
-    virtual void set_cursor(int pos) = 0;
+
+    void set_cursor(int pos)
+    {
+        disable_notify_events();
+        do_set_cursor(pos);
+        enable_notify_events();
+    }
 
     //by text
     virtual int find_text(const OUString& rText) const = 0;
@@ -1269,7 +1277,14 @@ public:
     virtual void copy_iterator(const TreeIter& rSource, TreeIter& rDest) const = 0;
     virtual bool get_selected(TreeIter* pIter) const = 0;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
-    virtual void set_cursor(const TreeIter& rIter) = 0;
+
+    void set_cursor(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_set_cursor(rIter);
+        enable_notify_events();
+    }
+
     virtual bool get_iter_first(TreeIter& rIter) const = 0;
     // set iter to point to next node at the current level
     virtual bool iter_next_sibling(TreeIter& rIter) const = 0;
