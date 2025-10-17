@@ -1543,8 +1543,9 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
             m_pDrawModelWrapper = m_xChartView->getDrawModelWrapper();
         if ( m_pDrawModelWrapper )
         {
-            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl(
-                std::bind(&ChartController::NotifyUndoActionHdl, this, std::placeholders::_1) );
+            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl([this](std::unique_ptr<SdrUndoAction> pUndoAction){
+                NotifyUndoActionHdl(std::move(pUndoAction));
+            });
         }
     }
     return m_pDrawModelWrapper.get();
