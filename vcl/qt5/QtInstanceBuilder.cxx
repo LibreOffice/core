@@ -145,6 +145,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/scalc/ui/selectsource.ui"_ustr,
         u"modules/scalc/ui/showsheetdialog.ui"_ustr,
         u"modules/scalc/ui/sortdialog.ui"_ustr,
+        u"modules/scalc/ui/ttestdialog.ui"_ustr,
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
         u"modules/sdraw/ui/dlgsnap.ui"_ustr,
         u"modules/sdraw/ui/insertlayer.ui"_ustr,
