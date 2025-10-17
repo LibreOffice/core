@@ -1095,7 +1095,7 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
         return;
     }
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aMaskRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aMaskRect);
 
     if (!aBufferDevice.isVisible())
         return;

@@ -3490,7 +3490,7 @@ void CairoPixelProcessor2D::processPatternFillPrimitive2D(
         return;
     }
 
-    impBufferDevice aBufferDevice(*mpTargetOutputDevice, aMaskRange);
+    impBufferDevice aBufferDevice(*mpTargetOutputDevice, aMaskRect);
     if (!aBufferDevice.isVisible())
         return;
     // remember last OutDev and set to content

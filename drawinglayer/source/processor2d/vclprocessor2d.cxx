@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <utility>
+#include <vcl/canvastools.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/kernarray.hxx>
@@ -923,7 +924,8 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     }
 
     const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    tools::Rectangle aMaskRect = vcl::unotools::rectangleFromB2DRectangle(aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aMaskRect);
 
     if (!aBufferDevice.isVisible())
         return;
@@ -977,7 +979,8 @@ void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(
         // transparence is in visible range
         basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
         aRange.transform(maCurrentTransformation);
-        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+        tools::Rectangle aRangeRect = vcl::unotools::rectangleFromB2DRectangle(aRange);
+        impBufferDevice aBufferDevice(*mpOutputDevice, aRangeRect);
 
         if (aBufferDevice.isVisible())
         {
@@ -1006,7 +1009,8 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
 
     basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aRange.transform(maCurrentTransformation);
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    tools::Rectangle aRangeRect = vcl::unotools::rectangleFromB2DRectangle(aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRangeRect);
 
     if (!aBufferDevice.isVisible())
         return;
