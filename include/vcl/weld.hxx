@@ -1076,7 +1076,9 @@ protected:
 
     virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
+    virtual void do_remove(int pos) = 0;
     virtual void do_scroll_to_row(int row) = 0;
+    virtual void do_remove(const TreeIter& rIter) = 0;
     virtual void do_select(const TreeIter& rIter) = 0;
     virtual void do_unselect(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
@@ -1178,7 +1180,13 @@ public:
         enable_notify_events();
     }
 
-    virtual void remove(int pos) = 0;
+    void remove(int pos)
+    {
+        disable_notify_events();
+        do_remove(pos);
+        enable_notify_events();
+    }
+
     // col index -1 gets the first text column
     virtual OUString get_text(int row, int col = -1) const = 0;
     // col index -1 sets the first text column
@@ -1282,7 +1290,13 @@ public:
     virtual bool iter_has_child(const TreeIter& rIter) const = 0;
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
-    virtual void remove(const TreeIter& rIter) = 0;
+
+    void remove(const TreeIter& rIter)
+    {
+        disable_notify_events();
+        do_remove(rIter);
+        enable_notify_events();
+    }
 
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select(const TreeIter& rIter)

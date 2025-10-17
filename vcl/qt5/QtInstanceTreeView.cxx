@@ -166,7 +166,7 @@ void QtInstanceTreeView::do_select(int nPos) { do_select(treeIter(nPos)); }
 
 void QtInstanceTreeView::do_unselect(int nPos) { do_unselect(treeIter(nPos)); }
 
-void QtInstanceTreeView::remove(int nPos) { remove(treeIter(nPos)); }
+void QtInstanceTreeView::do_remove(int nPos) { do_remove(treeIter(nPos)); }
 
 OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 {
@@ -509,7 +509,7 @@ int QtInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
     return m_pModel->rowCount(rQtIter.modelIndex());
 }
 
-void QtInstanceTreeView::remove(const weld::TreeIter& rIter)
+void QtInstanceTreeView::do_remove(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 

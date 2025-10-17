@@ -1605,7 +1605,7 @@ public:
 
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
 
-    virtual void remove(int pos) override;
+    virtual void do_remove(int pos) override;
 
     virtual int find_text(const OUString& rText) const override;
 
@@ -1755,7 +1755,7 @@ public:
 
     virtual bool iter_parent(weld::TreeIter& rIter) const override;
 
-    virtual void remove(const weld::TreeIter& rIter) override;
+    virtual void do_remove(const weld::TreeIter& rIter) override;
 
     virtual void do_select(const weld::TreeIter& rIter) override;
 

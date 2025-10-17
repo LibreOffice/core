@@ -56,7 +56,7 @@ public:
     virtual int get_selected_index() const override;
     virtual void do_select(int nPos) override;
     virtual void do_unselect(int nPos) override;
-    virtual void remove(int nPos) override;
+    virtual void do_remove(int nPos) override;
     virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
     virtual void set_sensitive(int nRow, bool bSensitive, int nCol = -1) override;
@@ -102,7 +102,7 @@ public:
     virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override;
     virtual bool iter_has_child(const weld::TreeIter& rIter) const override;
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
-    virtual void remove(const weld::TreeIter& rIter) override;
+    virtual void do_remove(const weld::TreeIter& rIter) override;
     virtual void do_select(const weld::TreeIter& rIter) override;
     virtual void do_unselect(const weld::TreeIter& rIter) override;
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;

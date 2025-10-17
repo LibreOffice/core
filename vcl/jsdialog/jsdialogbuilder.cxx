@@ -1803,15 +1803,15 @@ void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int
     sendUpdate();
 }
 
-void JSTreeView::remove(int pos)
+void JSTreeView::do_remove(int pos)
 {
-    SalInstanceTreeView::remove(pos);
+    SalInstanceTreeView::do_remove(pos);
     sendUpdate();
 }
 
-void JSTreeView::remove(const weld::TreeIter& rIter)
+void JSTreeView::do_remove(const weld::TreeIter& rIter)
 {
-    SalInstanceTreeView::remove(rIter);
+    SalInstanceTreeView::do_remove(rIter);
     sendUpdate();
 }
 

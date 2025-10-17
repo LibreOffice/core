@@ -15036,7 +15036,7 @@ public:
         set_font_color(rGtkIter.iter, rColor);
     }
 
-    virtual void remove(int pos) override
+    virtual void do_remove(int pos) override
     {
         disable_notify_events();
         GtkTreeIter iter;
@@ -15992,7 +15992,7 @@ public:
         return ret;
     }
 
-    virtual void remove(const weld::TreeIter& rIter) override
+    virtual void do_remove(const weld::TreeIter& rIter) override
     {
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

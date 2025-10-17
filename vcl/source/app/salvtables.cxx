@@ -4018,12 +4018,10 @@ void SalInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Colo
     set_font_color(rVclIter.iter, rColor);
 }
 
-void SalInstanceTreeView::remove(int pos)
+void SalInstanceTreeView::do_remove(int pos)
 {
-    disable_notify_events();
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
     m_xTreeView->RemoveEntry(pEntry);
-    enable_notify_events();
 }
 
 int SalInstanceTreeView::find_text(const OUString& rText) const
@@ -4656,12 +4654,10 @@ bool SalInstanceTreeView::iter_parent(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
-void SalInstanceTreeView::remove(const weld::TreeIter& rIter)
+void SalInstanceTreeView::do_remove(const weld::TreeIter& rIter)
 {
-    disable_notify_events();
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_xTreeView->RemoveEntry(rVclIter.iter);
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::do_select(const weld::TreeIter& rIter)
