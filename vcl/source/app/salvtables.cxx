@@ -5469,12 +5469,11 @@ void SalInstanceIconView::select(int pos)
     enable_notify_events();
 }
 
-void SalInstanceIconView::unselect(int pos)
+void SalInstanceIconView::do_unselect(int pos)
 {
     assert(m_xIconView->IsUpdateMode()
            && "don't select when frozen, select after thaw. Note selection doesn't survive a "
               "freeze");
-    disable_notify_events();
     if (pos == -1)
         m_xIconView->SelectAll(true);
     else
@@ -5482,7 +5481,6 @@ void SalInstanceIconView::unselect(int pos)
         SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
         m_xIconView->Select(pEntry, false);
     }
-    enable_notify_events();
 }
 
 void SalInstanceIconView::select_all() { unselect(-1); }

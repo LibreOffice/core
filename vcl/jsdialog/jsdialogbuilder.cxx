@@ -1920,9 +1920,9 @@ void JSIconView::select(int pos)
     sendAction(std::move(pMap));
 }
 
-void JSIconView::unselect(int pos)
+void JSIconView::do_unselect(int pos)
 {
-    SalInstanceIconView::unselect(pos);
+    SalInstanceIconView::do_unselect(pos);
     sendUpdate();
 }
 

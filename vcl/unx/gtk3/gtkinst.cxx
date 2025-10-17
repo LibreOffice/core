@@ -17206,7 +17206,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void unselect(int pos) override
+    virtual void do_unselect(int pos) override
     {
         assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();

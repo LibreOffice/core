@@ -750,7 +750,7 @@ public:
 
     virtual void do_clear() override;
     virtual void select(int pos) override;
-    virtual void unselect(int pos) override;
+    virtual void do_unselect(int pos) override;
 
     // OnDemandRenderingHandler
     virtual void render_entry(int pos, int dpix, int dpiy) override;

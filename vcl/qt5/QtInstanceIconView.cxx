@@ -159,7 +159,7 @@ void QtInstanceIconView::select(int nPos)
         [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
 }
 
-void QtInstanceIconView::unselect(int nPos)
+void QtInstanceIconView::do_unselect(int nPos)
 {
     SolarMutexGuard g;
 

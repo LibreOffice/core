@@ -1937,7 +1937,7 @@ public:
 
     virtual void select(int pos) override;
 
-    virtual void unselect(int pos) override;
+    virtual void do_unselect(int pos) override;
 
     virtual void select_all() override;
     virtual void unselect_all() override;
