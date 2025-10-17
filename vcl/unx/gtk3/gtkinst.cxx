@@ -16082,7 +16082,8 @@ public:
         return child_is_placeholder(aIter);
     }
 
-    virtual void set_children_on_demand(const weld::TreeIter& rIter, bool bChildrenOnDemand) override
+    virtual void do_set_children_on_demand(const weld::TreeIter& rIter,
+                                           bool bChildrenOnDemand) override
     {
         disable_notify_events();
 

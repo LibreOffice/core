@@ -1771,8 +1771,8 @@ public:
 
     virtual bool get_children_on_demand(const weld::TreeIter& rIter) const override;
 
-    virtual void set_children_on_demand(const weld::TreeIter& rIter,
-                                        bool bChildrenOnDemand) override;
+    virtual void do_set_children_on_demand(const weld::TreeIter& rIter,
+                                           bool bChildrenOnDemand) override;
 
     virtual void expand_row(const weld::TreeIter& rIter) override;
 

@@ -821,7 +821,7 @@ void QtInstanceTreeView::collapse_row(const weld::TreeIter& rIter)
     GetQtInstance().RunInMainThread([&] { m_pTreeView->collapse(modelIndex(rIter)); });
 }
 
-void QtInstanceTreeView::set_children_on_demand(const weld::TreeIter&, bool)
+void QtInstanceTreeView::do_set_children_on_demand(const weld::TreeIter&, bool)
 {
     assert(false && "Not implemented yet");
 }

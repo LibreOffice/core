@@ -1074,6 +1074,7 @@ protected:
         return m_aGetSizeHdl.Call(get_size_args(rDevice, rId));
     }
 
+    virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
 
 public:
@@ -1348,9 +1349,16 @@ public:
     virtual void expand_row(const TreeIter& rIter) = 0;
     // collapse row will first trigger the callback set via connect_collapsing before collapsing
     virtual void collapse_row(const TreeIter& rIter) = 0;
+
     // set the empty node to appear as if it has children, true is equivalent
     // to 'insert' with a bChildrenOnDemand of true. See notes above.
-    virtual void set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
+    void set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand)
+    {
+        disable_notify_events();
+        do_set_children_on_demand(rIter, bChildrenOnDemand);
+        enable_notify_events();
+    }
+
     // return if the node is configured to be populated on-demand
     virtual bool get_children_on_demand(const TreeIter& rIter) const = 0;
     // set if the expanders are shown or not

@@ -4727,11 +4727,9 @@ bool SalInstanceTreeView::get_children_on_demand(const weld::TreeIter& rIter) co
     return GetPlaceHolderChild(rVclIter.iter) != nullptr;
 }
 
-void SalInstanceTreeView::set_children_on_demand(const weld::TreeIter& rIter,
-                                                 bool bChildrenOnDemand)
+void SalInstanceTreeView::do_set_children_on_demand(const weld::TreeIter& rIter,
+                                                    bool bChildrenOnDemand)
 {
-    disable_notify_events();
-
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
 
     SvTreeListEntry* pPlaceHolder = GetPlaceHolderChild(rVclIter.iter);
@@ -4744,8 +4742,6 @@ void SalInstanceTreeView::set_children_on_demand(const weld::TreeIter& rIter,
     }
     else if (!bChildrenOnDemand && pPlaceHolder)
         m_xTreeView->RemoveEntry(pPlaceHolder);
-
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::expand_row(const weld::TreeIter& rIter)
