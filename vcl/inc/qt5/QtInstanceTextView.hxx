@@ -22,7 +22,7 @@ class QtInstanceTextView : public QtInstanceWidget, public virtual weld::TextVie
 public:
     QtInstanceTextView(QPlainTextEdit* pTextEdit);
 
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
     virtual OUString get_text() const override;
     virtual void do_select_region(int nStartPos, int nEndPos) override;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;

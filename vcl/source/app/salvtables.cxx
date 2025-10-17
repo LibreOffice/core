@@ -5949,12 +5949,7 @@ SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanc
     rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
 }
 
-void SalInstanceTextView::set_text(const OUString& rText)
-{
-    disable_notify_events();
-    m_xTextView->SetText(rText);
-    enable_notify_events();
-}
+void SalInstanceTextView::do_set_text(const OUString& rText) { m_xTextView->SetText(rText); }
 
 void SalInstanceTextView::do_replace_selection(const OUString& rText)
 {

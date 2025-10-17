@@ -1663,9 +1663,9 @@ JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
 {
 }
 
-void JSTextView::set_text(const OUString& rText)
+void JSTextView::do_set_text(const OUString& rText)
 {
-    SalInstanceTextView::set_text(rText);
+    SalInstanceTextView::do_set_text(rText);
     sendUpdate();
 }
 

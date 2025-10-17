@@ -18040,7 +18040,7 @@ public:
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
-    virtual void set_text(const OUString& rText) override
+    virtual void do_set_text(const OUString& rText) override
     {
         disable_notify_events();
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));

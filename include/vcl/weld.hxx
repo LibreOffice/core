@@ -2498,11 +2498,18 @@ protected:
 
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
+    virtual void do_set_text(const OUString& rText) = 0;
     virtual void do_select_region(int nStartPos, int nEndPos) = 0;
     virtual void do_replace_selection(const OUString& rText) = 0;
 
 public:
-    virtual void set_text(const OUString& rText) = 0;
+    void set_text(const OUString& rText)
+    {
+        disable_notify_events();
+        do_set_text(rText);
+        enable_notify_events();
+    }
+
     virtual OUString get_text() const = 0;
 
     // if nStartPos or nEndPos is -1 the max available text pos will be used

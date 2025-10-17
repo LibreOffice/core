@@ -1420,7 +1420,7 @@ public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
 
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
 
     virtual void do_replace_selection(const OUString& rText) override;
 

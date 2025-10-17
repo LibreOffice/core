@@ -31,7 +31,7 @@ QtInstanceTextView::QtInstanceTextView(QPlainTextEdit* pTextEdit)
                 &QtInstanceTextView::handleVerticalScrollValueChanged);
 }
 
-void QtInstanceTextView::set_text(const OUString& rText)
+void QtInstanceTextView::do_set_text(const OUString& rText)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pTextEdit->setPlainText(toQString(rText)); });
