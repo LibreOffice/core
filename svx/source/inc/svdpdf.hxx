@@ -173,10 +173,13 @@ class ImpSdrPdfImport final
 
 #if HAVE_FEATURE_PDFIMPORT
 
-    static ImportedFontMap CollectFonts(vcl::pdf::PDFiumDocument& rPdfDocument);
+    static ImportedFontMap CollectFonts(sal_Int64 nPrefix, vcl::pdf::PDFiumDocument& rPdfDocument);
 
-    static EmbeddedFontInfo convertToOTF(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
-                                         const OUString& fontName, const OUString& baseFontName,
+    sal_Int64 getPrefix() const { return reinterpret_cast<sal_Int64>(this); }
+
+    static EmbeddedFontInfo convertToOTF(sal_Int64 prefix, SubSetInfo& rSubSetInfo,
+                                         const OUString& fileUrl, const OUString& fontName,
+                                         const OUString& baseFontName,
                                          std::u16string_view fontFileName,
                                          const std::vector<uint8_t>& toUnicodeData,
                                          const vcl::pdf::PDFiumFont& font);
