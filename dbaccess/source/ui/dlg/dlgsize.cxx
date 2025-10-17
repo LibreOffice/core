@@ -23,8 +23,8 @@
 namespace dbaui
 {
 
-#define DEF_ROW_HEIGHT  45
-#define DEF_COL_WIDTH   227
+constexpr sal_Int32 DEF_ROW_HEIGHT = 45;
+constexpr sal_Int32 DEF_COL_WIDTH  = 227;
 
 DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
     : GenericDialogController(pParent, bRow ? u"dbaccess/ui/rowheightdialog.ui"_ustr : u"dbaccess/ui/colwidthdialog.ui"_ustr,
