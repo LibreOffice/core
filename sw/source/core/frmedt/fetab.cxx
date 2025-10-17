@@ -299,7 +299,9 @@ bool SwFEShell::DeleteCol()
 
     CurrShell aCurr( this );
 
-    bool bRecordChanges = GetDoc()->GetDocShell()->IsChangeRecording();
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    assert(pDocShell);
+    bool bRecordChanges = pDocShell->IsChangeRecording();
     bool bRecordAndHideChanges = bRecordChanges &&
         GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
 
@@ -317,7 +319,7 @@ bool SwFEShell::DeleteCol()
         SwSelBoxes aBoxes;
         GetTableSel( *this, aBoxes, SwTableSearchType::Col );
 
-        TableWait aWait( 20, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
+        TableWait aWait( 20, pFrame, *pDocShell, aBoxes.size() );
 
         SwTableNode* pTableNd = pFrame->IsTextFrame()
             ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->FindTableNode()
@@ -386,7 +388,7 @@ bool SwFEShell::DeleteCol()
     GetTableSel(*this, aBoxes, eSearchType);
     if ( !aBoxes.empty() )
     {
-        TableWait aWait( aBoxes.size(), pFrame, *GetDoc()->GetDocShell() );
+        TableWait aWait( aBoxes.size(), pFrame, *pDocShell );
 
         // remove crsr from the deletion area.
         // Put them behind/on the table; via the
