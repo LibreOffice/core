@@ -64,7 +64,7 @@ OUString GalleryFileStorageEntry::ReadStrFromIni(std::string_view aKeyName) cons
             if (n == std::string_view::npos || n < 1)
                 continue;
 
-            std::string_view aLocale = o3tl::trim(aKey.substr(n + 1, aKey.find(']', n + 2)));
+            std::string_view aLocale = o3tl::trim(aKey.substr(n + 1, aKey.find(']', n + 2) - n - 1));
             aKey = o3tl::trim(aKey.substr(0, n));
 
             SAL_INFO("svx", "ini file has '" << aKey << "' [ '" << aLocale << "' ] = '" << aValue << "'");
