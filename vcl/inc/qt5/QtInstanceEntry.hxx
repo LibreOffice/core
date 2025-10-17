@@ -22,7 +22,7 @@ class QtInstanceEntry : public QtInstanceWidget, public virtual weld::Entry
 public:
     QtInstanceEntry(QLineEdit* pLineEdit);
 
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
     virtual OUString get_text() const override;
     virtual void set_width_chars(int nChars) override;
     virtual int get_width_chars() const override;

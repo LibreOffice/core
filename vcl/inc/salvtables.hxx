@@ -608,7 +608,7 @@ private:
 public:
     SalInstanceEntry(::Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
 
     virtual OUString get_text() const override;
 
@@ -2244,7 +2244,7 @@ public:
     SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership);
 
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
 
     virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
 

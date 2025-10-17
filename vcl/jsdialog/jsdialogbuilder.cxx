@@ -1222,9 +1222,9 @@ JSEntry::JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pB
 {
 }
 
-void JSEntry::set_text(const OUString& rText)
+void JSEntry::do_set_text(const OUString& rText)
 {
-    SalInstanceEntry::set_text(rText);
+    SalInstanceEntry::do_set_text(rText);
     sendUpdate();
 }
 
@@ -1415,9 +1415,9 @@ JSFormattedSpinButton::JSFormattedSpinButton(JSDialogSender* pSender, ::Formatte
 {
 }
 
-void JSFormattedSpinButton::set_text(const OUString& rText)
+void JSFormattedSpinButton::do_set_text(const OUString& rText)
 {
-    SalInstanceFormattedSpinButton::set_text(rText);
+    SalInstanceFormattedSpinButton::do_set_text(rText);
     sendUpdate();
 }
 

@@ -1849,8 +1849,16 @@ protected:
         m_aCursorPositionHdl.Call(*this);
     }
 
+    virtual void do_set_text(const OUString& rText) = 0;
+
 public:
-    virtual void set_text(const OUString& rText) = 0;
+    void set_text(const OUString& rText)
+    {
+        disable_notify_events();
+        do_set_text(rText);
+        enable_notify_events();
+    }
+
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
     virtual int get_width_chars() const = 0;

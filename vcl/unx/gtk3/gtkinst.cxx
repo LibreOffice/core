@@ -13122,7 +13122,7 @@ public:
     {
     }
 
-    virtual void set_text(const OUString& rText) override
+    virtual void do_set_text(const OUString& rText) override
     {
         disable_notify_events();
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -17490,7 +17490,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_text(const OUString& rText) override
+    virtual void do_set_text(const OUString& rText) override
     {
         disable_notify_events();
         // tdf#122786 if we're just formatting a value, then we're done,
@@ -17666,7 +17666,7 @@ public:
     {
     }
 
-    virtual void set_text(const OUString& rText) override
+    virtual void do_set_text(const OUString& rText) override
     {
         GtkInstanceEditable::set_text(rText);
         Formatter& rFormatter = GetFormatter();

@@ -3308,12 +3308,7 @@ SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, b
     m_xEntry->SetTextFilter(&m_aTextFilter);
 }
 
-void SalInstanceEntry::set_text(const OUString& rText)
-{
-    disable_notify_events();
-    m_xEntry->SetText(rText);
-    enable_notify_events();
-}
+void SalInstanceEntry::do_set_text(const OUString& rText) { m_xEntry->SetText(rText); }
 
 OUString SalInstanceEntry::get_text() const { return m_xEntry->GetText(); }
 
@@ -5819,11 +5814,9 @@ SalInstanceFormattedSpinButton::SalInstanceFormattedSpinButton(FormattedField* p
     m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceFormattedSpinButton, LoseFocusHdl));
 }
 
-void SalInstanceFormattedSpinButton::set_text(const OUString& rText)
+void SalInstanceFormattedSpinButton::do_set_text(const OUString& rText)
 {
-    disable_notify_events();
     m_xButton->SpinField::SetText(rText);
-    enable_notify_events();
 }
 
 void SalInstanceFormattedSpinButton::connect_changed(const Link<weld::Entry&, void>& rLink)

@@ -26,7 +26,7 @@ QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
                      &QtInstanceEntry::handleTextChanged);
 }
 
-void QtInstanceEntry::set_text(const OUString& rText)
+void QtInstanceEntry::do_set_text(const OUString& rText)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pLineEdit->setText(toQString(rText)); });

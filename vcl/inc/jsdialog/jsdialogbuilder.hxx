@@ -515,7 +515,7 @@ class JSEntry final : public JSWidget<SalInstanceEntry, ::Edit>
 public:
     JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
     virtual void replace_selection(const OUString& rText) override;
 };
@@ -589,7 +589,7 @@ public:
     JSFormattedSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
                           SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void set_text(const OUString& rText) override;
+    virtual void do_set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
 };
 
