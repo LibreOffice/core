@@ -1074,6 +1074,11 @@ protected:
         return m_aGetSizeHdl.Call(get_size_args(rDevice, rId));
     }
 
+    virtual void do_insert(const TreeIter* pParent, int pos, const OUString* pStr,
+                           const OUString* pId, const OUString* pIconName,
+                           VirtualDevice* pImageSurface, bool bChildrenOnDemand, TreeIter* pRet)
+        = 0;
+    virtual void do_insert_separator(int pos, const OUString& rId) = 0;
     virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
     virtual void do_remove(int pos) = 0;
@@ -1093,10 +1098,14 @@ public:
     }
 
     // see 'expanding on-demand node details' for bChildrenOnDemand of true
-    virtual void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface,
-                        bool bChildrenOnDemand, TreeIter* pRet)
-        = 0;
+    void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
+                const OUString* pIconName, VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                TreeIter* pRet)
+    {
+        disable_notify_events();
+        do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface, bChildrenOnDemand, pRet);
+        enable_notify_events();
+    }
 
     void insert(int nRow, TreeIter* pRet = nullptr)
     {
@@ -1131,7 +1140,13 @@ public:
         insert(pParent, -1, &rStr, nullptr, nullptr, nullptr, false, nullptr);
     }
 
-    virtual void insert_separator(int pos, const OUString& rId) = 0;
+    void insert_separator(int pos, const OUString& rId)
+    {
+        disable_notify_events();
+        do_insert_separator(pos, rId);
+        enable_notify_events();
+    }
+
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 
     void connect_selection_changed(const Link<TreeView&, void>& rLink)

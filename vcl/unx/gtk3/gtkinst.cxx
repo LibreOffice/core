@@ -14988,9 +14988,10 @@ public:
         gtk_widget_queue_draw(GTK_WIDGET(m_pTreeView));
     }
 
-    virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface,
-                        bool bChildrenOnDemand, weld::TreeIter* pRet) override
+    virtual void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pText,
+                           const OUString* pId, const OUString* pIconName,
+                           VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                           weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;
@@ -15010,7 +15011,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert_separator(int pos, const OUString& rId) override
+    virtual void do_insert_separator(int pos, const OUString& rId) override
     {
         disable_notify_events();
         GtkTreeIter iter;

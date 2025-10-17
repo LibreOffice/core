@@ -1589,12 +1589,12 @@ public:
 
     virtual void hide() override;
 
-    virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
-                        const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, bool bChildrenOnDemand,
-                        weld::TreeIter* pRet) override;
+    virtual void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                           const OUString* pId, const OUString* pIconName,
+                           VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                           weld::TreeIter* pRet) override;
 
-    virtual void insert_separator(int pos, const OUString& /*rId*/) override;
+    virtual void do_insert_separator(int pos, const OUString& /*rId*/) override;
 
     virtual void bulk_insert_for_each(
         int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,

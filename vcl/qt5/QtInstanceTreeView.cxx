@@ -49,10 +49,10 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     m_pTreeView->viewport()->installEventFilter(this);
 }
 
-void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
-                                const OUString* pId, const OUString* pIconName,
-                                VirtualDevice* pImageSurface, bool bChildrenOnDemand,
-                                weld::TreeIter* pRet)
+void QtInstanceTreeView::do_insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
+                                   const OUString* pId, const OUString* pIconName,
+                                   VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                                   weld::TreeIter* pRet)
 {
     assert(!bChildrenOnDemand && "Not implemented yet");
     // avoid -Werror=unused-parameter for release build
@@ -96,7 +96,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
     });
 }
 
-void QtInstanceTreeView::insert_separator(int, const OUString&)
+void QtInstanceTreeView::do_insert_separator(int, const OUString&)
 {
     assert(false && "Not implemented yet");
 }

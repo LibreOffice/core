@@ -3585,7 +3585,6 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
                                     const VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                                     weld::TreeIter* pRet, bool bIsSeparator)
 {
-    disable_notify_events();
     const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
     SvTreeListEntry* iter = pVclIter ? pVclIter->iter : nullptr;
     auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
@@ -3639,8 +3638,6 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
         pViewData->SetSelectable(false);
     }
-
-    enable_notify_events();
 }
 
 void SalInstanceTreeView::update_checkbutton_column_width(SvTreeListEntry* pEntry)
@@ -3937,15 +3934,15 @@ void SalInstanceTreeView::hide()
     SalInstanceWidget::hide();
 }
 
-void SalInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
-                                 const OUString* pId, const OUString* pIconName,
-                                 VirtualDevice* pImageSurface, bool bChildrenOnDemand,
-                                 weld::TreeIter* pRet)
+void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                                    const OUString* pId, const OUString* pIconName,
+                                    VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                                    weld::TreeIter* pRet)
 {
     do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface, bChildrenOnDemand, pRet, false);
 }
 
-void SalInstanceTreeView::insert_separator(int pos, const OUString& /*rId*/)
+void SalInstanceTreeView::do_insert_separator(int pos, const OUString& /*rId*/)
 {
     OUString sSep(VclResId(STR_SEPARATOR));
     do_insert(nullptr, pos, &sSep, nullptr, nullptr, nullptr, false, nullptr, true);

@@ -39,12 +39,12 @@ class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeVie
 public:
     QtInstanceTreeView(QTreeView* pTreeView);
 
-    virtual void insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
-                        const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, bool bChildrenOnDemand,
-                        weld::TreeIter* pRet) override;
+    virtual void do_insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
+                           const OUString* pId, const OUString* pIconName,
+                           VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                           weld::TreeIter* pRet) override;
 
-    virtual void insert_separator(int pos, const OUString& rId) override;
+    virtual void do_insert_separator(int pos, const OUString& rId) override;
 
     virtual OUString get_selected_text() const override;
     virtual OUString get_selected_id() const override;

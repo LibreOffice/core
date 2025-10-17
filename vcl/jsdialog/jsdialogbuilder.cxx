@@ -1781,12 +1781,13 @@ void JSTreeView::drag_end()
     g_DragSource = nullptr;
 }
 
-void JSTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
-                        const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, bool bChildrenOnDemand, weld::TreeIter* pRet)
+void JSTreeView::do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                           const OUString* pId, const OUString* pIconName,
+                           VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                           weld::TreeIter* pRet)
 {
-    SalInstanceTreeView::insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
-                                bChildrenOnDemand, pRet);
+    SalInstanceTreeView::do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
+                                   bChildrenOnDemand, pRet);
 
     sendUpdate();
 }
