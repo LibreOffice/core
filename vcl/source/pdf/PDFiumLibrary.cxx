@@ -1517,6 +1517,14 @@ Bitmap PDFiumBitmapImpl::createBitmapFromBuffer()
 
     switch (eFormat)
     {
+        case vcl::pdf::PDFBitmapType::Gray:
+        {
+            aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N8_BPP,
+                             &Bitmap::GetGreyPalette(256));
+            ReadRawDIB(aBitmap, getBuffer(), ScanlineFormat::N8BitPal, nHeight, nStride);
+        }
+        break;
+
         case vcl::pdf::PDFBitmapType::BGR:
         {
             aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
