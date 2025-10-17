@@ -122,7 +122,7 @@ void SheetViewManager::unsyncAllSheetViews()
 OUString SheetViewManager::generateName()
 {
     maNameCounter++;
-    return u"Temp SheetView " + OUString::number(maNameCounter);
+    return u"Temp View " + OUString::number(maNameCounter);
 }
 }
 
