@@ -85,7 +85,7 @@ basegfx::B2DRange PolyPolygonRGBAPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // return range - without decompose
-    return basegfx::utils::getRange(getB2DPolyPolygon());
+    return getB2DPolyPolygon().getB2DRange();
 }
 
 // provide unique ID

@@ -1651,7 +1651,7 @@ static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
 static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
+    basegfx::B2DRange aRange(rPolyPolygon.getB2DRange());
 
     if (aRange.isEmpty())
         return tools::Rectangle();
@@ -2801,7 +2801,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
             // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
             // itself, else this method will no longer return the full polygon information (curve will
             // be lost)
-            const basegfx::B2DRange aPolyRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
+            const basegfx::B2DRange aPolyRangeNoCurve(rPolyPolygon.getB2DRange());
             aScale = aPolyRangeNoCurve.getRange();
             aTranslate = aPolyRangeNoCurve.getMinimum();
 
@@ -2833,7 +2833,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
                 // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
-                const basegfx::B2DRange aCorrectedRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
+                const basegfx::B2DRange aCorrectedRangeNoCurve(rPolyPolygon.getB2DRange());
                 aTranslate = aObjectMatrix * aCorrectedRangeNoCurve.getMinimum();
                 aScale = aCorrectedRangeNoCurve.getRange();
 
@@ -2847,7 +2847,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
                 // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
-                const basegfx::B2DRange aPolyRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
+                const basegfx::B2DRange aPolyRangeNoCurve(rPolyPolygon.getB2DRange());
                 if (!aPolyRangeNoCurve.isEmpty())
                 {
                     aScale = aPolyRangeNoCurve.getRange();
@@ -2980,7 +2980,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!aTranslate.equalZero())
     {
         // #i39529# absolute positioning, so get current position (without control points (!))
-        const basegfx::B2DRange aCurrentRange(basegfx::utils::getRange(aNewPolyPolygon));
+        const basegfx::B2DRange aCurrentRange(aNewPolyPolygon.getB2DRange());
         aTransform.translate(aTranslate.getX() - aCurrentRange.getMinX(), aTranslate.getY() - aCurrentRange.getMinY());
     }
 

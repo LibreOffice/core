@@ -179,18 +179,6 @@ namespace basegfx::utils
             }
         }
 
-        B2DRange getRange(const B2DPolyPolygon& rCandidate)
-        {
-            B2DRange aRetval;
-
-            for(auto const& rPolygon : rCandidate)
-            {
-                aRetval.expand(utils::getRange(rPolygon));
-            }
-
-            return aRetval;
-        }
-
         double getSignedArea(const B2DPolyPolygon& rCandidate)
         {
             double fRetval(0.0);

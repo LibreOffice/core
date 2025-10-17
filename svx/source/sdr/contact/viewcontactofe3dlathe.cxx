@@ -61,7 +61,7 @@ namespace sdr::contact
                 fPolygonMaxLength = std::max(fPolygonMaxLength, fPolygonLength);
             }
 
-            const basegfx::B2DRange aPolyPolygonRange(basegfx::utils::getRange(aPolyPolygon));
+            const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
             const basegfx::B2DVector aTextureSize(
                 M_PI * fabs(aPolyPolygonRange.getCenter().getX()), // PI * d
                 fPolygonMaxLength);

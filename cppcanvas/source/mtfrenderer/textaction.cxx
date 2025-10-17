@@ -585,7 +585,7 @@ namespace cppcanvas::internal
                 const ::basegfx::B2DPolyPolygon aPoly(
                     cppcanvastools::createTextLinesPolyPolygon( 0.0, nLineWidth,
                                                        rLineInfo ) );
-                auto aRange = basegfx::utils::getRange( aPoly ).getRange();
+                auto aRange = aPoly.getB2DRange().getRange();
                 o_rOverallSize = basegfx::B2DSize(aRange.getX(), aRange.getY());
 
                 o_rTextLines = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
@@ -1567,7 +1567,7 @@ namespace cppcanvas::internal
 
                 return calcEffectTextBounds( ::basegfx::unotools::b2DRectangleFromRealRectangle2D(
                                                  xTextLayout->queryTextBounds() ),
-                                             ::basegfx::utils::getRange( aPoly ),
+                                             aPoly.getB2DRange(),
                                              maReliefOffset,
                                              maShadowOffset,
                                              aLocalState,
@@ -2122,7 +2122,7 @@ namespace cppcanvas::internal
                             rShadowColor,
                             rTextFillColor,
                             xTextBoundsPoly,
-                            ::basegfx::utils::getRange(aResultingPolyPolygon),
+                            aResultingPolyPolygon.getB2DRange(),
                             xTextPoly,
                             aCharWidthSeq,
                             rVDev,
@@ -2140,7 +2140,7 @@ namespace cppcanvas::internal
                             rShadowColor,
                             rTextFillColor,
                             xTextBoundsPoly,
-                            ::basegfx::utils::getRange(aResultingPolyPolygon),
+                            aResultingPolyPolygon.getB2DRange(),
                             xTextPoly,
                             aCharWidthSeq,
                             rVDev,

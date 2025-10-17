@@ -150,7 +150,7 @@ namespace drawinglayer::primitive2d
                 {
                     if(rLineStartEnd.isStartActive())
                     {
-                        const basegfx::B2DRange aArrowRange(basegfx::utils::getRange(rLineStartEnd.getStartPolyPolygon()));
+                        const basegfx::B2DRange aArrowRange(rLineStartEnd.getStartPolyPolygon().getB2DRange());
                         fStartArrowW = rLineStartEnd.getStartWidth();
                         fStartArrowH = aArrowRange.getHeight() * fStartArrowW / aArrowRange.getWidth();
 
@@ -162,7 +162,7 @@ namespace drawinglayer::primitive2d
 
                     if(rLineStartEnd.isEndActive())
                     {
-                        const basegfx::B2DRange aArrowRange(basegfx::utils::getRange(rLineStartEnd.getEndPolyPolygon()));
+                        const basegfx::B2DRange aArrowRange(rLineStartEnd.getEndPolyPolygon().getB2DRange());
                         fEndArrowW = rLineStartEnd.getEndWidth();
                         fEndArrowH = aArrowRange.getHeight() * fEndArrowW / aArrowRange.getWidth();
 

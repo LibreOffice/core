@@ -59,19 +59,19 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
 
     if (aOverline.count())
     {
-        aRange.expand(::basegfx::utils::getRange(aOverline));
+        aRange.expand(aOverline.getB2DRange());
         mxOverline = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aOverline);
     }
 
     if (aUnderline.count())
     {
-        aRange.expand(::basegfx::utils::getRange(aUnderline));
+        aRange.expand(aUnderline.getB2DRange());
         mxUnderline = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aUnderline);
     }
 
     if (aStrikeout.count())
     {
-        aRange.expand(::basegfx::utils::getRange(aStrikeout));
+        aRange.expand(aStrikeout.getB2DRange());
         mxStrikeout = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aStrikeout);
     }
 

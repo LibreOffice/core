@@ -59,19 +59,6 @@ namespace basegfx::utils
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
 
-        /** Get the range of a polyPolygon
-
-            For detailed description look at getRange(const B2DPolygon&).
-            This method just expands by the range of every sub-Polygon.
-
-            @param rCandidate
-            The B2DPolyPolygon possibly containing bezier segments
-
-            @return
-            The outer range of the polygon
-        */
-        BASEGFX_DLLPUBLIC B2DRange getRange(const B2DPolyPolygon& rCandidate);
-
         // get signed area of polygon
         BASEGFX_DLLPUBLIC double getSignedArea(const B2DPolyPolygon& rCandidate);
 

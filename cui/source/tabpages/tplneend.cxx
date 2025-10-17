@@ -362,7 +362,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         }
 
         basegfx::B2DPolyPolygon aNewPolyPolygon(static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly());
-        basegfx::B2DRange aNewRange(basegfx::utils::getRange(aNewPolyPolygon));
+        basegfx::B2DRange aNewRange(aNewPolyPolygon.getB2DRange());
 
         // normalize
         aNewPolyPolygon.translate( -aNewRange.getMinX(), -aNewRange.getMinY() );

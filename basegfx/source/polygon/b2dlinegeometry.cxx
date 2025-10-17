@@ -70,7 +70,7 @@ namespace basegfx::utils
                 aRetval.append(rArrow);
 
                 // get size of the arrow
-                const B2DRange aArrowSize(getRange(rArrow));
+                const B2DRange aArrowSize(rArrow.getB2DRange());
 
                 // build ArrowTransform; center in X, align with axis in Y
                 B2DHomMatrix aArrowTransform(basegfx::utils::createTranslateB2DHomMatrix(

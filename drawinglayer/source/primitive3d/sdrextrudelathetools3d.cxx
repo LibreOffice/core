@@ -50,7 +50,7 @@ namespace
 
         if(!basegfx::fTools::equalZero(fScale))
         {
-            const basegfx::B2DRange aRange(basegfx::utils::getRange(rSource));
+            const basegfx::B2DRange aRange(rSource.getB2DRange());
             const basegfx::B2DPoint aCenter(aRange.getCenter());
             basegfx::B2DHomMatrix aTrans;
 
@@ -79,9 +79,9 @@ namespace
             // grow the outside polygon and scale all polygons to original size. This is done
             // to avoid a shrink which potentially would lead to self-intersections, but changes
             // the original polygon -> not a precision step, so e.g. not usable for charts
-            const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolygon));
+            const basegfx::B2DRange aRange(rPolygon.getB2DRange());
             rPolygon = basegfx::utils::growInNormalDirection(rPolygon, fOffset);
-            const basegfx::B2DRange aGrownRange(basegfx::utils::getRange(rPolygon));
+            const basegfx::B2DRange aGrownRange(rPolygon.getB2DRange());
             const double fScaleX(basegfx::fTools::equalZero(aGrownRange.getWidth()) ? 1.0 : aRange.getWidth() / aGrownRange.getWidth());
             const double fScaleY(basegfx::fTools::equalZero(aGrownRange.getHeight())? 1.0 : aRange.getHeight() / aGrownRange.getHeight());
             basegfx::B2DHomMatrix aScaleTrans;
@@ -397,7 +397,7 @@ namespace drawinglayer::primitive3d
 
                 if(bCloseFront || bCloseBack)
                 {
-                    const basegfx::B2DRange aBaseRange(basegfx::utils::getRange(aFront));
+                    const basegfx::B2DRange aBaseRange(aFront.getB2DRange());
                     const double fOuterLength(aBaseRange.getMaxX() * fRotation);
                     const double fInnerLength(aBaseRange.getMinX() * fRotation);
                     const double fAverageLength((fOuterLength + fInnerLength) * 0.5);

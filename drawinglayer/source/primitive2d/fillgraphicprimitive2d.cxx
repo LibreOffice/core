@@ -128,7 +128,7 @@ namespace drawinglayer::primitive2d
             basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
             aPolygon.transform(getTransformation());
 
-            return basegfx::utils::getRange(aPolygon);
+            return aPolygon.getB2DRange();
         }
 
         // provide unique ID

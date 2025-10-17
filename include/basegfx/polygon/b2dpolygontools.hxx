@@ -90,19 +90,6 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolygon& rCandidate, const B2DPolygon& rPolygon, bool bWithBorder = false);
 
-        /** Get the range of a polygon
-
-            This method creates the outer range of the subdivided bezier curve.
-            For detailed discussion see B2DPolygon::getB2DRange()
-
-            @param rCandidate
-            The B2DPolygon possibly containing bezier segments
-
-            @return
-            The outer range of the bezier curve
-        */
-        BASEGFX_DLLPUBLIC B2DRange getRange(const B2DPolygon& rCandidate);
-
         // get signed area of polygon
         BASEGFX_DLLPUBLIC double getSignedArea(const B2DPolygon& rCandidate);
 

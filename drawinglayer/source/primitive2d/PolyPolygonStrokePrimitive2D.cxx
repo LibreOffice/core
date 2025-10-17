@@ -79,7 +79,7 @@ basegfx::B2DRange PolyPolygonStrokePrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get range of it (subdivided)
-    basegfx::B2DRange aRetval(basegfx::utils::getRange(getB2DPolyPolygon()));
+    basegfx::B2DRange aRetval(getB2DPolyPolygon().getB2DRange());
 
     // if width, grow by line width
     if (getLineAttribute().getWidth())

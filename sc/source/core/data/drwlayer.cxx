@@ -737,7 +737,7 @@ namespace
     tools::Rectangle lcl_UpdateCalcPoly(basegfx::B2DPolygon &rCalcPoly, int nWhichPoint, const Point &rPos)
     {
         rCalcPoly.setB2DPoint(nWhichPoint, basegfx::B2DPoint(rPos.X(), rPos.Y()));
-        basegfx::B2DRange aRange(basegfx::utils::getRange(rCalcPoly));
+        basegfx::B2DRange aRange(rCalcPoly.getB2DRange());
         return tools::Rectangle(static_cast<tools::Long>(aRange.getMinX()), static_cast<tools::Long>(aRange.getMinY()),
             static_cast<tools::Long>(aRange.getMaxX()), static_cast<tools::Long>(aRange.getMaxY()));
     }

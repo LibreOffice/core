@@ -1045,7 +1045,7 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     static const bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
-        const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyLine));
+        const basegfx::B2DRange aRange(rPolyLine.getB2DRange());
         if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
             || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
         {

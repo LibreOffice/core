@@ -731,7 +731,7 @@ namespace basegfx::utils
                 {
                     const B2DPolygon& aCand(aCandidate.getB2DPolygon(a));
                     StripHelper* pNewHelper = &(aHelpers[a]);
-                    pNewHelper->maRange = utils::getRange(aCand);
+                    pNewHelper->maRange = aCand.getB2DRange();
                     pNewHelper->meOrinetation = utils::getOrientation(aCand);
 
                     // initialize with own orientation
@@ -811,7 +811,7 @@ namespace basegfx::utils
                     {
                         const B2DPolygon& aCandidate(rCandidate.getB2DPolygon(a));
                         StripHelper* pNewHelper = &(aHelpers[a]);
-                        pNewHelper->maRange = utils::getRange(aCandidate);
+                        pNewHelper->maRange = aCandidate.getB2DRange();
                         pNewHelper->meOrinetation = utils::getOrientation(aCandidate);
                         pNewHelper->mnDepth = (pNewHelper->meOrinetation == B2VectorOrientation::Negative ? -1 : 0);
                     }

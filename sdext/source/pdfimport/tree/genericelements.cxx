@@ -147,9 +147,9 @@ void PolyPolyElement::updateGeometry()
 {
     basegfx::B2DRange aRange;
     if( PolyPoly.areControlPointsUsed() )
-        aRange = basegfx::utils::getRange( basegfx::utils::adaptiveSubdivideByAngle( PolyPoly ) );
+        aRange = basegfx::utils::adaptiveSubdivideByAngle( PolyPoly ).getB2DRange();
     else
-        aRange = basegfx::utils::getRange( PolyPoly );
+        aRange = PolyPoly.getB2DRange();
     x = aRange.getMinX();
     y = aRange.getMinY();
     w = aRange.getWidth();

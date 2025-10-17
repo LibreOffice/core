@@ -360,7 +360,7 @@ basegfx::B2DRange SlideBackgroundFillPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // return range
-    return basegfx::utils::getRange(getB2DPolyPolygon());
+    return getB2DPolyPolygon().getB2DRange();
 }
 
 // provide unique ID
@@ -378,7 +378,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
         {
             // when we have no given definition range, use the range of the given geometry
             // also for definition (simplest case)
-            const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
+            const basegfx::B2DRange aRange(rPolyPolygon.getB2DRange());
 
             return createPolyPolygonFillPrimitive(
                 rPolyPolygon,
@@ -511,7 +511,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
                 Primitive2DContainer aAlpha {
                     new FillGradientPrimitive2D(
-                        basegfx::utils::getRange(rPolyPolygon),
+                        rPolyPolygon.getB2DRange(),
                         rDefinitionRange,
                         rAlphaGradient)
                 };
@@ -646,7 +646,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
                 aScaledUnitPolyPolygon.transform(aJustScaleTransform);
                 const basegfx::B2DRange aTextAnchorRange
-                    = getTextAnchorRange(rText, basegfx::utils::getRange(aScaledUnitPolyPolygon));
+                    = getTextAnchorRange(rText, aScaledUnitPolyPolygon.getB2DRange());
 
                 // now create a transformation from this basic range (aTextAnchorRange)
                 // #i121494# if we have no scale use at least 1.0 to have a carrier e.g. for

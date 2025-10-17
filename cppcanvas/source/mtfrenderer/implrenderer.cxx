@@ -562,7 +562,7 @@ namespace cppcanvas::internal
                     }
 
                     const ::basegfx::B2DRectangle aBounds(
-                        ::basegfx::utils::getRange(aDevicePoly) );
+                        aDevicePoly.getB2DRange() );
                     const ::basegfx::B2DVector aOffset(
                         rGradient.GetOfsX() / 100.0,
                         rGradient.GetOfsY() / 100.0);

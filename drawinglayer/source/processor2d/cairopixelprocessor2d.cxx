@@ -3595,7 +3595,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
 
     // create temporary FillGradientPrimitive2D, but do not forget
     // to embed to MaskPrimitive2D to get the PolyPolygon form
-    const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
+    const basegfx::B2DRange aRange(rPolyPolygon.getB2DRange());
     const primitive2d::Primitive2DContainer aContainerMaskedFillGradient{
         rtl::Reference<primitive2d::MaskPrimitive2D>(new primitive2d::MaskPrimitive2D(
             rPolyPolygon,

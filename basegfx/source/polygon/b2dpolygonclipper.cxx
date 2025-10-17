@@ -35,7 +35,7 @@ namespace basegfx::utils
 
             if(rCandidate.count())
             {
-                const B2DRange aCandidateRange(getRange(rCandidate));
+                const B2DRange aCandidateRange(rCandidate.getB2DRange());
 
                 if(bParallelToXAxis && fTools::moreOrEqual(aCandidateRange.getMinY(), fValueOnOtherAxis))
                 {
@@ -203,7 +203,7 @@ namespace basegfx::utils
                 }
             }
 
-            const B2DRange aCandidateRange(getRange(rCandidate));
+            const B2DRange aCandidateRange(rCandidate.getB2DRange());
 
             if(rRange.isInside(aCandidateRange))
             {

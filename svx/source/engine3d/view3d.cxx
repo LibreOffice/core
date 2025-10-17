@@ -1339,7 +1339,7 @@ void E3dView::Start3DCreation()
     {
         SdrObject* pMark = rMarkList.GetMark(nMark)->GetMarkedSdrObj();
         basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
-        aR.expand(basegfx::utils::getRange(aXPP));
+        aR.expand(aXPP.getB2DRange());
     }
 
     basegfx::B2DPoint aCenter(aR.getCenter());

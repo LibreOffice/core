@@ -89,7 +89,7 @@ namespace cppcanvas::internal
                                             bool                                bStroke ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
+                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
@@ -109,7 +109,7 @@ namespace cppcanvas::internal
                                             int                                 nTransparency ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
+                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
@@ -258,7 +258,7 @@ namespace cppcanvas::internal
                                                             const rendering::Texture&        rTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
+                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas ),
                 maTexture( rTexture )
             {
@@ -367,7 +367,7 @@ namespace cppcanvas::internal
                                                           rendering::StrokeAttributes           aStrokeAttributes ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
+                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas ),
                 maStrokeAttributes(std::move( aStrokeAttributes ))
             {

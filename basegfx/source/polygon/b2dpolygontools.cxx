@@ -389,12 +389,6 @@ namespace basegfx::utils
             return true;
         }
 
-        B2DRange getRange(const B2DPolygon& rCandidate)
-        {
-            // changed to use internally buffered version at B2DPolygon
-            return rCandidate.getB2DRange();
-        }
-
         double getSignedArea(const B2DPolygon& rCandidate)
         {
             const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);

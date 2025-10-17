@@ -923,7 +923,7 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
         return;
     }
 
-    const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
+    const basegfx::B2DRange aRange(aMask.getB2DRange());
     tools::Rectangle aMaskRect = vcl::unotools::rectangleFromB2DRectangle(aRange);
     impBufferDevice aBufferDevice(*mpOutputDevice, aMaskRect);
 

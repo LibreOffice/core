@@ -61,8 +61,7 @@ namespace canvas
 
             // clip which is about to be set, expressed as a
             // b2drectangle
-            const ::basegfx::B2DRectangle aClipBounds(
-                ::basegfx::utils::getRange( aClipPath ) );
+            const ::basegfx::B2DRectangle aClipBounds( aClipPath.getB2DRange() );
 
             const ::basegfx::B2DRectangle aBounds( 0.0, 0.0,
                                                    maSize.getX(),

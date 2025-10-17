@@ -128,7 +128,7 @@ namespace drawinglayer::primitive3d
                                     {
                                         // found two linearly independent 2D vectors
                                         // get 2d range of texture coordinates
-                                        const basegfx::B2DRange aOutlineRange(basegfx::utils::getRange(aTexPolyPolygon));
+                                        const basegfx::B2DRange aOutlineRange(aTexPolyPolygon.getB2DRange());
                                         const basegfx::BColor aHatchColor(getHatch().getColor());
                                         const double fAngle(getHatch().getAngle());
                                         std::vector< basegfx::B2DHomMatrix > aMatrices;

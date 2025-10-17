@@ -110,7 +110,7 @@ namespace sdr::contact
             {
                 // #i102548# create unscaled, unsheared, unrotated and untranslated polygon
                 // (unit polygon) by creating the object matrix and back-transforming the polygon
-                const basegfx::B2DRange aObjectRange(basegfx::utils::getRange(aUnitPolyPolygon));
+                const basegfx::B2DRange aObjectRange(aUnitPolyPolygon.getB2DRange());
                 const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
                 const double fWidth(aObjectRange.getWidth());
                 const double fHeight(aObjectRange.getHeight());

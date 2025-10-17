@@ -77,7 +77,7 @@ namespace basegfx
 
         public:
             const B2DPolygon& getPolygon() const { return maPolygon; }
-            void setPolygon(const B2DPolygon& rNew) { maPolygon = rNew; maRange = utils::getRange(maPolygon); }
+            void setPolygon(const B2DPolygon& rNew) { maPolygon = rNew; maRange = maPolygon.getB2DRange(); }
             const B2DRange& getRange() const { return maRange; }
             temporaryPointVector& getTemporaryPointVector() { return maPoints; }
         };

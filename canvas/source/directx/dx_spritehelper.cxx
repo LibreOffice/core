@@ -171,8 +171,7 @@ namespace dxcanvas
                 // apply a simple rect clip
                 // ========================
 
-                ::basegfx::B2DRectangle aClipBounds(
-                    ::basegfx::utils::getRange( aClipPath ) );
+                ::basegfx::B2DRectangle aClipBounds( aClipPath.getB2DRange() );
                 aClipBounds.intersect( aSourceRect );
 
                 mpBitmap->draw(fAlpha,rPos,aClipBounds,rTransform);

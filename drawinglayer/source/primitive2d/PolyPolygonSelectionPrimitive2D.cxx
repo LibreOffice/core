@@ -100,7 +100,7 @@ bool PolyPolygonSelectionPrimitive2D::operator==(const BasePrimitive2D& rPrimiti
 basegfx::B2DRange PolyPolygonSelectionPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    basegfx::B2DRange aRetval(basegfx::utils::getRange(getB2DPolyPolygon()));
+    basegfx::B2DRange aRetval(getB2DPolyPolygon().getB2DRange());
 
     if (getDiscreteGrow() > 0.0)
     {

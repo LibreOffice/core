@@ -302,7 +302,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         if (bFuzzing)
         {
-            const basegfx::B2DRange aRange(basegfx::utils::getRange(aFillPolyPolygon));
+            const basegfx::B2DRange aRange(aFillPolyPolygon.getB2DRange());
             if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
                 || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
             {

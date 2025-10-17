@@ -149,7 +149,7 @@ namespace emfplushelper
 
                     s.Seek(pos + pathLength);
 
-                    const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
+                    const ::basegfx::B2DRectangle aBounds(path->GetPolygon(rR, false).getB2DRange());
                     aWidth = aBounds.getWidth();
                     aHeight = aBounds.getHeight();
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tPolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " "
@@ -167,7 +167,7 @@ namespace emfplushelper
 
                     s.Seek(pos + 8 * boundaryPointCount);
 
-                    const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
+                    const ::basegfx::B2DRectangle aBounds(path->GetPolygon(rR, false).getB2DRange());
                     aWidth = aBounds.getWidth();
                     aHeight = aBounds.getHeight();
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tPolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " "

@@ -1234,7 +1234,7 @@ tools::Rectangle vcl::Region::GetBoundRect() const
     // prefer double precision source
     if(getB2DPolyPolygon())
     {
-        const basegfx::B2DRange aRange(basegfx::utils::getRange(*getB2DPolyPolygon()));
+        const basegfx::B2DRange aRange(getB2DPolyPolygon()->getB2DRange());
 
         if(aRange.isEmpty())
         {

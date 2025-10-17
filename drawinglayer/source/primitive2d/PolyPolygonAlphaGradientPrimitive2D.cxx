@@ -59,8 +59,8 @@ Primitive2DReference PolyPolygonAlphaGradientPrimitive2D::create2DDecomposition(
     Primitive2DContainer aContent{ new PolyPolygonColorPrimitive2D(getB2DPolyPolygon(),
                                                                    getBColor()) };
 
-    Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(
-        basegfx::utils::getRange(getB2DPolyPolygon()), getAlphaGradient()) };
+    Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(getB2DPolyPolygon().getB2DRange(),
+                                                             getAlphaGradient()) };
 
     return new TransparencePrimitive2D(std::move(aContent), std::move(aAlpha));
 }
@@ -93,7 +93,7 @@ basegfx::B2DRange PolyPolygonAlphaGradientPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // return range - without decompose
-    return basegfx::utils::getRange(getB2DPolyPolygon());
+    return getB2DPolyPolygon().getB2DRange();
 }
 
 // provide unique ID

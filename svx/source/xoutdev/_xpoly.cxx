@@ -406,7 +406,7 @@ tools::Rectangle XPolygon::GetBoundRect() const
         // get a relatively correct BoundRect. Numerically, this is not
         // correct and never was.
 
-        const basegfx::B2DRange aPolygonRange(basegfx::utils::getRange(getB2DPolygon()));
+        const basegfx::B2DRange aPolygonRange(getB2DPolygon().getB2DRange());
         aRetval = tools::Rectangle(basegfx::fround<tools::Long>(aPolygonRange.getMinX()),
                                    basegfx::fround<tools::Long>(aPolygonRange.getMinY()),
                                    basegfx::fround<tools::Long>(aPolygonRange.getMaxX()),

@@ -236,9 +236,9 @@ void FuMorph::ImpEqualizePolyPointCount(
     ::basegfx::B2DPolygon aPoly1(ImpGetExpandedPolygon(rSmall, nCnt));
 
     // create transformation for rBig to do the compare
-    const ::basegfx::B2DRange aSrcSize(::basegfx::utils::getRange(rBig));
+    const ::basegfx::B2DRange aSrcSize(rBig.getB2DRange());
     const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
-    const ::basegfx::B2DRange aDstSize(::basegfx::utils::getRange(rSmall));
+    const ::basegfx::B2DRange aDstSize(rSmall.getB2DRange());
     const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
 
     basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-aSrcPos.getX(), -aSrcPos.getY()));
@@ -292,13 +292,13 @@ void FuMorph::ImpAddPolys(
     while(rSmaller.count() < rBigger.count())
     {
         const ::basegfx::B2DPolygon& aToBeCopied(rBigger.getB2DPolygon(rSmaller.count()));
-        const ::basegfx::B2DRange aToBeCopiedPolySize(::basegfx::utils::getRange(aToBeCopied));
+        const ::basegfx::B2DRange aToBeCopiedPolySize(aToBeCopied.getB2DRange());
         ::basegfx::B2DPoint aNewPoint(aToBeCopiedPolySize.getCenter());
         ::basegfx::B2DPolygon aNewPoly;
 
-        const ::basegfx::B2DRange aSrcSize(::basegfx::utils::getRange(rBigger.getB2DPolygon(0)));
+        const ::basegfx::B2DRange aSrcSize(rBigger.getB2DPolygon(0).getB2DRange());
         const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
-        const ::basegfx::B2DRange aDstSize(::basegfx::utils::getRange(rSmaller.getB2DPolygon(0)));
+        const ::basegfx::B2DRange aDstSize(rSmaller.getB2DPolygon(0).getB2DRange());
         const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
         aNewPoint = aNewPoint - aSrcPos + aDstPos;
 
@@ -478,9 +478,9 @@ void FuMorph::ImpMorphPolygons(
     if(!nSteps)
         return;
 
-    const ::basegfx::B2DRange aStartPolySize(::basegfx::utils::getRange(rPolyPoly1));
+    const ::basegfx::B2DRange aStartPolySize(rPolyPoly1.getB2DRange());
     const ::basegfx::B2DPoint aStartCenter(aStartPolySize.getCenter());
-    const ::basegfx::B2DRange aEndPolySize(::basegfx::utils::getRange(rPolyPoly2));
+    const ::basegfx::B2DRange aEndPolySize(rPolyPoly2.getB2DRange());
     const ::basegfx::B2DPoint aEndCenter(aEndPolySize.getCenter());
     const ::basegfx::B2DPoint aDelta(aEndCenter - aStartCenter);
     const double fFactor(1.0 / (nSteps + 1));
@@ -491,7 +491,7 @@ void FuMorph::ImpMorphPolygons(
         fValue += fFactor;
         ::basegfx::B2DPolyPolygon aNewPolyPoly2D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
 
-        const ::basegfx::B2DRange aNewPolySize(::basegfx::utils::getRange(aNewPolyPoly2D));
+        const ::basegfx::B2DRange aNewPolySize(aNewPolyPoly2D.getB2DRange());
         const ::basegfx::B2DPoint aNewS(aNewPolySize.getCenter());
         const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
         const ::basegfx::B2DPoint aDiff(aRealS - aNewS);

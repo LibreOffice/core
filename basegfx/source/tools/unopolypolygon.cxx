@@ -105,7 +105,7 @@ namespace basegfx::unotools
             }
         }
 
-        const B2DRange  aBounds( utils::getRange( aSrcPoly ) );
+        const B2DRange  aBounds( aSrcPoly.getB2DRange() );
         const B2DVector     aOffset( unotools::b2DPointFromRealPoint2D( position ) -
                                              aBounds.getMinimum() );
 

@@ -162,7 +162,7 @@ namespace oglcanvas
                                                             rTexture.AffineTransform );
             ::basegfx::B2DRange aBounds;
             for( const auto& rPoly : rPolyPolygons )
-                aBounds.expand( ::basegfx::utils::getRange( rPoly ) );
+                aBounds.expand( rPoly.getB2DRange() );
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
 
@@ -306,7 +306,7 @@ namespace oglcanvas
                                                             rTexture.AffineTransform );
             ::basegfx::B2DRange aBounds;
             for( const auto& rPolyPolygon : rPolyPolygons )
-                aBounds.expand( ::basegfx::utils::getRange( rPolyPolygon ) );
+                aBounds.expand( rPolyPolygon.getB2DRange() );
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
             aTextureTransform.invert();
