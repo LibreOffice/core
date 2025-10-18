@@ -2090,10 +2090,8 @@ OUString SalInstanceAssistant::get_current_page_ident() const
     return get_page_ident(get_current_page());
 }
 
-void SalInstanceAssistant::set_current_page(int nPage)
+void SalInstanceAssistant::do_set_current_page(int nPage)
 {
-    disable_notify_events();
-
     // take the first shown page as the size for all pages
     if (m_xWizard->GetPageSizePixel().Width() == 0)
     {
@@ -2112,15 +2110,14 @@ void SalInstanceAssistant::set_current_page(int nPage)
     }
 
     m_xWizard->ShowPage(m_aIds[nPage]);
-    enable_notify_events();
 }
 
-void SalInstanceAssistant::set_current_page(const OUString& rIdent)
+void SalInstanceAssistant::do_set_current_page(const OUString& rIdent)
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
         return;
-    set_current_page(nIndex);
+    do_set_current_page(nIndex);
 }
 
 void SalInstanceAssistant::do_set_page_index(const OUString& rIdent, int nNewIndex)

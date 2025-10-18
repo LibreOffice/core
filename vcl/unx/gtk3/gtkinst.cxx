@@ -7739,7 +7739,7 @@ public:
         return get_page_ident(get_current_page());
     }
 
-    virtual void set_current_page(int nPage) override
+    virtual void do_set_current_page(int nPage) override
     {
         OString sDialogTitle(gtk_window_get_title(GTK_WINDOW(m_pAssistant)));
 
@@ -7752,12 +7752,12 @@ public:
             gtk_window_set_title(GTK_WINDOW(m_pAssistant), sDialogTitle.getStr());
     }
 
-    virtual void set_current_page(const OUString& rIdent) override
+    virtual void do_set_current_page(const OUString& rIdent) override
     {
         int nPage = find_page(rIdent);
         if (nPage == -1)
             return;
-        set_current_page(nPage);
+        do_set_current_page(nPage);
     }
 
     virtual void do_set_page_title(const OUString& rIdent, const OUString& rTitle) override

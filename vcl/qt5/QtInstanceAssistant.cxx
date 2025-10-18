@@ -73,7 +73,7 @@ OUString QtInstanceAssistant::get_current_page_ident() const
     return sId;
 }
 
-void QtInstanceAssistant::set_current_page(int nPage)
+void QtInstanceAssistant::do_set_current_page(int nPage)
 {
     SolarMutexGuard g;
 
@@ -101,7 +101,7 @@ void QtInstanceAssistant::set_current_page(int nPage)
     });
 }
 
-void QtInstanceAssistant::set_current_page(const OUString& rIdent)
+void QtInstanceAssistant::do_set_current_page(const OUString& rIdent)
 {
     SolarMutexGuard g;
 
@@ -112,7 +112,7 @@ void QtInstanceAssistant::set_current_page(const OUString& rIdent)
             QWizardPage* pPage = m_pWizard->page(nPageId);
             if (pPage && pPage->objectName() == toQString(rIdent))
             {
-                set_current_page(nPageId);
+                do_set_current_page(nPageId);
                 break;
             }
         }

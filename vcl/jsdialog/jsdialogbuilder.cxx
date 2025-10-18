@@ -1092,15 +1092,15 @@ JSAssistant::JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog,
 {
 }
 
-void JSAssistant::set_current_page(int nPage)
+void JSAssistant::do_set_current_page(int nPage)
 {
-    SalInstanceAssistant::set_current_page(nPage);
+    SalInstanceAssistant::do_set_current_page(nPage);
     sendFullUpdate();
 }
 
-void JSAssistant::set_current_page(const OUString& rIdent)
+void JSAssistant::do_set_current_page(const OUString& rIdent)
 {
-    SalInstanceAssistant::set_current_page(rIdent);
+    SalInstanceAssistant::do_set_current_page(rIdent);
     sendFullUpdate();
 }
 

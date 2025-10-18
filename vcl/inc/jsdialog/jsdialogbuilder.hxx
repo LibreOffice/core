@@ -431,8 +431,8 @@ public:
     JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder,
                 bool bTakeOwnership);
 
-    virtual void set_current_page(int nPage) override;
-    virtual void set_current_page(const OUString& rIdent) override;
+    void do_set_current_page(int nPage) override;
+    virtual void do_set_current_page(const OUString& rIdent) override;
     virtual void response(int response) override;
     virtual std::unique_ptr<weld::Button> weld_button_for_response(int response) override;
     virtual int run() override;
