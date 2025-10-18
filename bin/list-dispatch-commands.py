@@ -6,22 +6,35 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-"""
-Script to generate https://wiki.documentfoundation.org/Development/DispatchCommands
+USAGE="""
+Script to generate the lists in https://wiki.documentfoundation.org/Development/DispatchCommands
 3 types of source files are scanned to identify and describe a list of relevant UNO commands:
 - .hxx files: containing the symbolic and numeric id's, and the respective modes and groups
 - .xcu files; containing several english labels as they appear in menus or tooltips
 - .sdi files: containing a list of potential arguments for the commands, and their types
+
+Used with an argument : outfile.(csv|html|wiki)
+the script generates one list as in https://wiki.documentfoundation.org/Development/DispatchCommandsList
 """
 
 import os
 import sys
+import re
 
 # It is assumed that the script is called from $BUILDDIR;
 # and __file__ refers to the script location in $SRCDIR.
 # This allows to use it in separate builddir configuration.
 srcdir = os.path.dirname(os.path.realpath(__file__)) + '/..' # go up from /bin
 builddir = os.getcwd()
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == '-h':
+        print(USAGE)
+        exit(1)
+    FH_OUT = open(sys.argv[1], 'w')
+    xf, FORMAT_OUT = os.path.splitext(sys.argv[1])
+else:
+    FH_OUT = None
 
 REPO = 'https://opengrok.libreoffice.org/xref/core'
 
@@ -127,7 +140,7 @@ def analyze_xcu(all_commands):
 
                 cmdln = ln
                 tmp = line.split('"')
-                command_name = tmp[1]
+                command_name = re.sub('\\?.*$', '', tmp[1]) #strip URL arguments
 
                 while '</node>' not in line:
                     try:
@@ -367,37 +380,38 @@ def print_output(all_commands):
     # Produce tabular output
     unocommand, module, label, contextlabel, tooltiplabel, arguments, resourceid, numericid, group, mode = 0, 1, 5, 6, 7, 18, 11, 12, 13, 17
     lastmodule = ''
+    headers = [ 'Dispatch command',
+                'Description',
+                'Group',
+                'Arguments',
+                'Internal<br>name (value)',
+                'Mode',
+                'Source<br>files']
     for cmd in sorted_by_module:
-        # Format bottom and header
+
         if lastmodule != cmd[module]:
             if len(lastmodule) > 0:
-                print('\n|-\n|}\n')
-                print('</small>')
+                print_file('Modules', ())
+            else:
+                print_file('Module', headers) #top of file
+
             lastmodule = cmd[module]
-            print('=== %s ===\n' % lastmodule)
-            print('<small>')
-            print('{| class="wikitable sortable" width="100%"')
-            print('|-')
-            print('! scope="col" | Dispatch command')
-            print('! scope="col" | Description')
-            print('! scope="col" | Group')
-            print('! scope="col" | Arguments')
-            print('! scope="col" | Internal<br>name (value)')
-            print('! scope="col" | Mode')
-            print('! scope="col" | Source<br>files')
-        print('|-\n')
-        print('| ' + cmd[unocommand].replace('&amp;', '\n&'))
-        print('| ' + longest(cmd[label], cmd[contextlabel], cmd[tooltiplabel]))
-        print('| ' + cmd[group])
-        print('| ' + cmd[arguments].replace('\\n', '\n'))
-        if len(cmd[numericid]) == 0:
-            print('| ' + cmd[resourceid])
-        else:
-            print('| ' + cmd[resourceid] + ' (' + cmd[numericid] + ')')
-        print('| ' + cmd[mode])
-        print('| ' + sources(cmd))
-    print('|-\n|}\n')
-    # List the source files
+            print_file('=== %s ===\n' % lastmodule, headers) #section
+
+        rec = [
+         cmd[unocommand].replace('&amp;', '\n&'),
+         longest(cmd[label], cmd[contextlabel], cmd[tooltiplabel]),
+         cmd[group],
+         cmd[arguments].replace('\\n', '\n'),
+         cmd[resourceid] + ((' (' + cmd[numericid] + ')') if len(cmd[numericid]) != 0 else ''),
+         cmd[mode],
+         sources(cmd)
+         ]
+        print_file(lastmodule, rec)
+
+    print_file('END', ())
+
+def print_source_files():
     print('== Source files ==\n')
     fn = 0
     for i in range(len(XCU_FILES)):
@@ -414,6 +428,64 @@ def print_output(all_commands):
     print('</small>')
 
 
+def print_file(mod, rec):
+    if FH_OUT == None:  # default
+        print_wiki(mod, rec, False)
+    elif FORMAT_OUT == '.csv':
+        print_csv(mod, rec)
+    elif FORMAT_OUT == '.html':
+        print_html(mod, rec)
+    elif FORMAT_OUT == '.wiki': # 1 full list
+        print_wiki(mod, rec, True)
+
+def print_wiki_headers(rec):
+    print('<small>')
+    print('{| class="wikitable sortable" width="100%"')
+    print('|-')
+    print('\n'.join((map(lambda w: '! scope="col" | '+w, rec))) )
+
+def print_wiki(mod, rec, all): #legacy stdout
+    if mod.startswith('=== '):
+        if not all:
+            print(mod)
+            print_wiki_headers(rec)
+    elif mod == 'Module':
+        if all:
+            rec.insert(0, mod)
+            print_wiki_headers(rec)
+    elif mod == 'Modules':
+        if not all:
+            print('\n|-\n|}\n')
+            print('</small>')
+    elif mod == 'END':
+        print('|-\n|}\n')
+        print_source_files()
+    else:
+        print('|-\n')
+        if all:
+            rec.insert(0, mod)
+        print('\n'.join((map(lambda w: '| '+w, rec))) )
+
+def print_html(mod, rec):
+    if mod.startswith('=== '):
+        return
+    if mod == 'Module':
+        FH_OUT.write('<table border=1>\n')
+        rec = list(map(lambda r: r.replace('<br>',' '), rec))
+    if mod == 'END':
+        FH_OUT.write('</table>\n')
+        return
+    sep = '<td>'
+    FH_OUT.write('<tr>'+sep+mod+sep+sep.join(rec).replace('\n', '\r') )
+    FH_OUT.write('\n')
+
+def print_csv(mod, rec):
+    if mod.startswith('=== ') or mod == 'Modules' or mod == 'END':
+        return
+    sep = ';'
+    FH_OUT.write(mod+sep+sep.join(rec) .replace('\n', '\r'))
+    FH_OUT.write('\n')
+
 def main():
     all_commands = {}
 
@@ -429,3 +501,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+  
