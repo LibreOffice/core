@@ -18,6 +18,7 @@
  */
 
 #include <dlgsize.hxx>
+#include <o3tl/untaint.hxx>
 
 namespace dbaui
 {
@@ -60,7 +61,9 @@ sal_Int32 DlgSize::GetValue() const
 {
     if (m_xCB_STANDARD->get_active())
         return -1;
-    return static_cast<sal_Int32>(m_xMF_VALUE->get_value( FieldUnit::CM ));
+    sal_Int64 ret = m_xMF_VALUE->get_value(FieldUnit::CM);
+    o3tl::untaint_for_overrun(ret);
+    return static_cast<sal_Int32>(ret);
 }
 
 IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::Toggleable&, void)

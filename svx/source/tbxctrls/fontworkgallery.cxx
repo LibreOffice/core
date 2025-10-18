@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
+#include <o3tl/untaint.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
 
@@ -814,7 +815,9 @@ FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {
-    return static_cast<sal_Int32>(m_xMtrScale->get_value(FieldUnit::PERCENT));
+    sal_Int64 ret = m_xMtrScale->get_value(FieldUnit::PERCENT);
+    o3tl::untaint_for_overrun(ret);
+    return static_cast<sal_Int32>(ret);
 }
 
 }

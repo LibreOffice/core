@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <o3tl/untaint.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/objsh.hxx>
 #include <zoom.hxx>
@@ -37,7 +38,11 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
         return 100;
 
     if (m_xUserBtn->get_active())
-        return static_cast<sal_uInt16>(m_xUserEdit->get_value(FieldUnit::PERCENT));
+    {
+        sal_Int64 ret = m_xUserEdit->get_value(FieldUnit::PERCENT);
+        o3tl::untaint_for_overrun(ret);
+        return static_cast<sal_uInt16>(ret);
+    }
     else
         return SPECIAL_FACTOR;
 }

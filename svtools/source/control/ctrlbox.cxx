@@ -23,6 +23,7 @@
 #include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
 #include <o3tl/test_info.hxx>
+#include <o3tl/untaint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
 #include <vcl/customweld.hxx>
@@ -1395,7 +1396,11 @@ int FontSizeBox::get_value() const
         FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
         auto nValue = aFontSizeNames.Name2Size(aStr);
         if (nValue)
-            return vcl::ConvertValue(nValue, 0, GetDecimalDigits(), GetUnit(), GetUnit());
+        {
+            sal_Int64 ret = vcl::ConvertValue(nValue, 0, GetDecimalDigits(), GetUnit(), GetUnit());
+            o3tl::untaint_for_overrun(ret);
+            return ret;
+        }
     }
 
     const SvtSysLocale aSysLocale;
