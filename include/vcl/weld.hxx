@@ -1826,8 +1826,16 @@ protected:
         m_aToggleHdl.Call(*this);
     }
 
+    virtual void do_set_active(bool active) = 0;
+
 public:
-    virtual void set_active(bool active) = 0;
+    void set_active(bool active)
+    {
+        disable_notify_events();
+        do_set_active(active);
+        enable_notify_events();
+    }
+
     virtual bool get_active() const = 0;
 
     virtual TriState get_state() const
@@ -1914,9 +1922,9 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_active(bool bActive) override final
+    virtual void do_set_active(bool bActive) override final
     {
-        set_state(bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
+        do_set_state(bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
 
     virtual bool get_active() const override final { return get_state() == TRISTATE_TRUE; }

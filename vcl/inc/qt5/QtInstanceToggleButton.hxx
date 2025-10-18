@@ -20,7 +20,7 @@ class QtInstanceToggleButton : public QtInstanceButton, public virtual weld::Tog
 public:
     QtInstanceToggleButton(QAbstractButton* pButton);
 
-    virtual void set_active(bool bActive) override;
+    virtual void do_set_active(bool bActive) override;
     virtual bool get_active() const override;
 
 private Q_SLOTS:

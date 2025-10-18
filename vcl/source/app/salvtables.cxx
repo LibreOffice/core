@@ -2982,7 +2982,7 @@ SalInstanceMenuButton::SalInstanceMenuButton(::MenuButton* pButton, SalInstanceB
     }
 }
 
-void SalInstanceMenuButton::set_active(bool active)
+void SalInstanceMenuButton::do_set_active(bool active)
 {
     if (active == get_active())
         return;
@@ -3086,12 +3086,7 @@ SalInstanceRadioButton::SalInstanceRadioButton(::RadioButton* pButton, SalInstan
     m_xRadioButton->SetToggleHdl(LINK(this, SalInstanceRadioButton, ToggleHdl));
 }
 
-void SalInstanceRadioButton::set_active(bool active)
-{
-    disable_notify_events();
-    m_xRadioButton->Check(active);
-    enable_notify_events();
-}
+void SalInstanceRadioButton::do_set_active(bool active) { m_xRadioButton->Check(active); }
 
 bool SalInstanceRadioButton::get_active() const { return m_xRadioButton->IsChecked(); }
 

@@ -10286,7 +10286,7 @@ public:
     {
     }
 
-    virtual void set_active(bool active) override
+    virtual void do_set_active(bool active) override
     {
         disable_notify_events();
         gtk_toggle_button_set_active(m_pToggleButton, active);
@@ -10949,7 +10949,7 @@ public:
         m_aCustomBackground.use_custom_content(pDevice);
     }
 
-    virtual void set_active(bool active) override
+    virtual void do_set_active(bool active) override
     {
         disable_notify_events();
         if (active)
@@ -10979,10 +10979,10 @@ public:
         return GtkInstanceWidget::get_font();
     }
 #else
-    virtual void set_active(bool bActive) override
+    virtual void do_set_active(bool bActive) override
     {
         bool bWasActive = get_active();
-        GtkInstanceToggleButton::set_active(bActive);
+        GtkInstanceToggleButton::do_set_active(bActive);
         if (bWasActive && !bActive && gtk_widget_get_focus_on_click(GTK_WIDGET(m_pMenuButton)))
         {
             // grab focus back to the toggle button if the menu was popped down

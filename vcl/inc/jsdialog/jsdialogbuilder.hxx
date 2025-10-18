@@ -762,7 +762,7 @@ public:
     JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButton,
                   SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void set_active(bool active) override;
+    virtual void do_set_active(bool active) override;
 };
 
 class JSFrame : public JSWidget<SalInstanceFrame, ::VclFrame>
@@ -781,7 +781,7 @@ public:
     virtual void set_label(const OUString& rText) override;
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
-    virtual void set_active(bool active) override;
+    virtual void do_set_active(bool active) override;
 };
 
 class JSMenu final : public SalInstanceMenu

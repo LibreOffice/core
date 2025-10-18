@@ -19,7 +19,7 @@ QtInstanceToggleButton::QtInstanceToggleButton(QAbstractButton* pButton)
     connect(&getButton(), &QAbstractButton::toggled, this, &QtInstanceToggleButton::signalToggled);
 }
 
-void QtInstanceToggleButton::set_active(bool bActive)
+void QtInstanceToggleButton::do_set_active(bool bActive)
 {
     SolarMutexGuard g;
 

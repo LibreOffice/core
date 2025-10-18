@@ -1942,9 +1942,9 @@ JSRadioButton::JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButto
 {
 }
 
-void JSRadioButton::set_active(bool active)
+void JSRadioButton::do_set_active(bool active)
 {
-    SalInstanceRadioButton::set_active(active);
+    SalInstanceRadioButton::do_set_active(active);
     sendUpdate();
 }
 
@@ -1980,9 +1980,9 @@ void JSMenuButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& 
     sendUpdate();
 }
 
-void JSMenuButton::set_active(bool bActive)
+void JSMenuButton::do_set_active(bool bActive)
 {
-    SalInstanceMenuButton::set_active(bActive);
+    SalInstanceMenuButton::do_set_active(bActive);
 
     VclPtr<vcl::Window> pPopup = m_xMenuButton->GetPopover();
     if (pPopup)

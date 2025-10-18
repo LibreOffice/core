@@ -1104,12 +1104,7 @@ public:
         weld::ToggleButton::connect_toggled(rLink);
     }
 
-    virtual void set_active(bool active) override
-    {
-        disable_notify_events();
-        m_xToggleButton->Check(active);
-        enable_notify_events();
-    }
+    virtual void do_set_active(bool active) override { m_xToggleButton->Check(active); }
 
     virtual bool get_active() const override { return m_xToggleButton->IsChecked(); }
 
@@ -1997,7 +1992,7 @@ public:
     SalInstanceRadioButton(::RadioButton* pButton, SalInstanceBuilder* pBuilder,
                            bool bTakeOwnership);
 
-    virtual void set_active(bool active) override;
+    virtual void do_set_active(bool active) override;
 
     virtual bool get_active() const override;
 
@@ -2041,7 +2036,7 @@ protected:
 public:
     SalInstanceMenuButton(::MenuButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void set_active(bool active) override;
+    virtual void do_set_active(bool active) override;
 
     virtual bool get_active() const override;
 

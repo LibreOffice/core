@@ -20,7 +20,7 @@ QtInstanceRadioButton::QtInstanceRadioButton(QRadioButton* pRadioButton)
     connect(m_pRadioButton, &QRadioButton::toggled, this, [&] { signal_toggled(); });
 }
 
-void QtInstanceRadioButton::set_active(bool bActive)
+void QtInstanceRadioButton::do_set_active(bool bActive)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pRadioButton->setChecked(bActive); });

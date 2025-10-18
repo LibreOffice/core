@@ -24,7 +24,7 @@ public:
     QtInstanceRadioButton(QRadioButton* pRadioButton);
 
     // weld::Toggleable methods
-    virtual void set_active(bool bActive) override;
+    virtual void do_set_active(bool bActive) override;
     virtual bool get_active() const override;
 
     // weld::RadioButton methods
