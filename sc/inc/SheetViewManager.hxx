@@ -63,6 +63,8 @@ public:
     SheetViewID getPreviousSheetView(SheetViewID nID);
 
     void unsyncAllSheetViews();
+
+    static OUString defaultViewName();
 };
 }
 

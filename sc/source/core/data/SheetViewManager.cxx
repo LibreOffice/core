@@ -9,6 +9,8 @@
 
 #include <SheetViewManager.hxx>
 #include <table.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 namespace sc
 {
@@ -122,8 +124,11 @@ void SheetViewManager::unsyncAllSheetViews()
 OUString SheetViewManager::generateName()
 {
     maNameCounter++;
-    return u"Temp View " + OUString::number(maNameCounter);
+    OUString aTemplate = ScResId(STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE);
+    return aTemplate.replaceAll("%1", OUString::number(maNameCounter));
 }
+
+OUString SheetViewManager::defaultViewName() { return ScResId(STR_SHEET_VIEW_DEFAULT_VIEW_NAME); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
