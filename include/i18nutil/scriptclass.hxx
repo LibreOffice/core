@@ -8,7 +8,6 @@
  */
 
 #include <i18nutil/i18nutildllapi.h>
-#include <rtl/ustring.hxx>
 
 namespace i18nutil
 {

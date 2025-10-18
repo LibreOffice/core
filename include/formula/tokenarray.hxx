@@ -24,7 +24,6 @@
 #include <ostream>
 #include <type_traits>
 #include <unordered_set>
-#include <unordered_map>
 #include <vector>
 
 #include <formula/ExternalReferenceHelper.hxx>

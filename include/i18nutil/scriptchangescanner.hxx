@@ -11,7 +11,6 @@
 #include <i18nutil/i18nutildllapi.h>
 #include <com/sun/star/text/ScriptHintType.hpp>
 #include <rtl/ustring.hxx>
-#include <optional>
 #include <memory>
 #include <vector>
 

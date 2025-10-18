@@ -22,7 +22,6 @@
 #include <memory>
 #include <vector>
 #include <unordered_set>
-#include <unordered_map>
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>

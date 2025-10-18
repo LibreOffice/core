@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/errcode.hxx>
-#include <tools/ref.hxx>
 
 class SfxObjectShell;
 
