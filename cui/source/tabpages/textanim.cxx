@@ -359,8 +359,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE )
         {
-            nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE);
-            nValue = -nValue;
+            nValue = o3tl::saturating_toggle_sign(m_xMtrFldAmount->get_value(FieldUnit::NONE));
         }
         else
         {

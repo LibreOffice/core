@@ -229,8 +229,8 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
                 sal_Int64 nHeightPercent = m_xBitmapHeight->get_value(FieldUnit::NONE);
                 if (m_xTsbScale->get_sensitive() && m_xTsbScale->get_state() == TRISTATE_TRUE)
                 {
-                    aSetBitmapSize.setWidth( -nWidthPercent );
-                    aSetBitmapSize.setHeight( -nHeightPercent );
+                    aSetBitmapSize.setWidth(o3tl::saturating_toggle_sign(nWidthPercent));
+                    aSetBitmapSize.setHeight(o3tl::saturating_toggle_sign(nHeightPercent));
                 }
                 else if (!m_bLogicalSize)
                 {

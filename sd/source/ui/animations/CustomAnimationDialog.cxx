@@ -521,7 +521,7 @@ void SdRotationPropertyBox::updateMenu()
 {
     sal_Int64 nValue = mxMetric->get_value(FieldUnit::DEGREE);
     bool bDirection = nValue >= 0;
-    nValue = (nValue < 0 ? -nValue : nValue);
+    if (nValue < 0) nValue = o3tl::saturating_toggle_sign(nValue);
 
     mxControl->set_item_active(u"90"_ustr, nValue == 90);
     mxControl->set_item_active(u"180"_ustr, nValue == 180);

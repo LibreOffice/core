@@ -39,8 +39,8 @@ public:
 private:
     std::unique_ptr<weld::MetricSpinButton> m_xEdValue;
     std::unique_ptr<weld::CheckButton> m_xBtnDefVal;
-    int nDefaultValue;
-    int nCurrentValue;
+    sal_Int64 nDefaultValue;
+    sal_Int64 nCurrentValue;
 
     DECL_LINK(SetDefValHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);

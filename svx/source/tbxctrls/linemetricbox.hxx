@@ -27,7 +27,7 @@ class SvxMetricField final : public InterimItemWindow
 {
 private:
     std::unique_ptr<weld::MetricSpinButton> m_xWidget;
-    int             nCurValue;
+    sal_Int64       nCurValue;
     MapUnit         eDestPoolUnit;
     FieldUnit       eDlgUnit;
     css::uno::Reference< css::frame::XFrame > mxFrame;

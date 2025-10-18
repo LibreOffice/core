@@ -531,10 +531,9 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // Transparency
-    sal_uInt16 nVal = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
     if( m_xMtrTransparent->get_value_changed_from_saved() )
     {
-        XLineTransparenceItem aItem( nVal );
+        XLineTransparenceItem aItem(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
         pOld = GetOldItem( *rAttrs, XATTR_LINETRANSPARENCE );
         if ( !pOld || !( *static_cast<const XLineTransparenceItem*>(pOld) == aItem ) )
         {
