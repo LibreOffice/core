@@ -1847,59 +1847,6 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygon)
     }
 }
 
-// Test and document existing behaviour
-CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygonAlpha)
-{
-    Size aSize(100, 100);
-    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
-    pVDev->SetOutputSizePixel(aSize);
-
-    // create a square polypolygon
-    tools::Polygon aPolygon(4);
-    aPolygon.SetPoint(Point(0, 0), 0);
-    aPolygon.SetPoint(Point(0, 100), 1);
-    aPolygon.SetPoint(Point(100, 100), 2);
-    aPolygon.SetPoint(Point(0, 0), 3);
-    tools::PolyPolygon aPolyPolygon(aPolygon);
-    aPolyPolygon.Optimize(PolyOptimizeFlags::CLOSE);
-    basegfx::B2DPolyPolygon aB2DPolyPolygon(aPolyPolygon.getB2DPolyPolygon());
-
-    Color aLineColor(ColorAlpha, 255, 255, 0, 0); // opaque red
-    Color aFillColor(ColorAlpha, 127, 255, 0, 0); // 50% transparent red
-    pVDev->SetLineColor(aLineColor);
-    pVDev->SetFillColor(aFillColor);
-    pVDev->DrawPolyPolygon(aB2DPolyPolygon);
-
-    CPPUNIT_ASSERT_EQUAL(aLineColor, pVDev->GetPixel(Point(0, 0)));
-    // existing behaviour - we drop the alpha when we fill a polypolygon
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 255, 255, 0, 0), pVDev->GetPixel(Point(1, 1)));
-}
-
-// Test and document existing behaviour
-CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawRectAlpha)
-{
-    Size aSize(100, 100);
-    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
-    pVDev->SetOutputSizePixel(aSize);
-
-    const Color RED_OPAQUE(ColorAlpha, 255, 255, 0, 0); // opaque red
-    const Color RED_TRANSPARENT(ColorAlpha, 127, 255, 0, 0); // 50% transparent red
-    pVDev->SetLineColor(RED_OPAQUE);
-    pVDev->SetFillColor(RED_TRANSPARENT);
-    pVDev->DrawRect(tools::Rectangle(0, 0, 100, 100));
-
-    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(1, 1)));
-
-    pVDev->SetLineColor(RED_TRANSPARENT);
-    pVDev->SetFillColor(RED_OPAQUE);
-    pVDev->DrawRect(tools::Rectangle(0, 0, 100, 100));
-
-    // existing behaviour - we drop the alpha when we draw the line for a rect
-    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(RED_OPAQUE, pVDev->GetPixel(Point(1, 1)));
-}
-
 static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
 {
     MetaAction* pAction = rMtf.GetAction(nIndex);

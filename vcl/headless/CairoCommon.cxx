@@ -629,7 +629,6 @@ cairo_t* CairoCommon::createTmpCompatibleCairoContext() const
 
 void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
 {
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     if (cairo_surface_get_content(cairo_get_target(cr)) != CAIRO_CONTENT_ALPHA)
     {
         cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0,
@@ -639,6 +638,7 @@ void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
     {
         double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
         cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     }
 }
 
@@ -880,8 +880,7 @@ void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, 
             basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
 
         m_oFillColor = aOrigFillColor;
-        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect),
-                        (255 - aOrigFillColor->GetAlpha()) / 255.0, bAntiAlias);
+        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0, bAntiAlias);
         m_oFillColor = std::nullopt;
     }
 
