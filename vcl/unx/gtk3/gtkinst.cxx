@@ -7783,7 +7783,7 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    virtual void set_page_sensitive(const OUString& rIdent, bool bSensitive) override
+    virtual void do_set_page_sensitive(const OUString& rIdent, bool bSensitive) override
     {
         m_aNotClickable[rIdent] = !bSensitive;
     }

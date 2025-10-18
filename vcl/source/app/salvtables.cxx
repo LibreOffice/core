@@ -2191,17 +2191,15 @@ void SalInstanceAssistant::set_page_title(const OUString& rIdent, const OUString
     }
 }
 
-void SalInstanceAssistant::set_page_sensitive(const OUString& rIdent, bool bSensitive)
+void SalInstanceAssistant::do_set_page_sensitive(const OUString& rIdent, bool bSensitive)
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
         return;
     if (m_aAddedPages[nIndex]->IsEnabled() != bSensitive)
     {
-        disable_notify_events();
         m_aAddedPages[nIndex]->Enable(bSensitive);
         m_aUpdateRoadmapIdle.Start();
-        enable_notify_events();
     }
 }
 

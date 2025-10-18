@@ -698,6 +698,8 @@ protected:
         return m_aJumpPageHdl.Call(rIdent);
     }
 
+    virtual void do_set_page_sensitive(const OUString& rIdent, bool bSensitive) = 0;
+
 public:
     virtual int get_current_page() const = 0;
     virtual int get_n_pages() const = 0;
@@ -709,7 +711,14 @@ public:
     virtual void set_page_index(const OUString& rIdent, int nIndex) = 0;
     virtual void set_page_title(const OUString& rIdent, const OUString& rTitle) = 0;
     virtual OUString get_page_title(const OUString& rIdent) const = 0;
-    virtual void set_page_sensitive(const OUString& rIdent, bool bSensitive) = 0;
+
+    void set_page_sensitive(const OUString& rIdent, bool bSensitive)
+    {
+        disable_notify_events();
+        do_set_page_sensitive(rIdent, bSensitive);
+        enable_notify_events();
+    }
+
     virtual weld::Container* append_page(const OUString& rIdent) = 0;
 
     virtual void set_page_side_help_id(const OUString& rHelpId) = 0;

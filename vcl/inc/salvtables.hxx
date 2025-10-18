@@ -575,7 +575,7 @@ public:
     virtual weld::Container* append_page(const OUString& rIdent) override;
     virtual OUString get_page_title(const OUString& rIdent) const override;
     virtual void set_page_title(const OUString& rIdent, const OUString& rTitle) override;
-    virtual void set_page_sensitive(const OUString& rIdent, bool bSensitive) override;
+    virtual void do_set_page_sensitive(const OUString& rIdent, bool bSensitive) override;
     virtual void set_page_side_help_id(const OUString& rHelpId) override;
     virtual void set_page_side_image(const OUString& rImage) override;
     std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;

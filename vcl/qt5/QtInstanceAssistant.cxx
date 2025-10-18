@@ -179,7 +179,7 @@ OUString QtInstanceAssistant::get_page_title(const OUString& rIdent) const
     return sTitle;
 }
 
-void QtInstanceAssistant::set_page_sensitive(const OUString& rIdent, bool bSensitive)
+void QtInstanceAssistant::do_set_page_sensitive(const OUString& rIdent, bool bSensitive)
 {
     SolarMutexGuard g;
 
