@@ -998,7 +998,10 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     // Init VirDev
     maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
-    maVirDev->SetOutputSizePixel(aWinSize);
+    Size aDevSize(aWinSize);
+    aDevSize.AdjustWidth(mnMargin * 2);
+    aDevSize.AdjustHeight(mnMargin * 2);
+    maVirDev->SetOutputSizePixel(aDevSize);
     maVirDev->Erase();
 
     // nothing is changed in case of too small items
