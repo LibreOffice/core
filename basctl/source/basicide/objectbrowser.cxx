@@ -1054,8 +1054,8 @@ void ObjectBrowser::NavigateToMacroSource(const IdeSymbolInfo& rSymbol)
                  "NavigateToMacroSource: Document is alive, dispatching SID_BASICIDE_SHOWSBX.");
 
         // Pass the method name so it navigates to the exact line
-        SbxItem aSbxItem(SID_BASICIDE_ARG_SBX, aDoc, rSymbol.sOriginLibrary, rSymbol.sOriginModule,
-                         rSymbol.sName, basctl::SBX_TYPE_METHOD);
+        SbxItem aSbxItem(SID_BASICIDE_ARG_SBX, std::move(aDoc), rSymbol.sOriginLibrary,
+                         rSymbol.sOriginModule, rSymbol.sName, basctl::SBX_TYPE_METHOD);
 
         SfxViewFrame& rViewFrame = m_pShell->GetViewFrame();
         if (SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher())

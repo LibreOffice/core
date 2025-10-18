@@ -159,7 +159,7 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
                 pNode->aParameters.push_back(std::move(aParam));
             }
 
-            rMembers.push_back(pNode);
+            rMembers.push_back(std::move(pNode));
         }
 
         for (const auto& xField : xTypeClass->getFields())
@@ -213,7 +213,7 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
                 }
             }
 
-            rMembers.push_back(pMember);
+            rMembers.push_back(std::move(pMember));
         }
     }
     catch (const Exception& e)
@@ -295,7 +295,7 @@ void ImplGetMembersOfBasicModule(SymbolInfoList& rMembers, const IdeSymbolInfo& 
                     }
                 }
 
-                rMembers.push_back(pMember);
+                rMembers.push_back(std::move(pMember));
             }
         }
     }
@@ -325,7 +325,7 @@ void ImplGetChildrenOfBasicLibrary(SymbolInfoList& rChildren, const IdeSymbolInf
             }
             pNode->sParentName = rParent.sName;
             pNode->sIdentifier = rParent.sIdentifier + u":" + rLibName;
-            rChildren.push_back(pNode);
+            rChildren.push_back(std::move(pNode));
         }
     }
     else if (rParent.eKind == IdeSymbolKind::LIBRARY)
@@ -547,7 +547,7 @@ void IdeDataProvider::AddDocumentNodesWithModules()
                 {
                     pDocNode->sOriginLocation = rDoc.getDocument()->getURL();
                 }
-                m_aAllTopLevelNodes.push_back(pDocNode);
+                m_aAllTopLevelNodes.push_back(std::move(pDocNode));
             }
         }
     }
@@ -580,7 +580,7 @@ SymbolInfoList IdeDataProvider::GetTopLevelNodes()
         auto pLoadingNode = std::make_shared<IdeSymbolInfo>(u"[Initializing...]",
                                                             IdeSymbolKind::PLACEHOLDER, u"");
         pLoadingNode->bSelectable = false;
-        aNodes.push_back(pLoadingNode);
+        aNodes.push_back(std::move(pLoadingNode));
         return aNodes;
     }
 
