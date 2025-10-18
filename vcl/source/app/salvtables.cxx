@@ -2177,17 +2177,15 @@ OUString SalInstanceAssistant::get_page_title(const OUString& rIdent) const
     return m_aAddedPages[nIndex]->GetText();
 }
 
-void SalInstanceAssistant::set_page_title(const OUString& rIdent, const OUString& rTitle)
+void SalInstanceAssistant::do_set_page_title(const OUString& rIdent, const OUString& rTitle)
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
         return;
     if (m_aAddedPages[nIndex]->GetText() != rTitle)
     {
-        disable_notify_events();
         m_aAddedPages[nIndex]->SetText(rTitle);
         m_aUpdateRoadmapIdle.Start();
-        enable_notify_events();
     }
 }
 

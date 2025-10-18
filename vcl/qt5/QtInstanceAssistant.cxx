@@ -156,7 +156,7 @@ void QtInstanceAssistant::set_page_index(const OUString& rIdent, int nIndex)
     });
 }
 
-void QtInstanceAssistant::set_page_title(const OUString& rIdent, const OUString& rTitle)
+void QtInstanceAssistant::do_set_page_title(const OUString& rIdent, const OUString& rTitle)
 {
     SolarMutexGuard g;
 

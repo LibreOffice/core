@@ -7760,7 +7760,7 @@ public:
         set_current_page(nPage);
     }
 
-    virtual void set_page_title(const OUString& rIdent, const OUString& rTitle) override
+    virtual void do_set_page_title(const OUString& rIdent, const OUString& rTitle) override
     {
         int nIndex = find_page(rIdent);
         if (nIndex == -1)
