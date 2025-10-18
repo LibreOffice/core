@@ -589,6 +589,9 @@
 #define STR_SENSITIVITY_SHADOWPRICE             NC_("STR_SENSITIVITY_SHADOWPRICE", "Shadow Price")
 #define STR_SENSITIVITY_RHS                     NC_("STR_SENSITIVITY_RHS", "Constraint R.H. Side")
 
+#define STR_SHEET_VIEW_DEFAULT_VIEW_NAME        NC_("STR_SHEET_VIEW_DEFAULT_VIEW_NAME", "Default View")
+#define STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE  NC_("STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE", "Temporary View %1")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
