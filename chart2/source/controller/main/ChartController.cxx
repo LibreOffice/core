@@ -1297,10 +1297,9 @@ void SAL_CALL ChartController::dispatch(
                             const Sequence<Reference<chart2::XFormattedString>> aStrings(
                                 xTitle->getText());
                             xProperties.pop_back();
-                            for (int i = 0; i < aStrings.getLength(); i++)
+                            for (const auto& aString : aStrings)
                             {
-                                Reference<beans::XPropertySet> xTitlePropSet(aStrings[i],
-                                                                             uno::UNO_QUERY);
+                                Reference<beans::XPropertySet> xTitlePropSet(aString, uno::UNO_QUERY);
                                 xProperties.push_back(xTitlePropSet);
                             }
                         }
@@ -1310,9 +1309,9 @@ void SAL_CALL ChartController::dispatch(
                     }
                 }
                 bool bAllPropertiesExist = (xProperties.size() > 0);
-                for (std::size_t i = 0; i < xProperties.size(); i++)
+                for (const auto& xProperty : xProperties)
                 {
-                    if (!xProperties[i].is())
+                    if (!xProperty.is())
                         bAllPropertiesExist = false;
                 }
                 if (bAllPropertiesExist)
