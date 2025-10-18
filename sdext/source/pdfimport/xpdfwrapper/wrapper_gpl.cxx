@@ -203,6 +203,22 @@ int main(int argc, char **argv)
                     // PDFDoc takes over ownership for all strings below
                     GooString* pFileName = new GooString(myStringToStdString(argv[1]));
 
+#if POPPLER_CHECK_VERSION(22, 6, 0)
+                    std::optional<GooString> ownerPasswordStr = {};
+                    if (aPwBuf[0] != 0) {
+                        ownerPasswordStr = std::make_optional<GooString>(aPwBuf);
+                    } else if (ownerPassword) {
+                        ownerPasswordStr = std::make_optional<GooString>(myStringToStdString(ownerPassword));
+                    }
+                    std::optional<GooString> userPasswordStr = {};
+                    if (aPwBuf[0] != 0) {
+                        userPasswordStr = std::make_optional<GooString>(aPwBuf);
+                    } else if (userPassword) {
+                        userPasswordStr = std::make_optional<GooString>(myStringToStdString(userPassword));
+                    }
+                    pDocUnique = std::make_unique<PDFDoc>(
+                        std::unique_ptr<GooString>(pFileName), ownerPasswordStr, userPasswordStr);
+#else
                     // check for password string(s)
                     GooString* pOwnerPasswordStr(aPwBuf[0] != 0
                                                  ? new GooString(aPwBuf)
@@ -214,20 +230,6 @@ int main(int argc, char **argv)
                                                 : (userPassword
                                                   ? new GooString(myStringToStdString(userPassword))
                                                   : nullptr));
-#if POPPLER_CHECK_VERSION(25, 10, 0)
-                    std::string sFileName(pFileName ? pFileName->toStr() : std::string());
-                    std::string sOwnerPasswordStr(pOwnerPasswordStr ? pOwnerPasswordStr->toStr() : std::string());
-                    std::string sUserPasswordStr(pUserPasswordStr ? pUserPasswordStr->toStr() : std::string());
-                    pDocUnique = std::unique_ptr<PDFDoc>(
-                        new PDFDoc(std::make_unique<GooString>(sFileName),
-                                   std::optional<GooString>(sOwnerPasswordStr),
-                                   std::optional<GooString>(sUserPasswordStr)));
-#elif POPPLER_CHECK_VERSION(22, 6, 0)
-                    pDocUnique = std::unique_ptr<PDFDoc>(
-                        new PDFDoc(std::make_unique<GooString>(pFileName),
-                                   std::optional<GooString>(pOwnerPasswordStr),
-                                   std::optional<GooString>(pUserPasswordStr)));
-#else
                     pDocUnique = std::unique_ptr<PDFDoc>(
                         new PDFDoc(pFileName, pOwnerPasswordStr, pUserPasswordStr));
 #endif
