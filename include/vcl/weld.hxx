@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_WELD_HXX
-#define INCLUDED_VCL_WELD_HXX
+#pragma once
 
 #include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
@@ -2947,6 +2946,5 @@ void Dialog::set_default_response(int nResponse)
     change_default_button(nullptr, pButton.get());
 }
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
