@@ -902,10 +902,17 @@ void SdPageObjsTLV::Select()
 
     if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
         nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
-    else if (m_pDoc->GetSdPageCount(PageKind::Standard) == 1)
+    else
     {
-        // Can not move away the last slide in a document.
-        nDNDActions = DND_ACTION_COPY;
+        // Only for page/slide entry and only if page/slide entry dragging is re-enabled.
+        // Commit 1b031eb1ba6c529ce67ff8f471afee414d64a098 disabled page/slide entry dragging.
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_cursor(xIter.get()) && m_xTreeView->get_iter_depth(*xIter) == 0
+            && m_pDoc->GetSdPageCount(PageKind::Standard) == 1)
+        {
+            // Can not move away the last slide in a document.
+            nDNDActions = DND_ACTION_COPY;
+        }
     }
 
     // object is destroyed by internal reference mechanism
