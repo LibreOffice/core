@@ -119,7 +119,7 @@ void QtInstanceAssistant::set_current_page(const OUString& rIdent)
     });
 }
 
-void QtInstanceAssistant::set_page_index(const OUString& rIdent, int nIndex)
+void QtInstanceAssistant::do_set_page_index(const OUString& rIdent, int nIndex)
 {
     SolarMutexGuard g;
 

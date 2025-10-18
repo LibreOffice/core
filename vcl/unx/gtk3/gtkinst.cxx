@@ -7788,7 +7788,7 @@ public:
         m_aNotClickable[rIdent] = !bSensitive;
     }
 
-    virtual void set_page_index(const OUString& rIdent, int nNewIndex) override
+    virtual void do_set_page_index(const OUString& rIdent, int nNewIndex) override
     {
         int nOldIndex = find_page(rIdent);
         if (nOldIndex == -1)

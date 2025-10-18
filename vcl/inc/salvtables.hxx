@@ -571,7 +571,7 @@ public:
     virtual OUString get_current_page_ident() const override;
     virtual void set_current_page(int nPage) override;
     virtual void set_current_page(const OUString& rIdent) override;
-    virtual void set_page_index(const OUString& rIdent, int nNewIndex) override;
+    virtual void do_set_page_index(const OUString& rIdent, int nNewIndex) override;
     virtual weld::Container* append_page(const OUString& rIdent) override;
     virtual OUString get_page_title(const OUString& rIdent) const override;
     virtual void do_set_page_title(const OUString& rIdent, const OUString& rTitle) override;

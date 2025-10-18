@@ -698,6 +698,7 @@ protected:
         return m_aJumpPageHdl.Call(rIdent);
     }
 
+    virtual void do_set_page_index(const OUString& rIdent, int nIndex) = 0;
     virtual void do_set_page_title(const OUString& rIdent, const OUString& rTitle) = 0;
     virtual void do_set_page_sensitive(const OUString& rIdent, bool bSensitive) = 0;
 
@@ -708,8 +709,14 @@ public:
     virtual OUString get_current_page_ident() const = 0;
     virtual void set_current_page(int nPage) = 0;
     virtual void set_current_page(const OUString& rIdent) = 0;
+
     // move the page rIdent to position nIndex
-    virtual void set_page_index(const OUString& rIdent, int nIndex) = 0;
+    void set_page_index(const OUString& rIdent, int nIndex)
+    {
+        disable_notify_events();
+        do_set_page_index(rIdent, nIndex);
+        enable_notify_events();
+    }
 
     void set_page_title(const OUString& rIdent, const OUString& rTitle)
     {

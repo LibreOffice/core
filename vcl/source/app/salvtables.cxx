@@ -2123,7 +2123,7 @@ void SalInstanceAssistant::set_current_page(const OUString& rIdent)
     set_current_page(nIndex);
 }
 
-void SalInstanceAssistant::set_page_index(const OUString& rIdent, int nNewIndex)
+void SalInstanceAssistant::do_set_page_index(const OUString& rIdent, int nNewIndex)
 {
     int nOldIndex = find_page(rIdent);
 
@@ -2132,8 +2132,6 @@ void SalInstanceAssistant::set_page_index(const OUString& rIdent, int nNewIndex)
 
     if (nOldIndex == nNewIndex)
         return;
-
-    disable_notify_events();
 
     auto entry = std::move(m_aAddedPages[nOldIndex]);
     m_aAddedPages.erase(m_aAddedPages.begin() + nOldIndex);
@@ -2144,8 +2142,6 @@ void SalInstanceAssistant::set_page_index(const OUString& rIdent, int nNewIndex)
     m_aIds.insert(m_aIds.begin() + nNewIndex, nId);
 
     m_aUpdateRoadmapIdle.Start();
-
-    enable_notify_events();
 }
 
 weld::Container* SalInstanceAssistant::append_page(const OUString& rIdent)
