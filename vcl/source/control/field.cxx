@@ -1045,12 +1045,39 @@ static double nonValueDoubleToValueDouble( double nValue )
     return std::isfinite( nValue ) ? nValue : 0.0;
 }
 
+static double ConvertDoubleValue(double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
+                                 FieldUnit eInUnit, FieldUnit eOutUnit)
+{
+    if ( eInUnit != eOutUnit )
+    {
+        if (eInUnit == FieldUnit::PERCENT && mnBaseValue > 0 && nValue > 0)
+        {
+            sal_Int64 nDiv = 100 * ImplPower10(nDecDigits);
+
+            if (mnBaseValue != 1)
+                nValue *= mnBaseValue;
+
+            nValue += nDiv / 2;
+            nValue /= nDiv;
+        }
+        else
+        {
+            const o3tl::Length eFrom = FieldToO3tlLength(eInUnit, o3tl::Length::invalid);
+            const o3tl::Length eTo = FieldToO3tlLength(eOutUnit, o3tl::Length::invalid);
+            if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+                nValue = o3tl::convert(nValue, eFrom, eTo);
+        }
+    }
+
+    return nValue;
+}
+
 namespace vcl
 {
     sal_Int64 ConvertValue(sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                            FieldUnit eInUnit, FieldUnit eOutUnit)
     {
-        double nDouble = nonValueDoubleToValueDouble(vcl::ConvertDoubleValue(
+        double nDouble = nonValueDoubleToValueDouble(ConvertDoubleValue(
                     static_cast<double>(nValue), mnBaseValue, nDecDigits, eInUnit, eOutUnit));
 
         return clipDoubleAgainstMinMax(nDouble, SAL_MIN_INT64, SAL_MAX_INT64);
@@ -1121,33 +1148,6 @@ namespace vcl
         return static_cast<sal_Int64>(
             nonValueDoubleToValueDouble(
                 convertValue( nValue, nDecDigits, eFieldUnit, eOutUnit ) ) );
-    }
-
-    double ConvertDoubleValue(double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
-                              FieldUnit eInUnit, FieldUnit eOutUnit)
-    {
-        if ( eInUnit != eOutUnit )
-        {
-            if (eInUnit == FieldUnit::PERCENT && mnBaseValue > 0 && nValue > 0)
-            {
-                sal_Int64 nDiv = 100 * ImplPower10(nDecDigits);
-
-                if (mnBaseValue != 1)
-                    nValue *= mnBaseValue;
-
-                nValue += nDiv / 2;
-                nValue /= nDiv;
-            }
-            else
-            {
-                const o3tl::Length eFrom = FieldToO3tlLength(eInUnit, o3tl::Length::invalid);
-                const o3tl::Length eTo = FieldToO3tlLength(eOutUnit, o3tl::Length::invalid);
-                if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
-                    nValue = o3tl::convert(nValue, eFrom, eTo);
-            }
-        }
-
-        return nValue;
     }
 
     double ConvertDoubleValue(double nValue, sal_uInt16 nDigits,
@@ -1223,7 +1223,7 @@ namespace vcl
         FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
 
         // Recalculate unit
-        rValue = vcl::ConvertDoubleValue(nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit);
+        rValue = ConvertDoubleValue(nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit);
 
         return true;
     }
