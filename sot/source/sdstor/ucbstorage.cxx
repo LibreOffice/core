@@ -317,10 +317,15 @@ void FileStreamWrapper_Impl::checkError()
         throw NotConnectedException(OUString(), getXWeak());
 }
 
-
-#define COMMIT_RESULT_FAILURE           0
-#define COMMIT_RESULT_NOTHING_TO_DO     1
-#define COMMIT_RESULT_SUCCESS           2
+namespace
+{
+    enum class CommitResult
+    {
+        Failure,
+        Nothing_to_do,
+        Success
+    };
+}
 
 static SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
 {
@@ -446,7 +451,7 @@ public:
     void                        Free();
     bool                        Init();
     bool                        Clear();
-    sal_Int16                   Commit();       // if modified and committed: transfer an XInputStream to the content
+    CommitResult                Commit();       // if modified and committed: transfer an XInputStream to the content
     void                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
     sal_uInt64                  GetSize();
@@ -505,7 +510,7 @@ public:
                                                  bool, Reference< XProgressHandler > const & );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, bool );
     void                        Init();
-    sal_Int16                   Commit();
+    CommitResult                Commit();
     void                        Revert();
     bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
@@ -1043,7 +1048,7 @@ BaseStorage* UCBStorageStream_Impl::CreateStorage()
     return static_cast< BaseStorage* > ( pStorage );
 }
 
-sal_Int16 UCBStorageStream_Impl::Commit()
+CommitResult UCBStorageStream_Impl::Commit()
 {
     // send stream to the original content
     // the  parent storage is responsible for the correct handling of deleted contents
@@ -1085,27 +1090,27 @@ sal_Int16 UCBStorageStream_Impl::Commit()
             {
                 // any command wasn't executed successfully - not specified
                 SetError( ERRCODE_IO_GENERAL );
-                return COMMIT_RESULT_FAILURE;
+                return CommitResult::Failure;
             }
             catch (const RuntimeException&)
             {
                 // any other error - not specified
                 SetError( ERRCODE_IO_GENERAL );
-                return COMMIT_RESULT_FAILURE;
+                return CommitResult::Failure;
             }
             catch (const Exception&)
             {
                 // any other error - not specified
                 SetError( ERRCODE_IO_GENERAL );
-                return COMMIT_RESULT_FAILURE;
+                return CommitResult::Failure;
             }
 
             m_bCommited = false;
-            return COMMIT_RESULT_SUCCESS;
+            return CommitResult::Success;
         }
     }
 
-    return COMMIT_RESULT_NOTHING_TO_DO;
+    return CommitResult::Nothing_to_do;
 }
 
 void UCBStorageStream_Impl::Revert()
@@ -1982,10 +1987,10 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
     return bRet;
 }
 
-sal_Int16 UCBStorage_Impl::Commit()
+CommitResult UCBStorage_Impl::Commit()
 {
     // send all changes to the package
-    sal_Int16 nRet = COMMIT_RESULT_NOTHING_TO_DO;
+    CommitResult nRet = CommitResult::Nothing_to_do;
 
     // there is nothing to do if the storage has been opened readonly or if it was opened in transacted mode and no
     // commit command has been sent
@@ -1994,7 +1999,7 @@ sal_Int16 UCBStorage_Impl::Commit()
         try
         {
             // all errors will be caught in the "catch" statement outside the loop
-            for ( size_t i = 0; i < m_aChildrenList.size() && nRet; ++i )
+            for ( size_t i = 0; i < m_aChildrenList.size() && static_cast<sal_Int16>(nRet); ++i )
             {
                 auto& pElement = m_aChildrenList[ i ];
                 ::ucbhelper::Content* pContent = pElement->GetContent();
@@ -2016,23 +2021,23 @@ sal_Int16 UCBStorage_Impl::Commit()
                         if (pContent && (!pElement->m_xStream.is() || pElement->m_xStream->Clear()))
                         {
                             pContent->executeCommand( u"delete"_ustr, Any( true ) );
-                            nRet = COMMIT_RESULT_SUCCESS;
+                            nRet = CommitResult::Success;
                         }
                         else
                             // couldn't release stream because there are external references to it
-                            nRet = COMMIT_RESULT_FAILURE;
+                            nRet = CommitResult::Failure;
                     }
                 }
                 else
                 {
-                    sal_Int16 nLocalRet = COMMIT_RESULT_NOTHING_TO_DO;
+                    CommitResult nLocalRet = CommitResult::Nothing_to_do;
                     if ( pElement->m_xStorage.is() )
                     {
                         // element is a storage
                         // do a commit in the following cases:
                         //  - if storage is already inserted, and changed
                         //  - storage is not in a package
-                        //  - it's a new storage, try to insert and commit if successful inserted
+                        //  - it's a new storage, try to insert and commit if Successful inserted
                         if ( !pElement->m_bIsInserted || m_bIsLinked
                              || pElement->m_xStorage->Insert( m_oContent ? &*m_oContent : nullptr ) )
                         {
@@ -2059,22 +2064,22 @@ sal_Int16 UCBStorage_Impl::Commit()
                     if (pContent && pElement->m_aName != pElement->m_aOriginalName)
                     {
                         // name ( title ) of the element was changed
-                        nLocalRet = COMMIT_RESULT_SUCCESS;
+                        nLocalRet = CommitResult::Success;
                         pContent->setPropertyValue(u"Title"_ustr, Any(pElement->m_aName) );
                     }
 
                     if (pContent && pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType())
                     {
                         // mediatype of the element was changed
-                        nLocalRet = COMMIT_RESULT_SUCCESS;
+                        nLocalRet = CommitResult::Success;
                         pContent->setPropertyValue(u"MediaType"_ustr, Any(pElement->GetContentType()) );
                     }
 
-                    if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
+                    if ( nLocalRet != CommitResult::Nothing_to_do )
                         nRet = nLocalRet;
                 }
 
-                if ( nRet == COMMIT_RESULT_FAILURE )
+                if ( nRet == CommitResult::Failure )
                     break;
             }
         }
@@ -2082,31 +2087,31 @@ sal_Int16 UCBStorage_Impl::Commit()
         {
             // content could not be created
             SetError( ERRCODE_IO_NOTEXISTS );
-            return COMMIT_RESULT_FAILURE;
+            return CommitResult::Failure;
         }
         catch (const CommandAbortedException&)
         {
-            // any command wasn't executed successfully - not specified
+            // any command wasn't executed Successfully - not specified
             SetError( ERRCODE_IO_GENERAL );
-            return COMMIT_RESULT_FAILURE;
+            return CommitResult::Failure;
         }
         catch (const RuntimeException&)
         {
             // any other error - not specified
             SetError( ERRCODE_IO_GENERAL );
-            return COMMIT_RESULT_FAILURE;
+            return CommitResult::Failure;
         }
         catch (const Exception&)
         {
             // any other error - not specified
             SetError( ERRCODE_IO_GENERAL );
-            return COMMIT_RESULT_FAILURE;
+            return CommitResult::Failure;
         }
 
         if ( m_bIsRoot && m_oContent )
         {
             // the root storage must flush the root package content
-            if ( nRet == COMMIT_RESULT_SUCCESS )
+            if ( nRet == CommitResult::Success )
             {
                 try
                 {
@@ -2174,9 +2179,9 @@ sal_Int16 UCBStorage_Impl::Commit()
                 {
                     // how to tell the content : forget all changes ?!
                     // or should we assume that the content does it by itself because he threw an exception ?!
-                    // any command wasn't executed successfully - not specified
+                    // any command wasn't executed Successfully - not specified
                     SetError( ERRCODE_IO_GENERAL );
-                    return COMMIT_RESULT_FAILURE;
+                    return CommitResult::Failure;
                 }
                 catch (const RuntimeException&)
                 {
@@ -2184,7 +2189,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // or should we assume that the content does it by itself because he threw an exception ?!
                     // any other error - not specified
                     SetError( ERRCODE_IO_GENERAL );
-                    return COMMIT_RESULT_FAILURE;
+                    return CommitResult::Failure;
                 }
                 catch (const InteractiveIOException& r)
                 {
@@ -2199,7 +2204,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     else
                         SetError( ERRCODE_IO_GENERAL );
 
-                    return COMMIT_RESULT_FAILURE;
+                    return CommitResult::Failure;
                 }
                 catch (const Exception&)
                 {
@@ -2207,17 +2212,17 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // or should we assume that the content does it by itself because he threw an exception ?!
                     // any other error - not specified
                     SetError( ERRCODE_IO_GENERAL );
-                    return COMMIT_RESULT_FAILURE;
+                    return CommitResult::Failure;
                 }
             }
-            else if ( nRet != COMMIT_RESULT_NOTHING_TO_DO )
+            else if ( nRet != CommitResult::Nothing_to_do )
             {
                 // how to tell the content : forget all changes ?! Should we ?!
                 SetError( ERRCODE_IO_GENERAL );
                 return nRet;
             }
 
-            // after successful root commit all elements names and types are adjusted and all removed elements
+            // after Successful root commit all elements names and types are adjusted and all removed elements
             // are also removed from the lists
             for ( size_t i = 0; i < m_aChildrenList.size(); )
             {
@@ -2503,7 +2508,7 @@ bool UCBStorage::Commit()
     pImp->m_bCommited = true;
     if ( pImp->m_bIsRoot )
         // the root storage coordinates committing by sending a Commit command to its content
-        return ( pImp->Commit() != COMMIT_RESULT_FAILURE );
+        return ( pImp->Commit() != CommitResult::Failure );
     else
         return true;
 }
