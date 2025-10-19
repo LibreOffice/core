@@ -1151,21 +1151,6 @@ namespace vcl
     }
 
     double ConvertDoubleValue(double nValue, sal_uInt16 nDigits,
-                              MapUnit eInUnit, FieldUnit eOutUnit)
-    {
-        if ( !checkConversionUnits(eInUnit, eOutUnit) )
-        {
-            OSL_FAIL( "invalid parameters" );
-            return nValue;
-        }
-
-        tools::Long nDecDigits = nDigits;
-        FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
-
-        return convertValue(nValue, nDecDigits, eFieldUnit, eOutUnit);
-    }
-
-    double ConvertDoubleValue(double nValue, sal_uInt16 nDigits,
                               FieldUnit eInUnit, MapUnit eOutUnit)
     {
         if ( eInUnit == FieldUnit::PERCENT ||

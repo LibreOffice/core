@@ -791,9 +791,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         if( bWidthEq )
         {
             // Determine the width first as some styles can be missing depending on it
-            sal_Int64 nWidthPt =  static_cast<sal_Int64>(vcl::ConvertDoubleValue(
-                        sal_Int64( nWidth ), m_xLineWidthMF->get_digits(),
-                        MapUnit::MapTwip, FieldUnit::POINT ));
+            sal_Int64 nWidthPt = vcl::ConvertValue(nWidth, m_xLineWidthMF->get_digits(),
+                                                   MapUnit::MapTwip, FieldUnit::POINT);
             SetLineWidth(nWidthPt);
             m_xLbLineStyle->SetWidth(nWidth);
 
@@ -1330,11 +1329,11 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
     // set value inside edit box
     if (nOldWidth != nNewWidth)
     {
-        const sal_Int64 nNewWidthPt = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
+        const sal_Int64 nNewWidthPt = vcl::ConvertValue(
             nNewWidth,
             m_xLineWidthMF->get_digits(),
             MapUnit::MapTwip,
-            FieldUnit::POINT));
+            FieldUnit::POINT);
         SetLineWidth(nNewWidthPt);
     }
 

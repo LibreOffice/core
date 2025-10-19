@@ -49,17 +49,9 @@ VCL_DLLPUBLIC sal_Int64 ConvertValue(sal_Int64 nValue, sal_uInt16 nDecDigits, Ma
 // caution: conversion to double loses precision
 VCL_DLLPUBLIC double ConvertDoubleValue(double nValue, sal_uInt16 nDecDigits, FieldUnit eInUnit,
                                         MapUnit eOutUnit);
-VCL_DLLPUBLIC double ConvertDoubleValue(double nValue, sal_uInt16 nDecDigits, MapUnit eInUnit,
-                                        FieldUnit eOutUnit);
 
 inline double ConvertDoubleValue(sal_Int64 nValue, sal_uInt16 nDecDigits, FieldUnit eInUnit,
                                  MapUnit eOutUnit)
-{
-    return ConvertDoubleValue(static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit);
-}
-
-inline double ConvertDoubleValue(sal_Int64 nValue, sal_uInt16 nDecDigits, MapUnit eInUnit,
-                                 FieldUnit eOutUnit)
 {
     return ConvertDoubleValue(static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit);
 }

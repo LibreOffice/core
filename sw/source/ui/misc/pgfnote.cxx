@@ -197,9 +197,9 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     // Separator width
     m_xLineWidthEdit->connect_value_changed(LINK(this, SwFootNotePage, LineWidthChanged_Impl));
 
-    sal_Int64 nWidthPt = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
-            sal_Int64( pFootnoteInfo->GetLineWidth() ), m_xLineWidthEdit->get_digits(),
-            MapUnit::MapTwip, m_xLineWidthEdit->get_unit( ) ));
+    sal_Int64 nWidthPt = vcl::ConvertValue(
+            pFootnoteInfo->GetLineWidth(), m_xLineWidthEdit->get_digits(),
+            MapUnit::MapTwip, m_xLineWidthEdit->get_unit( ) );
     m_xLineWidthEdit->set_value(nWidthPt, FieldUnit::NONE);
 
     // Separator style
