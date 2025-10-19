@@ -1299,7 +1299,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
         }
     }
 
-    const double fMaxLong(vcl::ConvertValue(std::numeric_limits<sal_Int64>::max(), 0, MapUnit::Map100thMM, meDlgUnit) - 1);
+    const double fMaxLong(vcl::ConvertAndScaleValue(std::numeric_limits<sal_Int64>::max(), 0, MapUnit::Map100thMM, meDlgUnit) - 1);
     fLeft = std::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = std::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = std::clamp(fTop, - fMaxLong, fMaxLong);

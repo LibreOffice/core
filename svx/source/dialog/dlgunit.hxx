@@ -27,7 +27,7 @@
 inline OUString GetUnitString(tools::Long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep)
 {
     OUStringBuffer aVal
-        = OUString::number(vcl::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
+        = OUString::number(vcl::ConvertAndScaleValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
 
     while (aVal.getLength() < 3)
         aVal.insert(0, "0");

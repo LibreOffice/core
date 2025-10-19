@@ -1117,7 +1117,8 @@ double convertValue( double nValue, tools::Long nDigits, FieldUnit eInUnit, Fiel
 
 namespace vcl
 {
-    sal_Int64 ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
+    // nValue is not scaled to nDecDigits; the result is scaled
+    sal_Int64 ConvertAndScaleValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                          MapUnit eInUnit, FieldUnit eOutUnit )
     {
         tools::Long nDecDigits = nDigits;

@@ -42,8 +42,9 @@ VCL_DLLPUBLIC FieldUnit GetTextMetricUnit(std::u16string_view aStr);
 
 VCL_DLLPUBLIC sal_Int64 ConvertValue(sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit);
-VCL_DLLPUBLIC sal_Int64 ConvertValue(sal_Int64 nValue, sal_uInt16 nDecDigits, MapUnit eInUnit,
-                                     FieldUnit eOutUnit);
+// nValue is not scaled to nDecDigits; the result is scaled
+VCL_DLLPUBLIC sal_Int64 ConvertAndScaleValue(sal_Int64 nValue, sal_uInt16 nDecDigits,
+                                             MapUnit eInUnit, FieldUnit eOutUnit);
 // nValue is already scaled to nDecDigits; the result is unscaled
 VCL_DLLPUBLIC sal_Int64 ConvertAndUnscaleValue(sal_Int64 nValue, sal_uInt16 nDecDigits,
                                                FieldUnit eInUnit, FieldUnit eOutUnit);
