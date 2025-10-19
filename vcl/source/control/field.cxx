@@ -1101,12 +1101,7 @@ double convertValue( double nValue, tools::Long nDigits, FieldUnit eInUnit, Fiel
 {
     if ( nDigits < 0 )
     {
-        while ( nDigits )
-        {
-            nValue += 5;
-            nValue /= 10;
-            nDigits++;
-        }
+        nValue /= ImplPower10(-nDigits);
     }
     else
     {
