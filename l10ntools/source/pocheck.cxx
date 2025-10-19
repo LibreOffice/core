@@ -51,7 +51,7 @@ static void checkStyleNames(const OString& aLanguage)
             const OString& aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
-            if( aLocalizedStyleNames.find(aMsgStr) == aLocalizedStyleNames.end() )
+            if( !aLocalizedStyleNames.contains(aMsgStr) )
                 aLocalizedStyleNames[aMsgStr] = 1;
             else {
                 aLocalizedStyleNames[aMsgStr]++;
@@ -63,7 +63,7 @@ static void checkStyleNames(const OString& aLanguage)
             const OString& aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
-            if( aLocalizedNumStyleNames.find(aMsgStr) == aLocalizedNumStyleNames.end() )
+            if( !aLocalizedNumStyleNames.contains(aMsgStr) )
                 aLocalizedNumStyleNames[aMsgStr] = 1;
             else {
                 aLocalizedNumStyleNames[aMsgStr]++;
@@ -171,9 +171,9 @@ static void checkFunctionNames(const OString& aLanguage)
             const OString& aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
-            if( aLocalizedCoreFunctionNames.find(aMsgStr) == aLocalizedCoreFunctionNames.end() )
+            if( !aLocalizedCoreFunctionNames.contains(aMsgStr) )
                 aLocalizedCoreFunctionNames[aMsgStr] = 1;
-            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
+            if( !aLocalizedFunctionNames.contains(aMsgStr) ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;
@@ -205,9 +205,9 @@ static void checkFunctionNames(const OString& aLanguage)
             OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
-            if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
+            if( aLocalizedCoreFunctionNames.contains(aMsgStr) )
                 aMsgStr += "_ADD";
-            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
+            if( !aLocalizedFunctionNames.contains(aMsgStr) ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;

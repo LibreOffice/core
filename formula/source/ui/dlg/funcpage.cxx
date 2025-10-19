@@ -92,7 +92,7 @@ weld::TreeIter* FuncPage::FillCategoriesMap(const OUString& aCategory, bool bFil
     if (!bFill)
         return nullptr;
 
-    if (mCategories.find(aCategory) == mCategories.end())
+    if (!mCategories.contains(aCategory))
     {
         mCategories[aCategory] = m_xLbFunction->make_iterator();
         m_xLbFunction->insert(nullptr, -1, &aCategory, nullptr, nullptr, nullptr, false,
@@ -101,10 +101,7 @@ weld::TreeIter* FuncPage::FillCategoriesMap(const OUString& aCategory, bool bFil
     return mCategories[aCategory].get();
 }
 
-bool FuncPage::IsFavourite(sal_uInt16 nFIndex) const
-{
-    return aFavouritesList.find(nFIndex) != aFavouritesList.end();
-}
+bool FuncPage::IsFavourite(sal_uInt16 nFIndex) const { return aFavouritesList.contains(nFIndex); }
 
 bool FuncPage::UpdateFavouritesList()
 {
@@ -312,7 +309,7 @@ IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG(FuncPage, DblClkHdl, weld::TreeView&, bool)
 {
     const OUString aString = m_xLbFunction->get_selected_text();
-    if (mCategories.find(aString) != mCategories.end())
+    if (mCategories.contains(aString))
     {
         const auto& categoryRow = *(mCategories[aString]);
         if (m_xLbFunction->get_row_expanded(categoryRow))

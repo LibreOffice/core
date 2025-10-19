@@ -1993,7 +1993,7 @@ bool SVGFilter::implExportPage( std::u16string_view sPageId,
         SvXMLElementExport aExp(*mpSVGExport, u"g"_ustr, true, true);
 
         // In case the page has a background object we append it .
-        if( mpObjects->find( rxPage ) != mpObjects->end() )
+        if( mpObjects->contains( rxPage ) )
         {
             const GDIMetaFile& rMtf = (*mpObjects)[ rxPage ].GetRepresentation();
             if( rMtf.GetActionSize() )
@@ -2133,7 +2133,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                 }
             }
 
-            if( !bRet && mpObjects->find( rxShape ) !=  mpObjects->end() )
+            if( !bRet && mpObjects->contains( rxShape ) )
             {
                 css::awt::Rectangle    aBoundRect;
                 const GDIMetaFile&     rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
@@ -2563,7 +2563,7 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
             bBitmapFound = true; // the subsequent bitmaps are still the same just translated
 
             BitmapChecksum nChecksum = GetBitmapChecksum( pAction );
-            if( maBitmapActionMap.find( nChecksum ) == maBitmapActionMap.end() )
+            if( !maBitmapActionMap.contains( nChecksum ) )
             {
                 Point aPos; // (0, 0)
                 Size  aSize;
@@ -2686,7 +2686,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
                 return;
             }
-            bool bHasCharSetMap = mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) != mTextFieldCharSets.end();
+            const bool bHasCharSetMap = mTextFieldCharSets.contains( mCreateOjectsCurrentMasterPage );
 
             static constexpr OUString aHeaderId( NSPREFIX "header-field"_ustr );
             static constexpr OUString aFooterId( aOOOAttrFooterField );
@@ -2700,21 +2700,21 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
             }
             const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
+            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && pCharSetMap->contains( aHeaderId ) )
             {
                 pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
             }
-            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && pCharSetMap->contains( aFooterId ) )
             {
                 pCharSet = &( (*pCharSetMap)[ aFooterId ] );
             }
             else if( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME )
             {
-                if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
+                if( bHasCharSetMap && pCharSetMap->contains( aDateTimeId ) )
                 {
                     pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
                 }
-                if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
+                if( bHasCharSetMap && pCharSetMap->contains( aVariableDateTimeId ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
                 {
                     SvxDateFormat eDateFormat = SvxDateFormat::B, eCurDateFormat;
                     const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
@@ -2902,8 +2902,7 @@ void SVGExport::SetEmbeddedBulletGlyph(sal_Unicode cBullet)
 
 bool SVGExport::IsEmbeddedBulletGlyph(sal_Unicode cBullet) const
 {
-    auto it = maEmbeddedBulletGlyphs.find(cBullet);
-    return it != maEmbeddedBulletGlyphs.end();
+    return maEmbeddedBulletGlyphs.contains(cBullet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2922,7 +2922,7 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
     if( mpEmbeddedBitmapsMap && !mpEmbeddedBitmapsMap->empty())
     {
         BitmapChecksum nChecksum = rBmp.GetChecksum();
-        if( mpEmbeddedBitmapsMap->find( nChecksum ) != mpEmbeddedBitmapsMap->end() )
+        if( mpEmbeddedBitmapsMap->contains( nChecksum ) )
         {
             // <use transform="translate(?) scale(?)" xlink:ref="?" >
             OUString sTransform;

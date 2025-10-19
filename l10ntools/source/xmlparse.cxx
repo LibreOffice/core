@@ -457,7 +457,7 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur )
                     }
                 }
 
-                if ( bInsert && ( m_aNodes_localize.find( sName ) != m_aNodes_localize.end() ) )
+                if ( bInsert && m_aNodes_localize.contains( sName ) )
                     InsertL10NElement(pElement);
                 else if ( bInsert && pElement->GetChildList() )
                 {
