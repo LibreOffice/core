@@ -1286,10 +1286,10 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthMFHdl_Impl, weld::MetricSpinButton&
     else
         m_xLineWidthMF->set_min(5, FieldUnit::NONE);
 
-    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
+    nVal = vcl::ConvertAndUnscaleValue(
                 nVal,
                 m_xLineWidthMF->get_digits(),
-                FieldUnit::POINT, MapUnit::MapTwip ));
+                FieldUnit::POINT, FieldUnit::TWIP );
     m_xLbLineStyle->SetWidth( nVal );
 
     m_aFrameSel.SetStyleToSelection( nVal,
@@ -1306,11 +1306,11 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
     else
         m_xLineWidthMF->set_min(5, FieldUnit::NONE);
 
-    nOldWidth = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
+    nOldWidth = vcl::ConvertAndUnscaleValue(
         nOldWidth,
         m_xLineWidthMF->get_digits(),
         FieldUnit::POINT,
-        MapUnit::MapTwip));
+        FieldUnit::TWIP);
 
     const sal_Int64 nOldMinWidth = lcl_GetMinLineWidth(m_aFrameSel.getCurrentStyleLineStyle());
     const sal_Int64 nNewMinWidth = lcl_GetMinLineWidth(m_xLbLineStyle->GetSelectEntryStyle());
@@ -1574,8 +1574,8 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     }
 
     sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
-    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(nVal, m_xLineWidthMF->get_digits(),
-                                                                  m_xLineWidthMF->get_unit(), MapUnit::MapTwip));
+    nVal = vcl::ConvertAndUnscaleValue(nVal, m_xLineWidthMF->get_digits(),
+                                       m_xLineWidthMF->get_unit(), FieldUnit::TWIP);
     m_xLbLineStyle->SetWidth( nVal );
 }
 

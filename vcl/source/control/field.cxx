@@ -1086,15 +1086,10 @@ namespace vcl
 
 namespace {
 
-bool checkConversionUnits(MapUnit eInUnit, FieldUnit eOutUnit)
+bool checkConversionUnits(FieldUnit eInUnit, FieldUnit eOutUnit)
 {
-    return eOutUnit != FieldUnit::PERCENT
-        && eOutUnit != FieldUnit::CUSTOM
-        && eOutUnit != FieldUnit::NONE
-        && eInUnit != MapUnit::MapPixel
-        && eInUnit != MapUnit::MapSysFont
-        && eInUnit != MapUnit::MapAppFont
-        && eInUnit != MapUnit::MapRelative;
+    return FieldToO3tlLength(eInUnit, o3tl::Length::invalid) != o3tl::Length::invalid
+        && FieldToO3tlLength(eOutUnit, o3tl::Length::invalid) != o3tl::Length::invalid;
 }
 
 double convertValue( double nValue, tools::Long nDigits, FieldUnit eInUnit, FieldUnit eOutUnit )
@@ -1125,14 +1120,14 @@ namespace vcl
     sal_Int64 ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                          MapUnit eInUnit, FieldUnit eOutUnit )
     {
-        if ( !checkConversionUnits(eInUnit, eOutUnit) )
+        tools::Long nDecDigits = nDigits;
+        FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
+
+        if ( !checkConversionUnits(eFieldUnit, eOutUnit) )
         {
             OSL_FAIL( "invalid parameters" );
             return nValue;
         }
-
-        tools::Long nDecDigits = nDigits;
-        FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
 
         // Avoid sal_Int64 <-> double conversion issues if possible:
         if (eFieldUnit == eOutUnit && nDigits == 0)
@@ -1145,47 +1140,25 @@ namespace vcl
                 convertValue( nValue, nDecDigits, eFieldUnit, eOutUnit ) ) );
     }
 
-    double ConvertDoubleValue(double nValue, sal_uInt16 nDigits,
-                              FieldUnit eInUnit, MapUnit eOutUnit)
+    // nValue is already scaled to nDecDigits; the result is unscaled
+    sal_Int64 ConvertAndUnscaleValue(sal_Int64 nValue, sal_uInt16 nDigits, FieldUnit eInUnit,
+                                     FieldUnit eOutUnit)
     {
-        if ( eInUnit == FieldUnit::PERCENT ||
-             eInUnit == FieldUnit::CUSTOM ||
-             eInUnit == FieldUnit::NONE ||
-             eInUnit == FieldUnit::DEGREE ||
-             eInUnit == FieldUnit::SECOND ||
-             eInUnit == FieldUnit::MILLISECOND ||
-             eInUnit == FieldUnit::PIXEL ||
-             eInUnit == FieldUnit::FONT_EM ||
-             eInUnit == FieldUnit::FONT_CJK_ADVANCE ||
-             eOutUnit == MapUnit::MapPixel ||
-             eOutUnit == MapUnit::MapSysFont ||
-             eOutUnit == MapUnit::MapAppFont ||
-             eOutUnit == MapUnit::MapRelative )
+        if (!checkConversionUnits(eInUnit, eOutUnit))
         {
-            OSL_FAIL( "invalid parameters" );
+            SAL_WARN("vcl", "invalid parameters");
             return nValue;
         }
 
-        tools::Long nDecDigits = nDigits;
-        FieldUnit eFieldUnit = ImplMap2FieldUnit( eOutUnit, nDecDigits );
-
-        if ( nDecDigits < 0 )
+        // Avoid sal_Int64 <-> double conversion issues if possible:
+        if (eInUnit == eOutUnit && nDigits == 0)
         {
-            nValue *= ImplPower10(-nDecDigits);
-        }
-        else
-        {
-            nValue /= ImplPower10(nDecDigits);
+            return nValue;
         }
 
-        if ( eFieldUnit != eInUnit )
-        {
-            const o3tl::Length eFrom = FieldToO3tlLength(eInUnit, o3tl::Length::invalid);
-            const o3tl::Length eTo = FieldToO3tlLength(eFieldUnit, o3tl::Length::invalid);
-            if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
-                nValue = o3tl::convert(nValue, eFrom, eTo);
-        }
-        return nValue;
+        return static_cast<sal_Int64>(
+            nonValueDoubleToValueDouble(
+                convertValue( nValue, -static_cast<tools::Long>(nDigits), eInUnit, eOutUnit ) ) );
     }
 }
 

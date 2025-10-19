@@ -487,10 +487,10 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
         SvxBorderLineStyle::DASHED );
 
     sal_Int64 nLineWidth = m_xLineWidthEdit->get_value(FieldUnit::POINT);
-    nLineWidth = static_cast<tools::Long>(vcl::ConvertDoubleValue(
+    nLineWidth = vcl::ConvertAndUnscaleValue(
             nLineWidth,
             m_xLineWidthEdit->get_digits(),
-            FieldUnit::POINT, MapUnit::MapTwip ));
+            FieldUnit::POINT, FieldUnit::TWIP );
     m_xLineTypeDLB->SetWidth(nLineWidth);
     m_xLineColorDLB->SelectEntry(COL_BLACK);
 }
@@ -683,10 +683,10 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
         m_xLineColorLbl->set_sensitive(bEnable);
 
         sal_Int64 nLineWidth = m_xLineWidthEdit->get_value(FieldUnit::PERCENT);
-        nLineWidth = static_cast<tools::Long>(vcl::ConvertDoubleValue(
+        nLineWidth = vcl::ConvertAndUnscaleValue(
                 nLineWidth,
                 m_xLineWidthEdit->get_digits(),
-                m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));
+                m_xLineWidthEdit->get_unit(), FieldUnit::TWIP );
         if( !bEnable )
             m_xColMgr->SetNoLine();
         else
