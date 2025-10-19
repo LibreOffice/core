@@ -1131,7 +1131,7 @@ namespace vcl
         }
 
         // Avoid sal_Int64 <-> double conversion issues if possible:
-        if (eFieldUnit == eOutUnit && nDigits == 0)
+        if (eFieldUnit == eOutUnit && nDecDigits == 0)
         {
             return nValue;
         }
