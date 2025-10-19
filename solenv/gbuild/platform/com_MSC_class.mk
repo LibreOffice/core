@@ -562,7 +562,7 @@ printf "\nAttach the debugger to soffice.bin\n\n"
 OFFICESCRIPT=`mktemp` && \
 printf "$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.exe" > $${OFFICESCRIPT} && \
 printf " --norestore --nologo '--accept=pipe,name=$(USER);urp;'\n" >> $${OFFICESCRIPT} && \
-$(SHELL) $${OFFICESCRIPT} && \
+"$(SHELL)" $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef
 
