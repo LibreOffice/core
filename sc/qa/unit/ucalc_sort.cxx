@@ -1143,7 +1143,7 @@ void TestSort::testSortRefUpdate4_Impl()
             { "=Lesson1.A3", "=Lesson1.B3", "=Lesson2.B3", "=AVERAGE(B5:C5)" },
             { "=Lesson1.A2", "=Lesson1.B2", "=Lesson2.B2", "=AVERAGE(B6:C6)" },
         };
-        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
+        for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aCheck)); ++nRow)
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
@@ -1215,7 +1215,7 @@ void TestSort::testSortRefUpdate4_Impl()
             { "=Lesson1.A3", "=Lesson1.B3", "=Lesson2.B3", "=AVERAGE(B5:C5)" },
             { "=Lesson1.A2", "=Lesson1.B2", "=Lesson2.B2", "=AVERAGE(B6:C6)" },
         };
-        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
+        for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aCheck)); ++nRow)
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
@@ -1266,7 +1266,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aSortRange.aStart);
 
         // Actual results and expected sorted results.
-        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+        for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aValCheck)); ++nRow)
         {
             double fVal = m_pDoc->GetValue(ScAddress(1,nRow+1,0));
             aValCheck[nRow][0] = fVal;
@@ -1296,7 +1296,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
 
     // Check the sorted values.
     m_pDoc->CalcAll();
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aValCheck)); ++nRow)
     {
         size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2,nRow+1,0)));    // order 1..4
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(nRow+1), i);
@@ -1311,7 +1311,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
         "=TODAY()-$A4",
         "=TODAY()-$A5",
     };
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aFormulaCheck)); ++nRow)
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aFormulaCheck)); ++nRow)
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr(), OUString::createFromAscii(aFormulaCheck[nRow]), m_pDoc->GetFormula(1,nRow+1,0));
     }
@@ -1320,7 +1320,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     pUndoMgr->Undo();
     m_pDoc->CalcAll();
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aValCheck)); ++nRow)
     {
         CPPUNIT_ASSERT_EQUAL( aValCheck[nRow][0], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
         CPPUNIT_ASSERT_EQUAL( aValCheck[nRow][1], m_pDoc->GetValue(ScAddress(2,nRow+1,0)));
@@ -1329,7 +1329,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
     // Redo and check the result.
     pUndoMgr->Redo();
     m_pDoc->CalcAll();
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(std::size(aValCheck)); ++nRow)
     {
         size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2,nRow+1,0)));    // order 1..4
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(nRow+1), i);
