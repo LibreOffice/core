@@ -23,9 +23,9 @@ disable freetype dependent code
  #include <unordered_set>
  
  // helper for using std::visit to get a dependent false for static_asserts
-@@ -2840,6 +2840,8 @@
+@@ -2723,6 +2723,8 @@
  
- Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle, bool forceName)
+ Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle, bool fontSubstitutedIn, bool forceName)
  {
 +    return {};
 +#if 0

@@ -214,7 +214,15 @@ int main(int argc, char **argv)
                                                 : (userPassword
                                                   ? new GooString(myStringToStdString(userPassword))
                                                   : nullptr));
-#if POPPLER_CHECK_VERSION(22, 6, 0)
+#if POPPLER_CHECK_VERSION(25, 10, 0)
+                    std::string sFileName(pFileName ? pFileName->toStr() : std::string());
+                    std::string sOwnerPasswordStr(pOwnerPasswordStr ? pOwnerPasswordStr->toStr() : std::string());
+                    std::string sUserPasswordStr(pUserPasswordStr ? pUserPasswordStr->toStr() : std::string());
+                    pDocUnique = std::unique_ptr<PDFDoc>(
+                        new PDFDoc(std::make_unique<GooString>(sFileName),
+                                   std::optional<GooString>(sOwnerPasswordStr),
+                                   std::optional<GooString>(sUserPasswordStr)));
+#elif POPPLER_CHECK_VERSION(22, 6, 0)
                     pDocUnique = std::unique_ptr<PDFDoc>(
                         new PDFDoc(std::make_unique<GooString>(pFileName),
                                    std::optional<GooString>(pOwnerPasswordStr),
