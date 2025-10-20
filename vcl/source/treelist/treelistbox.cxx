@@ -138,6 +138,8 @@ void MyEdit_Impl::Command(const CommandEvent& rCEvt)
         Edit::Command(rCEvt);
         pOwner->InsertEscapeAccel();
     }
+    else
+        Edit::Command(rCEvt);
 }
 
 SvInplaceEdit2::SvInplaceEdit2
