@@ -255,4 +255,10 @@ void OTableDesignView::GetFocus()
         GetEditorCtrl()->GrabFocus();
 }
 
+void OTableDesignView::FlushModifiedData()
+{
+    if ( OTableFieldDescWin* pDescWin = GetDescWin() )
+        pDescWin->FlushModifiedData();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

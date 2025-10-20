@@ -168,6 +168,8 @@ namespace dbaui
         OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl();
 
+        void                FlushModifiedData();
+
         void                DisplayData(OFieldDescription* pFieldDescr );
 
         void                SaveData( OFieldDescription* pFieldDescr );

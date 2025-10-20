@@ -510,8 +510,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/)
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return false;
-    if ( getView() )
-        static_cast<OTableDesignView*>(getView())->GrabFocus();
+    if ( OTableDesignView* pView = static_cast<OTableDesignView*>(getView()) )
+        pView->FlushModifiedData();
     bool bCheck = true;
     if ( isModified() )
     {

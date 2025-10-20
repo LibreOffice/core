@@ -61,6 +61,8 @@ namespace dbaui
         void SaveData( OFieldDescription* pFieldDescr );
         void SetReadOnly( bool bReadOnly );
 
+        void FlushModifiedData();
+
         void SetControlText( sal_uInt16 nControlId, const OUString& rText )
                 { m_xFieldControl->SetControlText(nControlId,rText); }
 

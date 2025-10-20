@@ -894,10 +894,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     if (m_xDefault)
-    {
         m_xDefault->set_text(getControlDefault(pFieldDescr));
-        m_xDefault->save_value();
-    }
 
     if (m_xBoolDefault)
     {
@@ -937,10 +934,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     if (m_xTextLen)
-    {
         m_xTextLen->set_text(OUString::number(pFieldDescr->GetPrecision()));
-        m_xTextLen->save_value();
-    }
 
     if( m_xNumType )
     {
@@ -989,6 +983,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     // Enable/disable Controls
     bool bRead(IsReadOnly());
 
+    // Save the values that we loaded so we can detect any changes
+    iterateControls([] (OWidgetBase* pWidget)
+    {
+        if (pWidget)
+            pWidget->save_value();
+        return false;
+    });
+
     SetReadOnly( bRead );
 }
 
@@ -1000,7 +1002,6 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, weld::Widget&, rControl, void )
     {
         if (pWidget && &rControl == pWidget->GetWidget())
         {
-            pWidget->save_value();
             strHelpText = pWidget->GetHelp();
             return true;
         }
@@ -1037,6 +1038,17 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )
         UpdateFormatSample(pActFieldDescr);
 
     implFocusLost(&rControl);
+}
+
+void OFieldDescControl::FlushModifiedData()
+{
+    iterateControls([&](OWidgetBase* pWidget)
+    {
+        if (pWidget && pWidget->get_value_changed_from_saved())
+            CellModified(-1, pWidget->GetPos());
+
+        return false;
+    });
 }
 
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )

@@ -72,6 +72,11 @@ void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
     m_xFieldControl->SaveData( pFieldDescr );
 }
 
+void OTableFieldDescWin::FlushModifiedData()
+{
+    m_xFieldControl->FlushModifiedData();
+}
+
 IClipboardTest* OTableFieldDescWin::getActiveChild() const
 {
     IClipboardTest* pTest = nullptr;

@@ -91,6 +91,8 @@ namespace dbaui
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : nullptr; }
         OTableController&       getController() const { return m_rController; }
 
+        void                    FlushModifiedData();
+
         const css::lang::Locale& getLocale() const { return m_aLocale;}
 
         // IClipboardTest
