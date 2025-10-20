@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/warnings.patch \
     external/afdko/antlr4-chrono.patch \
     external/afdko/mergeFonts_crash.patch \
+    external/afdko/ubsan.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
