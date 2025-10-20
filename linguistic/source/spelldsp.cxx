@@ -58,9 +58,10 @@ namespace {
 class ProposalList
 {
     std::vector< OUString > aVec;
+    sal_Unicode m_cSingleEndQuote = u'\''; // ASCII apostrophe
 
 public:
-    ProposalList()  {}
+    ProposalList(const std::u16string_view& rEndQuote);
     ProposalList(const ProposalList&) = delete;
     ProposalList& operator=(const ProposalList&) = delete;
 
@@ -74,6 +75,12 @@ public:
 
 }
 
+ProposalList::ProposalList(const std::u16string_view& rEndQuote)
+{
+    if (!rEndQuote.empty())
+        m_cSingleEndQuote = rEndQuote[0];
+}
+
 void ProposalList::Prepend( const OUString &rText )
 {
     Append( rText, /*bPrepend=*/true );
@@ -82,7 +89,7 @@ void ProposalList::Prepend( const OUString &rText )
 void ProposalList::Append( const OUString &rOrig, bool bPrepend )
 {
     // convert ASCII apostrophe to the typographic one
-    const OUString aText( rOrig.indexOf( '\'' ) > -1 ? rOrig.replace('\'', u'’') : rOrig );
+    const OUString aText(rOrig.replace('\'', m_cSingleEndQuote));
     if (std::find(aVec.begin(), aVec.end(), aText) == aVec.end())
     {
         if ( bPrepend )
@@ -439,7 +446,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     OUString aChkWord( rWord );
     Locale aLocale( LanguageTag::convertToLocale( nLanguage ) );
 
-    // replace typographical apostroph by ascii apostroph
+    // replace typographical apostrophe by ascii apostrophe
     OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
     DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
     if (!aSingleQuote.isEmpty())
@@ -604,7 +611,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
     // list of proposals found (to be checked against entries of
     // negative dictionaries)
-    ProposalList aProposalList;
+    ProposalList aProposalList(aSingleQuote);
     sal_Int16 eFailureType = -1;    // no failure
     if (xRes.is())
     {
