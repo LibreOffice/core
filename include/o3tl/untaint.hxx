@@ -52,20 +52,24 @@ template <typename T>[[nodiscard]] inline T sanitizing_min(T a, T b) { return st
     return static_cast<unsigned short>(res);
 }
 
+// coverity[ -taint_source ]
+template <typename T1, typename T2> constexpr T1 sanitizing_cast(T2 value)
+{
+    assert(value >= std::numeric_limits<T1>::min() && value <= std::numeric_limits<T1>::max()
+           && "value was supposed to be within bounds of destination type");
+    return value;
+}
+
 [[nodiscard]] inline short sanitizing_inc(short value)
 {
     int res = value + 1;
-    assert(res >= std::numeric_limits<short>::min() && res <= std::numeric_limits<short>::max()
-           && "nValue was supposed to be incrementable without overflow");
-    return static_cast<short>(res);
+    return o3tl::sanitizing_cast<short>(res);
 }
 
 [[nodiscard]] inline short sanitizing_dec(short value)
 {
     int res = value - 1;
-    assert(res >= std::numeric_limits<short>::min() && res <= std::numeric_limits<short>::max()
-           && "nValue was supposed to be decrementable without underflow");
-    return static_cast<short>(res);
+    return o3tl::sanitizing_cast<short>(res);
 }
 
 // A hammer that can be used when coverity refuses to accept that code is safe

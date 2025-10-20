@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <o3tl/untaint.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
@@ -702,7 +703,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xAAPointLimit->get_value_changed_from_saved())
     {
-        sal_Int64 i = m_xAAPointLimit->get_value(FieldUnit::PIXEL);
+        sal_Int16 i = o3tl::sanitizing_cast<sal_Int16>(m_xAAPointLimit->get_value(FieldUnit::PIXEL));
         officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::set(i, batch);
         bAppearanceChanged = true;
     }

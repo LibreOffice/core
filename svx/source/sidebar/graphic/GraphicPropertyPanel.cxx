@@ -18,6 +18,7 @@
  */
 
 #include "GraphicPropertyPanel.hxx"
+#include <o3tl/untaint.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
@@ -90,7 +91,7 @@ void GraphicPropertyPanel::Initialize()
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, weld::MetricSpinButton&, void )
 {
-    const sal_Int16 nBright = mxMtrBrightness->get_value(FieldUnit::PERCENT);
+    const sal_Int16 nBright = o3tl::sanitizing_cast<sal_Int16>(mxMtrBrightness->get_value(FieldUnit::PERCENT));
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_LUMINANCE,
             SfxCallMode::RECORD, { &aBrightItem });
@@ -99,7 +100,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, weld::MetricSpinButt
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, weld::MetricSpinButton&, void )
 {
-    const sal_Int16 nContrast = mxMtrContrast->get_value(FieldUnit::PERCENT);
+    const sal_Int16 nContrast = o3tl::sanitizing_cast<sal_Int16>(mxMtrContrast->get_value(FieldUnit::PERCENT));
     const SfxInt16Item aContrastItem( SID_ATTR_GRAF_CONTRAST, nContrast );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_CONTRAST,
             SfxCallMode::RECORD, { &aContrastItem });
@@ -108,7 +109,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, weld::MetricSpinButton
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, weld::MetricSpinButton&, void )
 {
-    const sal_Int16 nTrans = mxMtrTrans->get_value(FieldUnit::PERCENT);
+    const sal_Int16 nTrans = o3tl::sanitizing_cast<sal_Int16>(mxMtrTrans->get_value(FieldUnit::PERCENT));
     const SfxUInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_TRANSPARENCE,
             SfxCallMode::RECORD, { &aTransItem });
