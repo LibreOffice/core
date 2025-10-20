@@ -127,7 +127,7 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
                 auto pNode = std::make_shared<IdeSymbolInfo>(
                     xInterface->getName(), IdeSymbolKind::UNO_INTERFACE, rNode.sIdentifier);
                 pNode->sQualifiedName = xInterface->getName();
-                rMembers.push_back(pNode);
+                rMembers.push_back(std::move(pNode));
             }
             return;
         }
@@ -344,7 +344,7 @@ void ImplGetChildrenOfBasicLibrary(SymbolInfoList& rChildren, const IdeSymbolInf
                     pNode->sOriginLibrary = rParent.sName;
                     pNode->sParentName = rParent.sName;
                     pNode->sIdentifier = rParent.sIdentifier + u":" + pNode->sName;
-                    rChildren.push_back(pNode);
+                    rChildren.push_back(std::move(pNode));
                 }
             }
         }
