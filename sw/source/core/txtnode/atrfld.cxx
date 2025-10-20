@@ -42,6 +42,8 @@
 #include <fieldhint.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 
 // constructor for default item in attribute-pool
@@ -403,6 +405,17 @@ void SwFormatField::ForceUpdateTextNode()
     // Force notify was added for conditional text fields,
     // at least the below fields need no forced notify.
     bool bNeedForced = lcl_NeedsForcedUpdate(*mpTextField->GetFormatField().GetField());
+    if (!bNeedForced)
+    {
+        // Check if this is an idle update after any doc stat change or an explicit UI update.
+        SwDocShell* pDocShell = pTextNd->GetDoc().GetDocShell();
+        SwWrtShell* pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
+        if (pWrtShell && pWrtShell->IsEnteringStdMode())
+        {
+            // The UI invoked the update, update even doc info fields.
+            bNeedForced = true;
+        }
+    }
     mpTextField->ExpandTextField(bNeedForced);
 }
 void SwFormatField::UpdateDocPos(const SwTwips nDocPos)

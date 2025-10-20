@@ -46,6 +46,7 @@
 #include <docufld.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <MarkManager.hxx>
+#include <fldmgr.hxx>
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
@@ -643,6 +644,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDOCXCommentImport)
     // Without the accompanying fix in place, this test would have failed, there were no annotation
     // marks with the name of pPostit.
     CPPUNIT_ASSERT(it != pMarkAccess->getAnnotationMarksEnd());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPageCrossrefUpdate)
+{
+    // Given a document with a "book" document variable set to 0, conditional content on pages 1-2,
+    // bookmark on page 3, reference to that bookmark on page 4:
+    createSwDoc("page-crossref-update.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Go to the doc variable field.
+    pWrtShell->GoNextBookmark();
+
+    // When performing the equivalent of what SwFieldEditDlg would do to set "book" to "1":
+    SwFieldMgr aMgr(pWrtShell);
+    aMgr.UpdateCurField(0, "book", u"1"_ustr);
+    SwDoc* pDoc = getSwDoc();
+    pWrtShell->SetEnteringStdMode(true);
+    pDoc->getIDocumentStatistics().GetUpdatedDocStat(/*bCompleteAsync=*/true, /*bFields=*/false);
+    pWrtShell->SetEnteringStdMode(false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the reference to the bookmark on (now) page 2 expands to the correct value:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aExpand = getXPath(
+        pXmlDoc, "/root/page[3]/body/section/txt/SwParaPortion/SwLineLayout/SwFieldPortion",
+        "expand");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. the reference to that bookmark was not updated for the new page number.
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aExpand);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
