@@ -1078,7 +1078,10 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )
     else if (m_xColumnName && &rControl == m_xColumnName->GetWidget() && m_xColumnName->get_value_changed_from_saved())
         CellModified(-1, m_xColumnName->GetPos());
     else if (m_xDefault && &rControl == m_xDefault->GetWidget() && m_xDefault->get_value_changed_from_saved())
+    {
         CellModified(-1, m_xDefault->GetPos());
+        UpdateFormatSample(pActFieldDescr);
+    }
     else if (m_xFormatSample && &rControl == m_xFormatSample->GetWidget() && m_xFormatSample->get_value_changed_from_saved())
         CellModified(-1, m_xFormatSample->GetPos());
     else if (m_xAutoIncrementValue && &rControl == m_xAutoIncrementValue->GetWidget() && m_xAutoIncrementValue->get_value_changed_from_saved())
@@ -1093,8 +1096,6 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )
         CellModified(-1, m_xBoolDefault->GetPos());
     else if (m_xType && &rControl == m_xType->GetWidget() && m_xType->get_value_changed_from_saved())
         CellModified(-1, m_xType->GetPos());
-    else if (m_xDefault && &rControl == m_xDefault->GetWidget())
-        UpdateFormatSample(pActFieldDescr);
 
     implFocusLost(&rControl);
 }
