@@ -475,6 +475,9 @@ void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUStrin
 
 void EmbeddedFontsManager::releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts)
 {
+    // Background save process: avoid deletion of files created by the parent
+    if (comphelper::LibreOfficeKit::isForkedChild())
+        return;
     std::vector<std::pair<OUString, OUString>> unregister;
     if (!fonts.empty())
     {
