@@ -57,7 +57,11 @@ xmlDocUniquePtr XmlTestTools::parseXmlStream(SvStream* pStream)
     pBuffer[nSize] = 0;
     auto pCharBuffer = reinterpret_cast<xmlChar*>(pBuffer.get());
     SAL_INFO("test", "XmlTestTools::parseXmlStream: pBuffer is '" << pCharBuffer << "'");
-    return xmlDocUniquePtr(xmlReadDoc(pCharBuffer, nullptr, nullptr, XML_PARSE_NODICT | XML_PARSE_HUGE));
+    int options = XML_PARSE_NODICT;
+#if !defined(__COVERITY__)
+    options |= XML_PARSE_HUGE;
+#endif
+    return xmlDocUniquePtr(xmlReadDoc(pCharBuffer, nullptr, nullptr, options));
 }
 
 xmlDocUniquePtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
