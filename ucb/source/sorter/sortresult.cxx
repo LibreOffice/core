@@ -1335,7 +1335,7 @@ void SortedResultSet::Remove( sal_Int32 nPos, sal_Int32 nCount, EventList *pEven
 
     // remove the entries from the lists and correct the positions
     // in the original2sorted list
-    for ( sal_IntPtr i=0; i < nCount; i++ )
+    for ( sal_Int32 i=0; i < nCount; i++ )
     {
         sal_IntPtr nSortPos = m_O2S[nPos];
         m_O2S.erase(m_O2S.begin() + nPos);
@@ -1500,7 +1500,7 @@ void SortedResultSet::BuildSortInfo(
 
 void SortedResultSet::SetChanged( sal_Int32 nPos, sal_Int32 nCount )
 {
-    for ( sal_IntPtr i=0; i<nCount; i++ )
+    for ( sal_Int32 i=0; i<nCount; i++ )
     {
         sal_IntPtr const nSortPos = m_O2S[nPos];
         if ( nSortPos < mnLastSort )
