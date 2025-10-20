@@ -943,13 +943,6 @@ void NumericBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-static bool ImplMetricProcessKeyInput( const KeyEvent& rKEvt,
-                                       bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
-{
-    // no meaningful strict format; therefore allow all characters
-    return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
-}
-
 static OUString ImplMetricGetUnitText(std::u16string_view rStr)
 {
     // fetch unit text
@@ -1426,17 +1419,6 @@ sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
     return vcl::ConvertValue(mnLast, 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
-bool MetricField::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
-    {
-        if ( ImplMetricProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return true;
-    }
-
-    return SpinField::PreNotify( rNEvt );
-}
-
 bool MetricField::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
@@ -1539,17 +1521,6 @@ Size MetricBox::CalcMinimumSize() const
     return aRet;
 }
 
-bool MetricBox::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2()  )
-    {
-        if ( ImplMetricProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return true;
-    }
-
-    return ComboBox::PreNotify( rNEvt );
-}
-
 bool MetricBox::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
@@ -1599,13 +1570,6 @@ void MetricBox::ReformatAll()
     }
     MetricFormatter::Reformat();
     SetUpdateMode( true );
-}
-
-static bool ImplCurrencyProcessKeyInput( const KeyEvent& rKEvt,
-                                         bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
-{
-    // no strict format set; therefore allow all characters
-    return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 
 static bool ImplCurrencyGetValue( std::u16string_view rStr, sal_Int64& rValue,
@@ -1688,17 +1652,6 @@ void CurrencyField::dispose()
     SpinField::dispose();
 }
 
-bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
-    {
-        if ( ImplCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return true;
-    }
-
-    return SpinField::PreNotify( rNEvt );
-}
-
 bool CurrencyField::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
@@ -1769,17 +1722,6 @@ void CurrencyBox::dispose()
 {
     ClearField();
     ComboBox::dispose();
-}
-
-bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
-    {
-        if ( ImplCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return true;
-    }
-
-    return ComboBox::PreNotify( rNEvt );
 }
 
 bool CurrencyBox::EventNotify( NotifyEvent& rNEvt )

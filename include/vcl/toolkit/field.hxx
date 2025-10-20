@@ -210,7 +210,6 @@ class VCL_DLLPUBLIC MetricField final : public SpinField, public MetricFormatter
 public:
     explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
 
-    SAL_DLLPRIVATE virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     SAL_DLLPRIVATE virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     SAL_DLLPRIVATE virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -242,7 +241,6 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetricBox final : public ComboBox, public 
 public:
     explicit                MetricBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -279,7 +277,6 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyField final : public SpinField, pu
 public:
     CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -584,7 +581,6 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyBox final : public ComboBox, publi
 public:
     explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
