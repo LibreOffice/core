@@ -39,14 +39,14 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview final : public weld::C
  friend class SvxConnectionPage;
 
 private:
-    MapMode aNewMapMode;
-    rtl::Reference<SdrEdgeObj>  pEdgeObj;
+    MapMode m_aNewMapMode;
+    rtl::Reference<SdrEdgeObj>  m_pEdgeObj;
     rtl::Reference<SdrPage> mxSdrPage;
-    const SdrView*      pView;
+    const SdrView*      m_pView;
 
     SVX_DLLPRIVATE void AdaptSize();
-    SVX_DLLPRIVATE void SetMapMode(const MapMode& rNewMapMode) { aNewMapMode = rNewMapMode; }
-    SVX_DLLPRIVATE const MapMode& GetMapMode() const { return aNewMapMode; }
+    SVX_DLLPRIVATE void SetMapMode(const MapMode& rNewMapMode) { m_aNewMapMode = rNewMapMode; }
+    SVX_DLLPRIVATE const MapMode& GetMapMode() const { return m_aNewMapMode; }
 public:
     SvxXConnectionPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -60,7 +60,7 @@ public:
     sal_uInt16   GetLineDeltaCount() const;
 
     void         Construct();
-    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    void         SetView( const SdrView* pSdrView ) { m_pView = pSdrView; }
 };
 
 #endif // INCLUDED_SVX_CONNCTRL_HXX

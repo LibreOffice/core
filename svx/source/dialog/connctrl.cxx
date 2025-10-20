@@ -34,7 +34,7 @@
 #include <memory>
 
 SvxXConnectionPreview::SvxXConnectionPreview()
-    : pView(nullptr)
+    : m_pView(nullptr)
 {
     SetMapMode(MapMode(MapUnit::Map100thMM));
 }
@@ -66,7 +66,7 @@ void SvxXConnectionPreview::AdaptSize()
 
     SetMapMode(MapMode(MapUnit::Map100thMM));
 
-    OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
+    OutputDevice* pOD = m_pView->GetFirstOutputDevice(); // GetWin( 0 );
     tools::Rectangle aRect = mxSdrPage->GetAllObjBoundRect();
 
     MapMode aMapMode = GetMapMode();
@@ -125,9 +125,9 @@ void SvxXConnectionPreview::AdaptSize()
 
 void SvxXConnectionPreview::Construct()
 {
-    assert(pView && "No valid view is passed on!");
+    assert(m_pView && "No valid view is passed on!");
 
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount >= 1 )
@@ -148,15 +148,15 @@ void SvxXConnectionPreview::Construct()
                 if(!mxSdrPage)
                 {
                     mxSdrPage = new SdrPage(
-                        pView->getSdrModelFromSdrView(),
+                        m_pView->getSdrModelFromSdrView(),
                         false);
                 }
 
                 const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
-                pEdgeObj = SdrObject::Clone(*pTmpEdgeObj, mxSdrPage->getSdrModelFromSdrPage());
+                m_pEdgeObj = SdrObject::Clone(*pTmpEdgeObj, mxSdrPage->getSdrModelFromSdrPage());
 
-                SdrObjConnection& rConn1 = pEdgeObj->GetConnection( true );
-                SdrObjConnection& rConn2 = pEdgeObj->GetConnection( false );
+                SdrObjConnection& rConn1 = m_pEdgeObj->GetConnection( true );
+                SdrObjConnection& rConn2 = m_pEdgeObj->GetConnection( false );
 
                 rConn1 = pTmpEdgeObj->GetConnection( true );
                 rConn2 = pTmpEdgeObj->GetConnection( false );
@@ -168,24 +168,24 @@ void SvxXConnectionPreview::Construct()
                 {
                     rtl::Reference<SdrObject> pObj1 = pTmpObj1->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
                     mxSdrPage->InsertObject( pObj1.get() );
-                    pEdgeObj->ConnectToNode( true, pObj1.get() );
+                    m_pEdgeObj->ConnectToNode( true, pObj1.get() );
                 }
 
                 if( pTmpObj2 )
                 {
                     rtl::Reference<SdrObject> pObj2 = pTmpObj2->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
                     mxSdrPage->InsertObject( pObj2.get() );
-                    pEdgeObj->ConnectToNode( false, pObj2.get() );
+                    m_pEdgeObj->ConnectToNode( false, pObj2.get() );
                 }
 
-                mxSdrPage->InsertObject( pEdgeObj.get() );
+                mxSdrPage->InsertObject( m_pEdgeObj.get() );
             }
         }
     }
 
-    if( !pEdgeObj )
+    if( !m_pEdgeObj )
     {
-        pEdgeObj = new SdrEdgeObj(pView->getSdrModelFromSdrView());
+        m_pEdgeObj = new SdrEdgeObj(m_pView->getSdrModelFromSdrView());
     }
 
     AdaptSize();
@@ -225,7 +225,7 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
 
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-    pEdgeObj->SetMergedItemSetAndBroadcast(rInAttrs);
+    m_pEdgeObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
@@ -234,7 +234,7 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 
 sal_uInt16 SvxXConnectionPreview::GetLineDeltaCount() const
 {
-    const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
+    const SfxItemSet& rSet = m_pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);
 
     if(SfxItemState::INVALID != rSet.GetItemState(SDRATTR_EDGELINEDELTACOUNT))
