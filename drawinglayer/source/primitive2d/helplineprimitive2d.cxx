@@ -53,7 +53,7 @@ namespace drawinglayer::primitive2d
                     aLineA.append(aStartA);
                     aLineA.append(aEndA);
                     aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    auto xMarker1 = new PolygonMarkerPrimitive2D(std::move(aLineA), getRGBColA(), getRGBColB(), getDiscreteDashLength());
+                    Primitive2DReference xMarker1(new PolygonMarkerPrimitive2D(std::move(aLineA), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
 
                     const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
                     const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
@@ -62,7 +62,7 @@ namespace drawinglayer::primitive2d
                     aLineB.append(aStartB);
                     aLineB.append(aEndB);
                     aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    auto xMarker2 = new PolygonMarkerPrimitive2D(std::move(aLineB), getRGBColA(), getRGBColB(), getDiscreteDashLength());
+                    Primitive2DReference xMarker2(new PolygonMarkerPrimitive2D(std::move(aLineB), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
 
                     xRet = new GroupPrimitive2D(Primitive2DContainer{xMarker1, xMarker2});
                     break;
