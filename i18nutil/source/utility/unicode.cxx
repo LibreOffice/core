@@ -69,8 +69,8 @@ unicode::getUnicodeScriptEnd( UnicodeScript type) {
 sal_Int16
 unicode::getUnicodeType(const sal_uInt32 ch)
 {
-    static sal_uInt32 c = 0x00;
-    static sal_uInt32 r = 0x00;
+    static thread_local sal_uInt32 c = 0x00;
+    static thread_local sal_Int16 r = 0x00;
 
     if (ch == c) return r;
     else c = ch;
@@ -174,8 +174,8 @@ unicode::getUnicodeType(const sal_uInt32 ch)
 
 sal_uInt8
 unicode::getUnicodeDirection( const sal_Unicode ch ) {
-    static sal_Unicode c = 0x00;
-    static sal_uInt8 r = 0x00;
+    static thread_local sal_Unicode c = 0x00;
+    static thread_local sal_uInt8 r = 0x00;
 
     if (ch == c) return r;
     else c = ch;
