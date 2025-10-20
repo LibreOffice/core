@@ -111,10 +111,10 @@ void ImplGrafControl::ImplModify()
          maCommand == ".uno:GrafBlue" ||
          maCommand == ".uno:GrafLuminance" ||
          maCommand == ".uno:GrafContrast" )
-        a <<= sal_Int16( nVal );
+        a <<= sal_Int16(std::clamp<sal_Int64>(nVal, SAL_MIN_INT16, SAL_MAX_INT16));
     else if ( maCommand == ".uno:GrafGamma" ||
               maCommand == ".uno:GrafTransparence" )
-        a <<= sal_Int32( nVal );
+        a <<= sal_Int32(std::clamp<sal_Int64>(nVal, SAL_MIN_INT32, SAL_MAX_INT32));
 
     if ( !a.hasValue() )
         return;
