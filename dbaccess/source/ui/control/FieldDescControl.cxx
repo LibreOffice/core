@@ -1293,14 +1293,10 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
                 {
                     if ( !sDefault.isEmpty() )
                     {
-                        try
-                        {
-                            nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
-                        }
-                        catch(const Exception&)
-                        {
-                            return OUString(); // return empty string for format example
-                        }
+                        // The number will have been canonicalized with OUString::number in
+                        // CanonicalizeToControlDefault so here we want to do the opposite in order
+                        // to get a number to format
+                        nValue = sDefault.toDouble();
                     }
                 }
             }
