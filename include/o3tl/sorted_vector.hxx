@@ -15,7 +15,6 @@
 #include <cassert>
 #include <functional>
 #include <iterator>
-#include <memory>
 #include <type_traits>
 
 namespace o3tl

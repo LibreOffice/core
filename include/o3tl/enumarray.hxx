@@ -20,11 +20,9 @@
 #ifndef INCLUDED_O3TL_ENUMARRAY_HXX
 #define INCLUDED_O3TL_ENUMARRAY_HXX
 
-#include <iterator>
-#include <type_traits>
 #include <utility>
 #include <array>
-#include <cassert>
+#include <cstddef>
 #include <concepts>
 
 namespace o3tl {

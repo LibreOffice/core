@@ -11,13 +11,16 @@
 
 #include <sal/config.h>
 
+#include <config_global.h>
+
+#if HAVE_CPP_STRONG_ORDER
 #include <compare>
+#else
 #include <concepts>
 #include <cstdint>
 #include <cstring>
 #include <limits>
-
-#include <config_global.h>
+#endif
 
 namespace o3tl
 {

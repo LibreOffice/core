@@ -240,15 +240,18 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
     - com/sun/star/rendering/XLinePolyPolygon2D.hpp
-    include/o3tl/char16_t2wchar_t.hxx:
-    # Needed on WIN32
-    - string_view
-    include/o3tl/make_shared.hxx:
-    # Needed for __COVERITY__
-    - o3tl/deleter.hxx
+    include/o3tl/float_int_conversion.hxx:
+    # Don't replace with std <concepts>
+    - o3tl/concepts.hxx
+    include/o3tl/numeric.hxx:
+    # Don't replace with std <concepts>
+    - o3tl/concepts.hxx
     include/o3tl/safeint.hxx:
     # Needed for std::min
     - algorithm
+    include/o3tl/strong_int.hxx:
+    # Needed for operator<=> needs std::strong_ordering
+    - compare
     include/o3tl/unreachable.hxx:
     # Needed for C++23 mode
     - utility
