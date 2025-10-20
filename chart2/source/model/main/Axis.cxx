@@ -369,8 +369,7 @@ void Axis::AllocateSubGrids()
         if( nOldSubIncCount > nNewSubIncCount )
         {
             // remove superfluous entries
-            aOldBroadcasters.insert(
-                aOldBroadcasters.end(),
+            aOldBroadcasters.assign(
                 m_aSubGridProperties.begin() + nNewSubIncCount,
                 m_aSubGridProperties.end());
 
