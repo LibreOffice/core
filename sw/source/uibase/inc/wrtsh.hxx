@@ -426,7 +426,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     SW_DLLPUBLIC void GotoMark( const ::sw::mark::MarkBase* const pMark );
     bool GotoMark( const ::sw::mark::MarkBase* const pMark, bool bSelect );
     SW_DLLPUBLIC void GotoMark( const OUString& rName );
-    bool GoNextBookmark(); // true when there still was one
+    SW_DLLPUBLIC bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();
 
     bool GotoFieldmark(::sw::mark::Fieldmark const * const pMark);
@@ -521,6 +521,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     virtual void InfoReadOnlyDialog(bool bAsync) const override;
     virtual bool WarnHiddenSectionDialog() const override;
     virtual bool WarnSwitchToDesignModeDialog() const override;
+    void SetEnteringStdMode(bool bEnteringStdMode) { m_bEnteringStdMode = bEnteringStdMode; }
+    bool IsEnteringStdMode() const { return m_bEnteringStdMode; }
 
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
@@ -608,6 +610,7 @@ private:
     bool    m_bIsInClickToEdit:1;
     bool    m_bClearMark      :1;     // don't delete selection for ChartAutoPilot
     bool    m_bRetainSelection :1; // Do not remove selections
+    bool m_bEnteringStdMode = false;
 
     Point   m_aStart;
     Link<SwWrtShell&,void>  m_aSelTableLink;

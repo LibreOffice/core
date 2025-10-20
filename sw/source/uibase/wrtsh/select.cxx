@@ -48,6 +48,7 @@
 #include <bitmaps.hlst>
 
 #include <svx/svdview.hxx>
+#include <comphelper/scopeguard.hxx>
 
 namespace com::sun::star::util {
     struct SearchOptions2;
@@ -567,6 +568,9 @@ void SwWrtShell::ExtSelLn(const Point *pPt, bool )
 
 void SwWrtShell::EnterStdMode()
 {
+    m_bEnteringStdMode = true;
+    comphelper::ScopeGuard g([this] { m_bEnteringStdMode = false; });
+
     if(m_bAddMode)
         LeaveAddMode();
     if(m_bBlockMode)
