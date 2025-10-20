@@ -27,34 +27,26 @@ OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,
                                          OUString const & _rAllowedChars,
                                          TranslateId pHelpId,
                                          short nPosition)
-    : OSQLNameEntry(std::move(xEntry), _rAllowedChars)
-    , m_nPos(nPosition)
+    : OSQLNameEntry(std::move(xEntry), _rAllowedChars, pHelpId, nPosition)
 {
-    m_strHelpText = DBA_RES(pHelpId);
 }
 
 OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, TranslateId pHelpId, short nPosition)
-    : OWidgetBase(xEntry.get())
+    : OWidgetBase(xEntry.get(), pHelpId, nPosition)
     , m_xEntry(std::move(xEntry))
-    , m_nPos(nPosition)
 {
-    m_strHelpText = DBA_RES(pHelpId);
 }
 
 OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, TranslateId pHelpId, short nPosition)
-    : OWidgetBase(xSpinButton.get())
+    : OWidgetBase(xSpinButton.get(), pHelpId, nPosition)
     , m_xSpinButton(std::move(xSpinButton))
-    , m_nPos(nPosition)
 {
-    m_strHelpText = DBA_RES(pHelpId);
 }
 
 OPropListBoxCtrl::OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, TranslateId pHelpId, short nPosition)
-    : OWidgetBase(xComboBox.get())
+    : OWidgetBase(xComboBox.get(), pHelpId, nPosition)
     , m_xComboBox(std::move(xComboBox))
-    , m_nPos(nPosition)
 {
-    m_strHelpText = DBA_RES(pHelpId);
 }
 
 } // end namespace dbaui
