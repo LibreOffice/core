@@ -235,6 +235,17 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
             inFull = True
             continue
 
+        # Check if IWYU considers the header as having correct
+        # list of includes - this would make all exclusions obsolete
+        match = re.match(".*has correct #includes/fwd-decls.*", line)
+        if match:
+            if "excludelist" in moduleRules.keys():
+                excludelistRules = moduleRules["excludelist"]
+                realFileName = os.path.relpath(fileName, os.getcwd())
+                if realFileName in excludelistRules.keys():
+                    print("WARNING:", "File has correct #includes/fwd-decls; all excluded headers can be removed from exclusion list of:", realFileName)
+            continue
+
         if inAdd:
             match = re.match('#include ([^ ]+)', line)
             if match:

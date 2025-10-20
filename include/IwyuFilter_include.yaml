@@ -212,9 +212,6 @@ excludelist:
     include/o3tl/unreachable.hxx:
     # Needed for C++23 mode
     - utility
-    include/o3tl/vector_utils.hxx:
-    # Needed for std::copy_if
-    - algorithm
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
