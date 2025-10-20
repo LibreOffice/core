@@ -1509,75 +1509,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources,\
 	Lib/pkg_resources/__init__.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor,\
-	Lib/pkg_resources/_vendor/__init__.py \
-	Lib/pkg_resources/_vendor/appdirs.py \
-	Lib/pkg_resources/_vendor/zipp.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/importlib_resources,\
-	Lib/pkg_resources/_vendor/importlib_resources/__init__.py \
-	Lib/pkg_resources/_vendor/importlib_resources/_adapters.py \
-	Lib/pkg_resources/_vendor/importlib_resources/_common.py \
-	Lib/pkg_resources/_vendor/importlib_resources/_compat.py \
-	Lib/pkg_resources/_vendor/importlib_resources/_itertools.py \
-	Lib/pkg_resources/_vendor/importlib_resources/_legacy.py \
-	Lib/pkg_resources/_vendor/importlib_resources/abc.py \
-	Lib/pkg_resources/_vendor/importlib_resources/readers.py \
-	Lib/pkg_resources/_vendor/importlib_resources/simple.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/jaraco,\
-	Lib/pkg_resources/_vendor/jaraco/__init__.py \
-	Lib/pkg_resources/_vendor/jaraco/context.py \
-	Lib/pkg_resources/_vendor/jaraco/functools.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/jaraco/text,\
-	Lib/pkg_resources/_vendor/jaraco/text/__init__.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/more_itertools,\
-	Lib/pkg_resources/_vendor/more_itertools/__init__.py \
-	Lib/pkg_resources/_vendor/more_itertools/more.py \
-	Lib/pkg_resources/_vendor/more_itertools/recipes.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/packaging,\
-	Lib/pkg_resources/_vendor/packaging/__about__.py \
-	Lib/pkg_resources/_vendor/packaging/__init__.py \
-	Lib/pkg_resources/_vendor/packaging/_manylinux.py \
-	Lib/pkg_resources/_vendor/packaging/_musllinux.py \
-	Lib/pkg_resources/_vendor/packaging/_structures.py \
-	Lib/pkg_resources/_vendor/packaging/markers.py \
-	Lib/pkg_resources/_vendor/packaging/requirements.py \
-	Lib/pkg_resources/_vendor/packaging/specifiers.py \
-	Lib/pkg_resources/_vendor/packaging/tags.py \
-	Lib/pkg_resources/_vendor/packaging/utils.py \
-	Lib/pkg_resources/_vendor/packaging/version.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/pyparsing,\
-	Lib/pkg_resources/_vendor/pyparsing/__init__.py \
-	Lib/pkg_resources/_vendor/pyparsing/actions.py \
-	Lib/pkg_resources/_vendor/pyparsing/common.py \
-	Lib/pkg_resources/_vendor/pyparsing/core.py \
-	Lib/pkg_resources/_vendor/pyparsing/exceptions.py \
-	Lib/pkg_resources/_vendor/pyparsing/helpers.py \
-	Lib/pkg_resources/_vendor/pyparsing/results.py \
-	Lib/pkg_resources/_vendor/pyparsing/testing.py \
-	Lib/pkg_resources/_vendor/pyparsing/unicode.py \
-	Lib/pkg_resources/_vendor/pyparsing/util.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/_vendor/pyparsing/diagram,\
-	Lib/pkg_resources/_vendor/pyparsing/diagram/__init__.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pkg_resources/extern,\
-	Lib/pkg_resources/extern/__init__.py \
+	Lib/pkg_resources/api_tests.txt \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pydoc_data,\
@@ -1595,20 +1527,22 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools,\
 	Lib/setuptools/__init__.py \
-	Lib/setuptools/_deprecation_warning.py \
+	Lib/setuptools/_core_metadata.py \
 	Lib/setuptools/_entry_points.py \
 	Lib/setuptools/_imp.py \
 	Lib/setuptools/_importlib.py \
 	Lib/setuptools/_itertools.py \
+	Lib/setuptools/_normalization.py \
 	Lib/setuptools/_path.py \
 	Lib/setuptools/_reqs.py \
+	Lib/setuptools/_shutil.py \
+	Lib/setuptools/_static.py \
 	Lib/setuptools/archive_util.py \
 	Lib/setuptools/build_meta.py \
 	Lib/setuptools/cli-32.exe \
 	Lib/setuptools/cli-64.exe \
 	Lib/setuptools/cli-arm64.exe \
 	Lib/setuptools/cli.exe \
-	Lib/setuptools/dep_util.py \
 	Lib/setuptools/depends.py \
 	Lib/setuptools/discovery.py \
 	Lib/setuptools/dist.py \
@@ -1622,29 +1556,28 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/installer.py \
 	Lib/setuptools/launch.py \
 	Lib/setuptools/logging.py \
+	Lib/setuptools/modified.py \
 	Lib/setuptools/monkey.py \
 	Lib/setuptools/msvc.py \
 	Lib/setuptools/namespaces.py \
 	Lib/setuptools/package_index.py \
-	Lib/setuptools/py34compat.py \
 	Lib/setuptools/sandbox.py \
 	Lib/setuptools/unicode_utils.py \
 	Lib/setuptools/version.py \
+	Lib/setuptools/warnings.py \
 	Lib/setuptools/wheel.py \
 	Lib/setuptools/windows_support.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_distutils,\
 	Lib/setuptools/_distutils/__init__.py \
-	Lib/setuptools/_distutils/_collections.py \
-	Lib/setuptools/_distutils/_functools.py \
+	Lib/setuptools/_distutils/_log.py \
 	Lib/setuptools/_distutils/_macos_compat.py \
+	Lib/setuptools/_distutils/_modified.py \
 	Lib/setuptools/_distutils/_msvccompiler.py \
 	Lib/setuptools/_distutils/archive_util.py \
-	Lib/setuptools/_distutils/bcppcompiler.py \
 	Lib/setuptools/_distutils/ccompiler.py \
 	Lib/setuptools/_distutils/cmd.py \
-	Lib/setuptools/_distutils/config.py \
 	Lib/setuptools/_distutils/core.py \
 	Lib/setuptools/_distutils/cygwinccompiler.py \
 	Lib/setuptools/_distutils/debug.py \
@@ -1657,10 +1590,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_distutils/file_util.py \
 	Lib/setuptools/_distutils/filelist.py \
 	Lib/setuptools/_distutils/log.py \
-	Lib/setuptools/_distutils/msvc9compiler.py \
-	Lib/setuptools/_distutils/msvccompiler.py \
-	Lib/setuptools/_distutils/py38compat.py \
-	Lib/setuptools/_distutils/py39compat.py \
 	Lib/setuptools/_distutils/spawn.py \
 	Lib/setuptools/_distutils/sysconfig.py \
 	Lib/setuptools/_distutils/text_file.py \
@@ -1668,6 +1597,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_distutils/util.py \
 	Lib/setuptools/_distutils/version.py \
 	Lib/setuptools/_distutils/versionpredicate.py \
+	Lib/setuptools/_distutils/zosccompiler.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_distutils/command,\
@@ -1690,17 +1620,49 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_distutils/command/install_headers.py \
 	Lib/setuptools/_distutils/command/install_lib.py \
 	Lib/setuptools/_distutils/command/install_scripts.py \
-	Lib/setuptools/_distutils/command/py37compat.py \
-	Lib/setuptools/_distutils/command/register.py \
 	Lib/setuptools/_distutils/command/sdist.py \
-	Lib/setuptools/_distutils/command/upload.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_distutils/compat,\
+	Lib/setuptools/_distutils/compat/__init__.py \
+	Lib/setuptools/_distutils/compat/numpy.py \
+	Lib/setuptools/_distutils/compat/py39.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_distutils/compilers/C,\
+	Lib/setuptools/_distutils/compilers/C/base.py \
+	Lib/setuptools/_distutils/compilers/C/cygwin.py \
+	Lib/setuptools/_distutils/compilers/C/errors.py \
+	Lib/setuptools/_distutils/compilers/C/msvc.py \
+	Lib/setuptools/_distutils/compilers/C/unix.py \
+	Lib/setuptools/_distutils/compilers/C/zos.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor,\
-	Lib/setuptools/_vendor/__init__.py \
-	Lib/setuptools/_vendor/ordered_set.py \
 	Lib/setuptools/_vendor/typing_extensions.py \
-	Lib/setuptools/_vendor/zipp.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/autocommand,\
+	Lib/setuptools/_vendor/autocommand/__init__.py \
+	Lib/setuptools/_vendor/autocommand/autoasync.py \
+	Lib/setuptools/_vendor/autocommand/autocommand.py \
+	Lib/setuptools/_vendor/autocommand/automain.py \
+	Lib/setuptools/_vendor/autocommand/autoparse.py \
+	Lib/setuptools/_vendor/autocommand/errors.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/backports,\
+	Lib/setuptools/_vendor/backports/__init__.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/backports/tarfile,\
+	Lib/setuptools/_vendor/backports/tarfile/__init__.py \
+	Lib/setuptools/_vendor/backports/tarfile/__main__.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/backports/tarfile/compat,\
+	Lib/setuptools/_vendor/backports/tarfile/compat/__init__.py \
+	Lib/setuptools/_vendor/backports/tarfile/compat/py38.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/importlib_metadata,\
@@ -1712,28 +1674,44 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_vendor/importlib_metadata/_itertools.py \
 	Lib/setuptools/_vendor/importlib_metadata/_meta.py \
 	Lib/setuptools/_vendor/importlib_metadata/_text.py \
+	Lib/setuptools/_vendor/importlib_metadata/diagnose.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/importlib_resources,\
-	Lib/setuptools/_vendor/importlib_resources/__init__.py \
-	Lib/setuptools/_vendor/importlib_resources/_adapters.py \
-	Lib/setuptools/_vendor/importlib_resources/_common.py \
-	Lib/setuptools/_vendor/importlib_resources/_compat.py \
-	Lib/setuptools/_vendor/importlib_resources/_itertools.py \
-	Lib/setuptools/_vendor/importlib_resources/_legacy.py \
-	Lib/setuptools/_vendor/importlib_resources/abc.py \
-	Lib/setuptools/_vendor/importlib_resources/readers.py \
-	Lib/setuptools/_vendor/importlib_resources/simple.py \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/importlib_metadata/compat,\
+	Lib/setuptools/_vendor/importlib_metadata/compat/__init__.py \
+	Lib/setuptools/_vendor/importlib_metadata/compat/py311.py \
+	Lib/setuptools/_vendor/importlib_metadata/compat/py39.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/inflect,\
+	Lib/setuptools/_vendor/inflect/__init__.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/inflect/compat,\
+	Lib/setuptools/_vendor/inflect/compat/__init__.py \
+	Lib/setuptools/_vendor/inflect/compat/py38.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/jaraco,\
-	Lib/setuptools/_vendor/jaraco/__init__.py \
 	Lib/setuptools/_vendor/jaraco/context.py \
-	Lib/setuptools/_vendor/jaraco/functools.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/jaraco/collections,\
+	Lib/setuptools/_vendor/jaraco/collections/__init__.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/jaraco/functools,\
+	Lib/setuptools/_vendor/jaraco/functools/__init__.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/jaraco/text,\
+	Lib/setuptools/_vendor/jaraco/text/Lorem_ipsum.txt \
 	Lib/setuptools/_vendor/jaraco/text/__init__.py \
+	Lib/setuptools/_vendor/jaraco/text/layouts.py \
+	Lib/setuptools/_vendor/jaraco/text/show-newlines.py \
+	Lib/setuptools/_vendor/jaraco/text/strip-prefix.py \
+	Lib/setuptools/_vendor/jaraco/text/to-dvorak.py \
+	Lib/setuptools/_vendor/jaraco/text/to-qwerty.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/more_itertools,\
@@ -1743,12 +1721,15 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/packaging,\
-	Lib/setuptools/_vendor/packaging/__about__.py \
 	Lib/setuptools/_vendor/packaging/__init__.py \
+	Lib/setuptools/_vendor/packaging/_elffile.py \
 	Lib/setuptools/_vendor/packaging/_manylinux.py \
 	Lib/setuptools/_vendor/packaging/_musllinux.py \
+	Lib/setuptools/_vendor/packaging/_parser.py \
 	Lib/setuptools/_vendor/packaging/_structures.py \
+	Lib/setuptools/_vendor/packaging/_tokenizer.py \
 	Lib/setuptools/_vendor/packaging/markers.py \
+	Lib/setuptools/_vendor/packaging/metadata.py \
 	Lib/setuptools/_vendor/packaging/requirements.py \
 	Lib/setuptools/_vendor/packaging/specifiers.py \
 	Lib/setuptools/_vendor/packaging/tags.py \
@@ -1756,21 +1737,20 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_vendor/packaging/version.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/pyparsing,\
-	Lib/setuptools/_vendor/pyparsing/__init__.py \
-	Lib/setuptools/_vendor/pyparsing/actions.py \
-	Lib/setuptools/_vendor/pyparsing/common.py \
-	Lib/setuptools/_vendor/pyparsing/core.py \
-	Lib/setuptools/_vendor/pyparsing/exceptions.py \
-	Lib/setuptools/_vendor/pyparsing/helpers.py \
-	Lib/setuptools/_vendor/pyparsing/results.py \
-	Lib/setuptools/_vendor/pyparsing/testing.py \
-	Lib/setuptools/_vendor/pyparsing/unicode.py \
-	Lib/setuptools/_vendor/pyparsing/util.py \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/packaging/licenses,\
+	Lib/setuptools/_vendor/packaging/licenses/__init__.py \
+	Lib/setuptools/_vendor/packaging/licenses/_spdx.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/pyparsing/diagram,\
-	Lib/setuptools/_vendor/pyparsing/diagram/__init__.py \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/platformdirs,\
+	Lib/setuptools/_vendor/platformdirs/__init__.py \
+	Lib/setuptools/_vendor/platformdirs/__main__.py \
+	Lib/setuptools/_vendor/platformdirs/android.py \
+	Lib/setuptools/_vendor/platformdirs/api.py \
+	Lib/setuptools/_vendor/platformdirs/macos.py \
+	Lib/setuptools/_vendor/platformdirs/unix.py \
+	Lib/setuptools/_vendor/platformdirs/version.py \
+	Lib/setuptools/_vendor/platformdirs/windows.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/tomli,\
@@ -1780,11 +1760,80 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_vendor/tomli/_types.py \
 ))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/typeguard,\
+	Lib/setuptools/_vendor/typeguard/__init__.py \
+	Lib/setuptools/_vendor/typeguard/_checkers.py \
+	Lib/setuptools/_vendor/typeguard/_config.py \
+	Lib/setuptools/_vendor/typeguard/_decorators.py \
+	Lib/setuptools/_vendor/typeguard/_exceptions.py \
+	Lib/setuptools/_vendor/typeguard/_functions.py \
+	Lib/setuptools/_vendor/typeguard/_importhook.py \
+	Lib/setuptools/_vendor/typeguard/_memo.py \
+	Lib/setuptools/_vendor/typeguard/_pytest_plugin.py \
+	Lib/setuptools/_vendor/typeguard/_suppression.py \
+	Lib/setuptools/_vendor/typeguard/_transformer.py \
+	Lib/setuptools/_vendor/typeguard/_union_transformer.py \
+	Lib/setuptools/_vendor/typeguard/_utils.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/wheel,\
+	Lib/setuptools/_vendor/wheel/__init__.py \
+	Lib/setuptools/_vendor/wheel/__main__.py \
+	Lib/setuptools/_vendor/wheel/_bdist_wheel.py \
+	Lib/setuptools/_vendor/wheel/_setuptools_logging.py \
+	Lib/setuptools/_vendor/wheel/bdist_wheel.py \
+	Lib/setuptools/_vendor/wheel/macosx_libfile.py \
+	Lib/setuptools/_vendor/wheel/metadata.py \
+	Lib/setuptools/_vendor/wheel/util.py \
+	Lib/setuptools/_vendor/wheel/wheelfile.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/wheel/cli,\
+	Lib/setuptools/_vendor/wheel/cli/__init__.py \
+	Lib/setuptools/_vendor/wheel/cli/convert.py \
+	Lib/setuptools/_vendor/wheel/cli/pack.py \
+	Lib/setuptools/_vendor/wheel/cli/tags.py \
+	Lib/setuptools/_vendor/wheel/cli/unpack.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/wheel/vendored,\
+	Lib/setuptools/_vendor/wheel/vendored/__init__.py \
+	Lib/setuptools/_vendor/wheel/vendored/vendor.txt \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/wheel/vendored/packaging,\
+	Lib/setuptools/_vendor/wheel/vendored/packaging/__init__.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/_elffile.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/_manylinux.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/_musllinux.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/_parser.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/_structures.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/_tokenizer.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/markers.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/requirements.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/specifiers.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/tags.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/utils.py \
+	Lib/setuptools/_vendor/wheel/vendored/packaging/version.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/zipp,\
+	Lib/setuptools/_vendor/zipp/__init__.py \
+	Lib/setuptools/_vendor/zipp/glob.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/_vendor/zipp/compat,\
+	Lib/setuptools/_vendor/zipp/compat/__init__.py \
+	Lib/setuptools/_vendor/zipp/compat/py310.py \
+))
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/command,\
 	Lib/setuptools/command/__init__.py \
+	Lib/setuptools/command/_requirestxt.py \
 	Lib/setuptools/command/alias.py \
 	Lib/setuptools/command/bdist_egg.py \
 	Lib/setuptools/command/bdist_rpm.py \
+	Lib/setuptools/command/bdist_wheel.py \
 	Lib/setuptools/command/build.py \
 	Lib/setuptools/command/build_clib.py \
 	Lib/setuptools/command/build_ext.py \
@@ -1798,15 +1847,19 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/command/install_egg_info.py \
 	Lib/setuptools/command/install_lib.py \
 	Lib/setuptools/command/install_scripts.py \
-	Lib/setuptools/command/py36compat.py \
-	Lib/setuptools/command/register.py \
 	Lib/setuptools/command/rotate.py \
 	Lib/setuptools/command/saveopts.py \
 	Lib/setuptools/command/sdist.py \
 	Lib/setuptools/command/setopt.py \
 	Lib/setuptools/command/test.py \
-	Lib/setuptools/command/upload.py \
-	Lib/setuptools/command/upload_docs.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/compat,\
+	Lib/setuptools/compat/__init__.py \
+	Lib/setuptools/compat/py310.py \
+	Lib/setuptools/compat/py311.py \
+	Lib/setuptools/compat/py312.py \
+	Lib/setuptools/compat/py39.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/config,\
@@ -1824,10 +1877,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/config/_validate_pyproject/fastjsonschema_exceptions.py \
 	Lib/setuptools/config/_validate_pyproject/fastjsonschema_validations.py \
 	Lib/setuptools/config/_validate_pyproject/formats.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/extern,\
-	Lib/setuptools/extern/__init__.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
