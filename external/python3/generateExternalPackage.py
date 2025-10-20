@@ -48,7 +48,7 @@ if __name__ == '__main__':
         print()
         if k == "Lib/msilib":
             print("ifeq (WNT,$(OS))")
-        print("$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/{},\\".format(k.lower()))
+        print("$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/{},\\".format(k.replace("Lib", "lib", 3)))
         for fileName in sorted(v):
             print("\t{} \\".format(fileName))
         print("))")
