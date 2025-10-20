@@ -40,6 +40,7 @@
 
 #include <comphelper/fileurl.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -142,9 +143,9 @@ namespace
     }
 }
 
-static int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
+static int PtTo10Mu( int nPoints ) { return o3tl::convert(nPoints, o3tl::Length::pt, o3tl::Length::mm100); }
 
-static int TenMuToPt( int nUnits ) { return static_cast<int>((static_cast<double>(nUnits)/35.27777778)+0.5); }
+static int TenMuToPt( int nUnits ) { return o3tl::convert(nUnits, o3tl::Length::mm100, o3tl::Length::pt); }
 
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
