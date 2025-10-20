@@ -181,7 +181,14 @@ int main(int argc, char **argv)
     _setmode( _fileno( g_binary_out ), _O_BINARY );
 #endif
 
-#if POPPLER_CHECK_VERSION(22, 6, 0)
+#if POPPLER_CHECK_VERSION(25, 10, 0)
+    std::string sFileName(pFileName ? pFileName->toStr() : std::string());
+    std::string sOwnerPasswordStr(pOwnerPasswordStr ? pOwnerPasswordStr->toStr() : std::string());
+    std::string sUserPasswordStr(pUserPasswordStr ? pUserPasswordStr->toStr() : std::string());
+    PDFDoc aDoc( std::make_unique<GooString>(sFileName),
+                 std::optional<GooString>(sOwnerPasswordStr),
+                 std::optional<GooString>(sUserPasswordStr));
+#elif POPPLER_CHECK_VERSION(22, 6, 0)
     PDFDoc aDoc( std::make_unique<GooString>(pFileName),
                  std::optional<GooString>(pOwnerPasswordStr),
                  std::optional<GooString>(pUserPasswordStr) );

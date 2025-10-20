@@ -150,7 +150,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 @@ -366,7 +366,11 @@
      for (const SysFontInfo *f : fonts) {
          fi = f;
-         if (fi->match(name2, bold, italic, oblique, fixedWidth)) {
+         if (fi->match(name2->toStr(), bold, italic, oblique, fixedWidth)) {
 +#ifndef __clang__
              if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
 +#else
@@ -162,7 +162,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 @@ -377,7 +381,11 @@
          for (const SysFontInfo *f : fonts) {
              fi = f;
-             if (fi->match(name2, false, italic)) {
+             if (fi->match(name2->toStr(), false, italic)) {
 +#ifndef __clang__
                  if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
 +#else
@@ -174,7 +174,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 @@ -389,7 +397,11 @@
          for (const SysFontInfo *f : fonts) {
              fi = f;
-             if (fi->match(name2, false, false)) {
+             if (fi->match(name2->toStr(), false, false)) {
 +#ifndef __clang__
                  if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
 +#else
@@ -196,7 +196,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
      size_t start = std::string::npos;
      findModifier(fontName, modStart, "Regular", start);
 @@ -1120,7 +1136,11 @@
-                     FcPatternGetInteger(fontSet->fonts[i], FC_INDEX, 0, &faceIndex);
+                     FcPatternGetString(fontSet->fonts[i], FC_FAMILY, 0, &fcFamily);
  
                      const std::string sFilePath = reinterpret_cast<char *>(fcFilePath);
 +#ifndef __clang__
@@ -204,7 +204,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 +#else
 +                    if (std::find(filesToIgnore.begin(), filesToIgnore.end(), sFilePath) == filesToIgnore.end()) {
 +#endif
-                         return FamilyStyleFontSearchResult(sFilePath, faceIndex);
+                         return FamilyStyleFontSearchResult(sFilePath, faceIndex, fontFamily != std::string(reinterpret_cast<char *>(fcFamily)));
                      }
                  }
 --- poppler/poppler/Catalog.cc.orig	2025-01-09 17:19:48.592089218 +0100
@@ -321,7 +321,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 +            std::transform(word->chars.begin(), word->chars.end(), uText.begin(), [](auto &c) { return c.text; });
 +#endif
              dumpFragment(uText.data(), uText.size(), uMap, &s);
-             (*outputFunc)(outputStream, s.c_str(), s.getLength());
+             (*outputFunc)(outputStream, s.c_str(), s.size());
  
 --- poppler/poppler/PDFDoc.cc.orig	2025-01-09 17:38:49.498598893 +0100
 +++ poppler/poppler/PDFDoc.cc	2025-01-09 17:38:22.459449316 +0100
