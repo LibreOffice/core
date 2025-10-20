@@ -192,42 +192,39 @@ sal_uInt32 unicode::GetMirroredChar(sal_uInt32 nChar) {
     return nChar;
 }
 
-#define bit(name)   (1U << name)
+static constexpr auto bit(sal_Int16 name) { return 1U << name; }
 
-#define UPPERMASK   bit(UnicodeType::UPPERCASE_LETTER)
-
-#define LOWERMASK   bit(UnicodeType::LOWERCASE_LETTER)
-
-#define TITLEMASK   bit(UnicodeType::TITLECASE_LETTER)
-
-#define ALPHAMASK   UPPERMASK|LOWERMASK|TITLEMASK|\
-            bit(UnicodeType::MODIFIER_LETTER)|\
-            bit(UnicodeType::OTHER_LETTER)
-
-#define SPACEMASK   bit(UnicodeType::SPACE_SEPARATOR)|\
-            bit(UnicodeType::LINE_SEPARATOR)|\
-            bit(UnicodeType::PARAGRAPH_SEPARATOR)
-
-#define CONTROLMASK bit(UnicodeType::CONTROL)|\
-            bit(UnicodeType::FORMAT)|\
-            bit(UnicodeType::LINE_SEPARATOR)|\
-            bit(UnicodeType::PARAGRAPH_SEPARATOR)
-
-#define IsType(func, mask)  \
-bool func( const sal_uInt32 ch) {\
-    return (bit(getUnicodeType(ch)) & (mask)) != 0;\
+bool unicode::isControl(const sal_uInt32 ch)
+{
+    const auto CONTROLMASK = bit(css::i18n::UnicodeType::CONTROL) |
+                             bit(css::i18n::UnicodeType::FORMAT) |
+                             bit(css::i18n::UnicodeType::LINE_SEPARATOR) |
+                             bit(css::i18n::UnicodeType::PARAGRAPH_SEPARATOR);
+    return (bit(getUnicodeType(ch)) & CONTROLMASK) != 0;
 }
 
-IsType(unicode::isControl, CONTROLMASK)
-IsType(unicode::isAlpha, ALPHAMASK)
-IsType(unicode::isSpace, SPACEMASK)
+bool unicode::isAlpha(const sal_uInt32 ch)
+{
+    const auto ALPHAMASK = bit(css::i18n::UnicodeType::UPPERCASE_LETTER) |
+                           bit(css::i18n::UnicodeType::LOWERCASE_LETTER) |
+                           bit(css::i18n::UnicodeType::TITLECASE_LETTER) |
+                           bit(css::i18n::UnicodeType::MODIFIER_LETTER) |
+                           bit(css::i18n::UnicodeType::OTHER_LETTER);
+    return (bit(getUnicodeType(ch)) & ALPHAMASK) != 0;
+}
 
-#define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\
-            bit(0x1c)|bit(0x1d)|bit(0x1e)|bit(0x1f)
+bool unicode::isSpace(const sal_uInt32 ch) {
+    const auto SPACEMASK = bit(css::i18n::UnicodeType::SPACE_SEPARATOR) |
+                           bit(css::i18n::UnicodeType::LINE_SEPARATOR) |
+                           bit(css::i18n::UnicodeType::PARAGRAPH_SEPARATOR);
+    return (bit(getUnicodeType(ch)) & SPACEMASK) != 0;
+}
 
 bool unicode::isWhiteSpace(const sal_uInt32 ch)
 {
-    return (ch != 0xa0 && isSpace(ch)) || (ch <= 0x1F && (bit(ch) & (CONTROLSPACE)));
+    const auto CONTROLSPACE = bit(0x09) | bit(0x0a) | bit(0x0b) | bit(0x0c) | bit(0x0d) | bit(0x1c)
+                              | bit(0x1d) | bit(0x1e) | bit(0x1f);
+    return (ch != 0xa0 && isSpace(ch)) || (ch <= 0x1F && (bit(ch) & CONTROLSPACE));
 }
 
 sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
