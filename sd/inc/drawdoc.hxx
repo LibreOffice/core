@@ -1001,6 +1001,8 @@ public:
         bool bIsPageObj,
         const sal_Int32 nInsertPosition);
 
+    SAL_DLLPRIVATE bool HasCanvasPage() const { return mpCanvasPage != nullptr; }
+
     SAL_DLLPRIVATE sal_uInt16 GetOrInsertCanvasPage ();
 
     /** return the document fonts for latin, cjk and ctl according to the current
@@ -1139,10 +1141,8 @@ private:
         bool bIsPageBack,
         bool bIsPageObj);
 
-    SAL_DLLPRIVATE bool hasCanvasPage() const { return mpCanvasPage != nullptr; }
-
     SAL_DLLPRIVATE void populatePagePreviewsGrid();
-    SAL_DLLPRIVATE void updateCanvasPreviewsGrid();
+    SAL_DLLPRIVATE void updatePagePreviewsGrid(SdPage* pPage);
 
     SAL_DLLPRIVATE virtual void PageListChanged() override;
     SAL_DLLPRIVATE virtual void MasterPageListChanged() override;
