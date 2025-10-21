@@ -17672,7 +17672,7 @@ public:
 
     virtual void do_set_text(const OUString& rText) override
     {
-        GtkInstanceEditable::set_text(rText);
+        GtkInstanceEditable::do_set_text(rText);
         Formatter& rFormatter = GetFormatter();
         m_bEmptyField = rFormatter.IsEmptyFieldEnabled() && rText.isEmpty();
         if (m_bEmptyField)
