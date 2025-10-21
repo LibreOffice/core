@@ -312,8 +312,8 @@ FROZEN_TARBALL := frozen-1.2.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-GLM_SHA256SUM := 09c5716296787e1f7fcb87b1cbdbf26814ec1288ed6259ccd30d5d9795809fa5
-GLM_TARBALL := glm-1.0.1.zip
+GLM_SHA256SUM := be64032585415ca7dbea0d614915bb8eec012adf7b4d4fea7ff6b5bd3e0b906a
+GLM_TARBALL := glm-1.0.2.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
