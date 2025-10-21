@@ -123,6 +123,7 @@ friend class sd::UndoAttrObject;
     sal_uInt16  mnPaperBin;               ///< PaperBin
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
     bool    mbIsCanvasPage;               ///< whether the page is a canvas page
+    bool    mbIsCanvasMasterPage;         ///< whether it is the master page of canvas page
 
     // PDF link annotations for read-only pdfium
     std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinkAnnotations;
@@ -403,6 +404,9 @@ public:
 
     bool IsCanvasPage() const { return mbIsCanvasPage; }
     void SetCanvasPage() { mbIsCanvasPage = true; }
+
+    bool IsCanvasMasterPage() const { return mbIsCanvasMasterPage; }
+    void SetCanvasMasterPage() { mbIsCanvasMasterPage = true; }
 
 private:
     bool mbIsPrecious;

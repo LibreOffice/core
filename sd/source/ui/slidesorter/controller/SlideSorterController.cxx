@@ -297,12 +297,22 @@ bool SlideSorterController::Command (
             if (mrModel.GetEditMode() == EditMode::Page)
             {
                 if (pPage != nullptr)
-                    aPopupId = "pagepane";
+                {
+                    if (pPage->IsCanvasPage())
+                        aPopupId = "pagepanecanvas";
+                    else
+                        aPopupId = "pagepane";
+                }
                 else
                     aPopupId = "pagepanenosel";
             }
             else if (pPage != nullptr)
-                aPopupId = "pagepanemaster";
+            {
+                if (pPage->IsCanvasMasterPage())
+                    aPopupId = "pagepanecanvasmaster";
+                else
+                    aPopupId = "pagepanemaster";
+            }
             else
                 aPopupId = "pagepanenoselmaster";
 

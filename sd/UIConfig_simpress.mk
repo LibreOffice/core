@@ -37,9 +37,11 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/simpress,\
 	sd/uiconfig/simpress/popupmenu/oleobject \
 	sd/uiconfig/simpress/popupmenu/outline \
 	sd/uiconfig/simpress/popupmenu/pagepanemaster \
+	sd/uiconfig/simpress/popupmenu/pagepanecanvasmaster \
 	sd/uiconfig/simpress/popupmenu/pagepanenoselmaster \
 	sd/uiconfig/simpress/popupmenu/pagepanenosel \
 	sd/uiconfig/simpress/popupmenu/pagepane \
+	sd/uiconfig/simpress/popupmenu/pagepanecanvas \
 	sd/uiconfig/simpress/popupmenu/pagetab \
 	sd/uiconfig/simpress/popupmenu/page \
 	sd/uiconfig/simpress/popupmenu/table \
