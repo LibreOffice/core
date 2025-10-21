@@ -154,7 +154,6 @@ bool supportsText(XmlShapeType eShapeType)
 
 }
 
-constexpr OUStringLiteral gsZIndex( u"ZOrder" );
 constexpr OUStringLiteral gsPrintable( u"Printable" );
 constexpr OUStringLiteral gsVisible( u"Visible" );
 constexpr OUStringLiteral gsModel( u"Model" );
@@ -269,20 +268,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): no call to seekShapes()!" );
         return;
     }
-    sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if( xPropSet.is() )
-        xPropSet->getPropertyValue(gsZIndex) >>= nZIndex;
 
-    ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
+    ShapeExportInfoMap& aShapeInfoMap = (*maCurrentShapesIter).second;
 
-    if( static_cast<sal_Int32>(aShapeInfoVector.size()) <= nZIndex )
-    {
-        OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): no shape info allocated for a given shape" );
-        return;
-    }
-
-    ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
+    ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoMap[xShape];
 
     uno::Reference< drawing::XShape > xCustomShapeReplacement = checkForCustomShapeReplacement( xShape );
     if ( xCustomShapeReplacement.is() )
@@ -579,7 +569,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no auto styles where collected before export" );
         return;
     }
-    sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
     OUString sHyperlink;
     try
@@ -635,12 +624,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // re-add stashed attributes
     GetExport().AddAttributeList(xSaveAttribs);
 
-    if( xSet.is() )
-        xSet->getPropertyValue(gsZIndex) >>= nZIndex;
+    ShapeExportInfoMap& aShapeInfoMap = (*maCurrentShapesIter).second;
 
-    ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
-
-    if( static_cast<sal_Int32>(aShapeInfoVector.size()) <= nZIndex )
+    auto it = aShapeInfoMap.find(xShape);
+    if (it == aShapeInfoMap.end())
     {
         SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
         return;
@@ -648,7 +635,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     NewTextListsHelper aNewTextListsHelper( mrExport );
 
-    const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
+    const ImplXMLShapeExportInfo& aShapeInfo = it->second;
 
 #ifdef DBG_UTIL
     // check if this is the correct ShapesInfo
@@ -1089,17 +1076,8 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
 {
     if( xShapes.is() )
     {
-        maCurrentShapesIter = maShapesInfos.find( xShapes );
-        if( maCurrentShapesIter == maShapesInfos.end() )
-        {
-            ImplXMLShapeExportInfoVector aNewInfoVector;
-            aNewInfoVector.resize( static_cast<ShapesInfos::size_type>(xShapes->getCount()) );
-            maShapesInfos[ xShapes ] = aNewInfoVector;
-
-            maCurrentShapesIter = maShapesInfos.find( xShapes );
-
-            SAL_WARN_IF( maCurrentShapesIter == maShapesInfos.end(), "xmloff", "XMLShapeExport::seekShapes(): insert into stl::map failed" );
-        }
+        maCurrentShapesIter = maShapesInfos.try_emplace(xShapes).first;
+        assert(maCurrentShapesIter != maShapesInfos.end());
 
         SAL_WARN_IF( (*maCurrentShapesIter).second.size() != static_cast<ShapesInfos::size_type>(xShapes->getCount()), "xmloff", "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
 

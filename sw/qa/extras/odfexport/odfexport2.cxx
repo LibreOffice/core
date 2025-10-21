@@ -843,6 +843,20 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='T2']/style:text-properties", "color", "#ff0000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168980)
+{
+    // In the document, an SvxCustomShape was exported to ODT as if it was a rectangle shape
+    createSwDoc("tdf168980.docx");
+    // Before the fix, saving the document failed:
+    // Exception-Message: com.sun.star.beans.UnknownPropertyException: "CornerRadius at
+    // C:/lo/core/svx/source/unodraw/unoshape.cxx:1625" (context: class SvxCustomShape )
+    // An uncaught UNO exception
+    // - com.sun.star.io.IOException: {Message: "SfxBaseModel::impl_store
+    // <file:///C:/lo/build/tmp/test_sw_odfexport4.dllizeba.tmp> failed: 0xc10(Error
+    // Area:Io Class:Write Code:16)
+    reload("OpenDocument Text Flat XML", "");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
