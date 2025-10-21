@@ -144,12 +144,8 @@ class SwCacheObj
     void SetCachePos(const sal_uInt16 nNew)
     {
         if (m_nCachePos != nNew)
-        {
             m_nCachePos = nNew;
-            UpdateCachePos();
-        }
     }
-    virtual void UpdateCachePos() { }
 
 protected:
     const void *m_pOwner;
