@@ -1629,6 +1629,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164677)
                          getProperty<sal_Int16>(xColumn, u"SeparatorLineStyle"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168980)
+{
+    // In the document, an SvxCustomShape was exported to ODT as if it was a rectangle shape
+    createSwDoc("tdf168980.docx");
+    // Before the fix, saving the document failed:
+    // Exception-Message: com.sun.star.beans.UnknownPropertyException: "CornerRadius at
+    // C:/lo/core/svx/source/unodraw/unoshape.cxx:1625" (context: class SvxCustomShape )
+    // An uncaught UNO exception
+    // - com.sun.star.io.IOException: {Message: "SfxBaseModel::impl_store
+    // <file:///C:/lo/build/tmp/test_sw_odfexport4.dllizeba.tmp> failed: 0xc10(Error
+    // Area:Io Class:Write Code:16)
+    saveAndReload(u"OpenDocument Text Flat XML"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
