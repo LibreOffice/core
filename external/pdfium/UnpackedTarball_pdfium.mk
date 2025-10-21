@@ -14,8 +14,6 @@ pdfium_patches += build.patch.1
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
 
-pdfium_patches += constexpr-template.patch
-
 pdfium_patches += freebsd.patch
 
 pdfium_patches += system-abseil.diff
