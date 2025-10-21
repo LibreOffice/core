@@ -224,6 +224,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_textobject \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_textstate \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_tilingpattern \
+    UnpackedTarball/pdfium/core/fpdfapi/page/jpx_decode_conversion \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cfdf_document \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_array \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_boolean \

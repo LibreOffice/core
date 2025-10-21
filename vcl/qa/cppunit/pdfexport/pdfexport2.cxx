@@ -4517,7 +4517,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139627)
     int rehmim = 0, kasreh = 1, jehtatweel = 2;
 
     CPPUNIT_ASSERT_EQUAL(u"رم"_ustr, sText[rehmim].trim());
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, sText[kasreh].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8("\xD9\x90\xD8\xAC"), sText[kasreh].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, sText[jehtatweel].trim());
 
     // "Kasreh" should be within "jeh" character

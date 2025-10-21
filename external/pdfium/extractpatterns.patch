@@ -7,7 +7,7 @@
 +  RetainPtr<CPDF_Object> pattern_obj() const { return pattern_obj_; }
  
   protected:
-   CPDF_Pattern(CPDF_Document* pDoc,
+   CPDF_Pattern(CPDF_Document* doc,
 @@ -35,7 +36,6 @@
  
    // All the getters that return pointers return non-NULL pointers.
