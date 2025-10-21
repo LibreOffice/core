@@ -95,8 +95,6 @@ public:
     /// Notify of the property change
     virtual void SAL_CALL propertyChange(
         css::beans::PropertyChangeEvent const &rEvt ) override;
-
-    bool isDisposed() const { return mbDisposed; }
 };
 
 template< typename uno_type > ConfigurationListenerProperty< uno_type >::ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener, const OUString &rProp )

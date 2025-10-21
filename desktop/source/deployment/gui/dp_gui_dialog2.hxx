@@ -153,8 +153,6 @@ public:
 
     void Close();
 
-    TheExtensionManager& getExtensionManager() const { return m_rManager; }
-
     void updateList();
     virtual void    prepareChecking() override;
     virtual void    checkEntries() override;

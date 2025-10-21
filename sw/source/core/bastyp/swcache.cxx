@@ -136,15 +136,6 @@ void SwCache::IncreaseMax( const sal_uInt16 nAdd )
 #endif
 }
 
-void SwCache::DecreaseMax( const sal_uInt16 nSub )
-{
-    if ( m_nCurMax > nSub )
-        m_nCurMax = m_nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
-#ifdef DBG_UTIL
-    ++m_nDecreaseMax;
-#endif
-}
-
 void SwCache::Flush()
 {
     INCREMENT( m_nFlushCnt );
@@ -320,13 +311,6 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
     CHECK;
 }
 
-void SwCache::Delete(void const*const pOwner, sal_uInt16 const nIndex)
-{
-    INCREMENT( m_nDelete );
-    if (SwCacheObj *const pObj = Get(pOwner, nIndex, false))
-        DeleteObj(pObj);
-}
-
 void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( m_nDelete );
@@ -435,24 +419,6 @@ bool SwCache::Insert(SwCacheObj *const pNew, bool const isDuplicateOwnerAllowed)
 
     CHECK;
     return true;
-}
-
-void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
-{
-    assert(nOfst < m_nCurMax);
-    if ( !m_pRealFirst || ((m_aCacheObjects.size() - m_aFreePositions.size()) < nOfst) )
-        return;
-
-    CHECK;
-    m_pFirst = m_pRealFirst;
-    for ( sal_uInt16 i = 0; i < m_aCacheObjects.size() && i < nOfst; ++i )
-    {
-        if ( m_pFirst->GetNext() && m_pFirst->GetNext()->GetNext() )
-            m_pFirst = m_pFirst->GetNext();
-        else
-            break;
-    }
-    CHECK;
 }
 
 SwCacheObj::SwCacheObj( const void *pOwn ) :
