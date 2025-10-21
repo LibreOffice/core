@@ -1001,7 +1001,7 @@ public:
         bool bIsPageObj,
         const sal_Int32 nInsertPosition);
 
-    SAL_DLLPRIVATE bool HasCanvasPage() const { return mpCanvasPage != nullptr; }
+    SAL_DLLPRIVATE bool HasCanvasPage() const { return mpCanvasPage.is(); }
 
     SAL_DLLPRIVATE sal_uInt16 GetOrInsertCanvasPage ();
 

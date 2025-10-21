@@ -851,6 +851,17 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem (SID_DELETE_MASTER_PAGE);
         rSet.DisableItem (SID_RENAME_MASTER_PAGE);
         rSet.DisableItem (SID_CLOSE_MASTER_VIEW);
+
+        if (mpActualPage->IsCanvasPage())
+        {
+            rSet.DisableItem(SID_INSERTPAGE);
+            rSet.DisableItem(SID_INSERTPAGE_QUICK);
+            rSet.DisableItem(SID_INSERTFILE);
+            rSet.DisableItem(SID_DUPLICATE_PAGE);
+            rSet.DisableItem(SID_PRESENTATION_LAYOUT);
+            rSet.DisableItem(SID_HIDE_SLIDE);
+            rSet.DisableItem(SID_SHOW_SLIDE);
+        }
     }
     else
     {

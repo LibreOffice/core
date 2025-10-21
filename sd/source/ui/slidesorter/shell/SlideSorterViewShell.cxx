@@ -792,6 +792,13 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
         rSet.DisableItem( SID_MOVE_PAGE_FIRST );
         rSet.DisableItem( SID_MOVE_PAGE_UP );
     }
+
+    if (GetDoc()->HasCanvasPage())
+        if (firstSelectedPageNo == GetDoc()->GetSdPageCount(PageKind::Standard) - 1)
+        {
+            rSet.DisableItem( SID_MOVE_PAGE_FIRST );
+            rSet.DisableItem( SID_MOVE_PAGE_UP );
+        }
 }
 
 void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
@@ -813,6 +820,10 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
 
     if (firstSelectedPageNo == 0)
         return;
+
+    if (GetDoc()->HasCanvasPage())
+        if (firstSelectedPageNo == GetDoc()->GetSdPageCount(PageKind::Standard) - 1)
+            return;
 
     // Move pages before firstSelectedPageNo - 1 (so after firstSelectedPageNo - 2),
     // remembering that -1 means at first, which is good.
@@ -843,6 +854,9 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     lastSelectedPageNo = (lastSelectedPageNo - 1) / 2;
     if (lastSelectedPageNo == nNoOfPages - 1)
         return;
+    if (GetDoc()->HasCanvasPage())
+        if (lastSelectedPageNo == nNoOfPages - 2)
+            return;
 
     // Move to position after lastSelectedPageNo
     GetDoc()->MoveSelectedPages( lastSelectedPageNo + 1 );
@@ -869,7 +883,10 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
 
     // Move to position after last page No (=Number of pages - 1)
-    GetDoc()->MoveSelectedPages( nNoOfPages - 1 );
+    if (!GetDoc()->HasCanvasPage())
+        GetDoc()->MoveSelectedPages( nNoOfPages - 1 );
+    else
+        GetDoc()->MoveSelectedPages( nNoOfPages - 2 );
 
     PostMoveSlidesActions(xSelection);
 }
@@ -900,6 +917,14 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
     {
         rSet.DisableItem( SID_MOVE_PAGE_LAST );
         rSet.DisableItem( SID_MOVE_PAGE_DOWN );
+    }
+    if (GetDoc()->HasCanvasPage())
+    {
+        if (lastSelectedPageNo == nNoOfPages - 2)
+        {
+            rSet.DisableItem( SID_MOVE_PAGE_LAST );
+            rSet.DisableItem( SID_MOVE_PAGE_DOWN );
+        }
     }
 }
 
