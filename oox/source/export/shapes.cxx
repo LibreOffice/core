@@ -1004,16 +1004,20 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             bool bExtURL = URLTransformer().isExternalURL(sBookmark);
             sBookmark = bExtURL ? sBookmark : lcl_GetTarget(GetFB()->getModel(), sBookmark);
 
-            OUString sRelId
-                = mpFB->addRelation(mpFS->getOutputStream(),
-                                    bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
-                                            : oox::getRelationship(Relationship::SLIDE),
-                                    sBookmark, bExtURL);
+            OUString sRelId;
+            if (!sBookmark.isEmpty())
+            {
+                sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                                           bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                                   : oox::getRelationship(Relationship::SLIDE),
+                                           sBookmark, bExtURL);
+            }
             if (bExtURL)
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
             else
-                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
-                                      XML_action, "ppaction://hlinksldjump");
+                mpFS->singleElementNS(
+                    XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
+                    sBookmark.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
         }
         AddExtLst(pFS, rXPropSet);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
