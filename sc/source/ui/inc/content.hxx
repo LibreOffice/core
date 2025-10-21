@@ -146,6 +146,7 @@ public:
     void    SetManualDoc(const OUString& rName);
     void    SelectDoc(const OUString& rName);
     void    SelectEntryByName(const ScContentId nRoot, std::u16string_view rName);
+    void    BringCommentToAttention(sal_uInt16 nCommentId);
 
     /** Applies the navigator settings to the listbox. */
     void ApplyNavigatorSettings();

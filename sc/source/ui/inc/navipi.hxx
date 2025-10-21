@@ -86,6 +86,7 @@ class ScNavigatorDlg : public PanelLayout, public SfxListener
 friend class ScNavigatorWin;
 friend class ScNavigatorControllerItem;
 friend class ScContentTree;
+friend class ScTabViewShell;
 
 private:
     static constexpr int CTRL_ITEMS = 4;
@@ -185,6 +186,26 @@ public:
     ScNavigatorWrapper(vcl::Window *pParent, sal_uInt16 nId,
                        SfxBindings* pBindings, SfxChildWinInfo* pInfo);
     SFX_DECL_CHILDWINDOW(ScNavigatorWrapper);
+};
+
+class ScNavigatorWin : public SfxNavigator
+{
+    friend class ScTabViewShell;
+private:
+    std::unique_ptr<ScNavigatorDlg> m_xNavigator;
+public:
+    ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* pMgr,
+                   vcl::Window* pParent, SfxChildWinInfo* pInfo);
+    virtual void StateChanged(StateChangedType nStateChange) override;
+    virtual void dispose() override
+    {
+        m_xNavigator.reset();
+        SfxNavigator::dispose();
+    }
+    virtual ~ScNavigatorWin() override
+    {
+        disposeOnce();
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

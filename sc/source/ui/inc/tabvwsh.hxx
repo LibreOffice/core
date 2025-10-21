@@ -303,6 +303,7 @@ public:
     void            GetDrawState(SfxItemSet &rSet);
     void            GetDrawInsState(SfxItemSet &rSet);
     void            ExecGallery(const SfxRequest& rReq);
+    void            ExecNavigatorWin(const SfxRequest& rReq);
 
     void            ExecChildWin(const SfxRequest& rReq);
 

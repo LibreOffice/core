@@ -262,8 +262,10 @@ void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChild
     rnRootIndex = ScContentId::ROOT;
     rnChildIndex = SC_CONTENT_NOCHILD;
 
-    if( !pEntry )
+    if( !pEntry ) {
+        SAL_WARN("sc", "got a null TreeIter");
         return;
+    }
 
     std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(pEntry));
     if (!m_xTreeView->iter_parent(*xParent))
@@ -1525,6 +1527,55 @@ void ScContentTree::SelectEntryByName(const ScContentId nRoot, std::u16string_vi
         bEntry = m_xTreeView->iter_next(*xEntry);
     }
 }
+
+void ScContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
+{
+    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_iter_first(*xIter))
+        return;
+
+    do
+    {
+        ScContentId nType;
+        sal_uLong nChild;
+        GetEntryIndexes(nType, nChild, xIter.get());
+
+        if (!xIter)
+            return;
+
+        if (nType == ScContentId::NOTE)
+        {
+            m_xTreeView->set_cursor(*xIter);
+            m_xTreeView->select(*xIter);
+            m_xTreeView->expand_row(*xIter);
+            sal_uInt32 nCount = m_xTreeView->iter_n_children(*xIter);
+            m_xTreeView->iter_children(*xIter);
+
+            std::vector<sc::NoteEntry> aEntries;
+            ScDocument* pDoc= GetSourceDocument();
+            pDoc->GetAllNoteEntries(aEntries);
+
+            if (aEntries.size() != nCount) {
+                SAL_WARN("sc", "number of comments and children count does not match.");
+                return;
+            }
+
+            for (sal_uInt32 i = 0; i < nCount; ++i)
+            {
+                const ScPostIt* pPostIt = aEntries[i].mpNote;
+                if (pPostIt && pPostIt->GetId() == nCommentId)
+                {
+                    m_xTreeView->select(*xIter);
+                    break;
+                }
+                m_xTreeView->iter_next(*xIter);
+            }
+            break;
+        }
+        else
+            m_xTreeView->collapse_row(*xIter);
+
+    } while (m_xTreeView->iter_next_sibling(*xIter));}
 
 void ScContentTree::ApplyNavigatorSettings()
 {

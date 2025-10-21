@@ -287,25 +287,6 @@ ScNavigatorSettings::ScNavigatorSettings()
     maExpandedVec.fill(false);
 }
 
-class ScNavigatorWin : public SfxNavigator
-{
-private:
-    std::unique_ptr<ScNavigatorDlg> m_xNavigator;
-public:
-    ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* pMgr,
-                   vcl::Window* pParent, SfxChildWinInfo* pInfo);
-    virtual void StateChanged(StateChangedType nStateChange) override;
-    virtual void dispose() override
-    {
-        m_xNavigator.reset();
-        SfxNavigator::dispose();
-    }
-    virtual ~ScNavigatorWin() override
-    {
-        disposeOnce();
-    }
-};
-
 ScNavigatorWin::ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                vcl::Window* _pParent, SfxChildWinInfo* pInfo)
     : SfxNavigator(_pBindings, _pMgr, _pParent, pInfo)
