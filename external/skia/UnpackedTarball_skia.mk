@@ -40,7 +40,6 @@ skia_patches := \
     ubsan-missing-typeinfo.patch.1 \
     help-msvc-analyzer.patch \
     windows-define-conflict.patch.1 \
-    modified-skcms-0001-Change-use-of-removed-intrinsic.patch \
 	0002-loong64-Honor-existing-LASX-LSX-settings.patch \
 	0003-loong64-Fix-missing-rounding-in-loong64-scaled_mult-.patch \
 	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
