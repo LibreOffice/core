@@ -486,11 +486,16 @@ void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
 // Remove page
 rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 {
+    // Do not remove the only non-canvas page
+    if (HasCanvasPage() && GetSdPageCount(PageKind::Standard) == 2)
+        return nullptr;
     rtl::Reference<SdrPage> pPage = FmFormModel::RemovePage(nPgNum);
 
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
     auto pSdPage = static_cast<SdPage*>(pPage.get());
+    if (pSdPage->IsCanvasPage())
+        mpCanvasPage = nullptr;
     pSdPage->DisconnectLink();
     ReplacePageInCustomShows( pSdPage, nullptr );
     UpdatePageObjectsInNotes(nPgNum);
@@ -1221,6 +1226,8 @@ sal_uInt16 SdDrawDocument::CreatePage (
     bool bIsPageObj,
     const sal_Int32 nInsertPosition)
 {
+    if (pActualPage->IsCanvasPage())
+        return 0xffff;
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
     rtl::Reference<SdPage> pStandardPage;
@@ -1304,6 +1311,9 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
     // Get current page
     SdPage* pActualPage = GetSdPage(nPageNum, ePageKind);
 
+    if (pActualPage->IsCanvasPage())
+        return 0xffff;
+
     // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
     SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
@@ -1327,6 +1337,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
     bool bIsPageObj,
     const sal_Int32 nInsertPosition)
 {
+    if (pActualPage->IsCanvasPage())
+        return 0xffff;
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
     rtl::Reference<SdPage> pStandardPage;
@@ -1470,12 +1482,17 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     sal_uInt16 nCanvasPageNum = CreatePage(pLastStandardPage, PageKind::Standard, u"Canvas Page"_ustr, u"Canvas notes page"_ustr, AutoLayout::AUTOLAYOUT_NONE, AutoLayout::AUTOLAYOUT_NONE, false, true, pLastStandardPage->GetPageNum() + 2);
 
     SdPage* pCanvasPage = GetSdPage(nCanvasPageNum, PageKind::Standard);
+    if (!pCanvasPage)
+        return 0xffff;
 
     const Size aCanvasSize(500000, 500000);
 
     ResizeCurrentPage(pCanvasPage, aCanvasSize, PageKind::Standard);
     pCanvasPage->SetCanvasPage();
     mpCanvasPage = pCanvasPage;
+
+    SdPage* pMasterCanvas = static_cast<SdPage*>(&pCanvasPage->TRG_GetMasterPage());
+    pMasterCanvas->SetCanvasMasterPage();
 
     populatePagePreviewsGrid();
 
