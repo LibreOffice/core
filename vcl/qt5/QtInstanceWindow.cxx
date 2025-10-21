@@ -199,8 +199,20 @@ weld::ScreenShotCollection QtInstanceWindow::collect_screenshot_data()
 
 VclPtr<VirtualDevice> QtInstanceWindow::screenshot()
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    SolarMutexGuard g;
+
+    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
+    GetQtInstance().RunInMainThread([&] {
+        resize_to_request();
+
+        QImage aImage(getQWidget()->size(), QImage::Format_ARGB32);
+        getQWidget()->render(&aImage);
+
+        xOutput->SetOutputSize(toSize(aImage.size()));
+        xOutput->DrawImage(Point(0, 0), toImage(aImage));
+    });
+
+    return xOutput;
 }
 
 const vcl::ILibreOfficeKitNotifier* QtInstanceWindow::GetLOKNotifier() { return nullptr; }

@@ -323,8 +323,7 @@ std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUStrin
 
 std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    return weld_dialog(m_xBuilder->getDialogId());
 }
 
 std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId)

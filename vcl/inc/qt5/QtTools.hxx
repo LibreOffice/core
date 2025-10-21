@@ -166,6 +166,7 @@ sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons);
 MouseEvent toVclMouseEvent(QMouseEvent& rEvent);
 
 QImage toQImage(const Image& rImage);
+Image toImage(const QImage& rImage);
 
 QFont toQtFont(const vcl::Font& rVclFont);
 

@@ -84,6 +84,15 @@ QWidget* QtBuilder::get_by_name(const OUString& rId)
     return nullptr;
 }
 
+OUString QtBuilder::getDialogId()
+{
+    for (const std::pair<const OUString, QWidget*>& rEntry : m_aWidgets)
+        if (qobject_cast<QDialog*>(rEntry.second))
+            return rEntry.first;
+
+    return OUString();
+}
+
 void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
                                              const std::vector<ComboBoxTextItem>& rItems)
 {

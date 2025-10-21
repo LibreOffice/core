@@ -44,6 +44,7 @@ public:
     virtual ~QtBuilder();
 
     template <typename T = QWidget> T* get(const OUString& rId);
+    OUString getDialogId();
 
     QObject* makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
                         const OUString& rId, stringmap& rMap);
