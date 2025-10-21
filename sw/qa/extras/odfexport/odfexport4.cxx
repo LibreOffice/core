@@ -1645,8 +1645,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168980)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf37128ConvertStartEndOnResave)
 {
-    // LO doesn't support start/end fo:text-align. These are always loaded as
-    // left/right, respectively. They should be resaved as left/right, too.
+    // Older versions of LO always stored fo:text-align left/right as
+    // start/end, respectively. Make sure documents produced by older
+    // versions of LO convert these values to left/right.
     loadAndReload("tdf37128-start-end-to-left-right.fodt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -1667,6 +1668,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf37128ConvertStartEndOnResave)
                 "text-align", u"right");
     assertXPath(pXmlDoc, "//style:style[@style:name='RTLEnd']/style:paragraph-properties",
                 "text-align", u"right");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf118350StartEndPreserved)
+{
+    // Check that fo:text-align start/end round-trip correctly for
+    // documents made by newer versions of LO.
+    loadAndReload("tdf118350-start-end-preserved.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTRLeft']/style:paragraph-properties",
+                "text-align", u"left");
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTRStart']/style:paragraph-properties",
+                "text-align", u"start");
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTRRight']/style:paragraph-properties",
+                "text-align", u"right");
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTREnd']/style:paragraph-properties",
+                "text-align", u"end");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLLeft']/style:paragraph-properties",
+                "text-align", u"left");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLStart']/style:paragraph-properties",
+                "text-align", u"start");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLRight']/style:paragraph-properties",
+                "text-align", u"right");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLEnd']/style:paragraph-properties",
+                "text-align", u"end");
 }
 
 } // end of anonymous namespace

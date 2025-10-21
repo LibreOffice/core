@@ -128,7 +128,9 @@ class SvxParaAlignTabPage : public SfxTabPage
 
     // alignment
     std::unique_ptr<weld::RadioButton> m_xLeft;
+    std::unique_ptr<weld::RadioButton> m_xStart;
     std::unique_ptr<weld::RadioButton> m_xRight;
+    std::unique_ptr<weld::RadioButton> m_xEnd;
     std::unique_ptr<weld::RadioButton> m_xCenter;
     std::unique_ptr<weld::RadioButton> m_xJustify;
     std::unique_ptr<weld::Label> m_xLeftBottom;

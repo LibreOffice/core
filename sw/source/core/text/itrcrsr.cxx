@@ -348,13 +348,29 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     const SvxAdjustItem& rAdjust = m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     mnAdjust = rAdjust.GetAdjust();
 
-    // left is left and right is right
-    if ( m_pFrame->IsRightToLeft() )
+    // Convert paragraph adjustment into an internal start/end value.
+    switch (mnAdjust)
     {
-        if ( SvxAdjust::Left == mnAdjust )
-            mnAdjust = SvxAdjust::Right;
-        else if ( SvxAdjust::Right == mnAdjust )
+        case SvxAdjust::ParaStart:
+            // Internally, the paragraph start is always the left margin:
             mnAdjust = SvxAdjust::Left;
+            break;
+
+        case SvxAdjust::ParaEnd:
+            // Internally, the paragraph end is always the right margin:
+            mnAdjust = SvxAdjust::Right;
+            break;
+
+        case SvxAdjust::Left:
+            mnAdjust = m_pFrame->IsRightToLeft() ? SvxAdjust::Right : SvxAdjust::Left;
+            break;
+
+        case SvxAdjust::Right:
+            mnAdjust = m_pFrame->IsRightToLeft() ? SvxAdjust::Left : SvxAdjust::Right;
+            break;
+
+        default:
+            break;
     }
 
     m_bOneBlock = rAdjust.GetOneWord() == SvxAdjust::Block;

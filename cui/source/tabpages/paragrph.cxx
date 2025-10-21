@@ -1265,7 +1265,9 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     : SfxTabPage(pPage, pController, u"cui/ui/paragalignpage.ui"_ustr, u"ParaAlignPage"_ustr, &rSet)
     , m_bSdrVertAlign(false)
     , m_xLeft(m_xBuilder->weld_radio_button(u"radioBTN_LEFTALIGN"_ustr))
+    , m_xStart(m_xBuilder->weld_radio_button(u"radioBTN_STARTALIGN"_ustr))
     , m_xRight(m_xBuilder->weld_radio_button(u"radioBTN_RIGHTALIGN"_ustr))
+    , m_xEnd(m_xBuilder->weld_radio_button(u"radioBTN_ENDALIGN"_ustr))
     , m_xCenter(m_xBuilder->weld_radio_button(u"radioBTN_CENTERALIGN"_ustr))
     , m_xJustify(m_xBuilder->weld_radio_button(u"radioBTN_JUSTIFYALIGN"_ustr))
     , m_xLeftBottom(m_xBuilder->weld_label(u"labelST_LEFTALIGN_ASIAN"_ustr))
@@ -1321,7 +1323,9 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
 
     Link<weld::Toggleable&, void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     m_xLeft->connect_toggled(aLink);
+    m_xStart->connect_toggled(aLink);
     m_xRight->connect_toggled(aLink);
+    m_xEnd->connect_toggled(aLink);
     m_xCenter->connect_toggled(aLink);
     m_xJustify->connect_toggled(aLink);
     m_xLastLineLB->connect_changed(LINK(this, SvxParaAlignTabPage, LastLineHdl_Impl));
@@ -1366,10 +1370,20 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         eAdjust = SvxAdjust::Left;
         bAdj = m_xLeft->get_saved_state() == TRISTATE_FALSE;
     }
+    else if (m_xStart->get_active())
+    {
+        eAdjust = SvxAdjust::ParaStart;
+        bAdj = m_xStart->get_saved_state() == TRISTATE_FALSE;
+    }
     else if (m_xRight->get_active())
     {
         eAdjust = SvxAdjust::Right;
         bAdj = m_xRight->get_saved_state() == TRISTATE_FALSE;
+    }
+    else if (m_xEnd->get_active())
+    {
+        eAdjust = SvxAdjust::ParaEnd;
+        bAdj = m_xEnd->get_saved_state() == TRISTATE_FALSE;
     }
     else if (m_xCenter->get_active())
     {
@@ -1466,7 +1480,11 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         {
             case SvxAdjust::Left: m_xLeft->set_active(true); break;
 
+            case SvxAdjust::ParaStart: m_xStart->set_active(true); break;
+
             case SvxAdjust::Right: m_xRight->set_active(true); break;
+
+            case SvxAdjust::ParaEnd: m_xEnd->set_active(true); break;
 
             case SvxAdjust::Center: m_xCenter->set_active(true); break;
 
@@ -1533,7 +1551,9 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     else
     {
         m_xLeft->set_active(false);
+        m_xStart->set_active(false);
         m_xRight->set_active(false);
+        m_xEnd->set_active(false);
         m_xCenter->set_active(false);
         m_xJustify->set_active(false);
         m_xLabelWordSpacing->set_sensitive(false);
@@ -1601,7 +1621,9 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_xSnapToGridCB->save_state();
     m_xVertAlignLB->save_value();
     m_xLeft->save_state();
+    m_xStart->save_state();
     m_xRight->save_state();
+    m_xEnd->save_state();
     m_xCenter->save_state();
     m_xJustify->save_state();
     m_xLastLineLB->save_value();
@@ -1623,7 +1645,9 @@ void SvxParaAlignTabPage::ChangesApplied()
     m_xSnapToGridCB->save_state();
     m_xVertAlignLB->save_value();
     m_xLeft->save_state();
+    m_xStart->save_state();
     m_xRight->save_state();
+    m_xEnd->save_state();
     m_xCenter->save_state();
     m_xJustify->save_state();
     m_xLastLineLB->save_value();
@@ -1714,9 +1738,32 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingMaximumHdl_Impl, weld::MetricSpi
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
 {
+    bool bParaIsRtl = [&]
+    {
+        SvxFrameDirection eDir = m_xTextDirectionLB->get_active_id();
+        switch (eDir)
+        {
+            case SvxFrameDirection::Environment:
+                return AllSettings::GetLayoutRTL();
+
+            case SvxFrameDirection::Horizontal_RL_TB:
+                return true;
+
+            default:
+            case SvxFrameDirection::Horizontal_LR_TB:
+                return false;
+        }
+    }();
+
     if (m_xLeft->get_active())
     {
         m_aExampleWin.EnableRTL(false);
+        m_aExampleWin.SetAdjust(SvxAdjust::Left);
+        m_aExampleWin.SetLastLine(SvxAdjust::Left);
+    }
+    else if (m_xStart->get_active())
+    {
+        m_aExampleWin.EnableRTL(bParaIsRtl);
         m_aExampleWin.SetAdjust(SvxAdjust::Left);
         m_aExampleWin.SetLastLine(SvxAdjust::Left);
     }
@@ -1726,38 +1773,29 @@ void SvxParaAlignTabPage::UpdateExample_Impl()
         m_aExampleWin.SetAdjust(SvxAdjust::Left);
         m_aExampleWin.SetLastLine(SvxAdjust::Left);
     }
-    else
+    else if (m_xEnd->get_active())
     {
-        SvxFrameDirection eDir = m_xTextDirectionLB->get_active_id();
-        switch ( eDir )
-        {
-            case SvxFrameDirection::Environment :
-                if ( !m_xRight->get_active() )
-                    m_aExampleWin.EnableRTL( AllSettings::GetLayoutRTL() );
-                break;
-            case SvxFrameDirection::Horizontal_RL_TB :
-                if ( !m_xLeft->get_active() )
-                    m_aExampleWin.EnableRTL( true );
-                break;
-            case SvxFrameDirection::Horizontal_LR_TB :
-                if ( !m_xRight->get_active() )
-                    m_aExampleWin.EnableRTL( false );
-                break;
-            default: ; //prevent warning
-        }
-        if (m_xCenter->get_active())
-            m_aExampleWin.SetAdjust( SvxAdjust::Center );
-        else if (m_xJustify->get_active())
-        {
-            m_aExampleWin.SetAdjust( SvxAdjust::Block );
-            int nLBPos = m_xLastLineLB->get_active();
-            if (nLBPos == 0)
-                m_aExampleWin.SetLastLine(SvxAdjust::Left);
-            else if (nLBPos == 1)
-                m_aExampleWin.SetLastLine(SvxAdjust::Center);
-            else if (nLBPos == 2)
-                m_aExampleWin.SetLastLine(SvxAdjust::Block);
-        }
+        m_aExampleWin.EnableRTL(!bParaIsRtl);
+        m_aExampleWin.SetAdjust(SvxAdjust::Left);
+        m_aExampleWin.SetLastLine(SvxAdjust::Left);
+    }
+    else if (m_xCenter->get_active())
+    {
+        m_aExampleWin.EnableRTL(bParaIsRtl);
+        m_aExampleWin.SetAdjust(SvxAdjust::Center);
+    }
+    else if (m_xJustify->get_active())
+    {
+        m_aExampleWin.EnableRTL(bParaIsRtl);
+        m_aExampleWin.SetAdjust(SvxAdjust::Block);
+
+        int nLBPos = m_xLastLineLB->get_active();
+        if (nLBPos == 0)
+            m_aExampleWin.SetLastLine(SvxAdjust::Left);
+        else if (nLBPos == 1)
+            m_aExampleWin.SetLastLine(SvxAdjust::Center);
+        else if (nLBPos == 2)
+            m_aExampleWin.SetLastLine(SvxAdjust::Block);
     }
 
     m_aExampleWin.Invalidate();

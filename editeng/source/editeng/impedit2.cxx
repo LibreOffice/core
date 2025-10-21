@@ -2070,12 +2070,29 @@ SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
     {
         eJustification = GetParaAttrib( nPara, EE_PARA_JUST ).GetAdjust();
 
-        if ( IsRightToLeft( nPara ) )
+        // Convert paragraph adjustment into an internal start/end value.
+        switch (eJustification)
         {
-            if ( eJustification == SvxAdjust::Left )
-                eJustification = SvxAdjust::Right;
-            else if ( eJustification == SvxAdjust::Right )
+            case SvxAdjust::ParaStart:
+                // Internally, the paragraph start is always the left margin:
                 eJustification = SvxAdjust::Left;
+                break;
+
+            case SvxAdjust::ParaEnd:
+                // Internally, the paragraph end is always the right margin:
+                eJustification = SvxAdjust::Right;
+                break;
+
+            case SvxAdjust::Left:
+                eJustification = IsRightToLeft(nPara) ? SvxAdjust::Right : SvxAdjust::Left;
+                break;
+
+            case SvxAdjust::Right:
+                eJustification = IsRightToLeft(nPara) ? SvxAdjust::Left : SvxAdjust::Right;
+                break;
+
+            default:
+                break;
         }
     }
     return eJustification;

@@ -151,6 +151,8 @@
 #define RID_SVXITEMS_ADJUST_BLOCK               NC_("RID_SVXITEMS_ADJUST_BLOCK", "Justify")
 #define RID_SVXITEMS_ADJUST_CENTER              NC_("RID_SVXITEMS_ADJUST_CENTER", "Centered")
 #define RID_SVXITEMS_ADJUST_BLOCKLINE           NC_("RID_SVXITEMS_ADJUST_BLOCKLINE", "Justify")
+#define RID_SVXITEMS_ADJUST_PARASTART           NC_("RID_SVXITEMS_ADJUST_PARASTART", "Start")
+#define RID_SVXITEMS_ADJUST_PARAEND             NC_("RID_SVXITEMS_ADJUST_PARAEND", "End")
 #define RID_SOLID                               NC_("RID_SOLID", "Single, solid")
 #define RID_DOTTED                              NC_("RID_DOTTED", "Single, dotted")
 #define RID_DASHED                              NC_("RID_DASHED", "Single, dashed")

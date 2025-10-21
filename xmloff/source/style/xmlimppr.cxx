@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <utility>
@@ -231,6 +232,34 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                     // let the XMLPropertySetMapper decide how to import the value
                     bSet = maPropMapper->importXML( sValue, aNewProperty,
                                              rUnitConverter );
+
+                    // tdf#37128: Older versions of LO stored fo:text-align incorrectly.
+                    // Remap the buggy values during parsing.
+                    if (bSet
+                        && GetImport().isGeneratorVersionOlderThan(SvXMLImport::AOO_4x,
+                                                                   SvXMLImport::LO_262)
+                        && rAttrName == u"fo:text-align"_ustr)
+                    {
+                        if (sal_Int16 nTmp; aNewProperty.maValue >>= nTmp)
+                        {
+                            css::style::ParagraphAdjust eAdjust{ nTmp };
+                            switch (eAdjust)
+                            {
+                                case css::style::ParagraphAdjust_START:
+                                    eAdjust = css::style::ParagraphAdjust_LEFT;
+                                    break;
+
+                                case css::style::ParagraphAdjust_END:
+                                    eAdjust = css::style::ParagraphAdjust_RIGHT;
+                                    break;
+
+                                default:
+                                    break;
+                            }
+
+                            aNewProperty.maValue <<= static_cast<sal_Int16>(eAdjust);
+                        }
+                    }
                 }
                 else
                 {

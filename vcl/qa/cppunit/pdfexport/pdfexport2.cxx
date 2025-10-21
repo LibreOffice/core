@@ -6348,6 +6348,97 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
     CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pPgNumObject->getText(pTextPage));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf118350StartEndParaAlign)
+{
+    saveAsPDF(u"tdf118350-start-end-para-align.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(24, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(24), aText.size());
+
+    // Lines from the Writer portion
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned left."_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(57.0, aRect.at(0).getMinX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned start."_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(57.0, aRect.at(1).getMinX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned right."_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(550.0, aRect.at(2).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned end."_ustr, aText.at(3).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(550.0, aRect.at(3).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned left"_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(5).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(57.0, aRect.at(5).getMinX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned start"_ustr, aText.at(6).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(7).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(550.0, aRect.at(6).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned right"_ustr, aText.at(8).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(9).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(550.0, aRect.at(8).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned end"_ustr, aText.at(10).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(11).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(57.0, aRect.at(11).getMinX(), /*delta*/ 10.0);
+
+    // Lines from the Edit Engine portion
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned left."_ustr, aText.at(12).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.0, aRect.at(12).getMinX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned start."_ustr, aText.at(13).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.0, aRect.at(13).getMinX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned right."_ustr, aText.at(14).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(537.0, aRect.at(14).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is LTR aligned end."_ustr, aText.at(15).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(537.0, aRect.at(15).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned left"_ustr, aText.at(16).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(17).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.0, aRect.at(17).getMinX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned start"_ustr, aText.at(18).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(19).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(537.0, aRect.at(18).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned right"_ustr, aText.at(20).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(21).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(537.0, aRect.at(20).getMaxX(), /*delta*/ 10.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"This paragraph is RTL aligned end"_ustr, aText.at(22).trim());
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, aText.at(23).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.0, aRect.at(23).getMinX(), /*delta*/ 10.0);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

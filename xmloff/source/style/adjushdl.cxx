@@ -33,8 +33,8 @@ SvXMLEnumMapEntry<style::ParagraphAdjust> const pXML_Para_Adjust_Enum[] =
 {
     { XML_LEFT,         style::ParagraphAdjust_LEFT },
     { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
-    { XML_START,        style::ParagraphAdjust_LEFT },
-    { XML_END,          style::ParagraphAdjust_RIGHT },
+    { XML_START,        style::ParagraphAdjust_START },
+    { XML_END,          style::ParagraphAdjust_END },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
     { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
     { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete

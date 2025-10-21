@@ -83,6 +83,8 @@ enum class SvxAdjust
     Block,
     Center,
     BlockLine,
+    ParaStart,
+    ParaEnd,
     End,
     LAST = End
 };

@@ -409,7 +409,7 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 eVal = - 1;
             ::cppu::enum2int(eVal,rVal);
-            if(eVal >= 0 && eVal <= 4)
+            if(eVal >= 0 && eVal <= 6)
             {
                 SvxAdjust eAdjust = static_cast<SvxAdjust>(eVal);
                 if(MID_LAST_LINE_ADJUST == nMemberId &&
@@ -512,10 +512,12 @@ OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_ADJUST_RIGHT,
         RID_SVXITEMS_ADJUST_BLOCK,
         RID_SVXITEMS_ADJUST_CENTER,
-        RID_SVXITEMS_ADJUST_BLOCKLINE
+        RID_SVXITEMS_ADJUST_BLOCKLINE,
+        RID_SVXITEMS_ADJUST_PARASTART,
+        RID_SVXITEMS_ADJUST_PARAEND
     };
-    static_assert(std::size(RID_SVXITEMS_ADJUST) - 1 == static_cast<size_t>(SvxAdjust::BlockLine), "unexpected size");
-    assert(nPos <= sal_uInt16(SvxAdjust::BlockLine) && "enum overflow!");
+    static_assert(std::size(RID_SVXITEMS_ADJUST) - 1 == static_cast<size_t>(SvxAdjust::ParaEnd), "unexpected size");
+    assert(nPos <= sal_uInt16(SvxAdjust::ParaEnd) && "enum overflow!");
     return EditResId(RID_SVXITEMS_ADJUST[nPos]);
 }
 
