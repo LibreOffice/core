@@ -163,7 +163,6 @@ MenuButton::~MenuButton()
 
 void MenuButton::dispose()
 {
-    mpMenuTimer.reset();
     mpFloatingWindow.reset();
     if (mpMenu && mbOwnPopupMenu)
         mpMenu->dispose();
