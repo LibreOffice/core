@@ -2526,6 +2526,25 @@ SfxVoidItem GoDownToEndOfData SID_CURSORBLKDOWN
 ]
 
 
+SfxVoidItem NavigatorSelectComment SID_NAVIGATOR_SELECT_COMMENT
+(SfxUInt16Item CommentId FN_PARAM_1)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
+
 SfxVoidItem GoDownToEndOfDataSel SID_CURSORBLKDOWN_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
