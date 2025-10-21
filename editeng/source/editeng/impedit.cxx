@@ -1638,7 +1638,9 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
             mpOutputWindow->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
+        bool bInvalidateToTriggerRedraw = !mpOutputWindow && getEditViewCallbacks();
+
+        if (comphelper::LibreOfficeKit::isActive() || bInvalidateToTriggerRedraw)
         {
             // Need to invalidate the window, otherwise no tile will be re-painted.
             // NOTE:
