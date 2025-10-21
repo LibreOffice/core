@@ -141,10 +141,10 @@ struct ImplXMLShapeExportInfo
 };
 
 /** a vector for shape style and type cache information */
-typedef std::vector< ImplXMLShapeExportInfo > ImplXMLShapeExportInfoVector;
+typedef std::map< css::uno::Reference< css::drawing::XShape >, ImplXMLShapeExportInfo > ShapeExportInfoMap;
 
 /** a map to store all cache data for already collected XShapes */
-typedef std::map< css::uno::Reference < css::drawing::XShapes >, ImplXMLShapeExportInfoVector > ShapesInfos;
+typedef std::map< css::uno::Reference < css::drawing::XShapes >, ShapeExportInfoMap > ShapesInfos;
 
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
