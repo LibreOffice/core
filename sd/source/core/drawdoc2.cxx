@@ -445,21 +445,22 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
     FmFormModel::InsertPage(pPage, nPos);
 
-    static_cast<SdPage*>(pPage)->ConnectLink();
+    SdPage* pSdPage = static_cast<SdPage*>(pPage);
+    pSdPage->ConnectLink();
 
     UpdatePageObjectsInNotes(nPos);
 
     if (!bLast)
-        UpdatePageRelativeURLs(static_cast<SdPage*>( pPage ), nPos, 1);
+        UpdatePageRelativeURLs(pSdPage, nPos, 1);
 
-    if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
+    if (comphelper::LibreOfficeKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
-    if (hasCanvasPage())
-        updateCanvasPreviewsGrid();
+    if (HasCanvasPage())
+        updatePagePreviewsGrid(pSdPage);
 }
 
 // Override SfxBaseModel::getUnoModel and return a more concrete type
@@ -475,8 +476,11 @@ void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
 
     UpdatePageObjectsInNotes(nPgNum);
 
-    if (hasCanvasPage())
-        updateCanvasPreviewsGrid();
+    // if (HasCanvasPage())
+    // {
+    //     SdPage* pPage = static_cast<SdPage*>(GetPage(nPgNum));
+    //     updatePagePreviewsGrid(pPage);
+    // }
 }
 
 // Remove page
@@ -500,8 +504,8 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
-    if (hasCanvasPage())
-        updateCanvasPreviewsGrid();
+    if (HasCanvasPage())
+        updatePagePreviewsGrid(pSdPage);
 
     return pPage;
 }
@@ -1456,7 +1460,7 @@ void SdDrawDocument::SetupNewPage (
 
 sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 {
-    if (hasCanvasPage())
+    if (HasCanvasPage())
         return mpCanvasPage->GetPageNum() / 2;
 
     sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
@@ -1543,10 +1547,39 @@ void SdDrawDocument::populatePagePreviewsGrid()
     }
 }
 
-void SdDrawDocument::updateCanvasPreviewsGrid()
+void SdDrawDocument::updatePagePreviewsGrid(SdPage* pPage)
 {
-    SdrPage* pPage = mpCanvasPage.get();
-    pPage->ClearSdrObjList();
-    populatePagePreviewsGrid();
+    SdrObjList* pObjList = mpCanvasPage.get();
+    sal_uInt16 nTotalPreviews = 0;
+    sal_uInt16 nPageCnt = GetSdPageCount(PageKind::Standard) - 1; // do not count canvas page
+
+    std::vector<SdrObject*> aToRemove;
+    SdrObjListIter aIter(pObjList, SdrIterMode::Flat);
+    for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
+    {
+        if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+        {
+            nTotalPreviews++;
+            SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+            if (pPage == pPageObj->GetReferencedPage())
+            {
+                aToRemove.push_back(pObj);
+            }
+        }
+    }
+    for (SdrObject* pObject : aToRemove)
+        pObjList->RemoveObject(pObject->GetOrdNum());
+
+    // page inserted
+    if (nTotalPreviews < nPageCnt)
+    {
+        const sal_uInt16 nPageNum = pPage->GetPageNum();
+        const ::tools::Long nPreviewWidth = pPage->GetWidth() / 5;
+        const ::tools::Long nPreviewHeight = pPage->GetHeight() / 5;
+        const ::tools::Long nX = (mpCanvasPage->GetWidth() - nPreviewWidth) / 2;
+        const ::tools::Long nY = (mpCanvasPage->GetHeight() - nPreviewHeight) / 2;
+
+        mpCanvasPage->CreatePresObj(PresObjKind::PagePreview, true, ::tools::Rectangle(Point(nX,nY), Size(nPreviewWidth, nPreviewHeight)), OUString(), nPageNum);
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
