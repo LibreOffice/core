@@ -949,6 +949,12 @@ void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Referen
             aFillStyle == FillStyle_HATCH)
         return;
 
+    // For BITMAP fill style, check if graphic is valid before writing bgPr
+    if (aFillStyle == FillStyle_BITMAP
+        && (!ImplGetPropertyValue(rXPropSet, u"FillBitmap"_ustr)
+            || !mAny.has<uno::Reference<graphic::XGraphic>>()))
+        return;
+
     pFS->startElementNS(XML_p, XML_bg);
     pFS->startElementNS(XML_p, XML_bgPr);
 
