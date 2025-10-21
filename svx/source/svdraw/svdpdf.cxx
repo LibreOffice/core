@@ -969,8 +969,12 @@ static bool isSimpleFamilyName(std::string_view Weight)
            || Weight == "BoldItalic";
 }
 
-static void rewriteBrokenFontName(std::string_view brokenName, std::string_view brokenCIDName,
-                                  std::string_view fixedName, const OUString& pfaCIDUrl)
+// a) change brokenName/brokenCIDName if present to fixedName
+// b) remove preamble FontMatrix and overwrite following ones in the %ADOBeginFontDict
+// section with that content instead to avoid generating fonts with unusual UnitsPerEm
+// of 1 that freetype will reject
+static void rewriteFont(std::string_view brokenName, std::string_view brokenCIDName,
+                        std::string_view fixedName, const OUString& pfaCIDUrl)
 {
     OUString oldCIDUrl = pfaCIDUrl + ".broken";
     if (osl::File::move(pfaCIDUrl, oldCIDUrl) != osl::File::E_None)
@@ -978,6 +982,12 @@ static void rewriteBrokenFontName(std::string_view brokenName, std::string_view 
         SAL_WARN("sd.filter", "unable to move file");
         return;
     }
+
+    const bool rewriteNames = !brokenName.empty();
+
+    bool fontDict = false;
+
+    OString sGlobalMatrix;
 
     const OString sBrokenFontLine = "/FontName /"_ostr + brokenName + " def"_ostr;
     const OString sFixedFontLine = "/FontName /"_ostr + fixedName + " def"_ostr;
@@ -990,16 +1000,40 @@ static void rewriteBrokenFontName(std::string_view brokenName, std::string_view 
     OString sLine;
     while (input.ReadLine(sLine))
     {
-        if (sLine == sBrokenFontLine)
+        if (rewriteNames)
         {
-            output.WriteLine(sFixedFontLine);
-            continue;
+            if (sLine == sBrokenFontLine)
+            {
+                output.WriteLine(sFixedFontLine);
+                continue;
+            }
+            else if (sLine == sBrokenCIDFontLine)
+            {
+                output.WriteLine(sFixedCIDFontLine);
+                continue;
+            }
         }
-        else if (sLine == sBrokenCIDFontLine)
+
+        if (sLine.startsWith("%ADOBeginFontDict"))
+            fontDict = true;
+        else if (sLine.startsWith("/FontMatrix "))
         {
-            output.WriteLine(sFixedCIDFontLine);
-            continue;
+            if (!fontDict)
+            {
+                // Global case, stash and don't emit the global matrix
+                sGlobalMatrix = sLine;
+                continue;
+            }
+
+            if (!sGlobalMatrix.isEmpty())
+            {
+                // Local case, emit the global matrix instead if
+                // there was one, otherwise emit the local matrix
+                output.WriteLine(sGlobalMatrix);
+                continue;
+            }
         }
+
         output.WriteLine(sLine);
         if (sLine.startsWith("%%BeginData"))
         {
@@ -1027,7 +1061,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     OUString toMergedMapUrl = fileUrl + u".tomergedmap";
 
     OString version, Notice, FullName, FamilyName, CIDFontName, CIDFontVersion, srcFontType,
-        glyphTag;
+        glyphTag, FontMatrix;
     OString brokenFontName;
     FontName = postScriptName.toUtf8();
     std::map<sal_Int32, OString> glyphIndexToName;
@@ -1066,6 +1100,8 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         if (extractEntry(sLine, "FSType", FSType))
             continue;
         if (extractEntry(sLine, "Weight", Weight))
+            continue;
+        if (extractEntry(sLine, "FontMatrix", FontMatrix))
             continue;
         if (extractEntry(sLine, "sup.srcFontType", srcFontType))
             continue;
@@ -1218,8 +1254,12 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         }
     }
 
-    if (!brokenFontName.isEmpty())
-        rewriteBrokenFontName(brokenFontName, CIDFontName, FontName, pfaCIDUrl);
+    if (!brokenFontName.isEmpty() || !FontMatrix.isEmpty())
+    {
+        // If the fontname isn't as expected, or if there is a
+        // font matrix present then we rewrite the font.
+        rewriteFont(brokenFontName, CIDFontName, FontName, pfaCIDUrl);
+    }
 
     return true;
 }
