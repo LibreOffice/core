@@ -37,7 +37,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mVariable2Range(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0 )
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
-    , mGroupedBy(BY_COLUMN)
+    , mGroupedBy(GroupedBy::BY_COLUMN)
     , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button(u"groupedby-columns-radio"_ustr))
@@ -245,9 +245,9 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseButtonFocusHandler, formula:
 IMPL_LINK_NOARG(ScStatisticsTwoVariableDialog, GroupByChanged, weld::Toggleable&, void)
 {
     if (mxGroupByColumnsRadio->get_active())
-        mGroupedBy = BY_COLUMN;
+        mGroupedBy = GroupedBy::BY_COLUMN;
     else if (mxGroupByRowsRadio->get_active())
-        mGroupedBy = BY_ROW;
+        mGroupedBy = GroupedBy::BY_ROW;
 
     ValidateDialogInput();
 }

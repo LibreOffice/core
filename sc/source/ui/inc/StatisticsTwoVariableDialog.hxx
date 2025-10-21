@@ -17,7 +17,7 @@
 class ScStatisticsTwoVariableDialog : public ScAnyRefDlgController
 {
 public:
-    enum GroupedBy {
+    enum class GroupedBy {
         BY_COLUMN,
         BY_ROW
     };
