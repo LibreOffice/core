@@ -101,14 +101,15 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
      fMetalLayer.device = fShared->fDevice.get();
      fMetalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
  
-@@ -65,10 +89,10 @@
+@@ -65,11 +89,11 @@
      fMetalLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
      fMetalLayer.contentsGravity = kCAGravityTopLeft;
      fMetalLayer.magnificationFilter = kCAFilterNearest;
 -    NSColorSpace* cs = fMainView.window.colorSpace;
 -    fMetalLayer.colorspace = cs.CGColorSpace;
 +    fMetalLayer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
- 
+     fMetalLayer.framebufferOnly = false;
+
 -    fMainView.layer = fMetalLayer;
 +    if (!reuseMetalLayer)
 +        fMainView.layer = fMetalLayer;

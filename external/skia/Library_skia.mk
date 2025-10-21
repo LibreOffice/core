@@ -424,7 +424,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkDistanceFieldGen \
     UnpackedTarball/skia/src/core/SkDocument \
     UnpackedTarball/skia/src/core/SkDraw \
-    UnpackedTarball/skia/src/core/SkDrawBase \
     UnpackedTarball/skia/src/core/SkDrawShadowInfo \
     UnpackedTarball/skia/src/core/SkDraw_atlas \
     UnpackedTarball/skia/src/core/SkDraw_text \
@@ -484,6 +483,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPath \
     UnpackedTarball/skia/src/core/SkPathBuilder \
     UnpackedTarball/skia/src/core/SkPathEffect \
+    UnpackedTarball/skia/src/core/SkPathIter \
     UnpackedTarball/skia/src/core/SkPathMeasure \
     UnpackedTarball/skia/src/core/SkPathPriv \
     UnpackedTarball/skia/src/core/SkPathRaw \
