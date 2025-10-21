@@ -180,7 +180,7 @@ namespace drawinglayer::primitive2d
                         mrSource.getFontAttribute(),
                         mrSource.getLocale(),
                         mrSource.getFontColor(),
-                        mrSource.getTextFillColor(),
+                        COL_TRANSPARENT,
                         mrSource.getLetterSpacing()));
             }
         }
