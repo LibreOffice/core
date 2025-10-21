@@ -1154,7 +1154,7 @@ namespace wmfemfhelper
                     std::move(aFontAttribute),
                     std::move(aLocale),
                     aFontColor,
-                    aFillColor,
+                    COL_TRANSPARENT,
                     rFont.GetFixKerning());
             }
         }
