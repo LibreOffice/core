@@ -125,6 +125,11 @@
           <value xml:lang="en-US">Slide Sorter/Pane</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/pagepanecanvas" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Sorter/Pane (Canvas)</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/pagepanenosel" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Slide Sorter/Pane (no selection)</value>
@@ -133,6 +138,11 @@
       <node oor:name="private:resource/popupmenu/pagepanemaster" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Master Slide Sorter/Pane</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagepanecanvasmaster" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Master Slide Sorter/Pane (Canvas)</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/pagepanenoselmaster" oor:op="replace">
