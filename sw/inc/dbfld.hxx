@@ -108,6 +108,7 @@ public:
 
     static bool FormatValue( SvNumberFormatter const * pDocFormatter, OUString const &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField = nullptr );
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline  void SwDBField::SetExpansion(const OUString& rStr)

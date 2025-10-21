@@ -300,6 +300,19 @@ bool SwDBField::FormatValue( SvNumberFormatter const * pDocFormatter, OUString c
     return bValidValue;
 }
 
+void SwDBField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwDBField"));
+    SwValueField::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("content"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(m_aContent.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /// get current field value and cache it
 void SwDBField::Evaluate()
 {
