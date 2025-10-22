@@ -11,32 +11,32 @@
 # Flatpak from a Fedora libreoffice.spec file.
 #
 # Arguments:
-# $1  pathname, ending in a slash, of the directory containing the source libreoffice-*.desktop
+# $1  pathname, ending in a slash, of the directory containing the source collaboraoffice-*.desktop
 #     files
 # $2  pathname, ending in a slash, of the directory into which to put the target
-#     org.libreoffice.LibreOffice.*.desktop files
+#     com.collabora.CollaboraOffice.*.desktop files
 
 set -e
 
-## libreoffice-*.desktop -> org.libreoffice.LibreOffice.*.desktop:
-for i in "${1?}"libreoffice-*.desktop
+## collaboraoffice-*.desktop -> com.collabora.CollaboraOffice.*.desktop:
+for i in "${1?}"collaboraoffice-*.desktop
 do
- sed -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice./' "$i" \
-  >"${2?}"org.libreoffice.LibreOffice."${i#"${1?}"libreoffice-}"
+ sed -e 's/^Icon=collaboraoffice-/Icon=com.collabora.CollaboraOffice./' "$i" \
+  >"${2?}"com.collabora.CollaboraOffice."${i#"${1?}"collaboraoffice-}"
 done
-mv "${2?}"org.libreoffice.LibreOffice.startcenter.desktop "${2?}"org.libreoffice.LibreOffice.desktop
+mv "${2?}"com.collabora.CollaboraOffice.startcenter.desktop "${2?}"com.collabora.CollaboraOffice.desktop
 
 # Flatpak .desktop exports take precedence over system ones due to
 # the order of XDG_DATA_DIRS - re-associating text/plain seems a bit much
-sed -i "s/text\/plain;//" "${2?}"org.libreoffice.LibreOffice.writer.desktop
+sed -i "s/text\/plain;//" "${2?}"com.collabora.CollaboraOffice.writer.desktop
 
-desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter \
- --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' \
- "${2?}"org.libreoffice.LibreOffice.desktop
+desktop-file-edit --set-key=X-Endless-Alias --set-value=collaboraoffice-startcenter \
+ --set-key=X-Flatpak-RenamedFrom --set-value='collaboraoffice-startcenter.desktop;' \
+ "${2?}"com.collabora.CollaboraOffice.desktop
 for i in base calc draw impress math writer xsltfilter
 do
- desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-"$i" \
+ desktop-file-edit --set-key=X-Endless-Alias --set-value=collaboraoffice-"$i" \
   --set-key=X-Flatpak-RenamedFrom \
-  --set-value="libreoffice-$i.desktop;org.libreoffice.LibreOffice-$i.desktop;" \
-  "${2?}"org.libreoffice.LibreOffice."$i".desktop
+  --set-value="collaboraoffice-$i.desktop;com.collabora.CollaboraOffice-$i.desktop;" \
+  "${2?}"com.collabora.CollaboraOffice."$i".desktop
 done
