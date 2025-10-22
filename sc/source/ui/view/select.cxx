@@ -626,38 +626,98 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
     }
     else if (m_rViewData.IsDBExpandMode())
     {
-        SCCOL nFillColStart;
-        SCROW nFillRowStart;
-        SCCOL nFillColEnd;
-        SCROW nFillRowEnd;
-        m_rViewData.GetFillData(nFillColStart, nFillRowStart, nFillColEnd, nFillRowEnd);
+        SCCOL nStartX, nEndX;
+        SCROW nStartY, nEndY;
+        m_rViewData.GetFillData(nStartX, nStartY, nEndX, nEndY);
 
-        bool bNegX = ( nPosX < nFillColStart );
-        bool bNegY = ( nPosY < nFillRowStart );
-
-        if ( bNegX )
+        if (m_rViewData.GetRefType() != SC_REFTYPE_FILL)
         {
-            //  in SetCursorAtPoint hidden columns are skipped.
-            //  They must be skipped here too, or the result will always be the first hidden column.
-            while ( nPosX<nFillColStart && rDoc.ColHidden(nPosX, nTab) ) ++nPosX;
+            pView->InitRefMode( nStartX, nStartY, nTab, SC_REFTYPE_FILL );
+            CreateAnchor();
         }
 
-        if ( bNegY )
+        if ( nPosX >= nStartX && nPosX <= nEndX &&
+             nPosY >= nStartY && nPosY <= nEndY &&
+             ( nPosX != nEndX || nPosY != nEndY ) )
         {
-            //  in SetCursorAtPoint hidden rows are skipped.
-            //  They must be skipped here too, or the result will always be the first hidden row.
-            if (nPosY < nFillRowStart)
+            // inside
+            tools::Long nSizeX = 0;
+            for (SCCOL i = nPosX + 1; i <= nEndX; i++)
+                nSizeX += rDoc.GetColWidth(i, nTab);
+            tools::Long nSizeY = rDoc.GetRowHeight(nPosY + 1, nEndY, nTab);
+
+            if (nSizeX > nSizeY)
             {
-                nPosY = rDoc.FirstVisibleRow(nPosY, nFillRowStart-1, nTab);
-                if (!rDoc.ValidRow(nPosY))
-                    nPosY = nFillRowStart;
+                nPosY = nEndY;
+            }
+            else
+            {
+                nPosX = nEndX;
+            }
+
+            // Header row or first row
+            if (nPosY == nStartY)
+                nPosY++;
+
+            if ( nStartX != m_rViewData.GetRefStartX() || nStartY != m_rViewData.GetRefStartY() )
+            {
+                m_rViewData.GetView()->DoneRefMode();
+                m_rViewData.GetView()->InitRefMode( nStartX, nStartY, nTab, SC_REFTYPE_FILL );
             }
         }
-
-        if ( nFillColStart != m_rViewData.GetRefStartX() || nFillRowStart != m_rViewData.GetRefStartY() )
+        else
         {
-            m_rViewData.GetView()->DoneRefMode();
-            m_rViewData.GetView()->InitRefMode( nFillColStart, nFillRowStart, nTab, SC_REFTYPE_FILL );
+            // outside
+            bool bNegX = ( nPosX < nStartX );
+            bool bNegY = ( nPosY < nStartY );
+
+            tools::Long nSizeX = 0;
+            if ( bNegX )
+            {
+                //  in SetCursorAtPoint hidden columns are skipped.
+                //  They must be skipped here too, or the result will always be the first hidden column.
+                do ++nPosX; while ( nPosX<nStartX && rDoc.ColHidden(nPosX, nTab) );
+                for (SCCOL i=nPosX; i<nStartX; i++)
+                    nSizeX += rDoc.GetColWidth( i, nTab );
+            }
+            else
+                for (SCCOL i=nEndX+1; i<=nPosX; i++)
+                    nSizeX += rDoc.GetColWidth( i, nTab );
+
+            tools::Long nSizeY = 0;
+            if ( bNegY )
+            {
+                //  in SetCursorAtPoint hidden rows are skipped.
+                //  They must be skipped here too, or the result will always be the first hidden row.
+                if (++nPosY < nStartY)
+                {
+                    nPosY = rDoc.FirstVisibleRow(nPosY, nStartY-1, nTab);
+                    if (!rDoc.ValidRow(nPosY))
+                        nPosY = nStartY;
+                }
+                nSizeY += rDoc.GetRowHeight( nPosY, nStartY-1, nTab );
+            }
+            else
+                nSizeY += rDoc.GetRowHeight( nEndY+1, nPosY, nTab );
+
+            if ( nSizeX > nSizeY ) // Fill only ever in one direction
+            {
+                nPosY = nEndY;
+                bNegY = false;
+            }
+            else
+            {
+                nPosX = nEndX;
+                bNegX = false;
+            }
+
+            nPosX = bNegX ? nStartX : nPosX;
+            nPosY = bNegY ? nStartY + 1 : nPosY; // Header row or first row
+            if ( nStartX != m_rViewData.GetRefStartX() || nStartY != m_rViewData.GetRefStartY() )
+            {
+                m_rViewData.GetView()->DoneRefMode();
+                m_rViewData.GetView()->InitRefMode( nStartX, nStartY, nTab, SC_REFTYPE_FILL );
+            }
         }
 
         pView->UpdateRef( nPosX, nPosY, nTab );

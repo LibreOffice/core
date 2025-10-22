@@ -1772,7 +1772,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                 }
                 else if (mpDBExpandRect && mpDBExpandRect->Contains(aMousePos))
                 {
-                    SetPointer( PointerStyle::Cross );     //! bold cross ?
+                    SetPointer( PointerStyle::SESize );
                     if (bAction)
                     {
                         SCCOL nX = maDBRange.aEnd.Col();
