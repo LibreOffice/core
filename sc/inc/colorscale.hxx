@@ -258,7 +258,7 @@ private:
     double GetMaxValue() const;
 
     void calcMinMax(double& nMin, double& nMax) const;
-    double CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& rItr) const;
+    std::optional<double> CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& rItr) const;
 public:
     SC_DLLPUBLIC ScColorScaleFormat(ScDocument& rDoc);
     ScColorScaleFormat(ScDocument& rDoc, const ScColorScaleFormat& rFormat);
@@ -329,8 +329,8 @@ public:
     void EnsureSize();
 
 private:
-    double getMin(double nMin, double nMax) const;
-    double getMax(double nMin, double nMax) const;
+    std::optional<double> getMin(double nMin, double nMax) const;
+    std::optional<double> getMax(double nMin, double nMax) const;
 
     std::unique_ptr<ScDataBarFormatData> mpFormatData;
 };
@@ -410,7 +410,7 @@ private:
 
     double GetMinValue() const;
     double GetMaxValue() const;
-    double CalcValue(double nMin, double nMax, const ScIconSetFormat::const_iterator& itr) const;
+    std::optional<double> CalcValue(double nMin, double nMax, const ScIconSetFormat::const_iterator& itr) const;
 
     std::unique_ptr<ScIconSetFormatData> mpFormatData;
 };
