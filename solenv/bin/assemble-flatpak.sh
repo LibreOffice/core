@@ -42,6 +42,11 @@ do
   ln -s ../../../share/runtime/locale/"${lang}"/resource/"${i}" /app/libreoffice/program/resource
 done
 
+# The .../share/registry/res/registry_*.xcd glob may match nothing (the
+# .../share/registry/Langpack-*.xcd and .../share/registry/res/fcfg_langpack_*.xcd globs will always
+# match at least .../share/registry/Langpack-en-US.xcd and
+# .../share/registry/res/fcfg_langpack-en-US.xcd, respectively):
+shopt -s nullglob
 for i in /app/libreoffice/share/registry/Langpack-*.xcd /app/libreoffice/share/registry/res/{fcfg_langpack,registry}_*.xcd
 do
   basename="$(basename "${i}" .xcd)"
