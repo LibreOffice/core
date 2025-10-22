@@ -1425,6 +1425,51 @@ static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl&
     return bExchangeLeftRight;
 }
 
+// If there is a deferred page break applied to this framed paragraph,
+// create a dummy paragraph without extra properties,
+// so that the anchored frame will be on the correct page (similar to shapes).
+void DomainMapper::HandleFramedParagraphPageBreak(PropertyMapPtr pContext)
+{
+    bool bBreakTypeIsSet = pContext->isSet(PROP_BREAK_TYPE);
+    if (!bBreakTypeIsSet)
+    {
+        if (!pContext->isSet(PROP_PARA_STYLE_NAME))
+        {
+            return;
+        }
+
+        OUString sStyleName;
+        pContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
+        if (sStyleName.isEmpty() || !GetStyleSheetTable())
+        {
+            return;
+        }
+
+        StyleSheetEntryPtr pStyle
+            = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sStyleName);
+        if (!pStyle || !pStyle->m_pProperties)
+        {
+            return;
+        }
+
+        bBreakTypeIsSet = pStyle->m_pProperties->isSet(PROP_BREAK_TYPE);
+    }
+    if (!bBreakTypeIsSet)
+    {
+        return;
+    }
+
+    pContext->Erase(PROP_BREAK_TYPE);
+
+    lcl_startParagraphGroup();
+    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
+    lcl_startCharacterGroup();
+    sal_Unicode const sBreak[] = { 0x0d };
+    lcl_utext(sBreak, 1);
+    lcl_endCharacterGroup();
+    lcl_endParagraphGroup();
+}
+
 void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 {
     // These SPRM's are not specific to any section, so it's expected that there is no context yet.
@@ -2581,21 +2626,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
         if( pContext )
         {
-            // If there is a deferred page break applied to this framed paragraph,
-            // create a dummy paragraph without extra properties,
-            // so that the anchored frame will be on the correct page (similar to shapes).
-            if (pContext->isSet(PROP_BREAK_TYPE))
-            {
-                pContext->Erase(PROP_BREAK_TYPE);
-
-                lcl_startParagraphGroup();
-                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
-                lcl_startCharacterGroup();
-                sal_Unicode const sBreak[] = { 0x0d };
-                lcl_utext(sBreak, 1);
-                lcl_endCharacterGroup();
-                lcl_endParagraphGroup();
-            }
+            HandleFramedParagraphPageBreak(pContext);
 
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
             if (pParaContext)
