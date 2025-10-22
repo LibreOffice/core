@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -23,16 +23,21 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/DomainMapper.cxx.
-class Test : public UnoApiTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -248,6 +253,25 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFFontFamily)
     // - Actual  : 0 (DONTKNOW)
     // i.e. the final result was a sans fallback instead of a serif fallback.
     CPPUNIT_ASSERT_EQUAL(awt::FontFamily::ROMAN, eFamily);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFrameprPagebreakStyle)
+{
+    // Given a document with a heading 1 style that sets both framePr and pageBreakBefore:
+    // When loading that document:
+    createSwDoc("framepr-pagebreak-style.docx");
+
+    // Then make sure the page break request is not ignored:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the page break was lost, the document didn't have the correct page count.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), pLastPage->GetPhyPageNum());
 }
 }
 
