@@ -37,6 +37,7 @@ fuzzer_externals = \
     libtiff \
     libwebp \
     pdfium \
+    afdko \
     md4c \
     openssl \
     expat \
