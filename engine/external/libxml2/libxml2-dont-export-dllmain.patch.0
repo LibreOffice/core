@@ -3,9 +3,9 @@
 --- globals.c
 +++ globals.c
 @@ -851,7 +851,7 @@
-    a public header because it's meant to be called by Windows itself,
-    not a program that uses this library.  This also has to be exported. */
- 
+  * It is a mistake to export this function, but changing that seems
+  * to break the ABI.
+  */
 -XMLPUBFUN BOOL WINAPI
 +BOOL WINAPI
  DllMain (HINSTANCE hinstDLL,
