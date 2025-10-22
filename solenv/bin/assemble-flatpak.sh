@@ -16,33 +16,33 @@
 
 set -e
 
-cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
-ln -s /app/libreoffice/program/soffice /app/bin/libreoffice
+cp -r "${PREFIXDIR?}"/lib/collaboraoffice /app/
+ln -s /app/collaboraoffice/program/soffice /app/bin/collaboraoffice
 
 mkdir -p /app/share/applications
 "${SRCDIR?}"/solenv/bin/assemble-flatpak-desktop.sh "${PREFIXDIR?}"/share/applications/ \
  /app/share/applications/ "${1?}"
 
-## icons/hicolor/*/apps/libreoffice-* ->
+## icons/hicolor/*/apps/collaboraoffice-* ->
 ## icons/hicolor/*/apps/$1-*:
 mkdir -p /app/share/icons
-for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/libreoffice-*
+for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/collaboraoffice-*
 do
  mkdir -p \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"
  cp -a "$i" \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(basename "$i")"
  cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"${1?}"."${i##*/apps/libreoffice-}"
+  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"${1?}"."${i##*/apps/collaboraoffice-}"
 done
 
 mkdir -p /app/share/runtime/locale
-for i in $(ls /app/libreoffice/program/resource)
+for i in $(ls /app/collaboraoffice/program/resource)
 do
   lang="${i%[_@]*}"
   mkdir -p /app/share/runtime/locale/"${lang}"/resource
-  mv /app/libreoffice/program/resource/"${i}" /app/share/runtime/locale/"${lang}"/resource
-  ln -s ../../../share/runtime/locale/"${lang}"/resource/"${i}" /app/libreoffice/program/resource
+  mv /app/collaboraoffice/program/resource/"${i}" /app/share/runtime/locale/"${lang}"/resource
+  ln -s ../../../share/runtime/locale/"${lang}"/resource/"${i}" /app/collaboraoffice/program/resource
 done
 
 # The .../share/registry/res/registry_*.xcd glob may match nothing (the
@@ -50,7 +50,7 @@ done
 # match at least .../share/registry/Langpack-en-US.xcd and
 # .../share/registry/res/fcfg_langpack-en-US.xcd, respectively):
 shopt -s nullglob
-for i in /app/libreoffice/share/registry/Langpack-*.xcd /app/libreoffice/share/registry/res/{fcfg_langpack,registry}_*.xcd
+for i in /app/collaboraoffice/share/registry/Langpack-*.xcd /app/collaboraoffice/share/registry/res/{fcfg_langpack,registry}_*.xcd
 do
   basename="$(basename "${i}" .xcd)"
   lang="${basename#Langpack-}"

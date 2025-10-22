@@ -11,7 +11,7 @@
 # Flatpak from a Fedora libreoffice.spec file.
 #
 # Arguments:
-# $1  pathname, ending in a slash, of the directory containing the source libreoffice-*.desktop
+# $1  pathname, ending in a slash, of the directory containing the source collaboraoffice-*.desktop
 #     files
 # $2  pathname, ending in a slash, of the directory into which to put the target
 #     $3.*.desktop files
@@ -19,11 +19,11 @@
 
 set -e
 
-## libreoffice-*.desktop -> $3.*.desktop:
-for i in "${1?}"libreoffice-*.desktop
+## collaboraoffice-*.desktop -> $3.*.desktop:
+for i in "${1?}"collaboraoffice-*.desktop
 do
- sed -e "s/^Icon=libreoffice-/Icon=${3?}./" "$i" \
-  >"${2?}${3?}"."${i#"${1?}"libreoffice-}"
+ sed -e "s/^Icon=collaboraoffice-/Icon=${3?}./" "$i" \
+  >"${2?}${3?}"."${i#"${1?}"collaboraoffice-}"
 done
 mv "${2?}${3?}".startcenter.desktop "${2?}${3?}".desktop
 
@@ -31,13 +31,13 @@ mv "${2?}${3?}".startcenter.desktop "${2?}${3?}".desktop
 # the order of XDG_DATA_DIRS - re-associating text/plain seems a bit much
 sed -i "s/text\/plain;//" "${2?}${3?}".writer.desktop
 
-desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter \
- --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' \
+desktop-file-edit --set-key=X-Endless-Alias --set-value=collaboraoffice-startcenter \
+ --set-key=X-Flatpak-RenamedFrom --set-value='collaboraoffice-startcenter.desktop;' \
  "${2?}${3?}".desktop
 for i in base calc draw impress math writer xsltfilter
 do
- desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-"$i" \
+ desktop-file-edit --set-key=X-Endless-Alias --set-value=collaboraoffice-"$i" \
   --set-key=X-Flatpak-RenamedFrom \
-  --set-value="libreoffice-$i.desktop;${3?}-$i.desktop;" \
+  --set-value="collaboraoffice-$i.desktop;${3?}-$i.desktop;" \
   "${2?}${3?}"."$i".desktop
 done

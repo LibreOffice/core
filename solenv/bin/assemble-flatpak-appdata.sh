@@ -20,25 +20,25 @@
 set -e
 
 ## $3.appdata.xml is manually derived from the various
-## inst/share/metainfo/libreoffice-*.appdata.xml (at least recent GNOME Software
+## inst/share/metainfo/collaboraoffice-*.appdata.xml (at least recent GNOME Software
 ## doesn't show more than five screenshots anyway, so restrict to one each from
-## the five libreoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
+## the five collaboraoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
 cat <<EOF >"${1?}${3?}".appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
  <id>${3?}</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>MPL-2.0</project_license>
- <name>LibreOffice</name>
- <summary>The LibreOffice productivity suite</summary>
+ <name>Collabora Office</name>
+ <summary>The Collabora Office productivity suite</summary>
  <description>
-  <p>LibreOffice is a powerful office suite.  Its clean interface and
+  <p>Collabora Office is a powerful office suite.  Its clean interface and
   feature-rich tools help you unleash your creativity and enhance your
-  productivity.  LibreOffice includes several applications that make it the most
+  productivity.  Collabora Office includes several applications that make it the most
   powerful Free and Open Source office suite on the market: Writer (word
   processing), Calc (spreadsheets), Impress (presentations), Draw (vector
   graphics and flowcharts), Base (databases), and Math (formula editing).</p>
-  <p>LibreOffice supports opening and saving into a wide variety of formats, so
+  <p>Collabora Office supports opening and saving into a wide variety of formats, so
   you can easily share documents with users of other popular office suites
   without worrying about compatibility.</p>
  </description>
