@@ -186,6 +186,7 @@ private:
 
     static void handleUnderlineType(const Id nId, const ::tools::SvRef<PropertyMap>& rContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::tools::SvRef<PropertyMap>& rContext, const bool bExchangeLeftRight);
+    void HandleFramedParagraphPageBreak(PropertyMapPtr pContext);
     static bool getColorFromId(const Id, sal_Int32 &nColor);
     static sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
     static OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
