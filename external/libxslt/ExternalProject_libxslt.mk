@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 			vcmanifest=yes \
-			lib=$(gb_UnpackedTarball_workdir)/libxml2/win32/bin.msvc \
+			lib=$(gb_UnpackedTarball_workdir)/libxml2/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 		&& nmake \
 	,win32)
 	$(call gb_Trace_EndRange,libxslt,EXTERNAL)
