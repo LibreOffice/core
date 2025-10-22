@@ -1265,6 +1265,27 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
                          "@draw:fill-image-name='Bitmap_20_1']");
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextShear)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/textshear.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // Ensure the Lato font style is italic, seen as regular before improvement to take
+    // text shear into account.
+    assertXPath(pXmlDoc,
+                "/office:document/office:automatic-styles/style:style[@style:name='P2']/"
+                "style:text-properties[@style:font-name='Lato' and @fo:font-style='italic']");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");

@@ -1900,7 +1900,17 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     if (!sFontName.isEmpty())
         aFnt.SetFamilyName(sFontName);
 
-    const int italicAngle = pPageObject->getFontAngle();
+    int italicAngle = pPageObject->getFontAngle();
+    {
+        // Decompose matrix to inspect shear
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+        int nTextRotation = basegfx::fround(basegfx::rad2deg<1>(atan(fShearX)));
+        // Add this additional shear to the reported italic angle, where
+        // rotation to the right is negative
+        italicAngle += -nTextRotation;
+    }
     aFnt.SetItalic(italicAngle == 0 ? ITALIC_NONE
                                     : (italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE));
     aFnt.SetWeight(eFontWeight);
