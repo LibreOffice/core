@@ -610,6 +610,8 @@ public:
 
     static bool IsIgnoreProtectedArea();
 
+    static bool IsAllowDragDropText();
+
     bool IsPDFExport() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::PdfExport); }
 

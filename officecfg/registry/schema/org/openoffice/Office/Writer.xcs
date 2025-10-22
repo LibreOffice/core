@@ -2182,6 +2182,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="AllowDragDrop" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether drag'n drop of selected text is possible in editengine.</desc>
+            <label>Allow drag'n drop</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
     </group>
     <group oor:name="FmtAidsAutocomplete">

@@ -579,6 +579,14 @@ bool SwViewOption::IsIgnoreProtectedArea()
     return gIgnoreProtectedArea.get();
 }
 
+bool SwViewOption::IsAllowDragDropText()
+{
+    if (comphelper::IsFuzzing())
+        return true;
+    static comphelper::ConfigurationListenerProperty<bool> gAllowDragDrop(getWCOptionListener(), u"AllowDragDrop"_ustr);
+    return gAllowDragDrop.get();
+}
+
 void SwViewOption::SyncLayoutRelatedViewOptions(const SwViewOption& rOpt)
 {
     SetFieldName(rOpt.IsFieldName());

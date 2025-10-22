@@ -1742,6 +1742,9 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xFmtAidsAutoComplFrame(m_xBuilder->weld_frame(u"fmtaidsautocompleteframe"_ustr))
     , m_xEncloseWithCharactersCB(m_xBuilder->weld_check_button(u"enclosewithcharacters"_ustr))
     , m_xEncloseWithCharactersImg(m_xBuilder->weld_widget(u"lockenclosewithcharacters"_ustr))
+    , m_xDragDropFrame(m_xBuilder->weld_frame(u"frmDragDrop"_ustr))
+    , m_xDragDropCB(m_xBuilder->weld_check_button(u"allowdragdrop"_ustr))
+    , m_xDragDropImg(m_xBuilder->weld_widget(u"lockallowdragdrop"_ustr))
     , m_xTextBoundariesCB(m_xBuilder->weld_check_button(u"cbTextBoundaries"_ustr))
     , m_xSectionBoundariesCB(m_xBuilder->weld_check_button(u"cbSectionBoundaries"_ustr))
     , m_xTableBoundariesCB(m_xBuilder->weld_check_button(u"cbTableBoundaries"_ustr))
@@ -1866,6 +1869,14 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         bRet = true;
     }
 
+    if( m_xDragDropCB->get_state_changed_from_saved())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::Cursor::Option::AllowDragDrop::set(m_xDragDropCB->get_active(), xChanges);
+        xChanges->commit();
+    }
+
     SwFmtAidsAutoComplItem aFmtAidsAutoComplOpt;
     aFmtAidsAutoComplOpt.SetEncloseWithCharactersOn(m_xEncloseWithCharactersCB->get_active());
     if (const SwFmtAidsAutoComplItem* pFmtAidsAutoComplItem
@@ -1950,6 +1961,13 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_xCursorInProtCB->set_sensitive(!bReadOnly);
     m_xCursorInProtImg->set_visible(bReadOnly);
     m_xCursorInProtCB->save_state();
+
+    const bool bAllowDragDrop = officecfg::Office::Writer::Cursor::Option::AllowDragDrop::get();
+    m_xDragDropCB->set_active(bAllowDragDrop);
+    bReadOnly = officecfg::Office::Writer::Cursor::Option::AllowDragDrop::isReadOnly();
+    m_xDragDropCB->set_sensitive(!bReadOnly);
+    m_xDragDropImg->set_visible(bReadOnly);
+    m_xDragDropCB->save_state();
 
     const SwDocDisplayItem* pDocDisplayAttr = rSet->GetItemIfSet( FN_PARAM_DOCDISP, false );
     if(pDocDisplayAttr)
