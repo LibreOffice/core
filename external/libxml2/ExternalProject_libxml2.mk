@@ -20,16 +20,29 @@ endif
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_use_external_project,libxml2,icu)
 
-$(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
-
+# remove VERSION file after the compilation, otherwise, libabw, libvisio,
+# and probably other libraries fail to compile with
+# workdir\UnpackedTarball\libxml2\version(1): error C2059: syntax error: 'constant
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_Trace_StartRange,libxml2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		cscript /e:javascript configure.js \
-			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
-			$(if $(filter TRUE,$(MSVC_USE_DEBUG_RUNTIME)),debug=yes) \
-		&& nmake \
-	,win32)
+		$(CMAKE) . \
+			$(if $(filter 17.%,$(VCVER)),-G "Visual Studio 17 2022") \
+			$(if $(filter 18.%,$(VCVER)),-G "Visual Studio 18 2026") \
+			-A $(gb_MSBUILD_PLATFORM) \
+			-DLIBXML2_WITH_TESTS=OFF \
+			-DLIBXML2_WITH_ICONV=OFF \
+			-DLIBXML2_WITH_PYTHON=OFF \
+			-DLIBXML2_WITH_SAX1=ON \
+			-DLIBXML2_WITH_ICU=ON \
+			-DICU_INCLUDE_DIR=$(gb_UnpackedTarball_workdir)/icu/source/common/ \
+			-DICU_LIBRARY=$(gb_UnpackedTarball_workdir)/icu/source/lib/ \
+			$(if $(MSVC_USE_DEBUG_RUNTIME), \
+				-DICU_UC_LIBRARY_DEBUG=$(gb_UnpackedTarball_workdir)/icu/source/lib/icuucd.lib, \
+				-DICU_UC_LIBRARY_RELEASE=$(gb_UnpackedTarball_workdir)/icu/source/lib/icuuc.lib) \
+		&& $(CMAKE) --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		&& rm VERSION \
+	)
 	$(call gb_Trace_EndRange,libxml2,EXTERNAL)
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):

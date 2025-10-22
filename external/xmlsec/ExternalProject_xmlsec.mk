@@ -33,9 +33,9 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js crypto=mscng xslt=no iconv=no static=no \
-			lib=$(gb_UnpackedTarball_workdir)/libxml2/win32/bin.msvc \
+			lib=$(gb_UnpackedTarball_workdir)/libxml2/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes cruntime=/MDd) \
-			cflags="$(SOLARINC) -I$(WORKDIR)/UnpackedTarball/libxml2/include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common" \
+			cflags="$(SOLARINC) $(LIBXML_CFLAGS)" \
 		&& nmake \
 	,win32)
 	$(call gb_Trace_EndRange,xmlsec,EXTERNAL)
