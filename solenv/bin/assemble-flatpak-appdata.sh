@@ -12,20 +12,21 @@
 #
 # Arguments:
 # $1  pathname, ending in a slash, of the directory into which to put the target
-#     com.collabora.CollaboraOffice.appdata.xml file
+#     $3.appdata.xml file
 # $2  "1" if a <releases> section shall be included in the target
-#     com.collabora.CollaboraOffice.appdata.xml file, "0" if not
+#     $3.appdata.xml file, "0" if not
+# $3  the flatpak ID
 
 set -e
 
-## com.collabora.CollaboraOffice.appdata.xml is manually derived from the various
+## $3.appdata.xml is manually derived from the various
 ## inst/share/metainfo/collaboraoffice-*.appdata.xml (at least recent GNOME Software
 ## doesn't show more than five screenshots anyway, so restrict to one each from
 ## the five collaboraoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
-cat <<\EOF >"${1?}"com.collabora.CollaboraOffice.appdata.xml
+cat <<EOF >"${1?}${3?}".appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
- <id>com.collabora.CollaboraOffice</id>
+ <id>${3?}</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>MPL-2.0</project_license>
  <name>Collabora Office</name>
@@ -41,7 +42,7 @@ cat <<\EOF >"${1?}"com.collabora.CollaboraOffice.appdata.xml
   you can easily share documents with users of other popular office suites
   without worrying about compatibility.</p>
  </description>
- <launchable type="desktop-id">com.collabora.CollaboraOffice.desktop</launchable>
+ <launchable type="desktop-id">${3?}.desktop</launchable>
  <url type="homepage">https://collabora.com</url>
  <screenshots>
   <screenshot type="default">
@@ -77,7 +78,7 @@ EOF
 
 if [ "${2?}" = 1 ]
 then
- cat <<EOF >>"${1?}"com.collabora.CollaboraOffice.appdata.xml
+ cat <<EOF >>"${1?}${3?}".appdata.xml
  <releases>
   <release
     version="${LIBO_VERSION_MAJOR?}.${LIBO_VERSION_MINOR?}.${LIBO_VERSION_MICRO?}.${LIBO_VERSION_PATCH?}"
@@ -86,6 +87,6 @@ then
 EOF
 fi
 
-cat <<\EOF >>"${1?}"com.collabora.CollaboraOffice.appdata.xml
+cat <<\EOF >>"${1?}${3?}".appdata.xml
 </component>
 EOF
