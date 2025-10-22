@@ -26,8 +26,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/extern_mergefonts.patch \
     external/afdko/extern_makeotf.patch \
     external/afdko/warnings.patch \
-    external/afdko/antlr4-chrono.patch \
     external/afdko/mergeFonts_crash.patch \
+    external/afdko/noverbose.patch \
+    external/afdko/antlr4-chrono.patch \
     external/afdko/ubsan.patch.0 \
 ))
 
