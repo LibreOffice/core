@@ -24,6 +24,8 @@
 #include <vcl/embeddedfontsmanager.hxx>
 #include "afdko.hxx"
 
+#define SUPERVERBOSE 0
+
 static bool convertTx(txCtx h)
 {
     h->src.stm.fp = fopen(h->src.stm.filename, "rb");
@@ -63,6 +65,23 @@ static bool convertTx(txCtx h)
     return true;
 }
 
+static void suppressDebugMessagess(txCtx h)
+{
+#if !SUPERVERBOSE
+    h->t1r.dbg.fp = nullptr;
+    h->cfr.dbg.fp = nullptr;
+    h->svr.dbg.fp = nullptr;
+    h->ufr.dbg.fp = nullptr;
+    h->ufow.dbg.fp = nullptr;
+    h->ttr.dbg.fp = nullptr;
+    h->cfw.dbg.fp = nullptr;
+    h->t1w.dbg.fp = nullptr;
+    h->svw.dbg.fp = nullptr;
+#else
+    (void)h;
+#endif
+}
+
 // System afdko could be used by calling: tx -dump src dest here
 bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl)
 {
@@ -78,6 +97,7 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
     txCtx h = txNew(nullptr);
     if (!h)
         return false;
+    suppressDebugMessagess(h);
 
     OString srcFontPathA(srcFontPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
@@ -106,6 +126,7 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     txCtx h = txNew(nullptr);
     if (!h)
         return false;
+    suppressDebugMessagess(h);
 
     setMode(h, mode_t1);
 
@@ -152,6 +173,7 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     txCtx h = mergeFontsNew(nullptr);
     if (!h)
         return false;
+    suppressDebugMessagess(h);
 
     OString cidFontInfoPathA(cidFontInfoPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
@@ -253,18 +275,26 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     OString featuresPathA(featuresPath.toUtf8());
 
     SAL_INFO(
-        "vcl.fonts", "makeotf -mf "
+        "vcl.fonts", "makeotf -nshw -mf "
                          << fontMenuNameDBPathA << " -f " << srcFontPathA << " -o " << destFilePathA
                          << (!charMapPathA.isEmpty() ? " -ch "_ostr + charMapPathA : OString())
                          << (!featuresPathA.isEmpty() ? " -ff "_ostr + featuresPathA : OString()));
 
     cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
 
-    cbConvert(cbctx, HOT_NO_OLD_OPS, nullptr, const_cast<char*>(srcFontPathA.getStr()),
+    int flags = HOT_NO_OLD_OPS;
+    int fontConvertFlags = 0;
+#if !SUPERVERBOSE
+    flags |= HOT_SUPRESS_WARNINGS | HOT_SUPRESS_HINT_WARNINGS;
+#else
+    fontConvertFlags |= HOT_CONVERT_VERBOSE;
+#endif
+
+    cbConvert(cbctx, flags, nullptr, const_cast<char*>(srcFontPathA.getStr()),
               const_cast<char*>(destFilePathA.getStr()),
               !featuresPathA.isEmpty() ? const_cast<char*>(featuresPathA.getStr()) : nullptr,
               !charMapPathA.isEmpty() ? const_cast<char*>(charMapPathA.getStr()) : nullptr, nullptr,
-              nullptr, nullptr, 0, 0, 0, 0, 0, -1, -1, 0, nullptr);
+              nullptr, nullptr, fontConvertFlags, 0, 0, 0, 0, -1, -1, 0, nullptr);
 
     return true;
 }
