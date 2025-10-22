@@ -1643,6 +1643,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168980)
     saveAndReload(u"OpenDocument Text Flat XML"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf37128ConvertStartEndOnResave)
+{
+    // LO doesn't support start/end fo:text-align. These are always loaded as
+    // left/right, respectively. They should be resaved as left/right, too.
+    loadAndReload("tdf37128-start-end-to-left-right.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTRLeft']/style:paragraph-properties",
+                "text-align", u"left");
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTRStart']/style:paragraph-properties",
+                "text-align", u"left");
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTRRight']/style:paragraph-properties",
+                "text-align", u"right");
+    assertXPath(pXmlDoc, "//style:style[@style:name='LTREnd']/style:paragraph-properties",
+                "text-align", u"right");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLLeft']/style:paragraph-properties",
+                "text-align", u"left");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLStart']/style:paragraph-properties",
+                "text-align", u"left");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLRight']/style:paragraph-properties",
+                "text-align", u"right");
+    assertXPath(pXmlDoc, "//style:style[@style:name='RTLEnd']/style:paragraph-properties",
+                "text-align", u"right");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

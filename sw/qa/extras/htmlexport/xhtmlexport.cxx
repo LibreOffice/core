@@ -46,10 +46,10 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf131812)
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
-    CPPUNIT_ASSERT(
-        aStream.indexOf(".paragraph-P1{ font-size:12pt; font-family:\'Liberation Serif\'; "
-                        "writing-mode:horizontal-tb; direction:rtl; text-align:right ! important;}")
-        != -1);
+    CPPUNIT_ASSERT(aStream.indexOf(
+                       ".paragraph-P1{ font-size:12pt; font-family:\'Liberation Serif\'; "
+                       "writing-mode:horizontal-tb; direction:rtl; text-align:right ! important; }")
+                   != -1);
 }
 
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf146264)
