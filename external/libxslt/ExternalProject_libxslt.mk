@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 			vcmanifest=yes \
-			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/win32/bin.msvc \
+			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 		&& nmake \
 	,win32)
 else # OS!=WNT

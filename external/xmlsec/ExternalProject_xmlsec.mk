@@ -24,9 +24,9 @@ $(eval $(call gb_ExternalProject_use_nmake,xmlsec,build))
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js crypto=mscng xslt=no iconv=no static=no \
-			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/win32/bin.msvc \
+			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes cruntime=/MDd) \
-			cflags="-arch:SSE $(SOLARINC) -I$(WORKDIR)/UnpackedTarball/libxml2/include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common" \
+			cflags="-arch:SSE $(SOLARINC) $(LIBXML_CFLAGS)" \
 		&& nmake \
 	,win32)
 

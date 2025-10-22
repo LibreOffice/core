@@ -16,15 +16,28 @@ $(eval $(call gb_ExternalProject_register_targets,libxml2,\
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_use_external_project,libxml2,icu)
 
-$(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
-
+# remove VERSION file after the compilation, otherwise, libabw, libvisio,
+# and probably other libraries fail to compile with
+# workdir\UnpackedTarball\libxml2\version(1): error C2059: syntax error: 'constant
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
-		cscript /e:javascript configure.js \
-			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
-			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
-		&& nmake \
-	,win32)
+		$(CMAKE) . \
+			$(if $(filter 150,$(VCVER)),-G "Visual Studio 16 2019" -T v141) \
+			$(if $(filter 160,$(VCVER)),-G "Visual Studio 16 2019") \
+			-A $(gb_MSBUILD_PLATFORM) \
+			-DLIBXML2_WITH_TESTS=OFF \
+			-DLIBXML2_WITH_ICONV=OFF \
+			-DLIBXML2_WITH_PYTHON=OFF \
+			-DLIBXML2_WITH_SAX1=ON \
+			-DLIBXML2_WITH_ICU=ON \
+			-DICU_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,icu)/source/common/ \
+			-DICU_LIBRARY=$(call gb_UnpackedTarball_get_dir,icu)/source/lib/ \
+			$(if $(MSVC_USE_DEBUG_RUNTIME), \
+				-DICU_UC_LIBRARY_DEBUG=$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icuucd.lib, \
+				-DICU_UC_LIBRARY_RELEASE=$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icuuc.lib) \
+		&& $(CMAKE) --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		&& rm VERSION \
+	)
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
