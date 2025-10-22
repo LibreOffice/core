@@ -15177,6 +15177,7 @@ AC_SUBST(MSGUNIQ)
 # check that the list is valid
 for lang in $WITH_LANG; do
     test "$lang" = "ALL" && continue
+    test "$lang" = "qtz" && ALL_LANGS="$ALL_LANGS qtz" && continue
     # need to check for the exact string, so add space before and after the list of all languages
     for vl in $ALL_LANGS; do
         if test "$vl" = "$lang"; then

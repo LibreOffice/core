@@ -120,8 +120,8 @@ MergeDataFile::MergeDataFile(
     const OString &rFileName, std::string_view rFile,
     bool bCaseSensitive, bool bWithQtz )
 {
-    auto const env = getenv("ENABLE_RELEASE_BUILD");
-    OString sEnableReleaseBuild(env == nullptr ? "" : env);
+    auto const env = getenv("GENERATE_QTZ");
+    OString sGenerateQtz(env == nullptr ? "" : env);
 
     std::ifstream aInputStream( rFileName.getStr() );
     if ( !aInputStream.is_open() )
@@ -217,7 +217,7 @@ MergeDataFile::MergeDataFile(
                 bFirstLang, bCaseSensitive );
 
             if( bFirstLang && bWithQtz &&
-                sEnableReleaseBuild != "TRUE" )
+                sGenerateQtz == "TRUE" )
             {
                 aLanguageSet.insert("qtz"_ostr);
                 InsertEntry(

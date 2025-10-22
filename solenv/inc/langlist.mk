@@ -147,25 +147,25 @@ ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
 completelangiso += $(lowcompletion_langs)
 else
 # allow to manually specify even in release config
+# (this bit is used from within configure.ac as well, without parsing config_host_lang.mk)
 completelangiso += $(foreach lang,$(WITH_LANG),$(filter $(lang),$(lowcompletion_langs)))
 endif
 
-ifneq ($(WITH_LANG),ALL)
-gb_WITH_LANG=$(WITH_LANG)
-else
-# expand ALL based on language list)
-gb_WITH_LANG=$(completelangiso)
-endif
-gb_HELP_LANGS := en-US
-
-ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
-ifneq ($(WITH_LANG),)
+# the stuff below is used by the actual build
+gb_HELP_LANGS = en-US
+# initialize with result from configure/config_host_lang.mk
+gb_WITH_LANG = $(WITH_LANG)
+# configure added qtz because it either it is a non-release build or it was explicitly requested
+ifneq ($(filter qtz,$(WITH_LANG_LIST)),)
 gb_WITH_LANG += qtz
 gb_HELP_LANGS += qtz
+# l10ntools/source/merge.cxx needs to know about qtz too
+export GENERATE_QTZ:=TRUE
 endif
-endif
+# expand ALL based on language list & use sort to remove any duplicates
+gb_WITH_LANG := $(sort $(subst ALL,$(completelangiso),$(gb_WITH_LANG)))
 
-gb_TRANS_LANGS = $(filter-out en-US,$(filter-out qtz,$(gb_WITH_LANG)))
+gb_TRANS_LANGS := $(filter-out en-US qtz,$(gb_WITH_LANG))
 
 gb_HELP_LANGS += \
 	$(foreach lang,$(filter-out $(WITH_POOR_HELP_LOCALIZATIONS),$(gb_TRANS_LANGS)),\
