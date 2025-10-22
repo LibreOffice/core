@@ -281,6 +281,13 @@ void ImpSdrPdfImport::CollectFonts()
                     continue;
                 }
 
+                std::vector<uint8_t> aFontData;
+                if (!pPageObject->getFontData(font, aFontData) || aFontData.empty())
+                {
+                    SAL_WARN("sd.filter", "that's worrying, skipping " << sFontName);
+                    continue;
+                }
+
                 SubSetInfo* pSubSetInfo;
 
                 SAL_INFO("sd.filter", "importing font: " << font);
@@ -301,9 +308,6 @@ void ImpSdrPdfImport::CollectFonts()
                         = maDifferentSubsetsForFont.emplace(sPostScriptName, aSubSetInfo).first;
                     pSubSetInfo = &result->second;
                 }
-                std::vector<uint8_t> aFontData;
-                if (!pPageObject->getFontData(font, aFontData))
-                    SAL_WARN("sd.filter", "that's worrying");
                 bool bTTF = EmbeddedFontsManager::analyzeTTF(aFontData.data(), aFontData.size(),
                                                              eFontWeight);
                 SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
