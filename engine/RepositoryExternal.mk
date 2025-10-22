@@ -3252,7 +3252,7 @@ gb_ExternalExecutable__register_xmllint :=
 else # ! SYSTEM_LIBXML_FOR_BUILD
 
 define gb_ExternalExecutable__register_xmllint
-$(call gb_ExternalExecutable_set_internal,xmllint,$(WORKDIR_FOR_BUILD)/UnpackedTarball/libxml2/$(if $(filter MSC,$(COM)),win32/bin.msvc)/xmllint$(gb_Executable_EXT_for_build),libxml2)
+$(call gb_ExternalExecutable_set_internal,xmllint,$(WORKDIR_FOR_BUILD)/UnpackedTarball/libxml2/$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release))/xmllint$(gb_Executable_EXT_for_build),libxml2)
 $(call gb_ExternalExecutable_add_dependencies,xmllint,\
 	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
 	$(call gb_Package_get_target,libxml2) \

@@ -21,14 +21,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libxml2,2))
 $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	external/libxml2/libxml2-dont-export-dllmain.patch.0 \
 	$(if $(filter SOLARIS,$(OS)),external/libxml2/libxml2-global-symbols.patch) \
-	external/libxml2/libxml2-vc10.patch \
 	external/libxml2/libxml2-XMLCALL-redefine.patch.0 \
-	external/libxml2/makefile.msvc-entry-point.patch.0 \
 	external/libxml2/0001-const-up-allowPCData.patch.1 \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
-	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
-		external/libxml2/libxml2-icu-sym.patch.0, \
-		external/libxml2/libxml2-icu.patch.0) \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,libxml2,xml2-config.in,external/libxml2/xml2-config.in))

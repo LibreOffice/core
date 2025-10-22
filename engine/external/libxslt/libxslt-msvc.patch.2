@@ -4,7 +4,43 @@
  CFLAGS = /nologo /D "_WINDOWS" /D "_MBCS" /W3 /wd4244 /wd4267 $(CRUNTIME) /D "_REENTRANT"
  CFLAGS = $(CFLAGS) /I$(BASEDIR) /I$(XSLT_SRCDIR) /I$(INCPREFIX)
  CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
-+CFLAGS = $(CFLAGS) $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\libxml2\include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common
- 
++CFLAGS = $(CFLAGS) $(SOLARINC) $(LIBXML_CFLAGS)
+
  # The linker and its options.
  LD = link.exe
+@@ -243,7 +243,11 @@
+ 	$(LD) $(LDFLAGS) /DLL \
+ 		/VERSION:$(LIBXSLT_MAJOR_VERSION).$(LIBXSLT_MINOR_VERSION) \
+ 		/IMPLIB:$(BINDIR)\$(XSLT_IMP) /OUT:$(BINDIR)\$(XSLT_SO) \
++!if "$(MSVC_USE_DEBUG_RUNTIME)" == "TRUE"
++		$(XSLT_OBJS) $(LIBS) libxml2d.lib
++!else
+ 		$(XSLT_OBJS) $(LIBS) libxml2.lib
++!endif
+ 			@$(_VC_MANIFEST_EMBED_DLL)
+ 
+ # Creates the libxslt archive.
+@@ -279,7 +283,11 @@
+ 	$(LD) $(LDFLAGS) /DLL \
+ 		/VERSION:$(LIBEXSLT_MAJOR_VERSION).$(LIBEXSLT_MINOR_VERSION) \
+ 		/IMPLIB:$(BINDIR)\$(EXSLT_IMP) /OUT:$(BINDIR)\$(EXSLT_SO) \
++!if "$(MSVC_USE_DEBUG_RUNTIME)" == "TRUE"
++		$(EXSLT_OBJS) $(XSLT_IMP) $(LIBS) libxml2d.lib
++!else
+ 		$(EXSLT_OBJS) $(XSLT_IMP) $(LIBS) libxml2.lib
++!endif
+ 			@$(_VC_MANIFEST_EMBED_DLL)
+ 
+ # Creates the libexslt archive.
+@@ -307,7 +315,11 @@
+ 	$(LD) $(LDFLAGS) /OUT:$@ $(XSLT_A) $(EXSLT_A) $(APPLIBS) $(UTILS_INTDIR)\$(<B).obj
+ 	@$(_VC_MANIFEST_EMBED_EXE)
+ !else
++!if "$(MSVC_USE_DEBUG_RUNTIME)" == "TRUE"
++APPLIBS = $(LIBS) libxml2d.lib
++!else
+ APPLIBS = $(LIBS) libxml2.lib
++!endif
+ {$(UTILS_SRCDIR)}.c{$(BINDIR)}.exe:
+ 	$(CC) $(CFLAGS) /Fo$(UTILS_INTDIR)\ /c $< 
+ 	$(LD) $(LDFLAGS) /OUT:$@ $(XSLT_IMP) $(EXSLT_IMP) $(APPLIBS) $(UTILS_INTDIR)\$(<B).obj

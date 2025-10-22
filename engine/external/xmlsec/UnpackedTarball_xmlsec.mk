@@ -7,17 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-xmlsec_patches := \
-	xmlsec-win32-libxml2-no-d-suffix.patch.0
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(XMLSEC_TARBALL),,xmlsec))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,xmlsec))
-
-$(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
-	$(foreach patch,$(xmlsec_patches),external/xmlsec/$(patch)) \
-))
 
 # vim: set noet sw=4 ts=4:
