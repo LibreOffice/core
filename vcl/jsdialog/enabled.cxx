@@ -171,6 +171,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/imoptdialog.ui" },
         { u"modules/scalc/ui/insertcells.ui" },
         { u"modules/scalc/ui/managenamesdialog.ui" },
+        { u"modules/scalc/ui/mergecellsdialog.ui" },
         { u"modules/scalc/ui/movecopysheet.ui" },
         { u"modules/scalc/ui/movingaveragedialog.ui" },
         { u"modules/scalc/ui/optimalcolwidthdialog.ui" },
