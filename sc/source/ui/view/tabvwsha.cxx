@@ -412,7 +412,11 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     }
                 }
                 break;
-
+            case FID_CURRENT_SHEET_VIEW:
+                {
+                    rSet.Put(SfxInt32Item(FID_CURRENT_SHEET_VIEW, GetViewData().GetSheetViewID()));
+                }
+                break;
             case FID_NORMALVIEWMODE:
             case FID_PAGEBREAKMODE:
                 // always handle both slots - they exclude each other

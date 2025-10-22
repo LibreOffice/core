@@ -72,6 +72,7 @@
 #include <svx/formatpaintbrushctrl.hxx>
 #include <tbzoomsliderctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
+#include <SheetViewControl.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child windows
@@ -148,6 +149,7 @@ void ScDLL::Init()
     SvxClipBoardControl             ::RegisterControl(SID_PASTE_UNFORMATTED,    pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
     sc::ScNumberFormatControl       ::RegisterControl(SID_NUMBER_TYPE_FORMAT,   pMod );
+    sc::SheetViewControl::RegisterControl(FID_CURRENT_SHEET_VIEW, pMod);
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
     SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);

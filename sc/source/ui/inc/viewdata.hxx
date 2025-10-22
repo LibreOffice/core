@@ -28,6 +28,8 @@
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace sc { class SheetViewManager; }
+
 constexpr auto SC_SIZE_NONE = std::numeric_limits<tools::Long>::max();
 
 enum class ScFillMode
@@ -419,6 +421,8 @@ public:
     }
 
     sc::SheetViewID GetSheetViewIDForSheet(SCTAB nTab) const;
+
+    std::shared_ptr<sc::SheetViewManager> GetCurrentSheetViewManager() const;
 
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }
