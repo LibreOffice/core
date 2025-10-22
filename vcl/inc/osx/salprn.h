@@ -149,8 +149,8 @@ class AquaSalPrinter : public SalPrinter
     AquaSalPrinter& operator=(const AquaSalPrinter&) = delete;
 };
 
-inline int PtTo10Mu( double nPoints ) { return o3tl::convert(nPoints, o3tl::Length::pt, o3tl::Length::mm100); }
+inline int PtTo10Mu( double nPoints ) { return std::round(o3tl::convert(nPoints, o3tl::Length::pt, o3tl::Length::mm100)); }
 
-inline double TenMuToPt( double nUnits ) { return o3tl::convert(nUnits, o3tl::Length::mm100, o3tl::Length::pt); }
+inline double TenMuToPt( double nUnits ) { return std::round(o3tl::convert(nUnits, o3tl::Length::mm100, o3tl::Length::pt)); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
