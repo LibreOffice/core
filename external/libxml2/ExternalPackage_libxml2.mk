@@ -21,7 +21,7 @@ else # COM=MSC
 $(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll,$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/libxml2$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
 endif
 else # OS!=WNT
-$(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.so.16,.libs/libxml2.so.16.0.$(LIBXML_VERSION_MICRO)))
+$(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.so.16,.libs/libxml2.so.16.1.$(LIBXML_VERSION_MICRO)))
 endif
 endif # DISABLE_DYNLOADING
 
