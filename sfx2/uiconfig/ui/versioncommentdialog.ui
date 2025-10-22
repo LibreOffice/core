@@ -133,6 +133,7 @@
                     <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="wrap-mode">word</property>
                   </object>
                 </child>
               </object>
