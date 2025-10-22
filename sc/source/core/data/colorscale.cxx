@@ -682,6 +682,15 @@ std::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) cons
         return std::optional<Color>();
 
     ScColorScaleEntries::const_iterator itr = begin();
+
+    // CalcValue will call GetPercentile for COLORSCALE_PERCENTILE. An empty
+    // getValues() is invalid for COLORSCALE_PERCENTILE.
+    if ((*itr)->GetType() == COLORSCALE_PERCENTILE && getValues().empty())
+    {
+        SAL_WARN("sc", "empty COLORSCALE_PERCENTILE");
+        return std::optional<Color>();
+    }
+
     double nValMin = CalcValue(nMin, nMax, itr);
     Color rColMin = (*itr)->GetColor();
     ++itr;
