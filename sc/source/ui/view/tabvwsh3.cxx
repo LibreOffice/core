@@ -1080,6 +1080,21 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             rReq.Done();
         }
         break;
+        case FID_CURRENT_SHEET_VIEW:
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if (pReqArgs != nullptr && pReqArgs->HasItem(FID_CURRENT_SHEET_VIEW, &pItem))
+            {
+                const sal_Int32 nValue = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                sc::SheetViewID nID(nValue);
+                if (nID != sc::InvalidSheetViewID)
+                {
+                    SelectSheetView(nID);
+                }
+            }
+            rReq.Done();
+        }
+        break;
 
         case SID_ATTR_ZOOM: // status row
         case FID_SCALE:

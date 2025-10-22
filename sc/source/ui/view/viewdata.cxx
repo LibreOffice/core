@@ -4532,5 +4532,9 @@ sc::SheetViewID ScViewData::GetSheetViewIDForSheet(SCTAB nTab) const
     return maTabData[nTab]->mnSheetViewID;
 }
 
+std::shared_ptr<sc::SheetViewManager> ScViewData::GetCurrentSheetViewManager() const
+{
+    return GetDocument().GetSheetViewManager(GetTabNumber());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
