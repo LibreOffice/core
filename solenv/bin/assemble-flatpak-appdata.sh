@@ -75,8 +75,7 @@ cat <<EOF >"${1?}${3?}".appdata.xml
    <caption>Sample Math document</caption>
   </screenshot>
  </screenshots>
- <developer_name>The Document Foundation</developer_name>
- <update_contact>libreoffice_at_lists.freedesktop.org</update_contact>
+ <developer_name>Collabora Limited</developer_name>
  <kudos>
   <kudo>HiDpiIcon</kudo>
   <kudo>HighContrast</kudo>
