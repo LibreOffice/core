@@ -4243,7 +4243,7 @@ void ScXMLExport::WriteExternalDataTransformations(ScDocument& rDoc, const std::
                 std::shared_ptr<sc::SplitColumnTransformation> aSplitTransformation = std::dynamic_pointer_cast<sc::SplitColumnTransformation>(itr);
 
                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(aSplitTransformation->getColumn()));
-                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SEPARATOR, OUString::number(aSplitTransformation->getSeparator()));
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SEPARATOR, OUString(aSplitTransformation->getSeparator()));
                 SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_SPLIT_TRANSFORMATION, true, true);
             }
             break;
