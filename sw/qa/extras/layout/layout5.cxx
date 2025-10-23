@@ -2115,6 +2115,105 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf72341GrowAllScripts)
     CPPUNIT_ASSERT_GREATER(nWidthAlephInitial, nWidthAlephResized);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168858)
+{
+    // Both test documents have no content outside of hidden sections.
+    // Each test checks, that the document loads OK, sections in the document load with correct
+    // conditions, the layout has nothing except a section on a single page, and the section is
+    // hidden (height is 0). The test repeats after save-and-reload. FODT format is used for save,
+    // because for ODT, the schema check fails for unknown "text:is-hidden" attribute in section
+    // (used as cache; written in XMLSectionExport::ExportRegularSectionStart; handled on import
+    // in XMLSectionImportContext::ProcessAttributes).
+
+    // 1. A single section, with a condition that hides it
+    {
+        createSwDoc("tdf168858_single_hidden_section.fodt");
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        // Before the fix, this was "0", because the condition was set to not hide the last section:
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 1']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 1']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 1']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 1']/body/*[2]", "section");
+        assertXPath(pXmlDoc, "//page['pass 1']/body/section", "formatName", u"abc");
+        // Before the fix, this was 276 - i.e., the frame wasn't hidden:
+        assertXPath(pXmlDoc, "//page['pass 1']/body/section/infos/bounds", "height", u"0");
+    }
+    {
+        saveAndReload(u"OpenDocument Text Flat XML"_ustr);
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 2']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 2']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 2']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 2']/body/*[2]", "section");
+        assertXPath(pXmlDoc, "//page['pass 2']/body/section", "formatName", u"abc");
+        assertXPath(pXmlDoc, "//page['pass 2']/body/section/infos/bounds", "height", u"0");
+    }
+
+    // 2. A conditionally hidden section inside another hidden section
+    {
+        createSwDoc("tdf168858_nested_hidden_section.fodt");
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+        aSect = xTextSections->getByName(u"def"_ustr);
+        // Before the fix, this was "0", because the condition was set to not hide the last section:
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 3']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 3']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 3']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 3']/body/*[2]", "section");
+        // The inner section replaces the whole area of the outer section, so there's no frame for
+        // the outer section:
+        assertXPath(pXmlDoc, "//page['pass 3']/body/section", "formatName", u"def");
+        // Even before the fix, this was hidden:
+        assertXPath(pXmlDoc, "//page['pass 3']/body/section/infos/bounds", "height", u"0");
+    }
+    {
+        saveAndReload(u"OpenDocument Text Flat XML"_ustr);
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+        aSect = xTextSections->getByName(u"def"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 4']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 4']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 4']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 4']/body/*[2]", "section");
+        // The inner section replaces the whole area of the outer section, so there's no frame for
+        // the outer section:
+        assertXPath(pXmlDoc, "//page['pass 4']/body/section", "formatName", u"def");
+        assertXPath(pXmlDoc, "//page['pass 4']/body/section/infos/bounds", "height", u"0");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
