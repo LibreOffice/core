@@ -236,15 +236,25 @@ public:
             size = maMultiPage.aPaperSize;
         else
             size = i_rPageSize;
+
+        bool bSwap = false;
+        const bool bSizeIsLandscape = size.Width() > size.Height();
         if(mbOrientationFromUser)
         {
-            if ( (meUserOrientation == Orientation::Portrait && size.Width() > size.Height()) ||
-                 (meUserOrientation == Orientation::Landscape && size.Width() < size.Height()) )
-            {
-                // coverity[swapped_arguments : FALSE] - this is in the correct order
-                size = Size( size.Height(), size.Width() );
-            }
+            bSwap = (bSizeIsLandscape && Orientation::Portrait == meUserOrientation)
+                    || (!bSizeIsLandscape && Orientation::Landscape == meUserOrientation);
         }
+        else if (mbPapersizeFromUser || mbPapersizeFromSetup) // automatic orientation
+        {
+            const bool bDocumentPageIsLandscape = i_rPageSize.Width() > i_rPageSize.Height();
+            bSwap = bDocumentPageIsLandscape != bSizeIsLandscape;
+        }
+        if (bSwap)
+        {
+            // coverity[swapped_arguments : FALSE] - this is in the correct order
+            size = Size(size.Height(), size.Width());
+        }
+
         return size;
     }
     PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
