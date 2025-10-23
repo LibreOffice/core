@@ -1,0 +1,4 @@
+./autogen.sh: line 1: $':\r': command not found
+Running './configure --without-java --disable-odk --disable-online-update --disable-extension-update --disable-report-builder --disable-scripting-beanshell --disable-scripting-javascript --srcdir=/mnt/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork --enable-option-checking=fatal'
+configure: error: invalid feature name: `scripting-javascript'
+Error running configure at ./autogen.sh line 338.
