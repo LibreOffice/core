@@ -452,6 +452,8 @@ public:
     bool getFontToUnicode(std::vector<uint8_t>& rData) const override;
     bool getIsEmbedded() const override;
 
+    sal_uInt32 getGlyphIndexFromCharCode(const sal_uInt32 nCharCode) const override;
+
     sal_Int64 getUniqueId() const override { return reinterpret_cast<sal_Int64>(mpFont); }
 };
 
@@ -1296,6 +1298,11 @@ bool PDFiumFontImpl::getFontToUnicode(std::vector<uint8_t>& rData) const
 }
 
 bool PDFiumFontImpl::getIsEmbedded() const { return FPDFFont_GetIsEmbedded(mpFont) == 1; }
+
+sal_uInt32 PDFiumFontImpl::getGlyphIndexFromCharCode(const sal_uInt32 nCharCode) const
+{
+    return FPDFFont_GetGlyphIndexFromCharCode(mpFont, nCharCode);
+}
 
 bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
 {

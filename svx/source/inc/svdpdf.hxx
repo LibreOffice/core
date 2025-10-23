@@ -190,7 +190,8 @@ class ImpSdrPdfImport final
     static EmbeddedFontInfo convertToOTF(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
                                          const OUString& fontName, const OUString& baseFontName,
                                          std::u16string_view fontFileName,
-                                         const std::vector<uint8_t>& toUnicodeData);
+                                         const std::vector<uint8_t>& toUnicodeData,
+                                         const vcl::pdf::PDFiumFont& font);
 
 #endif
 
