@@ -134,7 +134,7 @@ ScXMLColumnSplitContext::ScXMLColumnSplitContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
 {
-    SCCOL mnCol = 0;
+    SCCOL mnCol = -1;
     OUString cSeparator;
 
     if (rAttrList.is())
@@ -157,7 +157,7 @@ ScXMLColumnSplitContext::ScXMLColumnSplitContext(
         }
     }
 
-    if (mnCol > 0)
+    if (mnCol >= 0)
     {
         ScDocument* pDoc = GetScImport().GetDocument();
         auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
