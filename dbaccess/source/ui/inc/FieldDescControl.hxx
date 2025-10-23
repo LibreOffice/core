@@ -123,8 +123,6 @@ namespace dbaui
 
         bool                IsFocusInEditableWidget() const;
 
-        void                dispose();
-
         // Call func on all of the controls or stop early if one of them returns true
         template <class Func> bool iterateControls(Func func)
         {

@@ -33,8 +33,6 @@ namespace dbaui
 
         OTableEditorCtrl*   GetCtrl() const;
 
-        void dispose();
-
     protected:
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
