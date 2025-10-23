@@ -55,6 +55,8 @@ void TableColumn::importTableColumn( const AttributeList& rAttribs )
     maName = rAttribs.getString( XML_name, OUString() );
     maModel.maUniqueName = rAttribs.getXString( XML_uniqueName, OUString() );
     mnDataDxfId = rAttribs.getInteger( XML_dataDxfId, -1 );
+    if ( rAttribs.hasAttribute(XML_totalsRowLabel ) )
+        maColumnAttributes.maTotalsRowLabel = rAttribs.getStringDefaulted( XML_totalsRowLabel );
     if ( rAttribs.hasAttribute( XML_totalsRowFunction ) )
         maColumnAttributes.maTotalsFunction = rAttribs.getStringDefaulted( XML_totalsRowFunction );
 }

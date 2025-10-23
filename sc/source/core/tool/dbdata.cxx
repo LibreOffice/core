@@ -697,6 +697,91 @@ void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     mpSubTotal.reset(new ScSubTotalParam(rSubTotalParam));
 }
 
+void ScDBData::CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const
+{
+    rSubTotalParam.bDoSort = false;
+    rSubTotalParam.bGroupedBy = false;
+    rSubTotalParam.aGroups[0].bActive = true;
+    rSubTotalParam.aGroups[0].nField = rSubTotalParam.nCol1; // which column we add 'Summary'
+
+    const size_t nEntryCount = rSubTotalParam.nCol2 - rSubTotalParam.nCol1 + 1; // col count
+    if (nEntryCount > 0)
+    {
+        // how many col we do subtotal
+        size_t nTotalsCount = std::count_if(
+            GetTableColumnAttributes().begin(), GetTableColumnAttributes().end(),
+            [](const TableColumnAttributes& attr) { return attr.maTotalsFunction.has_value(); });
+        if (nTotalsCount > 0)
+        {
+            std::unique_ptr<ScSubTotalFunc[]> pFunctions;
+            std::unique_ptr<SCCOL[]> pSubTotals;
+            pFunctions.reset(new ScSubTotalFunc[nTotalsCount]);
+            pSubTotals.reset(new SCCOL[nTotalsCount]);
+
+            for (size_t i = 0, nCheck = 0; i < nEntryCount; i++)
+            {
+                if (GetTableColumnAttributes().size() <= i)
+                {
+                    SAL_WARN("sc.core",
+                             "ScDBData::CreateSubTotalParam - column attributes size mismatch");
+                    break;
+                }
+                if (GetTableColumnAttributes()[i].maTotalsFunction.has_value())
+                {
+                    pSubTotals[nCheck] = rSubTotalParam.nCol1 + i;
+                    const OUString& sFuncName = GetTableColumnAttributes()[i].maTotalsFunction.value();
+                    //if (mpContainer && sFuncName == u"custom")
+                    //{
+                    //    // TODO: store custom formula tokenarrays somewhere
+                    //    ScFormulaCell* pFC = mpContainer->GetDocument().GetFormulaCell(
+                    //        ScAddress(rSubTotalParam.nCol1 + i, rSubTotalParam.nRow2, nTable));
+                    //    if (pFC)
+                    //    {
+                    //        std::unique_ptr<ScTokenArray> pTokenArray = pFC->GetCode()->Clone();
+                    //    }
+                    //}
+                    pFunctions[nCheck] = ScDBData::GetSubTotalFuncFromString(sFuncName);
+                    nCheck++;
+                }
+            }
+            rSubTotalParam.SetSubTotals(static_cast<sal_uInt16>(0), // group number
+                                        pSubTotals.get(), pFunctions.get(),
+                                        nTotalsCount); // number of array elements
+        }
+
+        // how many col we have totals Row Label
+        size_t nLabelsCount = std::count_if(
+            GetTableColumnAttributes().begin(), GetTableColumnAttributes().end(),
+            [](const TableColumnAttributes& attr) { return attr.maTotalsRowLabel.has_value(); });
+        if (nLabelsCount > 0)
+        {
+            std::unique_ptr<OUString[]> pLabels;
+            std::unique_ptr<SCCOL[]> pSubLabels;
+            pLabels.reset(new OUString[nLabelsCount]);
+            pSubLabels.reset(new SCCOL[nLabelsCount]);
+
+            for (size_t i = 0, nCheck = 0; i < nEntryCount; i++)
+            {
+                if (GetTableColumnAttributes().size() <= i)
+                {
+                    SAL_WARN("sc.core",
+                             "ScDBData::CreateSubTotalParam - column attributes size mismatch");
+                    break;
+                }
+                if (GetTableColumnAttributes()[i].maTotalsRowLabel.has_value())
+                {
+                    pSubLabels[nCheck] = rSubTotalParam.nCol1 + i;
+                    pLabels[nCheck] = GetTableColumnAttributes()[i].maTotalsRowLabel.value();
+                    nCheck++;
+                }
+            }
+            rSubTotalParam.SetSubLabels(static_cast<sal_uInt16>(0), // group number
+                                        pSubLabels.get(), pLabels.get(),
+                                        nLabelsCount); // number of array elements
+        }
+    }
+}
+
 void ScDBData::GetImportParam(ScImportParam& rImportParam) const
 {
     rImportParam = *mpImportParam;
@@ -1236,6 +1321,35 @@ void ScDBData::SetTableStyleInfo(const ScTableStyleParam& rParam)
 const ScTableStyleParam* ScDBData::GetTableStyleInfo() const
 {
     return mpTableStyles.get();
+}
+
+ScSubTotalFunc ScDBData::GetSubTotalFuncFromString(std::u16string_view sFunction)
+{
+    if (sFunction == u"sum")
+        return SUBTOTAL_FUNC_SUM;
+    if (sFunction == u"countNums")
+        return SUBTOTAL_FUNC_CNT;
+    if (sFunction == u"count")
+        return SUBTOTAL_FUNC_CNT2;
+    /*if (sFunction)
+        return SUBTOTAL_FUNC_PROD;*/
+    if (sFunction == u"average")
+        return SUBTOTAL_FUNC_AVE;
+    /*if (sFunction)
+        return SUBTOTAL_FUNC_MED;*/
+    if (sFunction == u"max")
+        return SUBTOTAL_FUNC_MAX;
+    if (sFunction == u"min")
+        return SUBTOTAL_FUNC_MIN;
+    if (sFunction == u"stdDev")
+        return SUBTOTAL_FUNC_STD;
+    /*if (sFunction)
+        return SUBTOTAL_FUNC_STDP;*/
+    if (sFunction == u"var")
+        return SUBTOTAL_FUNC_VAR;
+    /*if (sFunction)
+        return SUBTOTAL_FUNC_VARP;*/
+    return SUBTOTAL_FUNC_NONE;
 }
 
 namespace {

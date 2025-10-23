@@ -747,6 +747,100 @@ bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;     // is not possible due to column numbers
 }
 
+ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
+                                     const ScSubTotalParam& rNewParam, SCROW nNewEndY,
+                                     ScDocumentUniquePtr pNewUndoDoc,
+                                     std::unique_ptr<ScRangeName> pNewUndoRange,
+                                     std::unique_ptr<ScDBCollection> pNewUndoDB,
+                                     std::unique_ptr<ScDBCollection> pNewRedoDB)
+    : ScDBFuncUndo(rNewDocShell, ScRange(rNewParam.nCol1, rNewParam.nRow1, nNewTab,
+                                         rNewParam.nCol2, rNewParam.nRow2, nNewTab))
+    , nTab(nNewTab)
+    , aParam(rNewParam)
+    , nNewEndRow(nNewEndY)
+    , xUndoDoc(std::move(pNewUndoDoc))
+    , xUndoRange(std::move(pNewUndoRange))
+    , xUndoDB(std::move(pNewUndoDB))
+    , xRedoDB(std::move(pNewRedoDB))
+{
+}
+
+OUString ScUndoTableTotals::GetComment() const
+{   // "Total Rows in Table Style"
+    return ScResId( STR_UNDO_TABLETOTALS );
+}
+
+void ScUndoTableTotals::Undo()
+{
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (!pViewShell)
+        return;
+
+    BeginUndo();
+
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    if (nNewEndRow > aParam.nRow2)
+    {
+        rDoc.DeleteRow( aParam.nCol1, nTab, aParam.nCol2, nTab, nNewEndRow, static_cast<SCSIZE>(1) );
+    }
+
+    rDoc.DeleteAreaTab( aParam.nCol1, aParam.nRow1+1, aParam.nCol2, aParam.nRow2, nTab, InsertDeleteFlags::ALL );
+
+    xUndoDoc->CopyToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, aParam.nRow2, nTab,
+                                                            InsertDeleteFlags::NONE, false, rDoc);
+    xUndoDoc->UndoToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, aParam.nRow2, nTab,
+                                                            InsertDeleteFlags::ALL, false, rDoc);
+
+    if (xUndoRange)
+        rDoc.SetRangeName(std::unique_ptr<ScRangeName>(new ScRangeName(*xUndoRange)));
+    if (xUndoDB)
+        rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
+
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
+    if ( nVisTab != nTab )
+        pViewShell->SetTabNo( nTab );
+
+    rDocShell.PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
+    rDocShell.PostDataChanged();
+
+    EndUndo();
+}
+
+void ScUndoTableTotals::Redo()
+{
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (!pViewShell)
+        return;
+
+    BeginRedo();
+
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
+    if ( nVisTab != nTab )
+        pViewShell->SetTabNo( nTab );
+
+    const ScDBData* pDBData = nullptr;
+    if (xRedoDB)
+    {
+        if (aParam.bReplace && !aParam.bRemoveOnly)
+            pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, nNewEndRow);
+        else
+            pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow2);
+    }
+    if (pDBData)
+        pViewShell->DoTableSubTotals(*pDBData, aParam, false);
+
+    EndRedo();
+}
+
+void ScUndoTableTotals::Repeat(SfxRepeatTarget& /* rTarget */) {
+}
+
+bool ScUndoTableTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+{
+    return false;
+}
+
 ScUndoQuery::ScUndoQuery( ScDocShell& rNewDocShell, SCTAB nNewTab, const ScQueryParam& rParam,
                             ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScDBCollection> pNewUndoDB,
                             const ScRange* pOld, bool bSize, const ScRange* pAdvSrc ) :
@@ -1012,10 +1106,11 @@ bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 // change database sections (dialog)
-ScUndoDBData::ScUndoDBData( ScDocShell& rNewDocShell,
+ScUndoDBData::ScUndoDBData( ScDocShell& rNewDocShell, const OUString& aName,
                             std::unique_ptr<ScDBCollection> pNewUndoColl,
                             std::unique_ptr<ScDBCollection> pNewRedoColl ) :
     ScSimpleUndo( rNewDocShell ),
+    aDBName( aName ),
     pUndoColl( std::move(pNewUndoColl) ),
     pRedoColl( std::move(pNewRedoColl) )
 {
@@ -1043,6 +1138,29 @@ void ScUndoDBData::Undo()
     rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc( bOldAutoCalc );
 
+    if (const ScDBData* pDBData
+        = pUndoColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(aDBName)))
+    {
+        const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
+        if (pTableStyleInfo)
+        {
+            ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+            if (pViewShell)
+            {
+                ScRange aRange;
+                pDBData->GetArea(aRange);
+                SCTAB nTab = aRange.aStart.Tab();
+                SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
+                if (nVisTab != nTab)
+                    pViewShell->SetTabNo(nTab);
+
+                rDocShell.PostPaint(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
+                                    PaintPartFlags::Grid | PaintPartFlags::Left
+                                        | PaintPartFlags::Top | PaintPartFlags::Size);
+            }
+        }
+    }
+
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
 
     EndUndo();
@@ -1060,6 +1178,29 @@ void ScUndoDBData::Redo()
     rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pRedoColl)), true );
     rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc( bOldAutoCalc );
+
+    if (const ScDBData* pDBData
+        = pRedoColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(aDBName)))
+    {
+        const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
+        if (pTableStyleInfo)
+        {
+            ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+            if (pViewShell)
+            {
+                ScRange aRange;
+                pDBData->GetArea(aRange);
+                SCTAB nTab = aRange.aStart.Tab();
+                SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
+                if (nVisTab != nTab)
+                    pViewShell->SetTabNo(nTab);
+
+                rDocShell.PostPaint(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
+                                    PaintPartFlags::Grid | PaintPartFlags::Left
+                                        | PaintPartFlags::Top | PaintPartFlags::Size);
+            }
+        }
+    }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
 

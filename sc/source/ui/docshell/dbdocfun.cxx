@@ -113,7 +113,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
     if (bUndo)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
+                        std::make_unique<ScUndoDBData>( rDocShell, rName, std::move(pUndoColl),
                             std::make_unique<ScDBCollection>( *pDocColl ) ) );
     }
 
@@ -139,6 +139,9 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         if (bUndo)
             pUndoColl.reset( new ScDBCollection( *pDocColl ) );
 
+        ScRange aRange;
+        iter->get()->GetArea(aRange);
+
         rDoc.PreprocessDBDataUpdate();
         rDBs.erase(iter);
         rDoc.CompileHybridFormula();
@@ -146,7 +149,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
+                            std::make_unique<ScUndoDBData>( rDocShell, rName, std::move(pUndoColl),
                                 std::make_unique<ScDBCollection>( *pDocColl ) ) );
         }
 
@@ -190,7 +193,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             if (bUndo)
             {
                 rDocShell.GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
+                                std::make_unique<ScUndoDBData>( rDocShell, rNew, std::move(pUndoColl),
                                     std::make_unique<ScDBCollection>( *pDocColl ) ) );
             }
             else
@@ -254,7 +257,6 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         {
             rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aStart.Row(), aNewRange.aStart.Tab(), ScMF::Auto);
         }
-
     }
 
     rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid);
@@ -262,7 +264,7 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     if (bUndo)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
+                        std::make_unique<ScUndoDBData>( rDocShell, rNewData.GetName(), std::move(pUndoColl),
                             std::make_unique<ScDBCollection>( *pDocColl ) ) );
     }
 
@@ -302,7 +304,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     if (bRecord)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoDBData>(rDocShell, std::move(pUndoColl),
+            std::make_unique<ScUndoDBData>(rDocShell, OUString(), std::move(pUndoColl),
                 std::make_unique<ScDBCollection>(rNewColl)));
     }
 }
@@ -1232,6 +1234,128 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
     rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab),
                         PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
+    aModificator.SetDocumentModified();
+}
+
+void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
+                                    bool bRecord, bool bApi )
+{
+    bool bDo = !rParam.bRemoveOnly; // sal_False = only delete
+
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
+        bRecord = false;
+
+    ScDBData* pDBData = rDoc.GetDBAtArea(nTab, rParam.nCol1, rParam.nRow1, rParam.nCol2, rParam.nRow2);
+    if (!pDBData)
+    {
+        OSL_FAIL("SubTotals: no DBData");
+        return;
+    }
+
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, 0, rParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
+    if (!aTester.IsEditable())
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(aTester.GetMessageId());
+        return;
+    }
+
+    if (rDoc.HasAttrib(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, rParam.nRow2, nTab,
+                       HasAttrFlags::Merged | HasAttrFlags::Overlapped))
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0); // don't insert into merged
+        return;
+    }
+
+    weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
+    ScDocShellModificator aModificator(rDocShell);
+
+    ScSubTotalParam aNewParam;
+    rNewData.GetSubTotalParam(aNewParam); // end of range is being changed
+    // ScSubTotalParam aNewParam(rParam);
+    ScDocumentUniquePtr pUndoDoc;
+    std::unique_ptr<ScRangeName> pUndoRange;
+    std::unique_ptr<ScDBCollection> pUndoDB;
+
+    if (bRecord) // secure old data
+    {
+        bool bOldFilter = bDo && rParam.bDoSort;
+
+        SCTAB nTabCount = rDoc.GetTableCount();
+        pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pUndoDoc->InitUndo(rDoc, nTab, nTab, false, bOldFilter);
+
+        //  secure data range - incl. filtering result
+        rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, rParam.nRow2, nTab,
+                            InsertDeleteFlags::ALL, false, *pUndoDoc);
+
+        //  all formulas because of references
+        rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount - 1,
+                            InsertDeleteFlags::FORMULA, false, *pUndoDoc);
+
+        //  ranges of DB and other
+        ScRangeName* pDocRange = rDoc.GetRangeName();
+        if (!pDocRange->empty())
+            pUndoRange.reset(new ScRangeName(*pDocRange));
+        ScDBCollection* pDocDB = rDoc.GetDBCollection();
+        if (!pDocDB->empty())
+            pUndoDB.reset(new ScDBCollection(*pDocDB));
+    }
+
+    if (rParam.bReplace)
+        rDoc.RemoveTableSubTotals(nTab, aNewParam, rParam);
+    bool bSuccess = true;
+    if (bDo)
+    {
+        // sort
+        if (rParam.bDoSort)
+        {
+            pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2,
+                             aNewParam.nRow2);
+
+            //  set partial result field to before the sorting
+            //  (Duplicates are omitted, so can be called again)
+
+            ScSortParam aOldSort;
+            pDBData->GetSortParam(aOldSort);
+            ScSortParam aSortParam(aNewParam, aOldSort);
+            Sort(nTab, aSortParam, false, false, bApi);
+        }
+
+        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam);
+        rDoc.SetDrawPageSize(nTab);
+    }
+    ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,
+                        nTab);
+    rDoc.SetDirty(aDirtyRange, true);
+
+    // Need to store with the new values
+    *pDBData = rNewData;
+    if (bRecord)
+    {
+        ScDBCollection* pDocDB = rDoc.GetDBCollection();
+        rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTableTotals>(
+            rDocShell, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc), std::move(pUndoRange),
+            std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB)));
+    }
+
+    if (!bSuccess)
+    {
+        // "Cannot insert rows"
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_MSSG_DOSUBTOTALS_2);
+    }
+
+    // store
+    pDBData->SetSubTotalParam(aNewParam);
+    pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2, aNewParam.nRow2);
+    rDoc.CompileDBFormula();
+
+    rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
+                        PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
+                            | PaintPartFlags::Size);
     aModificator.SetDocumentModified();
 }
 

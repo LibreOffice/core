@@ -326,7 +326,9 @@ public:
 
     bool        TestRemoveSubTotals( const ScSubTotalParam& rParam );
     void        RemoveSubTotals( ScSubTotalParam& rParam );
+    void        RemoveSimpleSubTotals( ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam );
     bool        DoSubTotals( ScSubTotalParam& rParam );
+    bool        DoSimpleSubTotals( ScSubTotalParam& rParam );
 
     const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents.get(); }
     void        SetSheetEvents( std::unique_ptr<ScSheetEvents> pNew );
