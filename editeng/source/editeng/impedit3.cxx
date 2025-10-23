@@ -3328,7 +3328,31 @@ void ImpEditEngine::DrawText_ToPosition(
                 std::move(aContent))};
     }
 
-    static bool bBlendForTest(false);
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+
+    if (rOutDev.IsClipRegion())
+    {
+        // tdf#167605 if a ClipRegion is set at the OutDev we have to take care of it for the
+        // primitive way of rendering. get range and ClipRegion to do checks
+        const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
+        const basegfx::B2DPolyPolygon aClipPolyPolygon(rOutDev.GetClipRegion().GetAsB2DPolyPolygon());
+        const basegfx::B2DRange aClipRange(aClipPolyPolygon.getB2DRange());
+
+        if (!aContentRange.overlaps(aClipRange))
+            // no overlap, nothing visible, no output neccesary
+            return;
+
+        if (!aClipRange.isInside(aContentRange))
+        {
+            // not completely inside aClipRange, clipping needed, embed to MaskPrimitive2D
+            aContent = drawinglayer::primitive2d::Primitive2DContainer{
+                new drawinglayer::primitive2d::MaskPrimitive2D(
+                    aClipPolyPolygon,
+                    std::move(aContent))};
+        }
+    }
+
+    static bool bBlendForTest(true);
     if(bBlendForTest)
     {
         aContent = drawinglayer::primitive2d::Primitive2DContainer{
@@ -3338,7 +3362,6 @@ void ImpEditEngine::DrawText_ToPosition(
     }
 
     // create ViewInformation2D based on target OutputDevice
-    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
     aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
 
     // create PrimitiveProcessor and render to target
