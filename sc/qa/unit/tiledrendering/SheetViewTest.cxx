@@ -698,6 +698,39 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRenderStateInSheetView)
+{
+    // Check the View Render State is set correctly when in sheet view.
+    // When in sheet view, we expect the sheet view ID to be set in the state.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+
+    // View 1
+    ScTestViewCallback aView1;
+
+    // View 1 - default state
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+
+    // View 2
+    SfxLokHelper::createView();
+    ScTestViewCallback aView2;
+
+    // View 2 - default state
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+
+    // Create a sheet view in View 2
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    // View 2 - state includes view sheet ID
+    CPPUNIT_ASSERT_EQUAL("S;Default;VS:0"_ostr, pModelObj->getViewRenderState());
+
+    // Switch to View 1
+    SfxLokHelper::setView(aView1.getViewID());
+
+    // View 1 - still default state
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
