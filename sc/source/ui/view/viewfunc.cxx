@@ -1966,15 +1966,15 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
             if (comphelper::LibreOfficeKit::isActive())
             {
                 if (bInsertCols)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().CurrentTabForData());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().GetTabNumber());
 
                 if (bInsertRows)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().CurrentTabForData());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNumber());
 
                 ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                                     bInsertCols, bInsertRows, true /* bSizes*/,
                                                                     true /* bHidden */, true /* bFiltered */,
-                                                                    true /* bGroups */, GetViewData().CurrentTabForData());
+                                                                    true /* bGroups */, GetViewData().GetTabNumber());
             }
         }
         else
@@ -2056,15 +2056,15 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             bool bColsDeleted = (eCmd == DelCellCmd::Cols);
             bool bRowsDeleted = (eCmd == DelCellCmd::Rows);
             if (bColsDeleted)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().CurrentTabForData());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().GetTabNumber());
 
             if (bRowsDeleted)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().CurrentTabForData());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNumber());
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                                 bColsDeleted, bRowsDeleted, true /* bSizes*/,
                                                                 true /* bHidden */, true /* bFiltered */,
-                                                                true /* bGroups */, GetViewData().CurrentTabForData());
+                                                                true /* bGroups */, GetViewData().GetTabNumber());
         }
     }
     else
@@ -2639,7 +2639,7 @@ void ScViewFunc::SetWidthOrHeight(
     ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
             bWidth /* bColumns */, !bWidth /* bRows */,
             true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
-            false /* bGroups */, nCurTab);
+            false /* bGroups */, GetViewData().GetTabNumber());
     GetViewData().GetView()->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
     {

@@ -135,7 +135,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 pTabViewShell, true /* bColumns */, true /* bRows */, true /* bSizes*/,
-                true /* bHidden */, true /* bFiltered */, true /* bGroups */, nThisTab);
+                true /* bHidden */, true /* bFiltered */, true /* bGroups */, rViewData.GetTabNumber());
         }
     }
     pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???

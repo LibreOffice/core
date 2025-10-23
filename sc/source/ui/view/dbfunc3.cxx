@@ -94,11 +94,11 @@ void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.MakeOutline( aRange, bColumns, bRecord, false );
 
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().CurrentTabForData());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().GetTabNumber());
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             false /* bHidden */, false /* bFiltered */,
-                                                            true /* bGroups */, GetViewData().CurrentTabForData());
+                                                            true /* bGroups */, GetViewData().GetTabNumber());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -115,11 +115,11 @@ void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.RemoveOutline( aRange, bColumns, bRecord, false );
 
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().CurrentTabForData());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().GetTabNumber());
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             true /* bHidden */, true /* bFiltered */,
-                                                            true /* bGroups */, GetViewData().CurrentTabForData());
+                                                            true /* bGroups */, GetViewData().GetTabNumber());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -203,7 +203,7 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             true /* bColumns */, true /* bRows */, false /* bSizes*/,
                                                             true /* bHidden */, true /* bFiltered */,
-                                                            true /* bGroups */, nTab);
+                                                            true /* bGroups */, GetViewData().GetTabNumber());
         UpdateScrollBars(BOTH_HEADERS);
     }
 }
@@ -242,7 +242,7 @@ void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord )
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             true /* bHidden */, true /* bFiltered */,
-                                                            true /* bGroups */, nTab);
+                                                            true /* bGroups */, GetViewData().GetTabNumber());
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
     }
 }
@@ -276,7 +276,7 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             true /* bHidden */, true /* bFiltered */,
-                                                            true /* bGroups */, nTab);
+                                                            true /* bGroups */, GetViewData().GetTabNumber());
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
     }
 }
@@ -296,7 +296,7 @@ void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             true /* bHidden */, true /* bFiltered */,
-                                                            true /* bGroups */, nTab);
+                                                            true /* bGroups */, GetViewData().GetTabNumber());
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
     }
 }
@@ -394,7 +394,7 @@ void ScDBFunc::ShowMarkedOutlines( bool bRecord )
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(), true, true,
                 false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                true /* bGroups */, GetViewData().CurrentTabForData());
+                true /* bGroups */, GetViewData().GetTabNumber());
             UpdateScrollBars();
         }
     }
@@ -417,7 +417,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(), true, true,
                 false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                true /* bGroups */, GetViewData().CurrentTabForData());
+                true /* bGroups */, GetViewData().GetTabNumber());
             UpdateScrollBars();
         }
     }
