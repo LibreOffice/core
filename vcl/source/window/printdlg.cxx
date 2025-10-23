@@ -961,7 +961,13 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     {
         PrinterController::PageSize aPageSize =
             maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
-        aCurPageSize = aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+
+        if (mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC)
+        {
+            aCurPageSize
+                = aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+        }
+
         if( ! aPageSize.bFullPaper )
         {
             const MapMode aMapMode( MapUnit::Map100thMM );
