@@ -3455,6 +3455,8 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
 void CairoPixelProcessor2D::processPatternFillPrimitive2D(
     const primitive2d::PatternFillPrimitive2D& rPrimitive)
 {
+    if (!mpTargetOutputDevice)
+        return;
     const basegfx::B2DRange& rReferenceRange = rPrimitive.getReferenceRange();
     if (rReferenceRange.isEmpty() || rReferenceRange.getWidth() <= 0.0
         || rReferenceRange.getHeight() <= 0.0)
