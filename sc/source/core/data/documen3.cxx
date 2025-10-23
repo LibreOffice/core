@@ -788,6 +788,18 @@ bool ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
     return pTable && pTable->DoSubTotals(rParam);
 }
 
+void ScDocument::RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam )
+{
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->RemoveSimpleSubTotals( rParam, rOldParam );
+}
+
+bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
+{
+    ScTable* pTable = FetchTable(nTab);
+    return pTable && pTable->DoSimpleSubTotals(rParam);
+}
+
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )
 {
     ScCellIterator aIter(*this, rRange);

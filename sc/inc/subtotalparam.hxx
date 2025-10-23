@@ -32,16 +32,21 @@ struct SC_DLLPUBLIC ScSubTotalParam
     bool            bAscending:1      = true;   ///< sort ascending
     bool            bUserDef:1        = false;  ///< sort user defined
     bool            bIncludePattern:1 = false;  ///< sort formats
+    bool            bGroupedBy:1      = true;   ///< grouped by column
+    bool            bHasHeader:1      = true;   ///< has header row
 
     struct SubtotalGroup
     {
         bool  bActive    = false; ///< active groups
         SCCOL nField     = 0;     ///< associated field
         SCCOL nSubTotals = 0;     ///< number of SubTotals
+        SCCOL nSubLabels = 0;     ///< number of SubLabels
 
         using Pair = std::pair<SCCOL, ScSubTotalFunc>;
+        using LabelPair = std::pair<SCCOL, rtl::OUString>;
         // array of columns to be calculated, and associated functions
         std::unique_ptr<Pair[]> pSubTotals;
+        std::unique_ptr<LabelPair[]> pSubLabels;
 
         SubtotalGroup() = default;
         SubtotalGroup(const SubtotalGroup& r);
@@ -50,13 +55,22 @@ struct SC_DLLPUBLIC ScSubTotalParam
         bool operator==(const SubtotalGroup& r) const;
 
         void AllocSubTotals(SCCOL n);
+        void AllocSubLabels(SCCOL n);
         void SetSubtotals(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
+        void SetSublabels(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
 
+        // Totals
         std::span<Pair> subtotals() { return std::span(pSubTotals.get(), nSubTotals); }
         std::span<const Pair> subtotals() const { return std::span(pSubTotals.get(), nSubTotals); }
         SCCOL& col(SCCOL n) { return subtotals()[n].first; }
         SCCOL col(SCCOL n) const { return subtotals()[n].first; }
         ScSubTotalFunc func(SCCOL n) const { return subtotals()[n].second; }
+        // Labels
+        std::span<LabelPair> sublabels() { return std::span(pSubLabels.get(), nSubLabels); }
+        std::span<const LabelPair> sublabels() const { return std::span(pSubLabels.get(), nSubLabels); }
+        SCCOL& collabels(SCCOL n) { return sublabels()[n].first; }
+        SCCOL collabels(SCCOL n) const { return sublabels()[n].first; }
+        rtl::OUString label(SCCOL n) const { return sublabels()[n].second; }
     };
     SubtotalGroup aGroups[MAXSUBTOTAL];
 
@@ -68,6 +82,10 @@ struct SC_DLLPUBLIC ScSubTotalParam
     void SetSubTotals( sal_uInt16 nGroup,
                        const SCCOL* ptrSubTotals,
                        const ScSubTotalFunc* ptrFunctions,
+                       sal_uInt16 nCount );
+    void SetSubLabels( sal_uInt16 nGroup,
+                       const SCCOL* ptrSubLabels,
+                       const rtl::OUString* ptrSubNames,
                        sal_uInt16 nCount );
 };
 

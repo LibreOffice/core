@@ -2494,7 +2494,29 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             ScRange aNewDBRange(nStartCol, nStartRow, nTab, nFillCol, nFillRow, nTab);
             aNewDBRange.PutInOrder();
             aNewDBData.SetArea(nTab, aNewDBRange.aStart.Col(), aNewDBRange.aStart.Row(), aNewDBRange.aEnd.Col(), aNewDBRange.aEnd.Row());
-            aFunc.ModifyDBData(aNewDBData);
+            // Do subtotal if needed
+            ScRange aOldRange;
+            pDBData->GetArea(aOldRange);
+            if (aNewDBData.HasTotals() && (aOldRange.aEnd.Row() != aNewDBRange.aEnd.Row() || aOldRange.aStart.Row() != aNewDBRange.aStart.Row()))
+            {
+                // Subtotals
+                ScSubTotalParam aSubTotalParam;
+                pDBData->GetSubTotalParam(aSubTotalParam);
+                aSubTotalParam.bHasHeader = aNewDBData.HasHeader();
+                if (!aNewDBData.HasSubTotalParam())
+                {
+                    pDBData->CreateSubTotalParam(aSubTotalParam);
+                    aNewDBData.SetSubTotalParam(aSubTotalParam);
+                }
+                // add/replace total row
+                aSubTotalParam.bRemoveOnly = false;
+                aSubTotalParam.bReplace = true;
+                aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, true);
+            }
+            else
+            {
+                aFunc.ModifyDBData(aNewDBData);
+            }
         }
     }
     else if (mrViewData.IsAnyFillMode())
