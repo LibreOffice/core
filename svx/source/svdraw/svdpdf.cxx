@@ -324,7 +324,7 @@ void ImpSdrPdfImport::CollectFonts()
                 {
                     EmbeddedFontInfo fontInfo
                         = convertToOTF(getPrefix(), *pSubSetInfo, fileUrl, sFontName,
-                                       sPostScriptName, sFontFileName, aToUnicodeData);
+                                       sPostScriptName, sFontFileName, aToUnicodeData, *font);
                     fileUrl = fontInfo.sFontFile;
                     sFontName = fontInfo.sFontName;
                     eFontWeight = fontInfo.eFontWeight;
@@ -1223,7 +1223,6 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
       ## glyph[tag] {name,encoding}
     */
     bNameKeyed = glyphTag == "{name,encoding}";
-
     if (bNameKeyed)
     {
         SAL_INFO("sd.filter", "convert to cid keyed");
@@ -1335,8 +1334,14 @@ struct ToUnicodeData
     std::vector<OString> bfcharlines;
     std::vector<OString> bfcharranges;
 
+    // one or the other of these
+    const vcl::pdf::PDFiumFont* pFont;
+    const std::map<int, int>* pNameIndexToGlyph;
+
     // For the pdf provided mapping from the font to unicode
-    ToUnicodeData(const std::vector<uint8_t>& toUnicodeData)
+    ToUnicodeData(const std::vector<uint8_t>& toUnicodeData, const vcl::pdf::PDFiumFont& pdfFont)
+        : pFont(&pdfFont)
+        , pNameIndexToGlyph(nullptr)
     {
         SvMemoryStream aInCMap(const_cast<uint8_t*>(toUnicodeData.data()), toUnicodeData.size(),
                                StreamMode::READ);
@@ -1370,6 +1375,8 @@ struct ToUnicodeData
     // reverse map from the name indexes so we can forward
     // map to unicode
     ToUnicodeData(std::map<int, int>& nameIndexToGlyph)
+        : pFont(nullptr)
+        , pNameIndexToGlyph(&nameIndexToGlyph)
     {
         for (const auto & [ adobe, glyphid ] : nameIndexToGlyph)
         {
@@ -1388,12 +1395,21 @@ struct ToUnicodeData
             bfcharlines.push_back(aBuffer.toString());
         }
     }
+
+    sal_uInt32 getGlyphIndexFromCharCode(sal_uInt32 nPDFCharCode)
+    {
+        if (pFont)
+            return pFont->getGlyphIndexFromCharCode(nPDFCharCode);
+        assert(pNameIndexToGlyph);
+        auto it = pNameIndexToGlyph->find(nPDFCharCode);
+        return it != pNameIndexToGlyph->end() ? it->second : 0;
+    }
 };
 }
 
 static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features,
-                                 std::string_view FontName, ToUnicodeData& tud, bool bNameKeyed,
-                                 std::map<int, int>& nameIndexToGlyph, SubSetInfo& rSubSetInfo)
+                                 std::string_view FontName, ToUnicodeData& tud,
+                                 SubSetInfo& rSubSetInfo)
 {
     SvFileStream CMap(CMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
 
@@ -1474,7 +1490,6 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
         if (!cidranges.empty())
         {
             // searching for real world examples where this occurs
-            assert(!bNameKeyed);
             OString beginline = OString::number(cidranges.size()) + " begincidrange";
             CMap.WriteLine(beginline);
             for (const auto& rLine : cidranges)
@@ -1492,9 +1507,8 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
             assert(charline[0] == '<');
             sal_Int32 nEnd = charline.indexOf('>', 1);
             assert(charline[nEnd] == '>');
-            sal_Int32 nGlyphIndex = o3tl::toInt32(charline.subView(1, nEnd - 1), 16);
-            if (bNameKeyed)
-                nGlyphIndex = nameIndexToGlyph[nGlyphIndex];
+            sal_Int32 nPDFCharCode = o3tl::toInt32(charline.subView(1, nEnd - 1), 16);
+            sal_Int32 nGlyphIndex = tud.getGlyphIndexFromCharCode(nPDFCharCode);
             OString sChars(o3tl::trim(charline.subView(nEnd + 1)));
             assert(sChars[0] == '<' && sChars[sChars.getLength() - 1] == '>');
             OString sContents = sChars.copy(1, sChars.getLength() - 2);
@@ -1598,7 +1612,7 @@ static EmbeddedFontInfo mergeFontSubsets(sal_Int64 prefix, const OUString& merge
                                          const OUString& longFontName, std::string_view Weight,
                                          const SubSetInfo& rSubSetInfo)
 {
-    SAL_WARN("sd.filter", "merging " << rSubSetInfo.aComponents.size() << " font subsets of "
+    SAL_INFO("sd.filter", "merging " << rSubSetInfo.aComponents.size() << " font subsets of "
                                      << postScriptName << " together to create: " << mergedFontUrl);
     std::vector<std::pair<OUString, OUString>> fonts;
     for (size_t i = 0; i < rSubSetInfo.aComponents.size(); ++i)
@@ -1752,7 +1766,8 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSu
                                                const OUString& fileUrl, const OUString& fontName,
                                                const OUString& postScriptName,
                                                std::u16string_view fontFileName,
-                                               const std::vector<uint8_t>& toUnicodeData)
+                                               const std::vector<uint8_t>& toUnicodeData,
+                                               const vcl::pdf::PDFiumFont& font)
 {
     // Convert to Type 1 CID keyed
     std::map<int, int> nameIndexToGlyph;
@@ -1774,16 +1789,14 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSu
     bool bCMap = true;
     if (!toUnicodeData.empty())
     {
-        ToUnicodeData tud(toUnicodeData);
-        buildCMapAndFeatures(CMapUrl, Features, FontName, tud, bNameKeyed, nameIndexToGlyph,
-                             rSubSetInfo);
+        ToUnicodeData tud(toUnicodeData, font);
+        buildCMapAndFeatures(CMapUrl, Features, FontName, tud, rSubSetInfo);
     }
     else if (bNameKeyed)
     {
         SAL_INFO("sd.filter", "There is no CMap, assuming Adobe Standard encoding.");
         ToUnicodeData tud(nameIndexToGlyph);
-        buildCMapAndFeatures(CMapUrl, Features, FontName, tud, bNameKeyed, nameIndexToGlyph,
-                             rSubSetInfo);
+        buildCMapAndFeatures(CMapUrl, Features, FontName, tud, rSubSetInfo);
     }
     else
     {

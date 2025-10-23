@@ -189,7 +189,8 @@ class ImpSdrPdfImport final
                                          const OUString& fileUrl, const OUString& fontName,
                                          const OUString& baseFontName,
                                          std::u16string_view fontFileName,
-                                         const std::vector<uint8_t>& toUnicodeData);
+                                         const std::vector<uint8_t>& toUnicodeData,
+                                         const vcl::pdf::PDFiumFont& font);
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrPdfImport(const ImpSdrPdfImport&) = delete;

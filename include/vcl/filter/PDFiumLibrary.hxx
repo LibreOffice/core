@@ -63,6 +63,12 @@ public:
     virtual bool getFontToUnicode(std::vector<uint8_t>& rData) const = 0;
     virtual bool getIsEmbedded() const = 0;
 
+    // Get the index in the font of the glyph represented by the pdf "character
+    // code" of nCharCode. Which itself is what is mapped to unicode by a pdf's
+    // ToUnicode resource.
+    // A return of 0 represents not-found.
+    virtual sal_uInt32 getGlyphIndexFromCharCode(const sal_uInt32 nCharCode) const = 0;
+
     virtual sal_Int64 getUniqueId() const = 0;
 };
 
