@@ -1198,6 +1198,16 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
             o_rMtf.WindStart();
             tools::Long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
             tools::Long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
+
+            // if the printout is larger than the paper: instead of centering, start at the top
+            const bool bHeigher = aPageSize.aSize.Height() > aPaperSize.Height();
+            if (aPageSize.bFullPaper && bHeigher)
+            {
+                Point aOffset(mpImplData->mxPrinter->GetPageOffset());
+                if (aPageSize.aSize.Height() - aPaperSize.Height() > aOffset.Y() * 2)
+                    nDY = -aOffset.Y();
+            }
+
             o_rMtf.Move( nDX, nDY, mpImplData->mxPrinter->GetDPIX(), mpImplData->mxPrinter->GetDPIY() );
             o_rMtf.WindStart();
             o_rMtf.SetPrefSize( aPaperSize );
