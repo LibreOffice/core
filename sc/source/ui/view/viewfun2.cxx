@@ -177,13 +177,12 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        SCTAB nTab = GetViewData().CurrentTabForData();
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(),
                 false /* bColumns */, true /* bRows */,
                 true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
-                false /* bGroups */, nTab);
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, nTab);
+                false /* bGroups */, GetViewData().GetTabNumber());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNumber());
     }
 
     return bAnyChanged;
@@ -238,8 +237,8 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
                 GetViewData().GetViewShell(),
                 false /* bColumns */, true /* bRows */,
                 true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
-                false /* bGroups */, nTab);
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().CurrentTabForData());
+                false /* bGroups */, GetViewData().GetTabNumber());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNumber());
     }
 
     return bChanged;

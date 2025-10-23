@@ -69,6 +69,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sc.hrc>
 #include <sfx2/bindings.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -2075,6 +2076,8 @@ void ScViewFunc::SheetViewChanged()
     {
         ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewShell->GetCurrentDocument());
         SfxLokHelper::notifyViewRenderState(pViewShell, pModel);
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, "all"_ostr);
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY, "all"_ostr);
     }
     SfxBindings& rBindings = rViewData.GetBindings();
     rBindings.Invalidate(FID_CURRENT_SHEET_VIEW);

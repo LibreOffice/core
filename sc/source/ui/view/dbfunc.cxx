@@ -263,7 +263,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
             GetViewData().GetViewShell(),
             false /* bColumns */, true /* bRows */,
             false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-            false /* bGroups */, nTab);
+            false /* bGroups */, GetViewData().GetTabNumber());
         UpdateScrollBars(ROW_HEADER);
         SelectionChanged();     // for attribute states (filtered rows are ignored)
     }
@@ -305,7 +305,7 @@ void ScDBFunc::ToggleAutoFilter()
             bHasAuto = false;
     }
 
-    if (bHasAuto)                               // remove
+    if (bHasAuto) // remove
     {
         //  hide filter buttons
 
@@ -485,7 +485,7 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
 
-    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, GetViewData().CurrentTabForData(), 
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, GetViewData().CurrentTabForData(),
                                     rParam.nCol1, rParam.nRow1, rParam.nCol2, rParam.nRow2);
     if ( !aTester.IsEditable() )
     {
