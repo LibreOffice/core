@@ -748,6 +748,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/sidebar/CommentsPanel \
     sw/source/uibase/sidebar/A11yCheckIssuesPanel \
     sw/source/uibase/sidebar/QuickFindPanel \
+    sw/source/uibase/sidebar/AIAssistantPanel \
     sw/source/uibase/table/chartins \
     sw/source/uibase/table/swtablerep \
     sw/source/uibase/table/tablemgr \

@@ -21,6 +21,7 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 
 #include "A11yCheckIssuesPanel.hxx"
+#include "AIAssistantPanel.hxx"
 #include "CommentsPanel.hxx"
 #include "ThemePanel.hxx"
 #include "StylePresetsPanel.hxx"
@@ -223,6 +224,12 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             = sw::sidebar::QuickFindPanel::Create(pParent, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(rsResourceURL, xFrame, std::move(xPanel),
                                                            ui::LayoutSize(-1, -1, -1));
+    }
+    else if (rsResourceURL.endsWith("/AIAssistantPanel"))
+    {
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::AIAssistantPanel::Create(pParent, pBindings);
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                        rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }
 
     return xElement;
