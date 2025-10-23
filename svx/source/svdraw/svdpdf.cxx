@@ -77,6 +77,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <unicode/normalizer2.h>
+#include <set>
 
 using namespace com::sun::star;
 
@@ -1369,8 +1370,8 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
 
     if (!tud.bfcharlines.empty())
     {
-        OString beginline = OString::number(tud.bfcharlines.size()) + " begincidchar";
-        CMap.WriteLine(beginline);
+        std::set<OString> usedCodes;
+        std::vector<OString> outputlines;
         for (const auto& charline : tud.bfcharlines)
         {
             assert(charline[0] == '<');
@@ -1392,12 +1393,25 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
                 if (!sLegacy.isEmpty())
                     ligatureGlyphToChars[nGlyphIndex] = sLegacy;
             }
+            if (usedCodes.insert(sChars).second == false)
+            {
+                // This can happen with e.g. unicode '1' mapped to from two variants of that glyph,
+                // in the absense of a better idea, prefer the first one seen
+                SAL_INFO("sd.filter", "code: " << sChars << " for glyph " << nGlyphIndex
+                                               << " already used earlier");
+                continue;
+            }
             OString cidcharline = sChars + " " + OString::number(nGlyphIndex);
             glyphs.push_back(nGlyphIndex);
             rSubSetInfo.aComponents.back().glyphToChars[nGlyphIndex] = sContents;
             rSubSetInfo.aComponents.back().charsToGlyph[sContents] = nGlyphIndex;
-            CMap.WriteLine(cidcharline);
+            outputlines.push_back(cidcharline);
         }
+
+        OString beginline = OString::number(outputlines.size()) + " begincidchar";
+        CMap.WriteLine(beginline);
+        for (const auto& cidcharline : outputlines)
+            CMap.WriteLine(cidcharline);
         CMap.WriteLine("endcidchar");
 
         rSubSetInfo.aComponents.back().nGlyphCount = tud.bfcharlines.size();
