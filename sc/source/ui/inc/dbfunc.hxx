@@ -56,6 +56,9 @@ public:
     void            DoSubTotals( const ScSubTotalParam& rParam, bool bRecord = true,
                             const ScSortParam* pForceNewSort = nullptr );
 
+    void            DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam& rParam,
+                                      bool bRecord = true );
+
     void            ToggleAutoFilter();
     void            HideAutoFilter();
     void            ClearAutoFilter();

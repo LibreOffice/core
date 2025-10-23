@@ -1186,6 +1186,10 @@ public:
 
     bool            DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
     void            RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
+    // Table SubTotals
+    bool            DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
+    void            RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam );
+
     bool            TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam );
     bool            HasSubTotalCells( const ScRange& rRange );
 
