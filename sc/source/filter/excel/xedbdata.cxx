@@ -261,6 +261,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     XML_id, OString::number(i+1),
                     XML_uniqueName, uniqueName,
                     XML_name, rColNames[i].toUtf8(),
+                    XML_totalsRowLabel, (i < rColAttributes.size() ? rColAttributes[i].maTotalsRowLabel : std::nullopt),
                     XML_totalsRowFunction, (i < rColAttributes.size() ? rColAttributes[i].maTotalsFunction : std::nullopt)
                     // OOXTODO: XML_dataCellStyle, ...,
                     // OOXTODO: XML_dataDxfId, ...,
@@ -269,7 +270,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     // OOXTODO: XML_queryTableFieldId, ...,
                     // OOXTODO: XML_totalsRowCellStyle, ...,
                     // OOXTODO: XML_totalsRowDxfId, ...,
-                    // OOXTODO: XML_totalsRowLabel, ...,
+                    // OOXTODO: XML_uniqueName, ...
             );
 
             if (i < rTableColumnModel.size() && rTableColumnModel[i].mxXmlColumnPr)

@@ -23,6 +23,7 @@
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
+#include <subtotalparam.hxx>
 
 #define ShellClass_ScTableShell
 #include <scslots.hxx>
@@ -91,7 +92,40 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                     aNewDBData.SetTableStyleInfo(aNewParam);
 
                     ScDBDocFunc aFunc(*rViewData.GetDocShell());
-                    aFunc.ModifyDBData(aNewDBData);
+                    // Set new area if size changed
+                    if (pDBData->HasTotals() != aNewDBData.HasTotals())
+                    {
+                        // Subtotals
+                        ScSubTotalParam aSubTotalParam;
+                        aNewDBData.GetSubTotalParam(aSubTotalParam);
+                        aSubTotalParam.bHasHeader = aNewDBData.HasHeader();
+                        if (!aNewDBData.HasSubTotalParam())
+                        {
+                            pDBData->CreateSubTotalParam(aSubTotalParam);
+                            aNewDBData.SetSubTotalParam(aSubTotalParam);
+                        }
+
+                        if (!aNewDBData.HasTotals())
+                        {
+                            // remove total row
+                            aSubTotalParam.bRemoveOnly = true;
+                            aSubTotalParam.bReplace = true;
+                            aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,
+                                                   true, true);
+                        }
+                        else
+                        {
+                            // add/replace total row
+                            aSubTotalParam.bRemoveOnly = false;
+                            aSubTotalParam.bReplace = false;
+                            aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,
+                                                   true, true);
+                        }
+                    }
+                    else
+                    {
+                        aFunc.ModifyDBData(aNewDBData);
+                    }
                 }
             }
             break;

@@ -67,6 +67,7 @@
 #define STR_UNDO_REMOVEALLOTLNS                 NC_("STR_UNDO_REMOVEALLOTLNS", "Clear Outline")
 #define STR_UNDO_AUTOOUTLINE                    NC_("STR_UNDO_AUTOOUTLINE", "AutoOutline")
 #define STR_UNDO_SUBTOTALS                      NC_("STR_UNDO_SUBTOTALS", "Subtotals")
+#define STR_UNDO_TABLETOTALS                    NC_("STR_UNDO_TABLETOTALS", "Tabletotals")
 #define STR_UNDO_SORT                           NC_("STR_UNDO_SORT", "Sort")
 #define STR_UNDO_QUERY                          NC_("STR_UNDO_QUERY", "Filter")
 #define STR_UNDO_DBDATA                         NC_("STR_UNDO_DBDATA", "Change Database Range")

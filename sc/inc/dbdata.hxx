@@ -81,6 +81,7 @@ enum class ScDBDataPortion
 // TODO: this can be merged with struct TableColumnModel
 struct TableColumnAttributes
 {
+    std::optional<OUString> maTotalsRowLabel = std::nullopt;
     std::optional<OUString> maTotalsFunction = std::nullopt;
 };
 
@@ -278,6 +279,8 @@ public:
     SC_DLLPUBLIC void       GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 
+    void        CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+
     void        GetImportParam(ScImportParam& rImportParam) const;
     void        SetImportParam(const ScImportParam& rImportParam);
 
@@ -310,6 +313,8 @@ public:
 
     SC_DLLPUBLIC void SetTableStyleInfo(const ScTableStyleParam& rParams);
     SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
+
+    static ScSubTotalFunc GetSubTotalFuncFromString(std::u16string_view sFunction);
 
 private:
 
