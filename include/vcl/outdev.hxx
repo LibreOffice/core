@@ -612,6 +612,8 @@ public:
 
     void                        DrawGrid( const tools::Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags );
 
+    void                        DrawGridOfCrosses( const tools::Rectangle& rRect, const Size& rDist, const tools::Rectangle& rCutRect, const Size& rCrossSize);
+
     ///@}
 
     /** @name Invert functions

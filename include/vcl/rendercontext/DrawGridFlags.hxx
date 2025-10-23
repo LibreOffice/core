@@ -26,11 +26,12 @@ enum class DrawGridFlags
     NONE = 0x0000,
     Dots = 0x0001,
     HorzLines = 0x0002,
-    VertLines = 0x0004
+    VertLines = 0x0004,
+    Crosses = 0x0008
 };
 namespace o3tl
 {
-template <> struct typed_flags<DrawGridFlags> : is_typed_flags<DrawGridFlags, 0x0007>
+template <> struct typed_flags<DrawGridFlags> : is_typed_flags<DrawGridFlags, 0x00f>
 {
 };
 }

@@ -461,6 +461,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     sal_uInt16 nGridPaintCnt=1;
     if (pFrames!=nullptr) nGridPaintCnt=pFrames->GetCount();
     for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintCnt; nGridPaintNum++) {
+        tools::Rectangle aDrawArea;
         if (pFrames!=nullptr) {
             const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
             nWrX=rGF.GetPaperRect().Left();
@@ -471,6 +472,11 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
             y2=rGF.GetUserArea().Bottom();
             aOrg=rGF.GetUserArea().TopLeft();
             aOrg-=rGF.GetPaperRect().TopLeft();
+            aDrawArea=rGF.GetUserArea();
+        }
+        else
+        {
+            aDrawArea=tools::Rectangle{maPageOrigin, GetPage()->GetSize()};
         }
         if (!rRect.IsEmpty()) {
             Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
@@ -500,18 +506,32 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
         {
             if( bHoriLines )
             {
-                DrawGridFlags nGridFlags = ( bHoriSolid ? DrawGridFlags::HorzLines : DrawGridFlags::Dots );
                 sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
                 sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000)/ nSteps) - (nx2 * 1000) ) : 0;
                 sal_uInt32 nStepOffset = 0;
                 sal_uInt16 nPointOffset = 0;
+                SAL_WARN("drawGrid", "bHoriSolid: " << (bHoriSolid ? "true" : "false"));
+                SAL_WARN("drawGrid", "nSteps: " << nSteps);
+                SAL_WARN("drawGrid", "nRestPerStepMul1000: " << nRestPerStepMul1000);
+                SAL_WARN("drawGrid", "nStepOffset: " << nStepOffset);
+                SAL_WARN("drawGrid", "nPointOffset: " << nPointOffset);
 
                 for(sal_uInt16 a=0;a<nSteps;a++)
                 {
                     // draw
-                    rOut.DrawGrid(
-                        tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
-                        Size( nx1, ny1 ), nGridFlags );
+                    if (false)
+                    {
+                        rOut.DrawGrid(
+                            tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
+                            Size( nx1, ny1 ), DrawGridFlags::HorzLines );
+                    }
+                    else
+                    {
+                        const tools::Long nCrossSize = std::min(GetView().maGridFin.Width(), GetView().maGridFin.Height()) / 4;
+                        rOut.DrawGridOfCrosses(
+                            tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
+                            Size( nx1, ny1 ), aDrawArea, Size(nCrossSize, nCrossSize) );
+                    }
 
                     // do a step
                     nStepOffset += nRestPerStepMul1000;
@@ -525,7 +545,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
             if( bVertLines )
             {
-                DrawGridFlags nGridFlags = ( bVertSolid ? DrawGridFlags::VertLines : DrawGridFlags::Dots );
                 sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
                 sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
                 sal_uInt32 nStepOffset = 0;
@@ -534,9 +553,19 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
                 for(sal_uInt16 a=0;a<nSteps;a++)
                 {
                     // draw
-                    rOut.DrawGrid(
-                        tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
-                        Size( nx1, ny1 ), nGridFlags );
+                    if (false)
+                    {
+                        rOut.DrawGrid(
+                            tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
+                            Size( nx1, ny1 ), DrawGridFlags::VertLines );
+                    }
+                    else
+                    {
+                        const tools::Long nCrossSize = std::min(GetView().maGridFin.Width(), GetView().maGridFin.Height()) / 4;
+                        rOut.DrawGridOfCrosses(
+                            tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
+                            Size( nx1, ny1 ), aDrawArea, Size(nCrossSize, nCrossSize) );
+                    }
 
                     // do a step
                     nStepOffset += nRestPerStepMul1000;

@@ -263,7 +263,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     std::vector< sal_Int32 > aVertBuf;
     std::vector< sal_Int32 > aHorzBuf;
 
-    if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::HorzLines ) )
+    if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::Crosses ) ||( nFlags & DrawGridFlags::HorzLines ) )
     {
         aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2 );
         aVertBuf[ nVertCount++ ] = nStartY;
@@ -273,7 +273,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
         }
     }
 
-    if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::VertLines ) )
+    if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::Crosses ) || ( nFlags & DrawGridFlags::VertLines ) )
     {
         aHorzBuf.resize( aDstRect.GetWidth() / nDistX + 2 );
         aHorzBuf[ nHorzCount++ ] = nStartX;
@@ -302,6 +302,20 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
             }
         }
     }
+    else if( nFlags & DrawGridFlags::Crosses )
+    {
+        for( tools::Long i = 0; i < nVertCount; i++ )
+        {
+            for( tools::Long j = 0, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
+            {
+                tools::Long X = aHorzBuf[ j ];
+                tools::Long crossSizeX = ImplLogicXToDevicePixel( 10 );
+                tools::Long crossSizeY = ImplLogicYToDevicePixel( 10 );
+                mpGraphics->DrawLine( X - crossSizeX, Y, X + crossSizeX, Y, *this );
+                mpGraphics->DrawLine( X, Y - crossSizeY, X, Y + crossSizeY, *this );
+            }
+        }
+    }
     else
     {
         if( nFlags & DrawGridFlags::HorzLines )
@@ -324,6 +338,95 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     }
 
     EnableMapMode( bOldMap );
+}
+
+void OutputDevice::DrawGridOfCrosses( const tools::Rectangle& rRect, const Size& rDist, const tools::Rectangle& rCutRect, const Size& rCrossSize )
+{
+    SAL_WARN("drawGrid", "DrawGridOfCrosses");
+    assert(!is_double_buffered_window());
+
+    tools::Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
+    aDstRect.Intersection( rRect );
+
+    if( aDstRect.IsEmpty() || ImplIsRecordLayout() )
+        return;
+
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
+    assert(mpGraphics);
+
+    if( mbInitClipRegion )
+        InitClipRegion();
+
+    if( mbOutputClipped )
+        return;
+
+    const tools::Long nDistX = std::max( rDist.Width(), tools::Long(1) );
+    const tools::Long nDistY = std::max( rDist.Height(), tools::Long(1) );
+    tools::Long nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
+    tools::Long nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
+    const tools::Long nRight = aDstRect.Right();
+    const tools::Long nBottom = aDstRect.Bottom();
+
+    std::vector< sal_Int32 > aVertBuf;
+    tools::Long nVertCount = 0;
+    aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2 );
+    aVertBuf[ nVertCount++ ] = ImplLogicYToDevicePixel( nY );
+    while( ( nY += nDistY ) <= nBottom )
+    {
+        aVertBuf[ nVertCount++ ] = ImplLogicYToDevicePixel( nY );
+    }
+
+    std::vector< sal_Int32 > aHorzBuf;
+    tools::Long nHorzCount = 0;
+    aHorzBuf.resize( aDstRect.GetWidth() / nDistX + 2 );
+    aHorzBuf[ nHorzCount++ ] = ImplLogicXToDevicePixel( nX );
+    while( ( nX += nDistX ) <= nRight )
+    {
+        aHorzBuf[ nHorzCount++ ] = ImplLogicXToDevicePixel( nX );
+    }
+
+    if( mbInitLineColor )
+        InitLineColor();
+
+    if( mbInitFillColor )
+        InitFillColor();
+
+    for( tools::Long i = 0; i < nVertCount; i++ )
+    {
+        for( tools::Long j = 0; j < nHorzCount; j++ )
+        {
+            const tools::Long nXPixel = aHorzBuf[ j ];
+            const tools::Long nYPixel = aVertBuf[ i ];
+            if (nXPixel < ImplLogicXToDevicePixel(rCutRect.Left()) || nYPixel < ImplLogicYToDevicePixel(rCutRect.Top()) ||
+                nXPixel > ImplLogicXToDevicePixel(rCutRect.Right()) || nYPixel > ImplLogicYToDevicePixel(rCutRect.Bottom()))
+                continue;
+
+            const tools::Long crossSizeX = ImplLogicWidthToDevicePixel(rCrossSize.Width() / 2);
+            const tools::Long crossSizeY = ImplLogicHeightToDevicePixel(rCrossSize.Height() / 2);
+            const tools::Long nStartX = std::max(nXPixel - crossSizeX, ImplLogicXToDevicePixel(rCutRect.Left()));
+            const tools::Long nEndX = std::min(nXPixel + crossSizeX + 1, ImplLogicXToDevicePixel(rCutRect.Right()));
+            const tools::Long nStartY = std::max(nYPixel - crossSizeY, ImplLogicYToDevicePixel(rCutRect.Top()));
+            const tools::Long nEndY = std::min(nYPixel + crossSizeY + 1, ImplLogicYToDevicePixel(rCutRect.Bottom()));
+
+            const bool bOldMap = mbMap;
+            EnableMapMode( false );
+
+            mpGraphics->DrawLine( nStartX,
+                nYPixel,
+                nEndX,
+                nYPixel, *this );
+            mpGraphics->DrawLine( nXPixel,
+                nStartY,
+                nXPixel,
+                nEndY, *this );
+
+            mpGraphics->DrawPixel( nXPixel, nYPixel, *this );
+
+            EnableMapMode( bOldMap );
+        }
+    }
+
 }
 
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
