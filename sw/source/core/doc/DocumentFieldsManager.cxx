@@ -902,38 +902,6 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     bool bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
 #endif
 
-    // Make sure we don't hide all content, which would lead to a crash. First, count how many visible sections we have.
-    int nShownSections = 0;
-    SwNodeOffset nContentStart = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionIndex() + 1;
-    SwNodeOffset nContentEnd = m_rDoc.GetNodes().GetEndOfContent().GetIndex();
-    SwSectionFormats& rSectFormats = m_rDoc.GetSections();
-    for( SwSectionFormats::size_type n = 0; n<rSectFormats.size(); ++n )
-    {
-        SwSectionFormat& rSectFormat = *rSectFormats[ n ];
-        SwSectionNode* pSectionNode = rSectFormat.GetSectionNode();
-        SwSection* pSect = rSectFormat.GetSection();
-
-        // Usually some of the content is not in a section: count that as a virtual section, so that all real sections can be hidden.
-        // Only look for section gaps at the lowest level, ignoring sub-sections.
-        if ( pSectionNode && !rSectFormat.GetParent() )
-        {
-            SwNodeIndex aNextIdx( *pSectionNode->EndOfSectionNode(), 1 );
-            if ( n == 0 && pSectionNode->GetIndex() != nContentStart )
-                nShownSections++;  //document does not start with a section
-            if ( n == rSectFormats.size() - 1 )
-            {
-                if ( aNextIdx.GetIndex() != nContentEnd )
-                    nShownSections++;  //document does not end in a section
-            }
-            else if ( !aNextIdx.GetNode().IsSectionNode() )
-                    nShownSections++; //section is not immediately followed by another section
-        }
-
-        // count only visible sections
-        if ( pSect && !pSect->CalcHiddenFlag())
-            nShownSections++;
-    }
-
     IDocumentRedlineAccess const& rIDRA(m_rDoc.getIDocumentRedlineAccess());
     std::unordered_map<SwSetExpFieldType const*, SwTextNode const*> SetExpOutlineNodeMap;
 
@@ -946,20 +914,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
             {
-                // Do we want to hide this one?
-                bool bHide = aValue.GetBool();
-                if (bHide && !pSect->IsCondHidden())
-                {
-                    // This section will be hidden, but it wasn't before
-                    if (nShownSections == 1)
-                    {
-                        // This would be the last section, so set its condition to false, and avoid hiding it.
-                        pSect->SetCondition(u"0"_ustr);
-                        bHide = false;
-                    }
-                    nShownSections--;
-                }
-                pSect->SetCondHidden( bHide );
+                pSect->SetCondHidden(aValue.GetBool());
             }
             continue;
         }
