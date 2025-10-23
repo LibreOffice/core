@@ -250,11 +250,11 @@ void ImpSdrPdfImport::CollectFonts()
             const vcl::pdf::PDFPageObjectType ePageObjectType = pPageObject->getType();
             if (ePageObjectType != vcl::pdf::PDFPageObjectType::Text)
                 continue;
-            vcl::pdf::PDFiumFont font = pPageObject->getFont();
+            std::unique_ptr<vcl::pdf::PDFiumFont> font = pPageObject->getFont();
             if (!font)
                 continue;
 
-            auto itImportedFont = maImportedFonts.find(font);
+            auto itImportedFont = maImportedFonts.find(font->getUniqueId());
             if (itImportedFont == maImportedFonts.end())
             {
                 OUString sPostScriptName = GetPostScriptName(pPageObject->getBaseFontName());
@@ -272,17 +272,17 @@ void ImpSdrPdfImport::CollectFonts()
                                  << sFontName);
                 }
 
-                if (!pPageObject->getIsEmbedded(font))
+                if (!font->getIsEmbedded())
                 {
                     SAL_WARN("sd.filter", "skipping not embedded font, map: "
                                               << sFontName << " to " << sPostScriptFontFamily);
-                    maImportedFonts.emplace(font,
+                    maImportedFonts.emplace(font->getUniqueId(),
                                             OfficeFontInfo{ sPostScriptFontFamily, eFontWeight });
                     continue;
                 }
 
                 std::vector<uint8_t> aFontData;
-                if (!pPageObject->getFontData(font, aFontData) || aFontData.empty())
+                if (!font->getFontData(aFontData) || aFontData.empty())
                 {
                     SAL_WARN("sd.filter", "that's worrying, skipping " << sFontName);
                     continue;
@@ -318,7 +318,7 @@ void ImpSdrPdfImport::CollectFonts()
                 else
                     SAL_INFO("sd.filter", "ttf written to: " << fileUrl);
                 std::vector<uint8_t> aToUnicodeData;
-                if (!pPageObject->getFontToUnicode(font, aToUnicodeData))
+                if (!font->getFontToUnicode(aToUnicodeData))
                     SAL_WARN("sd.filter", "that's maybe worrying");
                 if (!bTTF || !aToUnicodeData.empty())
                 {
@@ -332,7 +332,8 @@ void ImpSdrPdfImport::CollectFonts()
 
                 if (fileUrl.getLength())
                 {
-                    maImportedFonts.emplace(font, OfficeFontInfo{ sFontName, eFontWeight });
+                    maImportedFonts.emplace(font->getUniqueId(),
+                                            OfficeFontInfo{ sFontName, eFontWeight });
                     maEmbeddedFonts[sPostScriptName]
                         = EmbeddedFontInfo{ sFontName, fileUrl, eFontWeight };
                 }
@@ -1875,7 +1876,9 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     OUString sFontName;
     FontWeight eFontWeight(WEIGHT_DONTKNOW);
-    auto itImportedFont = maImportedFonts.find(pPageObject->getFont());
+    auto xFont = pPageObject->getFont();
+    auto itImportedFont
+        = xFont ? maImportedFonts.find(xFont->getUniqueId()) : maImportedFonts.end();
     if (itImportedFont != maImportedFonts.end())
     {
         // We expand a name like "Foo" with non-traditional styles like
