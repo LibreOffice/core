@@ -15975,7 +15975,7 @@ AC_CONFIG_LINKS([include:include])
 
 if test -n "$WSL_ONLY_AS_HELPER"; then
     # while we configure in linux, we actually compile in "cygwin" (close enough at least)
-    build=$host
+    build=$build_cpu-$host_vendor-$host_os
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
     PathFormat "$BUILDDIR"
