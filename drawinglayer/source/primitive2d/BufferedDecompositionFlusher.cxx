@@ -182,17 +182,23 @@ void SAL_CALL BufferedDecompositionFlusher::run()
             aRemoved2.clear();
         }
 
-        wait(TimeValue(2, 0));
+        {
+            std::unique_lock l(maMutex);
+            maDelayOrTerminate.wait_for(l, std::chrono::seconds(2), [this] { return mbShutdown; });
+        }
     }
 }
 
 /// Only called by FlusherDeinit
 void BufferedDecompositionFlusher::onTeardown()
 {
-    std::unique_lock l2(maMutex);
-    mbShutdown = true;
-    maRegistered1.clear();
-    maRegistered2.clear();
+    {
+        std::unique_lock l2(maMutex);
+        mbShutdown = true;
+        maRegistered1.clear();
+        maRegistered2.clear();
+    }
+    maDelayOrTerminate.notify_all();
 }
 
 } // end of namespace drawinglayer::primitive2d

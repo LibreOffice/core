@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <osl/thread.hxx>
 #include <unotools/weakref.hxx>
+#include <condition_variable>
 #include <unordered_map>
 
 namespace drawinglayer::primitive2d
@@ -58,6 +59,7 @@ private:
         maRegistered2;
     std::mutex maMutex;
     bool mbShutdown{ false };
+    std::condition_variable maDelayOrTerminate;
 };
 
 } // end of namespace drawinglayer::primitive2d
