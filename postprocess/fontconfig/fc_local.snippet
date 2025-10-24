@@ -1,0 +1,32 @@
+
+<!--
+  Disable embedded bitmaps for Calibri, Cambria & Monaco because
+  they look terrible rendered via cairo+freetype.
+ -->
+
+<match target="font">
+  <test qual="any" name="family">
+    <string>Calibri</string>
+  </test>
+  <edit name="embeddedbitmap">
+    <bool>false</bool>
+  </edit>
+</match>
+
+<match target="font">
+  <test qual="any" name="family">
+    <string>Cambria</string>
+  </test>
+  <edit name="embeddedbitmap">
+    <bool>false</bool>
+  </edit>
+</match>
+
+<match target="font">
+  <test qual="any" name="family">
+    <string>Monaco</string>
+  </test>
+  <edit name="embeddedbitmap">
+    <bool>false</bool>
+  </edit>
+</match>

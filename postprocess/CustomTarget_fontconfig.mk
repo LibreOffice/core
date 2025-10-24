@@ -19,7 +19,7 @@ $(gb_CustomTarget_workdir)/postprocess/fontconfig/fc_local.conf: \
     $(SRCDIR)/external/more_fonts/fc_local.snippet
 endif
 
-$(gb_CustomTarget_workdir)/postprocess/fontconfig/fc_local.conf:
+$(gb_CustomTarget_workdir)/postprocess/fontconfig/fc_local.conf: $(SRCDIR)/postprocess/fontconfig/fc_local.snippet
 	printf '<?xml version="1.0"?>\n<!DOCTYPE fontconfig SYSTEM "/etc/fonts/conf.d/fonts.dtd">\n<fontconfig>\n' >$@
 	cat $(SRCDIR)/extras/source/truetype/symbol/fc_local.snippet >>$@
 ifeq (EMSCRIPTEN,$(OS))
@@ -32,6 +32,7 @@ endif
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 	cat $(SRCDIR)/external/more_fonts/fc_local.snippet >>$@
 endif
+	cat $(SRCDIR)/postprocess/fontconfig/fc_local.snippet >>$@
 	printf '</fontconfig>\n' >>$@
 
 # vim: set noet sw=4 ts=4:
