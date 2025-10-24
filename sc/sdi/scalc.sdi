@@ -5025,7 +5025,7 @@ SfxVoidItem SetInputMode SID_SETINPUTMODE
 
 
 SfxVoidItem SetOptimalColumnWidth FID_COL_OPT_WIDTH
-(SfxUInt16Item aExtraWidth FID_COL_OPT_WIDTH)
+(SfxUInt16Item aExtraWidth FID_COL_OPT_WIDTH,SfxUInt16Item Column FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
