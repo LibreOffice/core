@@ -80,23 +80,10 @@ struct EmbeddedFontInfo
     FontWeight eFontWeight;
 };
 
-// A description of such a final font as LibreOffice sees it
-// e.g. "Name SemiBold"
-struct OfficeFontInfo
-{
-    OUString sFontName;
-    FontWeight eFontWeight;
-};
-
 // Helper Class to import PDF
 class ImpSdrPdfImport final
 {
     std::vector<rtl::Reference<SdrObject>> maTmpList;
-
-    std::map<sal_Int32, OfficeFontInfo> maImportedFonts;
-    std::map<OUString, SubSetInfo> maDifferentSubsetsForFont;
-    // map of PostScriptName->Merged Font File for that font
-    std::map<OUString, EmbeddedFontInfo> maEmbeddedFonts;
 
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle maScaleRect;
@@ -105,6 +92,7 @@ class ImpSdrPdfImport final
     std::unique_ptr<SfxItemSet> mpFillAttr;
     std::unique_ptr<SfxItemSet> mpTextAttr;
     SdrModel* mpModel;
+    std::shared_ptr<ImportedFontMap> mxImportedFonts;
     SdrLayerID mnLayer;
     sal_Int32 mnLineWidth;
     static constexpr css::drawing::LineCap gaLineCap = css::drawing::LineCap_BUTT;
@@ -185,7 +173,7 @@ class ImpSdrPdfImport final
 
 #if HAVE_FEATURE_PDFIMPORT
 
-    void CollectFonts();
+    static ImportedFontMap CollectFonts(vcl::pdf::PDFiumDocument& rPdfDocument);
 
     static EmbeddedFontInfo convertToOTF(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
                                          const OUString& fontName, const OUString& baseFontName,

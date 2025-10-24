@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
+#include <vcl/filter/embedfontinfo.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 
 class SvStream;
@@ -63,6 +64,10 @@ private:
     GfxLinkType     meType;
     sal_uInt32      mnUserId;
     BinaryDataContainer maDataContainer;
+    /// Useful for PDF, where multiple Graphics referring to individual pages
+    /// of a single PDF share a GfxLink, to describe PDF fonts that are already
+    /// imported from the PDF.
+    std::shared_ptr<ImportedFontMap> mxImportedFonts;
     mutable size_t  maHash;
     MapMode         maPrefMapMode;
     Size            maPrefSize;
@@ -100,6 +105,9 @@ public:
     const MapMode&      GetPrefMapMode() const { return maPrefMapMode;}
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
     bool                IsPrefMapModeValid() const { return mbPrefMapModeValid;}
+
+    void setImportedFonts(const std::shared_ptr<ImportedFontMap>& rImportedFonts) { mxImportedFonts = rImportedFonts; }
+    const std::shared_ptr<ImportedFontMap>& getImportedFonts() const { return mxImportedFonts; }
 
     bool                IsNative() const;
 
