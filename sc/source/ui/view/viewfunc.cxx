@@ -332,11 +332,10 @@ void ScViewData::setupSizeDeviceProviderForColWidth(ScSizeDeviceProvider& rProv,
     }
 }
 
-sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula )
+sal_uInt16 ScViewFunc::GetOptimalColWidth(SCCOL nCol, SCTAB nTab, bool bFormula, const ScMarkData& rMark)
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScMarkData& rMark = GetViewData().GetMarkData();
 
     ScSizeDeviceProvider aProv(pDocSh);
 
@@ -2573,7 +2572,7 @@ void ScViewFunc::SetWidthOrHeight(
                         sal_uInt16 nThisSize = nSizeTwips;
 
                         if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
-                            nThisSize = nSizeTwips + GetOptimalColWidth( nCol, nTab, bFormula );
+                            nThisSize = nSizeTwips + GetOptimalColWidth(nCol, nTab, bFormula, aMarkData);
                         if ( nThisSize )
                             rDoc.SetColWidth( nCol, nTab, nThisSize );
 
