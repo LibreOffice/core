@@ -17,6 +17,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
@@ -1676,6 +1677,91 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf140027)
     const ScPatternAttr aDefPattern = pPattern->getCellAttributeHelper().getDefaultCellAttribute();
     // check that the default pattern is not changed
     CPPUNIT_ASSERT(ScPatternAttr::areSame(pPattern, &aDefPattern));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testcommand_SetOptimalColumnWidth)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Set columns' width to 10 cm:
+    for (SCCOL col = 0; col <= 4; ++col)
+        pDoc->SetColWidth(col, 0, o3tl::toTwips(10, o3tl::Length::cm));
+
+    // Add strings
+    pDoc->SetString(0, 0, 0, u"WWW"_ustr); // A1
+    pDoc->SetString(1, 0, 0, u"WWW"_ustr); // B1
+    pDoc->SetString(2, 0, 0, u"WWW"_ustr); // C1
+    pDoc->SetString(3, 0, 0, u"WWW"_ustr); // D1
+    pDoc->SetString(4, 0, 0, u"WWW"_ustr); // E1
+    pDoc->SetString(4, 1, 0, u"WWWWW"_ustr); // E2
+    pDoc->SetString(4, 2, 0, u"WWWWWWW"_ustr); // E3
+
+    // Store the initial values of the widths:
+    auto nWidthA = pDoc->GetColWidth(0, 0);
+    auto nWidthB = pDoc->GetColWidth(1, 0);
+    auto nWidthC = pDoc->GetColWidth(2, 0);
+    auto nWidthD = pDoc->GetColWidth(3, 0);
+    auto nWidthE = pDoc->GetColWidth(4, 0);
+
+    auto pViewShell = pDoc->GetDocumentShell()->GetBestViewShell();
+
+    // Select C1:E2:
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(2, 0, 0, 4, 1, 0));
+
+    // .uno:SetOptimalColumnWidth must take selection into account:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)) });
+
+    // Columns A and B must not change width
+    CPPUNIT_ASSERT_EQUAL(nWidthA, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
+
+    // Columns C to E must become narrower
+    CPPUNIT_ASSERT_LESS(nWidthC, pDoc->GetColWidth(2, 0));
+    CPPUNIT_ASSERT_LESS(nWidthD, pDoc->GetColWidth(3, 0));
+    CPPUNIT_ASSERT_LESS(nWidthE, pDoc->GetColWidth(4, 0));
+
+    // Width of column C must be same as D, and smaller than E (in E, a wider string is selected):
+    CPPUNIT_ASSERT_EQUAL(pDoc->GetColWidth(2, 0), pDoc->GetColWidth(3, 0)); // D == C
+    CPPUNIT_ASSERT_GREATER(pDoc->GetColWidth(2, 0), pDoc->GetColWidth(4, 0)); // E > C
+
+    // Store updated width:
+    nWidthE = pDoc->GetColWidth(4, 0);
+
+    // Select E3:
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(4, 2, 0));
+
+    // .uno:SetOptimalColumnWidth must take selection into account:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)) });
+
+    // Width of E must increase (in E, even wider string is selected):
+    CPPUNIT_ASSERT_GREATER(nWidthE, pDoc->GetColWidth(4, 0));
+
+    // Select A1:B1:
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 0, 0, 1, 0, 0));
+    // Set width of column E to 10 cm:
+    pDoc->SetColWidth(4, 0, o3tl::toTwips(10, o3tl::Length::cm));
+    // Store it:
+    nWidthE = pDoc->GetColWidth(4, 0);
+
+    // .uno:SetOptimalColumnWidth with Column E must not change widths of columns A:B, only C:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)),
+                      comphelper::makePropertyValue(u"Column"_ustr, sal_uInt16(5)) });
+
+    CPPUNIT_ASSERT_EQUAL(nWidthA, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
+    CPPUNIT_ASSERT_LESS(nWidthE, pDoc->GetColWidth(4, 0));
+
+    // .uno:SetOptimalColumnWidth with Column A must change width of column A:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)),
+                      comphelper::makePropertyValue(u"Column"_ustr, sal_uInt16(1)) });
+
+    CPPUNIT_ASSERT_LESS(nWidthA, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
