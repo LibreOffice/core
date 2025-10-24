@@ -2215,6 +2215,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ReshufflePages" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Re-order pages</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:AssignLayout?WhatLayout:long=20" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Blank Slide</value>
