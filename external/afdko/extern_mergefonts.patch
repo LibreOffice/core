@@ -69,7 +69,15 @@
      long i;
  
      memFree(h, h->script.buf);
-@@ -2770,25 +2796,11 @@
+@@ -2749,6 +2775,7 @@
+     free(h);
+ }
+ 
++#if 0
+ /* Main program. */
+ int CTL_CDECL main(int argc, char *argv[]) {
+     txCtx h;
+@@ -2770,25 +2797,11 @@
      --argc;
      ++argv;
  
@@ -96,7 +104,7 @@
  
      if (argc > 1 && getOptionIndex(argv[argc - 2]) == opt_s) {
          /* Option list ends with script option */
-@@ -2810,7 +2822,7 @@
+@@ -2810,7 +2823,8 @@
          fprintf(stderr, "mem_manage() called %ld times in this run.\n",
                  h->failmem.iCall);
      }
@@ -105,3 +113,4 @@
  
      return 0;
  }
++#endif
