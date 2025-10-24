@@ -409,7 +409,7 @@ private:
                                         SCCOL nPosX, SCROW nPosY,
                                         bool bAllowDialogs, const TransferableDataHelper& rDataHelper, bool useSavedPrefs = false );
 
-    sal_uInt16      GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
+    sal_uInt16 GetOptimalColWidth(SCCOL nCol, SCTAB nTab, bool bFormula, const ScMarkData& rMark);
 
     void            StartFormatArea();
 
