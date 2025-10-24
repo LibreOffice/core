@@ -861,18 +861,17 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     std::unordered_map<OUString, OUString> aHashStrTable;
 
     {
-        const SwFieldType* pFieldType;
         // process separately:
-        for( auto n = mpFieldTypes->size(); n; )
+        for (auto it = mpFieldTypes->rbegin(); it != mpFieldTypes->rend(); ++it)
         {
-            pFieldType = (*mpFieldTypes)[ --n ].get();
+            SwFieldType* pFieldType = it->get();
             switch( pFieldType->Which() )
             {
             case SwFieldIds::User:
                 {
                     // Entry present?
                     const OUString aNm = pFieldType->GetName().toString();
-                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(1, SwUserType::None, LANGUAGE_SYSTEM));
+                    OUString sExpand(static_cast<SwUserFieldType*>(pFieldType)->Expand(1, SwUserType::None, LANGUAGE_SYSTEM));
                     auto pFnd = aHashStrTable.find( aNm );
                     if( pFnd != aHashStrTable.end() )
                         // modify entry in the hash table
@@ -908,25 +907,22 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
 
     for (std::unique_ptr<SetGetExpField> const& it : *mpUpdateFields->GetSortList())
     {
-        SwSection* pSect = const_cast<SwSection*>(it->GetSection());
-        if( pSect )
+        if (auto pSect = it->GetSection())
         {
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
             {
-                pSect->SetCondHidden(aValue.GetBool());
+                const_cast<SwSection*>(pSect)->SetCondHidden(aValue.GetBool());
             }
             continue;
         }
-        ::sw::mark::Bookmark *const pBookmark(
-                const_cast<::sw::mark::Bookmark *>(it->GetBookmark()));
-        if (pBookmark)
+        if (auto pBookmark = it->GetBookmark())
         {
             SwSbxValue const aValue(aCalc.Calculate(pBookmark->GetHideCondition()));
             if (!aValue.IsVoidValue())
             {
-                pBookmark->Hide(aValue.GetBool());
+                const_cast<::sw::mark::Bookmark*>(pBookmark)->Hide(aValue.GetBool());
             }
             continue;
         }
@@ -945,14 +941,14 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         }
 
         SwFormatField* pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
-        const SwField* pField = pFormatField->GetField();
+        SwField* pField = pFormatField->GetField();
 
-        nWhich = pField->GetTyp()->Which();
+        nWhich = pField->Which();
         switch( nWhich )
         {
         case SwFieldIds::HiddenText:
         {
-            SwHiddenTextField* pHField = const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField));
+            SwHiddenTextField* pHField = static_cast<SwHiddenTextField*>(pField);
             SwSbxValue aValue = aCalc.Calculate( pHField->GetPar1() );
             bool bValue = !aValue.GetBool();
             if(!aValue.IsVoidValue())
@@ -965,7 +961,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         break;
         case SwFieldIds::HiddenPara:
         {
-            SwHiddenParaField* pHPField = const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField));
+            SwHiddenParaField* pHPField = static_cast<SwHiddenParaField*>(pField);
             SwSbxValue aValue = aCalc.Calculate( pHPField->GetPar1() );
             bool bValue = aValue.GetBool();
             if(!aValue.IsVoidValue())
@@ -975,8 +971,8 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         case SwFieldIds::DbSetNumber:
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         {
-            const_cast<SwDBSetNumberField*>(static_cast<const SwDBSetNumberField*>(pField))->Evaluate(m_rDoc);
-            aCalc.VarChange( sDBNumNm, static_cast<const SwDBSetNumberField*>(pField)->GetSetNumber());
+            static_cast<SwDBSetNumberField*>(pField)->Evaluate(m_rDoc);
+            aCalc.VarChange(sDBNumNm, static_cast<SwDBSetNumberField*>(pField)->GetSetNumber());
             pField->ExpandField(m_rDoc.IsClipBoard(), nullptr);
         }
 #endif
@@ -985,7 +981,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         case SwFieldIds::DbNumSet:
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         {
-            UpdateDBNumFields( *const_cast<SwDBNameInfField*>(static_cast<const SwDBNameInfField*>(pField)), aCalc );
+            UpdateDBNumFields(*static_cast<SwDBNameInfField*>(pField), aCalc);
             if( bCanFill )
                 bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
         }
@@ -995,9 +991,9 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             // evaluate field
-            const_cast<SwDBField*>(static_cast<const SwDBField*>(pField))->Evaluate();
+            static_cast<SwDBField*>(pField)->Evaluate();
 
-            SwDBData aTmpDBData(static_cast<const SwDBField*>(pField)->GetDBData());
+            SwDBData aTmpDBData(static_cast<SwDBField*>(pField)->GetDBData());
 
             if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, false))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
@@ -1023,7 +1019,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         break;
         case SwFieldIds::GetExp:
         {
-            SwGetExpField* pGField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
+            SwGetExpField* pGField = static_cast<SwGetExpField*>(pField);
             if( SwGetSetExpType::String & pGField->GetSubType() )        // replace String
             {
                 if( (!pUpdateField || pUpdateField == pTextField )
@@ -1048,7 +1044,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         break;
         case SwFieldIds::SetExp:
         {
-            SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
+            SwSetExpField* pSField = static_cast<SwSetExpField*>(pField);
             if( SwGetSetExpType::String & pSField->GetSubType() )        // replace String
             {
                 // is the "formula" a field?
@@ -1169,12 +1165,12 @@ void DocumentFieldsManager::UpdateUsrFields()
     SwCalc* pCalc = nullptr;
     for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < mpFieldTypes->size(); ++i )
     {
-        const SwFieldType* pFieldType = (*mpFieldTypes)[i].get();
+        SwFieldType* pFieldType = (*mpFieldTypes)[i].get();
         if( SwFieldIds::User == pFieldType->Which() )
         {
             if( !pCalc )
                 pCalc = new SwCalc( m_rDoc );
-            const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->GetValue( *pCalc );
+            static_cast<SwUserFieldType*>(pFieldType)->GetValue(*pCalc);
         }
     }
 
