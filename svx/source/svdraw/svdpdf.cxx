@@ -110,7 +110,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 
     // Load the buffer using pdfium.
     auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
-    auto* pData = rVectorGraphicData->getBinaryDataContainer().getData();
+    const auto* pData = rVectorGraphicData->getBinaryDataContainer().getData();
     sal_Int32 nSize = rVectorGraphicData->getBinaryDataContainer().getSize();
     mpPdfDocument = mpPDFium ? mpPDFium->openDocument(pData, nSize, OString()) : nullptr;
     if (!mpPdfDocument)
@@ -118,7 +118,16 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 
     mnPageCount = mpPdfDocument->getPageCount();
 
-    CollectFonts();
+    const std::shared_ptr<GfxLink> xGrfLink = rGraphic.GetSharedGfxLink();
+    if (xGrfLink)
+        mxImportedFonts = xGrfLink->getImportedFonts();
+    if (!mxImportedFonts)
+    {
+        mxImportedFonts
+            = std::make_shared<ImportedFontMap>(CollectFonts(getPrefix(), *mpPdfDocument));
+        if (xGrfLink)
+            xGrfLink->setImportedFonts(mxImportedFonts);
+    }
 
     // Same as SdModule
     mpVD = VclPtr<VirtualDevice>::Create();
@@ -222,13 +231,20 @@ OUString getFileUrlForTemporaryFont(sal_Int64 prefix, std::u16string_view name,
 
 // Possibly there is some alternative route to query pdfium for all fonts without
 // iterating through every object to see what font each uses
-void ImpSdrPdfImport::CollectFonts()
+ImportedFontMap ImpSdrPdfImport::CollectFonts(sal_Int64 nPrefix,
+                                              vcl::pdf::PDFiumDocument& rPdfDocument)
 {
-    const int nPageCount = mpPdfDocument->getPageCount();
+    ImportedFontMap aImportedFonts;
+
+    std::map<OUString, SubSetInfo> aDifferentSubsetsForFont;
+    // map of PostScriptName->Merged Font File for that font
+    std::map<OUString, EmbeddedFontInfo> aEmbeddedFonts;
+
+    const int nPageCount = rPdfDocument.getPageCount();
 
     for (int nPageIndex = 0; nPageIndex < nPageCount; ++nPageIndex)
     {
-        auto pPdfPage = mpPdfDocument->openPage(nPageIndex);
+        auto pPdfPage = rPdfDocument.openPage(nPageIndex);
         if (!pPdfPage)
         {
             SAL_WARN("sd.filter", "ImpSdrPdfImport missing page: " << nPageIndex);
@@ -254,8 +270,8 @@ void ImpSdrPdfImport::CollectFonts()
             if (!font)
                 continue;
 
-            auto itImportedFont = maImportedFonts.find(font->getFontDictObjNum());
-            if (itImportedFont == maImportedFonts.end())
+            auto itImportedFont = aImportedFonts.find(font->getFontDictObjNum());
+            if (itImportedFont == aImportedFonts.end())
             {
                 OUString sPostScriptName = GetPostScriptName(pPageObject->getBaseFontName());
 
@@ -276,8 +292,8 @@ void ImpSdrPdfImport::CollectFonts()
                 {
                     SAL_WARN("sd.filter", "skipping not embedded font, map: "
                                               << sFontName << " to " << sPostScriptFontFamily);
-                    maImportedFonts.emplace(font->getFontDictObjNum(),
-                                            OfficeFontInfo{ sPostScriptFontFamily, eFontWeight });
+                    aImportedFonts.insert(OfficeFontInfo{ font->getFontDictObjNum(),
+                                                          sPostScriptFontFamily, eFontWeight });
                     continue;
                 }
 
@@ -291,9 +307,9 @@ void ImpSdrPdfImport::CollectFonts()
                 SubSetInfo* pSubSetInfo;
 
                 SAL_INFO("sd.filter", "importing font: " << font);
-                auto itFontName = maDifferentSubsetsForFont.find(sPostScriptName);
+                auto itFontName = aDifferentSubsetsForFont.find(sPostScriptName);
                 OUString sFontFileName = sPostScriptName;
-                if (itFontName != maDifferentSubsetsForFont.end())
+                if (itFontName != aDifferentSubsetsForFont.end())
                 {
                     sFontFileName += OUString::number(itFontName->second.aComponents.size());
                     itFontName->second.aComponents.emplace_back();
@@ -305,14 +321,14 @@ void ImpSdrPdfImport::CollectFonts()
                     SubSetInfo aSubSetInfo;
                     aSubSetInfo.aComponents.emplace_back();
                     auto result
-                        = maDifferentSubsetsForFont.emplace(sPostScriptName, aSubSetInfo).first;
+                        = aDifferentSubsetsForFont.emplace(sPostScriptName, aSubSetInfo).first;
                     pSubSetInfo = &result->second;
                 }
                 bool bTTF = EmbeddedFontsManager::analyzeTTF(aFontData.data(), aFontData.size(),
                                                              eFontWeight);
                 SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
-                OUString fileUrl = getFileUrlForTemporaryFont(getPrefix(), sFontFileName,
-                                                              bTTF ? u".ttf" : u".t1");
+                OUString fileUrl
+                    = getFileUrlForTemporaryFont(nPrefix, sFontFileName, bTTF ? u".ttf" : u".t1");
                 if (!writeFontFile(fileUrl, aFontData))
                     SAL_WARN("sd.filter", "ttf not written");
                 else
@@ -323,8 +339,8 @@ void ImpSdrPdfImport::CollectFonts()
                 if (!bTTF || !aToUnicodeData.empty())
                 {
                     EmbeddedFontInfo fontInfo
-                        = convertToOTF(getPrefix(), *pSubSetInfo, fileUrl, sFontName,
-                                       sPostScriptName, sFontFileName, aToUnicodeData, *font);
+                        = convertToOTF(nPrefix, *pSubSetInfo, fileUrl, sFontName, sPostScriptName,
+                                       sFontFileName, aToUnicodeData, *font);
                     fileUrl = fontInfo.sFontFile;
                     sFontName = fontInfo.sFontName;
                     eFontWeight = fontInfo.eFontWeight;
@@ -332,30 +348,32 @@ void ImpSdrPdfImport::CollectFonts()
 
                 if (fileUrl.getLength())
                 {
-                    maImportedFonts.emplace(font->getFontDictObjNum(),
-                                            OfficeFontInfo{ sFontName, eFontWeight });
-                    maEmbeddedFonts[sPostScriptName]
+                    aImportedFonts.insert(
+                        OfficeFontInfo{ font->getFontDictObjNum(), sFontName, eFontWeight });
+                    aEmbeddedFonts[sPostScriptName]
                         = EmbeddedFontInfo{ sFontName, fileUrl, eFontWeight };
                 }
             }
             else
             {
                 SAL_INFO("sd.filter", "already saw font " << font << " and used "
-                                                          << itImportedFont->second.sFontName
+                                                          << itImportedFont->sFontName
                                                           << " as name");
             }
         }
     }
 
-    if (!maEmbeddedFonts.empty())
+    if (!aEmbeddedFonts.empty())
     {
-        EmbeddedFontsManager aEmbeddedFontsManager(nullptr); //TODO get model we want fonts in
-        for (const auto& fontinfo : maEmbeddedFonts)
+        EmbeddedFontsManager aEmbeddedFontsManager(nullptr);
+        for (const auto& fontinfo : aEmbeddedFonts)
         {
             aEmbeddedFontsManager.addEmbeddedFont(fontinfo.second.sFontFile,
                                                   fontinfo.second.sFontName, true);
         }
     }
+
+    return aImportedFonts;
 }
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
@@ -1891,13 +1909,13 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     FontWeight eFontWeight(WEIGHT_DONTKNOW);
     auto xFont = pPageObject->getFont();
     auto itImportedFont
-        = xFont ? maImportedFonts.find(xFont->getFontDictObjNum()) : maImportedFonts.end();
-    if (itImportedFont != maImportedFonts.end())
+        = xFont ? mxImportedFonts->find(xFont->getFontDictObjNum()) : mxImportedFonts->end();
+    if (itImportedFont != mxImportedFonts->end())
     {
         // We expand a name like "Foo" with non-traditional styles like
         // "SemiBold" to "Foo SemiBold";
-        sFontName = itImportedFont->second.sFontName;
-        eFontWeight = itImportedFont->second.eFontWeight;
+        sFontName = itImportedFont->sFontName;
+        eFontWeight = itImportedFont->eFontWeight;
     }
     else
     {
