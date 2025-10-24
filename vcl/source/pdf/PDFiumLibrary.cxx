@@ -453,7 +453,7 @@ public:
 
     sal_uInt32 getGlyphIndexFromCharCode(const sal_uInt32 nCharCode) const override;
 
-    sal_Int64 getUniqueId() const override { return reinterpret_cast<sal_Int64>(mpFont); }
+    sal_Int32 getFontDictObjNum() const override;
 };
 
 class PDFiumSearchHandleImpl final : public PDFiumSearchHandle
@@ -1316,6 +1316,8 @@ sal_uInt32 PDFiumFontImpl::getGlyphIndexFromCharCode(const sal_uInt32 nCharCode)
 {
     return FPDFFont_GetGlyphIndexFromCharCode(mpFont, nCharCode);
 }
+
+sal_Int32 PDFiumFontImpl::getFontDictObjNum() const { return FPDFFont_GetFontDictObjNum(mpFont); }
 
 bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
 {
