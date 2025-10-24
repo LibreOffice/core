@@ -878,12 +878,13 @@
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "@OPENSYMBOL_TTF@"
-                }
+                },
                 {
-                    "url": "https://github.com/antijingoist/opendyslexic/releases/download/v0.9.10/opendyslexic-0.9.10-beta-2019.09.16.zip",
-                    "sha256": "ff19e6ba9b4ed56bca374bdbd2ad7ed11267addd18478f3c2f96ad9d744975f1",
+                    "url": "https://github.com/antijingoist/opendyslexic/releases/download/v0.91.12/@FONT_OPENDYSLEXIC_TARBALL@",
+                    "sha256": "@FONT_OPENDYSLEXIC_SHA256SUM@",
                     "type": "file",
-                    "dest-filename": "external/tarballs/opendyslexic-0.9.10-beta-2019.09.16.zip"
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_OPENDYSLEXIC_TARBALL@"
                 }
             ],
             "buildsystem": "simple",
