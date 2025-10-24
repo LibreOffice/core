@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_url_for_data_file
 
 # Find and replace
 # tdf118208/118212 - enabling either CJK or CTL, or both (Tools -> Options -> Languages and Locales -> General: Default Languages for Documents checkboxes)
