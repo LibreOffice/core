@@ -294,38 +294,32 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         }
         else if (pMtfSize_100TH_MM && (rGraphic.GetType() != GraphicType::Bitmap))
         {
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
-            const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
-
-            if( pVDev->SetOutputSizePixel( aSize ) )
+            if (bWriteTransGrf)
             {
-                if (bWriteTransGrf)
+                ScopedVclPtrInstance< VirtualDevice > pVDev(DeviceFormat::WITH_ALPHA);
+                const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
+
+                if( pVDev->SetOutputSizePixel( aSize ) )
                 {
-                    const Wallpaper aWallpaper( pVDev->GetBackground() );
-                    const Point     aPt;
-
-                    pVDev->SetBackground( Wallpaper( COL_BLACK ) );
-                    pVDev->Erase();
-                    rGraphic.Draw(*pVDev, aPt, aSize);
-
-                    const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
-
-                    pVDev->SetBackground( aWallpaper );
-                    pVDev->Erase();
-                    rGraphic.Draw(*pVDev, aPt, aSize);
-
-                    pVDev->SetRasterOp( RasterOp::Xor );
-                    pVDev->DrawBitmap( aPt, aSize, aBitmap );
-                    aGraphic = Bitmap( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
+                    rGraphic.Draw(*pVDev, Point(), aSize);
+                    aGraphic = pVDev->GetBitmap( Point(), aSize );
                 }
                 else
+                    aGraphic = rGraphic.GetBitmap();
+            }
+            else
+            {
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
+                const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
+
+                if( pVDev->SetOutputSizePixel( aSize ) )
                 {
                     rGraphic.Draw(*pVDev, Point(), aSize);
                     aGraphic = pVDev->GetBitmap(Point(), aSize);
                 }
+                else
+                    aGraphic = rGraphic.GetBitmap();
             }
-            else
-                aGraphic = rGraphic.GetBitmap();
         }
         else
             aGraphic = rGraphic.GetBitmap();
