@@ -496,6 +496,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162725)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphMarkPerLineProperties)
+{
+    createSwDoc("min-wtf.rtf");
+
+    // ensure paragraphs are merged by hidden formatting
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetViewMetaChars(false);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[1]", "height",
+                u"184");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[2]", "height",
+                u"184");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[3]", "height",
+                u"184");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[4]", "height",
+                u"184");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[5]", "height",
+                u"184");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout", 5);
+    // the problem was that this was 1656 due to using wrong line spacing for last line
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/infos/bounds", "height", u"1499");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[4]/SwFixPortion",
+                "type", u"PortionType::TabLeft");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[4]/SwFixPortion",
+                "width", u"532");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[5]/SwFixPortion",
+                "type", u"PortionType::TabLeft");
+    // the problem was that this was 626 (same tab position as previous line)
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout[5]/SwFixPortion",
+                "width", u"2755");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/SwParaPortion/SwLineLayout", 0);
+    // this one was also wrong (1968) due to wrong spacing-below
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "height", u"411");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[3]/SwParaPortion/SwLineLayout[1]", "height",
+                u"265");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[3]/SwParaPortion/SwLineLayout", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[3]/infos/bounds", "height", u"492");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
 {
     createSwDoc("tdf161810.fodt");
