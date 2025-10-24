@@ -347,6 +347,7 @@
     // FREE
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
 #define SID_INSERT_CANVAS_SLIDE             (SID_SD_START+353)
+#define SID_SHUFFLE_PAGES                   (SID_SD_START+354)
     // FREE
 #define SID_INSERT_FLD_PAGE_TITLE           (SID_SD_START+356)
 #define SID_INSERT_FLD_DATE_VAR             (SID_SD_START+357)

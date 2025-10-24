@@ -1408,6 +1408,16 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_SHUFFLE_PAGES:
+        {
+            if (!GetDoc()->HasCanvasPage())
+                break;
+            GetDoc()->ReshufflePages();
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
         case SID_DUPLICATE_PAGE:
         {
             auto slideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());

@@ -1069,6 +1069,10 @@ public:
         bool bUndo = true,
         const OUString& sNewName = OUString());
 
+    /** Re-order the pages based on the position of their previews on canvas page.
+     */
+    void ReshufflePages();
+
 private:
 
     void UpdatePageRelativeURLsImpl(const std::function<void(const SvxFieldItem & rFieldItem, editeng::SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback);

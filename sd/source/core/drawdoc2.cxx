@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
@@ -1470,6 +1471,79 @@ void SdDrawDocument::SetupNewPage (
     }
 }
 
+void SdDrawDocument::ReshufflePages()
+{
+    SdrObjList* pObjList = mpCanvasPage.get();
+    std::vector<SdrPageObj*> aPageOrder;
+
+    SdrObjListIter aIter(pObjList, SdrIterMode::Flat);
+    for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
+    {
+        if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+        {
+            SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+            aPageOrder.push_back(pPageObj);
+        }
+    }
+
+    // Sort the previews by comparing their y-center (compare x-center as a tie-breaker)
+    std::sort(aPageOrder.begin(), aPageOrder.end(),
+        [](const SdrPageObj* pObj1, const SdrPageObj* pObj2) {
+              const ::tools::Rectangle& rect1 = pObj1->GetSnapRect();
+              const ::tools::Rectangle& rect2 = pObj2->GetSnapRect();
+              const ::tools::Long yCenter1 = (rect1.Top() + rect1.Bottom()) / 2;
+              const ::tools::Long yCenter2 = (rect2.Top() + rect2.Bottom()) / 2;
+
+              if (yCenter1 != yCenter2)
+                  return yCenter1 < yCenter2;
+
+              const ::tools::Long xCenter1 = (rect1.Left() + rect1.Right()) / 2;
+              const ::tools::Long xCenter2 = (rect2.Left() + rect2.Right()) / 2;
+              return xCenter1 < xCenter2;
+        }
+    );
+
+    const bool bIsRTL = AllSettings::GetLayoutRTL();
+
+    // Form a row, and sort them based on their x-center
+    for (size_t rowStart = 0; rowStart < aPageOrder.size();)
+    {
+        const ::tools::Rectangle& rect0 = aPageOrder[rowStart]->GetSnapRect();
+        const ::tools::Long top = rect0.Top();
+        const ::tools::Long bottom = rect0.Bottom();
+
+        size_t rowEnd = rowStart;
+        while (rowEnd < aPageOrder.size())
+        {
+            const ::tools::Rectangle& rect = aPageOrder[rowEnd]->GetSnapRect();
+            const ::tools::Long yCenter = (rect.Top() + rect.Bottom()) / 2;
+
+            if (yCenter < top || yCenter > bottom)
+                break;
+            rowEnd++;
+        }
+
+        std::stable_sort(aPageOrder.begin() + rowStart, aPageOrder.begin() + rowEnd,
+            [&bIsRTL](const SdrPageObj* pObj1, const SdrPageObj* pObj2) {
+            const ::tools::Rectangle& rect1 = pObj1->GetSnapRect();
+            const ::tools::Rectangle& rect2 = pObj2->GetSnapRect();
+            const ::tools::Long xCenter1 = (rect1.Left() + rect1.Right()) / 2;
+            const ::tools::Long xCenter2 = (rect2.Left() + rect2.Right()) / 2;
+
+            return bIsRTL ? (xCenter1 > xCenter2) : (xCenter1 < xCenter2);
+        });
+    }
+
+    for (size_t i = 0; i < aPageOrder.size(); i++)
+    {
+        SdPage* pPage = static_cast<SdPage*>(aPageOrder[i]->GetReferencedPage());
+        sal_uInt16 nCurrentPageNum = pPage->GetPageNum();
+        sal_uInt16 nTargetPageNum = 2 * i + 1;
+        MovePage(nCurrentPageNum, nTargetPageNum); // Standard page
+        MovePage(nCurrentPageNum + 1, nTargetPageNum + 1); // Notes page
+    }
+}
+
 sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 {
     if (HasCanvasPage())
@@ -1478,7 +1552,10 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
     SdPage* pLastStandardPage = GetSdPage(nLastPageNum - 1, PageKind::Standard);
 
-    sal_uInt16 nCanvasPageNum = CreatePage(pLastStandardPage, PageKind::Standard, u"Canvas Page"_ustr, u"Canvas notes page"_ustr, AutoLayout::AUTOLAYOUT_NONE, AutoLayout::AUTOLAYOUT_NONE, false, true, pLastStandardPage->GetPageNum() + 2);
+    sal_uInt16 nCanvasPageNum = CreatePage(pLastStandardPage, PageKind::Standard,
+                                           u"Canvas Page"_ustr, u"Canvas notes page"_ustr,
+                                           AutoLayout::AUTOLAYOUT_NONE, AutoLayout::AUTOLAYOUT_NONE,
+                                           false, true, pLastStandardPage->GetPageNum() + 2);
 
     SdPage* pCanvasPage = GetSdPage(nCanvasPageNum, PageKind::Standard);
     if (!pCanvasPage)
