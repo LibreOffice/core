@@ -1,0 +1,32 @@
+--- pdfium.orig/public/fpdf_edit.h
++++ pdfium/public/fpdf_edit.h
+@@ -1627,6 +1627,11 @@
+ FPDFFont_GetGlyphIndexFromCharCode(FPDF_FONT font, uint32_t charcode);
+ 
+ // Experimental API.
++// Get FontDictObjNum of the PDF character code
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFFont_GetFontDictObjNum(FPDF_FONT font);
++
++// Experimental API.
+ // Get number of segments inside glyphpath.
+ //
+ // glyphpath - handle to a glyph path.
+--- pdfium.orig/fpdfsdk/fpdf_edittext.cpp
++++ pdfium/fpdfsdk/fpdf_edittext.cpp
+@@ -1173,6 +1173,15 @@
+   return FPDFGlyphPathFromCFXPath(pPath);
+ }
+ 
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFFont_GetFontDictObjNum(FPDF_FONT font) {
++  auto* pFont = CPDFFontFromFPDFFont(font);
++  if (!pFont)
++    return -1;
++
++  return pFont->GetFontDictObjNum();
++}
++
+ FPDF_EXPORT uint32_t FPDF_CALLCONV
+ FPDFFont_GetGlyphIndexFromCharCode(FPDF_FONT font, uint32_t char_code) {
+   auto* pFont = CPDFFontFromFPDFFont(font);

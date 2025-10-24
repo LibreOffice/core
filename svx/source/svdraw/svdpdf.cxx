@@ -252,7 +252,7 @@ void ImpSdrPdfImport::CollectFonts()
             if (!font)
                 continue;
 
-            auto itImportedFont = maImportedFonts.find(font->getUniqueId());
+            auto itImportedFont = maImportedFonts.find(font->getFontDictObjNum());
             if (itImportedFont == maImportedFonts.end())
             {
                 OUString sPostScriptName = GetPostScriptName(pPageObject->getBaseFontName());
@@ -274,7 +274,7 @@ void ImpSdrPdfImport::CollectFonts()
                 {
                     SAL_WARN("sd.filter", "skipping not embedded font, map: "
                                               << sFontName << " to " << sPostScriptFontFamily);
-                    maImportedFonts.emplace(font->getUniqueId(),
+                    maImportedFonts.emplace(font->getFontDictObjNum(),
                                             OfficeFontInfo{ sPostScriptFontFamily, eFontWeight });
                     continue;
                 }
@@ -330,7 +330,7 @@ void ImpSdrPdfImport::CollectFonts()
 
                 if (fileUrl.getLength())
                 {
-                    maImportedFonts.emplace(font->getUniqueId(),
+                    maImportedFonts.emplace(font->getFontDictObjNum(),
                                             OfficeFontInfo{ sFontName, eFontWeight });
                     maEmbeddedFonts[sPostScriptName]
                         = EmbeddedFontInfo{ sFontName, fileUrl, eFontWeight };
@@ -1892,7 +1892,7 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     FontWeight eFontWeight(WEIGHT_DONTKNOW);
     auto xFont = pPageObject->getFont();
     auto itImportedFont
-        = xFont ? maImportedFonts.find(xFont->getUniqueId()) : maImportedFonts.end();
+        = xFont ? maImportedFonts.find(xFont->getFontDictObjNum()) : maImportedFonts.end();
     if (itImportedFont != maImportedFonts.end())
     {
         // We expand a name like "Foo" with non-traditional styles like
