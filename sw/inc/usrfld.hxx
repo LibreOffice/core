@@ -47,6 +47,7 @@ public:
     SwUserFieldType( SwDoc* pDocPtr, const UIName& );
 
     virtual UIName          GetName() const override;
+    virtual void SetName(const UIName& newName) override;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     OUString                Expand(sal_uInt32 nFormat, SwUserType nSubType, LanguageType nLng);

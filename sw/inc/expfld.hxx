@@ -160,6 +160,7 @@ public:
                         SwGetSetExpType nType = SwGetSetExpType::Expr );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
     virtual UIName          GetName() const override;
+    virtual void SetName(const UIName& newName) override;
 
     inline void             SetType(SwGetSetExpType nTyp);
     inline SwGetSetExpType  GetType() const;

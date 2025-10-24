@@ -180,6 +180,8 @@ UIName SwDDEFieldType::GetName() const
     return m_aName;
 }
 
+void SwDDEFieldType::SetName(const UIName& newName) { m_aName = newName; }
+
 void SwDDEFieldType::SetCmd( const OUString& _aStr )
 {
     OUString aStr = _aStr;

@@ -453,7 +453,7 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
                 }
                 if( i >= nSize )        // not found
                 {
-                    const_cast<OUString&>(aFieldNm) = sSrch;
+                    rFieldTyp.SetName(UIName(sSrch));
                     break;      // exit while loop
                 }
                 ++nNum;

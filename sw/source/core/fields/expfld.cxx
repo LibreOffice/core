@@ -529,6 +529,8 @@ UIName SwSetExpFieldType::GetName() const
     return m_sName;
 }
 
+void SwSetExpFieldType::SetName(const UIName& newName) { m_sName = newName; }
+
 const OUString& SwSetExpField::GetExpStr(SwRootFrame const*const pLayout) const
 {
     return (pLayout && pLayout->IsHideRedlines()) ? msExpandRLHidden : msExpand;

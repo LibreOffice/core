@@ -38,6 +38,7 @@ public:
     virtual ~SwDBFieldType() override;
 
     virtual UIName GetName() const override;
+    virtual void SetName(const UIName& newName) override;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     void     AddRef() { m_nRefCnt++; }
