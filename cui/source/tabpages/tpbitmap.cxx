@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <stdlib.h>
+#include <o3tl/untaint.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xbtmpit.hxx>
@@ -702,8 +703,8 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
             {
                 if (m_xTsbScale->get_sensitive() && m_xTsbScale->get_state() == TRISTATE_TRUE)
                 {
-                    aSetBitmapSize.setWidth(-m_xBitmapWidth->get_value(FieldUnit::NONE));
-                    aSetBitmapSize.setHeight(-m_xBitmapHeight->get_value(FieldUnit::NONE));
+                    aSetBitmapSize.setWidth(o3tl::saturating_toggle_sign(m_xBitmapWidth->get_value(FieldUnit::NONE)));
+                    aSetBitmapSize.setHeight(o3tl::saturating_toggle_sign(m_xBitmapHeight->get_value(FieldUnit::NONE)));
                 }
                 else
                 {
@@ -751,10 +752,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, weld::MetricSpinButton&, 
     sal_uInt16 nTileYOff = 0;
 
     if(m_xTileOffLB->get_active() == static_cast<sal_Int32>(ROW))
-        nTileXOff = m_xTileOffset->get_value(FieldUnit::PERCENT);
+        nTileXOff = o3tl::sanitizing_cast<sal_uInt16>(m_xTileOffset->get_value(FieldUnit::PERCENT));
 
     if(m_xTileOffLB->get_active() == static_cast<sal_Int32>(COLUMN))
-        nTileYOff = m_xTileOffset->get_value(FieldUnit::PERCENT);
+        nTileYOff = o3tl::sanitizing_cast<sal_uInt16>(m_xTileOffset->get_value(FieldUnit::PERCENT));
 
     m_rXFSet.Put( XFillBmpTileOffsetXItem(nTileXOff) );
     m_rXFSet.Put( XFillBmpTileOffsetYItem(nTileYOff) );

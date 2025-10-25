@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/untaint.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <svl/intitem.hxx>
@@ -161,7 +162,7 @@ void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
     }
     else if (m_xMtrFldX->get_sensitive())
     {
-        nXValue = m_xMtrFldX->get_value(FieldUnit::NONE);
+        nXValue = o3tl::sanitizing_cast<int>(m_xMtrFldX->get_value(FieldUnit::NONE));
         m_xMtrFldX->set_text(OUString());
         m_xMtrFldX->set_sensitive(false);
         m_xFtX->set_sensitive(false);
@@ -175,7 +176,7 @@ void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
     }
     else if (m_xMtrFldY->get_sensitive())
     {
-        nYValue = m_xMtrFldY->get_value(FieldUnit::NONE);
+        nYValue = o3tl::sanitizing_cast<int>(m_xMtrFldY->get_value(FieldUnit::NONE));
         m_xMtrFldY->set_text(OUString());
         m_xMtrFldY->set_sensitive(false);
         m_xFtY->set_sensitive(false);

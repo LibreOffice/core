@@ -21,6 +21,7 @@
 
 #include <numpages.hxx>
 #include <dialmgr.hxx>
+#include <o3tl/untaint.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/numitem.hxx>
@@ -1945,7 +1946,7 @@ IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, ColorListBox&, rColorBox, void
 
 IMPL_LINK(SvxNumOptionsTabPage, BulRelSizeHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    sal_uInt16 nRelSize = rField.get_value(FieldUnit::PERCENT);
+    sal_uInt16 nRelSize = o3tl::sanitizing_cast<sal_uInt16>(rField.get_value(FieldUnit::PERCENT));
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)

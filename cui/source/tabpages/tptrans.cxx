@@ -28,6 +28,7 @@
 #include <svx/xflbckit.hxx>
 #include <svx/sdshtitm.hxx>
 #include <svx/xfltrit.hxx>
+#include <o3tl/untaint.hxx>
 #include <cuitabarea.hxx>
 #include <svl/intitem.hxx>
 
@@ -93,7 +94,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
+    sal_uInt16 nPos = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
     rXFSet.Put(XFillTransparenceItem(nPos));
 
     // preview
@@ -260,7 +261,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrTransparent->get_sensitive())
     {
         // linear transparence
-        sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
+        sal_uInt16 nPos = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
         if (m_xMtrTransparent->get_value_changed_from_saved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);

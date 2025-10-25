@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <editeng/sizeitem.hxx>
+#include <o3tl/untaint.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 
@@ -777,7 +778,7 @@ void SvxLineTabPage::FillXLSet_Impl()
         m_rXLSet.Put( XLineEndCenterItem( false ) );
 
     // Transparency
-    sal_uInt16 nVal = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
+    sal_uInt16 nVal = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
     m_rXLSet.Put( XLineTransparenceItem( nVal ) );
 
     m_aCtlPreview.SetLineAttributes(m_aXLineAttr.GetItemSet());
@@ -1359,7 +1360,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndModifyHdl_Impl, weld::MetricSpinButton&
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nVal = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
+    sal_uInt16 nVal = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
 
     m_rXLSet.Put(XLineTransparenceItem(nVal));
 
