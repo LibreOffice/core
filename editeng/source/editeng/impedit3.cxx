@@ -3339,7 +3339,7 @@ void ImpEditEngine::DrawText_ToPosition(
         const basegfx::B2DRange aClipRange(aClipPolyPolygon.getB2DRange());
 
         if (!aContentRange.overlaps(aClipRange))
-            // no overlap, nothing visible, no output neccesary
+            // no overlap, nothing visible, no output necessary
             return;
 
         if (!aClipRange.isInside(aContentRange))
