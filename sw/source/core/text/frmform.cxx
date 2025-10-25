@@ -1385,7 +1385,9 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             if (!bLoneAsCharAnchoredObj
                 && (bHasVisibleNumRule
                     || (nStrLen > TextFrameIndex(0)
-                        && (nEnd != rLine.GetStart() || rInf.GetRest())))
+                        && (nEnd != rLine.GetStart() || rInf.GetRest()
+                            // tdf#164718: Multiline field?
+                            || rLine.GetCurr()->IsRest())))
                )
             {
                 SplitFrame( nEnd );
