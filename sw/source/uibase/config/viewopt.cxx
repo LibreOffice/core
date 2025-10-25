@@ -573,12 +573,16 @@ rtl::Reference<comphelper::ConfigurationListener> const & getWCOptionListener()
 
 bool SwViewOption::IsIgnoreProtectedArea()
 {
+    if (comphelper::IsFuzzing())
+        return false;
     static comphelper::ConfigurationListenerProperty<bool> gIgnoreProtectedArea(getWCOptionListener(), u"IgnoreProtectedArea"_ustr);
     return gIgnoreProtectedArea.get();
 }
 
 bool SwViewOption::IsAllowDragDropText()
 {
+    if (comphelper::IsFuzzing())
+        return true;
     static comphelper::ConfigurationListenerProperty<bool> gAllowDragDrop(getWCOptionListener(), u"AllowDragDrop"_ustr);
     return gAllowDragDrop.get();
 }
