@@ -1847,7 +1847,7 @@ void SwTextFormatInfo::Init()
     m_nExtraDescent = 0;
     m_nSoftHyphPos = TextFrameIndex(0);
     m_nLastBookmarkPos = TextFrameIndex(-1);
-    m_cHookChar = 0;
+    ClearHookChar();
     SetIdx(TextFrameIndex(0));
     SetLen(TextFrameIndex(GetText().getLength()));
     SetPaintOfst(0);
@@ -1964,7 +1964,7 @@ bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout const * pCurr )
 TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                                                 TextFrameIndex const nEnd)
 {
-    m_cHookChar = 0;
+    ClearHookChar();
     TextFrameIndex i = nStart;
 
     // Used for decimal tab handling:
@@ -1995,7 +1995,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         case CH_BREAK:
         case CHAR_ZWSP :
         case CHAR_WJ :
-            m_cHookChar = cPos;
+            SetHookChar( cPos );
             return i;
 
         default:
@@ -2006,7 +2006,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                     OSL_ENSURE( cPos, "Unexpected end of string" );
                     if( cPos ) // robust
                     {
-                        m_cHookChar = cPos;
+                        SetHookChar( cPos );
                         return i;
                     }
                 }
@@ -2024,7 +2024,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                     {
                         if ( bNumFound )
                         {
-                            m_cHookChar = cPos;
+                            SetHookChar( cPos );
                             SetTabDecimal( cPos );
                             return i;
                         }
@@ -2041,8 +2041,8 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
         {
-            m_cHookChar = GetChar( i );
-            SetTabDecimal( m_cHookChar );
+            SetHookChar( cPos );
+            SetTabDecimal( cPos );
         }
     }
 

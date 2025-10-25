@@ -334,7 +334,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
         if ( m_nNextScriptChg < nFullLen )
         {
             nFullLen = m_nNextScriptChg;
-            rInf.SetHookChar( 0 );
+            rInf.ClearHookChar();
         }
         rInf.SetLen( nFullLen );
 
