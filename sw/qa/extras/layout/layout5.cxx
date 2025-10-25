@@ -2100,6 +2100,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168858)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718)
+{
+    // A 13-line field as the lone content of a paragraph in a two-column section:
+    createSwDoc("multiline-field-in-columnar-section.fodt");
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+
+    // The problem was, that layout refused to split the multiline field across the columns, which
+    // resulted in a layout loop, ending up in a new page creation, where that section had height
+    // equal to zero (invisible). The interesting part is, that splitting of the field, which is
+    // reasonable, is later undone currently; but that is a separate issue (related to orphan and
+    // widow control).
+
+    // Check that there is only one page, it has the leading paragraph, the section, and the
+    // trailing paragraph:
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPathChildren(pXmlDoc, "//page/body", 4);
+    assertXPathNodeName(pXmlDoc, "//page/body/*[1]", "infos");
+    assertXPathNodeName(pXmlDoc, "//page/body/*[2]", "txt");
+    assertXPathNodeName(pXmlDoc, "//page/body/*[3]", "section");
+    assertXPathNodeName(pXmlDoc, "//page/body/*[4]", "txt");
+
+    // Check that the section's height is not zero (which it was before the fix). Currently, in my
+    // testing it is 3588. This height is likely to change at some point, when the split will not
+    // be undone, and lines 8-13 of the field will end up in column 2; then it will be around 1932:
+    auto height = getXPath(pXmlDoc, "//page/body/section/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1500), height);
+    CPPUNIT_ASSERT_LESS(sal_Int32(4000), height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
