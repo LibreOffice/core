@@ -24,7 +24,6 @@
 #include <config_oauth2.h>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
-#include <systools/curlinit.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -127,113 +126,10 @@ namespace cmis
         if ( !m_aRepositories.empty() )
             return;
 
-        // init libcurl callback
-        libcmis::SessionFactory::setCurlInitProtocolsFunction(&::InitCurl_easy);
-
-        // Get the auth credentials
-        AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
-        AuthProvider::setXEnv( xEnv );
-
-        std::string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
-        std::string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
-
-        bool bIsDone = false;
-
-        while( !bIsDone )
-        {
-            if ( authProvider.authenticationQuery( rUsername, rPassword ) )
-            {
-                try
-                {
-                    // Create a session to get repositories
-                    libcmis::OAuth2DataPtr oauth2Data;
-                    if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
-                    {
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( AuthProvider::copyWebAuthCodeFallback );
-                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
-                            GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
-                            GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
-                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET );
-                    }
-                    if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
-                            ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
-                            ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
-                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET );
-                    if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
-                    {
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( AuthProvider::copyWebAuthCodeFallback );
-                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
-                            ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
-                            ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
-                            ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET );
-                    }
-
-                    std::unique_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
-                            OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, "", false, std::move(oauth2Data) ));
-                    if (!session)
-                        ucbhelper::cancelCommandExecution(
-                                            ucb::IOErrorCode_INVALID_DEVICE,
-                                            uno::Sequence< uno::Any >( 0 ),
-                                            xEnv );
-                    m_aRepositories = session->getRepositories( );
-
-                    bIsDone = true;
-                }
-                catch ( const libcmis::Exception& e )
-                {
-                    SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
-
-                    if (e.getType() == "dnsFailed")
-                    {
-                        uno::Any ex;
-                        ex <<= ucb::InteractiveNetworkResolveNameException(
-                                OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
-                                getXWeak(),
-                                task::InteractionClassification_ERROR,
-                                m_aURL.getBindingUrl());
-                        ucbhelper::cancelCommandExecution(ex, xEnv);
-                    }
-                    else if (e.getType() == "connectFailed" || e.getType() == "connectTimeout")
-                    {
-                        uno::Any ex;
-                        ex <<= ucb::InteractiveNetworkConnectException(
-                                OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
-                                getXWeak(),
-                                task::InteractionClassification_ERROR,
-                                m_aURL.getBindingUrl());
-                        ucbhelper::cancelCommandExecution(ex, xEnv);
-                    }
-                    else if (e.getType() == "transferFailed")
-                    {
-                        uno::Any ex;
-                        ex <<= ucb::InteractiveNetworkReadException(
-                                OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
-                                getXWeak(),
-                                task::InteractionClassification_ERROR,
-                                m_aURL.getBindingUrl());
-                        ucbhelper::cancelCommandExecution(ex, xEnv);
-                    }
-                    else if (e.getType() != "permissionDenied")
-                    {
-                        ucbhelper::cancelCommandExecution(
-                                        ucb::IOErrorCode_INVALID_DEVICE,
-                                        uno::Sequence< uno::Any >( 0 ),
-                                        xEnv );
-                    }
-                }
-            }
-            else
-            {
-                // Throw user cancelled exception
-                ucbhelper::cancelCommandExecution(
-                                    ucb::IOErrorCode_ABORT,
-                                    uno::Sequence< uno::Any >( 0 ),
-                                    xEnv,
-                                    u"Authentication cancelled"_ustr );
-            }
-        }
+        libcmis::Session* session = createSession(xEnv, *m_pProvider, m_aURL,
+                                                  m_xIdentifier->getContentIdentifier(), this);
+        assert(session);
+        m_aRepositories = session->getRepositories();
     }
 
     libcmis::RepositoryPtr RepoContent::getRepository( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
