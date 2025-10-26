@@ -98,6 +98,7 @@ private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
     static void deleteObjectLater(QObject* pObject);
     static void localeChanged();
+    void colorSchemeChanged();
 
     void orientationChanged(Qt::ScreenOrientation);
     void primaryScreenChanged(QScreen*);
