@@ -1247,9 +1247,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
         return;
     UsePdfium aGuard;
 
-    //cannot overwrite font file that windows has already open, fix in a later
-    //patch
-#if !defined _WIN32
     loadFromFile(u"pdf/sciencejournalsource.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
@@ -1262,7 +1259,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
     assertXPath(pXmlDoc, "/office:document/office:font-face-decls/style:font-face[@style:name='PT "
                          "Serif']/svg:font-face-src/svg:font-face-uri[@loext:font-weight='bold' "
                          "and @loext:font-style='normal']/office:binary-data");
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
