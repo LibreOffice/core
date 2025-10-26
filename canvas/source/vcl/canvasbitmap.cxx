@@ -40,7 +40,6 @@ namespace vclcanvas
     {
         // create bitmap for given reference device
         // ========================================
-        Bitmap aBitmap(rSize, vcl::PixelFormat::N24_BPP);
 
         // only create alpha channel bitmap, if factory requested
         // that. Providing alpha-channeled bitmaps by default has,
@@ -48,15 +47,13 @@ namespace vclcanvas
         // use alpha VDev, then).
         if( bAlphaBitmap )
         {
-            AlphaMask   aAlpha ( rSize );
-
-            maCanvasHelper.init( Bitmap( aBitmap, aAlpha ),
+            maCanvasHelper.init( Bitmap(rSize, vcl::PixelFormat::N32_BPP),
                                  rDevice,
                                  rOutDevProvider );
         }
         else
         {
-            maCanvasHelper.init( aBitmap,
+            maCanvasHelper.init( Bitmap(rSize, vcl::PixelFormat::N24_BPP),
                                  rDevice,
                                  rOutDevProvider );
         }
