@@ -529,7 +529,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     if (aMap.run() != RET_OK)
         return;
 
-    sal_Unicode cChar = aMap.GetChar();
+    sal_UCS4 cChar = aMap.GetChar();
     vcl::Font aActBulletFont = aMap.GetCharFont();
 
     sal_uInt16 _nMask = 1;
@@ -555,7 +555,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     {
         if (i == nIndex)
         {
-            aBulletSymbolsListRange[i] = OUStringChar(cChar);
+            aBulletSymbolsListRange[i] = OUString(&cChar, 1);
             aBulletSymbolsFontsListRange[i] = aActBulletFont.GetFamilyName();
         }
         else
