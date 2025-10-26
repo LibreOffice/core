@@ -2222,7 +2222,7 @@
 
       <node oor:name="TextColumnsPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Columns</value>
+          <value xml:lang="en-US">Text Attributes</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>TextColumnsPropertyPanel</value>

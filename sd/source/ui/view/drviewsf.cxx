@@ -471,6 +471,33 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             break;
 
+            case SID_ATTR_TEXT_AUTOGROWWIDTH:
+            case SID_ATTR_TEXT_AUTOGROWHEIGHT:
+            {
+                SfxItemSet aAttrs(GetDoc()->GetPool());
+                mpDrawView->GetAttributes(aAttrs);
+                const sal_uInt16 nActWhich = nSlotId == SID_ATTR_TEXT_AUTOGROWWIDTH
+                                                    ? SDRATTR_TEXT_AUTOGROWWIDTH
+                                                    : SDRATTR_TEXT_AUTOGROWHEIGHT;
+                rSet.Put(aAttrs.Get(nActWhich).CloneSetWhich(nSlotId));
+            }
+            break;
+            case SID_ATTR_TEXT_LEFTDIST:
+            case SID_ATTR_TEXT_RIGHTDIST:
+            case SID_ATTR_TEXT_UPPERDIST:
+            case SID_ATTR_TEXT_LOWERDIST:
+            {
+                SfxItemSet aAttrs(GetDoc()->GetPool());
+                mpDrawView->GetAttributes(aAttrs);
+                const sal_uInt16 nActWhich =
+                    nSlotId == SID_ATTR_TEXT_LEFTDIST   ? SDRATTR_TEXT_LEFTDIST :
+                    nSlotId == SID_ATTR_TEXT_RIGHTDIST  ? SDRATTR_TEXT_RIGHTDIST :
+                    nSlotId == SID_ATTR_TEXT_UPPERDIST  ? SDRATTR_TEXT_UPPERDIST :
+                                                        SDRATTR_TEXT_LOWERDIST;
+                rSet.Put(aAttrs.Get(nActWhich).CloneSetWhich(nSlotId));
+            }
+            break;
+
             case SID_HYPHENATION:
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );

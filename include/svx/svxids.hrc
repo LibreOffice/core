@@ -1112,9 +1112,15 @@ class XFillGradientItem;
 #define SID_CONNECTOR_LINES_CIRCLE_START                ( SID_SVX_START + 1248 )
 #define SID_CONNECTOR_LINES_CIRCLE_END                  ( SID_SVX_START + 1249 )
 #define SID_CONNECTOR_LINES_CIRCLES                     ( SID_SVX_START + 1250 )
+#define SID_ATTR_TEXT_AUTOGROWWIDTH                     ( SID_SVX_START + 1251 )
+#define SID_ATTR_TEXT_AUTOGROWHEIGHT                    ( SID_SVX_START + 1252 )
+#define SID_ATTR_TEXT_LEFTDIST                          ( SID_SVX_START + 1253 )
+#define SID_ATTR_TEXT_RIGHTDIST                         ( SID_SVX_START + 1254 )
+#define SID_ATTR_TEXT_UPPERDIST                         ( SID_SVX_START + 1255 )
+#define SID_ATTR_TEXT_LOWERDIST                         ( SID_SVX_START + 1256 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_SVX_START + 1250 + 1)
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1256 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

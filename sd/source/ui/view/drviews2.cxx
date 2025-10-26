@@ -4269,6 +4269,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_SOFTEDGE_RADIUS:
         case SID_ATTR_TEXTCOLUMNS_NUMBER:
         case SID_ATTR_TEXTCOLUMNS_SPACING:
+        case SID_ATTR_TEXT_AUTOGROWWIDTH:
+        case SID_ATTR_TEXT_AUTOGROWHEIGHT:
+        case SID_ATTR_TEXT_LEFTDIST:
+        case SID_ATTR_TEXT_RIGHTDIST:
+        case SID_ATTR_TEXT_UPPERDIST:
+        case SID_ATTR_TEXT_LOWERDIST:
             if (const SfxItemSet* pNewArgs = rReq.GetArgs())
                 mpDrawView->SetAttributes(*pNewArgs);
             rReq.Done();

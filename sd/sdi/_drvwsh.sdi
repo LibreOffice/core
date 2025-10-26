@@ -2983,6 +2983,36 @@ interface DrawView
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_TEXT_AUTOGROWWIDTH
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_AUTOGROWHEIGHT
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_LEFTDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_RIGHTDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_UPPERDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_LOWERDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
     SID_THEME_DIALOG
     [
         ExecMethod = FuTemporary;
