@@ -101,7 +101,7 @@ DocumentEntry::DocumentEntry (
     m_aDocument(std::move(aDocument)),
     m_eLocation(eLocation)
 {
-    OSL_ENSURE( m_aDocument.isValid(), "DocumentEntry::DocumentEntry: illegal document!" );
+    SAL_WARN_IF( !m_aDocument.isValid(), "basctl.basicide", "DocumentEntry::DocumentEntry: illegal document!" );
 }
 
 DocumentEntry::~DocumentEntry()
@@ -140,7 +140,7 @@ EntryDescriptor::EntryDescriptor (
     m_aName(std::move(aName)),
     m_eType(eType)
 {
-    OSL_ENSURE( m_aDocument.isValid(), "EntryDescriptor::EntryDescriptor: invalid document!" );
+    SAL_WARN_IF( !m_aDocument.isValid(), "basctl.basicide", "EntryDescriptor::EntryDescriptor: invalid document!" );
 }
 
 EntryDescriptor::EntryDescriptor (
@@ -160,7 +160,7 @@ EntryDescriptor::EntryDescriptor (
     m_aMethodName(std::move(aMethodName)),
     m_eType(eType)
 {
-    OSL_ENSURE( m_aDocument.isValid(), "EntryDescriptor::EntryDescriptor: invalid document!" );
+    SAL_WARN_IF( !m_aDocument.isValid(), "basctl.basicide", "EntryDescriptor::EntryDescriptor: invalid document!" );
 }
 
 SbTreeListBox::SbTreeListBox(std::unique_ptr<weld::TreeView> xControl, weld::Window* pTopLevel)
@@ -191,7 +191,7 @@ SbTreeListBox::~SbTreeListBox()
 
 void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    OSL_ENSURE( rDocument.isAlive(), "TreeListBox::ScanEntry: illegal document!" );
+    SAL_WARN_IF( !rDocument.isAlive(), "basctl.basicide", "TreeListBox::ScanEntry: illegal document!" );
     if ( !rDocument.isAlive() )
         return;
 
@@ -687,7 +687,7 @@ bool SbTreeListBox::IsEntryProtected(const weld::TreeIter* pEntry)
     {
         EntryDescriptor aDesc(GetEntryDescriptor(pEntry));
         const ScriptDocument& rDocument( aDesc.GetDocument() );
-        OSL_ENSURE( rDocument.isAlive(), "TreeListBox::IsEntryProtected: no document, or document is dead!" );
+        SAL_WARN_IF( !rDocument.isAlive(), "basctl.basicide", "TreeListBox::IsEntryProtected: no document, or document is dead!" );
         if ( rDocument.isAlive() )
         {
             const OUString& aOULibName( aDesc.GetLibName() );
@@ -748,7 +748,7 @@ OUString SbTreeListBox::GetRootEntryName( const ScriptDocument& rDocument, Libra
 
 OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
 {
-    OSL_ENSURE( rDocument.isValid(), "TreeListBox::GetRootEntryBitmaps: illegal document!" );
+    SAL_WARN_IF( !rDocument.isValid(), "basctl.basicide", "TreeListBox::GetRootEntryBitmaps: illegal document!" );
     if (!rDocument.isValid())
         return OUString();
 
@@ -803,7 +803,7 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
         );
     }
     ScriptDocument aDocument = aDesc.GetDocument();
-    OSL_ENSURE( aDocument.isValid(), "TreeListBox::SetCurrentEntry: invalid document!" );
+    SAL_WARN_IF( !aDocument.isValid(), "basctl.basicide", "TreeListBox::SetCurrentEntry: invalid document!" );
     LibraryLocation eLocation = aDesc.GetLocation();
     bool bRootEntry = FindRootEntry(aDocument, eLocation, *m_xScratchIter);
     if (bRootEntry)
