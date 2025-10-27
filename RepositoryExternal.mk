@@ -146,6 +146,46 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+ifneq ($(ENABLE_SQLITE3),)
+ifneq ($(SYSTEM_SQLITE3),)
+
+define gb_LinkTarget__use_sqlite3_impl
+$(if $(2),,$(error gb_LinkTarget__use_sqlite3_impl needs additional parameter))
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_SQLITE3 \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),-lsqlite3)
+
+endef
+
+gb_ExternalProject__use_sqlite3 :=
+
+else # !SYSTEM_SQLITE3
+
+define gb_LinkTarget__use_sqlite3_impl
+$(if $(2),,$(error gb_LinkTarget__use_sqlite3_impl needs additional parameter))
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(gb_UnpackedTarball_workdir)/sqlite3 \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	$(2) \
+)
+
+endef
+
+define gb_ExternalProject__use_sqlite3
+$(call gb_ExternalProject_use_static_libraries,$(1),sqlite3)
+
+endef
+
+endif # SYSTEM_SQLITE3
+endif # ENABLE_SQLITE3
+
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers

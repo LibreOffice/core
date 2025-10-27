@@ -2500,6 +2500,11 @@ AC_ARG_WITH(external-thes-dir,
         [Specify external thesaurus dir.]),
 ,)
 
+AC_ARG_WITH(system-sqlite3,
+    AS_HELP_STRING([--with-system-sqlite3],
+        [Use sqlite3 already on system.]),,
+    [with_system_sqlite3="$with_system_libs"])
+
 AC_ARG_WITH(system-zlib,
     AS_HELP_STRING([--with-system-zlib],
         [Use zlib already on system.]),,
@@ -6332,6 +6337,7 @@ if test "$cross_compiling" = "yes"; then
         REPORTBUILDER
         SCRIPTING
         SKIA
+        SQLITE3
         ZLIB
         ZSTD
         ZXCVBN
@@ -14471,6 +14477,16 @@ fi
 AC_SUBST(SYSTEM_BZIP2)
 AC_SUBST(BZIP2_CFLAGS)
 AC_SUBST(BZIP2_LIBS)
+
+dnl ===================================================================
+dnl Test whether we need sqlite3
+dnl ===================================================================
+ENABLE_SQLITE3=
+if test "$_os" != "Darwin" -a $enable_python = internal; then
+    ENABLE_SQLITE3="TRUE"
+    libo_CHECK_SYSTEM_MODULE([sqlite3], [SQLITE3], [sqlite3])
+fi
+AC_SUBST(ENABLE_SQLITE3)
 
 dnl ===================================================================
 dnl Test whether to enable extension update
