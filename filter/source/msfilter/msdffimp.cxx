@@ -5743,6 +5743,10 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject const * pObject ) const
 
 //  exported class: Public Methods
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  OUString aBaseURL,
                                  sal_uInt32 nOffsDgg_,
@@ -5792,7 +5796,14 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
     if( &rStCtrl != pStData )
         pStData->Seek( nOldPosData );
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, OUString aBaseURL )
     :DffPropertyReader( *this ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
@@ -5811,6 +5822,9 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, OUString aBaseURL )
 {
     SetModel( nullptr, 0 );
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 SvxMSDffManager::~SvxMSDffManager()
 {
