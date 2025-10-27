@@ -207,16 +207,16 @@ void SwXBookmark::attachToRangeEx(
     {
          m_pImpl->m_sMarkName = SwMarkName("Bookmark");
     }
-    if ((eType == IDocumentMarkAccess::MarkType::BOOKMARK) &&
-        ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))
+    if (eType == IDocumentMarkAccess::MarkType::BOOKMARK)
     {
-        eType = IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK;
-    }
-    else if ((eType == IDocumentMarkAccess::MarkType::BOOKMARK) &&
-        ::sw::mark::CrossRefHeadingBookmark::IsLegalName(m_pImpl->m_sMarkName) &&
-        IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aPam ) )
-    {
-        eType = IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK;
+        if (IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark(aPam))
+        {
+            // Both heading and numitem bookmarks require IsLegalPaMForCrossRefHeadingBookmark
+            if (sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))
+                eType = IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK;
+            else if (sw::mark::CrossRefHeadingBookmark::IsLegalName(m_pImpl->m_sMarkName))
+                eType = IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK;
+        }
     }
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
