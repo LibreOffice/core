@@ -24,7 +24,10 @@ $(call gb_AllLangHelp_get_helpfiles_target,%): | \
 	touch $@
 endif
 
-$(gb_AllLangHelp_targetdir)%.dir :
+$(gb_AllLangHelp_targetdir)/%/.dir :
+	mkdir -p $(@D) && touch $@
+
+$(gb_AllLangHelp_targetdir)/.dir :
 	mkdir -p $(@D) && touch $@
 
 $(gb_AllLangHelp_targetdir)/% :
