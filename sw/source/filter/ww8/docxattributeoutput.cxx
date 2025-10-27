@@ -1610,6 +1610,16 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     WriteCollectedParagraphProperties();
 
+    // Write w:framePr
+    if (!m_bWritingHeaderFooter && m_aFramePr.Frame())
+    {
+        const SwFrameFormat& rFrameFormat = m_aFramePr.Frame()->GetFrameFormat();
+        assert(SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
+
+        const Size aSize = m_aFramePr.Frame()->GetSize();
+        PopulateFrameProperties(&rFrameFormat, aSize);
+    }
+
     // Merge the marks for the ordered elements
     m_pSerializer->mergeTopMarks(Tag_InitCollectedParagraphProperties);
 
@@ -1656,9 +1666,6 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     {
         const SwFrameFormat& rFrameFormat = m_aFramePr.Frame()->GetFrameFormat();
         assert(SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
-
-        const Size aSize = m_aFramePr.Frame()->GetSize();
-        PopulateFrameProperties(&rFrameFormat, aSize);
 
         // if the paragraph itself never called FormatBox, do so now
         if (m_aFramePr.UseFrameBorders(!m_xTableWrt ? -1 : m_tableReference.m_nTableDepth))
