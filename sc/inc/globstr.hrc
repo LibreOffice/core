@@ -208,6 +208,7 @@
 #define STR_TABLE_GRAND_STDDEV                  NC_("STR_TABLE_GRAND_STDDEV", "Grand StdDev")
 #define STR_TABLE_GRAND_SUM                     NC_("STR_TABLE_GRAND_SUM", "Grand Sum")
 #define STR_TABLE_GRAND_VAR                     NC_("STR_TABLE_GRAND_VAR", "Grand Var")
+#define STR_TABLE_TOTAL                         NC_("STR_TABLE_TOTAL", "Summary")
 #define STR_NOCHARTATCURSOR                     NC_("STR_NOCHARTATCURSOR", "No chart found at this position.")
 #define STR_PIVOT_NOTFOUND                      NC_("STR_PIVOT_NOTFOUND", "No pivot table found at this position.")
 #define STR_EMPTYDATA                           NC_("STR_EMPTYDATA", "(empty)")
