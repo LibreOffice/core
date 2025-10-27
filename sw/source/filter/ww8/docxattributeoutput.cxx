@@ -1567,6 +1567,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
     // Did we already produce a <w:sz> element?
     bool bFontSizeWritten = false;
     bool bBoldWritten = false;
+    bool bPostureWritten = false;
     while (nWhichId)
     {
         if (aIter.GetItemState(true, &pItem) == SfxItemState::SET)
@@ -1576,12 +1577,15 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
                 // Will this item produce a <w:sz> element?
                 bool bFontSizeItem = nWhichId == RES_CHRATR_FONTSIZE || nWhichId == RES_CHRATR_CJK_FONTSIZE;
                 bool bBoldItem = nWhichId == RES_CHRATR_WEIGHT || nWhichId == RES_CHRATR_CJK_WEIGHT;
-                if (!(bFontSizeWritten && bFontSizeItem) && !(bBoldWritten && bBoldItem))
+                bool bPostureItem = nWhichId == RES_CHRATR_POSTURE || nWhichId == RES_CHRATR_CJK_POSTURE;
+                if (!(bFontSizeWritten && bFontSizeItem) && !(bBoldWritten && bBoldItem) && !(bPostureWritten && bPostureItem))
                     rAttributeOutput.OutputItem(*pItem);
                 if (bFontSizeItem)
                     bFontSizeWritten = true;
                 if (bBoldItem)
                     bBoldWritten = true;
+                if (bPostureItem)
+                    bPostureWritten = true;
             }
             else if (nWhichId == RES_TXTATR_AUTOFMT)
             {
