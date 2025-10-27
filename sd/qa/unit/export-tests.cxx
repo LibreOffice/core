@@ -1295,6 +1295,28 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
                          "@draw:fill-image-name='Bitmap_20_1']");
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testPdfPageMasterOrientation)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/SampleSlideDeck.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // Ensure the page size is landscape. Before fix the master pagesize was
+    // portrait Letter so on reimport of the [f]odg the master page size is
+    // what is applied to the reloaded pages and was obviously wrong on reload.
+    assertXPath(pXmlDoc,
+                "/office:document/office:automatic-styles/style:page-layout[@style:name='PM0']/"
+                "style:page-layout-properties[@style:print-orientation='landscape']");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextShear)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
