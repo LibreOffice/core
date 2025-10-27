@@ -361,7 +361,7 @@ ChartGradientPalettePopup::GetSelectedItem(const std::unique_ptr<ChartGradientPa
 
     const sal_uInt32 nIndex = nItemId - 1;
 
-    if (const basegfx::BGradient* pPalette = xPalettes->getPalette(nIndex))
+    if (xPalettes->getPalette(nIndex))
     {
         mbItemSelected = true;
         return nIndex;
@@ -393,7 +393,7 @@ void ChartGradientPalettePopup::MouseMoveHdl(
 
     if (nHlId > 0)
     {
-        if (const basegfx::BGradient* pPalette = xPalettes->getPalette(nHlId - 1))
+        if (xPalettes->getPalette(nHlId - 1))
         {
             mxControl->applyGradientPalette(eHlItemVariation, eHlType, true);
         }

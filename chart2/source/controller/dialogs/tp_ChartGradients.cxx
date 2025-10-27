@@ -169,7 +169,7 @@ ChartGradientsTabPage::GetSelectedItem(const std::unique_ptr<ChartGradientPalett
 
     const sal_uInt32 nIndex = nItemId - 1;
 
-    if (const basegfx::BGradient* pPalette = xPalettes->getPalette(nIndex))
+    if (xPalettes->getPalette(nIndex))
     {
         return nIndex;
     }
