@@ -794,10 +794,10 @@ void ScDocument::RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, cons
         pTable->RemoveSimpleSubTotals( rParam, rOldParam );
 }
 
-bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
+bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, sal_uInt16 nIndex )
 {
     ScTable* pTable = FetchTable(nTab);
-    return pTable && pTable->DoSimpleSubTotals(rParam);
+    return pTable && pTable->DoSimpleSubTotals(rParam, nIndex);
 }
 
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )
@@ -1581,9 +1581,12 @@ void ScDocument::GetFilterEntries(
     ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);  //!??
     if (!pDBData)
         return;
-
-    pDBData->ExtendBackColorArea(*this);
-    pDBData->ExtendDataArea(*this);
+    // Do not extand DBArea automatically in case of Table Styles with Total row
+    if (!pDBData->HasTotals() || !pDBData->GetTableStyleInfo())
+    {
+        pDBData->ExtendBackColorArea(*this);
+        pDBData->ExtendDataArea(*this);
+    }
     SCTAB nAreaTab;
     SCCOL nStartCol;
     SCROW nStartRow;
@@ -1593,6 +1596,9 @@ void ScDocument::GetFilterEntries(
 
     if (pDBData->HasHeader())
         ++nStartRow;
+    // For Table Styles area, exclude total row
+    if (pDBData->HasTotals() && pDBData->GetTableStyleInfo())
+        --nEndRow;
 
     ScQueryParam aParam;
     pDBData->GetQueryParam( aParam );

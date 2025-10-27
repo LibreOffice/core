@@ -2351,7 +2351,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     return bSpaceLeft;
 }
 
-bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
+bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam, sal_uInt16 nIndex )
 {
     RowEntry aRowEntry;
     aRowEntry.nGroupNo = 0;
@@ -2379,30 +2379,27 @@ bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
     }
     else
     {
-        SetString(group.nField, aRowEntry.nDestRow, nTab, u"Summary"_ustr);
+        SetString(group.nField, aRowEntry.nDestRow, nTab, ScResId(STR_TABLE_TOTAL));
     }
 
     // insert the formulas
     if (group.nSubTotals > 0)
     {
-        ScComplexRefData aRef;
-        aRef.InitFlags();
-        aRef.Ref1.SetAbsTab(nTab);
-        aRef.Ref2.SetAbsTab(nTab);
-
         for (SCCOL nResult = 0; nResult < group.nSubTotals; ++nResult)
         {
-            aRef.Ref1.SetAbsCol(group.col(nResult));
-            aRef.Ref1.SetAbsRow(aRowEntry.nFuncStart);
-            aRef.Ref2.SetAbsCol(group.col(nResult));
-            aRef.Ref2.SetAbsRow(aRowEntry.nFuncEnd);
-            // TODO: handle it with tablerefs: Table1[Column1]
             ScTokenArray aArr(rDocument);
             aArr.AddOpCode(ocSubTotal);
             aArr.AddOpCode(ocOpen);
             aArr.AddDouble(static_cast<double>(group.func(nResult)));
             aArr.AddOpCode(ocSep);
-            aArr.AddDoubleReference(aRef);
+            // Table refs structure
+            aArr.AddTableRef(nIndex);
+            aArr.AddOpCode(ocTableRefOpen);
+            ScSingleRefData aSingleRef;
+            aSingleRef.InitAddress(group.col(nResult), aRowEntry.nFuncStart - 1, nTab);
+            aArr.AddSingleReference(aSingleRef);
+            aArr.AddOpCode(ocTableRefClose);
+            // Table refs structure end
             aArr.AddOpCode(ocClose);
             aArr.AddOpCode(ocStop);
             ScFormulaCell* pCell = new ScFormulaCell(

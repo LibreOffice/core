@@ -834,7 +834,8 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );    // partial results exist?
 
-        if (aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly)
+        if ((aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly)
+            || (pDBData->HasTotals() && pDBData->GetTableStyleInfo()))
             bKeepSub = true;
     }
 
@@ -1309,22 +1310,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     bool bSuccess = true;
     if (bDo)
     {
-        // sort
-        if (rParam.bDoSort)
-        {
-            pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2,
-                             aNewParam.nRow2);
-
-            //  set partial result field to before the sorting
-            //  (Duplicates are omitted, so can be called again)
-
-            ScSortParam aOldSort;
-            pDBData->GetSortParam(aOldSort);
-            ScSortParam aSortParam(aNewParam, aOldSort);
-            Sort(nTab, aSortParam, false, false, bApi);
-        }
-
-        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam);
+        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam, rNewData.GetIndex());
         rDoc.SetDrawPageSize(nTab);
     }
     ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,
