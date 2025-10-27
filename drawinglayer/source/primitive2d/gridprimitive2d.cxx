@@ -24,7 +24,10 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <utility>
+#include <sal/log.hxx>
+
 
 
 using namespace com::sun::star;
@@ -34,6 +37,7 @@ namespace drawinglayer::primitive2d
 {
         Primitive2DReference GridPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
+            SAL_WARN("GridPrimitive2D", "create2DDecomposition" );
             if(!(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0))
                 return nullptr;
 
@@ -144,7 +148,7 @@ namespace drawinglayer::primitive2d
                     aExtendedViewport.transform(aTrans);
 
                     // crop start/end in X/Y to multiples of logical step width
-                    const double fHalfCrossSize((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(3.0, 0.0)).getLength());
+                    const double fHalfCrossSize((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(20.0, 0.0)).getLength());
                     const double fMinX(floor((aExtendedViewport.getMinX() - fHalfCrossSize) / fStepX) * fStepX);
                     const double fMaxX(ceil((aExtendedViewport.getMaxX() + fHalfCrossSize) / fStepX) * fStepX);
                     const double fMinY(floor((aExtendedViewport.getMinY() - fHalfCrossSize) / fStepY) * fStepY);
@@ -168,17 +172,20 @@ namespace drawinglayer::primitive2d
 
             for(double fX(aExtendedViewport.getMinX()); fX < aExtendedViewport.getMaxX(); fX += fStepX)
             {
+                SAL_WARN("GridPrimitive2D", "for(double fX(aExtendedViewport.getMinX()); fX < aExtendedViewport.getMaxX(); fX += fStepX)" );
                 const bool bXZero(basegfx::fTools::equalZero(fX));
 
                 for(double fY(aExtendedViewport.getMinY()); fY < aExtendedViewport.getMaxY(); fY += fStepY)
                 {
+                    SAL_WARN("GridPrimitive2D", "for(double fY(aExtendedViewport.getMinY()); fY < aExtendedViewport.getMaxY(); fY += fStepY)" );
                     const bool bYZero(basegfx::fTools::equalZero(fY));
 
                     if(!bXZero && !bYZero)
                     {
+                        SAL_WARN("GridPrimitive2D", "if(!bXZero && !bYZero)" );
                         // get discrete position and test against 3x3 area surrounding it
                         // since it's a cross
-                        const double fHalfCrossSize(3.0 * 0.5);
+                        const double fHalfCrossSize(20.0 * 0.5);
                         const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fY));
                         const basegfx::B2DRange aDiscreteRangeCross(
                             aViewPos.getX() - fHalfCrossSize, aViewPos.getY() - fHalfCrossSize,
@@ -202,7 +209,7 @@ namespace drawinglayer::primitive2d
                             if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                             {
                                 const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
-                                aPositionsPoint.push_back(aLogicPos);
+                                aPositionsCross.push_back(aLogicPos);
                             }
                         }
                     }
@@ -218,7 +225,7 @@ namespace drawinglayer::primitive2d
                             if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                             {
                                 const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
-                                aPositionsPoint.push_back(aLogicPos);
+                                aPositionsCross.push_back(aLogicPos);
                             }
                         }
                     }
@@ -226,29 +233,35 @@ namespace drawinglayer::primitive2d
             }
 
             // prepare return value
-            const sal_uInt32 nCountPoint(aPositionsPoint.size());
             const sal_uInt32 nCountCross(aPositionsCross.size());
 
             // add PointArrayPrimitive2D if point markers were added
             Primitive2DContainer aContainer;
-            if(nCountPoint)
             {
-                aContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsPoint), getBColor()));
-            }
+                SAL_WARN("GridPrimitive2D", "MarkerArrayPrimitive2D" );
+                for (const basegfx::B2DPoint &aPoint : aPositionsCross)
+                {
+                    SAL_WARN("GridPrimitive2D", "aPoint" );
+                    SAL_WARN("GridPrimitive2D", "fStepX: " << fStepX );
+                    double fHalfCrossSize(std::min(fStepX, fStepY) / 4 / 2);
+                    if(getSubdivisionsX())
+                    {
+                        fHalfCrossSize = std::min(fHalfCrossSize, fSmallStepX / 4 / 2);
+                    }
+                    if(getSubdivisionsY())
+                    {
+                        fHalfCrossSize = std::min(fHalfCrossSize, fSmallStepY / 4 / 2);
+                    }
 
-            // add MarkerArrayPrimitive2D if cross markers were added
-            if(!nCountCross)
-                return new GroupPrimitive2D(std::move(aContainer));
+                    aContainer.push_back(new SingleLinePrimitive2D(basegfx::B2DPoint(aPoint.getX() - fHalfCrossSize, aPoint.getY()),
+                        basegfx::B2DPoint(aPoint.getX() + fHalfCrossSize, aPoint.getY()),
+                        getBColor()));
 
-            if(!getSubdivisionsX() && !getSubdivisionsY())
-            {
-                // no subdivisions, so fall back to points at grid positions, no need to
-                // visualize a difference between divisions and sub-divisions
-                aContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsCross), getBColor()));
-            }
-            else
-            {
-                aContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), getCrossMarker()));
+
+                    aContainer.push_back(new SingleLinePrimitive2D(basegfx::B2DPoint(aPoint.getX(), aPoint.getY() - fHalfCrossSize),
+                        basegfx::B2DPoint(aPoint.getX(), aPoint.getY() + fHalfCrossSize),
+                        getBColor()));
+                }
             }
             return new GroupPrimitive2D(std::move(aContainer));
         }
