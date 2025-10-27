@@ -98,9 +98,9 @@ struct ParagraphIdleData
     std::unique_ptr<SwWrongList> pWrong;                // for spell checking
     std::unique_ptr<SwGrammarMarkUp> pGrammarCheck;     // for grammar checking /  proof reading
     std::unique_ptr<SwWrongList> pSmartTags;
-    sal_uLong nNumberOfWords  = 0;
-    sal_uLong nNumberOfAsianWords  = 0;
-    sal_uLong nNumberOfChars  = 0;
+    sal_uInt32 nNumberOfWords  = 0;
+    sal_uInt32 nNumberOfAsianWords  = 0;
+    sal_uInt32 nNumberOfChars  = 0;
     sal_uLong nNumberOfCharsExcludingSpaces = 0;
     bool bWordCountDirty = true;
     WrongState eWrongDirty = WrongState::TODO; ///< online spell checking needed/done?
