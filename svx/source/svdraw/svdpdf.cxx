@@ -1881,6 +1881,23 @@ Color ImpSdrPdfImport::getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> 
     return pPageObject->getFillColor();
 }
 
+static bool AllowDim(tools::Long nDim)
+{
+    if (nDim > 0x20000000 || nDim < -0x20000000)
+    {
+        SAL_WARN("sd.filter", "skipping huge dimension: " << nDim);
+        return false;
+    }
+    return true;
+}
+
+static bool AllowPoint(const Point& rPoint) { return AllowDim(rPoint.X()) && AllowDim(rPoint.Y()); }
+
+static bool AllowRect(const tools::Rectangle& rRect)
+{
+    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
+}
+
 void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                  std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                                  std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
@@ -1902,6 +1919,8 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     const tools::Rectangle aRect = PointsToLogic(aTextRect.getMinX(), aTextRect.getMaxX(),
                                                  aTextRect.getMinY(), aTextRect.getMaxY());
+    if (!AllowRect(aRect))
+        return;
 
     OUString sText = pPageObject->getText(pTextPage);
 
