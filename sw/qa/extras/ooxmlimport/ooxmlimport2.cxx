@@ -1372,6 +1372,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168567)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInvalidRefNumPara)
+{
+    // A document with a bookmark which name starts with "__RefNumPara__", somewhere in the
+    // middle of a paragraph text. Before the fix, importing it failed an assert:
+    createSwDoc("__RefNumPara__.docx");
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 } // end of anonymous namespace
