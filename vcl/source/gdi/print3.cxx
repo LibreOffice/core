@@ -1203,6 +1203,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
             const bool bHeigher = aPageSize.aSize.Height() > aPaperSize.Height();
             if (aPageSize.bFullPaper && bHeigher)
             {
+                // try to cram as much of the content onto the page as possible
                 Point aOffset(mpImplData->mxPrinter->GetPageOffset());
                 if (aPageSize.aSize.Height() - aPaperSize.Height() > aOffset.Y() * 2)
                     nDY = -aOffset.Y();
