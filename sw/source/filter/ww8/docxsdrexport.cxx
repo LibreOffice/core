@@ -1358,6 +1358,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
 
 void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat)
 {
+    m_pImpl->getExport().VMLExporter().SetSkipwzName(true);
     m_pImpl->getSerializer()->startElementNS(XML_w, XML_pict);
     m_pImpl->getDrawingML()->SetFS(m_pImpl->getSerializer());
     // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
@@ -1372,6 +1373,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
         *sdrObj, rFlow.GetValue(), rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
         rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient(), pAttrList.get(), true);
     m_pImpl->getSerializer()->endElementNS(XML_w, XML_pict);
+    m_pImpl->getExport().VMLExporter().SetSkipwzName(false);
 }
 
 static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
