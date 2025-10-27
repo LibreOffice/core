@@ -106,7 +106,7 @@ public:
 }
 
 SwTextAPIEditSource::SwTextAPIEditSource( const SwTextAPIEditSource& rSource )
-: SvxEditSource( *this )
+: SvxEditSource( rSource )
 {
     // shallow copy; uses internal refcounting
     m_pImpl = rSource.m_pImpl;
