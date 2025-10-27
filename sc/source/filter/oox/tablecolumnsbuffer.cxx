@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
+#include <subtotalparam.hxx>
 
 XmlColumnPrModel::XmlColumnPrModel() :
     mnMapId( 1 ),
@@ -130,6 +131,17 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
         }
         pDBData->SetTableColumnNames( std::move(aNames) );
         pDBData->SetTableColumnAttributes( std::move(aAttributesVector) );
+        // set subtotal parameters for columns
+        if (pDBData->HasTotals())
+        {
+            ScSubTotalParam aSubTotalParam;
+            pDBData->GetSubTotalParam(aSubTotalParam);
+            aSubTotalParam.bHasHeader = pDBData->HasHeader();
+            aSubTotalParam.bRemoveOnly = false;
+            aSubTotalParam.bReplace = false;
+            pDBData->CreateSubTotalParam(aSubTotalParam);
+            pDBData->SetSubTotalParam(aSubTotalParam);
+        }
         return true;
     }
     return false;
