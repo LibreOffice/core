@@ -1046,6 +1046,26 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testNegativeTimeAnimateValue)
     assertXPath(pXmlDoc, sPath + "[@tm]", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf168736)
+{
+    createSdImpressDoc("ppt/tdf168736-1.ppt");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Verify hyperlink to nextslide is properly exported the Relationship has Target attribute
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:hlinkClick",
+                "action", u"ppaction://hlinkshowjump?jump=nextslide");
+
+    createSdImpressDoc("ppt/tdf168736-2.ppt");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
+
+    // Verify that the Relationship has Target attribute
+    assertXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship[1]", "Target", u"slide1.xml");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

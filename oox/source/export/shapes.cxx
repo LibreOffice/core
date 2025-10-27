@@ -749,7 +749,8 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
         if (!xNamed)
             continue;
         OUString sSlideName = "#" + xNamed->getName();
-        if (rURL == sSlideName)
+        OUString sApiName = "#page" + OUString::number(i + 1);
+        if (rURL == sSlideName || rURL == sApiName)
         {
             sTarget = "slide" + OUString::number(i + 1) + ".xml";
             break;
@@ -1487,16 +1488,20 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         bool bExtURL = URLTransformer().isExternalURL(sBookmark);
         sBookmark = bExtURL ? sBookmark : lcl_GetTarget(GetFB()->getModel(), sBookmark);
 
-        OUString sRelId = mpFB->addRelation(mpFS->getOutputStream(),
-                                            bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
-                                                    : oox::getRelationship(Relationship::SLIDE),
-                                            sBookmark, bExtURL);
-
+        OUString sRelId;
+        if (!sBookmark.isEmpty())
+        {
+            sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                                       bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                               : oox::getRelationship(Relationship::SLIDE),
+                                       sBookmark, bExtURL);
+        }
         if (bExtURL)
             mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
         else
             mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
-                                  "ppaction://hlinksldjump");
+                                  sBookmark.isEmpty() ? "ppaction://noaction"
+                                                      : "ppaction://hlinksldjump");
     }
     AddExtLst(pFS, xShapeProps);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
