@@ -650,9 +650,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                     break;
                             }
                         }
-                        OString pathString = aPath.makeStringAndClear();
-                        if ( !pathString.isEmpty() && pathString != "xe" )
-                            m_pShapeAttrList->add( XML_path, pathString );
+                        // path attribute not valid for v:rect
+                        if ( m_nShapeType != ESCHER_ShpInst_Rectangle )
+                        {
+                            OString pathString = aPath.makeStringAndClear();
+                            if ( !pathString.isEmpty() && pathString != "xe" )
+                                m_pShapeAttrList->add( XML_path, pathString );
+                        }
                     }
                     else
                         SAL_WARN("oox.vml", "unhandled shape path, missing either pVertices or pSegmentInfo.");
