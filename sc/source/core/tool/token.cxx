@@ -2355,6 +2355,11 @@ FormulaToken* ScTokenArray::AddDBRange( sal_uInt16 n )
     return Add( new FormulaIndexToken( ocDBArea, n));
 }
 
+FormulaToken* ScTokenArray::AddTableRef( sal_uInt16 n )
+{
+    return Add( new ScTableRefToken(n, ScTableRefToken::TABLE));
+}
+
 FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const svl::SharedString& rName )
 {
     return Add( new ScExternalNameToken(nFileId, rName) );

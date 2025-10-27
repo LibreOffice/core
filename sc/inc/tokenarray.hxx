@@ -114,6 +114,7 @@ public:
     SC_DLLPUBLIC formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
     SC_DLLPUBLIC void      AddRangeName( sal_uInt16 n, sal_Int16 nSheet );
     formula::FormulaToken* AddDBRange( sal_uInt16 n );
+    SC_DLLPUBLIC formula::FormulaToken* AddTableRef( sal_uInt16 n );
     SC_DLLPUBLIC formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const svl::SharedString& rName );
     SC_DLLPUBLIC void AddExternalSingleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& rRef );
     SC_DLLPUBLIC formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& rRef );
