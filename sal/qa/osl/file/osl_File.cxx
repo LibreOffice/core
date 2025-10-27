@@ -115,27 +115,13 @@ static bool t_compareTime(TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_I
 
 /** compare two OUString file name.
 */
-static bool compareFileName(const OUString & ustr1, const OUString & ustr2)
+static OUString normalize(const OUString& path)
 {
-    bool bOk;
-// on Windows, the separator is '\', so here change to '/', then compare
 #if defined(_WIN32)
-    OUString ustr1new,ustr2new;
-    sal_Unicode reverseSlash = '\\';
-
-    if (ustr1.lastIndexOf(reverseSlash) != -1)
-        ustr1new = ustr1.replace(reverseSlash,'/');
-    else
-        ustr1new = ustr1;
-    if (ustr2.lastIndexOf(reverseSlash) != -1)
-        ustr2new = ustr2.replace(reverseSlash,'/');
-    else
-        ustr2new = ustr2;
-    bOk = ustr1new.equalsIgnoreAsciiCase(ustr2new);
+    return path.replace('\\', '/');
 #else
-    bOk = ustr1.equalsIgnoreAsciiCase(ustr2);
+    return path;
 #endif
-    return bOk;
 }
 
 /** simple version to judge if a file name or directory name is a URL or a system path, just to see if it
@@ -963,8 +949,6 @@ namespace osl_FileBase
         OUString aUResultURL (aSysPath4);
         osl::FileBase::RC nError = osl::FileBase::getSystemPathFromFileURL(aUNormalURL, aUStr);
 
-        bool bOk = compareFileName(aUStr, aUResultURL);
-
         OString sError =
             "test for getSystemPathFromFileURL(' " +
             OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US) +
@@ -973,7 +957,7 @@ namespace osl_FileBase
                         OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError);
-        CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bOk);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), normalize(aUResultURL), normalize(aUStr));
 
     }
 
@@ -987,8 +971,6 @@ namespace osl_FileBase
 
         osl::FileBase::RC nError = osl::FileBase::getSystemPathFromFileURL(aUNormalURL, aUStr);
 
-        bool bOk = compareFileName(aUStr, aUResultURL);
-
         OString sError =
             "test for getSystemPathFromFileURL(' " +
             OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US) +
@@ -998,7 +980,7 @@ namespace osl_FileBase
         deleteTestDirectory(aTmpName10);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError);
-        CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bOk);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), normalize(aUResultURL), normalize(aUStr));
     }
 
     void SystemPath_FileURL::getFileURLFromSystemPath_001()
@@ -1081,41 +1063,32 @@ namespace osl_FileBase
             /* search file is passed by system filename */
             OUString strRootSys = INetURLObject(aTempDirectoryURL).GetLastName();
             auto nError1 = osl::FileBase::searchFileURL(aTempDirectorySys, strRootSys, aUStr);
-            bool bOk1 = compareFileName(aUStr, aTempDirectoryURL);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename, system directory, searched file already exist.",
+                                    osl::FileBase::E_None, nError1);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename, system directory, searched file already exist.",
+                                         normalize(aTempDirectoryURL), normalize(aUStr));
             /* search file is passed by full qualified file URL */
             auto nError2 = osl::FileBase::searchFileURL(aTempDirectoryURL, strRootSys, aUStr);
-            bool bOk2 = compareFileName(aUStr, aTempDirectoryURL);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: URL filename, system directory, searched file already exist.",
+                                    osl::FileBase::E_None, nError2);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: URL filename, system directory, searched file already exist.",
+                                         normalize(aTempDirectoryURL), normalize(aUStr));
 #ifndef _WIN32
             /* search file is passed by relative file path */
             auto nError3 = osl::FileBase::searchFileURL(aRelURL5, strRootSys, aUStr);
-            bool bOk3 = compareFileName(aUStr, aTempDirectoryURL);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: relative path, system directory, searched file already exist.",
+                                    osl::FileBase::E_None, nError3);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: relative path, system directory, searched file already exist.",
+                                         normalize(aTempDirectoryURL), normalize(aUStr));
 #endif
             /* search file is passed by an exist file */
             createTestFile(aCanURL1);
             auto nError4 = osl::FileBase::searchFileURL(aCanURL4, aUserDirectorySys, aUStr);
-            bool bOk4 = compareFileName(aUStr, aCanURL1);
             deleteTestFile(aCanURL1);
-
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename, system directory, searched file already exist.",
-                                    osl::FileBase::E_None, nError1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: URL filename, system directory, searched file already exist.",
-                                    osl::FileBase::E_None, nError2);
-#ifndef _WIN32
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: relative path, system directory, searched file already exist.",
-                                    osl::FileBase::E_None, nError3);
-#endif
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
                                     osl::FileBase::E_None, nError4);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename, system directory, searched file already exist.",
-                                    bOk1);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: URL filename, system directory, searched file already exist.",
-                                    bOk2);
-#ifndef _WIN32
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: relative path, system directory, searched file already exist.",
-                                    bOk3);
-#endif
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
-                                    bOk4);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+                                         normalize(aCanURL1), normalize(aUStr));
 #endif
         }
 
@@ -1123,32 +1096,29 @@ namespace osl_FileBase
         {
             OUString aSystemPathList(aRootSys + PATH_LIST_DELIMITER + aTempDirectorySys + PATH_LIST_DELIMITER + aRootSys + "system/path");
             auto nError1 = osl::FileBase::searchFileURL(aUserDirectoryURL, aSystemPathList, aUStr);
-            bool bOk = compareFileName(aUStr, aUserDirectoryURL);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: search directory is a list of system paths",
                                     osl::FileBase::E_None, nError1);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: search directory is a list of system paths",
-                                    bOk);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: search directory is a list of system paths",
+                                         normalize(aUserDirectoryURL), normalize(aUStr));
         }
 
         void searchFileURL_004()
         {
             OUString aSystemPathList(aRootSys + PATH_LIST_DELIMITER + aTempDirectorySys + PATH_LIST_DELIMITER + aRootSys + "system/path/../name");
             auto nError1 = osl::FileBase::searchFileURL(aUserDirectoryURL, aSystemPathList, aUStr);
-            bool bOk = compareFileName(aUStr, aUserDirectoryURL);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: search directory is a list of system paths",
                                     osl::FileBase::E_None, nError1);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: search directory is a list of system paths",
-                                    bOk);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: search directory is a list of system paths",
+                                         normalize(aUserDirectoryURL), normalize(aUStr));
         }
 
         void searchFileURL_005()
         {
             auto nError1 = osl::FileBase::searchFileURL(aUserDirectoryURL, aNullURL, aUStr);
-            bool bOk = compareFileName(aUStr, aUserDirectoryURL);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: search directory is NULL",
                                     osl::FileBase::E_None, nError1);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: search directory is NULL",
-                                    bOk);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: search directory is NULL",
+                                         normalize(aUserDirectoryURL), normalize(aUStr));
         }
 
         CPPUNIT_TEST_SUITE(searchFileURL);
@@ -1352,8 +1322,8 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             aUStr = rFileStatus.getFileName();
 
-            CPPUNIT_ASSERT_MESSAGE("test for ctors function: mask all and see the file name",
-                                   compareFileName(aUStr, aTmpName2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for ctors function: mask all and see the file name",
+                                         normalize(aTmpName2), normalize(aUStr));
         }
 
         void ctors_002()
@@ -1363,8 +1333,8 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             aUStr = rFileStatus.getFileName();
 
-            CPPUNIT_ASSERT_MESSAGE("test for ctors function: mask is empty",
-                                   compareFileName(aUStr, aNullURL));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for ctors function: mask is empty",
+                                         normalize(aNullURL), normalize(aUStr));
         }
 
         CPPUNIT_TEST_SUITE(ctors);
@@ -1503,7 +1473,7 @@ namespace osl_FileStatus
                     FileStatus rFileStatus(mask_link);
                     rItem_link.getFileStatus(rFileStatus);
 
-                    if (compareFileName(rFileStatus.getFileName(), aFileName))
+                    if (normalize(rFileStatus.getFileName()) == normalize(aFileName))
                     {
                         if (rFileStatus.isValid(osl_FileStatus_Mask_LinkTargetURL))
                         {
@@ -1614,10 +1584,10 @@ namespace osl_FileStatus
                     osl::FileStatus::Type eType = _rFileStatus.getFileType();
                     bool bOK = false;
 
-                    if (compareFileName(suFilename, aTmpName2))
+                    if (normalize(suFilename) == normalize(aTmpName2))
                         bOK = (eType == osl::FileStatus::Regular);
 
-                    if (compareFileName(suFilename, aTmpName1))
+                    if (normalize(suFilename) == normalize(aTmpName1))
                         bOK = (eType == FileStatus::Directory);
 
                     CPPUNIT_ASSERT_MESSAGE("test for getFileType function: ", bOK);
@@ -1996,8 +1966,8 @@ namespace osl_FileStatus
 
             OUString aFileName = rFileStatus.getFileName();
 
-            CPPUNIT_ASSERT_MESSAGE("test for getFileName function: name compare with specify",
-                                    compareFileName(aFileName, aTmpName2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getFileName function: name compare with specify",
+                                         normalize(aTmpName2), normalize(aFileName));
         }
 
         CPPUNIT_TEST_SUITE(getFileName);
@@ -2034,8 +2004,8 @@ namespace osl_FileStatus
 
             OUString aFileURL = rFileStatus.getFileURL();
 
-            CPPUNIT_ASSERT_MESSAGE("test for getFileURL function: ",
-                                    compareFileName(aFileURL, aTmpName6));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getFileURL function: ",
+                                         normalize(aTmpName6), normalize(aFileURL));
         }
 
         CPPUNIT_TEST_SUITE(getFileURL);
@@ -2095,8 +2065,8 @@ namespace osl_FileStatus
             fd = remove(strLinkFileName.getStr());
             CPPUNIT_ASSERT_EQUAL_MESSAGE("in deleting link file",  static_cast<sal_Int32>(0), fd);
 
-            CPPUNIT_ASSERT_MESSAGE("test for getLinkTargetURL function: Solaris version, create a file, and a link file link to it, get its LinkTargetURL and compare",
-                                    compareFileName(aFileURL, aTypeURL));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getLinkTargetURL function: Solaris version, create a file, and a link file link to it, get its LinkTargetURL and compare",
+                                         normalize(aTypeURL), normalize(aFileURL));
 #endif
 #endif
         }
@@ -3565,8 +3535,8 @@ namespace osl_DirectoryItem
             nError1 = copyItem.getFileStatus(rFileStatus);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
-            CPPUNIT_ASSERT_MESSAGE("test for copy_assin_Ctors function: use copy constructor to get an item and check filename.",
-                                    compareFileName(rFileStatus.getFileName(), aTmpName2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy_assin_Ctors function: use copy constructor to get an item and check filename.",
+                                         normalize(aTmpName2), normalize(rFileStatus.getFileName()));
         }
 
         void copy_assin_Ctors_002()
@@ -3582,8 +3552,8 @@ namespace osl_DirectoryItem
             nError1 = copyItem.getFileStatus(rFileStatus);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
-            CPPUNIT_ASSERT_MESSAGE("test for copy_assin_Ctors function: test assignment operator here since it is same as copy constructor in test way.",
-                                    compareFileName(rFileStatus.getFileName(), aTmpName2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy_assin_Ctors function: test assignment operator here since it is same as copy constructor in test way.",
+                                         normalize(aTmpName2), normalize(rFileStatus.getFileName()));
         }
 
         CPPUNIT_TEST_SUITE(copy_assin_Ctors);
@@ -3666,8 +3636,8 @@ namespace osl_DirectoryItem
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for get function: use copy constructor to get an item and check filename.",
                                     osl::FileBase::E_None, nError2);
-            CPPUNIT_ASSERT_MESSAGE("test for get function: use copy constructor to get an item and check filename.",
-                                    compareFileName(rFileStatus.getFileName(), aTmpName2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for get function: use copy constructor to get an item and check filename.",
+                                         normalize(aTmpName2), normalize(rFileStatus.getFileName()));
         }
 
         void get_002()
@@ -3730,8 +3700,8 @@ namespace osl_DirectoryItem
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getFileStatus function: get file status and check filename",
                                     osl::FileBase::E_None, nError2);
-            CPPUNIT_ASSERT_MESSAGE("test for getFileStatus function: get file status and check filename",
-                                    compareFileName(rFileStatus.getFileName(), aTmpName2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getFileStatus function: get file status and check filename",
+                                         normalize(aTmpName2), normalize(rFileStatus.getFileName()));
         }
 
         void getFileStatus_002()
@@ -3762,8 +3732,8 @@ namespace osl_DirectoryItem
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getFileStatus function: get directory information",
                                     osl::FileBase::E_None, nError2);
-            CPPUNIT_ASSERT_MESSAGE("test for getFileStatus function: get directory information",
-                                    compareFileName(rFileStatus.getFileName(), aTmpName1));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getFileStatus function: get directory information",
+                                         normalize(aTmpName1), normalize(rFileStatus.getFileName()));
         }
 
         CPPUNIT_TEST_SUITE(getFileStatus);
@@ -4109,9 +4079,9 @@ namespace osl_Directory
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             bool bOK1,bOK2,bOK3;
-            bOK1 = compareFileName(rFileStatus.getFileName(), aTmpName2);
-            bOK2 = compareFileName(rFileStatus.getFileName(), aHidURL1);
-            bOK3 = compareFileName(rFileStatus.getFileName(), rFileStatusFirst.getFileName());
+            bOK1 = normalize(rFileStatus.getFileName()) == normalize(aTmpName2);
+            bOK2 = normalize(rFileStatus.getFileName()) == normalize(aHidURL1);
+            bOK3 = normalize(rFileStatus.getFileName()) == normalize(rFileStatusFirst.getFileName());
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for reset function: get two directory item, reset it, then get again, check the filename",
                                     osl::FileBase::E_None, nError2);
             CPPUNIT_ASSERT_MESSAGE("test for reset function: get two directory item, reset it, then get again, check the filename",
@@ -4214,17 +4184,17 @@ namespace osl_Directory
 
                 // a special order is not guaranteed. So any file may occur on any time.
                 // But every file name should occur only once.
-                if (!bOk1 && compareFileName(rFileStatus.getFileName(), aTmpName1))
+                if (!bOk1 && normalize(rFileStatus.getFileName()) == normalize(aTmpName1))
                 {
                     bOk1 = true;
                 }
 
-                if (!bOk2 && compareFileName(rFileStatus.getFileName(), aTmpName2))
+                if (!bOk2 && normalize(rFileStatus.getFileName()) == normalize(aTmpName2))
                 {
                     bOk2 = true;
                 }
 
-                if (!bOk3 && compareFileName(rFileStatus.getFileName(), aHidURL1))
+                if (!bOk3 && normalize(rFileStatus.getFileName()) == normalize(aHidURL1))
                 {
                     bOk3 = true;
                 }
@@ -4303,7 +4273,7 @@ namespace osl_Directory
                 if (nError1 == osl::FileBase::E_None) {
                     FileStatus   rFileStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type);
                     rItem.getFileStatus(rFileStatus);
-                    if (compareFileName(rFileStatus.getFileName(), aFileName))
+                    if (normalize(rFileStatus.getFileName()) == normalize(aFileName))
                     {
                         bFoundOK = true;
                         if (rFileStatus.getFileType() == FileStatus::Link)
@@ -4346,7 +4316,7 @@ namespace osl_Directory
                 // get file system name
                 OUString aFileSysName = _aVolumeInfo.getFileSystemName();
 
-                bool bRes2 = compareFileName(aFileSysName, aNullURL);
+                bool bRes2 = normalize(aFileSysName) == normalize(aNullURL);
                 CPPUNIT_ASSERT_MESSAGE("test for getVolumeInfo function: getVolumeInfo of root directory.",
                                         !bRes2);
             }
