@@ -1321,7 +1321,10 @@ void DocxExport::WriteSettings()
                 if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
                 {
                     OUString sValue = rAttribute.Value.get<OUString>();
-                    xAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
+                    if (nToken == XML_cryptAlgorithmSid && sValue.isEmpty())
+                        ; // ignore, empty is not valid OOXML
+                    else
+                        xAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
                     if ( nToken == XML_edit && sValue == "trackedChanges" )
                         bIsProtectionTrackChanges = true;
                     else if ( nToken == XML_edit && sValue == "readOnly" )
