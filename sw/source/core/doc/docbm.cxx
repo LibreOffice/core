@@ -113,32 +113,6 @@ namespace
         return bCRFirst; // cross-ref sorts *before*
     }
 
-    // specialise to avoid loplugin:faileddyncast
-    template<>
-    bool lcl_MarkOrderingByStart(const AnnotationMark *const pFirst,
-                                 const AnnotationMark *const pSecond)
-    {
-        SwPosition const& rFirstStart(pFirst->GetMarkStart());
-        SwPosition const& rSecondStart(pSecond->GetMarkStart());
-        if (rFirstStart.GetNode() != rSecondStart.GetNode())
-        {
-            return rFirstStart.GetNode() < rSecondStart.GetNode();
-        }
-        const sal_Int32 nFirstContent = rFirstStart.GetContentIndex();
-        const sal_Int32 nSecondContent = rSecondStart.GetContentIndex();
-        if (nFirstContent != 0 || nSecondContent != 0)
-        {
-            return nFirstContent < nSecondContent;
-        }
-        SwContentNode const*const pFirstNode(rFirstStart.nContent.GetContentNode());
-        SwContentNode const*const pSecondNode(rSecondStart.nContent.GetContentNode());
-        if ((pFirstNode != nullptr) != (pSecondNode != nullptr))
-        {   // consistency with SwPosition::operator<
-            return pSecondNode != nullptr;
-        }
-        return false; // equal
-    }
-
     template<class MarkT>
     bool lcl_MarkOrderingByEnd(const MarkT *const pFirst,
                                const MarkT *const pSecond)
