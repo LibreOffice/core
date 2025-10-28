@@ -17,6 +17,7 @@
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
+#include <fpdf_transformpage.h>
 #include <fpdf_save.h>
 #include <fpdf_signature.h>
 #include <fpdf_formfill.h>
@@ -300,6 +301,22 @@ public:
     PDFSegmentType getType() const override;
 };
 
+class PDFiumClipPathImpl final : public PDFiumClipPath
+{
+private:
+    FPDF_CLIPPATH mpClipPath;
+
+    PDFiumClipPathImpl(const PDFiumClipPathImpl&) = delete;
+    PDFiumClipPathImpl& operator=(const PDFiumClipPathImpl&) = delete;
+
+public:
+    PDFiumClipPathImpl(FPDF_CLIPPATH pClipPath);
+
+    int getPathCount() override;
+    int getPathSegmentCount(int nPathIndex) override;
+    std::unique_ptr<PDFiumPathSegment> getPathSegment(int nPathIndex, int nSegmentIndex) override;
+};
+
 class PDFiumAnnotationImpl final : public PDFiumAnnotation
 {
 private:
@@ -435,6 +452,9 @@ public:
     Size getImageSize(PDFiumPage& rPage) override;
     std::unique_ptr<PDFiumBitmap> getImageBitmap() override;
     bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) override;
+
+    // ClipPath
+    std::unique_ptr<PDFiumClipPath> getClipPath() override;
 };
 
 class PDFiumFontImpl final : public PDFiumFont
@@ -1375,6 +1395,17 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObjectImpl::getPathSegment(int inde
     return pPDFiumPathSegment;
 }
 
+std::unique_ptr<PDFiumClipPath> PDFiumPageObjectImpl::getClipPath()
+{
+    std::unique_ptr<PDFiumClipPath> pPDFiumClipPath;
+    FPDF_CLIPPATH pClipPath = FPDFPageObj_GetClipPath(mpPageObject);
+    if (pClipPath)
+    {
+        pPDFiumClipPath = std::make_unique<PDFiumClipPathImpl>(pClipPath);
+    }
+    return pPDFiumClipPath;
+}
+
 Size PDFiumPageObjectImpl::getImageSize(PDFiumPage& rPage)
 {
     FPDF_IMAGEOBJ_METADATA aMeta;
@@ -1494,6 +1525,31 @@ bool PDFiumPathSegmentImpl::isClosed() const { return FPDFPathSegment_GetClose(m
 PDFSegmentType PDFiumPathSegmentImpl::getType() const
 {
     return static_cast<PDFSegmentType>(FPDFPathSegment_GetType(mpPathSegment));
+}
+
+PDFiumClipPathImpl::PDFiumClipPathImpl(FPDF_CLIPPATH pClipPath)
+    : mpClipPath(pClipPath)
+{
+}
+
+int PDFiumClipPathImpl::getPathCount() { return FPDFClipPath_CountPaths(mpClipPath); }
+
+int PDFiumClipPathImpl::getPathSegmentCount(int nPathIndex)
+{
+    return FPDFClipPath_CountPathSegments(mpClipPath, nPathIndex);
+}
+
+std::unique_ptr<PDFiumPathSegment> PDFiumClipPathImpl::getPathSegment(int nPathIndex,
+                                                                      int nSegmentIndex)
+{
+    std::unique_ptr<PDFiumPathSegment> pPDFiumPathSegment;
+    FPDF_PATHSEGMENT pPathSegment
+        = FPDFClipPath_GetPathSegment(mpClipPath, nPathIndex, nSegmentIndex);
+    if (pPathSegment)
+    {
+        pPDFiumPathSegment = std::make_unique<PDFiumPathSegmentImpl>(pPathSegment);
+    }
+    return pPDFiumPathSegment;
 }
 
 PDFiumFormHandle::PDFiumFormHandle(FPDF_FORMHANDLE pHandle)
