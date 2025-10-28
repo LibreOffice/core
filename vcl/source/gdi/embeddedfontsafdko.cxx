@@ -295,11 +295,14 @@ static void* cb_memory(ctlMemoryCallbacks* /*cb*/, void* old, size_t size)
 }
 #endif
 
+static void makeOtfFatalCallback(void*) { throw std::runtime_error("fatal tx error"); }
+
 // System afdko could be used by calling: makeotf[exe] -mf fontMenuNameDB -f srcFont -o destFile -ch charMap [-ff features]
 bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& destFileUrl,
                                    const OUString& fontMenuNameDBUrl, const OUString& charMapUrl,
                                    const OUString& featuresUrl)
 {
+    bool ret = false;
 #if HAVE_FEATURE_AFDKO
     OUString srcFontPath, destFilePath, charMapPath, fontMenuNameDBPath, featuresPath;
     if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(srcFontUrl, srcFontPath)
@@ -331,8 +334,9 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     ctlMemoryCallbacks cb_dna_memcb{ nullptr, cb_memory };
     dnaCtx mainDnaCtx = dnaNew(&cb_dna_memcb, DNA_CHECK_ARGS);
 
-    cbCtx cbctx = cbNew(nullptr, const_cast<char*>(""), const_cast<char*>(""),
-                        const_cast<char*>(""), const_cast<char*>(""), mainDnaCtx);
+    cbCtx cbctx
+        = cbNew(nullptr, const_cast<char*>(""), const_cast<char*>(""), const_cast<char*>(""),
+                const_cast<char*>(""), mainDnaCtx, makeOtfFatalCallback);
 
     OString fontMenuNameDBPathA(fontMenuNameDBPath.toUtf8());
     OString srcFontPathA(srcFontPath.toUtf8());
@@ -346,31 +350,40 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
                          << (!charMapPathA.isEmpty() ? " -ch "_ostr + charMapPathA : OString())
                          << (!featuresPathA.isEmpty() ? " -ff "_ostr + featuresPathA : OString()));
 
-    cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
+    ret = true;
+    try
+    {
+        cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
 
-    int flags = HOT_NO_OLD_OPS;
-    int fontConvertFlags = 0;
+        int flags = HOT_NO_OLD_OPS;
+        int fontConvertFlags = 0;
 #if !SUPERVERBOSE
-    flags |= HOT_SUPRESS_WARNINGS | HOT_SUPRESS_HINT_WARNINGS;
+        flags |= HOT_SUPRESS_WARNINGS | HOT_SUPRESS_HINT_WARNINGS;
 #else
-    fontConvertFlags |= HOT_CONVERT_VERBOSE;
+        fontConvertFlags |= HOT_CONVERT_VERBOSE;
 #endif
 
-    cbConvert(cbctx, flags, nullptr, const_cast<char*>(srcFontPathA.getStr()),
-              const_cast<char*>(destFilePathA.getStr()),
-              !featuresPathA.isEmpty() ? const_cast<char*>(featuresPathA.getStr()) : nullptr,
-              !charMapPathA.isEmpty() ? const_cast<char*>(charMapPathA.getStr()) : nullptr, nullptr,
-              nullptr, nullptr, fontConvertFlags, 0, 0, 0, 0, -1, -1, 0, nullptr);
+        cbConvert(cbctx, flags, nullptr, const_cast<char*>(srcFontPathA.getStr()),
+                  const_cast<char*>(destFilePathA.getStr()),
+                  !featuresPathA.isEmpty() ? const_cast<char*>(featuresPathA.getStr()) : nullptr,
+                  !charMapPathA.isEmpty() ? const_cast<char*>(charMapPathA.getStr()) : nullptr,
+                  nullptr, nullptr, nullptr, fontConvertFlags, 0, 0, 0, 0, -1, -1, 0, nullptr);
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.fonts", "mergeFonts failure: " << e.what());
+        ret = false;
+    }
 
-    return true;
+    cbFree(cbctx);
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
     (void)fontMenuNameDBUrl;
     (void)charMapUrl;
     (void)featuresUrl;
-    return false;
 #endif
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
