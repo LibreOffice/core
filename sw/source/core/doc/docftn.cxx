@@ -445,6 +445,35 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 
 }
 
+namespace
+{
+// Change style of all text nodes between start and end node for the SwTextFootnote to the
+// style of the type of note it is.
+void lcl_ChgFormatColl(SwDoc* pDoc, SwTextFootnote* pTextFootnote, SwUndoChangeFootNote* pUndo)
+{
+    SwTextFormatColl* pChangeToTextFormatColl
+        = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
+            pTextFootnote->GetFootnote().IsEndNote() ? RES_POOLCOLL_ENDNOTE
+                                                     : RES_POOLCOLL_FOOTNOTE);
+
+    SwNodeIndex aNodeIndex(*pTextFootnote->GetStartNode(), 1);
+    while (!aNodeIndex.GetNode().IsEndNode())
+    {
+        if (aNodeIndex.GetNode().IsTextNode())
+        {
+            SwTextNode* pTextNode = aNodeIndex.GetNode().GetTextNode();
+            if (pUndo)
+            {
+                pUndo->GetHistory().AddColl(pTextNode->GetFormatColl(), pTextNode->GetIndex(),
+                                            SwNodeType::Text);
+            }
+            pTextNode->ChgFormatColl(pChangeToTextFormatColl);
+        }
+        ++aNodeIndex;
+    }
+}
+}
+
 bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                        bool bIsEndNote)
 {
@@ -495,6 +524,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                 {
                     const_cast<SwFormatFootnote&>(rFootnote).SetEndNote( bIsEndNote );
                     bTypeChgd = true;
+                    lcl_ChgFormatColl(this, pTextFootnote, pUndo.get());
                     pTextFootnote->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
                     const_cast<SwFormatFootnote&>(rFootnote).InvalidateFootnote();
@@ -529,6 +559,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                 {
                     const_cast<SwFormatFootnote&>(rFootnote).SetEndNote( bIsEndNote );
                     bTypeChgd = true;
+                    lcl_ChgFormatColl(this, pTextFootnote, pUndo.get());
                     pTextFootnote->CheckCondColl();
                 }
             }
