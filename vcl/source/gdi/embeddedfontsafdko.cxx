@@ -65,7 +65,6 @@ static bool convertTx(txCtx h)
 
     return true;
 }
-#endif
 
 static void suppressDebugMessagess(txCtx h)
 {
@@ -84,6 +83,13 @@ static void suppressDebugMessagess(txCtx h)
 #endif
 }
 
+static void txFatalCallback(txCtx h)
+{
+    txFree(h);
+    throw std::runtime_error("fatal tx error");
+}
+#endif
+
 // System afdko could be used by calling: tx -dump src dest here
 bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl)
 {
@@ -100,6 +106,9 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
     txCtx h = txNew(nullptr);
     if (!h)
         return false;
+    // appSpecificFree is only called on error so we can piggyback on that
+    // to intercept what would otherwise be a fatal error
+    h->appSpecificFree = txFatalCallback;
     suppressDebugMessagess(h);
 
     OString srcFontPathA(srcFontPath.toUtf8());
@@ -109,14 +118,21 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
 
     h->src.stm.filename = const_cast<char*>(srcFontPathA.getStr());
     h->dst.stm.filename = const_cast<char*>(destFilePathA.getStr());
-    bool result = convertTx(h);
-    txFree(h);
-    return result;
+    try
+    {
+        bool result = convertTx(h);
+        txFree(h);
+        return result;
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.fonts", "tx failure: " << e.what());
+    }
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
-    return false;
 #endif
+    return false;
 }
 
 // System afdko could be used by calling: tx -t1 src dest here
@@ -135,6 +151,9 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     txCtx h = txNew(nullptr);
     if (!h)
         return false;
+    // appSpecificFree is only called on error so we can piggyback on that
+    // to intercept what would otherwise be a fatal error
+    h->appSpecificFree = txFatalCallback;
     suppressDebugMessagess(h);
 
     setMode(h, mode_t1);
@@ -143,15 +162,30 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     h->src.stm.filename = const_cast<char*>(srcFontPathA.getStr());
     OString destFilePathA(destFilePath.toUtf8());
     h->dst.stm.filename = const_cast<char*>(destFilePathA.getStr());
-    bool result = convertTx(h);
-    txFree(h);
-    return result;
+    try
+    {
+        bool result = convertTx(h);
+        txFree(h);
+        return result;
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.fonts", "tx failure: " << e.what());
+    }
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
-    return false;
 #endif
+    return false;
 }
+
+#if HAVE_FEATURE_AFDKO
+static void mergeFontsFatalCallback(txCtx h)
+{
+    mergeFontsFree(h);
+    throw std::runtime_error("fatal mergeFonts error");
+}
+#endif
 
 // System afdko could be used by calling: mergefonts -cid cidfontinfo destfile [glyphaliasfile mergefontfile]+ here
 bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUString& destFileUrl,
@@ -188,6 +222,9 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     txCtx h = mergeFontsNew(nullptr);
     if (!h)
         return false;
+    // appSpecificFree is only called on error so we can piggyback on that
+    // to intercept what would otherwise be a fatal error
+    h->appSpecificFree = mergeFontsFatalCallback;
     suppressDebugMessagess(h);
 
     OString cidFontInfoPathA(cidFontInfoPath.toUtf8());
@@ -199,42 +236,49 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     SAL_INFO("vcl.fonts",
              "mergefonts -cid " << cidFontInfoPathA << " " << destFilePathA << aBuffer.toString());
 
-    readCIDFontInfo(h, const_cast<char*>(cidFontInfoPathA.getStr()));
-
-    setMode(h, mode_cff);
-
-    dstFileSetName(h, const_cast<char*>(destFilePathA.getStr()));
-    h->cfw.flags |= CFW_CHECK_IF_GLYPHS_DIFFER;
-    h->cfw.flags |= CFW_PRESERVE_GLYPH_ORDER;
-
-    std::vector<char*> args;
-    for (const auto& path : paths)
+    try
     {
-        args.push_back(const_cast<char*>(path.getStr()));
+        readCIDFontInfo(h, const_cast<char*>(cidFontInfoPathA.getStr()));
+
+        setMode(h, mode_cff);
+
+        dstFileSetName(h, const_cast<char*>(destFilePathA.getStr()));
+        h->cfw.flags |= CFW_CHECK_IF_GLYPHS_DIFFER;
+        h->cfw.flags |= CFW_PRESERVE_GLYPH_ORDER;
+
+        std::vector<char*> args;
+        for (const auto& path : paths)
+        {
+            args.push_back(const_cast<char*>(path.getStr()));
+        }
+        // merge the input fonts into destfile
+        size_t resultarg = doMergeFileSet(h, args.size(), args.data(), 0);
+        SAL_WARN_IF(resultarg != args.size() - 1, "vcl.fonts",
+                    "suspicious doMergeFileSet result of: " << resultarg);
+
+        // convert that merged cid result to Type 1
+        h->src.stm.filename = const_cast<char*>(destFilePathA.getStr());
+        OString tmpdestfile = destFilePathA + ".temp";
+        h->dst.stm.filename = const_cast<char*>(tmpdestfile.getStr());
+        setMode(h, mode_t1);
+        bool result = convertTx(h);
+        mergeFontsFree(h);
+
+        remove(destFilePathA.getStr());
+        rename(tmpdestfile.getStr(), destFilePathA.getStr());
+
+        return result;
     }
-    // merge the input fonts into destfile
-    size_t resultarg = doMergeFileSet(h, args.size(), args.data(), 0);
-    SAL_WARN_IF(resultarg != args.size() - 1, "vcl.fonts",
-                "suspicious doMergeFileSet result of: " << resultarg);
-
-    // convert that merged cid result to Type 1
-    h->src.stm.filename = const_cast<char*>(destFilePathA.getStr());
-    OString tmpdestfile = destFilePathA + ".temp";
-    h->dst.stm.filename = const_cast<char*>(tmpdestfile.getStr());
-    setMode(h, mode_t1);
-    bool result = convertTx(h);
-    mergeFontsFree(h);
-
-    remove(destFilePathA.getStr());
-    rename(tmpdestfile.getStr(), destFilePathA.getStr());
-
-    return result;
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.fonts", "mergeFonts failure: " << e.what());
+    }
 #else
     (void)cidFontInfoUrl;
     (void)destFileUrl;
     (void)fonts;
-    return false;
 #endif
+    return false;
 }
 
 #if HAVE_FEATURE_AFDKO
@@ -251,6 +295,8 @@ static void* cb_memory(ctlMemoryCallbacks* /*cb*/, void* old, size_t size)
 
     return malloc(size);
 }
+
+static void makeOtfFatalCallback(void*) { throw std::runtime_error("fatal tx error"); }
 #endif
 
 // System afdko could be used by calling: makeotf[exe] -mf fontMenuNameDB -f srcFont -o destFile -ch charMap [-ff features]
@@ -289,8 +335,9 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     ctlMemoryCallbacks cb_dna_memcb{ nullptr, cb_memory };
     dnaCtx mainDnaCtx = dnaNew(&cb_dna_memcb, DNA_CHECK_ARGS);
 
-    cbCtx cbctx = cbNew(nullptr, const_cast<char*>(""), const_cast<char*>(""),
-                        const_cast<char*>(""), const_cast<char*>(""), mainDnaCtx);
+    cbCtx cbctx
+        = cbNew(nullptr, const_cast<char*>(""), const_cast<char*>(""), const_cast<char*>(""),
+                const_cast<char*>(""), mainDnaCtx, makeOtfFatalCallback);
 
     OString fontMenuNameDBPathA(fontMenuNameDBPath.toUtf8());
     OString srcFontPathA(srcFontPath.toUtf8());
@@ -304,31 +351,40 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
                          << (!charMapPathA.isEmpty() ? " -ch "_ostr + charMapPathA : OString())
                          << (!featuresPathA.isEmpty() ? " -ff "_ostr + featuresPathA : OString()));
 
-    cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
+    bool ret = true;
+    try
+    {
+        cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
 
-    int flags = HOT_NO_OLD_OPS;
-    int fontConvertFlags = 0;
+        int flags = HOT_NO_OLD_OPS;
+        int fontConvertFlags = 0;
 #if !SUPERVERBOSE
-    flags |= HOT_SUPRESS_WARNINGS | HOT_SUPRESS_HINT_WARNINGS;
+        flags |= HOT_SUPRESS_WARNINGS | HOT_SUPRESS_HINT_WARNINGS;
 #else
-    fontConvertFlags |= HOT_CONVERT_VERBOSE;
+        fontConvertFlags |= HOT_CONVERT_VERBOSE;
 #endif
 
-    cbConvert(cbctx, flags, nullptr, const_cast<char*>(srcFontPathA.getStr()),
-              const_cast<char*>(destFilePathA.getStr()),
-              !featuresPathA.isEmpty() ? const_cast<char*>(featuresPathA.getStr()) : nullptr,
-              !charMapPathA.isEmpty() ? const_cast<char*>(charMapPathA.getStr()) : nullptr, nullptr,
-              nullptr, nullptr, fontConvertFlags, 0, 0, 0, 0, -1, -1, 0, nullptr);
+        cbConvert(cbctx, flags, nullptr, const_cast<char*>(srcFontPathA.getStr()),
+                  const_cast<char*>(destFilePathA.getStr()),
+                  !featuresPathA.isEmpty() ? const_cast<char*>(featuresPathA.getStr()) : nullptr,
+                  !charMapPathA.isEmpty() ? const_cast<char*>(charMapPathA.getStr()) : nullptr,
+                  nullptr, nullptr, nullptr, fontConvertFlags, 0, 0, 0, 0, -1, -1, 0, nullptr);
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.fonts", "mergeFonts failure: " << e.what());
+        ret = false;
+    }
 
-    return true;
+    cbFree(cbctx);
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
     (void)fontMenuNameDBUrl;
     (void)charMapUrl;
     (void)featuresUrl;
-    return false;
 #endif
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

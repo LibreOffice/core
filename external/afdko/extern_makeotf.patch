@@ -66,6 +66,25 @@
  }
  
  // [fcdb callback] Report database parsing warning.
+@@ -1185,7 +1185,8 @@
+ 
+ /* Create new callback context */
+ cbCtx cbNew(char *progname, char *pfbdir, char *otfdir,
+-            char *cmapdir, char *featdir, dnaCtx mainDnaCtx) {
++            char *cmapdir, char *featdir, dnaCtx mainDnaCtx,
++            void (*fatal)(void*)) {
+     static hotCallbacks template = {
+         NULL, /* Callback context; set after creation */
+         myfatal,
+@@ -1233,6 +1234,8 @@
+     h->dir.cmap = cmapdir;
+ 
+     h->hot.cb = template; /* Copy template */
++    if (fatal)
++    	h->hot.cb.fatal = fatal;
+     h->hot.cb.ctx = h;
+ 
+     h->dnaCtx = mainDnaCtx;
 --- afdko/c/makeotf/source/file.c	2025-09-23 13:18:57.919265608 +0100
 +++ afdko/c/makeotf/source/file.c	2025-09-23 13:20:04.148358137 +0100
 @@ -23,7 +23,7 @@
@@ -314,6 +333,16 @@
  typedef struct cbCtx_ *cbCtx;
  
  /* Define to supply Microsoft-specific function calling info, e.g. __cdecl */
+@@ -22,7 +22,8 @@
+ 
+ /* --- Basic functions --- */
+ extern cbCtx cbNew(char *progname, char *pfbdir, char *otfdir,
+-                   char *cmapdir, char *featdir, dnaCtx mainDnaCtx);
++                   char *cmapdir, char *featdir, dnaCtx mainDnaCtx,
++                   void (*fatal)(void*));
+ extern void cbConvert(cbCtx h, int flags, char *clientVers,
+                       char *pfbfile, char *otffile,
+                       char *featurefile, char *hcmapfile, char *vcmapfile,
 @@ -80,4 +85,8 @@
  #define OTHERFLAGS_VERBOSE (1 << 15)
  #define OTHERFLAGS_FINAL_NAMES (1 << 16)
