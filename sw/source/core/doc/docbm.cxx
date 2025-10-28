@@ -414,51 +414,51 @@ namespace
 
 static bool IsNavigatorReminder(const MarkBase& rBkmk)
 {
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
     // not using dynamic_cast<> here for performance
-    return (*pMarkTypeInfo == typeid(NavigatorReminder));
+    return (rMarkTypeInfo == typeid(NavigatorReminder));
 }
 
 static bool IsCrossRefBookmark(const sw::mark::MarkBase& rBkmk)
 {
     // not using dynamic_cast<> here for performance
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
-    return (*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
-        || (*pMarkTypeInfo == typeid(CrossRefNumItemBookmark));
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
+    return (rMarkTypeInfo == typeid(CrossRefHeadingBookmark))
+        || (rMarkTypeInfo == typeid(CrossRefNumItemBookmark));
 }
 
 static bool IsAnnotationMark(const sw::mark::MarkBase& rBkmk)
 {
     // not using dynamic_cast<> here for performance
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
-    return (*pMarkTypeInfo == typeid(AnnotationMark));
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
+    return (rMarkTypeInfo == typeid(AnnotationMark));
 }
 
 IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const MarkBase& rBkmk)
 {
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
     // not using dynamic_cast<> here for performance
-    if(*pMarkTypeInfo == typeid(UnoMark))
+    if(rMarkTypeInfo == typeid(UnoMark))
         return MarkType::UNO_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(DdeBookmark))
+    else if(rMarkTypeInfo == typeid(DdeBookmark))
         return MarkType::DDE_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(Bookmark))
+    else if(rMarkTypeInfo == typeid(Bookmark))
         return MarkType::BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
+    else if(rMarkTypeInfo == typeid(CrossRefHeadingBookmark))
         return MarkType::CROSSREF_HEADING_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(CrossRefNumItemBookmark))
+    else if(rMarkTypeInfo == typeid(CrossRefNumItemBookmark))
         return MarkType::CROSSREF_NUMITEM_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(AnnotationMark))
+    else if(rMarkTypeInfo == typeid(AnnotationMark))
         return MarkType::ANNOTATIONMARK;
-    else if(*pMarkTypeInfo == typeid(TextFieldmark))
+    else if(rMarkTypeInfo == typeid(TextFieldmark))
         return MarkType::TEXT_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(CheckboxFieldmark))
+    else if(rMarkTypeInfo == typeid(CheckboxFieldmark))
         return MarkType::CHECKBOX_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(DropDownFieldmark))
+    else if(rMarkTypeInfo == typeid(DropDownFieldmark))
         return MarkType::DROPDOWN_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(DateFieldmark))
+    else if(rMarkTypeInfo == typeid(DateFieldmark))
         return MarkType::DATE_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(NavigatorReminder))
+    else if(rMarkTypeInfo == typeid(NavigatorReminder))
         return MarkType::NAVIGATOR_REMINDER;
     else
     {
