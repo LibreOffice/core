@@ -1271,15 +1271,15 @@ void DocxExport::WriteSettings()
     bool bHyphenationZone = false;
     if (pColl && (pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false)))
     {
-        if (pZoneItem->IsNoCapsHyphenation())
-            pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
-
         if ( sal_Int16 nHyphenZone = pZoneItem->GetTextHyphenZone() )
         {
             pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
                                          OString::number(nHyphenZone));
             bHyphenationZone = true;
         }
+
+        if (pZoneItem->IsNoCapsHyphenation())
+            pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
 
         if ( sal_Int16 nMaxHyphens = pZoneItem->GetMaxHyphens() )
             pFS->singleElementNS(XML_w, XML_consecutiveHyphenLimit, FSNS(XML_w, XML_val),
