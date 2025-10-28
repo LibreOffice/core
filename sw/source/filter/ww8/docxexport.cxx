@@ -1076,6 +1076,8 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
             rTargetCompatibilityMode = 14;
         }
     }
+    if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE))
+        rpFS->singleElementNS(XML_w, XML_ulTrailSpace);
     // Do not justify lines with manual break
     if (rIDSA.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
     {
@@ -1090,8 +1092,6 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
         // Map the DoNotBreakWrappedTables compat flag to <w:doNotBreakWrappedTables>.
         rpFS->singleElementNS(XML_w, XML_doNotBreakWrappedTables);
     }
-    if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE))
-        rpFS->singleElementNS(XML_w, XML_ulTrailSpace);
 }
 
 void DocxExport::WriteSettings()
