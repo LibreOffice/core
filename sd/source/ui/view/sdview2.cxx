@@ -285,10 +285,13 @@ void View::DoPaste (::sd::Window* pWindow,bool /*bMergeMasterPagesOnly*/)
 
     if( pOLV && EditEngine::HasValidData( aDataHelper.GetTransferable() ) )
     {
-        const_cast< OutlinerView* >(pOLV)->PasteSpecial();
+        SdrObject* pObj = GetTextEditObject();
+        SdPage* pPage = static_cast<SdPage*>(pObj ? pObj->getSdrPageFromSdrObject() : nullptr);
+        // tdf#139269 - prevent text pasting into readonly areas of master views
+        if (pPage && pPage->IsMasterPage() && pOLV->IsReadOnly())
+            return;
 
-        SdrObject*  pObj = GetTextEditObject();
-        SdPage*     pPage = static_cast<SdPage*>( pObj ? pObj->getSdrPageFromSdrObject() : nullptr );
+        const_cast< OutlinerView* >(pOLV)->PasteSpecial();
         ::Outliner& rOutliner = pOLV->GetOutliner();
 
         if( pObj && pPage && pPage->GetPresObjKind(pObj) == PresObjKind::Title )

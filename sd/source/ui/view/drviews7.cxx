@@ -856,6 +856,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxBoolItem(SID_PAGEMODE, false));
         rSet.Put(SfxBoolItem(SID_MASTERPAGE, true));
 
+        // tdf#139269 - disable menu entries to paste text into read only areas of master views
+        const OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+        if (pOlView && pOlView->IsReadOnly())
+        {
+            rSet.DisableItem(SID_PASTE);
+            rSet.DisableItem(SID_PASTE_UNFORMATTED);
+        }
+
         /**********************************************************************
         * Background page mode
         **********************************************************************/
