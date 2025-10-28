@@ -158,6 +158,17 @@ public:
     virtual PDFSegmentType getType() const = 0;
 };
 
+class VCL_DLLPUBLIC PDFiumClipPath
+{
+public:
+    virtual ~PDFiumClipPath() = default;
+
+    virtual int getPathCount() = 0;
+    virtual int getPathSegmentCount(int nPathIndex) = 0;
+    virtual std::unique_ptr<PDFiumPathSegment> getPathSegment(int nPathIndex, int nSegmentIndex)
+        = 0;
+};
+
 class VCL_DLLPUBLIC PDFiumPageObject
 {
 public:
@@ -193,6 +204,9 @@ public:
     virtual Size getImageSize(PDFiumPage& rPage) = 0;
     virtual std::unique_ptr<PDFiumBitmap> getImageBitmap() = 0;
     virtual bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) = 0;
+
+    // ClipPath
+    virtual std::unique_ptr<PDFiumClipPath> getClipPath() = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumSearchHandle
