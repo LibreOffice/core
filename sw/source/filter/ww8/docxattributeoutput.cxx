@@ -4759,6 +4759,17 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     // Output any table cell redlines if there are any attached to this specific cell
     TableCellRedline( pTableTextNodeInfoInner );
 
+    if (const SfxGrabBagItem* pItem = pTableBox->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
+    {
+        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
+        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find(u"CellCnfStyle"_ustr);
+        if (it != rGrabBag.end())
+        {
+            uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
+            m_pTableStyleExport->CnfStyle(aAttributes);
+        }
+    }
+
     // Cell preferred width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( nCell );
     if ( nCell )
@@ -4796,18 +4807,6 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     {
         m_pSerializer->singleElementNS(XML_w, XML_vMerge, FSNS(XML_w, XML_val), "continue");
     }
-
-    if (const SfxGrabBagItem* pItem = pTableBox->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
-    {
-        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find(u"CellCnfStyle"_ustr);
-        if (it != rGrabBag.end())
-        {
-            uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
-            m_pTableStyleExport->CnfStyle(aAttributes);
-        }
-    }
-
 
     const SvxBoxItem& rBox = pTableBox->GetFrameFormat( )->GetBox( );
     const SvxBoxItem& rDefaultBox = (*m_TableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
