@@ -957,6 +957,14 @@ QHash<QAccessible::Attribute, QVariant> QtAccessibleWidget::attributes() const
     aQtAttrs.insert(QAccessible::Attribute::Locale, aQLocale);
 #endif
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+    const sal_Int64 nStates = xContext->getAccessibleStateSet();
+    if (nStates & css::accessibility::AccessibleStateType::HORIZONTAL)
+        aQtAttrs.insert(QAccessible::Attribute::Orientation, Qt::Horizontal);
+    else if (nStates & css::accessibility::AccessibleStateType::VERTICAL)
+        aQtAttrs.insert(QAccessible::Attribute::Orientation, Qt::Vertical);
+#endif
+
     Reference<XAccessibleExtendedAttributes> xAttributes(xContext, UNO_QUERY);
     if (!xAttributes.is())
         return aQtAttrs;
