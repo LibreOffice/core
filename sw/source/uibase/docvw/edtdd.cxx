@@ -112,11 +112,23 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         else
             rSh.UnlockPaint();
     }
-    else if (!bInSelect)// tdf#116384 only drag hyperlink if user's not currently setting the selection
+    else if (!bInSelect)// tdf#116384 only drag hyperlink if not currently setting the selection
     {
+        // Prefer starting a selection (rather than a drag) when at the start/end of a hyperlink.
+
+        // Use the cursor point, not the mouse point, to determine whether this is at the start/end.
+        Point aCursorPoint = rSh.GetCharRect().Center();
+
         SwContentAtPos aSwContentAtPos( IsAttrAtPos::InetAttr );
-        bStart = rSh.GetContentAtPos( aDocPos,
-                    aSwContentAtPos );
+        bStart = rSh.GetContentAtPos(aCursorPoint, aSwContentAtPos);
+
+        // If true (cursor is in hyperlink), perhaps the cursor is at the start of the hyperlink?
+        if (bStart)
+        {
+            aCursorPoint.AdjustX(-1);
+            aSwContentAtPos = SwContentAtPos(IsAttrAtPos::InetAttr);
+            bStart = rSh.GetContentAtPos(aCursorPoint, aSwContentAtPos);
+        }
     }
 
     if ( !bStart || m_bIsInDrag )
