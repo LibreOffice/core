@@ -170,7 +170,7 @@ public:
 
     TEntry_Impl const & GetEntryData( tools::Long nPos ) { return m_vEntries[ nPos ]; }
     tools::Long            GetEntryCount() const { return static_cast<tools::Long>(m_vEntries.size()); }
-    tools::Rectangle GetActiveEntryRect() const;
+    tools::Rectangle GetEntryRect(tools::Long nPos) const;
     bool            HasActive() const { return m_nActive >= 0; }
     tools::Long            PointToPos( const Point& rPos );
     virtual void    RecalcAll();

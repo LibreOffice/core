@@ -285,18 +285,21 @@ void ExtensionBox::CalcActiveHeight(const tools::Long nPos)
         m_nActiveHeight += 2;
 }
 
-tools::Rectangle ExtensionBox::GetActiveEntryRect() const
+tools::Rectangle ExtensionBox::GetEntryRect(tools::Long nIndex) const
 {
-    assert(m_nActive >= 0 && "No active entry");
+    const ::osl::MutexGuard aGuard(m_entriesMutex);
 
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
+    tools::Long nY = -m_nTopIndex;
+    if (m_nActive >= 0 && nIndex > m_nActive)
+        nY += (nIndex - 1) * m_nStdHeight + m_nActiveHeight;
+    else
+        nY += nIndex * m_nStdHeight;
+    Point aStart(0, nY);
 
-    Size aSize( GetOutputSizePixel() );
-    aSize.setHeight(m_nActiveHeight);
+    Size aSize(GetOutputSizePixel());
+    aSize.setHeight(nIndex == m_nActive ? m_nActiveHeight : m_nStdHeight);
 
-    Point aPos(0, -m_nTopIndex + m_nActive * m_nStdHeight);
-
-    return tools::Rectangle( aPos, aSize );
+    return tools::Rectangle(aStart, aSize);
 }
 
 void ExtensionBox::DeleteRemoved()
@@ -524,7 +527,7 @@ void ExtensionBox::RecalcAll()
 
     if (m_nActive >= 0)
     {
-        tools::Rectangle aEntryRect = GetActiveEntryRect();
+        tools::Rectangle aEntryRect = GetEntryRect(m_nActive);
 
         if ( m_bAdjustActive )
         {
@@ -617,18 +620,12 @@ void ExtensionBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     if ( m_bNeedsRecalc )
         RecalcAll();
 
-    Point aStart( 0, -m_nTopIndex );
-    Size aSize(GetOutputSizePixel());
-
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     for (tools::Long i = 0; i < GetEntryCount(); ++i)
     {
         const bool bActive = i == m_nActive;
-        aSize.setHeight(bActive ? m_nActiveHeight : m_nStdHeight);
-        tools::Rectangle aEntryRect( aStart, aSize );
-        DrawRow(rRenderContext, aEntryRect, GetEntryData(i), bActive);
-        aStart.AdjustY(aSize.Height() );
+        DrawRow(rRenderContext, GetEntryRect(i), GetEntryData(i), bActive);
     }
 }
 
