@@ -569,9 +569,17 @@ void ScDocument::FillInfo(
 
                                 if (bContainsCondFormat && pCondFormList)
                                 {
-                                    bAnyCondition |= handleConditionalFormat(*pCondFormList, rCondFormats,
+                                    bool bCondition = handleConditionalFormat(*pCondFormList, rCondFormats,
                                             pInfo, &rTabInfo, pStlPool, ScAddress(nCol, nCurRow, nTab),
                                             bHidden, bHideFormula, bTabProtect);
+
+                                    bAnyCondition |= bCondition;
+
+                                    // if there is a condition, then old pPatternAttr was deleted.
+                                    // Therefore, we need to refetch it.
+                                    if (bCondition && pThisAttrArr->Count())
+                                        pInfo->pPatternAttr
+                                            = pThisAttrArr->mvData[nIndex].getScPatternAttr();
                                 }
 
                                 if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.getType() == CELLTYPE_FORMULA))
