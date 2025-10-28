@@ -138,6 +138,7 @@
 #include <textcontentcontrol.hxx>
 #include <formatflysplit.hxx>
 
+#include <o3tl/sprintf.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
@@ -3831,9 +3832,11 @@ static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextT
     {
         for (char16_t aChar : aView)
         {
+            char pBuf[5];
+            o3tl::sprintf(pBuf, "%04x", aChar);
             pSerializer->singleElementNS(XML_w, XML_sym,
                 FSNS(XML_w, XML_font), rSymbolFont,
-                FSNS(XML_w, XML_char), OString::number(aChar, 16));
+                FSNS(XML_w, XML_char), pBuf);
         }
     }
     else
