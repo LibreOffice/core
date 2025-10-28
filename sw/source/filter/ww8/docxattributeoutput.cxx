@@ -7824,6 +7824,15 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                 FSNS( XML_w, XML_val ), OString::number(nStart) );
     }
 
+    // format
+    OString aCustomFormat;
+    OString aFormat(lcl_ConvertNumberingType(nNumberingType, pOutSet, aCustomFormat, "decimal"_ostr));
+
+    if (aCustomFormat.isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), aFormat);
+    }
+
     if (m_bExportingOutline)
     {
         sal_uInt16 nId = m_rExport.m_pStyles->GetHeadingParagraphStyleId( nLevel );
@@ -7835,29 +7844,19 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     if (isLegal)
         m_pSerializer->singleElementNS(XML_w, XML_isLgl);
 
-    // format
-    OString aCustomFormat;
-    OString aFormat(lcl_ConvertNumberingType(nNumberingType, pOutSet, aCustomFormat, "decimal"_ostr));
-
+    if (!aCustomFormat.isEmpty())
     {
-        if (aCustomFormat.isEmpty())
-        {
-            m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), aFormat);
-        }
-        else
-        {
-            m_pSerializer->startElementNS(XML_mc, XML_AlternateContent);
-            m_pSerializer->startElementNS(XML_mc, XML_Choice, XML_Requires, "w14");
+        m_pSerializer->startElementNS(XML_mc, XML_AlternateContent);
+        m_pSerializer->startElementNS(XML_mc, XML_Choice, XML_Requires, "w14");
 
-            m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), aFormat,
-                                           FSNS(XML_w, XML_format), aCustomFormat);
+        m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), aFormat,
+                                       FSNS(XML_w, XML_format), aCustomFormat);
 
-            m_pSerializer->endElementNS(XML_mc, XML_Choice);
-            m_pSerializer->startElementNS(XML_mc, XML_Fallback);
-            m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), "decimal");
-            m_pSerializer->endElementNS(XML_mc, XML_Fallback);
-            m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
-        }
+        m_pSerializer->endElementNS(XML_mc, XML_Choice);
+        m_pSerializer->startElementNS(XML_mc, XML_Fallback);
+        m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), "decimal");
+        m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+        m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
     }
 
     // suffix
