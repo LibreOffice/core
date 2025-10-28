@@ -7944,6 +7944,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     if ( pOutSet )
     {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
+        // mark() before child elements.
+        InitCollectedRunProperties();
 
         SfxItemSet aTempSet(*pOutSet);
         if ( pFont )
@@ -7961,6 +7963,9 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         m_rExport.OutputItemSet(aTempSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
 
         WriteCollectedRunProperties();
+
+        // Merge the marks for the ordered elements
+        m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
