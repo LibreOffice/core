@@ -1251,37 +1251,33 @@ namespace sw::mark
         switch(IDocumentMarkAccess::GetType(*pMark))
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
+                if (auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(pMark));
+                    ppBookmark != m_vBookmarks.end())
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(pMark));
-                    if ( ppBookmark != m_vBookmarks.end() )
-                    {
-                        Bookmark* pBookmark = *ppBookmark;
+                    Bookmark* pBookmark = *ppBookmark;
 
-                        if(pBookmark)
-                            pBookmark->sendLOKDeleteCallback();
+                    if(pBookmark)
+                        pBookmark->sendLOKDeleteCallback();
 
-                        m_vBookmarks.erase(ppBookmark);
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
-                    }
+                    m_vBookmarks.erase(ppBookmark);
+                }
+                else
+                {
+                    assert(false &&
+                        "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                 }
                 break;
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
+                if (auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(pMark));
+                    ppBookmark != m_vBookmarks.end())
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(pMark));
-                    if ( ppBookmark != m_vBookmarks.end() )
-                    {
-                        m_vBookmarks.erase(ppBookmark);
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
-                    }
+                    m_vBookmarks.erase(ppBookmark);
+                }
+                else
+                {
+                    assert(false &&
+                        "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                 }
                 break;
 
@@ -1289,22 +1285,20 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
+                if (auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, static_cast<Fieldmark*>(pMark));
+                    ppFieldmark != m_vFieldmarks.end())
                 {
-                    auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, static_cast<Fieldmark*>(pMark));
-                    if ( ppFieldmark != m_vFieldmarks.end() )
-                    {
-                        if(m_pLastActiveFieldmark == *ppFieldmark)
-                            ClearFieldActivation();
+                    if(m_pLastActiveFieldmark == *ppFieldmark)
+                        ClearFieldActivation();
 
-                        m_vFieldmarks.erase(ppFieldmark);
-                        ret.reset(new LazyFieldmarkDeleter(static_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
-                        pMark = nullptr;
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
-                    }
+                    m_vFieldmarks.erase(ppFieldmark);
+                    ret.reset(new LazyFieldmarkDeleter(static_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
+                    pMark = nullptr;
+                }
+                else
+                {
+                    assert(false &&
+                        "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
                 }
                 break;
 
