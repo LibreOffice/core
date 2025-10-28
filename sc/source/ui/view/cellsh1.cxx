@@ -3467,8 +3467,8 @@ void ScCellShell::ExecuteDataPilotDialog()
     }
     else            // create new table
     {
-        //  select database range or data
-        pTabViewShell->GetDBData( true, SC_DB_OLD );
+        // tdf#169108 - create anonymous database range or data
+        pTabViewShell->GetDBData( true, SC_DB_MAKE );
         ScMarkData& rMark = GetViewData().GetMarkData();
         if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
             pTabViewShell->MarkDataArea( false );
