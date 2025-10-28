@@ -3176,6 +3176,8 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
     {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
+        // mark() before child elements.
+        InitCollectedRunProperties();
 
         // 1. output webHidden flag
         if(GetExport().m_bHideTabLeaderAndPageNumbers && m_pHyperlinkAttrList.is() )
@@ -3189,6 +3191,9 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
         // 3. write the character properties
         WriteCollectedRunProperties();
+
+        // Merge the marks for the ordered elements
+        m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
