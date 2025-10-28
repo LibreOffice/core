@@ -525,44 +525,40 @@ void ExtensionBox::RecalcAll()
 
     SetupScrollBar();
 
-    if (m_nActive >= 0)
+    if (m_nActive >= 0 && m_bAdjustActive)
     {
+        m_bAdjustActive = false;
+
+        // If the top of the selected entry isn't visible, make it visible
         tools::Rectangle aEntryRect = GetEntryRect(m_nActive);
-
-        if ( m_bAdjustActive )
+        if (aEntryRect.Top() < 0)
         {
-            m_bAdjustActive = false;
-
-            // If the top of the selected entry isn't visible, make it visible
-            if ( aEntryRect.Top() < 0 )
-            {
-                m_nTopIndex += aEntryRect.Top();
-                aEntryRect.Move( 0, -aEntryRect.Top() );
-            }
-
-            // If the bottom of the selected entry isn't visible, make it visible even if now the top
-            // isn't visible any longer ( the buttons are more important )
-            Size aOutputSize = GetOutputSizePixel();
-            if ( aEntryRect.Bottom() > aOutputSize.Height() )
-            {
-                m_nTopIndex += ( aEntryRect.Bottom() - aOutputSize.Height() );
-                aEntryRect.Move( 0, -( aEntryRect.Bottom() - aOutputSize.Height() ) );
-            }
-
-            // If there is unused space below the last entry but all entries don't fit into the box,
-            // move the content down to use the whole space
-            const tools::Long nTotalHeight = GetTotalHeight();
-            if ( m_bHasScrollBar && ( aOutputSize.Height() + m_nTopIndex > nTotalHeight ) )
-            {
-                tools::Long nOffset = m_nTopIndex;
-                m_nTopIndex = nTotalHeight - aOutputSize.Height();
-                nOffset -= m_nTopIndex;
-                aEntryRect.Move( 0, nOffset );
-            }
-
-            if ( m_bHasScrollBar )
-                m_xScrollBar->vadjustment_set_value( m_nTopIndex );
+            m_nTopIndex += aEntryRect.Top();
+            aEntryRect.Move(0, -aEntryRect.Top());
         }
+
+        // If the bottom of the selected entry isn't visible, make it visible even if now the top
+        // isn't visible any longer ( the buttons are more important )
+        Size aOutputSize = GetOutputSizePixel();
+        if (aEntryRect.Bottom() > aOutputSize.Height())
+        {
+            m_nTopIndex += (aEntryRect.Bottom() - aOutputSize.Height());
+            aEntryRect.Move(0, -(aEntryRect.Bottom() - aOutputSize.Height()));
+        }
+
+        // If there is unused space below the last entry but all entries don't fit into the box,
+        // move the content down to use the whole space
+        const tools::Long nTotalHeight = GetTotalHeight();
+        if (m_bHasScrollBar && (aOutputSize.Height() + m_nTopIndex > nTotalHeight))
+        {
+            tools::Long nOffset = m_nTopIndex;
+            m_nTopIndex = nTotalHeight - aOutputSize.Height();
+            nOffset -= m_nTopIndex;
+            aEntryRect.Move(0, nOffset);
+        }
+
+        if (m_bHasScrollBar)
+            m_xScrollBar->vadjustment_set_value(m_nTopIndex);
     }
 
     m_bNeedsRecalc = false;
