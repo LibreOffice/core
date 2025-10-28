@@ -51,7 +51,6 @@ class TheExtensionManager;
 
 struct Entry_Impl
 {
-    bool            m_bActive       :1;
     bool            m_bLocked       :1;
     bool            m_bHasOptions   :1;
     bool            m_bUser         :1;
@@ -146,7 +145,8 @@ class ExtensionBox : public weld::CustomWidgetController
     void CalcActiveHeight( const tools::Long nPos );
     tools::Long GetTotalHeight() const;
     void SetupScrollBar();
-    void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry);
+    void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
+                 const TEntry_Impl& rEntry, bool bActive);
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     bool FindEntryPos( const TEntry_Impl& rEntry, tools::Long nStart, tools::Long nEnd, tools::Long &nFound );
     void DeleteRemoved();

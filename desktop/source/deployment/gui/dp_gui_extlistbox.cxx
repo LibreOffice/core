@@ -75,7 +75,6 @@ bool FindWeakRef::operator () (uno::WeakReference< deployment::XPackage >  const
 
 Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
                         const PackageState eState, const bool bReadOnly ) :
-    m_bActive( false ),
     m_bLocked( bReadOnly ),
     m_bHasOptions( false ),
     m_bUser( false ),
@@ -333,14 +332,12 @@ void ExtensionBox::selectEntry(const tools::Long nPos)
             if ( nPos == m_nActive )
                 return;
 
-            m_vEntries[ m_nActive ]->m_bActive = false;
             m_nActive = -1;
         }
 
         if ( ( nPos >= 0 ) && ( o3tl::make_unsigned(nPos) < m_vEntries.size() ) )
         {
             m_nActive = nPos;
-            m_vEntries[ nPos ]->m_bActive = true;
 
             if ( IsReallyVisible() )
             {
@@ -363,11 +360,11 @@ void ExtensionBox::selectEntry(const tools::Long nPos)
 }
 
 void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
-                           const TEntry_Impl& rEntry)
+                           const TEntry_Impl& rEntry, bool bActive)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if (rEntry->m_bActive)
+    if (bActive)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else if ((rEntry->m_eState != PackageState::REGISTERED)
              && (rEntry->m_eState != PackageState::NOT_AVAILABLE))
@@ -375,7 +372,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
     else
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 
-    if (rEntry->m_bActive)
+    if (bActive)
     {
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
@@ -453,7 +450,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
     OUString sDescription;
     if (!rEntry->m_sErrorText.isEmpty())
     {
-        if (rEntry->m_bActive)
+        if (bActive)
             sDescription = rEntry->m_sErrorText + "\n" + rEntry->m_sDescription;
         else
             sDescription = rEntry->m_sErrorText;
@@ -462,7 +459,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
         sDescription = rEntry->m_sDescription;
 
     aPos.AdjustY(aTextHeight );
-    if (rEntry->m_bActive)
+    if (bActive)
     {
         tools::Long nExtraHeight = 0;
 
@@ -625,11 +622,12 @@ void ExtensionBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
-    for (auto const& entry : m_vEntries)
+    for (tools::Long i = 0; i < GetEntryCount(); ++i)
     {
-        aSize.setHeight( entry->m_bActive ? m_nActiveHeight : m_nStdHeight );
+        const bool bActive = i == m_nActive;
+        aSize.setHeight(bActive ? m_nActiveHeight : m_nStdHeight);
         tools::Rectangle aEntryRect( aStart, aSize );
-        DrawRow(rRenderContext, aEntryRect, entry);
+        DrawRow(rRenderContext, aEntryRect, GetEntryData(i), bActive);
         aStart.AdjustY(aSize.Height() );
     }
 }
