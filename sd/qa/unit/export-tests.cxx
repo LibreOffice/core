@@ -1177,6 +1177,36 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     CPPUNIT_ASSERT_MESSAGE("Shape should be Invisible", !bVisible);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfClippedImages)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/ClippedImages.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
+    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+
+    uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroupShape.is());
+
+    uno::Reference<beans::XPropertySet> xGraphicShape1(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGraphicShape1.is());
+    bool bVisible(true);
+    xGraphicShape1->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT_MESSAGE("1st Graphic should be Visible", bVisible);
+
+    // before the fix the clip for this graphic wasn't taken into account so it was visiblem
+    // not it is detected as entirely clipped out and toggled to invisible
+    uno::Reference<beans::XPropertySet> xGraphicShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGraphicShape2.is());
+    xGraphicShape2->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT_MESSAGE("2nd Graphic should be Invisible", !bVisible);
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();

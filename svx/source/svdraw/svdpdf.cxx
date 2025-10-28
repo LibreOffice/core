@@ -21,6 +21,7 @@
 
 #include <config_features.h>
 #include <tools/UnitConversion.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -56,6 +57,7 @@
 #include <svx/svdetc.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1938,6 +1940,29 @@ void ImpSdrPdfImport::MapScaling()
     mnMapScalingOfs = nCount;
 }
 
+basegfx::B2DPolyPolygon
+ImpSdrPdfImport::GetClip(const std::unique_ptr<vcl::pdf::PDFiumClipPath>& pClipPath,
+                         const basegfx::B2DHomMatrix& rPathMatrix,
+                         const basegfx::B2DHomMatrix& rTransform)
+{
+    basegfx::B2DPolyPolygon aClipPolyPoly;
+
+    int nClipPathCount = pClipPath->getPathCount();
+    for (int i = 0; i < nClipPathCount; ++i)
+    {
+        std::vector<std::unique_ptr<vcl::pdf::PDFiumPathSegment>> aPathSegments;
+        const int nSegments = pClipPath->getPathSegmentCount(i);
+        for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
+            aPathSegments.push_back(pClipPath->getPathSegment(i, nSegmentIndex));
+
+        appendSegmentsToPolyPoly(aClipPolyPoly, aPathSegments, rPathMatrix);
+    }
+
+    aClipPolyPoly.transform(rTransform);
+
+    return aClipPolyPoly;
+}
+
 void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                   int /*nPageObjectIndex*/)
 {
@@ -1962,6 +1987,34 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     float right = aBounds.getMaxX();
     // Upside down.
     float top = aBounds.getMaxY();
+
+    bool bEntirelyClippedOut = false;
+
+    auto aPathMatrix = pPageObject->getMatrix();
+
+    aPathMatrix *= maCurrentMatrix;
+
+    const basegfx::B2DHomMatrix aTransform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+
+    basegfx::B2DPolyPolygon aClipPolyPoly
+        = GetClip(pPageObject->getClipPath(), aPathMatrix, aTransform);
+
+    if (aClipPolyPoly.count())
+    {
+        // Clip against ClipRegion, use same conversions and transformation on
+        // the graphic bounds as were applied to the clipping polypolygon
+        const tools::Rectangle aRect = PointsToLogic(aBounds.getMinX(), aBounds.getMaxX(),
+                                                     aBounds.getMinY(), aBounds.getMaxY());
+        basegfx::B2DPolyPolygon aGraphicBounds(
+            basegfx::utils::createPolygonFromRect(vcl::unotools::b2DRectangleFromRectangle(aRect)));
+        aGraphicBounds.transform(aTransform);
+        const basegfx::B2DPolyPolygon aClippedBounds(basegfx::utils::clipPolyPolygonOnPolyPolygon(
+            aGraphicBounds, aClipPolyPoly, true, false));
+        // completely clipped out
+        bEntirelyClippedOut = aClippedBounds.getB2DRange().isEmpty();
+    }
+
     tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
     aRect.AdjustRight(1);
     aRect.AdjustBottom(1);
@@ -1972,6 +2025,10 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
     pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+
+    if (bEntirelyClippedOut)
+        pGraf->SetVisible(false);
+
     InsertObj(pGraf.get());
 }
 
