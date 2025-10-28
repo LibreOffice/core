@@ -162,6 +162,10 @@ class ImpSdrPdfImport final
         const std::vector<std::unique_ptr<vcl::pdf::PDFiumPathSegment>>& rPathSegments,
         const basegfx::B2DHomMatrix& rPathMatrix);
 
+    basegfx::B2DPolyPolygon GetClip(const std::unique_ptr<vcl::pdf::PDFiumClipPath>& rClipPath,
+                                    const basegfx::B2DHomMatrix& rPathMatrix,
+                                    const basegfx::B2DHomMatrix& rTransform);
+
     // #i73407# reformulation to use new B2DPolygon classes
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
