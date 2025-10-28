@@ -157,6 +157,11 @@ class ImpSdrPdfImport final
     void InsertObj(SdrObject* pObj, bool bScale = true);
     void MapScaling();
 
+    void appendSegmentsToPolyPoly(
+        basegfx::B2DPolyPolygon& rPolyPoly,
+        const std::vector<std::unique_ptr<vcl::pdf::PDFiumPathSegment>>& rPathSegments,
+        const basegfx::B2DHomMatrix& rPathMatrix);
+
     // #i73407# reformulation to use new B2DPolygon classes
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 

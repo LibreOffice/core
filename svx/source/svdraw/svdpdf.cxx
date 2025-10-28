@@ -1987,26 +1987,20 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     InsertObj(pGraf.get());
 }
 
-void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                                 std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
-                                 int /*nPageObjectIndex*/)
+void ImpSdrPdfImport::appendSegmentsToPolyPoly(
+    basegfx::B2DPolyPolygon& rPolyPoly,
+    const std::vector<std::unique_ptr<vcl::pdf::PDFiumPathSegment>>& rPathSegments,
+    const basegfx::B2DHomMatrix& rPathMatrix)
 {
-    auto aPathMatrix = pPageObject->getMatrix();
-
-    aPathMatrix *= maCurrentMatrix;
-
-    basegfx::B2DPolyPolygon aPolyPoly;
     basegfx::B2DPolygon aPoly;
     std::vector<basegfx::B2DPoint> aBezier;
 
-    const int nSegments = pPageObject->getPathSegmentCount();
-    for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
+    for (const auto& pPathSegment : rPathSegments)
     {
-        auto pPathSegment = pPageObject->getPathSegment(nSegmentIndex);
         if (pPathSegment != nullptr)
         {
             basegfx::B2DPoint aB2DPoint = pPathSegment->getPoint();
-            aB2DPoint *= aPathMatrix;
+            aB2DPoint *= rPathMatrix;
 
             const bool bClose = pPathSegment->isClosed();
             if (bClose)
@@ -2036,7 +2030,7 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
                     // New Poly.
                     if (aPoly.count() > 0)
                     {
-                        aPolyPoly.append(aPoly, 1);
+                        rPolyPoly.append(aPoly, 1);
                         aPoly.clear();
                     }
 
@@ -2060,9 +2054,29 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     if (aPoly.count() > 0)
     {
-        aPolyPoly.append(aPoly, 1);
+        rPolyPoly.append(aPoly, 1);
         aPoly.clear();
     }
+}
+
+void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
+                                 int /*nPageObjectIndex*/)
+{
+    auto aPathMatrix = pPageObject->getMatrix();
+
+    aPathMatrix *= maCurrentMatrix;
+
+    basegfx::B2DPolyPolygon aPolyPoly;
+
+    std::vector<std::unique_ptr<vcl::pdf::PDFiumPathSegment>> aPathSegments;
+    const int nSegments = pPageObject->getPathSegmentCount();
+    for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
+    {
+        aPathSegments.push_back(pPageObject->getPathSegment(nSegmentIndex));
+    }
+
+    appendSegmentsToPolyPoly(aPolyPoly, aPathSegments, aPathMatrix);
 
     const basegfx::B2DHomMatrix aTransform(
         basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
