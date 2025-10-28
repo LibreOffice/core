@@ -1560,6 +1560,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextAlignLeft)
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr", "algn", u"l");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOLEObjectAnimationTarget)
+{
+    createSdImpressDoc("pptx/tdf169088.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    const OUString sOleId = getXPath(
+        pXmlDoc, "/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "id");
+
+    // Check animation target spid matches OLE object id
+    assertXPath(pXmlDoc,
+                "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
+                "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/"
+                "p:cBhvr/p:tgtEl/p:spTgt",
+                "spid", sOleId);
+
+    assertXPath(pXmlDoc,
+                "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
+                "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animEffect/"
+                "p:cBhvr/p:tgtEl/p:spTgt",
+                "spid", sOleId);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
