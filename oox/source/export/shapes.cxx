@@ -3021,7 +3021,9 @@ sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape, XmlFil
 
     sal_Int32 nID = pFB->GetUniqueId();
 
-    (*mpShapeMap)[ rXShape ] = nID;
+    auto it = mpShapeMap->find(rXShape);
+    if (it == mpShapeMap->end())
+        (*mpShapeMap)[rXShape] = nID;
 
     return nID;
 }
