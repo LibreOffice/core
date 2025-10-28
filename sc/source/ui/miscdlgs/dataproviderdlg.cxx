@@ -151,6 +151,11 @@ ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(
     , maDeleteTransformation(std::move(aDeleteTransformation))
     , mpDoc(pDoc)
 {
+    // for uitests
+    mxSeparator->set_buildable_name(mxSeparator->get_buildable_name() + OUString::number(nIndex));
+    mxNumColumns->set_buildable_name(mxNumColumns->get_buildable_name() + OUString::number(nIndex));
+    mxDelete->set_buildable_name(mxDelete->get_buildable_name() + OUString::number(nIndex));
+
     mxDelete->connect_clicked(LINK(this,ScSplitColumnTransformationControl, DeleteHdl));
 }
 
@@ -192,6 +197,11 @@ ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(
     , maDeleteTransformation(std::move(aDeleteTransformation))
     , mpDoc(pDoc)
 {
+    // for uitests
+    mxSeparator->set_buildable_name(mxSeparator->get_buildable_name() + OUString::number(nIndex));
+    mxEdColumns->set_buildable_name(mxEdColumns->get_buildable_name() + OUString::number(nIndex));
+    mxDelete->set_buildable_name(mxDelete->get_buildable_name() + OUString::number(nIndex));
+
     mxDelete->connect_clicked(LINK(this,ScMergeColumnTransformationControl, DeleteHdl));
 
     OUStringBuffer aBuffer;

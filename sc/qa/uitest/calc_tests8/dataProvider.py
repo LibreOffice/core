@@ -11,6 +11,10 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
+from org.libreoffice.unotest import systemPathToFileUrl
+from libreoffice.calc.document import get_cell_by_position
+from libreoffice.uno.propertyvalue import mkPropertyValues
+from tempfile import TemporaryDirectory
 
 import os
 
@@ -82,5 +86,75 @@ class DataProvider(UITestCase):
                                  "sc", "qa", "unit", "data", "dataprovider", "csv",
                                  "test1.csv")
         self.do_import("CSV", test_file, "", "1")
+
+    def test_save_split_transformation(self):
+
+        with TemporaryDirectory() as tempdir:
+
+            xFilePath = os.path.join(tempdir, 'tdf169019-tmp.ods')
+
+            with self.ui_test.load_file(get_url_for_data_file('tdf169019.ods')):
+
+                with self.ui_test.execute_dialog_through_command(".uno:DataProvider") as xDialog:
+                    xDB = xDialog.getChild("select_db_range")
+                    select_by_text(xDB, "myImport")
+                    self.assertEqual("myImport", get_state_as_dict(xDB)['DisplayText'])
+
+                    xBrowse = xDialog.getChild("browse")
+                    with self.ui_test.execute_blocking_action(
+                            xBrowse.executeAction, args=('CLICK', ()), close_button="") as dialog:
+                        xFileName = dialog.getChild("file_name")
+                        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf169019.csv")}))
+                        xOpen = dialog.getChild("open")
+                        xOpen.executeAction("CLICK", tuple())
+
+                    xProvider = xDialog.getChild("provider_lst")
+                    xURL = xDialog.getChild("ed_url")
+                    self.assertEqual(get_url_for_data_file("tdf169019.csv"), get_state_as_dict(xURL)['Text'])
+                    self.assertEqual("CSV", get_state_as_dict(xProvider)['DisplayText'])
+
+                    xTransformation = xDialog.getChild("transformation_box")
+                    select_by_text(xTransformation, "Split Column")
+                    self.assertEqual("Split Column", get_state_as_dict(xTransformation)['DisplayText'])
+
+                    xAdd = xDialog.getChild("add_transformation")
+                    xAdd.executeAction("CLICK", tuple())
+
+                    xSeparator1 = xDialog.getChild("ed_separator0")
+                    xNumCols1 = xDialog.getChild("num_cols0")
+                    xSeparator1.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
+                    xNumCols1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+
+                    xApply = xDialog.getChild("apply")
+                    xApply.executeAction("CLICK", tuple())
+
+                    self.assertEqual("Split Column", get_state_as_dict(xTransformation)['DisplayText'])
+
+                    xAdd = xDialog.getChild("add_transformation")
+                    xAdd.executeAction("CLICK", tuple())
+
+                    xSeparator2 = xDialog.getChild("ed_separator1")
+                    xNumCols2 = xDialog.getChild("num_cols1")
+                    xSeparator2.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
+                    xNumCols2.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+
+                    xApply = xDialog.getChild("apply")
+                    xApply.executeAction("CLICK", tuple())
+
+                # Save Copy as
+                with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="open") as xDialog:
+                    xFileName = xDialog.getChild('file_name')
+                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                    xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
+
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 'Rank' != 'Rank|Males|Females\r'
+                self.assertEqual("Rank", get_cell_by_position(doc2, 0, 0, 0).getString())
+                self.assertEqual("Males", get_cell_by_position(doc2, 0, 1, 0).getString())
+                self.assertEqual("Females\r", get_cell_by_position(doc2, 0, 2, 0).getString())
+                for i in range(1, 101):
+                    self.assertEqual(str(i), get_cell_by_position(doc2, 0, 0, i).getString())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
