@@ -1107,26 +1107,33 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     });
 
     loadFromFile(u"two-pages.pdf");
-    // save and reload as odg
-    saveAndReload("draw8");
 
-    // Check that the graphic in the second page of the document is the second page of the pdf
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
-                                                                   uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
-    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xImage.is());
-    uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
-    uno::Reference<graphic::XGraphic> xGraphic;
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+    OUString formats[] = { "draw8", "OpenDocument Drawing Flat XML" };
+    // save and reload as odg and fodg
+    for (const OUString& format : formats)
+    {
+        setImportFilterName(format);
+        saveAndReload(format);
 
-    Graphic aGraphic(xGraphic);
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1
-    // - Actual  : -1
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getPageNumber());
+        // Check that the graphic in the second page of the document is the second page of the pdf
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+        uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1),
+                                                     uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xImage.is());
+        uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+
+        Graphic aGraphic(xGraphic);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1
+        // - Actual  : -1
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getPageNumber());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

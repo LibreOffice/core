@@ -1362,13 +1362,14 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const& 
     return xGraphic;
 }
 
-uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Reference<io::XOutputStream> const & rxOutputStream)
+uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Reference<io::XOutputStream> const & rxOutputStream,
+                                                                     sal_Int32 nPageNum)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
 
     if (mxGraphicStorageHandler.is())
     {
-        xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
+        xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStreamAtPage(rxOutputStream, nPageNum);
     }
 
     return xGraphic;

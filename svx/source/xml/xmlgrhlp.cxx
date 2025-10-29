@@ -237,7 +237,7 @@ public:
 
     bool                            Exists() const { return mxStmWrapper.is(); }
     const GraphicObject&            GetGraphicObject();
-    Graphic GetGraphic();
+    Graphic GetGraphic(sal_Int32 nPageNum = -1);
 };
 
 SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
@@ -283,7 +283,7 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
     mbClosed = true;
 }
 
-Graphic SvXMLGraphicOutputStream::GetGraphic()
+Graphic SvXMLGraphicOutputStream::GetGraphic(sal_Int32 nPageNum)
 {
     Graphic aGraphic;
 
@@ -292,7 +292,8 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
         sal_uInt16 nDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, u"", *mpOStm ,nFormat,&nDeterminedFormat);
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, u"", *mpOStm ,nFormat,&nDeterminedFormat,
+                GraphicFilterImportFlags::NONE, nPageNum);
 
         if (nDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -332,7 +333,8 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
                         if (nStreamLen_ > 0)
                         {
                             aDest.Seek(0);
-                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, u"", aDest ,nFormat,&nDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, u"", aDest ,nFormat,&nDeterminedFormat,
+                                    GraphicFilterImportFlags::NONE, nPageNum);
                         }
                     }
                 }
@@ -619,7 +621,7 @@ uno::Reference<graphic::XGraphic>
     return xGraphic;
 }
 
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
+uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOutputStreamAtPage(uno::Reference<io::XOutputStream> const & rxOutputStream, sal_Int32 nPageNum)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -627,14 +629,18 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOu
 
     if ((SvXMLGraphicHelperMode::Read == meCreateMode) && rxOutputStream.is())
     {
-
         SvXMLGraphicOutputStream* pGraphicOutputStream = static_cast<SvXMLGraphicOutputStream*>(rxOutputStream.get());
         if (pGraphicOutputStream)
         {
-            xGraphic = pGraphicOutputStream->GetGraphic().GetXGraphic();
+            xGraphic = pGraphicOutputStream->GetGraphic(nPageNum).GetXGraphic();
         }
     }
     return xGraphic;
+}
+
+uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
+{
+    return loadGraphicFromOutputStreamAtPage(rxOutputStream, -1);
 }
 
 OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
@@ -999,6 +1005,9 @@ protected:
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
 
+    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+        loadGraphicFromOutputStreamAtPage(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream, sal_Int32 nPage) override;
+
     virtual OUString SAL_CALL
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
@@ -1069,6 +1078,11 @@ SvXMLGraphicImportExportHelper::loadGraphicAtPage(OUString const& rURL, sal_Int3
 uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
     return m_xXMLGraphicHelper->loadGraphicFromOutputStream(rxOutputStream);
+}
+
+uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphicFromOutputStreamAtPage(uno::Reference<io::XOutputStream> const & rxOutputStream, sal_Int32 nPage)
+{
+    return m_xXMLGraphicHelper->loadGraphicFromOutputStreamAtPage(rxOutputStream, nPage);
 }
 
 OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
