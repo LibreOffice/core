@@ -10,7 +10,7 @@ from os import path, walk
 
 if __name__ == '__main__':
 
-    ignoredPackages = ["dbm", "curses", "test", "tkinter", "turtledemo", "idlelib"]
+    ignoredPackages = ["curses", "test", "tkinter", "turtledemo", "idlelib"]
 
     coreDir = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
     pythonDir = path.join(coreDir, "workdir/UnpackedTarball/python3")

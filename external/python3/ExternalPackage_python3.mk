@@ -176,7 +176,6 @@ endif
 
 
 # packages not shipped:
-# dbm - need some database stuff
 # curses - need curses to build the C module
 # idlelib, tkinter, turtledemo - need Tk to build the C module
 # test - probably unnecessary? was explicitly removed #i116738#
@@ -430,6 +429,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/ctypes/macholib/dyld.py \
 	Lib/ctypes/macholib/dylib.py \
 	Lib/ctypes/macholib/framework.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/dbm,\
+	Lib/dbm/__init__.py \
+	Lib/dbm/dumb.py \
+	Lib/dbm/gnu.py \
+	Lib/dbm/ndbm.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/email,\

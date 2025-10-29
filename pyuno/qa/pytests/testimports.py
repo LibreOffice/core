@@ -47,5 +47,12 @@ class ImportsTest(unittest.TestCase):
         with open(os.devnull, "w") as devnull:
             print(str(venv), file=devnull)
 
+    def test_dbm_import(self):
+        import dbm
+
+        # use imported dbm module for pyflakes
+        with open(os.devnull, "w") as devnull:
+            print(str(dbm), file=devnull)
+
 if __name__ == '__main__':
     unittest.main()
