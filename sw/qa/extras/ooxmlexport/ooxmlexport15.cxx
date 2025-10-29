@@ -1062,7 +1062,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135667)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape", "strokeweight", u"4pt");
 
     // line type
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "linestyle", u"Single");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "linestyle", u"single");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "dashstyle", u"Dash");
 }
 
