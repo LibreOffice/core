@@ -405,6 +405,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 {
     std::vector< std::pair< OUString, Any > > aUserData;
     aUserData.reserve(41); // worst case
+    SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(&GetModel());
 
     aUserData.emplace_back( sUNO_View_GridIsVisible, Any( IsGridVisible() ) );
     aUserData.emplace_back( sUNO_View_GridIsFront, Any( IsGridFront() ) );
@@ -479,6 +480,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.emplace_back( sUNO_View_GridSnapWidthYDenominator, Any( GetSnapGridWidthY().GetDenominator() ) );
     aUserData.emplace_back( sUNO_View_IsAngleSnapEnabled, Any( IsAngleSnapEnabled() ) );
     aUserData.emplace_back( sUNO_View_SnapAngle, Any( static_cast<sal_Int32>(GetSnapAngle()) ) );
+    aUserData.emplace_back( sUNO_View_HasCanvasPage, Any( pDrawDocument->HasCanvasPage() ) );
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc( nOldLength + aUserData.size() );
@@ -909,6 +911,11 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
             SdrLayerIDSet aSdrLayerIDSets;
             aSdrLayerIDSets.PutValue( rValue.Value );
             SetLockedLayers( aSdrLayerIDSets );
+        }
+        else if ( bImpress && rValue.Name == sUNO_View_HasCanvasPage )
+        {
+            if ( (rValue.Value >>= bBool) && bBool )
+                pDrawDocument->ImportCanvasPage();
         }
     }
 
