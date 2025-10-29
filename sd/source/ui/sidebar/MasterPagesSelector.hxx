@@ -26,6 +26,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/idle.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
@@ -48,6 +49,21 @@ namespace sd::sidebar {
 class MasterPagesSelector : public PanelLayout
                           , public sfx2::sidebar::ILayoutableWindow
 {
+    class UpdateTask final : public Idle
+    {
+        MasterPagesSelector& m_rContainer;
+
+    public:
+        UpdateTask(MasterPagesSelector& rStylesList)
+            : Idle("MasterPagesUpdateTask")
+            , m_rContainer(rStylesList)
+        {
+            SetPriority(TaskPriority::DEFAULT_IDLE);
+        }
+
+        virtual void Invoke() override { m_rContainer.LateInit(); }
+    };
+
 public:
     // Sidebar
     MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
@@ -157,6 +173,7 @@ protected:
 
 private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    UpdateTask maUpdateTask;
 
     /** The offset between ValueSet index and MasterPageContainer::Token
         last seen.  This value is used heuristically to speed up the lookup
