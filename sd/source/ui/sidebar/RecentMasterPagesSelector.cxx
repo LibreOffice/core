@@ -45,7 +45,6 @@ std::unique_ptr<PanelLayout> RecentMasterPagesSelector::Create (
             rViewShellBase,
             pContainer,
             rxSidebar));
-    xSelector->LateInit();
     xSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_RECENT);
 
     return xSelector;
@@ -71,7 +70,6 @@ void RecentMasterPagesSelector::LateInit()
 {
     MasterPagesSelector::LateInit();
 
-    MasterPagesSelector::Fill();
     RecentlyUsedMasterPages::Instance().AddEventListener (
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
 }
