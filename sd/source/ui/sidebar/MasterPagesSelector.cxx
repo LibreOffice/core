@@ -62,6 +62,7 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
     , mrDocument(rDocument)
     , mrBase(rBase)
     , mxSidebar(std::move(xSidebar))
+    , maUpdateTask(*this)
 {
     mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
     mxPreviewIconView->connect_command(LINK(this, MasterPagesSelector, CommandHdl));
@@ -69,6 +70,7 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
+    maUpdateTask.Start();
 }
 
 // Notebookbar
@@ -81,6 +83,7 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
     , mxPreviewIconView(m_xBuilder->weld_icon_view(rIconViewId))
     , mrDocument(rDocument)
     , mrBase(rBase)
+    , maUpdateTask(*this)
 {
     mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
     mxPreviewIconView->connect_command(LINK(this, MasterPagesSelector, CommandHdl));
@@ -88,6 +91,7 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
+    maUpdateTask.Start();
 }
 
 
@@ -104,6 +108,7 @@ MasterPagesSelector::~MasterPagesSelector()
 
 void MasterPagesSelector::LateInit()
 {
+    Fill();
 }
 
 void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
