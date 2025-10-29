@@ -571,10 +571,10 @@ void RtfExport::WriteInfo()
                    ::comphelper::string::convertCommaSeparated(xDocProps->getKeywords()));
         OutUnicode(OOO_STRING_SVTOOLS_RTF_DOCCOMM, xDocProps->getDescription());
 
-        OutUnicode(OOO_STRING_SVTOOLS_RTF_AUTHOR, xDocProps->getAuthor());
+        OutUnicode(OOO_STRING_SVTOOLS_RTF_AUTHOR, xDocProps->getAuthor(), true);
         OutDateTime(OOO_STRING_SVTOOLS_RTF_CREATIM, xDocProps->getCreationDate());
 
-        OutUnicode(OOO_STRING_SVTOOLS_RTF_AUTHOR, xDocProps->getModifiedBy());
+        OutUnicode(OOO_STRING_SVTOOLS_RTF_AUTHOR, xDocProps->getModifiedBy(), true);
         OutDateTime(OOO_STRING_SVTOOLS_RTF_REVTIM, xDocProps->getModificationDate());
 
         OutDateTime(OOO_STRING_SVTOOLS_RTF_PRINTIM, xDocProps->getPrintDate());
