@@ -65,7 +65,6 @@ static bool convertTx(txCtx h)
 
     return true;
 }
-#endif
 
 static void suppressDebugMessagess(txCtx h)
 {
@@ -89,6 +88,7 @@ static void txFatalCallback(txCtx h)
     txFree(h);
     throw std::runtime_error("fatal tx error");
 }
+#endif
 
 // System afdko could be used by calling: tx -dump src dest here
 bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl)
@@ -179,11 +179,13 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     return false;
 }
 
+#if HAVE_FEATURE_AFDKO
 static void mergeFontsFatalCallback(txCtx h)
 {
     mergeFontsFree(h);
     throw std::runtime_error("fatal mergeFonts error");
 }
+#endif
 
 // System afdko could be used by calling: mergefonts -cid cidfontinfo destfile [glyphaliasfile mergefontfile]+ here
 bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUString& destFileUrl,
@@ -293,9 +295,9 @@ static void* cb_memory(ctlMemoryCallbacks* /*cb*/, void* old, size_t size)
 
     return malloc(size);
 }
-#endif
 
 static void makeOtfFatalCallback(void*) { throw std::runtime_error("fatal tx error"); }
+#endif
 
 // System afdko could be used by calling: makeotf[exe] -mf fontMenuNameDB -f srcFont -o destFile -ch charMap [-ff features]
 bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& destFileUrl,
