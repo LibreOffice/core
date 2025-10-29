@@ -1005,6 +1005,9 @@ public:
 
     SAL_DLLPRIVATE bool HasCanvasPage() const { return mpCanvasPage.is(); }
 
+    SAL_DLLPRIVATE void ImportCanvasPage();
+    SAL_DLLPRIVATE bool ValidateCanvasPage(const SdPage* pPage) const;
+
     SAL_DLLPRIVATE sal_uInt16 GetOrInsertCanvasPage ();
 
     /** return the document fonts for latin, cjk and ctl according to the current

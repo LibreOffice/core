@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <unordered_set>
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
@@ -1468,6 +1469,47 @@ void SdDrawDocument::SetupNewPage (
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+    }
+}
+
+bool SdDrawDocument::ValidateCanvasPage(const SdPage* pPage) const
+{
+    std::unordered_set<SdrPage*> aPreviewPageSet;
+    SdrObjListIter aIter(pPage, SdrIterMode::Flat);
+    for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
+    {
+        if (pObj->GetObjIdentifier() != SdrObjKind::Page)
+            continue;
+        SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+        SdrPage* pPreviewPage = pPageObj->GetReferencedPage();
+        if (aPreviewPageSet.contains(pPreviewPage))
+            return false;
+        else
+            aPreviewPageSet.insert(pPreviewPage);
+    }
+    if (aPreviewPageSet.size() != GetSdPageCount(PageKind::Standard) - 1)
+        return false;
+    return true;
+}
+
+void SdDrawDocument::ImportCanvasPage()
+{
+    sal_uInt16 nStdPageCnt = GetSdPageCount(PageKind::Standard);
+
+    // what if canvas page is not the last page?
+    SdPage* pPage = GetSdPage(nStdPageCnt - 1, PageKind::Standard);
+    bool bIsCanvasPageValid = ValidateCanvasPage(pPage);
+    pPage->SetCanvasPage();
+    mpCanvasPage = pPage;
+    // re-populate the previews grid if not valid
+    if (!bIsCanvasPageValid)
+    {
+        while (pPage->GetObjCount() > 0)
+        {
+            // maybe only SdrPageObj(s) should be removed?
+            pPage->NbcRemoveObject(0);
+        }
+        populatePagePreviewsGrid();
     }
 }
 
