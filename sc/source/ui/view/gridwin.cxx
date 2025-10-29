@@ -2501,11 +2501,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 ScSubTotalParam aSubTotalParam;
                 pDBData->GetSubTotalParam(aSubTotalParam);
                 aSubTotalParam.bHasHeader = aNewDBData.HasHeader();
-                if (!aNewDBData.HasSubTotalParam())
-                {
-                    pDBData->CreateSubTotalParam(aSubTotalParam);
-                    aNewDBData.SetSubTotalParam(aSubTotalParam);
-                }
+                // store current subtotal settings
+                pDBData->CreateSubTotalParam(aSubTotalParam);
+                aNewDBData.SetSubTotalParam(aSubTotalParam);
                 // add/replace total row
                 aSubTotalParam.bRemoveOnly = false;
                 aSubTotalParam.bReplace = true;

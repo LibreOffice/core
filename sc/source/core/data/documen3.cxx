@@ -793,10 +793,10 @@ void ScDocument::RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, cons
         pTable->RemoveSimpleSubTotals( rParam, rOldParam );
 }
 
-bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, sal_uInt16 nIndex )
+bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 {
     ScTable* pTable = FetchTable(nTab);
-    return pTable && pTable->DoSimpleSubTotals(rParam, nIndex);
+    return pTable && pTable->DoSimpleSubTotals(rParam);
 }
 
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )
@@ -1483,10 +1483,10 @@ void ScDocument::PrepareQuery( SCTAB nTab, ScQueryParam& rQueryParam )
     }
 }
 
-SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub)
+SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub, bool bKeepTotals)
 {
     if (ScTable* pTable = FetchTable(nTab))
-        return pTable->Query(rQueryParam, bKeepSub);
+        return pTable->Query(rQueryParam, bKeepSub, bKeepTotals);
 
     OSL_FAIL("missing tab");
     return 0;

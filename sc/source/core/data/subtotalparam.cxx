@@ -28,6 +28,19 @@ ScSubTotalParam::SubtotalGroup::SubtotalGroup(const SubtotalGroup& r)
         std::copy_n(r.pSubTotals.get(), r.nSubTotals, pSubTotals.get());
     }
 
+    if (r.nCustFuncs > 0)
+    {
+        assert(r.pCustFuncs);
+        AllocCustFuncs(r.nCustFuncs);
+        for (SCCOL i = 0; i < r.nCustFuncs; ++i)
+        {
+            if (r.pCustFuncs[i].second)
+                pCustFuncs[i] = std::make_pair(r.pCustFuncs[i].first, r.pCustFuncs[i].second->Clone());
+            else
+                pCustFuncs[i] = std::make_pair(r.pCustFuncs[i].first, nullptr);
+        }
+    }
+
     if (r.nSubLabels > 0)
     {
         assert(r.pSubLabels);
@@ -48,6 +61,19 @@ ScSubTotalParam::SubtotalGroup& ScSubTotalParam::SubtotalGroup::operator=(const 
         std::copy_n(r.pSubTotals.get(), r.nSubTotals, pSubTotals.get());
     }
 
+    AllocCustFuncs(r.nCustFuncs);
+    if (r.nCustFuncs > 0)
+    {
+        assert(r.pCustFuncs);
+        for (SCCOL i = 0; i < r.nCustFuncs; ++i)
+        {
+            if (r.pCustFuncs[i].second)
+                pCustFuncs[i] = std::make_pair(r.pCustFuncs[i].first, r.pCustFuncs[i].second->Clone());
+            else
+                pCustFuncs[i] = std::make_pair(r.pCustFuncs[i].first, nullptr);
+        }
+    }
+
     AllocSubLabels(r.nSubLabels);
     if (r.nSubLabels > 0)
     {
@@ -63,6 +89,8 @@ bool ScSubTotalParam::SubtotalGroup::operator==(const SubtotalGroup& r) const
     return bActive == r.bActive && nField == r.nField && nSubTotals == r.nSubTotals && nSubLabels == r.nSubLabels
            && (!nSubTotals
                || std::equal(pSubTotals.get(), pSubTotals.get() + nSubTotals, r.pSubTotals.get()))
+           && (!nCustFuncs
+               || std::equal(pCustFuncs.get(), pCustFuncs.get() + nCustFuncs, r.pCustFuncs.get()))
            && (!nSubLabels
                || std::equal(pSubLabels.get(), pSubLabels.get() + nSubLabels, r.pSubLabels.get()));
 }
@@ -73,6 +101,15 @@ void ScSubTotalParam::SubtotalGroup::AllocSubTotals(SCCOL n)
     {
         nSubTotals = std::max(n, SCCOL(0));
         pSubTotals.reset(nSubTotals ? new std::pair<SCCOL, ScSubTotalFunc>[nSubTotals] : nullptr);
+    }
+}
+
+void ScSubTotalParam::SubtotalGroup::AllocCustFuncs(SCCOL n)
+{
+    if (nCustFuncs != n)
+    {
+        nCustFuncs = std::max(n, SCCOL(0));
+        pCustFuncs.reset(nCustFuncs ? new std::pair<SCCOL, std::unique_ptr<ScTokenArray>>[nCustFuncs] : nullptr);
     }
 }
 
@@ -93,10 +130,15 @@ void ScSubTotalParam::SubtotalGroup::SetSubtotals(const css::uno::Sequence<css::
                           ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(seq[i].Function)) };
 }
 
-void ScSubTotalParam::SubtotalGroup::SetSublabels(const css::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
-{
-    // TODO UNO::API: SubTotalColumn has no LabelName member
-}
+//void ScSubTotalParam::SubtotalGroup::SetCustFuncs(const css::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
+//{
+// TODO UNO::API: SubTotalColumn has no token array member
+//}
+
+//void ScSubTotalParam::SubtotalGroup::SetSublabels(const css::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
+//{
+// TODO UNO::API: SubTotalColumn has no LabelName member
+//}
 
 void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
                                     const SCCOL* ptrSubTotals,
@@ -124,26 +166,33 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
         aGroups[nGroup].pSubTotals[i] = { ptrSubTotals[i], ptrFunctions[i] };
 }
 
+void ScSubTotalParam::SetCustFuncs(sal_uInt16 nGroup,
+                       std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>>& rColFuncs,
+                       sal_uInt16 nCount )
+{
+    OSL_ENSURE((nGroup <= MAXSUBTOTAL), "ScSubTotalParam::SetCustFuncs(): nGroup > MAXSUBTOTAL!");
+    OSL_ENSURE((nCount > 0), "ScSubTotalParam::SetCustFuncs(): nCount == 0!");
+    if (!(nCount > 0 && nGroup <= MAXSUBTOTAL))
+        return;
+
+    aGroups[nGroup].AllocCustFuncs(nCount);
+    for (sal_uInt16 i = 0; i < nCount; i++)
+        aGroups[nGroup].pCustFuncs[i] = std::make_pair(rColFuncs[i].first, std::move(rColFuncs[i].second));
+}
+
 void ScSubTotalParam::SetSubLabels(sal_uInt16 nGroup,
-                       const SCCOL* ptrSubLabels,
-                       const rtl::OUString* ptrSubNames,
+                       std::vector<std::pair<SCCOL, rtl::OUString>>& rColLabels,
                        sal_uInt16 nCount )
 {
     OSL_ENSURE((nGroup <= MAXSUBTOTAL), "ScSubTotalParam::SetSubLabels(): nGroup > MAXSUBTOTAL!");
-    OSL_ENSURE(ptrSubLabels, "ScSubTotalParam::SetSubLabels(): ptrSubLabels == NULL!");
-    OSL_ENSURE(ptrSubNames, "ScSubTotalParam::SetSubLabels(): ptrSubNames == NULL!");
     OSL_ENSURE((nCount > 0), "ScSubTotalParam::SetSubLabels(): nCount == 0!");
 
-    if (!(ptrSubLabels && ptrSubNames && (nCount > 0) && (nGroup <= MAXSUBTOTAL)))
+    if (!(nCount > 0 && nGroup <= MAXSUBTOTAL))
         return;
-
-    // 0 is interpreted as 1, otherwise decrementing the array index
-    if (nGroup != 0)
-        nGroup--;
 
     aGroups[nGroup].AllocSubLabels(nCount);
     for (sal_uInt16 i = 0; i < nCount; i++)
-        aGroups[nGroup].pSubLabels[i] = { ptrSubLabels[i], ptrSubNames[i] };
+        aGroups[nGroup].pSubLabels[i] = std::make_pair(rColLabels[i].first, std::move(rColLabels[i].second));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

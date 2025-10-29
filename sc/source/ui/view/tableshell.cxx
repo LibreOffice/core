@@ -99,14 +99,12 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                         ScSubTotalParam aSubTotalParam;
                         aNewDBData.GetSubTotalParam(aSubTotalParam);
                         aSubTotalParam.bHasHeader = aNewDBData.HasHeader();
-                        if (!aNewDBData.HasSubTotalParam())
-                        {
-                            pDBData->CreateSubTotalParam(aSubTotalParam);
-                            aNewDBData.SetSubTotalParam(aSubTotalParam);
-                        }
 
                         if (!aNewDBData.HasTotals())
                         {
+                            // store current subtotal settings
+                            pDBData->CreateSubTotalParam(aSubTotalParam);
+                            aNewDBData.SetSubTotalParam(aSubTotalParam);
                             // remove total row
                             aSubTotalParam.bRemoveOnly = true;
                             aSubTotalParam.bReplace = true;
