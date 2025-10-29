@@ -1447,14 +1447,14 @@ void DocxAttributeOutput::StartParagraphProperties()
     m_pSerializer->startElementNS(XML_w, XML_pPr);
     m_bOpenedParaPr = true;
 
+    InitCollectedParagraphProperties();
+
     // and output the section break now (if it appeared)
     if (m_pSectionInfo && m_rExport.m_nTextTyp == TXT_MAINTEXT)
     {
         m_rExport.SectionProperties( *m_pSectionInfo );
         m_pSectionInfo.reset();
     }
-
-    InitCollectedParagraphProperties();
 }
 
 void DocxAttributeOutput::InitCollectedParagraphProperties()
@@ -1624,9 +1624,6 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         PopulateFrameProperties(&rFrameFormat, aSize);
     }
 
-    // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks(Tag_InitCollectedParagraphProperties);
-
     // Write 'Paragraph Mark' properties
     m_pSerializer->startElementNS(XML_w, XML_rPr);
     // mark() before paragraph mark properties child elements.
@@ -1712,6 +1709,9 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_aFramePr.SetUseFrameBackground(true);
         m_aFramePr.SetUseFrameTextDirection(true);
     }
+
+    // Merge the marks for the ordered elements
+    m_pSerializer->mergeTopMarks(Tag_InitCollectedParagraphProperties);
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
