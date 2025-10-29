@@ -3318,11 +3318,12 @@ void DocxAttributeOutput::StartRunProperties()
 
     m_pSerializer->startElementNS(XML_w, XML_rPr);
 
+    InitCollectedRunProperties();
+
     if(GetExport().m_bHideTabLeaderAndPageNumbers && m_pHyperlinkAttrList.is() )
     {
         m_pSerializer->singleElementNS(XML_w, XML_webHidden);
     }
-    InitCollectedRunProperties();
 
     assert( !m_oPostponedGraphic );
     m_oPostponedGraphic.emplace();
