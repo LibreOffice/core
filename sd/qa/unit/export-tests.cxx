@@ -1211,8 +1211,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfClippedImages)
     xGraphicShape1->getPropertyValue(u"Visible"_ustr) >>= bVisible;
     CPPUNIT_ASSERT_MESSAGE("1st Graphic should be Visible", bVisible);
 
-    // before the fix the clip for this graphic wasn't taken into account so it was visiblem
-    // not it is detected as entirely clipped out and toggled to invisible
+    // before the fix the clip for this graphic wasn't taken into account so it was visible
+    // now it is detected as entirely clipped out and toggled to invisible
     uno::Reference<beans::XPropertySet> xGraphicShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGraphicShape2.is());
     xGraphicShape2->getPropertyValue(u"Visible"_ustr) >>= bVisible;
