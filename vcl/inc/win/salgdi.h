@@ -200,7 +200,7 @@ public:
 
     HRGN getRegion() const;
 
-    static IDWriteFactory* getDWriteFactory();
+    static const sal::systools::COMReference<IDWriteFactory>& getDWriteFactory();
     static IDWriteGdiInterop* getDWriteGdiInterop();
 
     HWND gethWnd();
