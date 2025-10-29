@@ -113,4 +113,6 @@ inline constexpr OUString sUNO_View_VisibleAreaHeight = u"VisibleAreaHeight"_ust
 
 inline constexpr OUString sUNO_View_ZoomOnPage = u"ZoomOnPage"_ustr;
 
+inline constexpr OUString sUNO_View_HasCanvasPage = u"HasCanvasPage"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
