@@ -1199,7 +1199,7 @@ public:
     bool            DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
     void            RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
     // Table SubTotals
-    bool            DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, sal_uInt16 nIndex );
+    bool            DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
     void            RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam );
 
     bool            TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam );
@@ -2253,7 +2253,7 @@ public:
     void               Reorder( const sc::ReorderParam& rParam );
 
     void               PrepareQuery( SCTAB nTab, ScQueryParam& rQueryParam );
-    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
+    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub, bool bKeepTotals );
     SC_DLLPUBLIC bool  CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam );
     OUString           GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab);
 

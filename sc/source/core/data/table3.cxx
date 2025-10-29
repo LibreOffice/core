@@ -2351,7 +2351,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     return bSpaceLeft;
 }
 
-bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam, sal_uInt16 nIndex )
+bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
 {
     RowEntry aRowEntry;
     aRowEntry.nGroupNo = 0;
@@ -2379,38 +2379,27 @@ bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam, sal_uInt16 nIndex )
     }
     else
     {
-        SetString(group.nField, aRowEntry.nDestRow, nTab, ScResId(STR_TABLE_TOTAL));
+        SetString(rParam.nCol1, aRowEntry.nDestRow, nTab, ScResId(STR_TABLE_TOTAL));
     }
 
     // insert the formulas
-    if (group.nSubTotals > 0)
+    if (group.nCustFuncs > 0)
     {
-        for (SCCOL nResult = 0; nResult < group.nSubTotals; ++nResult)
+        for (SCCOL nResult = 0; nResult < group.nCustFuncs; ++nResult)
         {
-            ScTokenArray aArr(rDocument);
-            aArr.AddOpCode(ocSubTotal);
-            aArr.AddOpCode(ocOpen);
-            aArr.AddDouble(static_cast<double>(group.func(nResult)));
-            aArr.AddOpCode(ocSep);
-            // Table refs structure
-            aArr.AddTableRef(nIndex);
-            aArr.AddOpCode(ocTableRefOpen);
-            ScSingleRefData aSingleRef;
-            aSingleRef.InitAddress(group.col(nResult), aRowEntry.nFuncStart - 1, nTab);
-            aArr.AddSingleReference(aSingleRef);
-            aArr.AddOpCode(ocTableRefClose);
-            // Table refs structure end
-            aArr.AddOpCode(ocClose);
-            aArr.AddOpCode(ocStop);
-            ScFormulaCell* pCell = new ScFormulaCell(
-                rDocument, ScAddress(group.col(nResult), aRowEntry.nDestRow, nTab), aArr);
-            if (rParam.bIncludePattern)
-                pCell->SetNeedNumberFormat(true);
-
-            SetFormulaCell(group.col(nResult), aRowEntry.nDestRow, pCell);
-            if (group.col(nResult) != group.nField)
+            if (ScTokenArray* pArray = group.custToken(nResult))
             {
-                lcl_RemoveNumberFormat(this, group.col(nResult), aRowEntry.nDestRow);
+                ScFormulaCell* pCell = new ScFormulaCell(
+                    rDocument, ScAddress(group.colcust(nResult), aRowEntry.nDestRow, nTab),
+                    *pArray);
+                if (rParam.bIncludePattern)
+                    pCell->SetNeedNumberFormat(true);
+
+                SetFormulaCell(group.colcust(nResult), aRowEntry.nDestRow, pCell);
+                if (group.colcust(nResult) != group.nField)
+                {
+                    lcl_RemoveNumberFormat(this, group.colcust(nResult), aRowEntry.nDestRow);
+                }
             }
         }
     }
@@ -2665,7 +2654,7 @@ void ScTable::PrepareQuery( ScQueryParam& rQueryParam )
     lcl_PrepareQuery(&rDocument, this, rQueryParam, false);
 }
 
-SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
+SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub, bool bKeepTotals)
 {
     ScQueryParam    aParam( rParamOrg );
     typedef std::unordered_set<OUString> StrSetType;
@@ -2698,6 +2687,11 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
     {
         bool bResult;                                   // Filter result
         bool bValid = queryEvaluator.ValidQuery(j, nullptr, &blockPos);
+        // Keep Totals row (last) even if we have no any cell formula!
+        if (!bValid && bKeepTotals && j == nRealRow2)
+        {
+            bValid = true;
+        }
         if (!bValid && bKeepSub)                        // Keep subtotals
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
