@@ -1231,6 +1231,57 @@ tools::Long GetListFirstLineIndent(const SwNumFormat &rFormat)
     return nReverseListIndented;
 }
 
+bool AreListsDifferentForExport(SwNumRule const& rRule1, SwNumRule const& rRule2)
+{
+    if (rRule1 == rRule2)
+        // They are equal, nothing to do
+        return false;
+
+    if (rRule1.IsContinusNum() != rRule2.IsContinusNum())
+        return true;
+
+    sal_uInt8 const nLevels = static_cast<sal_uInt8>(
+        rRule1.IsContinusNum() ? WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
+    for (sal_uInt8 nLevel = 0; nLevel < nLevels; ++nLevel)
+    {
+        if (AreListLevelsDifferentForExport(rRule1.Get(nLevel), rRule2.Get(nLevel)))
+            return true;
+    }
+    return false;
+}
+
+// Not all attributes of SwNumFormat are important for export, so can't just use embedded in
+// that classes comparison.
+bool AreListLevelsDifferentForExport(SwNumFormat const& rFormat1, SwNumFormat const& rFormat2)
+{
+    if (rFormat1 == rFormat2)
+        // They are equal, nothing to do
+        return false;
+
+    if (!rFormat1.GetCharFormat() != !rFormat2.GetCharFormat())
+        // One has charformat, other not. they are different
+        return true;
+
+    if (rFormat1.GetCharFormat() && rFormat2.GetCharFormat())
+    {
+        const SwAttrSet& a1 = rFormat1.GetCharFormat()->GetAttrSet();
+        const SwAttrSet& a2 = rFormat2.GetCharFormat()->GetAttrSet();
+
+        if (!(a1 == a2))
+            // Difference in charformat: they are different
+            return true;
+    }
+
+    // Compare numformats with empty charformats
+    SwNumFormat modified1 = rFormat1;
+    SwNumFormat modified2 = rFormat2;
+    modified1.SetCharFormatName(OUString());
+    modified2.SetCharFormatName(OUString());
+    modified1.SetCharFormat(nullptr);
+    modified2.SetCharFormat(nullptr);
+    return modified1 != modified2;
+}
+
 static tools::Long lcl_GetTrueMargin(SvxFirstLineIndentItem const& rFirstLine,
         SvxTextLeftMarginItem const& rLeftMargin, const SwNumFormat &rFormat,
     tools::Long &rFirstLinePos)

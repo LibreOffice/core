@@ -184,11 +184,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr));
-        // different numbering style
-        OUString listStyle3;
-        CPPUNIT_ASSERT(xPara->getPropertyValue(u"NumberingStyleName"_ustr) >>= listStyle3);
-        CPPUNIT_ASSERT(listStyle3.startsWith("WWNum"));
-        CPPUNIT_ASSERT(listStyle3 != listStyle);
         // but same list
         CPPUNIT_ASSERT_EQUAL(u"1.1.3"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
@@ -280,11 +275,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
-        // different numbering style
-        OUString listStyle2;
-        CPPUNIT_ASSERT(xPara->getPropertyValue(u"NumberingStyleName"_ustr) >>= listStyle2);
-        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
-        CPPUNIT_ASSERT(listStyle2 != listStyle);
         // restarted numeration due to override
         CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
@@ -316,11 +306,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(11), uno::UNO_QUERY);
-        // different numbering style
-        OUString listStyle2;
-        CPPUNIT_ASSERT(xPara->getPropertyValue(u"NumberingStyleName"_ustr) >>= listStyle2);
-        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
-        CPPUNIT_ASSERT(listStyle2 != listStyle);
         // numeration is continued
         CPPUNIT_ASSERT_EQUAL(u"3"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
