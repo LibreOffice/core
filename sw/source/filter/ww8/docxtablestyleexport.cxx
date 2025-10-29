@@ -448,7 +448,6 @@ void DocxTableStyleExport::Impl::tableStyleRPr(const uno::Sequence<beans::Proper
         }
     }
     tableStyleRRFonts(aRFonts);
-    tableStyleRLang(aLang);
     handleBoolean(aB, XML_b);
     handleBoolean(aBCs, XML_bCs);
     handleBoolean(aI, XML_i);
@@ -466,6 +465,7 @@ void DocxTableStyleExport::Impl::tableStyleRPr(const uno::Sequence<beans::Proper
         m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), aSz);
     if (!aSzCs.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_szCs, FSNS(XML_w, XML_val), aSzCs);
+    tableStyleRLang(aLang);
 
     m_pSerializer->endElementNS(XML_w, XML_rPr);
 }
