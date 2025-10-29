@@ -65,7 +65,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
                             OUString& aMenuLabel,
                             OUString& aCommandURL,
                             OUString& aHelpURL,
-                            Any& rImage,
+                            Reference<css::graphic::XGraphic>& xGraphic,
                             Reference< XIndexContainer >& xSubContainer )
 {
     try
@@ -73,7 +73,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
         // mandatory properties
         xActionTriggerPropertySet->getPropertyValue(u"Text"_ustr) >>= aMenuLabel;
         xActionTriggerPropertySet->getPropertyValue(u"CommandURL"_ustr) >>= aCommandURL;
-        rImage = xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr);
+        xGraphic = vcl::GetGraphic(xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr));
         xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr) >>= xSubContainer;
     }
     catch (const Exception&)
@@ -117,11 +117,11 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                     OUString aLabel;
                     OUString aCommandURL;
                     OUString aHelpURL;
-                    Any aImage;
+                    Reference<css::graphic::XGraphic> xGraphic;
                     Reference< XIndexContainer > xSubContainer;
 
                     sal_uInt16 nNewItemId = nItemId++;
-                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, aImage, xSubContainer );
+                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xGraphic, xSubContainer );
 
                     {
                         // insert new menu item
@@ -142,10 +142,9 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                         }
 
                         // handle bitmap
-                        if (aImage.hasValue())
+                        if (xGraphic)
                         {
-                            if (auto xGraphic = vcl::GetGraphic(aImage))
-                                rSubMenu->setItemImage(nNewItemId, xGraphic, false);
+                            rSubMenu->setItemImage(nNewItemId, xGraphic, false);
                         }
                         else
                         {
