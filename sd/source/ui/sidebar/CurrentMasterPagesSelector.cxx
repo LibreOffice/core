@@ -54,7 +54,6 @@ std::unique_ptr<PanelLayout> CurrentMasterPagesSelector::Create (
             rViewShellBase,
             pContainer,
             rxSidebar));
-    xSelector->LateInit();
     xSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
 
     return xSelector;
@@ -92,7 +91,6 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 void CurrentMasterPagesSelector::LateInit()
 {
     MasterPagesSelector::LateInit();
-    MasterPagesSelector::Fill();
     if (mrDocument.GetDocSh() != nullptr)
     {
         StartListening(*mrDocument.GetDocSh());

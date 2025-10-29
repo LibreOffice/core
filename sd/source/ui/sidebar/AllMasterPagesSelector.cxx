@@ -91,7 +91,6 @@ std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
             rViewShellBase,
             pContainer,
             rxSidebar));
-    xSelector->LateInit();
     xSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_ALL);
 
     return xSelector;
@@ -112,7 +111,6 @@ std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
             *pDocument,
             rViewShellBase,
             pContainer));
-    xSelector->LateInit();
     xSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_ALL);
 
     return xSelector;
@@ -127,7 +125,6 @@ AllMasterPagesSelector::AllMasterPagesSelector(
                           u"masterpageall_icons"_ustr)
     , mpSortedMasterPages(new SortedMasterPageDescriptorList())
 {
-    MasterPagesSelector::Fill();
 }
 
 AllMasterPagesSelector::AllMasterPagesSelector(
@@ -138,7 +135,6 @@ AllMasterPagesSelector::AllMasterPagesSelector(
                           u"masterpageall_icons"_ustr)
     , mpSortedMasterPages(new SortedMasterPageDescriptorList())
 {
-    MasterPagesSelector::Fill();
 }
 
 
