@@ -43,6 +43,8 @@ public:
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
 
+    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getFocusWindow() override;
+
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getFloatWindow() override;
 
     css::uno::Reference<css::ui::test::XUIObject>
@@ -86,6 +88,15 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocus
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
     if (!pObj)
         throw css::uno::RuntimeException(u"UITest::getFocusTopWindow did not find a window"_ustr);
+    return new UIObjectUnoObj(std::move(pObj));
+}
+
+css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFocusWindow()
+{
+    SolarMutexGuard aGuard;
+    std::unique_ptr<UIObject> pObj = UITest::getFocusWindow();
+    if (!pObj)
+        throw css::uno::RuntimeException(u"UITest::getFocusWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 

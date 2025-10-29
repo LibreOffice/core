@@ -65,6 +65,18 @@ std::unique_ptr<UIObject> UITest::getFocusTopWindow()
     return pSVData->maFrameData.mpFirstFrame->GetUITestFactory()(pSVData->maFrameData.mpFirstFrame);
 }
 
+std::unique_ptr<UIObject> UITest::getFocusWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVWinData& rWinData = *pSVData->mpWinData;
+
+    VclPtr<vcl::Window> pFocusWin = rWinData.mpFocusWin;
+    if (pFocusWin)
+        return pFocusWin->GetUITestFactory()(pFocusWin);
+
+    return nullptr;
+}
+
 std::unique_ptr<UIObject> UITest::getFloatWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();

@@ -30,6 +30,8 @@ namespace UITest
 
     std::unique_ptr<UIObject> getFocusTopWindow();
 
+    std::unique_ptr<UIObject> getFocusWindow();
+
     std::unique_ptr<UIObject> getFloatWindow();
 };
 
