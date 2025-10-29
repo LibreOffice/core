@@ -7700,38 +7700,6 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
     m_pSerializer->endElementNS( XML_w, XML_num );
 }
 
-// Not all attributes of SwNumFormat are important for export, so can't just use embedded in
-// that classes comparison.
-static bool lcl_ListLevelsAreDifferentForExport(const SwNumFormat & rFormat1, const SwNumFormat & rFormat2)
-{
-    if (rFormat1 == rFormat2)
-        // They are equal, nothing to do
-        return false;
-
-    if (!rFormat1.GetCharFormat() != !rFormat2.GetCharFormat())
-        // One has charformat, other not. they are different
-        return true;
-
-    if (rFormat1.GetCharFormat() && rFormat2.GetCharFormat())
-    {
-        const SwAttrSet & a1 = rFormat1.GetCharFormat()->GetAttrSet();
-        const SwAttrSet & a2 = rFormat2.GetCharFormat()->GetAttrSet();
-
-        if (!(a1 == a2))
-            // Difference in charformat: they are different
-            return true;
-    }
-
-    // Compare numformats with empty charformats
-    SwNumFormat modified1 = rFormat1;
-    SwNumFormat modified2 = rFormat2;
-    modified1.SetCharFormatName(OUString());
-    modified2.SetCharFormatName(OUString());
-    modified1.SetCharFormat(nullptr);
-    modified2.SetCharFormat(nullptr);
-    return modified1 != modified2;
-}
-
 void DocxAttributeOutput::OverrideNumberingDefinition(
         SwNumRule const& rRule,
         sal_uInt16 const nNum, sal_uInt16 const nAbstractNum, const std::map< size_t, size_t > & rLevelOverrides )
@@ -7747,7 +7715,8 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
     for (sal_uInt8 nLevel = 0; nLevel < nLevels; ++nLevel)
     {
         const auto levelOverride = rLevelOverrides.find(nLevel);
-        bool bListsAreDifferent = lcl_ListLevelsAreDifferentForExport(rRule.Get(nLevel), rAbstractRule.Get(nLevel));
+        bool bListsAreDifferent
+            = AreListLevelsDifferentForExport(rRule.Get(nLevel), rAbstractRule.Get(nLevel));
 
         // Export list override only if it is different to abstract one
         // or we have a level numbering override

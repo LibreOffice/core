@@ -3947,10 +3947,13 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                             GetExport().m_rDoc.FindNumRulePtr(
                                 pList->GetDefaultListStyleName()));
                         assert(pAbstractRule);
-                        if (pAbstractRule == pRule && !bListRestart)
+                        if (!AreListsDifferentForExport(*pAbstractRule, *pRule) && !bListRestart)
                         {
-                            // different list, but no override
-                            nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule) + 1;
+                            nNumId = GetExport().GetNumberingId(*pAbstractRule);
+                            if (nNumId == SAL_MAX_UINT16)
+                                nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule) + 1;
+                            else
+                                nNumId += 1;
                         }
                         else
                         {
