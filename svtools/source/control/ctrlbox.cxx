@@ -1059,14 +1059,18 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
     {
         int nFound = m_xComboBox->find_text(aOldText);
         if (nFound != -1)
-        {
             m_xComboBox->set_active(nFound);
-            return;
+        else
+        {
+            // otherwise, just pick something
+            m_xComboBox->set_active(0);
         }
     }
 
-    // otherwise, just pick something
-    m_xComboBox->set_active(0);
+    // tdf#165265 if nothing was originally selected, then
+    // don't pick anything and leave the combobox empty
+    // so the search for style feature doesn't add any
+    // not-explicitly selected font styles by default
 }
 
 FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)
