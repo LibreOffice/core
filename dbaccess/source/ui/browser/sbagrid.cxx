@@ -465,7 +465,10 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
 
 VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
-    return VclPtr<SbaGridControl>::Create( m_xContext, pParent, this, nStyle);
+    auto pGridControl = VclPtr<SbaGridControl>::Create( m_xContext, pParent, this, nStyle);
+    // Set an ID on the grid to make it easier to do UI testing
+    pGridControl->set_id("DBGrid");
+    return pGridControl;
 }
 
 // SbaGridHeader
