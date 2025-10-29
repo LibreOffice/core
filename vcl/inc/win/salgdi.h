@@ -81,7 +81,6 @@ private:
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
     LOGFONTW                maLogFont;
-    mutable sal::systools::COMReference<IDWriteFontFace> mxDWFontFace;
 };
 
 /**
