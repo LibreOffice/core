@@ -6144,63 +6144,63 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
         switch (rBox.GetLeft()->GetBorderLineStyle())
         {
             case SvxBorderLineStyle::SOLID:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::DASHED:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Dash"_ostr;
                 break;
             case SvxBorderLineStyle::DASH_DOT:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "DashDot"_ostr;
                 break;
             case SvxBorderLineStyle::DASH_DOT_DOT:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "ShortDashDotDot"_ostr;
                 break;
             case SvxBorderLineStyle::DOTTED:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Dot"_ostr;
                 break;
             case SvxBorderLineStyle::DOUBLE:
-                sLineType = "ThinThin"_ostr;
+                sLineType = "thinThin"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::DOUBLE_THIN:
-                sLineType = "ThinThin"_ostr;
+                sLineType = "thinThin"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::EMBOSSED:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::ENGRAVED:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::FINE_DASHED:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Dot"_ostr;
                 break;
             case SvxBorderLineStyle::INSET:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::OUTSET:
-                sLineType = "Single"_ostr;
+                sLineType = "single"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
             case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
             case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
-                sLineType = "ThickThin"_ostr;
+                sLineType = "thickThin"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::THINTHICK_LARGEGAP:
             case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
             case SvxBorderLineStyle::THINTHICK_SMALLGAP:
-                sLineType = "ThinThick"_ostr;
+                sLineType = "thinThick"_ostr;
                 sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::NONE:
