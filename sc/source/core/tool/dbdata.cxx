@@ -25,6 +25,8 @@
 #include <unotools/charclass.hxx>
 
 #include <dbdata.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 #include <globalnames.hxx>
 #include <refupdat.hxx>
 #include <document.hxx>
@@ -321,7 +323,6 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
-    maTableColumnAttributes(rData.maTableColumnAttributes),
     mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
@@ -359,7 +360,6 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
-    maTableColumnAttributes(rData.maTableColumnAttributes),
     mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
@@ -417,7 +417,6 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         else
         {
             maTableColumnNames  = rData.maTableColumnNames;
-            maTableColumnAttributes = rData.maTableColumnAttributes;
             mbTableColumnNamesDirty = rData.mbTableColumnNamesDirty;
         }
 
@@ -697,7 +696,9 @@ void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     mpSubTotal.reset(new ScSubTotalParam(rSubTotalParam));
 }
 
-void ScDBData::CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const
+void ScDBData::ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
+                                   const std::vector<TableColumnAttributes>& rAttributesVector,
+                                   formula::FormulaGrammar::Grammar eGrammar) const
 {
     rSubTotalParam.bDoSort = false;
     rSubTotalParam.bGroupedBy = false;
@@ -706,79 +707,316 @@ void ScDBData::CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const
     const size_t nEntryCount = rSubTotalParam.nCol2 - rSubTotalParam.nCol1 + 1; // col count
     if (nEntryCount > 0)
     {
-        // how many col we do subtotal
-        size_t nTotalsCount = std::count_if(
-            GetTableColumnAttributes().begin(), GetTableColumnAttributes().end(),
-            [](const TableColumnAttributes& attr) { return attr.maTotalsFunction.has_value(); });
-        if (nTotalsCount > 0)
+        SCCOL nCol = rSubTotalParam.nCol1;
+        std::vector<std::pair<SCCOL, OUString>> vColLabels;
+        std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>> vColFuncs;
+        for (const auto& rxTableColumn : rAttributesVector)
         {
-            std::unique_ptr<ScSubTotalFunc[]> pFunctions;
-            std::unique_ptr<SCCOL[]> pSubTotals;
-            pFunctions.reset(new ScSubTotalFunc[nTotalsCount]);
-            pSubTotals.reset(new SCCOL[nTotalsCount]);
-
-            for (size_t i = 0, nCheck = 0; i < nEntryCount; i++)
+            if (rxTableColumn.maTotalsRowLabel.has_value())
             {
-                if (GetTableColumnAttributes().size() <= i)
+                OUString aStr = rxTableColumn.maTotalsRowLabel.value();
+                if (!aStr.isEmpty())
+                    vColLabels.push_back(std::make_pair(nCol, std::move(aStr)));
+            }
+            else if (mpContainer && rxTableColumn.maTotalsFunction.has_value())
+            {
+                ScDocument& rDoc = mpContainer->GetDocument();
+                const OUString& sFuncName = rxTableColumn.maTotalsFunction.value();
+                if (sFuncName == u"custom")
                 {
-                    SAL_WARN("sc.core",
-                             "ScDBData::CreateSubTotalParam - column attributes size mismatch");
-                    break;
+                    if (rxTableColumn.maCustomFunction.has_value())
+                    {
+                        SCROW nLastRow = rSubTotalParam.nRow2;
+                        if (!HasTotals())
+                            nLastRow++;
+
+                        ScAddress aPos(nCol, nLastRow, nTable);
+                        ScCompiler aComp(rDoc, aPos, eGrammar, true,
+                                         false);
+                        std::unique_ptr<ScTokenArray> pArr
+                            = aComp.CompileString(rxTableColumn.maCustomFunction.value());
+                        if (pArr)
+                        {
+                            vColFuncs.push_back(std::make_pair(nCol, std::move(pArr)));
+                        }
+                    }
                 }
-                if (GetTableColumnAttributes()[i].maTotalsFunction.has_value())
+                else
                 {
-                    pSubTotals[nCheck] = rSubTotalParam.nCol1 + i;
-                    const OUString& sFuncName = GetTableColumnAttributes()[i].maTotalsFunction.value();
-                    //if (mpContainer && sFuncName == u"custom")
-                    //{
-                    //    // TODO: store custom formula tokenarrays somewhere
-                    //    ScFormulaCell* pFC = mpContainer->GetDocument().GetFormulaCell(
-                    //        ScAddress(rSubTotalParam.nCol1 + i, rSubTotalParam.nRow2, nTable));
-                    //    if (pFC)
-                    //    {
-                    //        std::unique_ptr<ScTokenArray> pTokenArray = pFC->GetCode()->Clone();
-                    //    }
-                    //}
-                    pFunctions[nCheck] = ScDBData::GetSubTotalFuncFromString(sFuncName);
-                    nCheck++;
+                    ScSubTotalFunc eSubType = GetSubTotalFuncFromString(sFuncName);
+                    if (eSubType != SUBTOTAL_FUNC_NONE)
+                    {
+                        std::unique_ptr<ScTokenArray> pArr(new ScTokenArray(rDoc));
+                        pArr->AddOpCode(ocSubTotal);
+                        pArr->AddOpCode(ocOpen);
+                        pArr->AddDouble(static_cast<double>(eSubType));
+                        pArr->AddOpCode(ocSep);
+                        // Table refs structure
+                        pArr->AddTableRef(GetIndex());
+                        pArr->AddOpCode(ocTableRefOpen);
+                        ScSingleRefData aSingleRef;
+                        aSingleRef.InitAddress(nCol, rSubTotalParam.nRow1, nTable);
+                        pArr->AddSingleReference(aSingleRef);
+                        pArr->AddOpCode(ocTableRefClose);
+                        // Table refs structure end
+                        pArr->AddOpCode(ocClose);
+                        pArr->AddOpCode(ocStop);
+                        // Store
+                        vColFuncs.push_back(std::make_pair(nCol, std::move(pArr)));
+                    }
                 }
             }
-            rSubTotalParam.SetSubTotals(static_cast<sal_uInt16>(0), // group number
-                                        pSubTotals.get(), pFunctions.get(),
-                                        nTotalsCount); // number of array elements
+            nCol++;
         }
+        rSubTotalParam.SetSubLabels(static_cast<sal_uInt16>(0), vColLabels, vColLabels.size());
+        rSubTotalParam.SetCustFuncs(static_cast<sal_uInt16>(0), vColFuncs, vColFuncs.size());
+    }
+}
 
-        // how many col we have totals Row Label
-        size_t nLabelsCount = std::count_if(
-            GetTableColumnAttributes().begin(), GetTableColumnAttributes().end(),
-            [](const TableColumnAttributes& attr) { return attr.maTotalsRowLabel.has_value(); });
-        if (nLabelsCount > 0)
+void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
+{
+    rSubTotalParam.bDoSort = false;
+    rSubTotalParam.bGroupedBy = false;
+    rSubTotalParam.aGroups[0].nField = rSubTotalParam.nCol1; // which column we add 'Summary'
+
+    const size_t nEntryCount = rSubTotalParam.nCol2 - rSubTotalParam.nCol1 + 1; // col count
+    if (nEntryCount > 0 && mpContainer)
+    {
+        ScDocument& rDoc = mpContainer->GetDocument();
+        ScHorizontalCellIterator aIter(rDoc, nTable, rSubTotalParam.nCol1, rSubTotalParam.nRow2,
+                                       rSubTotalParam.nCol2,
+                                       rSubTotalParam.nRow2); // Total row only
+        ScRefCellValue* pCell;
+        SCCOL nCol = rSubTotalParam.nCol1 - 1;
+        SCROW nRow;
+        std::vector<std::pair<SCCOL, OUString>> vColLabels;
+        std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>> vColFuncs;
+        while ((pCell = aIter.GetNext(nCol, nRow)) != nullptr)
         {
-            std::unique_ptr<OUString[]> pLabels;
-            std::unique_ptr<SCCOL[]> pSubLabels;
-            pLabels.reset(new OUString[nLabelsCount]);
-            pSubLabels.reset(new SCCOL[nLabelsCount]);
-
-            for (size_t i = 0, nCheck = 0; i < nEntryCount; i++)
+            if (pCell->getType() != CELLTYPE_FORMULA)
             {
-                if (GetTableColumnAttributes().size() <= i)
+                OUString aStr = pCell->getString(rDoc);
+                if (!aStr.isEmpty())
+                    vColLabels.push_back(std::make_pair(nCol, std::move(aStr)));
+            }
+            else
+            {
+                if (ScFormulaCell* pFC = pCell->getFormula())
                 {
-                    SAL_WARN("sc.core",
-                             "ScDBData::CreateSubTotalParam - column attributes size mismatch");
-                    break;
-                }
-                if (GetTableColumnAttributes()[i].maTotalsRowLabel.has_value())
-                {
-                    pSubLabels[nCheck] = rSubTotalParam.nCol1 + i;
-                    pLabels[nCheck] = GetTableColumnAttributes()[i].maTotalsRowLabel.value();
-                    nCheck++;
+                    std::unique_ptr<ScTokenArray> pTokens = pFC->GetCode()->Clone();
+                    if (pTokens)
+                    {
+                        vColFuncs.push_back(std::make_pair(nCol, std::move(pTokens)));
+                    }
                 }
             }
-            rSubTotalParam.SetSubLabels(static_cast<sal_uInt16>(0), // group number
-                                        pSubLabels.get(), pLabels.get(),
-                                        nLabelsCount); // number of array elements
+        }
+        rSubTotalParam.SetSubLabels(static_cast<sal_uInt16>(0), vColLabels, vColLabels.size());
+        rSubTotalParam.SetCustFuncs(static_cast<sal_uInt16>(0), vColFuncs, vColFuncs.size());
+    }
+}
+
+std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::FormulaGrammar::Grammar eGrammar) const
+{
+    ScSubTotalParam rParam;
+    GetSubTotalParam(rParam);
+
+    const SCCOL nEntryCount = rParam.nCol2 - rParam.nCol1 + 1; // col count
+    std::vector<TableColumnAttributes> aAttributesVector(nEntryCount);
+    if (nEntryCount > 0)
+    {
+        if (HasTotals())
+        {
+            if (!mpContainer)
+                assert(!"ScDBData::GetTotalRowAttributes - how did we end up here without container?");
+            else
+            {
+                ScDocument& rDoc = mpContainer->GetDocument();
+                ScHorizontalCellIterator aIter(rDoc, nTable, rParam.nCol1, rParam.nRow2,
+                                               rParam.nCol2,
+                                               rParam.nRow2); // Total row only
+                ScRefCellValue* pCell;
+                SCCOL nCol = rParam.nCol1 - 1;
+                SCROW nRow;
+                while ((pCell = aIter.GetNext(nCol, nRow)) != nullptr)
+                {
+                    TableColumnAttributes aNameAttr;
+                    if (pCell->getType() != CELLTYPE_FORMULA)
+                    {
+                        OUString aStr = pCell->getString(rDoc);
+                        if (!aStr.isEmpty())
+                            aNameAttr.maTotalsRowLabel = aStr;
+                    }
+                    else
+                    {
+                        if (ScFormulaCell* pFC = pCell->getFormula())
+                        {
+                            bool bSubTotal = pFC->IsSubTotal();
+                            ScTokenArray* pTokens = pFC->GetCode();
+                            if (bSubTotal && pTokens)
+                            {
+                                OUString aFunctype = GetSimpleSubTotalFunction(pTokens, nCol, rParam.nRow1);
+                                if (aFunctype != u"custom")
+                                    aNameAttr.maTotalsFunction = aFunctype;
+                                else
+                                    bSubTotal = false; // fallback to custom
+                            }
+
+                            if (!bSubTotal && pTokens)
+                            {
+                                ScAddress aPos(nCol, rParam.nRow2, nTable);
+                                ScCompiler aComp(rDoc, aPos, *pTokens, eGrammar);
+                                OUStringBuffer aBuf;
+                                aComp.CreateStringFromTokenArray(aBuf);
+                                OUString aFormula = aBuf.makeStringAndClear();
+                                aNameAttr.maTotalsFunction = "custom";
+                                aNameAttr.maCustomFunction = aFormula;
+                            }
+                        }
+                    }
+                    SCCOL nPos = nCol - rParam.nCol1;
+                    if (nPos < nEntryCount)
+                        aAttributesVector[nPos] = std::move(aNameAttr);
+                    else
+                        SAL_WARN("sc.core", "ScDBData::GetTotalRowAttributes - invalid attributes/columns");
+                }
+            }
+        }
+        else
+        {
+            const auto& group = rParam.aGroups[0];
+            if (group.nSubLabels > 0)
+            {
+                for (SCCOL nResult = 0; nResult < group.nSubLabels; ++nResult)
+                {
+                    SCCOL nPos = group.collabels(nResult) - rParam.nCol1;
+                    if (nPos < nEntryCount)
+                        aAttributesVector[nPos].maTotalsRowLabel = group.label(nResult);
+                    else
+                        SAL_WARN("sc.core", "ScDBData::GetTotalRowAttributes - invalid attributes/columns");
+                }
+            }
+
+            // insert the formulas
+            if (group.nCustFuncs > 0)
+            {
+                for (SCCOL nResult = 0; nResult < group.nCustFuncs; ++nResult)
+                {
+                    if (ScTokenArray* pTokens = group.custToken(nResult))
+                    {
+                        SCCOL nCol = group.colcust(nResult);
+                        bool bSubTotal = pTokens->HasOpCode(ocSubTotal);
+                        if (bSubTotal)
+                        {
+                            OUString aFunctype = GetSimpleSubTotalFunction(pTokens, nCol, rParam.nRow1);
+                            if (aFunctype != u"custom")
+                            {
+                                SCCOL nPos = nCol - rParam.nCol1;
+                                if (nPos < nEntryCount)
+                                    aAttributesVector[nPos].maTotalsFunction = aFunctype;
+                                else
+                                    SAL_WARN("sc.core", "ScDBData::GetTotalRowAttributes - invalid "
+                                                        "attributes/columns");
+                            }
+                            else
+                                bSubTotal = false; // fallback to custom
+                        }
+
+                        if (!bSubTotal)
+                        {
+                            if (!mpContainer)
+                                assert(!"ScDBData::GetTotalRowAttributes - how did we end up here without container?");
+                            else
+                            {
+                                ScDocument& rDoc = mpContainer->GetDocument();
+                                ScAddress aPos(nCol, rParam.nRow2 + 1, nTable);
+                                ScCompiler aComp(rDoc, aPos, *pTokens, eGrammar);
+                                OUStringBuffer aBuf;
+                                aComp.CreateStringFromTokenArray(aBuf);
+                                OUString aFormula = aBuf.makeStringAndClear();
+
+                                SCCOL nPos = nCol - rParam.nCol1;
+                                if (nPos < nEntryCount)
+                                {
+                                    aAttributesVector[nPos].maTotalsFunction = "custom";
+                                    aAttributesVector[nPos].maCustomFunction = aFormula;
+                                }
+                                else
+                                    SAL_WARN("sc.core", "ScDBData::GetTotalRowAttributes - invalid "
+                                                        "attributes/columns");
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
+    return aAttributesVector;
+}
+
+OUString ScDBData::GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL nCol, SCROW nHeaderRow) const
+{
+    std::vector<std::pair<OpCode, formula::StackVar>> expected
+        = { { ocSubTotal, formula::svByte },  { ocOpen, formula::svSep },
+            { ocPush, formula::svDouble },    { ocSep, formula::svSep },
+            { ocTableRef, formula::svIndex }, { ocTableRefOpen, formula::svSep },
+            { ocPush, formula::svSingleRef }, { ocTableRefClose, formula::svSep },
+            { ocClose, formula::svSep } };
+
+    size_t nIdx = 0;
+    ScSubTotalFunc eSubType = SUBTOTAL_FUNC_NONE;
+    formula::FormulaTokenArrayPlainIterator aIterResult(*pTokens);
+    for (formula::FormulaToken* t = aIterResult.NextNoSpaces(); t; t = aIterResult.NextNoSpaces())
+    {
+        // check for subtotal opcode
+        OpCode eOpCode = t->GetOpCode();
+        formula::StackVar eType = t->GetType();
+
+        if (nIdx < expected.size() && eOpCode == expected[nIdx].first
+            && eType == expected[nIdx].second)
+        {
+            if (nIdx == 2) // { ocPush, formula::svDouble }
+            {
+                sal_Int32 nFunc = static_cast<sal_Int32>(t->GetDouble());
+                if (nFunc > 100.)
+                    nFunc -= 100;
+
+                if (nFunc < 1 || nFunc > 11)
+                {
+                    return u"custom"_ustr;
+                }
+                else
+                    eSubType = static_cast<ScSubTotalFunc>(nFunc);
+            }
+            else if (nIdx == 4) // { ocTableRef, formula::svIndex }
+            {
+                sal_uInt16 nDbIndex = t->GetIndex();
+                if (GetIndex() != nDbIndex)
+                {
+                    return u"custom"_ustr;
+                }
+            }
+            else if (nIdx == 6) // { ocPush, formula::svSingleRef }
+            {
+                const ScSingleRefData* pRef = t->GetSingleRef();
+                if (!(pRef && pRef->Col() == nCol && pRef->Row() == nHeaderRow))
+                {
+                    return u"custom"_ustr;
+                }
+            }
+            else
+            { /*Nothing to do*/
+            }
+
+            ++nIdx;
+        }
+        else
+        {
+            return u"custom"_ustr;
+        }
+    }
+
+    return GetStringFromSubTotalFunc(eSubType);
 }
 
 void ScDBData::GetImportParam(ScImportParam& rImportParam) const
@@ -881,7 +1119,6 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
                 aRange.aEnd.Row());
         // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
         maTableColumnNames = aNames;
-        maTableColumnAttributes.resize(aNames.size());
         mbTableColumnNamesDirty = bTableColumnNamesDirty;
     }
 
@@ -914,7 +1151,7 @@ bool ScDBData::UpdateReference(const ScDocument& rDoc, UpdateRefMode eUpdateRefM
     if (bDoUpdate && eRet != UR_INVALID)
     {
         // MoveTo() invalidates column names via SetArea(); adjust, remember and set new.
-        AdjustTableColumnAttributes( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
+        AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
         ::std::vector<OUString> aNames( maTableColumnNames);
         bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
         // tdf#48025, tdf#141946: update the column index of the filter criteria,
@@ -925,7 +1162,6 @@ bool ScDBData::UpdateReference(const ScDocument& rDoc, UpdateRefMode eUpdateRefM
             MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
         // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
         maTableColumnNames = aNames;
-        maTableColumnAttributes.resize(aNames.size());
         mbTableColumnNamesDirty = bTableColumnNamesDirty;
     }
 
@@ -1009,12 +1245,7 @@ void ScDBData::SetTableColumnNames( ::std::vector< OUString >&& rNames )
     mbTableColumnNamesDirty = false;
 }
 
-void ScDBData::SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes )
-{
-    maTableColumnAttributes = std::move(rAttributes);
-}
-
-void ScDBData::AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
         SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 )
 {
     if (maTableColumnNames.empty())
@@ -1026,7 +1257,6 @@ void ScDBData::AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL 
         return;     // not moved or entirely moved, nothing to do
 
     ::std::vector<OUString> aNewNames;
-    ::std::vector<TableColumnAttributes> aNewAttributes;
     if (eUpdateRefMode == URM_INSDEL)
     {
         if (nDx > 0)
@@ -1043,26 +1273,22 @@ void ScDBData::AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL 
             if (nDx > 0)
                 n += nDx;
             aNewNames.resize(n);
-            aNewAttributes.resize(n);
             // Copy head.
             for (size_t i = 0; i < nHead; ++i)
             {
                 aNewNames[i] = maTableColumnNames[i];
-                aNewAttributes[i] = maTableColumnAttributes[i];
             }
             // Copy tail, inserted middle range, if any, stays empty.
             for (size_t i = n - nTail, j = maTableColumnNames.size() - nTail; i < n; ++i, ++j)
             {
                 aNewNames[i] = maTableColumnNames[j];
-                aNewAttributes[i] = maTableColumnAttributes[j];
             }
         }
     } // else   empty aNewNames invalidates names/offsets
 
     SAL_WARN_IF( !maTableColumnNames.empty() && aNewNames.empty(),
-            "sc.core", "ScDBData::AdjustTableColumnAttributes - invalidating column attributes/offsets");
+            "sc.core", "ScDBData::AdjustTableColumnNames - invalidating column names/offsets");
     aNewNames.swap( maTableColumnNames);
-    aNewAttributes.swap(maTableColumnAttributes);
     if (maTableColumnNames.empty())
         mbTableColumnNamesDirty = true;
     if (mbTableColumnNamesDirty)
@@ -1198,7 +1424,6 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     }
 
     aNewNames.swap( maTableColumnNames);
-    maTableColumnAttributes.resize(maTableColumnNames.size());
     mbTableColumnNamesDirty = false;
 }
 
@@ -1326,29 +1551,58 @@ ScSubTotalFunc ScDBData::GetSubTotalFuncFromString(std::u16string_view sFunction
 {
     if (sFunction == u"sum")
         return SUBTOTAL_FUNC_SUM;
-    if (sFunction == u"countNums")
+    else if (sFunction == u"countNums")
         return SUBTOTAL_FUNC_CNT;
-    if (sFunction == u"count")
+    else if (sFunction == u"count")
         return SUBTOTAL_FUNC_CNT2;
-    /*if (sFunction)
+    /*else if (sFunction)
         return SUBTOTAL_FUNC_PROD;*/
-    if (sFunction == u"average")
+    else if (sFunction == u"average")
         return SUBTOTAL_FUNC_AVE;
-    /*if (sFunction)
+    /*else if (sFunction)
         return SUBTOTAL_FUNC_MED;*/
-    if (sFunction == u"max")
+    else if (sFunction == u"max")
         return SUBTOTAL_FUNC_MAX;
-    if (sFunction == u"min")
+    else if (sFunction == u"min")
         return SUBTOTAL_FUNC_MIN;
-    if (sFunction == u"stdDev")
+    else if (sFunction == u"stdDev")
         return SUBTOTAL_FUNC_STD;
-    /*if (sFunction)
+    /*else if (sFunction)
         return SUBTOTAL_FUNC_STDP;*/
-    if (sFunction == u"var")
+    else if (sFunction == u"var")
         return SUBTOTAL_FUNC_VAR;
-    /*if (sFunction)
+    /*else if (sFunction)
         return SUBTOTAL_FUNC_VARP;*/
-    return SUBTOTAL_FUNC_NONE;
+    else
+        return SUBTOTAL_FUNC_NONE;
+}
+
+OUString ScDBData::GetStringFromSubTotalFunc(ScSubTotalFunc eFunc)
+{
+    if (eFunc == SUBTOTAL_FUNC_SUM)
+        return u"sum"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_CNT)
+        return u"countNums"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_CNT2)
+        return u"count"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_PROD)
+        return u"custom"_ustr; // ooxml not support in Total row
+    else if (eFunc == SUBTOTAL_FUNC_AVE)
+        return u"average"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_MED)
+        return u"custom"_ustr; // ooxml not support in Total row
+    else if (eFunc == SUBTOTAL_FUNC_MAX)
+        return u"max"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_MIN)
+        return u"min"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_STD)
+        return u"stdDev"_ustr;
+    else if (eFunc == SUBTOTAL_FUNC_STDP)
+        return u"custom"_ustr; // ooxml not support in Total row
+    else if (eFunc == SUBTOTAL_FUNC_VAR)
+        return u"var"_ustr;
+    else
+        return u"none"_ustr;
 }
 
 namespace {

@@ -36,6 +36,7 @@ class ScDocument;
 struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
+class ScTokenArray;
 
 class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
 {
@@ -83,6 +84,7 @@ struct TableColumnAttributes
 {
     std::optional<OUString> maTotalsRowLabel = std::nullopt;
     std::optional<OUString> maTotalsFunction = std::nullopt;
+    std::optional<OUString> maCustomFunction = std::nullopt;
 };
 
 // xmlColumnPr attributes
@@ -175,7 +177,6 @@ private:
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
-    ::std::vector< TableColumnAttributes > maTableColumnAttributes; ///< attributes of table columns
     ::std::vector< TableColumnModel > maTableColumnModel;
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
@@ -233,8 +234,6 @@ public:
     void        EndTableColumnNamesListener();
     SC_DLLPUBLIC void SetTableColumnNames( ::std::vector< OUString >&& rNames );
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
-    SC_DLLPUBLIC void SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes );
-    SC_DLLPUBLIC const ::std::vector< TableColumnAttributes >& GetTableColumnAttributes() const { return maTableColumnAttributes; }
     SC_DLLPUBLIC void SetTableColumnModel( TableColumnModel& rModel )
     {
         maTableColumnModel.push_back(std::move(rModel));
@@ -279,7 +278,17 @@ public:
 
     SC_DLLPUBLIC void       GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     SC_DLLPUBLIC void       SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
-    SC_DLLPUBLIC void       CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+
+    // Total row param handling for Table Styles
+    SC_DLLPUBLIC void       ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
+                                                const std::vector<TableColumnAttributes>& rAttributesVector,
+                                                formula::FormulaGrammar::Grammar eGrammar) const;
+    SC_DLLPUBLIC void       CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const;
+
+    SC_DLLPUBLIC std::vector<TableColumnAttributes>
+                            GetTotalRowAttributes(formula::FormulaGrammar::Grammar eGrammar) const;
+
+    OUString    GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL nCol, SCROW nHeaderRow) const;
 
     void        GetImportParam(ScImportParam& rImportParam) const;
     void        SetImportParam(const ScImportParam& rImportParam);
@@ -315,10 +324,11 @@ public:
     SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
 
     static ScSubTotalFunc GetSubTotalFuncFromString(std::u16string_view sFunction);
+    static OUString GetStringFromSubTotalFunc(ScSubTotalFunc eFunc);
 
 private:
 
-    void AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+    void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
             SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
     void InvalidateTableColumnNames( bool bSwapToEmptyNames );
 };
