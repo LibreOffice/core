@@ -152,9 +152,10 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
 {
     EnsureUsedNumberingTable();
     SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
-    sal_uInt16 nRet = o3tl::narrowing<sal_uInt16>(m_pUsedNumTable->GetPos(p));
-
-    return nRet;
+    size_t pos = m_pUsedNumTable->GetPos(p);
+    if (pos == SIZE_MAX)
+        return SAL_MAX_UINT16;
+    return o3tl::narrowing<sal_uInt16>(pos);
 }
 
 // GetFirstLineOffset should problem never appear unadorned apart from

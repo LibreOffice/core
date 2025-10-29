@@ -201,6 +201,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
     fnVerify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
+{
+    // Given a document that changes a lot between a few numbering styles and overrides:
+    loadAndSave("mixednumberings.docx");
+
+    // Then make sure that we export a reasonable number of "w:num" elements:
+    xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10
+    // - Actual  : 61
+    CPPUNIT_ASSERT_EQUAL(10, countXPathNodes(pXmlNum, "//w:numbering/w:num"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
