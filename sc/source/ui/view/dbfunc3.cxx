@@ -671,7 +671,7 @@ void ScDBFunc::DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam
     bool bSuccess = true;
     if (bDo)
     {
-        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam, rNewData.GetIndex());
+        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam);
     }
     ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,
                         nTab);

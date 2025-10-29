@@ -32,15 +32,31 @@ TableColumnContext::TableColumnContext( WorksheetContextBase& rParent, TableColu
 {
 }
 
-ContextHandlerRef TableColumnContext::onCreateContext( sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
+void TableColumnContext::onCharacters( const rtl::OUString& rChars )
 {
-    /* no known child elements */
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( totalsRowFormula ):
+            mrTableColumn.setFunc(rChars);
+        break;
+    }
+}
+
+ContextHandlerRef TableColumnContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if ((getCurrentElement() == XLS_TOKEN(tableColumn))
+        && (nElement == XLS_TOKEN(totalsRowFormula)))
+    {
+        if (rAttribs.getToken(XML_t, XML_normal) != XML_TOKEN_INVALID)
+            return this;
+    }
     return nullptr;
 }
 
 void TableColumnContext::onStartElement( const AttributeList& rAttribs )
 {
-    mrTableColumn.importTableColumn( rAttribs );
+    if (getCurrentElement() == XLS_TOKEN(tableColumn))
+        mrTableColumn.importTableColumn( rAttribs );
 }
 
 ContextHandlerRef TableColumnContext::onCreateRecordContext( sal_Int32 /*nRecId*/, SequenceInputStream& /*rStrm*/ )

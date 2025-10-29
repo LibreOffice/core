@@ -20,7 +20,6 @@
 #pragma once
 
 #include <oox/helper/refvector.hxx>
-#include <dbdata.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox { class AttributeList; }
@@ -41,14 +40,22 @@ public:
     void                importTableColumn( SequenceInputStream& rStrm );
     /** Gets the name of this column. */
     const OUString&     getName() const;
-    /** Gets the attributes of this column. */
-    const TableColumnAttributes& getColumnAttributes() const;
+    /** Gets the Total Row Label of this column. */
+    const std::optional<OUString>& getColumnRowLabel() const;
+    /** Gets the Subtotal function of this column. */
+    const std::optional<OUString>& getColumnSubTotal() const;
+    /** Gets the Custom function of this column. */
+    const std::optional<OUString>& getColumnFunction() const;
+    /** Sets the function of this column. */
+    void                setFunc( const OUString& rChars );
 
 private:
     OUString            maName;
     sal_Int32           mnId;
     sal_Int32           mnDataDxfId;
-    TableColumnAttributes maColumnAttributes;
+    std::optional<OUString> maRowLabel = std::nullopt;
+    std::optional<OUString> maSubTotal = std::nullopt;
+    std::optional<OUString> maFunction = std::nullopt;
 };
 
 class TableColumns : public WorkbookHelper

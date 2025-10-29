@@ -813,14 +813,17 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     bool bKeepSub = false;                          // repeat existing partial results?
+    bool bKeepTotals = false;
     if (rQueryParam.GetEntry(0).bDoQuery)           // not at cancellation
     {
         ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );    // partial results exist?
 
-        if ((aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly)
-            || (pDBData->HasTotals() && pDBData->GetTableStyleInfo()))
+        if ((aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly))
             bKeepSub = true;
+
+        if (pDBData->HasTotals() && pDBData->GetTableStyleInfo())
+            bKeepTotals = true;
     }
 
     ScDocumentUniquePtr pUndoDoc;
@@ -886,7 +889,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     //  execute filtering on the document
-    SCSIZE nCount = rDoc.Query( nTab, rQueryParam, bKeepSub );
+    SCSIZE nCount = rDoc.Query( nTab, rQueryParam, bKeepSub, bKeepTotals );
     pDBData->CalcSaveFilteredCount( nCount );
     if (bCopy)
     {
@@ -1256,7 +1259,6 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
 
     ScSubTotalParam aNewParam;
     rNewData.GetSubTotalParam(aNewParam); // end of range is being changed
-    // ScSubTotalParam aNewParam(rParam);
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScRangeName> pUndoRange;
     std::unique_ptr<ScDBCollection> pUndoDB;
@@ -1291,7 +1293,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     bool bSuccess = true;
     if (bDo)
     {
-        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam, rNewData.GetIndex());
+        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam);
         rDoc.SetDrawPageSize(nTab);
     }
     ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,

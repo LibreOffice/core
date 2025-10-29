@@ -82,6 +82,7 @@ struct TableColumnAttributes
 {
     std::optional<OUString> maTotalsRowLabel = std::nullopt;
     std::optional<OUString> maTotalsFunction = std::nullopt;
+    std::optional<OUString> maCustomFunction = std::nullopt;
 };
 
 /** Container base class to provide selected access for ScDBData. */
@@ -150,7 +151,6 @@ private:
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
-    ::std::vector< TableColumnAttributes > maTableColumnAttributes; ///< attributes of table columns
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
 
@@ -205,8 +205,6 @@ public:
     void        EndTableColumnNamesListener();
     SC_DLLPUBLIC void SetTableColumnNames( ::std::vector< OUString >&& rNames );
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
-    SC_DLLPUBLIC void SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes );
-    SC_DLLPUBLIC const ::std::vector< TableColumnAttributes >& GetTableColumnAttributes() const { return maTableColumnAttributes; }
     bool        AreTableColumnNamesDirty() const { return mbTableColumnNamesDirty; }
 
     /** Refresh/update the column names with the header row's cell contents. */
@@ -246,6 +244,9 @@ public:
 
     SC_DLLPUBLIC void       GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     SC_DLLPUBLIC void       SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
+    SC_DLLPUBLIC void       ImportSubTotalParam(ScSubTotalParam& rSubTotalParam,
+                                                const std::vector<TableColumnAttributes>& rAttributesVector,
+                                                formula::FormulaGrammar::Grammar eGrammar) const;
     SC_DLLPUBLIC void       CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
 
     void        GetImportParam(ScImportParam& rImportParam) const;
@@ -285,7 +286,7 @@ public:
 
 private:
 
-    void AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+    void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
             SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
     void InvalidateTableColumnNames( bool bSwapToEmptyNames );
 };
