@@ -7938,7 +7938,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         {
             GetExport().GetId( *pFont ); // ensure font info is written to fontTable.xml
             OString aFamilyName( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
-            m_pSerializer->singleElementNS( XML_w, XML_rFonts,
+            AddToAttrList( m_pFontsAttrList,
                     FSNS( XML_w, XML_ascii ), aFamilyName,
                     FSNS( XML_w, XML_hAnsi ), aFamilyName,
                     FSNS( XML_w, XML_cs ), aFamilyName,
