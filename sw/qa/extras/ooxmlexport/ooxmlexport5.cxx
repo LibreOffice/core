@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78284)
 {
     loadAndSave("fdo78284.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
-    assertXPath(pXmlDoc,"/ContentType:Types/ContentType:Override[@PartName='/word/media/OOXDiagramDataRels1_0.png']",
+    assertXPath(pXmlDoc,"/ContentType:Types/ContentType:Default[@Extension='png']",
                         "ContentType",
                         u"image/png");
 }
