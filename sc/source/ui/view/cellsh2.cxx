@@ -1213,6 +1213,15 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                                 rSet.DisableItem(nWhich);
                             }
                         }
+                        else if (nWhich == SCITEM_SUBTDATA)
+                        {
+                            // Disable if table style is applied (same as MSO)
+                            ScDBData* pDBData = pTabViewShell->GetDBData(false, SC_DB_OLD);
+                            if (pDBData && pDBData->GetTableStyleInfo())
+                            {
+                                rSet.DisableItem(nWhich);
+                            }
+                        }
                     }
                 }
                 break;
