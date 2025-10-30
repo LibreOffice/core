@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	icu_headers \
 	icui18n \
 	icuuc \
+	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
