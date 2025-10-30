@@ -380,6 +380,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
 {
     if ( eErrorStyle == SC_VALERR_MACRO ) {
         DoMacro(rPos, rInput, nullptr, pParent);
+        callback(true);
         return;
     }
 
