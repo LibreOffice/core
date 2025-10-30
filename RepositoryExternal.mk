@@ -4510,7 +4510,18 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(gb_UnpackedTarball_workdir)/y-crdt/tests-ffi/include \
 )
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(gb_UnpackedTarball_workdir)/y-crdt/target/debug/yrs.lib \
+	$(eval $(call gb_LinkTarget_use_system_win32_libs,$(1),\
+		ntdll \
+		userenv \
+		ws2_32 \
+	))
+)
+else
 $(call gb_LinkTarget_add_libs,$(1),$(gb_UnpackedTarball_workdir)/y-crdt/target/debug/libyrs.a)
+endif
 endef
 
 else
