@@ -141,6 +141,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     // Get TextBounds relative to baseline
     vcl::Font aFnt = mpVD->GetFont();
     aFnt.SetAlignment(ALIGN_BASELINE);
+    aFnt.SetFamily(FAMILY_DONTKNOW);
     mpVD->SetFont(aFnt);
 }
 
@@ -615,15 +616,15 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
         const sal_uInt32 nHeight(
             basegfx::fround<sal_uInt32>(aFnt.GetFontSize().Height() * mfScaleY));
 
-        mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyTypeMaybeAskConfig(), aFnt.GetFamilyName(),
-                                    aFnt.GetStyleName(), aFnt.GetPitchMaybeAskConfig(),
-                                    aFnt.GetCharSet(), EE_CHAR_FONTINFO));
-        mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyTypeMaybeAskConfig(), aFnt.GetFamilyName(),
-                                    aFnt.GetStyleName(), aFnt.GetPitchMaybeAskConfig(),
-                                    aFnt.GetCharSet(), EE_CHAR_FONTINFO_CJK));
-        mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyTypeMaybeAskConfig(), aFnt.GetFamilyName(),
-                                    aFnt.GetStyleName(), aFnt.GetPitchMaybeAskConfig(),
-                                    aFnt.GetCharSet(), EE_CHAR_FONTINFO_CTL));
+        mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(),
+                                    aFnt.GetPitchMaybeAskConfig(), aFnt.GetCharSet(),
+                                    EE_CHAR_FONTINFO));
+        mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(),
+                                    aFnt.GetPitchMaybeAskConfig(), aFnt.GetCharSet(),
+                                    EE_CHAR_FONTINFO_CJK));
+        mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(),
+                                    aFnt.GetPitchMaybeAskConfig(), aFnt.GetCharSet(),
+                                    EE_CHAR_FONTINFO_CTL));
         mpTextAttr->Put(SvxPostureItem(aFnt.GetItalicMaybeAskConfig(), EE_CHAR_ITALIC));
         mpTextAttr->Put(SvxWeightItem(aFnt.GetWeightMaybeAskConfig(), EE_CHAR_WEIGHT));
         mpTextAttr->Put(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT));
