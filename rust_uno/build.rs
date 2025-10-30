@@ -14,12 +14,20 @@
 fn main() {
     // Tell cargo to link against the rust_uno-cpp library
     // This library contains the generated C++ bridge functions
-    println!("cargo:rustc-link-lib=rust_uno-cpplo");
+    // It requires linking against sal3.dll on Windows
+    if cfg!(windows) {
+        println!("cargo:rustc-link-lib=irust_uno-cpp");
+        println!("cargo:rustc-link-lib=isal");
+    } else {
+        println!("cargo:rustc-link-lib=rust_uno-cpplo");
+    }
 
     // Add the LibreOffice instdir/program directory to the library search path
     // This is where librust_uno-cpplo.so is located
+    // sal3.dll's .lib is under sdk/lib
     if let Ok(instdir) = std::env::var("INSTDIR") {
         println!("cargo:rustc-link-search=native={}/program", instdir);
+        println!("cargo:rustc-link-search=native={}/sdk/lib", instdir);
     }
 
     // Also try the workdir path where the library might be during build
