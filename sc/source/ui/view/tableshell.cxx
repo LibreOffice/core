@@ -102,10 +102,9 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
 
                         if (!aNewDBData.HasTotals())
                         {
-                            // store current subtotal settings
-                            pDBData->CreateSubTotalParam(aSubTotalParam);
+                            // store current subtotal settings before removing total row
+                            pDBData->CreateTotalRowParam(aSubTotalParam);
                             aNewDBData.SetSubTotalParam(aSubTotalParam);
-                            // remove total row
                             aSubTotalParam.bRemoveOnly = true;
                             aSubTotalParam.bReplace = true;
                             aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,

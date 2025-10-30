@@ -2354,9 +2354,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
 {
     RowEntry aRowEntry;
-    aRowEntry.nGroupNo = 0;
-    aRowEntry.nSubStartRow = rParam.nRow1 + static_cast<SCROW>(rParam.bHasHeader); // Header
-    aRowEntry.nFuncStart = rParam.nRow1 + static_cast<SCROW>(rParam.bHasHeader); // Header
+    aRowEntry.nGroupNo = 0; // only one group can have
+    //aRowEntry.nSubStartRow = rParam.nRow1 + static_cast<SCROW>(rParam.bHasHeader); // Header
+    //aRowEntry.nFuncStart = rParam.nRow1 + static_cast<SCROW>(rParam.bHasHeader); // Header
     aRowEntry.nDestRow = rParam.nRow2 + 1;
     aRowEntry.nFuncEnd = rParam.nRow2;
 
