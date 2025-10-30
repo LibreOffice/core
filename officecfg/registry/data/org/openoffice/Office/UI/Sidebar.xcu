@@ -1529,7 +1529,7 @@
 
       <node oor:name="ScDatabasePropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Database Range</value>
+          <value xml:lang="en-US">Table Style Options</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>ScDatabasePropertyPanel</value>

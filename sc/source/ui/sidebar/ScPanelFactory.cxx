@@ -98,7 +98,6 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         else if (rsResourceURL.endsWith("/DatabasePropertyPanel"))
         {
             xPanel = ScDatabasePropertyPanel::Create( pParent, xFrame, pBindings );
-            nMinimumSize = 0;
         }
 
         if (xPanel)
