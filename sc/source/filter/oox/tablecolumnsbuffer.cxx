@@ -161,12 +161,12 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
         pDBData->SetTableColumnNames( std::move(aNames) );
 
         // Import subtotal parameters for columns
-        if (hasAnySetValue && !pDBData->HasTotals())
+        if (hasAnySetValue)
         {
             ScSubTotalParam aSubTotalParam;
             pDBData->GetSubTotalParam(aSubTotalParam);
             aSubTotalParam.bHasHeader = pDBData->HasHeader();
-            pDBData->ImportSubTotalParam(aSubTotalParam, aAttributes,
+            pDBData->ImportTotalRowParam(aSubTotalParam, aAttributes,
                                          formula::FormulaGrammar::GRAM_OOXML);
             pDBData->SetSubTotalParam(aSubTotalParam);
         }
