@@ -1527,13 +1527,13 @@ void SbiRuntime::StepLIKE()
     {
         bTextMode = IsImageFlag( SbiImageFlags::COMPARETEXT );
     }
-    sal_uInt32 searchFlags = UREGEX_UWORD | UREGEX_DOTALL; // Dot matches newline
+    uint32_t searchFlags = UREGEX_UWORD | UREGEX_DOTALL; // Dot matches newline
     if( bTextMode )
     {
         searchFlags |= UREGEX_CASE_INSENSITIVE;
     }
 
-    static sal_uInt32 cachedSearchFlags = 0;
+    static uint32_t cachedSearchFlags = 0;
     static OUString cachedRegex;
     static std::optional<icu::RegexMatcher> oRegexMatcher;
     UErrorCode nIcuErr = U_ZERO_ERROR;
@@ -1544,6 +1544,12 @@ void SbiRuntime::StepLIKE()
         icu::UnicodeString sRegex(false, reinterpret_cast<const UChar*>(cachedRegex.getStr()),
                                   cachedRegex.getLength());
         oRegexMatcher.emplace(sRegex, cachedSearchFlags, nIcuErr);
+        if (U_FAILURE(nIcuErr))
+        {
+            // Bad regex; oRegexMatcher has no pattern - would crash in RegexMatcher::reset
+            oRegexMatcher.reset();
+            return Error(ERRCODE_BASIC_BAD_PATTERN);
+        }
     }
 
     icu::UnicodeString sSource(false, reinterpret_cast<const UChar*>(value.getStr()),
