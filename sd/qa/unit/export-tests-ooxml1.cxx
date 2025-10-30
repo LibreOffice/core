@@ -222,6 +222,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124781)
                 u"-8000");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf168786_ppt_to_pptx_internal_link_to_nowhere)
+{
+    createSdImpressDoc("ppt/tdf168786.ppt");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
+                u"ppaction://noaction");
+
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
+                u"ppaction://noaction");
+
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
+                u"ppaction://noaction");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf144914)
 {
     createSdImpressDoc("pptx/tdf144616.pptx");
