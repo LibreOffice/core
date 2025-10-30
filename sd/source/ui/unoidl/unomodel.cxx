@@ -124,7 +124,7 @@
 
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include "UnoDocumentSettings.hxx"

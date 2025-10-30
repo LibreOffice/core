@@ -468,7 +468,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/unodraw/XPropertyTable \
     svx/source/xml/xmleohlp \
     svx/source/xml/xmlexport \
-    svx/source/xml/xmlgrhlp \
     svx/source/xml/xmlxtexp \
     svx/source/xml/xmlxtimp \
     svx/source/xoutdev/xattr \

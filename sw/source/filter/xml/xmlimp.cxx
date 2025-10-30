@@ -59,7 +59,7 @@
 #include <swdll.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxmodelfactory.hxx>

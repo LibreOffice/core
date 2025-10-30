@@ -26,8 +26,6 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
@@ -43,12 +41,13 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
+#include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 
 #include <algorithm>
@@ -376,6 +375,48 @@ SvXMLGraphicHelper::~SvXMLGraphicHelper()
 {
 }
 
+void SvXMLGraphicHelper::splitObjectURL(const OUString& _aURLNoPar,
+    OUString& rContainerStorageName,
+    OUString& rObjectStorageName)
+{
+    DBG_ASSERT(_aURLNoPar.isEmpty() || '#' != _aURLNoPar[0], "invalid object URL" );
+    OUString aURLNoPar = _aURLNoPar;
+
+    sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
+    if( -1 == _nPos )
+    {
+        rContainerStorageName.clear();
+        rObjectStorageName = aURLNoPar;
+    }
+    else
+    {
+        //eliminate 'superfluous' slashes at start and end
+        //#i103076# load objects with all allowed xlink:href syntaxes
+        {
+            //eliminate './' at start
+            sal_Int32 nStart = 0;
+            sal_Int32 nCount = aURLNoPar.getLength();
+            if( aURLNoPar.startsWith( "./" ) )
+            {
+                nStart = 2;
+                nCount -= 2;
+            }
+
+            //eliminate '/' at end
+            sal_Int32 nEnd = aURLNoPar.lastIndexOf( '/' );
+            if( nEnd == aURLNoPar.getLength()-1 && nEnd != (nStart-1) )
+                nCount--;
+
+            aURLNoPar = aURLNoPar.copy( nStart, nCount );
+        }
+
+        _nPos = aURLNoPar.lastIndexOf( '/' );
+        if( _nPos >= 0 )
+            rContainerStorageName = aURLNoPar.copy( 0, _nPos );
+        rObjectStorageName = aURLNoPar.copy( _nPos+1 );
+    }
+}
+
 bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
                                                  OUString& rPictureStorageName,
                                                  OUString& rPictureStreamName )
@@ -391,7 +432,7 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
         rPictureStreamName = aURLStr;
     }
     else
-        SvXMLEmbeddedObjectHelper::splitObjectURL(aURLStr, rPictureStorageName, rPictureStreamName);
+        SvXMLGraphicHelper::splitObjectURL(aURLStr, rPictureStorageName, rPictureStreamName);
 
     SAL_WARN_IF(rPictureStreamName.isEmpty(), "svx", "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme: " << rURLStr);
 
@@ -1175,69 +1216,5 @@ com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
 {
     return cppu::acquire(new SvXMLGraphicImportExportHelper(SvXMLGraphicHelperMode::Write));
 }
-
-namespace svx {
-
-    void DropUnusedNamedItems(css::uno::Reference<css::uno::XInterface> const& xModel)
-    {
-        uno::Reference<lang::XMultiServiceFactory> const xModelFactory(xModel, uno::UNO_QUERY);
-        assert(xModelFactory.is());
-        try
-        {
-            uno::Reference<util::XCancellable> const xGradient(
-                xModelFactory->createInstance(u"com.sun.star.drawing.GradientTable"_ustr),
-                uno::UNO_QUERY );
-            if (xGradient.is())
-            {
-                xGradient->cancel();
-            }
-
-            uno::Reference<util::XCancellable> const xHatch(
-                xModelFactory->createInstance(u"com.sun.star.drawing.HatchTable"_ustr),
-                uno::UNO_QUERY );
-            if (xHatch.is())
-            {
-                xHatch->cancel();
-            }
-
-            uno::Reference<util::XCancellable> const xBitmap(
-                xModelFactory->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr),
-                uno::UNO_QUERY );
-            if (xBitmap.is())
-            {
-                xBitmap->cancel();
-            }
-
-            uno::Reference<util::XCancellable> const xTransGradient(
-                xModelFactory->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr),
-                uno::UNO_QUERY );
-            if (xTransGradient.is())
-            {
-                xTransGradient->cancel();
-            }
-
-            uno::Reference<util::XCancellable> const xMarker(
-                xModelFactory->createInstance(u"com.sun.star.drawing.MarkerTable"_ustr),
-                uno::UNO_QUERY );
-            if (xMarker.is())
-            {
-                xMarker->cancel();
-            }
-
-            uno::Reference<util::XCancellable> const xDashes(
-                xModelFactory->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
-                uno::UNO_QUERY );
-            if (xDashes.is())
-            {
-                xDashes->cancel();
-            }
-        }
-        catch (const Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("svx", "dropUnusedNamedItems(): exception during clearing of unused named items");
-        }
-    }
-
-} // namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -112,12 +112,11 @@ public:
     // XNameAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
-
-
-    static void splitObjectURL(const OUString& aURLNoPar,
-        OUString& rContainerStorageName,
-        OUString& rObjectStorageName);
 };
+
+namespace svx {
+    SVXCORE_DLLPUBLIC void DropUnusedNamedItems(css::uno::Reference<css::uno::XInterface> const& xModel);
+}
 
 #endif // INCLUDED_SVX_XMLEOHLP_HXX
 

@@ -14,7 +14,7 @@
 #include <comphelper/storagehelper.hxx>
 
 #include <svx/graphichelper.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 

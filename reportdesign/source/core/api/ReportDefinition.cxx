@@ -110,7 +110,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/unofill.hxx>
 #include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 

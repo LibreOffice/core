@@ -229,4 +229,14 @@
       constructor="com_sun_star_comp_Xmloff_AnimationsImport">
     <service name="com.sun.star.comp.Xmloff.AnimationsImport"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper"
+      constructor="com_sun_star_comp_Svx_GraphicExportHelper_get_implementation">
+    <service name="com.sun.star.document.BinaryStreamResolver"/>
+    <service name="com.sun.star.document.GraphicStorageHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper"
+      constructor="com_sun_star_comp_Svx_GraphicImportHelper_get_implementation">
+    <service name="com.sun.star.document.BinaryStreamResolver"/>
+    <service name="com.sun.star.document.GraphicStorageHandler"/>
+  </implementation>
 </component>

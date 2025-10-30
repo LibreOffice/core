@@ -390,8 +390,6 @@ core_constructor_list = [
     "com_sun_star_comp_svx_ColorToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FrameToolBoxControl_get_implementation",
-    "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
-    "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
     "com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
@@ -539,6 +537,8 @@ core_constructor_list = [
     "com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation",
+    "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
+    "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation",
     "com_sun_star_comp_xmlscript_XMLBasicExporter",

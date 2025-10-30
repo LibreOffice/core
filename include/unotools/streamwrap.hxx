@@ -99,7 +99,12 @@ public:
 
 //= OOutputStreamWrapper
 
-class UNOTOOLS_DLLPUBLIC OOutputStreamWrapper : public cppu::WeakImplHelper<css::io::XOutputStream>
+// avoid LNK2005 duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE OOutputStreamWrapper_Base : public cppu::WeakImplHelper<css::io::XOutputStream>
+{
+};
+
+class UNOTOOLS_DLLPUBLIC OOutputStreamWrapper : public OOutputStreamWrapper_Base
 {
 public:
     OOutputStreamWrapper(SvStream& _rStream);

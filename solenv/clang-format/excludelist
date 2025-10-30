@@ -5854,7 +5854,6 @@ include/svx/xlntrit.hxx
 include/svx/xlnwtit.hxx
 include/svx/xmleohlp.hxx
 include/svx/xmlexchg.hxx
-include/svx/xmlgrhlp.hxx
 include/svx/xmlsecctrl.hxx
 include/svx/xoutbmp.hxx
 include/svx/xpoly.hxx
@@ -6282,6 +6281,7 @@ include/xmloff/xmlerror.hxx
 include/xmloff/xmlevent.hxx
 include/xmloff/xmlexp.hxx
 include/xmloff/xmlexppr.hxx
+include/xmloff/xmlgrhlp.hxx
 include/xmloff/xmlictxt.hxx
 include/xmloff/xmlimp.hxx
 include/xmloff/xmlimppr.hxx
@@ -11654,7 +11654,6 @@ svx/source/unogallery/unogaltheme.hxx
 svx/source/unogallery/unogalthemeprovider.cxx
 svx/source/xml/xmleohlp.cxx
 svx/source/xml/xmlexport.cxx
-svx/source/xml/xmlgrhlp.cxx
 svx/source/xml/xmlxtexp.cxx
 svx/source/xml/xmlxtimp.cxx
 svx/source/xoutdev/_xoutbmp.cxx
@@ -15199,6 +15198,7 @@ xmloff/source/core/unointerfacetouniqueidentifiermapper.cxx
 xmloff/source/core/xmlcnimp.cxx
 xmloff/source/core/xmlerror.cxx
 xmloff/source/core/xmlexp.cxx
+xmloff/source/core/xmlgrhlp.cxx
 xmloff/source/core/xmlictxt.cxx
 xmloff/source/core/xmlimp.cxx
 xmloff/source/core/xmlmultiimagehelper.cxx
