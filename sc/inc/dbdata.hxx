@@ -244,10 +244,17 @@ public:
 
     SC_DLLPUBLIC void       GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     SC_DLLPUBLIC void       SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
-    SC_DLLPUBLIC void       ImportSubTotalParam(ScSubTotalParam& rSubTotalParam,
+
+    // Total row param handling for Table Styles
+    SC_DLLPUBLIC void       ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
                                                 const std::vector<TableColumnAttributes>& rAttributesVector,
                                                 formula::FormulaGrammar::Grammar eGrammar) const;
-    SC_DLLPUBLIC void       CreateSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+    SC_DLLPUBLIC void       CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const;
+
+    SC_DLLPUBLIC const std::vector<TableColumnAttributes>
+                            GetTotalRowAttributes(formula::FormulaGrammar::Grammar eGrammar) const;
+
+    OUString    GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL nCol, SCROW nHeaderRow) const;
 
     void        GetImportParam(ScImportParam& rImportParam) const;
     void        SetImportParam(const ScImportParam& rImportParam);
@@ -283,6 +290,7 @@ public:
     SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
 
     static ScSubTotalFunc GetSubTotalFuncFromString(std::u16string_view sFunction);
+    static OUString GetStringFromSubTotalFunc(ScSubTotalFunc eFunc);
 
 private:
 

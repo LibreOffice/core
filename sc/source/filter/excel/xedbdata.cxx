@@ -181,6 +181,19 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     ScRange aRange( ScAddress::UNINITIALIZED);
     rData.GetArea( aRange);
     sax_fastparser::FSHelperPtr& pTableStrm = rStrm.GetCurrentStream();
+
+    const std::vector<TableColumnAttributes> aTotalValues
+        = rData.GetTotalRowAttributes(formula::FormulaGrammar::GRAM_OOXML);
+
+    // if the Total row have ever been showed it will be true
+    bool hasAnySetValue = std::any_of(aTotalValues.begin(), aTotalValues.end(),
+                                      [](const TableColumnAttributes& attr)
+                                      {
+                                          return attr.maTotalsRowLabel.has_value()
+                                                 || attr.maTotalsFunction.has_value()
+                                                 || attr.maCustomFunction.has_value();
+                                      });
+
     pTableStrm->startElement( XML_table,
         XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         XML_id, OString::number( rEntry.mnTableId),
@@ -189,7 +202,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aRange),
         XML_headerRowCount, ToPsz10(rData.HasHeader()),
         XML_totalsRowCount, ToPsz10(rData.HasTotals()),
-        XML_totalsRowShown, ToPsz10(rData.HasTotals())  // we don't support that but if there are totals they are shown
+        XML_totalsRowShown, ToPsz10(hasAnySetValue)
         // OOXTODO: XML_comment, ...,
         // OOXTODO: XML_connectionId, ...,
         // OOXTODO: XML_dataCellStyle, ...,
@@ -224,6 +237,10 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
     if (!rColNames.empty())
     {
+        // rColNames and aTotalValues size should always be equal
+        assert((rColNames.size() == aTotalValues.size()) &&
+               "XclExpTables::SaveTableXml - mismatch between column names and total values");
+
         pTableStrm->startElement(XML_tableColumns,
                 XML_count, OString::number(aRange.aEnd.Col() - aRange.aStart.Col() + 1));
 
@@ -233,13 +250,31 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
             // which case we'd need start/endElement XML_tableColumn for such
             // column.
 
-            // OOXTODO: write <totalsRowFormula> once we support it.
-
-            pTableStrm->singleElement( XML_tableColumn,
+            if (i < aTotalValues.size() && aTotalValues[i].maTotalsFunction.has_value()
+                && aTotalValues[i].maTotalsFunction.value() == u"custom")
+            {
+                pTableStrm->startElement( XML_tableColumn,
                     XML_id, OString::number(i+1),
-                    XML_name, rColNames[i].toUtf8()
-                    // XML_totalsRowLabel, (i < rColAttributes.size() ? rColAttributes[i].maTotalsRowLabel : std::nullopt),
-                    // XML_totalsRowFunction, (i < rColAttributes.size() ? rColAttributes[i].maTotalsFunction : std::nullopt)
+                    XML_name, rColNames[i].toUtf8(),
+                    XML_totalsRowLabel, (i < aTotalValues.size() ? aTotalValues[i].maTotalsRowLabel : std::nullopt),
+                    XML_totalsRowFunction, (i < aTotalValues.size() ? aTotalValues[i].maTotalsFunction : std::nullopt)
+                    // OOXTODO...
+                );
+
+                // write custom functions
+                pTableStrm->startElement(XML_totalsRowFormula);
+                pTableStrm->writeEscaped(aTotalValues[i].maCustomFunction.value());
+                pTableStrm->endElement(XML_totalsRowFormula);
+
+                pTableStrm->endElement(XML_tableColumn);
+            }
+            else
+            {
+                pTableStrm->singleElement( XML_tableColumn,
+                    XML_id, OString::number(i+1),
+                    XML_name, rColNames[i].toUtf8(),
+                    XML_totalsRowLabel, (i < aTotalValues.size() ? aTotalValues[i].maTotalsRowLabel : std::nullopt),
+                    XML_totalsRowFunction, (i < aTotalValues.size() ? aTotalValues[i].maTotalsFunction : std::nullopt)
                     // OOXTODO: XML_dataCellStyle, ...,
                     // OOXTODO: XML_dataDxfId, ...,
                     // OOXTODO: XML_headerRowCellStyle, ...,
@@ -248,7 +283,8 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     // OOXTODO: XML_totalsRowCellStyle, ...,
                     // OOXTODO: XML_totalsRowDxfId, ...,
                     // OOXTODO: XML_uniqueName, ...
-            );
+                );
+            }
         }
 
         pTableStrm->endElement( XML_tableColumns);
