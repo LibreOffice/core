@@ -141,6 +141,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     // Get TextBounds relative to baseline
     vcl::Font aFnt = mpVD->GetFont();
     aFnt.SetAlignment(ALIGN_BASELINE);
+    aFnt.SetFamily(FAMILY_DONTKNOW);
     mpVD->SetFont(aFnt);
 }
 
@@ -611,7 +612,7 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 
     if (bText && mbFntDirty)
     {
-        vcl::Font aFnt(mpVD->GetFont());
+        const vcl::Font aFnt(mpVD->GetFont());
         const sal_uInt32 nHeight(
             basegfx::fround<sal_uInt32>(aFnt.GetFontSize().Height() * mfScaleY));
 
