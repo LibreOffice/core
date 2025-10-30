@@ -7001,7 +7001,9 @@ void ScGridWindow::UpdateDatabaseOverlay()
     ScAddress aCurrentAddress = mrViewData.GetCurPos();
     std::vector<basegfx::B2DRange> aRanges;
     ScRange aCurrRange;
-    if (ScDBData* pDBData = rDocument.GetDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(), aCurrentAddress.Tab(), ScDBDataPortion::AREA))
+    ScDBData* pDBData = rDocument.GetDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(),
+                                                aCurrentAddress.Tab(), ScDBDataPortion::AREA);
+    if (pDBData && pDBData->GetTableStyleInfo())
     {
         pDBData->GetArea(aCurrRange);
         Point aStart = mrViewData.GetScrPos(aCurrRange.aStart.Col(),

@@ -679,8 +679,9 @@ void ScTabView::CursorPosChanged()
         aViewData.GetViewShell()->SetSparklineShell(bSparkline);
         if (!bSparkline)
         {
-            bool bHasDBTable = rDocument.GetDBAtCursor(rAddr.Col(), rAddr.Row(), rAddr.Tab(), ScDBDataPortion::AREA) != nullptr;
-            aViewData.GetViewShell()->SetTableShell(bHasDBTable);
+            const ScDBData* pDbData = rDocument.GetDBAtCursor(rAddr.Col(), rAddr.Row(), rAddr.Tab(), ScDBDataPortion::AREA);
+            bool bHasDBTableStyle = pDbData && pDbData->GetTableStyleInfo();
+            aViewData.GetViewShell()->SetTableShell(bHasDBTableStyle);
         }
     }
 
