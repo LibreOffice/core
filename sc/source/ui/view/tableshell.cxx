@@ -77,7 +77,7 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                 const ScDatabaseSettingItem* pDBItem
                     = static_cast<const ScDatabaseSettingItem*>(pItem);
                 const ScDBData* pDBData = GetDBDataAtCursor();
-                if (pDBData)
+                if (pDBData && pDBData->GetTableStyleInfo())
                 {
                     ScDBData aNewDBData(*pDBData);
                     aNewDBData.SetAutoFilter(pDBItem->HasShowFilters());
