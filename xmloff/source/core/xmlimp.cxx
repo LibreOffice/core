@@ -31,6 +31,7 @@
 #include <vcl/graph.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -608,10 +609,7 @@ void SAL_CALL SvXMLImport::startDocument()
         if (!mxGraphicStorageHandler.is())
         {
             // #99870# Import... instead of Export...
-            mxGraphicStorageHandler.set(
-                GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr, uno::Sequence<uno::Any>(), GetComponentContext()),
-                uno::UNO_QUERY );
+            mxGraphicStorageHandler = SvXMLGraphicHelper::Create(nullptr, SvXMLGraphicHelperMode::Read);
             mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
         }
 
@@ -1331,7 +1329,10 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const& 
         {
             if (IsPackageURL(rURL))
             {
-                xGraphic = mxGraphicStorageHandler->loadGraphicAtPage(rURL, nPageNum);
+                if (SvXMLGraphicHelper* pGraphicStorageHandler = dynamic_cast<SvXMLGraphicHelper*>(mxGraphicStorageHandler.get()))
+                    xGraphic = pGraphicStorageHandler->loadGraphicAtPage(rURL, nPageNum);
+                else
+                    xGraphic = mxGraphicStorageHandler->loadGraphic(rURL);
             }
             else
             {
@@ -1369,7 +1370,10 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Refere
 
     if (mxGraphicStorageHandler.is())
     {
-        xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStreamAtPage(rxOutputStream, nPageNum);
+        if (SvXMLGraphicHelper* pGraphicStorageHandler= dynamic_cast<SvXMLGraphicHelper*>(mxGraphicStorageHandler.get()))
+            xGraphic = pGraphicStorageHandler->loadGraphicFromOutputStreamAtPage(rxOutputStream, nPageNum);
+        else
+            xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
     }
 
     return xGraphic;

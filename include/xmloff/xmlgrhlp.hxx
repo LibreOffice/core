@@ -106,15 +106,8 @@ public:
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphic(OUString const & aURL) override;
 
-    // XGraphicStorageHandler
-    virtual css::uno::Reference<css::graphic::XGraphic>
-        SAL_CALL loadGraphicAtPage(OUString const& aURL, sal_Int32 nPage) override;
-
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
-
-    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
-        loadGraphicFromOutputStreamAtPage(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream, sal_Int32 nPage) override;
 
     virtual OUString SAL_CALL
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
@@ -129,6 +122,12 @@ public:
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) override;
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL createOutputStream(  ) override;
     virtual OUString SAL_CALL resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
+
+    css::uno::Reference<css::graphic::XGraphic>
+        loadGraphicAtPage(OUString const& aURL, sal_Int32 nPage);
+
+    css::uno::Reference<css::graphic::XGraphic>
+        loadGraphicFromOutputStreamAtPage(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream, sal_Int32 nPage);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

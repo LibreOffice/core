@@ -614,9 +614,8 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(OUStr
     return loadGraphicAtPage(rURL, -1);
 }
 
-// XGraphicStorageHandler
 uno::Reference<graphic::XGraphic>
-    SAL_CALL SvXMLGraphicHelper::loadGraphicAtPage(OUString const& rURL, sal_Int32 nPage)
+    SvXMLGraphicHelper::loadGraphicAtPage(OUString const& rURL, sal_Int32 nPage)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -662,7 +661,7 @@ uno::Reference<graphic::XGraphic>
     return xGraphic;
 }
 
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOutputStreamAtPage(uno::Reference<io::XOutputStream> const & rxOutputStream, sal_Int32 nPageNum)
+uno::Reference<graphic::XGraphic> SvXMLGraphicHelper::loadGraphicFromOutputStreamAtPage(uno::Reference<io::XOutputStream> const & rxOutputStream, sal_Int32 nPageNum)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -679,7 +678,8 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOu
     return xGraphic;
 }
 
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
+// XGraphicStorageHandler
+uno::Reference<graphic::XGraphic> SvXMLGraphicHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
     return loadGraphicFromOutputStreamAtPage(rxOutputStream, -1);
 }
@@ -1040,14 +1040,8 @@ protected:
         loadGraphic(const OUString& aURL) override;
 
     // ____ XGraphicStorageHandler ____
-    virtual css::uno::Reference<css::graphic::XGraphic>
-        SAL_CALL loadGraphicAtPage(const OUString& aURL, sal_Int32 nPage) override;
-
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
-
-    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
-        loadGraphicFromOutputStreamAtPage(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream, sal_Int32 nPage) override;
 
     virtual OUString SAL_CALL
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
@@ -1110,20 +1104,9 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadG
 }
 
 // ____ XGraphicStorageHandler ____
-uno::Reference<graphic::XGraphic> SAL_CALL
-SvXMLGraphicImportExportHelper::loadGraphicAtPage(OUString const& rURL, sal_Int32 nPage)
-{
-    return m_xXMLGraphicHelper->loadGraphicAtPage(rURL, nPage);
-}
-
 uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
     return m_xXMLGraphicHelper->loadGraphicFromOutputStream(rxOutputStream);
-}
-
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphicFromOutputStreamAtPage(uno::Reference<io::XOutputStream> const & rxOutputStream, sal_Int32 nPage)
-{
-    return m_xXMLGraphicHelper->loadGraphicFromOutputStreamAtPage(rxOutputStream, nPage);
 }
 
 OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
