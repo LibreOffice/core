@@ -1575,6 +1575,7 @@ char const* YrsWhichToAttrName(sal_Int16 const nWhich)
             return "EE_PARA_VER_JUST";
         default:
             assert(false);
+            abort();
     }
 }
 
