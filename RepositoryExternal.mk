@@ -147,6 +147,46 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 endif
 
 ifneq ($(OS),WNT)
+ifneq ($(filter LZMA,$(BUILD_TYPE)),)
+ifneq ($(SYSTEM_LZMA),)
+
+define gb_LinkTarget__use_lzma_impl
+$(if $(2),,$(error gb_LinkTarget__use_lzma_impl needs additional parameter))
+
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_LZMA \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),-llzma)
+
+endef
+
+gb_ExternalProject__use_lzma :=
+
+else # !SYSTEM_LZMA
+
+define gb_LinkTarget__use_lzma_impl
+$(if $(2),,$(error gb_LinkTarget__use_lzma_impl needs additional parameter))
+
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(gb_UnpackedTarball_workdir)/lzma \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+    $(2) \
+)
+
+endef
+
+define gb_ExternalProject__use_lzma
+$(call gb_ExternalProject_use_static_libraries,$(1),lzma)
+
+endef
+
+endif # SYSTEM_LZMA
+endif # LZMA
+
 ifneq ($(filter SQLITE3,$(BUILD_TYPE)),)
 ifneq ($(SYSTEM_SQLITE3),)
 

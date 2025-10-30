@@ -2535,6 +2535,11 @@ AC_ARG_WITH(system-libxml,
         [Use libxml/libxslt already on system.]),,
     [with_system_libxml=auto])
 
+AC_ARG_WITH(system-lzma,
+    AS_HELP_STRING([--with-system-lzma],
+        [Use lzma already on system.]),,
+    [with_system_lzma="$with_system_libs"])
+
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
@@ -6333,6 +6338,7 @@ if test "$cross_compiling" = "yes"; then
         LIBWEBP
         LIBXML2
         LIBXSLT
+        LZMA
         MDDS
         MESON
         NATIVE
@@ -14509,7 +14515,15 @@ AC_SUBST(BZIP2_CFLAGS)
 AC_SUBST(BZIP2_LIBS)
 
 dnl ===================================================================
-dnl Test whether we need sqlite3
+dnl Test whether we need lzma for internal python
+dnl ===================================================================
+if test $enable_python = internal; then
+    BUILD_TYPE="$BUILD_TYPE LZMA"
+    libo_CHECK_SYSTEM_MODULE([lzma], [LZMA], [lzma])
+fi
+
+dnl ===================================================================
+dnl Test whether we need sqlite3 for internal python (no needed on macOS)
 dnl ===================================================================
 if test "$_os" != "Darwin" -a $enable_python = internal; then
     BUILD_TYPE="$BUILD_TYPE SQLITE3"
