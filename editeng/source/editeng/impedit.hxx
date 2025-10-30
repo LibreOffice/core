@@ -1044,6 +1044,7 @@ public:
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
     EditPaM         InsertTab(const EditSelection& rEditSelection);
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
+    void            UpdateAutoParaDirection(const EditSelection& rCurSel);
     bool            UpdateFields();
 
     ErrCode         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );

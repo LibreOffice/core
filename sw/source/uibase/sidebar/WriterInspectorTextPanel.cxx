@@ -339,6 +339,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "UnvisitedCharStyleName", RID_UNVISITED_CHAR_STYLE_NAME },
         { "VisitedCharStyleName", RID_VISITED_CHAR_STYLE_NAME },
         { "WritingMode", RID_WRITING_MODE },
+        { "WritingModeAutomatic", RID_WRITING_MODE_AUTOMATIC },
         { "BorderColor", RID_BORDER_COLOR },
         { "BorderInnerLineWidth", RID_BORDER_INNER_LINE_WIDTH },
         { "BorderLineDistance", RID_BORDER_LINE_DISTANCE },

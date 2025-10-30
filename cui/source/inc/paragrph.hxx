@@ -151,6 +151,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xVertAlignSdr;
 
     std::unique_ptr<svx::FrameDirectionListBox>  m_xTextDirectionLB;
+    std::unique_ptr<weld::CheckButton> m_xAutoTextDirectionCB;
 
     /// word spacing
     std::unique_ptr<weld::Label> m_xLabelWordSpacing;

@@ -309,6 +309,7 @@ enum class SfxItemType : sal_uInt16
     Svx3DTextureProjectionXItemType,
     Svx3DTextureProjectionYItemType,
     SvxAdjustItemType,
+    SvxAutoFrameDirectionItemType,
     SvxAutoKernItemType,
     SvxB3DVectorItemType,
     SvxBitmapListItemType,

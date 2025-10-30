@@ -2127,6 +2127,7 @@ wrap-contour
 wrap-contour-mode
 wrap-option
 writing-mode
+writing-mode-automatic
 www
 x
 x1

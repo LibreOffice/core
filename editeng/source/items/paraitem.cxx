@@ -43,6 +43,7 @@
 #include <editeng/forbiddenruleitem.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <editeng/memberids.h>
@@ -1514,5 +1515,24 @@ bool SvxParaGridItem::GetPresentation(
     return true;
 }
 
+SvxAutoFrameDirectionItem::SvxAutoFrameDirectionItem(bool bValue, const sal_uInt16 nId)
+    : SfxBoolItem(nId, bValue)
+{
+}
+
+SvxAutoFrameDirectionItem* SvxAutoFrameDirectionItem::Clone(SfxItemPool*) const
+{
+    return new SvxAutoFrameDirectionItem(*this);
+}
+
+bool SvxAutoFrameDirectionItem::GetPresentation(SfxItemPresentation /*ePres*/,
+                                                MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
+                                                OUString& rText, const IntlWrapper& /*rIntl*/) const
+{
+    rText = GetValue() ? EditResId(RID_SVXITEMS_AUTOFRAMEDIRECTION_ON)
+                       : EditResId(RID_SVXITEMS_AUTOFRAMEDIRECTION_OFF);
+
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -374,6 +374,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf108791)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf162120AutoRTL)
+{
+    createSwDoc("tdf162120-auto-rtl.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // The initial direction should be RTL
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"WritingMode"_ustr));
+
+    // Insert a strong LTR character at the start of the paragraph.
+    // The writing mode should automatically switch to LTR.
+    pWrtShell->Insert(u"a"_ustr);
+    CPPUNIT_ASSERT_EQUAL(short(0),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"WritingMode"_ustr));
+
+    // Delete the leading LTR character.
+    // The writing mode should switch back to RTL.
+    pWrtShell->DelLeft();
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"WritingMode"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

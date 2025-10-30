@@ -26,6 +26,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -327,6 +328,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     // Get both attributes immediately isn't more expensive!!
     SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
                                                     RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE,
+                                                    RES_PARATR_AUTOFRAMEDIR, RES_PARATR_AUTOFRAMEDIR,
                                                     RES_FRAMEDIR, RES_FRAMEDIR>(GetPool()));
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
@@ -405,6 +407,10 @@ SET_LINESPACE:
                     (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
                         SvxFrameDirection::Horizontal_LR_TB : SvxFrameDirection::Horizontal_RL_TB;
             aSet.Put( SvxFrameDirectionItem( eFrameDirection, RES_FRAMEDIR ) );
+
+            // tdf#162120: The paragraph direction has been manually set by the user.
+            // Don't automatically adjust the paragraph direction anymore.
+            aSet.Put(SvxAutoFrameDirectionItem(false, RES_PARATR_AUTOFRAMEDIR));
 
             if (bChgAdjust)
             {

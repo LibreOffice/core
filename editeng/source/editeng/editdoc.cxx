@@ -19,6 +19,7 @@
 
 #include <editdoc.hxx>
 
+#include <editeng/autodiritem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -1029,6 +1030,14 @@ void YrsInsertAttribImplImpl(YrsWrite const& yw, SfxPoolItem const& rItm,
             SvxFrameDirectionItem const& rItem{static_cast<SvxFrameDirectionItem const&>(rItm)};
             attr = yinput_long(uint64_t(rItem.GetValue()));
             attrName = "EE_PARA_WRITINGDIR";
+            break;
+        }
+        case EE_PARA_AUTOWRITINGDIR:
+        {
+            SvxAutoFrameDirectionItem const& rItem{ static_cast<SvxAutoFrameDirectionItem const&>(
+                rItm) };
+            attr = yinput_bool(rItem.GetValue() ? Y_TRUE : Y_FALSE);
+            attrName = "EE_PARA_AUTOWRITINGDIR";
             break;
         }
         case EE_PARA_HANGINGPUNCTUATION:
@@ -2115,6 +2124,13 @@ void YrsImplInsertAttr(SfxItemSet & rSet, ::std::vector<sal_uInt16> *const pRemo
             auto const value{YrsReadInt(rValue)};
             yvalidate(::std::underlying_type_t<SvxFrameDirection>(SvxFrameDirection::Horizontal_LR_TB) <= value && value < ::std::underlying_type_t<SvxFrameDirection>(SvxFrameDirection::Stacked));
             SvxFrameDirectionItem const item{SvxFrameDirection(value), nWhich};
+            rSet.Put(item);
+            break;
+        }
+        case EE_PARA_AUTOWRITINGDIR:
+        {
+            yvalidate(rValue.tag == Y_JSON_BOOL);
+            SvxAutoFrameDirectionitem const item{ rValue.value.flag == Y_TRUE, nWhich };
             rSet.Put(item);
             break;
         }

@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,i18nutil))
 $(eval $(call gb_CppunitTest_use_sdk_api,i18nutil))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,i18nutil,\
+	i18nutil/qa/cppunit/test_guessparadirection \
 	i18nutil/qa/cppunit/test_kashida \
 	i18nutil/qa/cppunit/test_scriptchangescanner \
 ))

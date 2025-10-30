@@ -24,6 +24,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <i18nutil/guessparadirection.hxx>
+#include <editeng/autodiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
@@ -59,6 +62,58 @@
 
 using namespace com::sun::star;
 
+void SwEditShell::UpdateSelectionAutoParaDirection()
+{
+    for (SwPaM& rPaM : getShellCursor(true)->GetRingContainer())
+    {
+        auto* pNode = rPaM.GetPointNode().GetTextNode();
+        if (!pNode)
+        {
+            continue;
+        }
+
+        const SvxAutoFrameDirectionItem* pAutoItem
+            = pNode->GetSwAttrSet().GetItemIfSet(RES_PARATR_AUTOFRAMEDIR);
+        if (!pAutoItem || !pAutoItem->GetValue())
+        {
+            continue;
+        }
+
+        Point aPt;
+        std::pair<Point, bool> const tmp(aPt, false);
+        const SwTextFrame* pFrame
+            = static_cast<SwTextFrame*>(pNode->getLayoutFrame(GetLayout(), rPaM.GetPoint(), &tmp));
+
+        bool bIsAlreadyRtl = pFrame->IsRightToLeft();
+
+        bool bShouldBeRtl = bIsAlreadyRtl;
+        switch (i18nutil::GuessParagraphDirection(pNode->GetText()))
+        {
+            case i18nutil::ParagraphDirection::Ambiguous:
+                bShouldBeRtl = bIsAlreadyRtl;
+                break;
+
+            case i18nutil::ParagraphDirection::LeftToRight:
+                bShouldBeRtl = false;
+                break;
+
+            case i18nutil::ParagraphDirection::RightToLeft:
+                bShouldBeRtl = true;
+                break;
+        }
+
+        if (bShouldBeRtl == bIsAlreadyRtl)
+        {
+            continue;
+        }
+
+        SvxFrameDirection eNeeded = bShouldBeRtl ? SvxFrameDirection::Horizontal_RL_TB
+                                                 : SvxFrameDirection::Horizontal_LR_TB;
+        rPaM.GetDoc().getIDocumentContentOperations().InsertPoolItem(
+            rPaM, SvxFrameDirectionItem{ eNeeded, RES_FRAMEDIR });
+    }
+}
+
 void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCursor )
 {
     StartAllAction();
@@ -72,6 +127,9 @@ void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCursor )
             break;
 
     }
+
+    // tdf#162120: Automatically adjust paragraph direction after insert
+    UpdateSelectionAutoParaDirection();
 
     EndAllAction();
 }
@@ -161,6 +219,9 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
     }
 
     SetInFrontOfLabel( false ); // #i27615#
+
+    // tdf#162120: Automatically adjust paragraph direction after insert
+    UpdateSelectionAutoParaDirection();
 
     EndAllAction();
 }
@@ -977,6 +1038,9 @@ OUString SwEditShell::DeleteExtTextInput( bool bInsText )
         // to the original position. Therefore we have to do this manually.
         if ( ! bInsText && IsOverwriteCursor() )
             *GetCursor()->GetPoint() = aPos;
+
+        // tdf#162120: Automatically adjust paragraph direction after insert
+        UpdateSelectionAutoParaDirection();
 
         EndAllAction();
     }

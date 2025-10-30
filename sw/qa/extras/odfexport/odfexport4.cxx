@@ -1696,6 +1696,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118350StartEndPreserved)
                 "text-align", u"end");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162120StyleWritingModeAutomaticSerialization)
+{
+    loadAndReload("tdf162120-style-writing-mode-automatic.fodt");
+
+    auto pStylesDoc = parseExport(u"styles.xml"_ustr);
+    assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 1);
+    assertXPath(pStylesDoc, "//style:style[@style:name='AutoStyle']/style:paragraph-properties",
+                "writing-mode-automatic", u"true");
+
+    auto pContentDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 2);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -301,6 +301,8 @@
 #define RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT90     NC_("RID_SVXITEMS_FRMDIR_Vert_TOP_RIGHT90", "Text direction right-to-left (vertical, all characters rotated)")
 #define RID_SVXITEMS_PARASNAPTOGRID_ON          NC_("RID_SVXITEMS_PARASNAPTOGRID_ON", "Paragraph snaps to text grid (if active)")
 #define RID_SVXITEMS_PARASNAPTOGRID_OFF         NC_("RID_SVXITEMS_PARASNAPTOGRID_OFF", "Paragraph does not snap to text grid")
+#define RID_SVXITEMS_AUTOFRAMEDIRECTION_ON      NC_("RID_SVXITEMS_AUTOFRAMEDIRECTION_ON", "Text direction is automatically updated")
+#define RID_SVXITEMS_AUTOFRAMEDIRECTION_OFF     NC_("RID_SVXITEMS_AUTOFRAMEDIRECTION_OFF", "Text direction is not automatically updated")
 #define RID_SVXITEMS_CHARHIDDEN_FALSE           NC_("RID_SVXITEMS_CHARHIDDEN_FALSE", "Not hidden")
 #define RID_SVXITEMS_CHARHIDDEN_TRUE            NC_("RID_SVXITEMS_CHARHIDDEN_TRUE", "Hidden")
 

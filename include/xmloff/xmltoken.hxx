@@ -2214,6 +2214,7 @@ namespace xmloff::token {
         XML_WRAP_CONTOUR_MODE,
         XML_WRAP_OPTION,
         XML_WRITING_MODE,
+        XML_WRITING_MODE_AUTOMATIC,
         XML_WWW,
         XML_X,
         XML_X1,

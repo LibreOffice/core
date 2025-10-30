@@ -736,6 +736,7 @@ inline constexpr OUString UNO_NAME_CELL_NAME = u"CellName"_ustr;
 inline constexpr OUString UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES = u"ParaUserDefinedAttributes"_ustr;
 inline constexpr OUString UNO_NAME_MERGE_LAST_PARA = u"MergeLastPara"_ustr;
 inline constexpr OUString UNO_NAME_WRITING_MODE = u"WritingMode"_ustr;
+inline constexpr OUString UNO_NAME_PARA_WRITING_MODE_AUTOMATIC = u"WritingModeAutomatic"_ustr;
 inline constexpr OUString UNO_NAME_GRID_COLOR = u"GridColor"_ustr;
 inline constexpr OUString UNO_NAME_GRID_LINES = u"GridLines"_ustr;
 inline constexpr OUString UNO_NAME_GRID_BASE_HEIGHT = u"GridBaseHeight"_ustr;

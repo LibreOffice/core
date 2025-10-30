@@ -3361,6 +3361,7 @@ const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_SNAPTOGRID*/          nullptr, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  nullptr, // new
 /* RES_PARATR_OUTLINELEVEL */       nullptr,
+/* RES_PARATR_AUTOFRAMEDIR */       nullptr,
 /* RES_PARATR_RSID */               nullptr,
 /* RES_PARATR_GRABBAG */            nullptr,
 

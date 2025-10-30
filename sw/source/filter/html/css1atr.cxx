@@ -3484,6 +3484,7 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_PARATR_SNAPTOGRID*/          nullptr, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  nullptr, // new
 /* RES_PARATR_OUTLINELEVEL */       nullptr, // new since cws outlinelevel
+/* RES_PARATR_AUTOFRAMEDIR */       nullptr,
 /* RES_PARATR_RSID */               nullptr, // new
 /* RES_PARATR_GRABBAG */            nullptr,
 

@@ -32,6 +32,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <paragrph.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -77,7 +78,8 @@ const WhichRangesContainer SvxParaAlignTabPage::pSdrAlignRanges(
     svl::Items<
     SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST, // 1076
     SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST ,      // 10027
-    SID_ATTR_FRAMEDIRECTION, SID_ATTR_FRAMEDIRECTION  // 10944
+    SID_ATTR_FRAMEDIRECTION, SID_ATTR_FRAMEDIRECTION, // 10944
+    SID_ATTR_PARA_AUTOFRAMEDIRECTION, SID_ATTR_PARA_AUTOFRAMEDIRECTION
     >);
 
 const WhichRangesContainer SvxExtParagraphTabPage::pExtRanges(svl::Items<
@@ -1282,6 +1284,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xVertAlign(m_xBuilder->weld_label(u"labelFL_VERTALIGN"_ustr))
     , m_xVertAlignSdr(m_xBuilder->weld_label(u"labelST_VERTALIGN_SDR"_ustr))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboLB_TEXTDIRECTION"_ustr)))
+    , m_xAutoTextDirectionCB(m_xBuilder->weld_check_button(u"checkCB_AUTOTEXTDIRECTION"_ustr))
     , m_xLabelWordSpacing(m_xBuilder->weld_label(u"labelWordSpacing"_ustr))
     , m_xLabelMinimum(m_xBuilder->weld_label(u"labelMinimum"_ustr))
     , m_xLabelDesired(m_xBuilder->weld_label(u"labelDesired"_ustr))
@@ -1458,6 +1461,13 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         }
     }
 
+    if (m_xAutoTextDirectionCB->get_state_changed_from_saved())
+    {
+        rOutSet->Put(SvxAutoFrameDirectionItem(m_xAutoTextDirectionCB->get_active(),
+                                               GetWhich(SID_ATTR_PARA_AUTOFRAMEDIRECTION)));
+        bModified = true;
+    }
+
     return bModified;
 }
 
@@ -1618,6 +1628,16 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_xTextDirectionLB->save_value();
     }
 
+    _nWhich = GetWhich(SID_ATTR_PARA_AUTOFRAMEDIRECTION);
+    eItemState = rSet->GetItemState(_nWhich);
+    if (eItemState >= SfxItemState::DEFAULT)
+    {
+        const SvxAutoFrameDirectionItem& rSnap
+            = static_cast<const SvxAutoFrameDirectionItem&>(rSet->Get(_nWhich));
+        m_xAutoTextDirectionCB->set_active(rSnap.GetValue());
+    }
+
+    m_xAutoTextDirectionCB->save_state();
     m_xSnapToGridCB->save_state();
     m_xVertAlignLB->save_value();
     m_xLeft->save_state();
@@ -1642,6 +1662,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 void SvxParaAlignTabPage::ChangesApplied()
 {
     m_xTextDirectionLB->save_value();
+    m_xAutoTextDirectionCB->save_state();
     m_xSnapToGridCB->save_state();
     m_xVertAlignLB->save_value();
     m_xLeft->save_state();
