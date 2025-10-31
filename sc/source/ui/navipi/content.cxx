@@ -1540,9 +1540,6 @@ void ScContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
         sal_uLong nChild;
         GetEntryIndexes(nType, nChild, xIter.get());
 
-        if (!xIter)
-            return;
-
         if (nType == ScContentId::NOTE)
         {
             m_xTreeView->set_cursor(*xIter);
