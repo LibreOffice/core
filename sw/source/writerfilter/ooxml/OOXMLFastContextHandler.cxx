@@ -1553,6 +1553,36 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue& va
          i < count;
          ++i )
     {
+        if (isForwardEvents())
+        {
+            // Forwarding events: not just looking through e.g. all footnotes, searching for a
+            // specific footnote. In this case wBefore/wAfter creates a cell to ensure correct width
+            // of the other cells in the row. Set the layout size of the empty paragraph to a
+            // minimum, to make sure this dummy paragraph doesn't increase the row height.
+            startParagraphGroup();
+            {
+                // <w:spacing w:before="0" w:after="0" w:lineRule="atLeast" w:line="0">
+                OOXMLPropertySet::Pointer_t pAttributes(new OOXMLPropertySet);
+                OOXMLValue pSBVal = OOXMLValue::createInteger(0);
+                pAttributes->add(NS_ooxml::LN_CT_Spacing_before, pSBVal, OOXMLProperty::ATTRIBUTE);
+                OOXMLValue pSAVal = OOXMLValue::createInteger(0);
+                pAttributes->add(NS_ooxml::LN_CT_Spacing_after, pSAVal, OOXMLProperty::ATTRIBUTE);
+                OOXMLValue pSLRVal = OOXMLValue::createInteger(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast);
+                pAttributes->add(NS_ooxml::LN_CT_Spacing_lineRule, pSLRVal, OOXMLProperty::ATTRIBUTE);
+                OOXMLValue pSLVal = OOXMLValue::createInteger(0);
+                pAttributes->add(NS_ooxml::LN_CT_Spacing_line, pSLVal, OOXMLProperty::ATTRIBUTE);
+                OOXMLValue pSprm = OOXMLValue::createPropertySet(pAttributes);
+                OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+                pProps->add(NS_ooxml::LN_CT_PPrBase_spacing, pSprm, OOXMLProperty::SPRM);
+                mpStream->props(pProps.get());
+            }
+            // Also set the font size to 1pt, unit is half-points.
+            OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+            OOXMLValue pSprm = OOXMLValue::createInteger(2);
+            pProps->add(NS_ooxml::LN_EG_RPrBase_sz, pSprm, OOXMLProperty::SPRM);
+            mpStream->props(pProps.get());
+        }
+
         endOfParagraph();
 
         if (isForwardEvents())
