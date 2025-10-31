@@ -2253,7 +2253,7 @@ public:
     void               Reorder( const sc::ReorderParam& rParam );
 
     void               PrepareQuery( SCTAB nTab, ScQueryParam& rQueryParam );
-    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub, bool bKeepTotals );
+    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub, bool bKeepTotals = false );
     SC_DLLPUBLIC bool  CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam );
     OUString           GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab);
 
