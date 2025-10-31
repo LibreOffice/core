@@ -50,6 +50,7 @@ enum class EditEntryMode
     UNPROTECT_TABLE    = 2,
     DELETE        = 3,
     RENAME        = 4,
+    TEXT_ALTERNATIVE = 5
 };
 
 // Flags for PopupMenu-enable/disable

@@ -2700,3 +2700,13 @@ cmd/sc_formatline-more.png sfx2/res/symphony/open_more.png
 cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
 cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
 cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
+
+# SwNavigator toolbox functions toolbar
+cmd/sc_objecttitledescription-frames.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-frames.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-images.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-images.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-oleobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-oleobjects.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-drawingobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-drawingobjects.png cmd/lc_objecttitledescription.png

@@ -434,16 +434,19 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
             m_sTypeToken = "frame";
             m_bEdit = true;
             m_bRenamable = true;
+            m_bTextAlternative = true;
         break;
         case ContentTypeId::GRAPHIC:
             m_sTypeToken = "graphic";
             m_bEdit = true;
             m_bRenamable = true;
+            m_bTextAlternative = true;
         break;
         case ContentTypeId::OLE:
             m_sTypeToken = "ole";
             m_bEdit = true;
             m_bRenamable = true;
+            m_bTextAlternative = true;
         break;
         case ContentTypeId::TEXTFIELD:
             m_bEdit = true;
@@ -483,6 +486,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
             m_sTypeToken = "drawingobject";
             m_bEdit = true;
             m_bRenamable = true;
+            m_bTextAlternative = true;
         break;
         default: break;
     }
@@ -1787,6 +1791,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveMakeAllFootnotesEndnotesEntry = true,
          bRemoveMakeAllEndnotesFootnotesEntry = true;
     bool bRemoveRenameEntry = true;
+    bool bRemoveTextAlternative = true;
     bool bRemoveSelectEntry = true;
     bool bRemoveToggleExpandEntry = true;
     bool bRemoveChapterEntries = true;
@@ -2031,6 +2036,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             }
             if (bRenamable && !bReadonly)
                 bRemoveRenameEntry = false;
+            if (pType->HasTextAlternative() && !bReadonly)
+                bRemoveTextAlternative = false;
         }
         else
         {
@@ -2240,6 +2247,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemoveRenameEntry)
         xPop->remove(OUString::number(502));
+
+    if (bRemoveTextAlternative)
+        xPop->remove(u"textalternative"_ustr);
 
     if (bRemoveUpdateIndexEntry)
         xPop->remove(OUString::number(402));
@@ -5953,6 +5963,12 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         EditEntry(*xFirst, EditEntryMode::DELETE);
         return;
     }
+    else if (rSelectedPopupEntry == "textalternative")
+    {
+        EditEntry(*xFirst, EditEntryMode::TEXT_ALTERNATIVE);
+        return;
+    }
+
 
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
@@ -6306,6 +6322,14 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
 
     SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(rEntry));
     GotoContent(pCnt);
+
+    if (nMode == EditEntryMode::TEXT_ALTERNATIVE)
+    {
+        m_pActiveShell->GetView().GetViewFrame().
+                    GetDispatcher()->Execute(FN_TITLE_DESCRIPTION_SHAPE, SfxCallMode::SYNCHRON);
+        return;
+    }
+
     const ContentTypeId nType = pCnt->GetParent()->GetType();
     sal_uInt16 nSlot = 0;
 

@@ -201,6 +201,7 @@ class SwContentType final : public SwTypeNumber
     bool                m_bEdit:          1;  // can this type be edited?
     bool                m_bDelete:        1;  // can this type be deleted?
     bool m_bRenamable = false;
+    bool m_bTextAlternative = false;
 
     bool m_bAlphabeticSort = false;
 
@@ -235,6 +236,7 @@ public:
         bool                IsEditable() const {return m_bEdit;}
         bool                IsDeletable() const {return m_bDelete;}
         bool IsRenamable() const {return m_bRenamable;}
+        bool HasTextAlternative() const {return m_bTextAlternative;}
 };
 
 #endif

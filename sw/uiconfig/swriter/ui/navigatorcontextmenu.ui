@@ -406,6 +406,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="textalternative">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_TEXT_ALTERNATIVE">Text Alternative...</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkCheckMenuItem" id="protectsection">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
