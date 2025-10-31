@@ -161,6 +161,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableWafterRowHeight)
     auto pBeforeTableFrame = pPage->FindFirstBodyContent()->DynCastTextFrame();
     auto pTabFrame = pBeforeTableFrame->GetNext()->DynCastTabFrame();
     const SwFrame* pRow1Frame = pTabFrame->Lower();
+    assert(pRow1Frame);
     const SwFrame* pRow2Frame = pRow1Frame->GetNext();
     SwTwips nRow2Height = pRow2Frame->getFrameArea().Height();
     // Without the accompanying fix in place, this test would have failed with:
