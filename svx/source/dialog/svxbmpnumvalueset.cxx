@@ -470,27 +470,27 @@ void SvxNumValueSet::SetCustomBullets(const std::vector<std::pair<OUString, OUSt
 
 SvxBmpNumValueSet::SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : SvxNumValueSet(std::move(pScrolledWindow))
-    , aFormatIdle("SvxBmpNumValueSet FormatIdle")
-    , bGrfNotFound(false)
+    , m_aFormatIdle("SvxBmpNumValueSet FormatIdle")
+    , m_bGrfNotFound(false)
 {
 }
 
 void SvxBmpNumValueSet::init()
 {
     SvxNumValueSet::init(NumberingPageType::BITMAP);
-    bGrfNotFound = false;
+    m_bGrfNotFound = false;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
-    aFormatIdle.SetPriority(TaskPriority::LOWEST);
-    aFormatIdle.SetInvokeHandler(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
+    m_aFormatIdle.SetPriority(TaskPriority::LOWEST);
+    m_aFormatIdle.SetInvokeHandler(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
-    aFormatIdle.Stop();
+    m_aFormatIdle.Stop();
 }
 
 void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
@@ -509,7 +509,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
                         &aGraphic))
     {
-        bGrfNotFound = true;
+        m_bGrfNotFound = true;
     }
     else
     {
@@ -526,10 +526,10 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl, Timer *, void)
 {
     // only when a graphics was not there, it needs to be formatted
-    if (bGrfNotFound)
+    if (m_bGrfNotFound)
     {
         SetFormat();
-        bGrfNotFound = false;
+        m_bGrfNotFound = false;
     }
     Invalidate();
 }

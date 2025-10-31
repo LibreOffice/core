@@ -96,8 +96,8 @@ public:
 
 class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
 {
-    Idle        aFormatIdle;
-    bool        bGrfNotFound;
+    Idle        m_aFormatIdle;
+    bool        m_bGrfNotFound;
 
     DECL_DLLPRIVATE_LINK(FormatHdl_Impl, Timer *, void);
 
