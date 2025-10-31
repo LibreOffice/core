@@ -36,6 +36,7 @@ class ScDocument;
 struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
+class ScTokenArray;
 
 class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
 {
