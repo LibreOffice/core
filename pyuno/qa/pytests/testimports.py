@@ -54,5 +54,12 @@ class ImportsTest(unittest.TestCase):
         with open(os.devnull, "w") as devnull:
             print(str(dbm), file=devnull)
 
+    def test__hashlib_import(self):
+        import _hashlib
+
+        # use imported _hashlib module for pyflakes
+        with open(os.devnull, "w") as devnull:
+            print(str(_hashlib), file=devnull)
+
 if __name__ == '__main__':
     unittest.main()
