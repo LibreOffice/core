@@ -1545,27 +1545,26 @@ void ScContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
             m_xTreeView->set_cursor(*xIter);
             m_xTreeView->select(*xIter);
             m_xTreeView->expand_row(*xIter);
-            sal_uInt32 nCount = m_xTreeView->iter_n_children(*xIter);
-            m_xTreeView->iter_children(*xIter);
 
             std::vector<sc::NoteEntry> aEntries;
-            ScDocument* pDoc= GetSourceDocument();
+            ScDocument* pDoc = GetSourceDocument();
             pDoc->GetAllNoteEntries(aEntries);
 
-            if (aEntries.size() != nCount) {
+            if (aEntries.size() != static_cast<size_t>(m_xTreeView->iter_n_children(*xIter))) {
                 SAL_WARN("sc", "number of comments and children count does not match.");
                 return;
             }
 
-            for (sal_uInt32 i = 0; i < nCount; ++i)
+            size_t i = 0;
+            for (bool bChild = m_xTreeView->iter_children(*xIter); bChild;
+                 bChild = m_xTreeView->iter_next_sibling(*xIter))
             {
-                const ScPostIt* pPostIt = aEntries[i].mpNote;
+                const ScPostIt* pPostIt = aEntries[i++].mpNote;
                 if (pPostIt && pPostIt->GetId() == nCommentId)
                 {
                     m_xTreeView->select(*xIter);
                     break;
                 }
-                m_xTreeView->iter_next(*xIter);
             }
             break;
         }
