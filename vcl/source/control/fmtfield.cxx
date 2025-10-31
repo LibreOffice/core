@@ -1360,8 +1360,8 @@ void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         // weld::TimeFormatter uses h24 format
         rJsonWriter.put("type", "time");
     }
-    rJsonWriter.put("min", rFormatter.GetMinValue());
-    rJsonWriter.put("max", rFormatter.GetMaxValue());
+    rJsonWriter.put("min", rFormatter.HasMinValue() ? rFormatter.GetMinValue() : std::numeric_limits<sal_Int32>::min());
+    rJsonWriter.put("max", rFormatter.HasMaxValue() ? rFormatter.GetMaxValue() : std::numeric_limits<sal_Int32>::max());
     rJsonWriter.put("value", rFormatter.GetValue());
     rJsonWriter.put("step", rFormatter.GetSpinSize());
 }
