@@ -1069,7 +1069,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
 #endif
     sal_Int32 y = getXPath(pXml, "//textarray[1]", "y").toInt32();
     // was 3092 originally
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3063, y, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3057, y, 0);
+
+    // Before fix, on reimport this was split over two lines when it
+    // should have remained as one line.
+    assertXPath(pXml, "//textarray", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
@@ -1099,13 +1103,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
 #if !defined _WIN32
     //TODO, debug this
     {
-        OUString sWeight = getXPath(pXml, "//font[4]", "weight");
+        OUString sWeight = getXPath(pXml, "//font[3]", "weight");
         // was "normal" before
         CPPUNIT_ASSERT_EQUAL(u"bold"_ustr, sWeight);
         // check that the others remain as expected
-        OUString sFontName = getXPath(pXml, "//font[4]", "name");
+        OUString sFontName = getXPath(pXml, "//font[3]", "name");
         CPPUNIT_ASSERT_EQUAL(u"Liberation Sans"_ustr, sFontName);
-        int nFontHeight = getXPath(pXml, "//font[4]", "height").toInt32();
+        sal_Int32 nFontHeight = getXPath(pXml, "//font[3]", "height").toInt32();
         CPPUNIT_ASSERT_EQUAL(564, nFontHeight);
     }
 #endif
