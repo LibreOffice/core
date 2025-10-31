@@ -591,6 +591,9 @@ public:
 
     virtual void do_set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
+
+private:
+    VclPtr<::FormattedField> m_pFmtSpin;
 };
 
 class JSMessageDialog final : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>

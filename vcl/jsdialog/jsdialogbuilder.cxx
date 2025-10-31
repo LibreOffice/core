@@ -1412,12 +1412,19 @@ JSFormattedSpinButton::JSFormattedSpinButton(JSDialogSender* pSender, ::Formatte
                                              SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceFormattedSpinButton, ::FormattedField>(pSender, pSpin, pBuilder,
                                                                  bTakeOwnership)
+    , m_pFmtSpin(pSpin)
 {
 }
 
 void JSFormattedSpinButton::do_set_text(const OUString& rText)
 {
-    SalInstanceFormattedSpinButton::do_set_text(rText);
+    if (!m_pFmtSpin)
+        return;
+
+    disable_notify_events();
+    m_pFmtSpin->SetValueFromString(rText);
+    enable_notify_events();
+
     sendUpdate();
 }
 
