@@ -1028,6 +1028,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf135843)
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnB/a:solidFill");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testNegativeTimeAnimateValue)
+{
+    createSdImpressDoc("ppt/novell6655408.ppt");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    static constexpr OString sPath(
+        "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst"
+        "/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
+        "/p:childTnLst/p:anim/p:tavLst/p:tav[2]"_ostr);
+
+    // Verify `tav` exists
+    assertXPath(pXmlDoc, sPath, 2);
+    // Verify `tm` doesn't exist
+    assertXPath(pXmlDoc, sPath + "[@tm]", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
