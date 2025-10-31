@@ -5600,8 +5600,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->startElementNS(XML_a, XML_xfrm, xFrameAttributes);
 
     m_pSerializer->singleElementNS(XML_a, XML_off, XML_x, "0", XML_y, "0");
-    OString aWidth( OString::number( TwipsToEMU( aSize.Width() ) ) );
-    OString aHeight( OString::number( TwipsToEMU( aSize.Height() ) ) );
+    // clamp to >=0, negative values are not valid here
+    OString aWidth( OString::number( std::max(sal_Int64(0), TwipsToEMU( aSize.Width() )) ) );
+    OString aHeight( OString::number( std::max(sal_Int64(0), TwipsToEMU( aSize.Height() )) ) );
     m_pSerializer->singleElementNS(XML_a, XML_ext, XML_cx, aWidth, XML_cy, aHeight);
     m_pSerializer->endElementNS( XML_a, XML_xfrm );
     m_pSerializer->startElementNS(XML_a, XML_prstGeom, XML_prst, "rect");
