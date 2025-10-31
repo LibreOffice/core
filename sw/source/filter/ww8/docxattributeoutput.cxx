@@ -6700,8 +6700,12 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 
             // Write run properties.
             m_pSerializer->startElementNS(XML_w, XML_rPr);
+            // mark() before paragraph mark properties child elements.
+            InitCollectedRunProperties();
             aAttrIter.OutAttr(nCurrentPos);
             WriteCollectedRunProperties();
+            // mergeTopMarks() after paragraph mark properties child elements.
+            m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
             m_pSerializer->endElementNS(XML_w, XML_rPr);
 
             bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
