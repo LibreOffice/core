@@ -1001,7 +1001,8 @@ void ScContentTree::GetNoteStrings()
     for (const auto& rEntry : aEntries)
     {
         OUString aValue = lcl_NoteString(*rEntry.mpNote);
-        m_xTreeView->insert(pParent, -1, &aValue, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        OUString aId = OUString::number(rEntry.mpNote->GetId());
+        m_xTreeView->insert(pParent, -1, &aValue, &aId, nullptr, nullptr, false, m_xScratchIter.get());
         m_xTreeView->set_sensitive(*m_xScratchIter, true);
     }
 }
@@ -1546,21 +1547,11 @@ void ScContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
             m_xTreeView->select(*xIter);
             m_xTreeView->expand_row(*xIter);
 
-            std::vector<sc::NoteEntry> aEntries;
-            ScDocument* pDoc = GetSourceDocument();
-            pDoc->GetAllNoteEntries(aEntries);
-
-            if (aEntries.size() != static_cast<size_t>(m_xTreeView->iter_n_children(*xIter))) {
-                SAL_WARN("sc", "number of comments and children count does not match.");
-                return;
-            }
-
-            size_t i = 0;
+            OUString aCommentId(OUString::number(nCommentId));
             for (bool bChild = m_xTreeView->iter_children(*xIter); bChild;
                  bChild = m_xTreeView->iter_next_sibling(*xIter))
             {
-                const ScPostIt* pPostIt = aEntries[i++].mpNote;
-                if (pPostIt && pPostIt->GetId() == nCommentId)
+                if (m_xTreeView->get_id(*xIter) == aCommentId)
                 {
                     m_xTreeView->select(*xIter);
                     break;
