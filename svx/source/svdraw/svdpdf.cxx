@@ -1775,10 +1775,13 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     double dFontSizeH = fabs(std::hypot(aMatrix.a(), aMatrix.c()) * dFontSize);
     double dFontSizeV = fabs(std::hypot(aMatrix.b(), aMatrix.d()) * dFontSize);
 
-    dFontSizeH = convertPointToMm100(dFontSizeH);
-    dFontSizeV = convertPointToMm100(dFontSizeV);
-
-    const Size aFontSize(dFontSizeH, dFontSizeV);
+    // We will only really be able to squeeze a font size in whole units of
+    // twips through the various layers esp. export and reimport, so work in
+    // twips here and LogicToLogic so we don't end up using a value that cannot
+    // be roundtripped back.
+    const Size aFontSizeTwips(dFontSizeH * 20, dFontSizeV * 20);
+    const Size aFontSize(OutputDevice::LogicToLogic(aFontSizeTwips, MapMode(MapUnit::MapTwip),
+                                                    MapMode(MapUnit::Map100thMM)));
     vcl::Font aFnt = mpVD->GetFont();
     aFnt.SetFontSize(aFontSize);
 
