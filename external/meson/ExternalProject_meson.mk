@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t; fill-column: 100 -*-
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -7,11 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,meson))
+$(eval $(call gb_ExternalProject_ExternalProject,meson))
 
-$(eval $(call gb_Module_add_targets,meson,\
-    ExternalProject_meson \
-    UnpackedTarball_meson \
-))
+ifeq ($(SYSTEM_PYTHON),)
+$(WORKDIR)/ExternalProject/meson.prepare : $(call gb_Package_get_target,python3)
+endif
 
 # vim: set noet sw=4 ts=4:
