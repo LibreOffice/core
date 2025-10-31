@@ -2635,6 +2635,8 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     aTmpInf.ResetSpaceIdx();
     aTmpInf.SetKanaComp( pCurrent->GetpKanaComp() );
     aTmpInf.ResetKanaIdx();
+    aTmpInf.SetLetterSpacing( 0 );
+    aTmpInf.SetScaleWidth( 100 );
 
     // The frame's size
     aTmpInf.SetIdx( nStartIdx );

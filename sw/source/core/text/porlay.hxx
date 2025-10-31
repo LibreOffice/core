@@ -86,6 +86,11 @@ private:
     SwTwips m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
     SwTwips m_nExtraAscent = 0;
     SwTwips m_nExtraDescent = 0;
+    sal_Int32 m_nSpaceCount = 0;       // space count in the line
+    SwTwips m_nLetterSpacing = 0;      // custom letter spacing
+    SwTwips m_nScaleWidth = 100;       // glyph scaling (grain resolution to limit font generation)
+    float m_fScaleWidthSpacing = 0.0;  // extra space filled by glyph scaling
+
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
     bool m_bEndHyph   : 1;
@@ -178,6 +183,18 @@ public:
 
     void SetExtraDescent(SwTwips nNew) { m_nExtraDescent = nNew; }
     SwTwips GetExtraDescent() const { return m_nExtraDescent; }
+
+    void SetSpaceCount(sal_Int32 nNew) { m_nSpaceCount = nNew; }
+    sal_Int32 GetSpaceCount() const { return m_nSpaceCount; }
+
+    void SetLetterSpacing(SwTwips nNew) { m_nLetterSpacing = nNew; }
+    SwTwips GetLetterSpacing() const { return m_nLetterSpacing; }
+
+    void SetScaleWidth(SwTwips nNew) { m_nScaleWidth = nNew; }
+    SwTwips GetScaleWidth() const { return m_nScaleWidth; }
+
+    void SetScaleWidthSpacing(SwTwips nNew) { m_fScaleWidthSpacing = nNew; }
+    float GetScaleWidthSpacing() const { return m_fScaleWidthSpacing; }
 
     // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();

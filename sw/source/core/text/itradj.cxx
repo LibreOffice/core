@@ -369,13 +369,28 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                             ? -nSpaceAdd + LONG_MAX/2
                             : 0;
 
-                    SwLinePortion *pPortion = pCurrent->GetFirstPortion();
                     // word spacing filled by letter spacing and glyph scaling (at expansion) or
                     // word spacing shrunk by them (at shrinking)
-                    tools::Long nSpaceKernAndScale = pPortion->GetSpaceCount()
-                        ? ( pPortion->GetLetterSpacing() + pPortion->GetScaleWidthSpacing() ) * 100.0 /
-                                                                            sal_Int32(pPortion->GetSpaceCount())
-                        : 0;
+                    tools::Long nSpaceKernAndScale = 0;
+                    if ( pCurrent->GetSpaceCount() )
+                    {
+                        // note: soft hyphen, zero-width spaces are not normal text,
+                        // i.e. GetLen() is OK for checking multiportion lines
+                        // (where the width of the portions are adjusted for custom
+                        // letter spacing and glyph scaling)
+                        bool bSinglePortion =
+                                pCurrent->GetLetterCount() == pCurrent->GetFirstPortion()->GetLen();
+                        nSpaceKernAndScale = bSinglePortion
+                            ? 100.0 * ( pCurrent->GetLetterSpacing() *
+                                    // -1: remove letter spacing after the last letter
+                                    ( sal_Int32(pCurrent->GetLetterCount()) - 1 ) +
+                                    pCurrent->GetScaleWidthSpacing() ) / pCurrent->GetSpaceCount()
+                            // multiportion lines: width of the portions are already adjusted, so
+                            // remove letter spacing only after the last letter, and adjust scaling
+                            : 100.0 * ( -pCurrent->GetLetterSpacing() +
+                                    pCurrent->GetScaleWidthSpacing() ) / pCurrent->GetSpaceCount();
+                    }
+
                     // set expansion in 1/100 twips/space
                     pCurrent->SetLLSpaceAdd( nSpaceSub
                         ? ( nSpaceSub + nSpaceKernAndScale <= LONG_MAX/2 ? 0 : nSpaceSub + nSpaceKernAndScale )

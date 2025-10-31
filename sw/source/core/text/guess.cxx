@@ -509,7 +509,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             SwTwips nExtraSpace = nLineWidth / (nScaleWidthMinimum / 100.0) - nLineWidth;
             nLineWidth += nExtraSpace;
             rInf.SetExtraSpace( rInf.GetExtraSpace() + nExtraSpace );
+            TextFrameIndex nOrigCutPos = m_nCutPos;
             m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
+            // restore the cut position, where the last portion fit the line exactly
+            // to avoid of infinite loop
+            if ( TextFrameIndex(COMPLETE_STRING) == m_nCutPos )
+                m_nCutPos = nOrigCutPos;
         }
 
         // tdf#167648 minimum letter spacing allows more text in the line
@@ -524,7 +529,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             nLineWidth -= nExtraSpace;
             // sum minimum word spacing and letter spacing
             rInf.SetExtraSpace( rInf.GetExtraSpace() + nExtraSpace );
+            TextFrameIndex nOrigCutPos = m_nCutPos;
             m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
+            // restore the cut position, where the last portion fit the line exactly
+            // to avoid of infinite loop
+            if ( TextFrameIndex(COMPLETE_STRING) == m_nCutPos )
+                m_nCutPos = nOrigCutPos;
         }
 
 #if OSL_DEBUG_LEVEL > 1

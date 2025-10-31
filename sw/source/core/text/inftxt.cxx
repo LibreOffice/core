@@ -519,6 +519,8 @@ void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTex
     m_aPaintRect = rPaint;
     m_nSpaceIdx = 0;
     m_pSpaceAdd = nullptr;
+    m_nLetterSpacing = 0;
+    m_nScaleWidth = 0;
     m_pWrongList = nullptr;
     m_pGrammarCheckList = nullptr;
     m_pSmartTags = nullptr;
@@ -531,6 +533,8 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* p
     , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
     , m_pSmartTags( rInf.GetSmartTags() )
     , m_pSpaceAdd( rInf.GetpSpaceAdd() ),
+      m_nLetterSpacing( rInf.GetLetterSpacing() ),
+      m_nScaleWidth( rInf.GetScaleWidth() ),
       m_pBrushItem( rInf.GetBrushItem() ),
       m_aTextFly( rInf.GetTextFly() ),
       m_aPos( rInf.GetPos() ),
@@ -545,6 +549,8 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
     , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
     , m_pSmartTags( rInf.GetSmartTags() )
     , m_pSpaceAdd( rInf.GetpSpaceAdd() ),
+      m_nLetterSpacing( rInf.GetLetterSpacing() ),
+      m_nScaleWidth( rInf.GetScaleWidth() ),
       m_pBrushItem( rInf.GetBrushItem() ),
       m_aTextFly( rInf.GetTextFly() ),
       m_aPos( rInf.GetPos() ),
@@ -788,12 +794,12 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
             aDrawInf.SetSmartTags( bTmpSmart ? m_pSmartTags : nullptr );
 
             // set custom letter spacing (hyphenation hasn't been supported yet)
-            if ( rPor.GetLetterSpacing() != 0 )
-                aDrawInf.SetLetterSpacing( rPor.GetLetterSpacing() / sal_Int32(nLength) );
+            if ( GetLetterSpacing() != 0 )
+                aDrawInf.SetLetterSpacing( GetLetterSpacing() );
 
             // set custom glyph scaling (hyphenation hasn't been supported yet)
             // Note: set 100 percent, too (to reset the setting of the previous line)
-            aDrawInf.SetScaleWidth( rPor.GetScaleWidth() );
+            aDrawInf.SetScaleWidth( GetScaleWidth() );
 
             m_pFnt->DrawText_( aDrawInf );
         }

@@ -710,6 +710,82 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf167648_minimum)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf169168)
+{
+    createSwDoc("tdf169168.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 11 characters in the first portion on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(11), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged letter-spacing
+            // This was 286, now 320, according to the 25% maximum letter spacing
+            CPPUNIT_ASSERT_GREATER(sal_Int32(315), sal_Int32(pDXArray[1]));
+            CPPUNIT_ASSERT_LESS(sal_Int32(325), sal_Int32(pDXArray[1]));
+
+            // first character of the second word nearer to the left side
+            // because of the narrower spaces
+            // This was 977, now 965, according to the 25% maximum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(970), sal_Int32(pDXArray[5]));
+            CPPUNIT_ASSERT_GREATER(sal_Int32(960), sal_Int32(pDXArray[5]));
+            break;
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf169168_minimum)
+{
+    createSwDoc("tdf169168_minimum.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 5 characters in the first portion on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(5), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged letter-spacing
+            // This was 286, now 266, according to the -25% minimum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(270), sal_Int32(pDXArray[1]));
+
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168251)
 {
     createSwDoc("tdf168251.fodt");
@@ -770,8 +846,74 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168251)
 
             // Assert we are using the expected position for the
             // first character of the last word with enlarged glyph width
-            // This was 3689, now 3659, according to the 110% maximum glyph scaling
-            CPPUNIT_ASSERT_LESS(sal_Int32(3665), sal_Int32(pDXArray[30]));
+            // This was 3689, now 3667, according to the 110% maximum glyph scaling
+            CPPUNIT_ASSERT_LESS(sal_Int32(3675), sal_Int32(pDXArray[30]));
+
+            break;
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf169168_scaling)
+{
+    createSwDoc("tdf169168_scaling.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 11 characters in the first portion on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(11), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged letter-spacing
+            // This was 286, now 266, according to the -25% minimum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(270), sal_Int32(pDXArray[1]));
+
+            break;
+        }
+    }
+
+    // Find the fourth text array action
+    int nLine = 0;
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            if (++nLine < 9)
+                continue;
+
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 35 characters on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(35), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged glyph width
+            // This was 238, now 251, according to the 110% maximum glyph scaling
+            // (and no changes in letter spacing)
+            CPPUNIT_ASSERT_GREATER(sal_Int32(245), sal_Int32(pDXArray[1]));
+
+            // Assert we are using the expected position for the
+            // first character of the last word with enlarged glyph width
+            // This was 3689, now 3667, according to the 110% maximum glyph scaling
+            CPPUNIT_ASSERT_LESS(sal_Int32(3675), sal_Int32(pDXArray[30]));
 
             break;
         }
@@ -853,10 +995,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168448)
             // This was 750, now 786, according to the enabled maximum letter spacing
             CPPUNIT_ASSERT_GREATER(sal_Int32(770), sal_Int32(pDXArray[4]));
 
-            // Assert we are using the expected position for the
-            // first character of the second word with enlarged letter-spacing
-            // This was 881, now 877, according to the enabled maximum letter spacing
-            CPPUNIT_ASSERT_LESS(sal_Int32(880), sal_Int32(pDXArray[5]));
+            // first character of the second word is there after a space
+            CPPUNIT_ASSERT_GREATER(sal_Int32(877), sal_Int32(pDXArray[5]));
 
             bFirstArray = false;
             continue;
@@ -865,6 +1005,69 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168448)
         // check hyphen position of the first line (in the second text array)
         if (!bFirstArray && pAction->GetType() == MetaActionType::TEXTARRAY)
         {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 1 character, the hyphen of the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(1), pDXArray.size());
+
+            // This was 3662 (at enabled letter spacing for the hyphenated line),
+            // now 4149, according to the fixed hyphen position
+            auto nX = pTextArrayAction->GetPoint().X();
+            CPPUNIT_ASSERT_GREATER(sal_Int32(4100), sal_Int32(nX));
+
+            break;
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf169168_hyphen)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf169168_hyphen.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first two text array actions (associated to the first text line)
+    int nArray = 0;
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+
+        // check letter spacing in the first line (in the first text array)
+        if (nArray == 0 && pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 11 characters in the first portion on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(11), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // last character of the first word with enlarged letter-spacing
+            // This was 750, now 786, according to the enabled maximum letter spacing
+            CPPUNIT_ASSERT_GREATER(sal_Int32(770), sal_Int32(pDXArray[4]));
+
+            // first character of the second word is there after a space
+            CPPUNIT_ASSERT_GREATER(sal_Int32(877), sal_Int32(pDXArray[5]));
+        }
+
+        // check hyphen position of the first line (in the forth text array)
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            if (++nArray < 7)
+                continue;
+
             auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
             auto pDXArray = pTextArrayAction->GetDXArray();
 

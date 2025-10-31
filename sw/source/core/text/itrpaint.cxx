@@ -136,6 +136,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     GetAdjusted();
     AddExtraBlankWidth();
     GetInfo().SetpSpaceAdd( m_pCurr->GetpLLSpaceAdd() );
+    GetInfo().SetLetterSpacing( m_pCurr->GetLetterSpacing() );
+    GetInfo().SetScaleWidth( m_pCurr->GetScaleWidth() );
     GetInfo().ResetSpaceIdx();
     GetInfo().SetKanaComp( m_pCurr->GetpKanaComp() );
     GetInfo().ResetKanaIdx();
@@ -430,12 +432,13 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             else
             {
                 // adjust the hyphen at custom spacing
-                if ( pPor->InHyphGrp() && ( m_pCurr->GetFirstPortion()->GetLetterSpacing() > 0 ||
-                            m_pCurr->GetFirstPortion()->GetScaleWidthSpacing() > 0 ) )
+                if ( pPor->Width() > 0 && pPor->InHyphGrp() && ( m_pCurr->GetLetterSpacing() > 0 ||
+                            m_pCurr->GetScaleWidthSpacing() > 0 ) &&
+                                m_pCurr->GetFirstPortion()->GetLen() == m_pCurr-> GetLetterCount() )
                 {
                     GetInfo().X( GetInfo().X() +
-                            m_pCurr->GetFirstPortion()->GetLetterSpacing() +
-                            m_pCurr->GetFirstPortion()->GetScaleWidthSpacing() );
+                            m_pCurr->GetLetterSpacing() * (sal_Int32(m_pCurr->GetLetterCount())) +
+                            m_pCurr->GetScaleWidthSpacing() );
                 }
                 pPor->Paint( GetInfo() );
             }

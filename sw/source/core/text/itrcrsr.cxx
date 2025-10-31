@@ -970,7 +970,10 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                             SwTwips nTmp = nX;
                             aInf.SetKanaComp( pKanaComp );
                             aInf.SetKanaIdx( nKanaIdx );
-                            nX += pPor->GetTextSize( aInf ).Width();
+                            // fix cursor position, when the line contains custom letter spacing
+                            // and custom glyph scaling for better justification
+                            nX += pPor->GetTextSize( aInf ).Width() * m_pCurr->GetScaleWidth() / 100.0 +
+                                    sal_Int32(pPor->GetLen()) * m_pCurr->GetLetterSpacing();
                             aInf.SetOnWin( bOldOnWin );
                             if ( pPor->InSpaceGrp() && nSpaceAdd )
                                 nX += pPor->CalcSpacing( nSpaceAdd, aInf );
