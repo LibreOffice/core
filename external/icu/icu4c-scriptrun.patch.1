@@ -1,7 +1,7 @@
 diff -ur icu.org/source/extra/scrptrun/scrptrun.cpp icu/source/extra/scrptrun/scrptrun.cpp
 --- icu.org/source/extra/scrptrun/scrptrun.cpp	2017-01-20 01:20:31.000000000 +0100
 +++ icu/source/extra/scrptrun/scrptrun.cpp	2017-04-21 22:59:31.708037770 +0200
-@@ -151,7 +151,11 @@
+@@ -153,7 +153,11 @@
          // characters above it on the stack will be poped.
          if (pairIndex >= 0) {
              if ((pairIndex & 1) == 0) {
@@ -12,8 +12,8 @@ diff -ur icu.org/source/extra/scrptrun/scrptrun.cpp icu/source/extra/scrptrun/sc
 +                    parenStack.resize(nVecSize + 128);
 +                parenStack[parenSP].pairIndex = pairIndex;
                  parenStack[parenSP].scriptCode  = scriptCode;
+                 startSP = parenSP;
              } else if (parenSP >= 0) {
-                 int32_t pi = pairIndex & ~1;
 @@ -185,7 +189,14 @@
              // pop it from the stack
              if (pairIndex >= 0 && (pairIndex & 1) != 0 && parenSP >= 0) {

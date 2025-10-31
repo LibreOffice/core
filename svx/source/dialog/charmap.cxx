@@ -1960,6 +1960,32 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x11380, 0x113FF, SvxResId(RID_SUBSETSTR_TULU_TIGALARI) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 77)
+                case UBLOCK_BERIA_ERFE:
+                    aAllSubsets.emplace_back( 0x16EA0, 0x16EDF, SvxResId(RID_SUBSETSTR_BERIA_ERFE) );
+                    break;
+                case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J:
+                    aAllSubsets.emplace_back( 0x323B0, 0x3347F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J) );
+                    break;
+                case UBLOCK_MISCELLANEOUS_SYMBOLS_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x1CEC0, 0x1CEFF, SvxResId(RID_SUBSETSTR_MISCELLANEOUS_SYMBOLS_SUPPLEMENT) );
+                    break;
+                case UBLOCK_SHARADA_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x11B60, 0x11B7F, SvxResId(RID_SUBSETSTR_SHARADA_SUPPLEMENT) );
+                    break;
+                case UBLOCK_SIDETIC:
+                    aAllSubsets.emplace_back( 0x10940, 0x1095F, SvxResId(RID_SUBSETSTR_SIDETIC) );
+                    break;
+                case UBLOCK_TAI_YO:
+                    aAllSubsets.emplace_back( 0x1E6C0, 0x1E6FF, SvxResId(RID_SUBSETSTR_TAI_YO) );
+                    break;
+                case UBLOCK_TANGUT_COMPONENTS_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x18D80, 0x18DFF, SvxResId(RID_SUBSETSTR_TANGUT_COMPONENTS_SUPPLEMENT) );
+                    break;
+                case UBLOCK_TOLONG_SIKI:
+                    aAllSubsets.emplace_back( 0x11DB0, 0x11DEF, SvxResId(RID_SUBSETSTR_TOLONG_SIKI) );
+                    break;
+#endif
             }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
