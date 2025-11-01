@@ -162,7 +162,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     if ( mbInitClipRegion )
         InitClipRegion();
 
-    const bool bMetafile(nullptr != mpMetaFile);
     /*
        tdf#135325 typically in these OutputDevice methods, for the in
        record-to-metafile case the  MetaFile is already written to before the
@@ -172,7 +171,7 @@ void OutputDevice::DrawTransformedBitmapEx(
        recording to a metafile. It's typical to record with a device of nominal
        size and play back later against something of a totally different size.
      */
-    if (mbOutputClipped && !bMetafile)
+    if (mbOutputClipped && !mpMetaFile)
         return;
 
 #ifdef DO_TIME_TEST
@@ -190,7 +189,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
-    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
+    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !mpMetaFile);
     // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
     // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
     // ImplGetDeviceTransformation declaration
@@ -239,14 +238,14 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
         const Point aOrigin = GetMapMode().GetOrigin();
-        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             aDestPt.Move(aOrigin.getX(), aOrigin.getY());
             EnableMapMode(false);
         }
 
         DrawBitmap(aDestPt, aDestSize, bitmap);
-        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
             aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
@@ -289,7 +288,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const double fOrigAreaScaled(fOrigArea * 1.44);
     double fMaximumArea(std::clamp(fOrigAreaScaled, 1000000.0, 4500000.0));
 
-    if(!bMetafile)
+    if(!mpMetaFile)
     {
         if ( !TransformAndReduceBitmapExToTargetRange( aFullTransform, aVisibleRange, fMaximumArea ) )
             return;
