@@ -440,6 +440,28 @@ bool OutputDevice::HasFastDrawTransformedBitmap() const
     return mpGraphics->HasFastDrawTransformedBitmap();
 }
 
+bool OutputDevice::DrawTransformedBitmap(
+        const basegfx::B2DHomMatrix& aFullTransform,
+        const Bitmap& rBitmap,
+        double fAlpha)
+{
+    assert(!is_double_buffered_window());
+
+    // try to paint directly
+    const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
+    const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
+    const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
+    SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
+
+    return mpGraphics->DrawTransformedBitmap(
+        aNull,
+        aTopX,
+        aTopY,
+        *pSalSrcBmp,
+        fAlpha,
+        *this);
+};
+
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
     assert(!is_double_buffered_window());

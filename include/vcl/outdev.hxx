@@ -1397,7 +1397,7 @@ protected:
 
      @return true if it was able to draw the bitmap, false if not
      */
-    virtual bool                DrawTransformBitmapExDirect(
+    virtual bool                DrawTransformedBitmap(
                                     const basegfx::B2DHomMatrix& aFullTransform,
                                     const Bitmap& rBitmap,
                                     double fAlpha = 1.0);

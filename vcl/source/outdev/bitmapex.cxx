@@ -31,28 +31,6 @@
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
-bool OutputDevice::DrawTransformBitmapExDirect(
-        const basegfx::B2DHomMatrix& aFullTransform,
-        const Bitmap& rBitmap,
-        double fAlpha)
-{
-    assert(!is_double_buffered_window());
-
-    // try to paint directly
-    const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
-    const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
-    const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
-    SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
-
-    return mpGraphics->DrawTransformedBitmap(
-        aNull,
-        aTopX,
-        aTopY,
-        *pSalSrcBmp,
-        fAlpha,
-        *this);
-};
-
 bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
         const basegfx::B2DHomMatrix& aFullTransform,
         basegfx::B2DRange &aVisibleRange,
@@ -223,7 +201,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     {
         if(bTryDirectPaint)
         {
-            if(DrawTransformBitmapExDirect(aFullTransform, bitmap, fAlpha))
+            if (DrawTransformedBitmap(aFullTransform, bitmap, fAlpha))
             {
                 // we are done
                 return;
@@ -239,7 +217,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     // If the backend's implementation is known to not need any optimizations here, pass to it directly.
     // With most backends it's more performant to try to simplify to DrawBitmap() first.
-    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmap))
+    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformedBitmap(aFullTransform, bitmap))
         return;
 
     // decompose matrix to check rotation and shear
@@ -277,7 +255,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     }
 
     // Try the backend's implementation before resorting to the slower fallback here.
-    if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmap))
+    if (bTryDirectPaint && DrawTransformedBitmap(aFullTransform, bitmap))
         return;
 
     // take the fallback when no rotate and shear, but mirror (else we would have done this above)
