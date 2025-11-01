@@ -21,9 +21,19 @@ $(eval $(call gb_Library_set_include,cairo,\
 $(eval $(call gb_Library_add_defs,cairo,\
 	-wd4057 \
 	-wd4100 \
+	-wd4132 \
 	-wd4146 \
+	-wd4200 \
+	-wd4245 \
 	-wd4267 \
+	-wd4295 \
+	-wd4456 \
+	-wd4701 \
 	-wd4702 \
+	-wd4703 \
+	-wd5294 \
+	-wd5286 \
+	-wd5287 \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,cairo, \
