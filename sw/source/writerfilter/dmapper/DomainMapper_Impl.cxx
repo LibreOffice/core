@@ -988,6 +988,13 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
+    // Empty run level SDTs before starting a block level SDT
+    if (bSdt)
+    {
+        while (!m_xSdtStarts.empty())
+            m_xSdtStarts.pop();
+    }
+
     m_StreamStateStack.top().bSdt = bSdt;
 
     if (m_StreamStateStack.top().bSdt && !m_aTextAppendStack.empty())
