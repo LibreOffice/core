@@ -22,6 +22,7 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -1389,6 +1390,48 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168567)
         xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
         CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInvalidRefNumPara)
+{
+    // A document with a bookmark which name starts with "__RefNumPara__", somewhere in the
+    // middle of a paragraph text. Before the fix, importing it failed an assert:
+    createSwDoc("__RefNumPara__.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169173)
+{
+    createSwDoc("tdf169173.docx");
+
+    // Access the first table in the doc
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
+
+    // Get the last row first coloumn in the table
+    uno::Reference<text::XText> xCell(
+        xCellRange->getCellByPosition(0, xTable->getRows()->getCount() - 1), uno::UNO_QUERY);
+
+    uno::Reference<container::XEnumerationAccess> xParaAccess(xCell, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParaAccess->createEnumeration();
+
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+
+    // Block level SDTs are imported as ComboBox
+    OUString aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"TextField"_ustr, aPortionType);
+    uno::Reference<text::XTextField> xField;
+    xTextPortion->getPropertyValue(u"TextField"_ustr) >>= xField;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xField, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
