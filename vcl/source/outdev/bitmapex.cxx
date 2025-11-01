@@ -139,6 +139,51 @@ struct LocalTimeTest
 };
 #endif
 
+void OutputDevice::DrawScaledAndTranslatedBitmap(
+        const basegfx::B2DVector& rScale, const basegfx::B2DVector& rTranslate,
+        const Bitmap& rBitmap)
+{
+    // with no rotation, shear or mirroring it can be mapped to DrawBitmap
+    // do *not* execute the mirroring here, it's done in the fallback
+    // #i124580# the correct DestSize needs to be calculated based on MaxXY values
+    Point aDestPt(basegfx::fround<tools::Long>(rTranslate.getX()), basegfx::fround<tools::Long>(rTranslate.getY()));
+
+    const Size aDestSize(
+        basegfx::fround<tools::Long>(rScale.getX() + rTranslate.getX()) - aDestPt.X(),
+        basegfx::fround<tools::Long>(rScale.getY() + rTranslate.getY()) - aDestPt.Y());
+
+    const Point aOrigin = GetMapMode().GetOrigin();
+
+    if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+    {
+        aDestPt.Move(aOrigin.getX(), aOrigin.getY());
+        EnableMapMode(false);
+    }
+
+    DrawBitmap(aDestPt, aDestSize, rBitmap);
+    if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+    {
+        EnableMapMode();
+        aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
+    }
+    return;
+}
+
+void OutputDevice::DrawMirroredBitmap(
+        const basegfx::B2DVector& rScale, const basegfx::B2DVector& rTranslate,
+        const Bitmap& rBitmap)
+{
+    // with no rotation or shear it can be mapped to DrawBitmap
+    // do *not* execute the mirroring here, it's done in the fallback
+    // #i124580# the correct DestSize needs to be calculated based on MaxXY values
+    const Point aDestPt(basegfx::fround<tools::Long>(rTranslate.getX()), basegfx::fround<tools::Long>(rTranslate.getY()));
+    const Size aDestSize(
+        basegfx::fround<tools::Long>(rScale.getX() + rTranslate.getX()) - aDestPt.X(),
+        basegfx::fround<tools::Long>(rScale.getY() + rTranslate.getY()) - aDestPt.Y());
+
+    DrawBitmap(aDestPt, aDestSize, rBitmap);
+}
+
 void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
     const Bitmap& rBitmap,
@@ -229,28 +274,9 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bMirroredX(aScale.getX() < 0.0);
     const bool bMirroredY(aScale.getY() < 0.0);
 
-    if(!bRotated && !bSheared && !bMirroredX && !bMirroredY)
+    if (!bRotated && !bSheared && !bMirroredX && !bMirroredY)
     {
-        // with no rotation, shear or mirroring it can be mapped to DrawBitmap
-        // do *not* execute the mirroring here, it's done in the fallback
-        // #i124580# the correct DestSize needs to be calculated based on MaxXY values
-        Point aDestPt(basegfx::fround<tools::Long>(aTranslate.getX()), basegfx::fround<tools::Long>(aTranslate.getY()));
-        const Size aDestSize(
-            basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
-            basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
-        const Point aOrigin = GetMapMode().GetOrigin();
-        if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
-        {
-            aDestPt.Move(aOrigin.getX(), aOrigin.getY());
-            EnableMapMode(false);
-        }
-
-        DrawBitmap(aDestPt, aDestSize, bitmap);
-        if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
-        {
-            EnableMapMode();
-            aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
-        }
+        DrawScaledAndTranslatedBitmap(aScale, aTranslate, bitmap);
         return;
     }
 
@@ -261,15 +287,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     // take the fallback when no rotate and shear, but mirror (else we would have done this above)
     if(!bRotated && !bSheared)
     {
-        // with no rotation or shear it can be mapped to DrawBitmap
-        // do *not* execute the mirroring here, it's done in the fallback
-        // #i124580# the correct DestSize needs to be calculated based on MaxXY values
-        const Point aDestPt(basegfx::fround<tools::Long>(aTranslate.getX()), basegfx::fround<tools::Long>(aTranslate.getY()));
-        const Size aDestSize(
-            basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
-            basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
-
-        DrawBitmap(aDestPt, aDestSize, bitmap);
+        DrawMirroredBitmap(aScale, aTranslate, bitmap);
         return;
     }
 

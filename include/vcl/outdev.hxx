@@ -1421,6 +1421,17 @@ protected:
                                     double &fMaximumArea);
 
 private:
+
+    SAL_DLLPRIVATE void         DrawScaledAndTranslatedBitmap(
+                                    const basegfx::B2DVector& rScale,
+                                    const basegfx::B2DVector& rTranslate,
+                                    const Bitmap& rBitmap);
+
+    SAL_DLLPRIVATE void         DrawMirroredBitmap(
+                                    const basegfx::B2DVector& rScale,
+                                    const basegfx::B2DVector& rTranslate,
+                                    const Bitmap& rBitmap);
+
     SAL_DLLPRIVATE void         DrawAlphaBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
