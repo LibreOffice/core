@@ -21,7 +21,16 @@ $(eval $(call gb_StaticLibrary_add_defs,pixman,\
 	-DHAVE_CONFIG_H \
 	-wd4100 \
 	-wd4127 \
+	-wd4132 \
+	-wd4146 \
 	-wd4189 \
+	-wd4245 \
+	-wd4267 \
+	-wd4389 \
+	-wd4456 \
+	-wd4457 \
+	-wd4701 \
+	-wd5286 \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,pixman,\
@@ -48,15 +57,19 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,pixman,\
 		pixman-matrix \
 		pixman-mips-dspr2 \
 		pixman-mips \
-		pixman-mmx \
+		$(if $(filter-out AARCH64,$(CPUNAME)), \
+			pixman-mmx \
+		) \
 		pixman-noop \
 		pixman-ppc \
 		pixman-radial-gradient \
 		pixman-region16 \
 		pixman-region32 \
 		pixman-solid-fill \
-		pixman-sse2 \
-		pixman-ssse3 \
+		$(if $(filter-out AARCH64,$(CPUNAME)), \
+			pixman-sse2 \
+			pixman-ssse3 \
+		) \
 		pixman-timer \
 		pixman-trap \
 		pixman-utils \

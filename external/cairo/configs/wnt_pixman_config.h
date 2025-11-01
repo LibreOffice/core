@@ -159,10 +159,14 @@
 /* #undef USE_OPENMP */
 
 /* use SSE2 compiler intrinsics */
+#ifndef _M_ARM64
 #define USE_SSE2 1
+#endif
 
 /* use SSSE3 compiler intrinsics */
+#ifndef _M_ARM64
 #define USE_SSSE3 1
+#endif
 
 /* use VMX compiler intrinsics */
 /* #undef USE_VMX */
