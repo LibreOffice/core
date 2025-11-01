@@ -1383,7 +1383,7 @@ public:
 
 protected:
 
-    virtual void                DrawDeviceBitmapEx(
+    virtual void                DrawDeviceBitmap(
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     Bitmap& rBitmap );

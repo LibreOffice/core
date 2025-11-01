@@ -246,7 +246,45 @@ void OutputDevice::DrawAlphaBitmap( const Point& rDestPt, const Size& rDestSize,
     if (mbOutputClipped)
         return;
 
-    DrawDeviceBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp);
+    DrawDeviceBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp);
+}
+
+void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
+                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                     Bitmap& rBitmap )
+{
+    assert(!is_double_buffered_window());
+
+    if (rBitmap.HasAlpha())
+    {
+        DrawDeviceAlphaBitmap(rBitmap,
+                              rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
+        return;
+    }
+
+    if (rBitmap.IsEmpty())
+        return;
+
+    SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(),
+                       rSrcSizePixel.Height(), ImplLogicXToDevicePixel(rDestPt.X()),
+                       ImplLogicYToDevicePixel(rDestPt.Y()),
+                       ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                       ImplLogicHeightToDevicePixel(rDestSize.Height()));
+
+    const BmpMirrorFlags nMirrFlags = AdjustTwoRect(aPosAry, rBitmap.GetSizePixel());
+
+    if (!(aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight))
+        return;
+
+    if (nMirrFlags != BmpMirrorFlags::NONE)
+        rBitmap.Mirror(nMirrFlags);
+
+    const SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
+
+    assert(!rBitmap.HasAlpha()
+            && "I removed some code here that will need to be restored");
+
+    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *this);
 }
 
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
