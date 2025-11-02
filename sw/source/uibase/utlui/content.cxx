@@ -6388,13 +6388,17 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         break;
         case ContentTypeId::POSTIT:
         {
-            auto& rView = m_pActiveShell->GetView();
-            auto pPostItMgr = rView.GetPostItMgr();
-            pPostItMgr->AssureStdModeAtShell();
-            pPostItMgr->SetActiveSidebarWin(nullptr);
-            rView.GetEditWin().GrabFocus();
-            if(nMode == EditEntryMode::DELETE)
-                m_pActiveShell->DelRight();
+            if (nMode == EditEntryMode::DELETE)
+            {
+                if (auto pPostItMgr = m_pActiveShell->GetPostItMgr())
+                {
+                    if (auto pPostItField = static_cast<SwPostItContent*>(pCnt)->GetPostItField())
+                    {
+                        pPostItMgr->AssureStdModeAtShell();
+                        pPostItMgr->Delete(pPostItField->GetPostItId());
+                    }
+                }
+            }
             else
                 nSlot = FN_POSTIT;
         }
@@ -6701,26 +6705,11 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
     }
     else if (eContentTypeId == ContentTypeId::POSTIT)
     {
-        m_pActiveShell->AssureStdMode();
-
-        const auto nCount = pContentType->GetMemberCount();
-
-        m_pActiveShell->StartAction();
-        SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, pContentType->GetName());
-        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
-        for (size_t i = 0; i < nCount; i++)
+        if (auto pPostItMgr = m_pActiveShell->GetPostItMgr())
         {
-            const SwPostItContent* pPostItContent
-                    = static_cast<const SwPostItContent*>(pContentType->GetMember(i));
-            if (pPostItContent->GetPostIt())
-            {
-                m_pActiveShell->GotoFormatField(*pPostItContent->GetPostIt());
-            }
-            m_pActiveShell->DelRight();
+            pPostItMgr->AssureStdModeAtShell();
+            pPostItMgr->Delete();
         }
-        m_pActiveShell->EndUndo();
-        m_pActiveShell->EndAction();
     }
     else if (eContentTypeId == ContentTypeId::DRAWOBJECT)
     {
