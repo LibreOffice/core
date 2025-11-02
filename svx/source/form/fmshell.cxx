@@ -597,7 +597,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame().ToggleChildWindow(nSlot);
+            // request may explicitly request to show/hide these
+            // so may or may not result in a ToggleChildWindow
+            GetViewShell()->GetViewFrame().ChildWindowExecute(rReq);
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
