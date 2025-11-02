@@ -3375,31 +3375,31 @@ void ScInterpreter::ScEuroConvert()
 }
 
 // BAHTTEXT
-#define UTF8_TH_0       "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
-#define UTF8_TH_1       "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
-#define UTF8_TH_2       "\340\270\252\340\270\255\340\270\207"
-#define UTF8_TH_3       "\340\270\252\340\270\262\340\270\241"
-#define UTF8_TH_4       "\340\270\252\340\270\265\340\271\210"
-#define UTF8_TH_5       "\340\270\253\340\271\211\340\270\262"
-#define UTF8_TH_6       "\340\270\253\340\270\201"
-#define UTF8_TH_7       "\340\271\200\340\270\210\340\271\207\340\270\224"
-#define UTF8_TH_8       "\340\271\201\340\270\233\340\270\224"
-#define UTF8_TH_9       "\340\271\200\340\270\201\340\271\211\340\270\262"
-#define UTF8_TH_10      "\340\270\252\340\270\264\340\270\232"
-#define UTF8_TH_11      "\340\271\200\340\270\255\340\271\207\340\270\224"
-#define UTF8_TH_20      "\340\270\242\340\270\265\340\271\210"
-#define UTF8_TH_1E2     "\340\270\243\340\271\211\340\270\255\340\270\242"
-#define UTF8_TH_1E3     "\340\270\236\340\270\261\340\270\231"
-#define UTF8_TH_1E4     "\340\270\253\340\270\241\340\270\267\340\271\210\340\270\231"
-#define UTF8_TH_1E5     "\340\271\201\340\270\252\340\270\231"
-#define UTF8_TH_1E6     "\340\270\245\340\271\211\340\270\262\340\270\231"
-#define UTF8_TH_DOT0    "\340\270\226\340\271\211\340\270\247\340\270\231"
-#define UTF8_TH_BAHT    "\340\270\232\340\270\262\340\270\227"
-#define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
-#define UTF8_TH_MINUS   "\340\270\245\340\270\232"
-
 // local functions
 namespace {
+
+constexpr std::u16string_view UTF8_TH_0      = u"ศูนย์";
+constexpr std::u16string_view UTF8_TH_1      = u"หนึ่ง";
+constexpr std::u16string_view UTF8_TH_2      = u"สอง";
+constexpr std::u16string_view UTF8_TH_3      = u"สาม";
+constexpr std::u16string_view UTF8_TH_4      = u"สี่";
+constexpr std::u16string_view UTF8_TH_5      = u"ห้า";
+constexpr std::u16string_view UTF8_TH_6      = u"หก";
+constexpr std::u16string_view UTF8_TH_7      = u"เจ็ด";
+constexpr std::u16string_view UTF8_TH_8      = u"แปด";
+constexpr std::u16string_view UTF8_TH_9      = u"เก้า";
+constexpr std::u16string_view UTF8_TH_10     = u"สิบ";
+constexpr std::u16string_view UTF8_TH_11     = u"เอ็ด";
+constexpr std::u16string_view UTF8_TH_20     = u"ยี่";
+constexpr std::u16string_view UTF8_TH_1E2    = u"ร้อย";
+constexpr std::u16string_view UTF8_TH_1E3    = u"พัน";
+constexpr std::u16string_view UTF8_TH_1E4    = u"หมื่น";
+constexpr std::u16string_view UTF8_TH_1E5    = u"แสน";
+constexpr std::u16string_view UTF8_TH_1E6    = u"ล้าน";
+constexpr std::u16string_view UTF8_TH_DOT0   = u"ถ้วน";
+constexpr std::u16string_view UTF8_TH_BAHT   = u"บาท";
+constexpr std::u16string_view UTF8_TH_SATANG = u"สตางค์";
+constexpr std::u16string_view UTF8_TH_MINUS  = u"ลบ";
 
 void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
 {
@@ -3407,7 +3407,7 @@ void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSi
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit( OStringBuffer& rText, sal_Int32 nDigit )
+void lclAppendDigit( OUStringBuffer& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
@@ -3429,7 +3429,7 @@ void lclAppendDigit( OStringBuffer& rText, sal_Int32 nDigit )
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10( OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
+void lclAppendPow10( OUStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
 {
     OSL_ENSURE( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
     lclAppendDigit( rText, nDigit );
@@ -3444,7 +3444,7 @@ void lclAppendPow10( OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
+void lclAppendBlock( OUStringBuffer& rText, sal_Int32 nValue )
 {
     OSL_ENSURE( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
     if( nValue >= 100000 )
@@ -3513,7 +3513,7 @@ void ScInterpreter::ScBahtText()
     sal_Int32 nSatang = 0;
     lclSplitBlock( fBaht, nSatang, fValue, 100.0 );
 
-    OStringBuffer aText;
+    OUStringBuffer aText;
 
     // generate text for Baht value
     if( fBaht == 0.0 )
@@ -3523,7 +3523,7 @@ void ScInterpreter::ScBahtText()
     }
     else while( fBaht > 0.0 )
     {
-        OStringBuffer aBlock;
+        OUStringBuffer aBlock;
         sal_Int32 nBlock = 0;
         lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
         if( nBlock > 0 )
@@ -3552,7 +3552,7 @@ void ScInterpreter::ScBahtText()
     if( bMinus )
         aText.insert( 0, UTF8_TH_MINUS );
 
-    PushString( OStringToOUString(aText, RTL_TEXTENCODING_UTF8) );
+    PushString(aText.makeStringAndClear());
 }
 
 void ScInterpreter::ScGetPivotData()
