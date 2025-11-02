@@ -96,30 +96,30 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
 
         // If the image is too large we make it fit into the page
-        if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
-            aSize.Height() && aPageSize.Height() )
+        const auto nSizeHeight = aSize.Height(), nSizeWidth = aSize.Width();
+        const auto nPageHeight = aPageSize.Height(), nPageWidth = aPageSize.Width();
+        if ((nSizeHeight > nPageHeight || nSizeWidth > nPageWidth) &&
+            nSizeHeight && nPageHeight)
         {
-            float fGrfWH =  static_cast<float>(aSize.Width()) /
-                            static_cast<float>(aSize.Height());
-            float fWinWH =  static_cast<float>(aPageSize.Width()) /
-                            static_cast<float>(aPageSize.Height());
+            float fGrfWH =  static_cast<float>(nSizeWidth) / static_cast<float>(nSizeHeight);
+            float fWinWH =  static_cast<float>(nPageWidth) / static_cast<float>(nPageHeight);
 
             // constrain size to page size if necessary
-            if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
+            if (fGrfWH < fWinWH)
             {
-                aSize.setWidth( static_cast<::tools::Long>(aPageSize.Height() * fGrfWH) );
-                aSize.setHeight( aPageSize.Height() );
+                aSize.setWidth( static_cast<::tools::Long>(nPageHeight * fGrfWH) );
+                aSize.setHeight( nPageHeight );
             }
             else
             {
-                aSize.setWidth( aPageSize.Width() );
-                aSize.setHeight( static_cast<::tools::Long>(aPageSize.Width() / fGrfWH) );
+                aSize.setWidth( nPageWidth );
+                aSize.setHeight( static_cast<::tools::Long>(nPageWidth / fGrfWH) );
             }
         }
 
         // set output rectangle for graphic
-        Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
-                    (aPageSize.Height() - aSize.Height()) / 2);
+        Point aPnt ((nPageWidth  - aSize.Width())  / 2,
+                    (nPageHeight - aSize.Height()) / 2);
         aPnt += Point(pPage->GetLeftBorder(), pPage->GetUpperBorder());
         ::tools::Rectangle aRect (aPnt, aSize);
 
