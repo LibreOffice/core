@@ -570,12 +570,18 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
         if (!bTakeShortcut)
         {
+            bool bAtPageObjectsAreInvalid = false;
             while ( !IsInterrupt() && !IsNextCycle() &&
-                    ((pPage->GetSortedObjs() && pPage->IsInvalidFly()) || pPage->IsInvalid()) )
+                    ((pPage->GetSortedObjs() && pPage->IsInvalidFly()) || pPage->IsInvalid() || bAtPageObjectsAreInvalid))
             {
                 unlockPositionOfObjects( pPage );
 
-                SwObjectFormatter::FormatObjsAtFrame( *pPage, *pPage, this );
+                pPage->ValidateAtPageFly();
+                pPage->SetInAtPageFlyFormatting(true);
+                SwObjectFormatter::FormatObjsAtFrame(*pPage, *pPage, this);
+                pPage->SetInAtPageFlyFormatting(false);
+                bAtPageObjectsAreInvalid = pPage->IsInvalidAtPageFly();
+
                 if ( !pPage->GetSortedObjs() )
                 {
                     // If there are no (more) Flys, the flags are superfluous.
