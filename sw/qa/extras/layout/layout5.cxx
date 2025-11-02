@@ -2244,6 +2244,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718)
     CPPUNIT_ASSERT_LESS(sal_Int32(4000), height);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169158)
+{
+    // A table with vertical-align="middle" in a fly anchored at page:
+    createSwDoc("cell-vertical-align-middle-in-fly-at-page.fodt");
+    auto pXmlDoc = parseLayoutDump(); // Intentionally no Scheduler::ProcessEventsToIdle
+
+    // The problem was, that layout didn't reformat objects at page, when the non-default
+    // alignment invalidated cells in tables in at-page fly in SwContentNotify::ImplDestroy.
+
+    // Check that the text in the cell is aligned correctly:
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page/anchored/fly/tab/row/cell/infos/bounds", "top", u"1985");
+    // Without the fix, this would fail with
+    // - Expected: 2698
+    // - Actual  : 2043
+    assertXPath(pXmlDoc, "//page/anchored/fly/tab/row/cell/txt/infos/bounds", "top", u"2698");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
