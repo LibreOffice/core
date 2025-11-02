@@ -179,6 +179,7 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
 TextBodyContext::TextBodyContext( ContextHandler2Helper const & rParent, TextBody& rTextBody )
 : ContextHandler2( rParent )
 , mrTextBody( rTextBody )
+, mListNumberingMask(0)
 {
 }
 
