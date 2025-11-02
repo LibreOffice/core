@@ -2443,6 +2443,38 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf150229)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165733_leap_day_BCE)
+{
+    createScDoc();
+
+    {
+        ScDocument* pDoc = getScDoc();
+        // Set -0001-02-29 (proleptic Gregorian leap day), which is -0001-03-02 in proleptic Julian.
+        // If we ever change UI to use proleptic Gregorian, this will change:
+        pDoc->SetString(0, 0, 0, u"-0001-03-02"_ustr);
+        CPPUNIT_ASSERT_EQUAL(-693900.0, pDoc->GetValue(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(SvNumFormatType::DATE,
+                             pDoc->GetFormatTable()->GetType(pDoc->GetNumberFormat(0, 0, 0)));
+    }
+
+    saveAndReload(u"calc8"_ustr);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "//table:table-cell", "date-value", u"-0001-02-29");
+
+        ScDocument* pDoc = getScDoc();
+        // without the fix, this failed with:
+        // - Expected: -693900
+        // - Actual  : 0
+        // because import didn't recognize 1 BCE as a leap year, and considered 29th invalid in Feb:
+        CPPUNIT_ASSERT_EQUAL(-693900.0, pDoc->GetValue(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(SvNumFormatType::DATE,
+                             pDoc->GetFormatTable()->GetType(pDoc->GetNumberFormat(0, 0, 0)));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
