@@ -26,6 +26,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <optional>
 
+#include <comphelper/date.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <rtl/character.hxx>
@@ -1743,25 +1744,6 @@ bool Converter::parseDateTime(   util::DateTime& rDateTime,
             rString);
 }
 
-static bool lcl_isLeapYear(const sal_uInt32 nYear)
-{
-    return ((nYear % 4) == 0)
-        && (((nYear % 100) != 0) || ((nYear % 400) == 0));
-}
-
-static sal_uInt16
-lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
-{
-    static const sal_uInt16 s_MaxDaysPerMonth[12] =
-        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    assert(0 < nMonth && nMonth <= 12);
-    if ((2 == nMonth) && lcl_isLeapYear(nYear))
-    {
-        return 29;
-    }
-    return s_MaxDaysPerMonth[nMonth - 1];
-}
-
 static void lcl_ConvertToUTC(
         sal_Int16 & o_rYear, sal_uInt16 & o_rMonth, sal_uInt16 & o_rDay,
         sal_uInt16 & o_rHours, sal_uInt16 & o_rMinutes,
@@ -1794,7 +1776,7 @@ static void lcl_ConvertToUTC(
             return; // handle time without date - don't adjust what isn't there
         }
         o_rDay += nDayAdd;
-        sal_Int16 const nDaysInMonth(lcl_MaxDaysPerMonth(o_rMonth, o_rYear));
+        sal_Int16 const nDaysInMonth(comphelper::date::getDaysInMonth(o_rMonth, o_rYear));
         if (o_rDay <= nDaysInMonth)
         {
             return;
@@ -1834,7 +1816,7 @@ static void lcl_ConvertToUTC(
             return;
         }
         sal_Int16 const nPrevMonth((o_rMonth == 1) ? 12 : o_rMonth - 1);
-        sal_Int16 const nDaysInMonth(lcl_MaxDaysPerMonth(nPrevMonth, o_rYear));
+        sal_Int16 const nDaysInMonth(comphelper::date::getDaysInMonth(nPrevMonth, o_rYear));
         o_rDay += nDaysInMonth;
         --o_rMonth;
         if (0 == o_rMonth)
@@ -1898,6 +1880,7 @@ static bool lcl_parseDate(
         {
             bSuccess &= (0 < nYear);
         }
+        bSuccess &= (nYear <= (isNegative ? 32768 : 32767)); // Must fit into css::util::Date
         bSuccess &= (nPos < string.size()); // not last token
     }
     if (bSuccess && ('-' != string[nPos])) // separator
@@ -1931,7 +1914,9 @@ static bool lcl_parseDate(
         }
         if (nMonth > 0) // not possible to check if month was missing
         {
-            bSuccess &= (nDay <= lcl_MaxDaysPerMonth(nMonth, nYear));
+            sal_Int32 nMaxDay
+                = comphelper::date::getDaysInMonth(nMonth, isNegative ? -nYear : nYear);
+            bSuccess &= (nDay <= nMaxDay);
         }
         else assert(bIgnoreInvalidOrMissingDate);
     }
