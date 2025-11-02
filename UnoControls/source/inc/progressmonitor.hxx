@@ -35,13 +35,13 @@ namespace unocontrols {
 
 class ProgressBar;
 
-#define PROGRESSMONITOR_FREEBORDER                      10                                                      // border around and between the controls
+constexpr sal_Int32 PROGRESSMONITOR_FREEBORDER = 10;                                                     // border around and between the controls
 inline constexpr OUString PROGRESSMONITOR_DEFAULT_TOPIC  = u""_ustr;
 inline constexpr OUString PROGRESSMONITOR_DEFAULT_TEXT = u""_ustr;
-#define PROGRESSMONITOR_LINECOLOR_BRIGHT                sal_Int32(Color( 0xFF, 0xFF, 0xFF ))             // white
-#define PROGRESSMONITOR_LINECOLOR_SHADOW                sal_Int32(Color( 0x00, 0x00, 0x00 ))             // black
-#define PROGRESSMONITOR_DEFAULT_WIDTH                   350
-#define PROGRESSMONITOR_DEFAULT_HEIGHT                  100
+constexpr sal_Int32 PROGRESSMONITOR_LINECOLOR_BRIGHT = 0xFFFFFF;             // white
+constexpr sal_Int32 PROGRESSMONITOR_LINECOLOR_SHADOW = 0x000000;             // black
+constexpr sal_Int32 PROGRESSMONITOR_DEFAULT_WIDTH = 350;
+constexpr sal_Int32 PROGRESSMONITOR_DEFAULT_HEIGHT = 100;
 
 /// Item of TextList
 struct IMPL_TextlistItem
