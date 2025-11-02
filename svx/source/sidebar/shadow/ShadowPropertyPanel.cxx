@@ -179,10 +179,10 @@ void ShadowPropertyPanel::ModifyShadowDistance()
     {
         case 0: nX = nXY; nY = 0;             break;
         case 45: nX = nXY; nY = o3tl::saturating_toggle_sign(nXY); break;
-        case 90: nX = 0; nY = - nXY;          break;
-        case 135: nX = nY = -nXY;             break;
-        case 180: nX = -nXY; nY = 0;          break;
-        case 225: nX = -nXY; nY = nXY;        break;
+        case 90: nX = 0; nY = o3tl::saturating_toggle_sign(nXY); break;
+        case 135: nX = nY = o3tl::saturating_toggle_sign(nXY); break;
+        case 180: nX = o3tl::saturating_toggle_sign(nXY); nY = 0; break;
+        case 225: nX = o3tl::saturating_toggle_sign(nXY); nY = nXY; break;
         case 270: nX = 0; nY = nXY;           break;
         case 315: nX = nY = nXY;              break;
     }
