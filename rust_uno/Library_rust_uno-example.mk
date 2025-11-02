@@ -30,8 +30,20 @@ $(eval $(call gb_Library_use_libraries,rust_uno-example, \
 $(eval $(call gb_Library_use_sdk_api,rust_uno-example))
 
 $(call gb_Library_get_target,rust_uno-example): $(call gb_CustomTarget_get_target,rust_uno/cargo)
-$(eval $(call gb_Library_add_libs,rust_uno-example,\
-    $(SRCDIR)/rust_uno/target/release/$(if $(filter WNT,$(OS_FOR_BUILD)),rust_uno.dll.lib,librust_uno.so) \
-))
+
+ifneq ($(filter WNT,$(OS_FOR_BUILD)),)
+    # Windows-specific flags
+    $(eval $(call gb_Library_add_libs,rust_uno-example,\
+        $(SRCDIR)/rust_uno/target/release/rust_uno.lib \
+    ))
+else
+    # Unix/Linux with RPATH
+    $(eval $(call gb_Library_add_ldflags,rust_uno-example,\
+        -Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN \
+    ))
+    $(eval $(call gb_Library_add_libs,rust_uno-example,\
+        -L$(SRCDIR)/rust_uno/target/release -lrust_uno \
+    ))
+endif
 
 # vim: set noet sw=4 ts=4:
