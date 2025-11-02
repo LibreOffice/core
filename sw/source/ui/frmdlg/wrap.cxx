@@ -576,7 +576,7 @@ IMPL_LINK(SwWrapTabPage, RangeModifyHdl, weld::MetricSpinButton&, rEdit, void)
     {
         auto nOpposite = pOpposite->get_value(FieldUnit::NONE);
 
-        if (nValue + nOpposite > std::max(rEdit.get_max(FieldUnit::NONE), pOpposite->get_max(FieldUnit::NONE)))
+        if (nValue > std::max(rEdit.get_max(FieldUnit::NONE), pOpposite->get_max(FieldUnit::NONE)) - nOpposite)
             pOpposite->set_value(pOpposite->get_max(FieldUnit::NONE) - nValue, FieldUnit::NONE);
     }
 }
