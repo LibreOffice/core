@@ -26,7 +26,7 @@
 
 namespace {
 
-SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
+SvStream& Out_Hex( SvStream& rStream, sal_uInt64 nHex, sal_uInt8 nLen )
 {
     char aNToABuf[] = "0000000000000000";
 

@@ -549,7 +549,7 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream )
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uInt32 nHex, sal_uInt8 nLen )
+SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uInt64 nHex, sal_uInt8 nLen )
 {                                                  // out into a stream
     char aNToABuf[] = "0000000000000000";
 
