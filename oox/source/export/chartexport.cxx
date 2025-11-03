@@ -5059,33 +5059,6 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_c, XML_dLbls));
     }
 
-    bool bLinkedNumFmt = true;
-    if (GetProperty(xPropSet, u"LinkNumberFormatToSource"_ustr))
-        mAny >>= bLinkedNumFmt;
-
-    chart2::DataPointLabel aLabel;
-    bool bLabelIsNumberFormat = true;
-    if( xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
-        bLabelIsNumberFormat = aLabel.ShowNumber;
-
-    if (GetProperty(xPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
-    {
-        sal_Int32 nKey = 0;
-        mAny >>= nKey;
-
-        OUString aNumberFormatString = getNumberFormatCode(nKey);
-
-        if (bIsChartex) {
-            pFS->singleElement(FSNS(XML_cx, XML_numFmt),
-                XML_formatCode, aNumberFormatString,
-                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-        } else {
-            pFS->singleElement(FSNS(XML_c, XML_numFmt),
-                XML_formatCode, aNumberFormatString,
-                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-        }
-    }
-
     uno::Sequence<sal_Int32> aAttrLabelIndices;
     xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aAttrLabelIndices;
 
@@ -5192,9 +5165,12 @@ void ChartExport::exportDataLabels(
             }
         }
 
+        bool bLinkedNumFmt = false;
         if( GetProperty(xLabelPropSet, u"LinkNumberFormatToSource"_ustr) )
             mAny >>= bLinkedNumFmt;
 
+        chart2::DataPointLabel aLabel;
+        bool bLabelIsNumberFormat = true;
         if( xLabelPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
             bLabelIsNumberFormat = aLabel.ShowNumber;
         else
@@ -5220,6 +5196,33 @@ void ChartExport::exportDataLabels(
         writeLabelProperties(pFS, this, xLabelPropSet, aParam, nIdx,
                 rDLblsRange, bIsChartex);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
+    }
+
+    bool bLinkedNumFmt = true;
+    if (GetProperty(xPropSet, u"LinkNumberFormatToSource"_ustr))
+        mAny >>= bLinkedNumFmt;
+
+    chart2::DataPointLabel aLabel;
+    bool bLabelIsNumberFormat = true;
+    if( xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
+        bLabelIsNumberFormat = aLabel.ShowNumber;
+
+    if (GetProperty(xPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
+    {
+        sal_Int32 nKey = 0;
+        mAny >>= nKey;
+
+        OUString aNumberFormatString = getNumberFormatCode(nKey);
+
+        if (bIsChartex) {
+            pFS->singleElement(FSNS(XML_cx, XML_numFmt),
+                XML_formatCode, aNumberFormatString,
+                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
+        } else {
+            pFS->singleElement(FSNS(XML_c, XML_numFmt),
+                XML_formatCode, aNumberFormatString,
+                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
+        }
     }
 
     // Baseline label properties for all labels.
