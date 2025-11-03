@@ -3401,11 +3401,6 @@ constexpr std::u16string_view UTF8_TH_BAHT   = u"บาท";
 constexpr std::u16string_view UTF8_TH_SATANG = u"สตางค์";
 constexpr std::u16string_view UTF8_TH_MINUS  = u"ลบ";
 
-void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
-{
-    rnBlock = static_cast< sal_Int32 >( modf( (fValue + 0.1) / fSize, &rfInt ) * fSize + 0.1 );
-}
-
 /** Appends a digit (0 to 9) to the passed string. */
 void lclAppendDigit( OUStringBuffer& rText, sal_Int32 nDigit )
 {
@@ -3505,13 +3500,14 @@ void ScInterpreter::ScBahtText()
     bool bMinus = fValue < 0.0;
     fValue = std::abs( fValue );
 
-    // round to 2 digits after decimal point, fValue contains Satang as integer
-    fValue = ::rtl::math::approxFloor( fValue * 100.0 + 0.5 );
-
     // split Baht and Satang
     double fBaht = 0.0;
-    sal_Int32 nSatang = 0;
-    lclSplitBlock( fBaht, nSatang, fValue, 100.0 );
+    sal_Int32 nSatang = std::round(modf(fValue, &fBaht) * 100);
+    if (nSatang > 99)
+    {
+        nSatang -= 100;
+        fBaht += 1;
+    }
 
     OUStringBuffer aText;
 
@@ -3524,9 +3520,7 @@ void ScInterpreter::ScBahtText()
     else while( fBaht > 0.0 )
     {
         OUStringBuffer aBlock;
-        sal_Int32 nBlock = 0;
-        lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
-        if( nBlock > 0 )
+        if (sal_Int32 nBlock = std::round(modf(fBaht / 1.0e6, &fBaht) * 1.0e6))
             lclAppendBlock( aBlock, nBlock );
         // add leading "million", if there will come more blocks
         if( fBaht > 0.0 )
