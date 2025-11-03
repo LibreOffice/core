@@ -5927,7 +5927,12 @@ static void doc_setViewOption(LibreOfficeKitDocument* pThis, const char* pOption
         const int nZoom = getUString(pValue).toInt32();
 
         if (nZoom)
+        {
             pDoc->setExportZoom(nZoom);
+
+            // Remember the current page zoom in Impress
+            pDoc->setPageZoom(nZoom);
+        }
     }
 }
 

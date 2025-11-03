@@ -294,6 +294,16 @@ public:
     }
 
     /**
+     * Remember the zoom level as a percent for canvas page and
+     * non-canvas page
+     *
+     * @param nZoom - the zoom level as a percent
+     */
+    virtual void setPageZoom(int /*nPageZoom*/)
+    {
+    }
+
+    /**
      * Show/Hide a single row/column header outline for Calc documents.
      *
      * @param bColumn - if we are dealing with a column or row group
