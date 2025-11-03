@@ -1252,6 +1252,8 @@ void Window::Validate()
 
 bool Window::HasPaintEvent() const
 {
+    if (!mpWindowImpl)
+        return false;
 
     if ( !mpWindowImpl->mbReallyVisible )
         return false;
