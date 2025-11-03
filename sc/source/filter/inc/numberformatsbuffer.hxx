@@ -60,6 +60,10 @@ public:
 
     /** Sets the passed format code. */
     void                setFormatCode( std::u16string_view aFmtCode );
+    /** Sets the passed format code. */
+    void                setFormatCode(
+                            const css::lang::Locale& rLocale,
+                            const OUString& rcFmtCode );
     /** Sets the passed format code, encoded in UTF-8. */
     void                setFormatCode(
                             const css::lang::Locale& rLocale,
