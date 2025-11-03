@@ -3342,6 +3342,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     m_pFontsAttrList = nullptr;
     m_pEastAsianLayoutAttrList = nullptr;
     m_pCharLangAttrList = nullptr;
+    m_oFontSize.reset();
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -3600,6 +3601,9 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     {
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, detachFrom( m_pFontsAttrList ) );
     }
+
+    if ( m_oFontSize )
+        m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), OString::number(*m_oFontSize));
 
     if ( m_pColorAttrList.is() )
     {
@@ -8078,10 +8082,9 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
     m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
 
-    if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_rExport.m_bFontSizeWritten )
+    if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_oFontSize )
     {
-        OString sSize = OString::number( round(( fHeight * nProp ) / 1000) );
-        m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), sSize);
+        m_oFontSize = round(( fHeight * nProp ) / 1000);
     }
 }
 
@@ -8110,16 +8113,16 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
 {
-    OString fontSize = OString::number( ( rFontSize.GetHeight() + 5 ) / 10 );
+    double fontSize = ( rFontSize.GetHeight() + 5 ) / 10;
 
     switch ( rFontSize.Which() )
     {
         case RES_CHRATR_FONTSIZE:
         case RES_CHRATR_CJK_FONTSIZE:
-            m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), fontSize);
+            m_oFontSize = ( rFontSize.GetHeight() + 5 ) / 10;
             break;
         case RES_CHRATR_CTL_FONTSIZE:
-            m_pSerializer->singleElementNS(XML_w, XML_szCs, FSNS(XML_w, XML_val), fontSize);
+            m_pSerializer->singleElementNS(XML_w, XML_szCs, FSNS(XML_w, XML_val), OString::number(fontSize));
             break;
     }
 }
