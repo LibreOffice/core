@@ -101,7 +101,6 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbNoSelection       = true;
     mbDoubleSel         = false;
-    mbScroll            = false;
     mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
@@ -752,7 +751,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     }
 
     // if necessary scroll to the visible area
-    if (mbScroll && nItemId && mnCols)
+    if (nItemId && mnCols)
     {
         sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
         if ( nNewLine < mnFirstLine )
@@ -760,7 +759,8 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             SetFirstLine(nNewLine);
             bNewLine = true;
         }
-        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
+        else if (mnFirstLine + mnVisLines - 1 >= 0
+                 && nNewLine > o3tl::make_unsigned(mnFirstLine + mnVisLines - 1))
         {
             SetFirstLine(static_cast<sal_uInt16>(nNewLine-mnVisLines+1));
             bNewLine = true;
@@ -930,8 +930,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
 
     // calculate number of rows
-    mbScroll = false;
-
     auto nOldLines = mnLines;
     // Floor( (M+N-1)/N )==Ceiling( M/N )
     mnLines = (static_cast<tools::Long>(nItemCount) + mnCols - 1) / mnCols;
@@ -959,9 +957,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
 
     bAdjustmentOutOfDate |= nOldVisLines != mnVisLines;
-
-    if (mnLines > mnVisLines)
-        mbScroll = true;
 
     if (mnLines <= mnVisLines)
     {

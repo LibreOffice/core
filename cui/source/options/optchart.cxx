@@ -89,6 +89,37 @@ void SvxDefaultColorOptPage::FillBoxChartColorLB()
     m_xLbChartColors->thaw();
 }
 
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl, weld::TreeView&, void)
+{
+    auto nIndex = m_xLbChartColors->get_selected_index();
+    if (nIndex == -1)
+        return;
+
+    Color& rColor(aColorList[nIndex]);
+
+    XColorListRef xColorList;
+    for (size_t i = 0, nSize = aPaletteManager.GetPaletteList().size(); i < nSize; ++i)
+    {
+        aPaletteManager.SetPalette(i, true/*bPosOnly*/);
+
+        xColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+            XPropertyListType::Color, aPaletteManager.GetSelectedPalettePath()));
+        if (!xColorList->Load())
+            continue;
+
+        auto nPos = xColorList->GetIndexOfColor(rColor);
+        if (nPos == -1)
+            continue;
+
+        m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
+        SelectPaletteLbHdl(*m_xLbPaletteSelector);
+
+        m_xValSetColorBox->SelectItem(m_xValSetColorBox->GetItemId(nPos));
+
+        return;
+    }
+}
+
 SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/optchartcolorspage.ui"_ustr, u"OptChartColorsPage"_ustr, &rInAttrs)
     , m_xLbChartColors(m_xBuilder->weld_tree_view(u"colors"_ustr))
@@ -100,6 +131,9 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
     , m_xValSetColorBoxWin(new weld::CustomWeld(*m_xBuilder, u"table"_ustr, *m_xValSetColorBox))
 {
     m_xLbChartColors->set_size_request(-1, m_xLbChartColors->get_height_rows(16));
+
+    m_xLbChartColors->connect_selection_changed(
+        LINK(this, SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl));
 
     if (officecfg::Office::Chart::DefaultColor::Series::isReadOnly())
     {
@@ -145,6 +179,7 @@ void SvxDefaultColorOptPage::Construct()
     FillPaletteLB();
 
     m_xLbChartColors->select( 0 );
+    LbChartColorsSelectionChangedHdl(*m_xLbChartColors);
 }
 
 std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs )

@@ -280,9 +280,11 @@ std::vector<OUString> PaletteManager::GetPaletteList()
     return aPaletteNames;
 }
 
-void PaletteManager::SetPalette( sal_Int32 nPos )
+void PaletteManager::SetPalette(sal_Int32 nPos, bool bPosOnly)
 {
     mnCurrentPalette = nPos;
+    if (bPosOnly)
+        return;
     if( nPos != mnNumOfPalettes - 1 && nPos != 0)
     {
         mpColorList = XPropertyList::AsColorList(
@@ -332,8 +334,9 @@ OUString PaletteManager::GetPaletteName()
 
 const OUString & PaletteManager::GetSelectedPalettePath()
 {
-    if (mnCurrentPalette < m_Palettes.size() && mnCurrentPalette != 0)
-        return m_Palettes[mnCurrentPalette - 1]->GetPath();
+    auto nPalettesIndex = mnCurrentPalette - 1;
+    if (nPalettesIndex >= 0 && o3tl::make_unsigned(nPalettesIndex) < m_Palettes.size())
+        return m_Palettes[nPalettesIndex]->GetPath();
     else
         return EMPTY_OUSTRING;
 }

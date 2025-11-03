@@ -66,7 +66,7 @@ public:
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
     void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();
-    void        SetPalette( sal_Int32 nPos );
+    void SetPalette(sal_Int32 nPos, bool bPosOnly = false);
     sal_Int32   GetPalette() const;
     sal_Int32   GetPaletteCount() const { return mnNumOfPalettes; }
     OUString    GetPaletteName();
