@@ -61,6 +61,20 @@ public:
 };
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExportTableFrame)
+{
+    createSwDoc("table.odt");
+
+    // Without the fix in place, this test would have crashed here
+    save(mpFilter);
+
+    std::string aActual = TempFileToString();
+    std::string aExpected("Text" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+                          "![]()Text" SAL_NEWLINE_STRING);
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
 {
     createSwDoc("basic-elements.fodt");
