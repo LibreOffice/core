@@ -3378,44 +3378,44 @@ void ScInterpreter::ScEuroConvert()
 // local functions
 namespace {
 
-constexpr std::u16string_view UTF8_TH_0      = u"ศูนย์";
-constexpr std::u16string_view UTF8_TH_1      = u"หนึ่ง";
-constexpr std::u16string_view UTF8_TH_2      = u"สอง";
-constexpr std::u16string_view UTF8_TH_3      = u"สาม";
-constexpr std::u16string_view UTF8_TH_4      = u"สี่";
-constexpr std::u16string_view UTF8_TH_5      = u"ห้า";
-constexpr std::u16string_view UTF8_TH_6      = u"หก";
-constexpr std::u16string_view UTF8_TH_7      = u"เจ็ด";
-constexpr std::u16string_view UTF8_TH_8      = u"แปด";
-constexpr std::u16string_view UTF8_TH_9      = u"เก้า";
-constexpr std::u16string_view UTF8_TH_10     = u"สิบ";
-constexpr std::u16string_view UTF8_TH_11     = u"เอ็ด";
-constexpr std::u16string_view UTF8_TH_20     = u"ยี่";
-constexpr std::u16string_view UTF8_TH_1E2    = u"ร้อย";
-constexpr std::u16string_view UTF8_TH_1E3    = u"พัน";
-constexpr std::u16string_view UTF8_TH_1E4    = u"หมื่น";
-constexpr std::u16string_view UTF8_TH_1E5    = u"แสน";
-constexpr std::u16string_view UTF8_TH_1E6    = u"ล้าน";
-constexpr std::u16string_view UTF8_TH_DOT0   = u"ถ้วน";
-constexpr std::u16string_view UTF8_TH_BAHT   = u"บาท";
-constexpr std::u16string_view UTF8_TH_SATANG = u"สตางค์";
-constexpr std::u16string_view UTF8_TH_MINUS  = u"ลบ";
+constexpr std::u16string_view TH_0      = u"ศูนย์";
+constexpr std::u16string_view TH_1      = u"หนึ่ง";
+constexpr std::u16string_view TH_2      = u"สอง";
+constexpr std::u16string_view TH_3      = u"สาม";
+constexpr std::u16string_view TH_4      = u"สี่";
+constexpr std::u16string_view TH_5      = u"ห้า";
+constexpr std::u16string_view TH_6      = u"หก";
+constexpr std::u16string_view TH_7      = u"เจ็ด";
+constexpr std::u16string_view TH_8      = u"แปด";
+constexpr std::u16string_view TH_9      = u"เก้า";
+constexpr std::u16string_view TH_10     = u"สิบ";
+constexpr std::u16string_view TH_11     = u"เอ็ด";
+constexpr std::u16string_view TH_20     = u"ยี่";
+constexpr std::u16string_view TH_1E2    = u"ร้อย";
+constexpr std::u16string_view TH_1E3    = u"พัน";
+constexpr std::u16string_view TH_1E4    = u"หมื่น";
+constexpr std::u16string_view TH_1E5    = u"แสน";
+constexpr std::u16string_view TH_1E6    = u"ล้าน";
+constexpr std::u16string_view TH_DOT0   = u"ถ้วน";
+constexpr std::u16string_view TH_BAHT   = u"บาท";
+constexpr std::u16string_view TH_SATANG = u"สตางค์";
+constexpr std::u16string_view TH_MINUS  = u"ลบ";
 
 /** Appends a digit (0 to 9) to the passed string. */
 void lclAppendDigit( OUStringBuffer& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
-        case 0: rText.append( UTF8_TH_0 ); break;
-        case 1: rText.append( UTF8_TH_1 ); break;
-        case 2: rText.append( UTF8_TH_2 ); break;
-        case 3: rText.append( UTF8_TH_3 ); break;
-        case 4: rText.append( UTF8_TH_4 ); break;
-        case 5: rText.append( UTF8_TH_5 ); break;
-        case 6: rText.append( UTF8_TH_6 ); break;
-        case 7: rText.append( UTF8_TH_7 ); break;
-        case 8: rText.append( UTF8_TH_8 ); break;
-        case 9: rText.append( UTF8_TH_9 ); break;
+        case 0: rText.append( TH_0 ); break;
+        case 1: rText.append( TH_1 ); break;
+        case 2: rText.append( TH_2 ); break;
+        case 3: rText.append( TH_3 ); break;
+        case 4: rText.append( TH_4 ); break;
+        case 5: rText.append( TH_5 ); break;
+        case 6: rText.append( TH_6 ); break;
+        case 7: rText.append( TH_7 ); break;
+        case 8: rText.append( TH_8 ); break;
+        case 9: rText.append( TH_9 ); break;
         default:    OSL_FAIL( "lclAppendDigit - illegal digit" );
     }
 }
@@ -3430,10 +3430,10 @@ void lclAppendPow10( OUStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
     lclAppendDigit( rText, nDigit );
     switch( nPow10 )
     {
-        case 2: rText.append( UTF8_TH_1E2 );   break;
-        case 3: rText.append( UTF8_TH_1E3 );   break;
-        case 4: rText.append( UTF8_TH_1E4 );   break;
-        case 5: rText.append( UTF8_TH_1E5 );   break;
+        case 2: rText.append( TH_1E2 );   break;
+        case 3: rText.append( TH_1E3 );   break;
+        case 4: rText.append( TH_1E4 );   break;
+        case 5: rText.append( TH_1E5 );   break;
         default:    OSL_FAIL( "lclAppendPow10 - illegal power" );
     }
 }
@@ -3472,11 +3472,11 @@ void lclAppendBlock( OUStringBuffer& rText, sal_Int32 nValue )
         if( nTen >= 3 )
             lclAppendDigit( rText, nTen );
         else if( nTen == 2 )
-            rText.append( UTF8_TH_20 );
-        rText.append( UTF8_TH_10 );
+            rText.append( TH_20 );
+        rText.append( TH_10 );
     }
     if( (nTen > 0) && (nOne == 1) )
-        rText.append( UTF8_TH_11 );
+        rText.append( TH_11 );
     else if( nOne > 0 )
         lclAppendDigit( rText, nOne );
 }
@@ -3515,7 +3515,7 @@ void ScInterpreter::ScBahtText()
     if( fBaht == 0.0 )
     {
         if( nSatang == 0 )
-            aText.append( UTF8_TH_0 );
+            aText.append( TH_0 );
     }
     else while( fBaht > 0.0 )
     {
@@ -3524,27 +3524,27 @@ void ScInterpreter::ScBahtText()
             lclAppendBlock( aBlock, nBlock );
         // add leading "million", if there will come more blocks
         if( fBaht > 0.0 )
-            aBlock.insert( 0, UTF8_TH_1E6 );
+            aBlock.insert( 0, TH_1E6 );
 
         aText.insert(0, aBlock);
     }
     if (!aText.isEmpty())
-        aText.append( UTF8_TH_BAHT );
+        aText.append( TH_BAHT );
 
     // generate text for Satang value
     if( nSatang == 0 )
     {
-        aText.append( UTF8_TH_DOT0 );
+        aText.append( TH_DOT0 );
     }
     else
     {
         lclAppendBlock( aText, nSatang );
-        aText.append( UTF8_TH_SATANG );
+        aText.append( TH_SATANG );
     }
 
     // add the minus sign
     if( bMinus )
-        aText.insert( 0, UTF8_TH_MINUS );
+        aText.insert( 0, TH_MINUS );
 
     PushString(aText.makeStringAndClear());
 }
