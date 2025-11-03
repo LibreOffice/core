@@ -686,6 +686,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ABKHAZ,                 "ab", ""  , k0    },
     { LANGUAGE_USER_ENGLISH_GUYANA,         "en", "GY", k0    },
     { LANGUAGE_USER_GRONINGS,              "gos", "NL", k0    },
+    { LANGUAGE_USER_EXTREMADURAN,          "ext", "ES", k0    },
     // Add new languages ^^^ there.
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0    },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0    },    // undetermined language, language cannot be identified

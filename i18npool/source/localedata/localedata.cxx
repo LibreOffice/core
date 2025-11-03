@@ -128,6 +128,7 @@ constexpr struct {
     { "es_VE",  DataLocaleLibrary::ES },
     { "gl_ES",  DataLocaleLibrary::ES },
     { "oc_ES_aranes",  DataLocaleLibrary::ES },
+    { "ext_ES", DataLocaleLibrary::ES },
 
     { "de_DE",  DataLocaleLibrary::EURO },
     { "de_AT",  DataLocaleLibrary::EURO },
