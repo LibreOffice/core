@@ -1651,7 +1651,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
-                        SetZoom( static_cast<::tools::Long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
+                    {
+                        sal_uInt16 nZoom = pArgs->Get( SID_ATTR_ZOOM ).GetValue();
+                        SetZoom( static_cast<::tools::Long>( nZoom ) );
+                        RememberPageZoom(nZoom);
+                    }
                         break;
 
                     case SvxZoomType::OPTIMAL:

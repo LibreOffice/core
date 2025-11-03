@@ -634,6 +634,21 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
     SetZoom(nZoom);
 }
 
+sal_uInt16 ViewShell::GetPageZoom() const
+{
+    if (getCurrentPage()->IsCanvasPage())
+        return mnCanvasPageZoom;
+    return mnNonCanvasPageZoom;
+}
+
+void ViewShell::RememberPageZoom(const sal_uInt16 nZoom)
+{
+    if (getCurrentPage()->IsCanvasPage())
+        mnCanvasPageZoom = nZoom;
+    else
+        mnNonCanvasPageZoom = nZoom;
+}
+
 void ViewShell::SetActiveWindow (::sd::Window* pWin)
 {
     SfxViewShell* pViewShell = GetViewShell();

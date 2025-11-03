@@ -35,6 +35,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/fmshell.hxx>
 #include <tools/debug.hxx>
@@ -1038,16 +1039,20 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             SdrPageView* pPV = mpDrawView->GetSdrPageView();
             SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
 
+            bool bChangeZoom = false;
+
             if (pCurrentPage)
             {
                 Size aCurrentPageSize = pCurrentPage->GetSize();
                 const ::tools::Long nCurrentWidth = aCurrentPageSize.Width();
                 const ::tools::Long nCurrentHeight = aCurrentPageSize.Height();
 
-                SdPage* pNewPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
-                Size aNewPageSize = pNewPage->GetSize();
+                SdPage* pSelectedPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
+                Size aNewPageSize = pSelectedPage->GetSize();
                 const ::tools::Long nNewWidth = aNewPageSize.Width();
                 const ::tools::Long nNewHeight = aNewPageSize.Height();
+
+                bChangeZoom = pCurrentPage->IsCanvasPage() || pSelectedPage->IsCanvasPage();
 
                 if ((nCurrentWidth != nNewWidth || nCurrentHeight != nNewHeight) && bAllowChangeFocus)
                 {
@@ -1058,7 +1063,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
 
                     InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 
-                    // pNewPage->SetBackgroundFullSize(true);
+                    // pSelectedPage->SetBackgroundFullSize(true);
 
                     UpdateScrollBars();
 
@@ -1098,6 +1103,29 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             maTabControl->SetCurPageId(maTabControl->GetPageId(nSelectedPage));
             mpDrawView->ShowSdrPage(mpActualPage);
             GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(mpActualPage);
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                if (bChangeZoom && bAllowChangeFocus)
+                {
+                    sal_uInt16 nZoom = GetPageZoom();
+                    if (nZoom != 0)
+                    {
+                        OString aPayload = ".uno:PageZoomChange="_ostr + OString::number(nZoom);
+                        if (SfxViewShell* pViewShell = GetViewShell())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+                    }
+                }
+            }
+            else
+            {
+                const sal_uInt16 nZoom = GetPageZoom();
+                if (nZoom)
+                {
+                    const SvxZoomItem aZoomItem(SvxZoomType::PERCENT, nZoom, SID_ATTR_ZOOM);
+                    GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::SLOT, {&aZoomItem});
+                }
+            }
 
             SdrPageView* pNewPageView = mpDrawView->GetSdrPageView();
 
