@@ -276,6 +276,8 @@ public:
     SD_DLLPUBLIC virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
+    /// @see vcl::ITiledRenderable::setPageZoom().
+    virtual void setPageZoom(int nPageZoom) override;
     /// @see vcl::ITiledRenderable::setClipboard().
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) override;
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().

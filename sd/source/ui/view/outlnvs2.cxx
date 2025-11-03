@@ -79,14 +79,20 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             if ( pArgs )
             {
-                SvxZoomType eZT = pArgs->Get( SID_ATTR_ZOOM ).GetType();
+                SvxZoomItem aZoom = pArgs->Get( SID_ATTR_ZOOM );
+                SvxZoomType eZT = aZoom.GetType();
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
+                    {
                         SetZoom( static_cast<::tools::Long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
-                        break;
+                        sal_uInt16 nZoom = aZoom.GetValue();
+                        RememberPageZoom(nZoom);
+                    }
+                    break;
+
                     default:
                         break;
                 }
