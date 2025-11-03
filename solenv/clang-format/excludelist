@@ -11315,7 +11315,6 @@ svx/source/dialog/rlrcitem.cxx
 svx/source/dialog/rlrcitem.hxx
 svx/source/dialog/rulritem.cxx
 svx/source/dialog/samecontentlistbox.cxx
-svx/source/dialog/searchcharmap.cxx
 svx/source/dialog/spacinglistbox.cxx
 svx/source/dialog/srchctrl.cxx
 svx/source/dialog/srchdlg.cxx
