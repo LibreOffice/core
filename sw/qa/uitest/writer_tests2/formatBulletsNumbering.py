@@ -10,7 +10,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 
-from libreoffice.uno.propertyvalue import mkPropertyValues
+from libreoffice.uno.propertyvalue import mkPropertyValues, convert_property_values_to_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
@@ -304,5 +304,40 @@ class formatBulletsNumbering(UITestCase):
             # Without the fix in place, this test would have crashed here
             self.xUITest.executeCommand(".uno:DocumentBulletList")
 
+   def test_bullets_and_numbering_bullet_from_smp(self):
+        with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+
+            # Change the bullet to U+107B5 MODIFIER LETTER BILABIAL CLICK. This is a character
+            # outside of the basic multilingual plane which means that it can’t be stored in a
+            # single sal_Unicode variable. Verifies tdf#166488
+            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
+                # Select the BulletPage's selector
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xBulletPage = xDialog.getChild("PickBulletPage")
+                xSelector = xBulletPage.getChild("valueset")
+
+                # Select element number 1
+                xSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
+                self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "1")
+                xChangeBulletBtn = xBulletPage.getChild("changeBulletBtn")
+                with self.ui_test.execute_blocking_action(xChangeBulletBtn.executeAction, args=('CLICK', ())) as xCharSetDialog:
+                    # Select the Noto Sans font because that should contain the character
+                    xFontName = xCharSetDialog.getChild("fontlb")
+                    xFontName.executeAction("SET", mkPropertyValues({"TEXT": "Noto Sans"}))
+                    # Use the hex entry to select the character
+                    xHexText = xCharSetDialog.getChild("hexvalue")
+                    xHexText.executeAction("SET", mkPropertyValues({"TEXT": "107B5"}))
+                    # Check that the character was selected by checking the name
+                    xCharName = xCharSetDialog.getChild("charname")
+                    self.assertEqual(get_state_as_dict(xCharName)["Text"],
+                                     "MODIFIER LETTER BILABIAL CLICK")
+
+            # Check that the numbering level was updated for the paragraph in the document
+            xDocCursor = xComponent.getText().createTextCursor()
+            xNumberingRules = xDocCursor.getPropertyValue("NumberingRules")
+            xNumberingLevel = xNumberingRules.getByIndex(0)
+            self.assertEqual(convert_property_values_to_dict(xNumberingLevel)["BulletChar"],
+                             "\U000107B5")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
