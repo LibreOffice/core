@@ -1671,7 +1671,9 @@ namespace emfplushelper
                         if (mbSetTextContrast)
                         {
                             sal_uInt16 nTextContrast = std::clamp(mnTextContrast, LOWERGAMMA, UPPERGAMMA);
+                            assert(nTextContrast >= LOWERGAMMA && nTextContrast <= UPPERGAMMA);
                             const auto gammaVal = nTextContrast / 1000;
+                            assert(gammaVal != 0);
                             SAL_INFO("drawinglayer.emf", "EMF+\t Text contrast: " << gammaVal << " gamma");
                             const basegfx::BColorModifier_gamma gamma(gammaVal);
 
