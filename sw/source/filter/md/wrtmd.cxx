@@ -161,7 +161,8 @@ void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
     SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
     Graphic aGraphic;
     OUString aGraphicURL;
-    if (rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType() == SwNodeType::Grf)
+    SwNodeType eNodeType = rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType();
+    if (eNodeType == SwNodeType::Grf)
     {
         SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
         aGraphic = pGrfNode->GetGraphic();
@@ -181,7 +182,7 @@ void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
             aGraphicURL = "data:" + aGraphicInBase64;
         }
     }
-    else
+    else if (eNodeType == SwNodeType::Ole)
     {
         SwOLENode* pOLENode = rWrt.m_pDoc->GetNodes()[nStart]->GetOLENode();
         assert(pOLENode->GetGraphic());
