@@ -14,7 +14,7 @@ from uitest.uihelper.common import select_pos
 
 class autocorrectOptions(UITestCase):
 
-   def test_autocorrect_options_writer(self):
+    def test_autocorrect_options_writer(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", close_button="cancel") as xDialog:

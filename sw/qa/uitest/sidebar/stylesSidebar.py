@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class StylesSidebar(UITestCase):
 
-   def test_load_styles_from_template(self):
+    def test_load_styles_from_template(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:LoadStyles", close_button="") as xDialog:

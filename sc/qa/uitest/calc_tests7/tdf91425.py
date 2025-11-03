@@ -15,7 +15,7 @@ from libreoffice.calc.document import get_cell_by_position
 #Bug 91425 - CRASH - Calc Insert Columns Left
 
 class tdf91425(UITestCase):
-   def test_tdf91425_insert_columns_left(self):
+    def test_tdf91425_insert_columns_left(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf91425.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

@@ -13,7 +13,7 @@ import os.path
 
 class save_shared_readonly_with_password(UITestCase):
 
-   def test_save_to_shared_ods(self):
+    def test_save_to_shared_ods(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "shared_readonly_with_password_tmp.ods")

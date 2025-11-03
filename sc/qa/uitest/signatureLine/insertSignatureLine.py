@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Bug 117903 - Allow signature lines in Calc
 class insertSignatureLineCalc(UITestCase):
 
-   def test_insert_signature_line_calc(self):
+    def test_insert_signature_line_calc(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             # set the signature line
             with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:

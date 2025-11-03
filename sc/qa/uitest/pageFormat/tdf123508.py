@@ -14,33 +14,33 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 # Bug 123508 - "Fit print range(s) to width/height" value falls back to default when window closes
 class tdf123508(UITestCase):
-   def test_tdf123508_format_page_scale(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf123508.ods")):
-        #open "Format > Page - Sheet > Scale
-        with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "6")  #tab Scale
-            scalingMode = xDialog.getChild("comboLB_SCALEMODE")
-            spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
-            spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
-            #select "Shrink print range(s) to width/height"  from the scale mode drop-down list
-            select_by_text(scalingMode, "Shrink print range(s) to width/height")
-            #define a value for the page, e.g.: width   2; height  2
-            spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
-            spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())
+    def test_tdf123508_format_page_scale(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf123508.ods")):
+            #open "Format > Page - Sheet > Scale
+            with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "6")  #tab Scale
+                scalingMode = xDialog.getChild("comboLB_SCALEMODE")
+                spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
+                spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
+                #select "Shrink print range(s) to width/height"  from the scale mode drop-down list
+                select_by_text(scalingMode, "Shrink print range(s) to width/height")
+                #define a value for the page, e.g.: width   2; height  2
+                spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
+                spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())
 
 
-        #verify
-        with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog", close_button="cancel") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "6")  #tab Scale
-            scalingMode = xDialog.getChild("comboLB_SCALEMODE")
-            spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
-            spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
+            #verify
+            with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog", close_button="cancel") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "6")  #tab Scale
+                scalingMode = xDialog.getChild("comboLB_SCALEMODE")
+                spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
+                spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
 
-            self.assertEqual(get_state_as_dict(scalingMode)["SelectEntryText"], "Shrink print range(s) to width/height")
-            self.assertEqual(get_state_as_dict(spinEDSCALEPAGEWIDTH)["Text"], "2")
-            self.assertEqual(get_state_as_dict(spinEDSCALEPAGEHEIGHT)["Text"], "2")
+                self.assertEqual(get_state_as_dict(scalingMode)["SelectEntryText"], "Shrink print range(s) to width/height")
+                self.assertEqual(get_state_as_dict(spinEDSCALEPAGEWIDTH)["Text"], "2")
+                self.assertEqual(get_state_as_dict(spinEDSCALEPAGEHEIGHT)["Text"], "2")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

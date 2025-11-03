@@ -13,7 +13,7 @@ from uitest.uihelper.common import type_text
 
 class tdf123446(UITestCase):
 
-   def test_tdf123446_undo_redo_ToC_crash(self):
+    def test_tdf123446_undo_redo_ToC_crash(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

@@ -12,7 +12,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf148920(UITestCase):
 
-   def test_tdf148920(self):
+    def test_tdf148920(self):
 
         with self.ui_test.create_doc_in_start_center("writer"):
 

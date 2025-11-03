@@ -15,7 +15,7 @@ from uitest.uihelper.common import select_pos
 
 class formatCharacter(UITestCase):
 
-   def test_format_character_tab_font(self):
+    def test_format_character_tab_font(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
@@ -64,7 +64,7 @@ class formatCharacter(UITestCase):
                 xLangFontCTL = xDialog.getChild("cbCTLLanguage")
                 self.assertEqual(get_state_as_dict(xLangFontCTL)["Text"], "[None]")
 
-   def test_format_character_tab_font_effects(self):
+    def test_format_character_tab_font_effects(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
@@ -112,7 +112,7 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xEmphasis)["SelectEntryText"], "Dot")
                 self.assertEqual(get_state_as_dict(xPosition)["SelectEntryText"], "Below text")
 
-   def test_format_character_tab_asian_layout(self):
+    def test_format_character_tab_asian_layout(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
@@ -130,7 +130,7 @@ class formatCharacter(UITestCase):
 
                 self.assertEqual(get_state_as_dict(xTwolines)["Selected"], "true")
 
-   def test_format_character_tab_position(self):
+    def test_format_character_tab_position(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
@@ -177,7 +177,7 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xFitToLine)["Selected"], "true")
                 self.assertEqual(get_state_as_dict(xNoHyphenation)["Selected"], "true")
 
-   def test_format_character_tab_position_scalewidthsb(self):
+    def test_format_character_tab_position_scalewidthsb(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
@@ -194,7 +194,7 @@ class formatCharacter(UITestCase):
                 xScalewidth = xDialog.getChild("scalewidthsb")
                 self.assertEqual(get_state_as_dict(xScalewidth)["Text"], "101%")
 
-   def test_tdf161205_cjk_ctl_tab_preserved(self):
+    def test_tdf161205_cjk_ctl_tab_preserved(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:

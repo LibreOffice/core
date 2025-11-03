@@ -13,11 +13,11 @@ from uitest.uihelper.common import select_pos
 
 class tdf115573(UITestCase):
 
-   def insertTextIntoCell(self, table, cellName, text ):
+    def insertTextIntoCell(self, table, cellName, text ):
         tableText = table.getCellByName( cellName )
         tableText.setString( text )
 
-   def test_tdf115573_Table_loses_formatting_inserting_row_before(self):
+    def test_tdf115573_Table_loses_formatting_inserting_row_before(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
@@ -41,7 +41,7 @@ class tdf115573(UITestCase):
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 
-   def test_tdf115573_Table_loses_formatting_inserting_row_after(self):
+    def test_tdf115573_Table_loses_formatting_inserting_row_after(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
@@ -65,7 +65,7 @@ class tdf115573(UITestCase):
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 
-   def test_tdf115573_Table_loses_formatting_inserting_column_left(self):
+    def test_tdf115573_Table_loses_formatting_inserting_column_left(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
@@ -84,7 +84,7 @@ class tdf115573(UITestCase):
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 
-   def test_tdf115573_Table_loses_formatting_inserting_column_right(self):
+    def test_tdf115573_Table_loses_formatting_inserting_column_right(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):

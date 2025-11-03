@@ -13,7 +13,7 @@ from uitest.uihelper.common import select_pos
 
 class tdf107847(UITestCase):
 
-   def test_tdf_107847_macro_tab_crash(self):
+    def test_tdf_107847_macro_tab_crash(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:

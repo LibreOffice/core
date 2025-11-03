@@ -14,7 +14,7 @@ from uitest.uihelper.common import select_pos
 
 class autocorrectOptions(UITestCase):
 
-   def test_autocorrect_options_calc(self):
+    def test_autocorrect_options_calc(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             with self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", close_button="cancel") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")

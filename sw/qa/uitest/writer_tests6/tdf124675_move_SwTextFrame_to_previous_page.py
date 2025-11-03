@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 #Bug 124675 - CRASH: after moving the content down and undoing
 
 class tdf124675(UITestCase):
-   def test_tdf124675_crash_moving_SwTextFrame_previous_page(self):
+    def test_tdf124675_crash_moving_SwTextFrame_previous_page(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf124675.docx")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

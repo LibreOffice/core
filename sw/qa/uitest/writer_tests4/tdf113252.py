@@ -14,7 +14,7 @@ from uitest.uihelper.common import select_pos
 
 class tdf113252(UITestCase):
 
-   def test_tdf113252_macro_dialog(self):
+    def test_tdf113252_macro_dialog(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

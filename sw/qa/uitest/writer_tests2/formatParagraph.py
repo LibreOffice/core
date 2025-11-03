@@ -17,7 +17,7 @@ from uitest.uihelper.common import change_measurement_unit
 
 class formatParagraph(UITestCase):
 
-   def test_format_paragraph_tab_indents_spacing(self):
+    def test_format_paragraph_tab_indents_spacing(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -70,7 +70,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_alignment(self):
+    def test_format_paragraph_tab_alignment(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -112,7 +112,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_text_flow(self):
+    def test_format_paragraph_tab_text_flow(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -182,7 +182,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_asian_typography(self):
+    def test_format_paragraph_tab_asian_typography(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -212,7 +212,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_outline_numbering(self):
+    def test_format_paragraph_tab_outline_numbering(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -246,7 +246,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_tabs(self):
+    def test_format_paragraph_tab_tabs(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Centimeter"):
@@ -358,7 +358,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_drop_caps(self):
+    def test_format_paragraph_tab_drop_caps(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -397,7 +397,7 @@ class formatParagraph(UITestCase):
 
 
 
-   def test_format_paragraph_tab_borders(self):
+    def test_format_paragraph_tab_borders(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Centimeter"):
@@ -444,7 +444,7 @@ class formatParagraph(UITestCase):
                     self.assertEqual(get_state_as_dict(xBottom)["Text"], "0.10 cm")
 
 
-   def test_format_paragraph_area(self):
+    def test_format_paragraph_area(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
@@ -463,7 +463,7 @@ class formatParagraph(UITestCase):
                 xPattern.executeAction("CLICK", tuple())
                 xHatch.executeAction("CLICK", tuple())
 
-   def test_format_paragraph_transparency(self):
+    def test_format_paragraph_transparency(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:

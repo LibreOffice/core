@@ -12,24 +12,24 @@ from uitest.framework import UITestCase
 import re
 
 class LibreLogoCompileTest(UITestCase):
-   LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
-   LS = "#_@L_i_N_e@_#" # LibreLogo line separator for debug feature "jump to the bad LibreLogo program line"
+    LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
+    LS = "#_@L_i_N_e@_#" # LibreLogo line separator for debug feature "jump to the bad LibreLogo program line"
 
-   def createMasterScriptProviderFactory(self):
-       xServiceManager = self.xContext.ServiceManager
-       return xServiceManager.createInstanceWithContext(
-           "com.sun.star.script.provider.MasterScriptProviderFactory",
-           self.xContext)
+    def createMasterScriptProviderFactory(self):
+        xServiceManager = self.xContext.ServiceManager
+        return xServiceManager.createInstanceWithContext(
+            "com.sun.star.script.provider.MasterScriptProviderFactory",
+            self.xContext)
 
-   def getScript(self, command):
-       xMasterScriptProviderFactory = self.createMasterScriptProviderFactory()
-       document = self.ui_test.get_component()
-       xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(document)
-       xScript = xScriptProvider.getScript(self.LIBRELOGO_PATH %command)
-       self.assertIsNotNone(xScript, "xScript was not loaded")
-       return xScript
+    def getScript(self, command):
+        xMasterScriptProviderFactory = self.createMasterScriptProviderFactory()
+        document = self.ui_test.get_component()
+        xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(document)
+        xScript = xScriptProvider.getScript(self.LIBRELOGO_PATH %command)
+        self.assertIsNotNone(xScript, "xScript was not loaded")
+        return xScript
 
-   def test_compile_librelogo(self):
+    def test_compile_librelogo(self):
         # XScript interface to LibreLogo Python compiler
         xCompile = self.getScript("__compil__")
 

@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class Tdf1254400(UITestCase):
 
-   def test_tdf125440(self):
+    def test_tdf125440(self):
         # In order to simulate copy&paste from external source,
         # import the text in Writer, copy it and paste it in Calc
         with self.ui_test.load_file(get_url_for_data_file("tdf125440.odt")):

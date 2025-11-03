@@ -15,7 +15,7 @@ import platform
 
 class Tdf95554(UITestCase):
 
-   def test_tdf95554(self):
+    def test_tdf95554(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

@@ -12,13 +12,13 @@ from uitest.uihelper.common import get_url_for_data_file
 # Bug 124896 - CRASH: deleting sheet
 
 class tdf124896(UITestCase):
-   def test_tdf124896_crash_delete_sheet(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf124896.ods")) as calc_doc:
-        # Remove X Bar R Chart (2) sheet
-        with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
-            pass
+    def test_tdf124896_crash_delete_sheet(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf124896.ods")) as calc_doc:
+            # Remove X Bar R Chart (2) sheet
+            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
+                pass
 
-        #verify; no crashes
-        self.assertEqual(len(calc_doc.Sheets), 2)
+            #verify; no crashes
+            self.assertEqual(len(calc_doc.Sheets), 2)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

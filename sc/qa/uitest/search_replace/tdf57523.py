@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf57523(UITestCase):
 
-   def test_tdf57523(self):
+    def test_tdf57523(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

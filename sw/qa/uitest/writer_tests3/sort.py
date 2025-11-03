@@ -14,7 +14,7 @@ from uitest.uihelper.common import type_text
 
 class WriterSort(UITestCase):
 
-   def test_sort(self):
+    def test_sort(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -34,7 +34,7 @@ class WriterSort(UITestCase):
             self.assertEqual(document.Text.String[0:1], "v")
 
 
-   def test_sort_numerical(self):
+    def test_sort_numerical(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

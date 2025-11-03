@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf126168(UITestCase):
 
-   def test_tdf126168_frame_undo_redo_crash(self):
+    def test_tdf126168_frame_undo_redo_crash(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
             #2) Menu > Insert > Frame > Frame

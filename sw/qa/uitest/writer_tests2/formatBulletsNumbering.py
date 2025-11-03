@@ -17,7 +17,7 @@ from uitest.uihelper.common import change_measurement_unit
 
 class formatBulletsNumbering(UITestCase):
 
-   def test_bullets_and_numbering_change_bullet(self):
+    def test_bullets_and_numbering_change_bullet(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             # Set the "black down-pointing triangle" bullet in the third item
@@ -56,7 +56,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(get_state_as_dict(xDecText)["Text"], "9660")
 
 
-   def test_bullets_and_numbering_dialog_tab_position(self):
+    def test_bullets_and_numbering_dialog_tab_position(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Millimeter"):
@@ -90,7 +90,7 @@ class formatBulletsNumbering(UITestCase):
 
 
 
-   def test_bullets_and_numbering_dialog_tab_position2(self):
+    def test_bullets_and_numbering_dialog_tab_position2(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
@@ -108,7 +108,7 @@ class formatBulletsNumbering(UITestCase):
 
 
 
-   def test_bullets_and_numbering_dialog_tab_customize(self):
+    def test_bullets_and_numbering_dialog_tab_customize(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
@@ -170,7 +170,7 @@ class formatBulletsNumbering(UITestCase):
 
 
 
-   def test_bullets_and_numbering_tab_move(self):
+    def test_bullets_and_numbering_tab_move(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Millimeter"):
@@ -201,7 +201,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(indentValue == indentValue3 , True)
 
 
-   def test_bullets_and_numbering_button_move(self):
+    def test_bullets_and_numbering_button_move(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Millimeter"):
@@ -230,7 +230,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(indentValue == indentValue3 , True)
 
 
-   def test_bullets_and_numbering_selection(self):
+    def test_bullets_and_numbering_selection(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             # Test Bullet Page
@@ -298,13 +298,13 @@ class formatBulletsNumbering(UITestCase):
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "23")
 
 
-   def test_bullets_and_numbering_document_bullet_list(self):
+    def test_bullets_and_numbering_document_bullet_list(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             self.xUITest.executeCommand(".uno:DefaultBullet")
             # Without the fix in place, this test would have crashed here
             self.xUITest.executeCommand(".uno:DocumentBulletList")
 
-   def test_bullets_and_numbering_bullet_from_smp(self):
+    def test_bullets_and_numbering_bullet_from_smp(self):
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
 
             # Change the bullet to U+1F431 CAT FACE. This is a character outside of the basic

@@ -17,7 +17,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 119954 - Using a second defined database range in formula expression switches to first range.
 class tdf119954(UITestCase):
-   def test_tdf119954_second_db_range(self):
+    def test_tdf119954_second_db_range(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf119954.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 35020 - Find and Replace changes case of sheet name in formulas
 class tdf35020(UITestCase):
-   def test_tdf39959_find_replace_all_sheets(self):
+    def test_tdf39959_find_replace_all_sheets(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf35020.ods")) as calc_doc:
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")

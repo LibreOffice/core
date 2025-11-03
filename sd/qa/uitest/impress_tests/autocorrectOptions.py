@@ -15,7 +15,7 @@ from uitest.uihelper.common import select_pos
 
 class autocorrectOptions(UITestCase):
 
-   def test_autocorrect_options_impress(self):
+    def test_autocorrect_options_impress(self):
         with self.ui_test.create_doc_in_start_center("impress"):
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

@@ -12,7 +12,7 @@ from uitest.uihelper.common import type_text
 
 class insertEndnote(UITestCase):
 
-   def test_insert_endnote(self):
+    def test_insert_endnote(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

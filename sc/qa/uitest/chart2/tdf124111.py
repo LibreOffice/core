@@ -15,39 +15,39 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 124111 - Cannot enter negative number for cross other axis at value
 class tdf124111(UITestCase):
-   def test_tdf124111_chart_x_negative_cross(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf124111.ods")):
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+    def test_tdf124111_chart_x_negative_cross(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf124111.ods")):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-        gridwin.executeAction("ACTIVATE", tuple())
-        xChartMainTop = self.xUITest.getTopFocusWindow()
-        xChartMain = xChartMainTop.getChild("chart_window")
-        xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
-            #Click on tab "positioning".
-            tabcontrol = xDialog.getChild("tabcontrol")
-            select_pos(tabcontrol, "1")
+            gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+            gridwin.executeAction("ACTIVATE", tuple())
+            xChartMainTop = self.xUITest.getTopFocusWindow()
+            xChartMain = xChartMainTop.getChild("chart_window")
+            xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+            with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
+                #Click on tab "positioning".
+                tabcontrol = xDialog.getChild("tabcontrol")
+                select_pos(tabcontrol, "1")
 
-            crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
-            crossAxisValue.executeAction("DOWN", tuple())  #-1
+                crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
+                crossAxisValue.executeAction("DOWN", tuple())  #-1
 
-        #reopen and verify tab "positioning".
-        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-        gridwin.executeAction("ACTIVATE", tuple())
-        xChartMainTop = self.xUITest.getTopFocusWindow()
-        xChartMain = xChartMainTop.getChild("chart_window")
-        xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
+            #reopen and verify tab "positioning".
+            gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+            gridwin.executeAction("ACTIVATE", tuple())
+            xChartMainTop = self.xUITest.getTopFocusWindow()
+            xChartMain = xChartMainTop.getChild("chart_window")
+            xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+            with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
 
-            tabcontrol = xDialog.getChild("tabcontrol")
-            select_pos(tabcontrol, "1")
+                tabcontrol = xDialog.getChild("tabcontrol")
+                select_pos(tabcontrol, "1")
 
-            crossAxis = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
-            crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
+                crossAxis = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
+                crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
 
-            self.assertEqual(get_state_as_dict(crossAxis)["SelectEntryText"], "Value")
-            self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "-1")
+                self.assertEqual(get_state_as_dict(crossAxis)["SelectEntryText"], "Value")
+                self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "-1")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

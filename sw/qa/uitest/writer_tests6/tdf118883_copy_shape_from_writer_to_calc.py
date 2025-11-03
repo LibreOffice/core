@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class Tdf118883(UITestCase):
 
-   def test_tdf118883(self):
+    def test_tdf118883(self):
         with self.ui_test.create_doc_in_start_center("writer") as writer_document:
 
             # Insert shape with Ctrl key

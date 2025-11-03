@@ -15,7 +15,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class scenarios(UITestCase):
 
-   def test_scenarios(self):
+    def test_scenarios(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")

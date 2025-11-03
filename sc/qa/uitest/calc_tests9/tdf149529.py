@@ -14,7 +14,7 @@ from libreoffice.calc.document import get_cell_by_position
 
 class Tdf149529(UITestCase):
 
-   def test_tdf149529(self):
+    def test_tdf149529(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
 
             with self.ui_test.execute_dialog_through_command(".uno:Insert") as xDialog:

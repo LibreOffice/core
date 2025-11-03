@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 89383 - Read-only passwords on OOXML files are not working
 
 class tdf89383(UITestCase):
-   def test_tdf89383_DOCX(self):
+    def test_tdf89383_DOCX(self):
         with self.ui_test.load_file(get_url_for_data_file("writeprotection.docx")):
             document = self.ui_test.get_component()
 

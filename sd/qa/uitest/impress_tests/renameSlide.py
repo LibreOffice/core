@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class renameSlide(UITestCase):
 
-   def test_rename_slide(self):
+    def test_rename_slide(self):
         with self.ui_test.create_doc_in_start_center("impress"):
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
