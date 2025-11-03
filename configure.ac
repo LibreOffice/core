@@ -2555,6 +2555,11 @@ AC_ARG_WITH(system-abseil,
         [Use the abseil libraries already on system.]),,
     [with_system_abseil="$with_system_libs"])
 
+AC_ARG_WITH(system-afdko,
+    AS_HELP_STRING([--with-system-afdko],
+        [Use system AKDKO (only needed for pdfium based PDF import.)]),,
+    [with_system_afdko="$with_system_libs"])
+
 AC_ARG_WITH(system-openjpeg,
     AS_HELP_STRING([--with-system-openjpeg],
         [Use the OpenJPEG library already on system.]),,
@@ -12946,8 +12951,32 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
     # Only used by the pdf import code that uses pdfium
     # which doesn't currently have --with-system support
     if test "$ENABLE_PDFIMPORT" = "TRUE"; then
-        BUILD_TYPE="$BUILD_TYPE AFDKO"
         AC_DEFINE(HAVE_FEATURE_AFDKO)
+        AC_MSG_CHECKING([which AFDKO to use])
+        if test "$with_system_afdko" = "yes"; then
+            SYSTEM_AFDKO=TRUE
+            AC_MSG_RESULT([external])
+            AC_PATH_PROGS(TX, tx)
+            if test -z "$TX"; then
+                AC_MSG_ERROR([install 'tx' from Adobe Font Development Kit for OpenType (AFDKO)])
+            fi
+            AC_PATH_PROGS(MAKEOTF, makeotfexe makeotf)
+            if test -z "$MAKEOTF"; then
+                AC_MSG_ERROR([install 'makeotf' from Adobe Font Development Kit for OpenType (AFDKO)])
+            fi
+            AC_PATH_PROGS(MERGEFONTS, mergefonts)
+            if test -z "$MERGEFONTS"; then
+                AC_MSG_ERROR([install 'mergefonts' from Adobe Font Development Kit for OpenType (AFDKO)])
+            fi
+            AC_DEFINE(USE_AFDKO_PROGRAMS)
+            AC_DEFINE_UNQUOTED(TX,"$TX")
+            AC_DEFINE_UNQUOTED(MAKEOTF,"$MAKEOTF")
+            AC_DEFINE_UNQUOTED(MERGEFONTS,"$MERGEFONTS")
+        else
+            AC_MSG_RESULT([internal])
+            BUILD_TYPE="$BUILD_TYPE AFDKO"
+        fi
+        AC_SUBST(SYSTEM_AFDKO)
     fi
 fi
 AC_SUBST(SYSTEM_OPENJPEG2)
@@ -16229,6 +16258,7 @@ AC_CONFIG_FILES([vs-code.code-workspace.template:.vscode/vs-code-template.code-w
                -e '/defaultProfile/s#Cygwin#Git Bash#' vs-code.code-workspace.template
     fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
 
+AC_CONFIG_HEADERS([config_host/config_afdko.h])
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
 AC_CONFIG_HEADERS([config_host/config_buildconfig.h])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])

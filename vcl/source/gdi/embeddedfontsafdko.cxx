@@ -16,12 +16,13 @@
 #include <sal/config.h>
 
 #include <config_features.h>
+#include <config_afdko.h>
 
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
 
-#if HAVE_FEATURE_AFDKO
+#if HAVE_FEATURE_AFDKO && !USE_AFDKO_PROGRAMS
 
 #include "afdko.hxx"
 
@@ -103,6 +104,14 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
         return false;
     }
 
+    OString srcFontPathA(srcFontPath.toUtf8());
+    OString destFilePathA(destFilePath.toUtf8());
+    OString txCommand = TX " -dump " + srcFontPathA + " " + destFilePathA;
+    SAL_INFO("vcl.fonts", txCommand);
+
+#if USE_AFDKO_PROGRAMS
+    return system(txCommand.getStr()) == 0;
+#else
     txCtx h = txNew(nullptr);
     if (!h)
         return false;
@@ -110,11 +119,6 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
     // to intercept what would otherwise be a fatal error
     h->appSpecificFree = txFatalCallback;
     suppressDebugMessagess(h);
-
-    OString srcFontPathA(srcFontPath.toUtf8());
-    OString destFilePathA(destFilePath.toUtf8());
-
-    SAL_INFO("vcl.fonts", "tx -dump " << srcFontPathA << " " << destFilePathA);
 
     h->src.stm.filename = const_cast<char*>(srcFontPathA.getStr());
     h->dst.stm.filename = const_cast<char*>(destFilePathA.getStr());
@@ -128,6 +132,7 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
     {
         SAL_WARN("vcl.fonts", "tx failure: " << e.what());
     }
+#endif
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
@@ -148,6 +153,13 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
         return false;
     }
 
+    OString srcFontPathA(srcFontPath.toUtf8());
+    OString destFilePathA(destFilePath.toUtf8());
+    OString txCommand = TX " -t1 " + srcFontPathA + " " + destFilePathA;
+    SAL_INFO("vcl.fonts", txCommand);
+#if USE_AFDKO_PROGRAMS
+    return system(txCommand.getStr()) == 0;
+#else
     txCtx h = txNew(nullptr);
     if (!h)
         return false;
@@ -158,9 +170,7 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
 
     setMode(h, mode_t1);
 
-    OString srcFontPathA(srcFontPath.toUtf8());
     h->src.stm.filename = const_cast<char*>(srcFontPathA.getStr());
-    OString destFilePathA(destFilePath.toUtf8());
     h->dst.stm.filename = const_cast<char*>(destFilePathA.getStr());
     try
     {
@@ -172,6 +182,7 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     {
         SAL_WARN("vcl.fonts", "tx failure: " << e.what());
     }
+#endif
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
@@ -179,7 +190,7 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
     return false;
 }
 
-#if HAVE_FEATURE_AFDKO
+#if HAVE_FEATURE_AFDKO && !USE_AFDKO_PROGRAMS
 static void mergeFontsFatalCallback(txCtx h)
 {
     mergeFontsFree(h);
@@ -219,6 +230,20 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
         paths.push_back(mergeFontFilePath.toUtf8());
     }
 
+    OString cidFontInfoPathA(cidFontInfoPath.toUtf8());
+    OString destFilePathA(destFilePath.toUtf8());
+
+    OStringBuffer aBuffer;
+    for (const auto& path : paths)
+        aBuffer.append(" "_ostr + path);
+    OString mergeFontsCommand
+        = MERGEFONTS " -cid  " + cidFontInfoPathA + " " + destFilePathA + aBuffer;
+    SAL_INFO("vcl.fonts", mergeFontsCommand);
+
+#if USE_AFDKO_PROGRAMS
+    if (system(mergeFontsCommand.getStr()) != 0)
+        return false;
+#else
     txCtx h = mergeFontsNew(nullptr);
     if (!h)
         return false;
@@ -226,15 +251,6 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     // to intercept what would otherwise be a fatal error
     h->appSpecificFree = mergeFontsFatalCallback;
     suppressDebugMessagess(h);
-
-    OString cidFontInfoPathA(cidFontInfoPath.toUtf8());
-    OString destFilePathA(destFilePath.toUtf8());
-
-    OStringBuffer aBuffer;
-    for (const auto& path : paths)
-        aBuffer.append(" "_ostr + path);
-    SAL_INFO("vcl.fonts",
-             "mergefonts -cid " << cidFontInfoPathA << " " << destFilePathA << aBuffer.toString());
 
     try
     {
@@ -255,24 +271,40 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
         size_t resultarg = doMergeFileSet(h, args.size(), args.data(), 0);
         SAL_WARN_IF(resultarg != args.size() - 1, "vcl.fonts",
                     "suspicious doMergeFileSet result of: " << resultarg);
-
-        // convert that merged cid result to Type 1
-        h->src.stm.filename = const_cast<char*>(destFilePathA.getStr());
-        OString tmpdestfile = destFilePathA + ".temp";
-        h->dst.stm.filename = const_cast<char*>(tmpdestfile.getStr());
-        setMode(h, mode_t1);
-        bool result = convertTx(h);
-        mergeFontsFree(h);
-
-        remove(destFilePathA.getStr());
-        rename(tmpdestfile.getStr(), destFilePathA.getStr());
-
-        return result;
     }
     catch (const std::exception& e)
     {
         SAL_WARN("vcl.fonts", "mergeFonts failure: " << e.what());
     }
+#endif
+
+    // convert that merged cid result to Type 1
+    bool result = false;
+    OString tmpdestfile = destFilePathA + ".temp";
+
+    OString txCommand = TX " -t1 " + destFilePathA + " " + tmpdestfile;
+    SAL_INFO("vcl.fonts", txCommand);
+#if USE_AFDKO_PROGRAMS
+    result = system(mergeFontsCommand.getStr()) == 0;
+#else
+    try
+    {
+        h->src.stm.filename = const_cast<char*>(destFilePathA.getStr());
+        h->dst.stm.filename = const_cast<char*>(tmpdestfile.getStr());
+        setMode(h, mode_t1);
+        result = convertTx(h);
+        mergeFontsFree(h);
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.fonts", "mergeFonts failure: " << e.what());
+    }
+#endif
+
+    remove(destFilePathA.getStr());
+    rename(tmpdestfile.getStr(), destFilePathA.getStr());
+
+    return result;
 #else
     (void)cidFontInfoUrl;
     (void)destFileUrl;
@@ -281,7 +313,7 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     return false;
 }
 
-#if HAVE_FEATURE_AFDKO
+#if HAVE_FEATURE_AFDKO && !USE_AFDKO_PROGRAMS
 static void* cb_memory(ctlMemoryCallbacks* /*cb*/, void* old, size_t size)
 {
     if (size == 0)
@@ -333,24 +365,29 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
         return false;
     }
 
-    ctlMemoryCallbacks cb_dna_memcb{ nullptr, cb_memory };
-    dnaCtx mainDnaCtx = dnaNew(&cb_dna_memcb, DNA_CHECK_ARGS);
-
-    cbCtx cbctx
-        = cbNew(nullptr, const_cast<char*>(""), const_cast<char*>(""), const_cast<char*>(""),
-                const_cast<char*>(""), mainDnaCtx, makeOtfFatalCallback);
-
     OString fontMenuNameDBPathA(fontMenuNameDBPath.toUtf8());
     OString srcFontPathA(srcFontPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
     OString charMapPathA(charMapPath.toUtf8());
     OString featuresPathA(featuresPath.toUtf8());
 
-    SAL_INFO(
-        "vcl.fonts", "makeotf -nshw -mf "
-                         << fontMenuNameDBPathA << " -f " << srcFontPathA << " -o " << destFilePathA
-                         << (!charMapPathA.isEmpty() ? " -ch "_ostr + charMapPathA : OString())
-                         << (!featuresPathA.isEmpty() ? " -ff "_ostr + featuresPathA : OString()));
+    OString makeotfCommand = MAKEOTF " -nshw -mf " + fontMenuNameDBPathA + " -f " + srcFontPathA
+                             + " -o " + destFilePathA;
+    if (!charMapPathA.isEmpty())
+        makeotfCommand += " -ch "_ostr + charMapPathA;
+    if (!featuresPathA.isEmpty())
+        makeotfCommand += " -ff "_ostr + featuresPathA;
+    SAL_INFO("vcl.fonts", makeotfCommand);
+
+#if USE_AFDKO_PROGRAMS
+    return system(makeotfCommand.getStr()) == 0;
+#else
+    ctlMemoryCallbacks cb_dna_memcb{ nullptr, cb_memory };
+    dnaCtx mainDnaCtx = dnaNew(&cb_dna_memcb, DNA_CHECK_ARGS);
+
+    cbCtx cbctx
+        = cbNew(nullptr, const_cast<char*>(""), const_cast<char*>(""), const_cast<char*>(""),
+                const_cast<char*>(""), mainDnaCtx, makeOtfFatalCallback);
 
     ret = true;
     try
@@ -378,6 +415,7 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     }
 
     cbFree(cbctx);
+#endif
 #else
     (void)srcFontUrl;
     (void)destFileUrl;

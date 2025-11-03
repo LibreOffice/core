@@ -4317,6 +4317,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
        pdfium \
 ))
 
+ifneq ($(SYSTEM_AFDKO),)
+
+else # !SYSTEM_AFDKO
+
 define gb_LinkTarget__use_afdko
 $(call gb_LinkTarget_use_unpacked,$(1),afdko)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -4326,16 +4330,14 @@ $(call gb_LinkTarget_set_include,$(1),\
        -I$(gb_UnpackedTarball_workdir)/afdko/c/makeotf/source \
        $$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	afdko \
-)
-
+$(call gb_LinkTarget_use_static_libraries,$(1),afdko)
 endef
 
 define gb_ExternalProject__use_afdko
 $(call gb_ExternalProject_use_static_libraries,$(1),afdko)
-
 endef
+
+endif
 
 endif
 
