@@ -14,7 +14,7 @@ $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \
 	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
-	$(if $(ENABLE_SQLITE3),sqlite3) \
+	$(call gb_Helper_optional,SQLITE3,sqlite3) \
 	zlib \
 ))
 

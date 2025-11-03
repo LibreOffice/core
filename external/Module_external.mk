@@ -96,7 +96,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,REVENGE,librevenge) \
 	$(call gb_Helper_optional,RHINO,rhino) \
 	$(call gb_Helper_optional,SKIA,skia) \
-	$(if $(ENABLE_SQLITE3),sqlite3) \
+	$(call gb_Helper_optional,SQLITE3,sqlite3) \
 	$(call gb_Helper_optional,STAROFFICE,libstaroffice) \
 	$(if $(filter WNT,$(OS)),twain_dsm) \
 	$(call gb_Helper_optional,VISIO,libvisio) \

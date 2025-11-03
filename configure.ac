@@ -6337,7 +6337,6 @@ if test "$cross_compiling" = "yes"; then
         REPORTBUILDER
         SCRIPTING
         SKIA
-        SQLITE3
         ZLIB
         ZSTD
         ZXCVBN
@@ -14481,12 +14480,10 @@ AC_SUBST(BZIP2_LIBS)
 dnl ===================================================================
 dnl Test whether we need sqlite3
 dnl ===================================================================
-ENABLE_SQLITE3=
 if test "$_os" != "Darwin" -a $enable_python = internal; then
-    ENABLE_SQLITE3="TRUE"
+    BUILD_TYPE="$BUILD_TYPE SQLITE3"
     libo_CHECK_SYSTEM_MODULE([sqlite3], [SQLITE3], [sqlite3])
 fi
-AC_SUBST(ENABLE_SQLITE3)
 
 dnl ===================================================================
 dnl Test whether to enable extension update

@@ -11,6 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,sqlite3))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,sqlite3,$(SQLITE3_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,sqlite3,0))
-
 # vim: set noet sw=4 ts=4:
