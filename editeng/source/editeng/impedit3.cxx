@@ -4675,7 +4675,8 @@ OUString ImpEditEngine::convertDigits(std::u16string_view rString, sal_Int32 nSt
     {
         sal_Unicode cChar = aBuf[nIdx];
         if (cChar >= '0' && cChar <= '9')
-            aBuf[nIdx] = GetLocalizedChar(cChar, eDigitLang);
+            // TODO: are the localized digit surrogates?
+            aBuf[nIdx] = static_cast<sal_Unicode>(GetLocalizedChar(cChar, eDigitLang));
     }
     return aBuf.makeStringAndClear();
 }

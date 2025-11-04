@@ -224,7 +224,8 @@ namespace
         {
             sal_Unicode nChar = aBuf[i];
             if (nChar >= '0' && nChar <= '9')
-                aBuf[i] = GetLocalizedChar(nChar, eTextLanguage);
+                // TODO: are the localized digit surrogates?
+                aBuf[i] = static_cast<sal_Unicode>(GetLocalizedChar(nChar, eTextLanguage));
         }
         return aBuf.makeStringAndClear();
     }

@@ -1460,7 +1460,8 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             sal_UCS4 cBullet = rFormat.GetBulletChar();
 
             //BulletId
-            nINT16 = cBullet;
+            // TODO what happens if this is a surrogate pair?
+            nINT16 = static_cast<sal_uInt16>(cBullet);
             aPropertyValues.push_back(comphelper::makePropertyValue(u"BulletId"_ustr, nINT16));
 
             const std::optional<vcl::Font>& pFont = rFormat.GetBulletFont();

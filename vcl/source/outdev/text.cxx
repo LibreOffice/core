@@ -1011,7 +1011,7 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                     if (!xTmpStr)
                         xTmpStr = OUStringBuffer(rStr);
                     // TODO: are the localized digit surrogates?
-                    (*xTmpStr)[pStr - pBase] = cChar;
+                    (*xTmpStr)[pStr - pBase] = static_cast<sal_Unicode>(cChar);
                 }
             }
         }

@@ -32,13 +32,13 @@ void VclFontCharMapTest::testDefaultFontCharMap()
 
     CPPUNIT_ASSERT(xfcmap->IsDefaultMap());
 
-    sal_uInt32 nStartBMPPlane = xfcmap->GetFirstChar();
-    sal_uInt32 nStartSupBMPPlane = xfcmap->GetNextChar(0xD800);
-    sal_uInt32 nEndBMPPlane = xfcmap->GetLastChar();
+    sal_UCS4 nStartBMPPlane = xfcmap->GetFirstChar();
+    sal_UCS4 nStartSupBMPPlane = xfcmap->GetNextChar(0xD800);
+    sal_UCS4 nEndBMPPlane = xfcmap->GetLastChar();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x0020), nStartBMPPlane);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0xE000), nStartSupBMPPlane);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0xFFF0 - 1), nEndBMPPlane);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_UCS4>(0x0020), nStartBMPPlane);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_UCS4>(0xE000), nStartSupBMPPlane);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_UCS4>(0xFFF0 - 1), nEndBMPPlane);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontCharMapTest);
