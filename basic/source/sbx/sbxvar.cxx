@@ -233,14 +233,15 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     }
     aTmp.append("(");
 
-    for (SbxParams::const_iterator iter = pInfo->m_Params.begin(); iter != pInfo->m_Params.end(); ++iter)
+    bool first = true;
+    for (auto const& i : pInfo->m_Params)
     {
-        auto const& i = *iter;
         int nt = i->eType & 0x0FFF;
-        if (iter != pInfo->m_Params.begin())
+        if (!first)
         {
             aTmp.append(",");
         }
+        first = false;
         if( i->nFlags & SbxFlagBits::Optional )
         {
             aTmp.append( GetSbxRes( StringId::Optional ) );
