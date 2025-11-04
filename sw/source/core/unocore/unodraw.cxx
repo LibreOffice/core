@@ -1135,6 +1135,17 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     throw uno::RuntimeException();
                 }
 
+                if (SwStartNode const*const pFly{pInternalPam->GetPoint()->GetNode().FindFlyStartNode()})
+                {
+                    if (SwFrameFormat const*const pTextBox{SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT)})
+                    {
+                        if (pFly == &pTextBox->GetContent().GetContentIdx()->GetNode())
+                        {
+                            throw lang::IllegalArgumentException(u"cannot anchor object to itself"_ustr, nullptr, 1);
+                        }
+                    }
+                }
+
                 if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                 {
                     //delete old SwFormatFlyCnt
