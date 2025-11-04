@@ -1754,12 +1754,16 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             // display any dialog yet, so call into a function in
             // CODA.cpp.
             typedef void (*ofd_t)(const std::wstring& suggestedURI, std::string& result);
-            ofd_t ofd = (ofd_t)GetProcAddress(GetModuleHandle(NULL), "output_file_dialog_from_core");
-            std::string newURI;
-            (*ofd)(std::wstring(o3tl::toW(aFileName)), newURI);
-            if (newURI == "")
-                return false;
-            aFileName = OUString::fromUtf8(newURI.c_str());
+            // Use mangled name to catch changes in parameters...
+            ofd_t ofd = (ofd_t)GetProcAddress(GetModuleHandle(NULL), "?output_file_dialog_from_core@@YAXAEBV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@AEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z");
+            if (ofd != NULL)
+            {
+                std::string newURI;
+                (*ofd)(std::wstring(o3tl::toW(aFileName)), newURI);
+                if (newURI == "")
+                    return false;
+                aFileName = OUString::fromUtf8(newURI.c_str());
+            }
         }
 #endif
 
