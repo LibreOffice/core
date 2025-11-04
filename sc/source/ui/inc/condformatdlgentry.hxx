@@ -74,6 +74,7 @@ public:
     virtual ~ScCondFrmtEntry();
 
     void Show() { mxGrid->show(); }
+    weld::ComboBox& GetTypeComboBox() { return *mxLbType; }
 
     void set_grid_top_attach(int nAttach);
     int get_preferred_height() const { return mxBorder->get_preferred_size().Height(); }
