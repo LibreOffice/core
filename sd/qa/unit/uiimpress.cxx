@@ -2082,6 +2082,54 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)
                          xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
+{
+    // Given a document with a shape, 2nd paragraph is a numbering:
+    createSdImpressDoc("odp/num-to-bullet.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pShape = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    // When turning the numbering to a bullet:
+    // Start text edit:
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeString(pImpressDocument, u"x");
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    // Do the switch:
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    // End text edit:
+    typeKey(pImpressDocument, KEY_ESCAPE);
+
+    // Then make sure we switch to a bullet and not toggle off the numbering:
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(1, xShape),
+                                                   uno::UNO_QUERY);
+    // Check that list level is 1 & level 1 numbering type is a bullet:
+    sal_Int16 nNumberingLevel{};
+    xParagraph->getPropertyValue(u"NumberingLevel"_ustr) >>= nNumberingLevel;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. list level was -1 (toggle off) instead of switch to bullet.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
+    uno::Reference<container::XIndexAccess> xNumberingRules;
+    xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+    comphelper::SequenceAsHashMap aNumberingRule(xNumberingRules->getByIndex(1));
+    sal_Int16 nNumberingType = 0;
+    aNumberingRule[u"NumberingType"_ustr] >>= nNumberingType;
+    // Bullet and not numbering (ARABIC):
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHAR_SPECIAL, nNumberingType);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
