@@ -93,6 +93,7 @@ constexpr OUString szOldManagerStream = u"BasicManager"_ustr;
 constexpr OUString szManagerStream = u"BasicManager2"_ustr;
 constexpr OUString szImbedded = u"LIBIMBEDDED"_ustr;
 constexpr OString szCryptingKey = "CryptedBasic"_ostr;
+constexpr sal_Int32 DEFAULT_STREAM_BUFFER_SIZE = 1024;
 
 
 const StreamMode eStreamReadMode = StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL;
@@ -651,7 +652,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, std::u16string_view r
         }
     }
 
-    xManagerStream->SetBufferSize( 1024 );
+    xManagerStream->SetBufferSize( DEFAULT_STREAM_BUFFER_SIZE );
     xManagerStream->Seek( STREAM_SEEK_TO_BEGIN );
 
     sal_uInt32 nEndPos;
@@ -729,7 +730,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         return;
     }
 
-    xManagerStream->SetBufferSize( 1024 );
+    xManagerStream->SetBufferSize( DEFAULT_STREAM_BUFFER_SIZE );
     xManagerStream->Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt32 nBasicStartOff, nBasicEndOff;
     xManagerStream->ReadUInt32( nBasicStartOff );
@@ -880,7 +881,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
                 {
                     pLibInfo->SetLib( new StarBASIC( GetStdLib(), mbDocMgr ) );
                 }
-                xBasicStream->SetBufferSize( 1024 );
+                xBasicStream->SetBufferSize( DEFAULT_STREAM_BUFFER_SIZE );
                 xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
                 bLoaded = ImplLoadBasic( *xBasicStream, pLibInfo->GetLibRef() );
                 xBasicStream->SetBufferSize( 0 );
