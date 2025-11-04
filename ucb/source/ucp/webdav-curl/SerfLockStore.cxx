@@ -46,7 +46,11 @@ public:
         : Thread( "WebDavTickerThread" ), m_bFinish( false ),
           m_rLockStore( rLockStore ) {}
 
-    void finish() { m_bFinish = true; }
+    void finish()
+    {
+        m_bFinish = true;
+        m_rLockStore.m_aCondition.notify_all(); // Wake up the TickerThread
+    }
 
 private:
 
