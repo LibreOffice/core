@@ -259,6 +259,12 @@ public:
                                  sal_Int16 const* pTimeZoneOffset,
                                    bool bAddTimeIf0AM = false );
 
+    /** convert util::DateTime to XMLSchema-2 "date" or "dateTime" string */
+    static void convertDateTime( OStringBuffer& rBuffer,
+                                const css::util::DateTime& rDateTime,
+                                 sal_Int16 const* pTimeZoneOffset,
+                                   bool bAddTimeIf0AM = false );
+
     /** convert util::DateTime to XMLSchema-2 "time" or "dateTime" string */
     static void convertTimeOrDateTime(OUStringBuffer& rBuffer,
                             const css::util::DateTime& rDateTime);
