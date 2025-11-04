@@ -6342,6 +6342,7 @@ if test "$cross_compiling" = "yes"; then
         REPORTBUILDER
         SCRIPTING
         SKIA
+        SQLITE3
         ZLIB
         ZSTD
         ZXCVBN
