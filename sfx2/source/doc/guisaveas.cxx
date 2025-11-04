@@ -107,6 +107,7 @@
 #include <vcl/abstdlg.hxx>
 
 #ifdef _WIN32
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <Shlobj.h>
 #ifdef GetTempPath
 #undef GetTempPath
@@ -1717,6 +1718,22 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     {
         OUString aFileName;
         aFileNameIter->second >>= aFileName;
+#ifdef _WIN32
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // FIXME: Horrible hack. In CODA-W, we didn't actually
+            // display any dialog yet, so call into a function in
+            // CODA.cpp.
+            typedef void (*ofd_t)(const std::wstring& suggestedURI, std::string& result);
+            ofd_t ofd = (ofd_t)GetProcAddress(GetModuleHandle(NULL), "output_file_dialog_from_core");
+            std::string newURI;
+            (*ofd)(std::wstring(o3tl::toW(aFileName)), newURI);
+            if (newURI == "")
+                return false;
+            aFileName = OUString::fromUtf8(newURI.c_str());
+        }
+#endif
+
         aURL.SetURL( aFileName );
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
 
