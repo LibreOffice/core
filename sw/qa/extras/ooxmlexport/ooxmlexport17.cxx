@@ -976,7 +976,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 #if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
-    loadAndReload("tdf146955.odt");
+    auto const url{createFileURL(u"tdf146955.odt")};
+    std::cout << url << ":\n";
+    loadFromURL(url, nullptr);
+    save(mpFilter, nullptr);
+    std::cout << maTempFile.GetURL() << ":\n";
+    loadFromURL(maTempFile.GetURL(), nullptr);
     // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
     // when the code tried to access to a non-existent footnote
     uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
