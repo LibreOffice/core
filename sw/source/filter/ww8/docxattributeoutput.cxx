@@ -3609,7 +3609,10 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     }
 
     if ( m_oFontSize )
+    {
         m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), OString::number(*m_oFontSize));
+        m_oFontSize.reset();
+    }
 
     if ( m_pColorAttrList.is() )
     {
