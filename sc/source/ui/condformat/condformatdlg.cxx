@@ -264,6 +264,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
     if(itr == maEntries.end())
         return;
 
+    const bool bFocused = pBox->has_focus();
     sal_Int32 nPos = pBox->get_active();
     switch(nPos)
     {
@@ -314,6 +315,10 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
             break;
 
     }
+
+    if (bFocused)
+        (*itr)->GetTypeComboBox().grab_focus();
+
     Thaw();
     RecalcAll();
 }
