@@ -424,7 +424,13 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                 }
 
                 if (!bMasterPage)
-                    pOLV->ToggleBullets();
+                {
+                    // Set all levels of the list, so later increase/decrease of the list level
+                    // works, too.
+                    SfxUInt16Item aItem(FN_SVX_SET_BULLET, sal_uInt16(0xFFFF));
+                    mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                        FN_SVX_SET_BULLET, SfxCallMode::RECORD, { &aItem });
+                }
                 else
                 {
                     //Resolves: fdo#78151 in master pages if we toggle bullets on
