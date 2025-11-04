@@ -275,6 +275,10 @@ bool isAllowlistedLanguage(const OUString& lang)
             }
             std::cerr << std::endl;
         }
+        else
+        {
+            aList.emplace_back("*"); // LOK_ALLOWLIST_LANGUAGES not defined, allow all
+        }
 
         if (aList.empty())
             std::cerr << "No language allowlisted, turning off the language support." << std::endl;
@@ -284,6 +288,9 @@ bool isAllowlistedLanguage(const OUString& lang)
 
     if (aAllowlist.empty())
         return false;
+
+    if (aAllowlist.size() == 1 && aAllowlist[0] == "*")
+        return true;
 
     for (const auto& entry : aAllowlist)
     {
