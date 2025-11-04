@@ -28,6 +28,7 @@
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -621,6 +622,31 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTi
 }
 
 static void
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTimeWithTimezone& rTime )
+{
+    if (rTime.Timezone == 0)
+    {
+        writeElement(pDoc, nXmlElement, rTime.DateTimeInTZ);
+        return;
+    }
+
+    if( rTime.DateTimeInTZ.Year == 0 )
+        return;
+
+    if ( ( nXmlElement >> 16 ) != XML_dcterms )
+        pDoc->startElement(nXmlElement);
+    else
+        pDoc->startElement(nXmlElement, FSNS(XML_xsi, XML_type), "dcterms:W3CDTF");
+
+    OStringBuffer aStr;
+    sax::Converter::convertDateTime(aStr, rTime.DateTimeInTZ, &rTime.Timezone);
+
+    pDoc->write( aStr );
+
+    pDoc->endElement( nXmlElement );
+}
+
+static void
 writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OUString >& aItems )
 {
     if( !aItems.hasElements() )
@@ -972,6 +998,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     util::Date aDate;
                     util::Duration aDuration;
                     util::DateTime aDateTime;
+                    util::DateTimeWithTimezone aDateTimeTZ;
                     if ( rProp.Value >>= num )
                     {
                         // i4 - 4-byte signed integer
@@ -991,6 +1018,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     }
                     else if ( rProp.Value >>= aDateTime )
                             writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime );
+                    else if ( rProp.Value >>= aDateTimeTZ )
+                            writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTimeTZ );
                     else
                         //no other options
                         OSL_FAIL( "XMLFilterBase::writeCustomProperties unsupported value type!" );
