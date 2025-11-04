@@ -498,6 +498,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
         if( x1 <= x2 && y1 <= y2 )
         {
+            const tools::Rectangle aDrawingArea(x1, y1, x2, y2);
             if( bHoriLines )
             {
                 DrawGridFlags nGridFlags = ( bHoriSolid ? DrawGridFlags::HorzLines : DrawGridFlags::Dots );
@@ -508,9 +509,16 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
                 for(sal_uInt16 a=0;a<nSteps;a++)
                 {
+                    // Make sure the origin of the subgrid is within the drawing area
+                    const Point aSubGridPosition(xFinOrg + (a * nx2) + nPointOffset, yBigOrg);
+                    if (!aDrawingArea.Contains(aSubGridPosition))
+                    {
+                        continue;
+                    }
+
                     // draw
                     rOut.DrawGrid(
-                        tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
+                        tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
                         Size( nx1, ny1 ), nGridFlags );
 
                     // do a step
@@ -533,9 +541,16 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
                 for(sal_uInt16 a=0;a<nSteps;a++)
                 {
+                    // Make sure the origin of the subgrid is within the drawing area
+                    const Point aSubGridPosition(xBigOrg, yFinOrg + (a * ny2) + nPointOffset);
+                    if (!aDrawingArea.Contains(aSubGridPosition))
+                    {
+                        continue;
+                    }
+
                     // draw
                     rOut.DrawGrid(
-                        tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
+                        tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
                         Size( nx1, ny1 ), nGridFlags );
 
                     // do a step
