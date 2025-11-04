@@ -38,12 +38,14 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -2804,10 +2806,32 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     if (!xAudioStream.is())
         return;
 
-    int nLastSlash = sUrl.lastIndexOf('/');
-    sName = sUrl.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
+    sName = INetURLObject::decode(sUrl, INetURLObject::DecodeMechanism::ToIUri, RTL_TEXTENCODING_UTF8);
+    int nLastSlash = sName.lastIndexOf('/');
+    sName = sName.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
 
-    OUString sPath = "../media/" + sName;
+    // MS PowerPoint reports a corrupt file if the media name contains non-ascii characters
+    OUString sAsciiName;
+    if (comphelper::string::isValidAsciiFilename(sName))
+        sAsciiName = sName;
+    else
+    {
+        // create an ASCII name - using a hash to try and keep it unique and yet non-random
+        comphelper::Hash aHash(comphelper::HashType::MD5);
+        sal_Int32 nBytesToRead = std::clamp<sal_Int32>(xAudioStream->available(), 0, 32000);
+        uno::Sequence<sal_Int8> aTempBuf(nBytesToRead);
+        if ((nBytesToRead = xAudioStream->readBytes(aTempBuf, nBytesToRead)))
+            aHash.update(aTempBuf.getConstArray(), nBytesToRead);
+        else // safety fallback: use the name to create a hash: should never happen
+        {
+            const OString sUtf(OUStringToOString(sName, RTL_TEXTENCODING_UTF8));
+            aHash.update(sUtf.getStr(), sUtf.getLength());
+        }
+        sAsciiName
+            = "audio_" + OUString::fromUtf8(comphelper::hashToString(aHash.finalize())) + ".wav";
+    }
+
+    OUString sPath = "../media/" + sAsciiName;
     sRelId = addRelation(pFS->getOutputStream(),
                         oox::getRelationship(Relationship::AUDIO), sPath);
 
