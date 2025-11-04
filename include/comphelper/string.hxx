@@ -375,6 +375,15 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
 
+/** Determine if an OUString contains only valid ASCII filename characters
+
+    @param rString  An OUString
+
+    @return false   if empty string, or string contains any characters that are not allowed
+                    in any target operating system or target file system
+ */
+COMPHELPER_DLLPUBLIC bool isValidAsciiFilename(std::u16string_view rString);
+
 /** Sanitize an OUString to not have invalid surrogates
 
     @param rString  An OUString

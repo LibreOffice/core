@@ -927,6 +927,34 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf120573)
                 "ContentType", u"audio/x-wav");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf148478_transitionMusic)
+{
+    // This original file does not open cleanly in MS PowerPoint
+    // because the file name has a Unicode character: ../media/Cortázar.wav.
+    createSdImpressDoc("pptx/tdf148478_transitionMusic.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    // an MD5-based ascii replacement was substituted for the unicode name. This now opens in MS PP.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT(
+        xNameAccess->hasByName(u"ppt/media/audio_ac976207e31e8b69f8b3c3d981097f3d.wav"_ustr));
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    assertXPath(pXmlDocRels,
+                "(/rels:Relationships/rels:Relationship[@Target='../media/"
+                "audio_ac976207e31e8b69f8b3c3d981097f3d.wav'])",
+                "Type",
+                u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio");
+
+    xmlDocUniquePtr pXmlContentType = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/"
+                "audio_ac976207e31e8b69f8b3c3d981097f3d.wav']",
+                "ContentType", u"audio/x-wav");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf119118)
 {
     createSdImpressDoc("pptx/tdf119118.pptx");

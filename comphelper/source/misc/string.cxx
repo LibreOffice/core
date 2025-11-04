@@ -513,6 +513,37 @@ bool isdigitAsciiString(std::u16string_view rString)
         [](sal_Unicode c){ return rtl::isAsciiDigit(c); });
 }
 
+bool isValidAsciiFilename(std::u16string_view rString)
+{
+    if (rString.empty() || rString[0] == ' ' || rString[rString.size() - 1] == ' ')
+        return false;
+
+    bool bRet = std::all_of(
+        rString.data(), rString.data() + rString.size(),
+        [](sal_Unicode c)
+        {
+            if (!rtl::isAscii(c))
+               return false;
+            switch (c)
+            {
+                case '<':
+                case '>':
+                case ':':
+                case '"':
+                case '\\':
+                case '/':
+                case '?':
+                case '%':
+                case '*':
+                case '|':
+                    return false;
+                default:
+                    return true;
+            }
+        });
+    return bRet;
+}
+
 OUString reverseString(std::u16string_view rStr)
 {
     if (rStr.empty())
