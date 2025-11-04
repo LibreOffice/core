@@ -1577,48 +1577,20 @@ bool SwDoc::IsInHeaderFooter( const SwNode& rIdx ) const
     const SwNode* pFlyNd = pNd->FindFlyStartNode();
     while( pFlyNd )
     {
-        // get up by using the Anchor
-#if OSL_DEBUG_LEVEL > 0
-        std::vector<const SwFrameFormat*> checkFormats;
-        for(sw::SpzFrameFormat* pFormat: *GetSpzFrameFormats())
+        // go up by using the Anchor
+        SwFormatAnchor const& rAnchor{pNd->GetFlyFormat()->GetAnchor()};
+        if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
         {
-            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-            if( pIdx && pFlyNd == &pIdx->GetNode() )
-                checkFormats.push_back( pFormat );
-        }
-#endif
-        std::vector<SwFrameFormat*> const & rFlys(pFlyNd->GetAnchoredFlys());
-        bool bFound(false);
-        for (size_t i = 0; i < rFlys.size(); ++i)
-        {
-            const SwFrameFormat *const pFormat = rFlys[i];
-            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-            if( pIdx && pFlyNd == &pIdx->GetNode() )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                auto checkPos = std::find(
-                        checkFormats.begin(), checkFormats.end(), pFormat );
-                assert( checkPos != checkFormats.end());
-                checkFormats.erase( checkPos );
-#endif
-                const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-                if ((RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()) ||
-                    !rAnchor.GetAnchorNode() )
-                {
-                    return false;
-                }
-
-                pNd = rAnchor.GetAnchorNode();
-                pFlyNd = pNd->FindFlyStartNode();
-                bFound = true;
-                break;
-            }
-        }
-        if (!bFound)
-        {
-            OSL_ENSURE(mbInReading, "Found a FlySection but not a Format!");
             return false;
         }
+        if (rAnchor.GetAnchorNode() == nullptr)
+        {
+            assert(mbInReading);
+            return false;
+        }
+        assert(pNd != rAnchor.GetAnchorNode());
+        pNd = rAnchor.GetAnchorNode();
+        pFlyNd = pNd->FindFlyStartNode();
     }
 
     return nullptr != pNd->FindHeaderStartNode() ||
