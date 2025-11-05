@@ -59,6 +59,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/colorpage.ui" },
         { u"cui/ui/colorpickerdialog.ui" },
         { u"cui/ui/croppage.ui" },
+        { u"cui/ui/diagramdialog.ui" },
         { u"cui/ui/effectspage.ui" },
         { u"cui/ui/eventassigndialog.ui" },
         { u"cui/ui/fontfeaturesdialog.ui" },
