@@ -1304,15 +1304,18 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
         if (!IsFirstRun())
         {
             auto pParaContext = static_cast<ParagraphPropertyMap*>(GetTopContextOfType(eId).get());
-            pParaContext->props().SetListId(-1);
-            pParaContext->Erase(PROP_NUMBERING_RULES); // only true with column, not page break
-            pParaContext->Erase(PROP_NUMBERING_LEVEL);
-            pParaContext->Erase(PROP_NUMBERING_TYPE);
-            pParaContext->Erase(PROP_START_WITH);
+            if (pParaContext)
+            {
+                pParaContext->props().SetListId(-1);
+                pParaContext->Erase(PROP_NUMBERING_RULES); // only true with column, not page break
+                pParaContext->Erase(PROP_NUMBERING_LEVEL);
+                pParaContext->Erase(PROP_NUMBERING_TYPE);
+                pParaContext->Erase(PROP_START_WITH);
 
-            pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
-            pParaContext->Erase(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
-            pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::Any(sal_uInt32(0)));
+                pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                pParaContext->Erase(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::Any(sal_uInt32(0)));
+            }
         }
 
         m_aPropertyStacks[eId].push( GetTopContextOfType(eId));
