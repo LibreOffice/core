@@ -256,6 +256,7 @@ public:
     virtual void                SetPar2(const OUString& rStr) override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline void  SwSetExpField::SetPromptText(const OUString& rStr)
