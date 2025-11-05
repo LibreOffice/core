@@ -41,6 +41,7 @@
 #include <salinst.hxx>
 #include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/lok.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {
@@ -796,7 +797,7 @@ Task::~Task()
             mpSchedulerData->mpTask = nullptr;
     }
     else
-        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing());
+        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing() || comphelper::LibreOfficeKit::isActive());
 }
 
 bool Task::DecideTransferredExecution()
