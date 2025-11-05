@@ -38,6 +38,7 @@
 #include <saltimer.hxx>
 #include <salinst.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/lok.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {
@@ -765,7 +766,7 @@ Task::~Task() COVERITY_NOEXCEPT_FALSE
             mpSchedulerData->mpTask = nullptr;
     }
     else
-        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing());
+        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing() || comphelper::LibreOfficeKit::isActive());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
