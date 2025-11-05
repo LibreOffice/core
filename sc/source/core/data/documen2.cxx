@@ -24,6 +24,7 @@
 #include <osl/thread.h>
 #include <svx/xtable.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
@@ -39,6 +40,8 @@
 #include <comphelper/configuration.hxx>
 
 #include <scmod.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 #include <document.hxx>
 #include <table.hxx>
 #include <patattr.hxx>
@@ -314,6 +317,15 @@ void ScDocument::SetChangeTrack( std::unique_ptr<ScChangeTrack> pTrack )
         return ;
     EndChangeTracking();
     pChangeTrack = std::move(pTrack);
+
+    if (bLoadingMedium && mpShell)
+    {
+        mpShell->AddDelayedInfobarEntry(
+            "hiddentrackchanges", ScResId(STR_TRACK_CHANGES_INFOBAR_TITLE),
+            ScResId(pChangeTrack->GetActionMax() > 0 ? STR_DOCUMENT_HAS_CHANGES
+                                                     : STR_DOCUMENT_TRACKS_CHANGES),
+            InfobarType::INFO, true);
+    }
 }
 
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl, Timer *, void)

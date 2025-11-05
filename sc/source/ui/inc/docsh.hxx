@@ -128,6 +128,8 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
                         ScDocShell & mrDocShell;
     };
 
+    bool ImportFrom(SfxMedium&, const css::uno::Reference<css::text::XTextRange>&) override;
+
     bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     SCTAB         GetSaveTab();
@@ -435,6 +437,10 @@ public:
     SC_DLLPUBLIC void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
 
     ScModelObj* GetModel() const { return static_cast<ScModelObj*>(SfxObjectShell::GetModel().get()); }
+
+    void AddDelayedInfobarEntry(const OUString& sId, const OUString& sPrimaryMessage,
+                                const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                bool bShowCloseButton);
 
 private:
     void ExecuteChartSource(SfxRequest& rReq);

@@ -563,6 +563,13 @@ bool ScDocShell::GetRecalcRowHeightsMode()
     return bHardRecalc;
 }
 
+bool ScDocShell::ImportFrom(SfxMedium& rMedium,
+                            const css::uno::Reference<css::text::XTextRange>& xInsertPosition)
+{
+    LoadMediumGuard aLoadGuard(m_pDocument.get());
+    return SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
+}
+
 bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());
@@ -1239,6 +1246,14 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
         rScientificConvert = static_cast<bool>(aTokens[2].toInt32());
 }
 
+void ScDocShell::AddDelayedInfobarEntry(const OUString& sId, const OUString& sPrimaryMessage,
+                                        const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                        bool bShowCloseButton)
+{
+    m_pImpl->mpDelayedInfobarEntry.push_back(
+        { sId, sPrimaryMessage, sSecondaryMessage, aInfobarType, bShowCloseButton });
+}
+
 bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());
@@ -1334,8 +1349,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if (eError == SCWARN_IMPORT_UNKNOWN_ENCRYPTION)
             {
-
-                m_pImpl->mpDelayedInfobarEntry.push_back({ u"UnknownEncryption"_ustr, ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), u""_ustr, InfobarType::INFO, true });
+                AddDelayedInfobarEntry(u"UnknownEncryption"_ustr, ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), u""_ustr, InfobarType::INFO, true);
                 eError = ERRCODE_NONE;
             }
 
