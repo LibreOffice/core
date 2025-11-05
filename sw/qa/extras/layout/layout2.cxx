@@ -155,6 +155,54 @@ void SwLayoutWriter2::CheckRedlineCharAttributesHidden()
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/Text[1]", "Portion", "foobaz");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136220)
+{
+    SwDoc* pDoc = createDoc("footer_field_rest_portion.fodt");
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/LineBreak", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/LineBreak[1]/following-sibling::Special[1]",
+                    "rText", u"the subject is testing a text formatting bug");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/LineBreak[1]/following-sibling::Special[2]",
+                    "rText", u"the subject is testing a text formatting bug");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/Text[1]", "Portion",
+                    u"and some plain text in follow on page 2 to test it properly");
+        discardDumpedLayout();
+    }
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Down(false, 4);
+    pWrtShell->Insert(u"X");
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/LineBreak", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/LineBreak[1]/following-sibling::Special[1]",
+                    "rText", u"the subject is testing a text formatting bug");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/LineBreak[1]/following-sibling::Special[2]",
+                    "rText", u"the subject is testing a text formatting ");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak", 1);
+        // the problem was that the field follow / rest portion was missing
+        assertXPath(pXmlDoc,
+                    "/root/page[2]/body/txt[1]/Special[1]",
+                    "rText", u"bug");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/Text[1]", "Portion",
+                    u" and some plain text in follow on page 2 to test it properly");
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
 {
     createDoc("redline_charatr.fodt");
