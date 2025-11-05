@@ -1147,7 +1147,7 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     pVmlDrawing->startElement(FSNS(XML_v, XML_textbox));
     pVmlDrawing->startElement(XML_div);
     pVmlDrawing->startElement(XML_font);
-    pVmlDrawing->write(m_aLabel);
+    pVmlDrawing->writeEscaped(m_aLabel);
     pVmlDrawing->endElement(XML_font);
     pVmlDrawing->endElement(XML_div);
     pVmlDrawing->endElement(FSNS(XML_v, XML_textbox));
