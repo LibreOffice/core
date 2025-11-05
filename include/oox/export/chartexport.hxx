@@ -77,6 +77,8 @@ namespace model {
 
 namespace oox::drawingml {
 
+struct LabelPlacementParam;
+
 enum AxesType
 {
     AXIS_PRIMARY_X = 1,
@@ -296,6 +298,11 @@ private:
             sal_Int32 nElTokenId, const model::StyleRef& aColor);
     void outputFontRef(::sax_fastparser::FSHelperPtr pFS,
             sal_Int32 nElTokenId, const model::FontRef& aColor);
+
+    void writeLabelProperties(
+        const css::uno::Reference<css::beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
+        sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
+        bool bIsChartex);
 
 public:
 
