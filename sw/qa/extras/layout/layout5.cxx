@@ -2308,6 +2308,31 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169320)
     assertXPath(pXmlDoc, "//body/txt[5]//SwFieldPortion", "expand", u"4.1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf33687)
+{
+    // A ToC in linked frames, on a First Page followed by a Standard page:
+    createSwDoc("ToC-in-linked-frame-on-first-page-style.fodt");
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 5);
+
+    // Check that the ToC text flows to the second frame:
+
+    // First frame
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly", "formatName", u"Frame1");
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section", 2);
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section[1]", "formatName",
+                u"TOC1_Head");
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section[1]/txt", 1);
+    // Before the fix, this was 60:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section[2]/txt", 36);
+
+    // Second frame
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly", "formatName", u"Frame2");
+    // Before the fix, there was no section in this frame, because ToC didn't flow here:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly/section", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly/section[1]/txt", 24);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
