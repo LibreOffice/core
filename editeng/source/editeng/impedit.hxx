@@ -771,7 +771,6 @@ private:
     void                ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex);
     static LanguageType ImplCalcDigitLang(LanguageType eCurLang);
     static void         ImplInitDigitMode(OutputDevice& rOutDev, LanguageType eLang);
-    static OUString     convertDigits(std::u16string_view rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang);
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );

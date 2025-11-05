@@ -47,6 +47,8 @@
 #define GF_FONTMASK  0xF0000000
 #define GF_FONTSHIFT 28
 
+namespace
+{
 
 sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
@@ -119,6 +121,51 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 
     nChar += nOffset;
     return nChar;
+}
+
+}
+
+OUString LocalizeDigitsInString( const OUString& sStr, LanguageType eTextLanguage,
+                                 sal_Int32 nStart, sal_Int32& nLen )
+{
+    sal_Int32 nextPos, nEnd = nStart + nLen;
+
+    for (sal_Int32 i = nStart; i < nEnd; i = nextPos)
+    {
+        nextPos = i;
+        sal_uInt32 nChar = sStr.iterateCodePoints(&nextPos);
+
+        sal_UCS4 nReplacementChar = GetLocalizedChar(nChar, eTextLanguage);
+
+        // The first time we encounter a character that needs to change we’ll make a copy of the
+        // string so we can return a new modified one
+        if (nReplacementChar != nChar)
+        {
+            // The new string is very likely to have the same length as the old one
+            OUStringBuffer xTmpStr(sStr.getLength());
+            xTmpStr.append(sStr.subView(0, i));
+            xTmpStr.appendUtf32(nReplacementChar);
+
+            // Convert the remainder of the range
+            for (i = nextPos; i < nEnd;)
+            {
+                nReplacementChar = GetLocalizedChar(sStr.iterateCodePoints(&i), eTextLanguage);
+                xTmpStr.appendUtf32(nReplacementChar);
+            }
+
+            // Add the rest of the string outside of the range
+            xTmpStr.append(sStr.subView(nEnd));
+
+            // The length of the string might have changed if GetLocalizedChar converts between BMP
+            // and surrogate pairs
+            nLen += xTmpStr.getLength() - sStr.getLength();
+
+            return xTmpStr.makeStringAndClear();
+        }
+    }
+
+    // Nothing changed so we can just return the original string
+    return sStr;
 }
 
 SalLayout::SalLayout()

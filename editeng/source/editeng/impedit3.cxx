@@ -3906,8 +3906,9 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                 // Unicode code points conversion according to ctl text numeral setting
-                                aText = convertDigits(aText, nTextStart, nTextLen,
-                                    ImplCalcDigitLang(aTmpFont.GetLanguage()));
+                                aText = LocalizeDigitsInString(aText,
+                                    ImplCalcDigitLang(aTmpFont.GetLanguage()),
+                                    nTextStart, nTextLen);
 
                                 // StripPortions() data callback
                                 const DrawPortionInfo aInfo(
@@ -4666,19 +4667,6 @@ LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang)
         eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     return eLang;
-}
-
-OUString ImpEditEngine::convertDigits(std::u16string_view rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang)
-{
-    OUStringBuffer aBuf(rString);
-    for (sal_Int32 nIdx = nStt, nEnd = nStt + nLen; nIdx < nEnd; ++nIdx)
-    {
-        sal_Unicode cChar = aBuf[nIdx];
-        if (cChar >= '0' && cChar <= '9')
-            // TODO: are the localized digit surrogates?
-            aBuf[nIdx] = static_cast<sal_Unicode>(GetLocalizedChar(cChar, eDigitLang));
-    }
-    return aBuf.makeStringAndClear();
 }
 
 // Either sets the digit mode at the output device
