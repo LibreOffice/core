@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/harfbuzz_visibility.patch.1 \
-	external/harfbuzz/0001-Fix-applying-synthetic-slight-to-glyph-origins-5629.patch.1 \
 ))
 
 # meson will replace python3 from shebang in build commands with the
