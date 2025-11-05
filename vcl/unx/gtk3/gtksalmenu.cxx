@@ -398,22 +398,6 @@ void GtkSalMenu::Update()
     ImplUpdate(false, !bAlwaysShowDisabledEntries);
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer user_data)
-{
-    Point *pPos = static_cast<Point*>(user_data);
-    *x = pPos->X();
-    if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
-    {
-        GtkRequisition natural_size;
-        gtk_widget_get_preferred_size(GTK_WIDGET(menu), nullptr, &natural_size);
-        *x -= natural_size.width;
-    }
-    *y = pPos->Y();
-    *push_in = false;
-}
-#endif
-
 static void MenuClosed(GtkPopover* pWidget, GMainLoop* pLoop)
 {
     // gtk4 4.4.0: click on an entry in a submenu of a menu crashes without this workaround
@@ -483,65 +467,30 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
     gtk_popover_popup(GTK_POPOVER(mpMenuWidget));
 #else
-#if GTK_CHECK_VERSION(3,22,0)
-    if (gtk_check_version(3, 22, 0) == nullptr)
+    AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+    aFloatRect.Move(-mpFrame->GetUnmirroredGeometry().x(), -mpFrame->GetUnmirroredGeometry().y());
+    GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                       static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+    GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
+
+    if (nFlags & FloatWinPopupFlags::Left)
     {
-        AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
-        aFloatRect.Move(-mpFrame->GetUnmirroredGeometry().x(), -mpFrame->GetUnmirroredGeometry().y());
-        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
-                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
-
-        GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
-
-        if (nFlags & FloatWinPopupFlags::Left)
-        {
-            rect_anchor = GDK_GRAVITY_NORTH_WEST;
-            menu_anchor = GDK_GRAVITY_NORTH_EAST;
-        }
-        else if (nFlags & FloatWinPopupFlags::Up)
-        {
-            rect_anchor = GDK_GRAVITY_NORTH_WEST;
-            menu_anchor = GDK_GRAVITY_SOUTH_WEST;
-        }
-        else if (nFlags & FloatWinPopupFlags::Right)
-        {
-            rect_anchor = GDK_GRAVITY_NORTH_EAST;
-        }
-
-        GdkSurface* gdkWindow = widget_get_surface(mpFrame->getMouseEventWidget());
-        gtk_menu_popup_at_rect(GTK_MENU(mpMenuWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
+        rect_anchor = GDK_GRAVITY_NORTH_WEST;
+        menu_anchor = GDK_GRAVITY_NORTH_EAST;
     }
-    else
-#endif
+    else if (nFlags & FloatWinPopupFlags::Up)
     {
-        guint nButton;
-        guint32 nTime;
-
-        //typically there is an event, and we can then distinguish if this was
-        //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
-        //doesn't)
-        GdkEvent *pEvent = gtk_get_current_event();
-        if (pEvent)
-        {
-            gdk_event_get_button(pEvent, &nButton);
-            nTime = gdk_event_get_time(pEvent);
-        }
-        else
-        {
-            nButton = 0;
-            nTime = GtkSalFrame::GetLastInputEventTime();
-        }
-
-        // Do the same strange semantics as vcl popup windows to arrive at a frame geometry
-        // in mirrored UI case; best done by actually executing the same code.
-        // (see code in FloatingWindow::StartPopupMode)
-        sal_uInt16 nArrangeIndex;
-        Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
-        AbsoluteScreenPixelPoint aPosAbs = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
-
-        gtk_menu_popup(GTK_MENU(mpMenuWidget), nullptr, nullptr, MenuPositionFunc,
-                       &aPosAbs, nButton, nTime);
+        rect_anchor = GDK_GRAVITY_NORTH_WEST;
+        menu_anchor = GDK_GRAVITY_SOUTH_WEST;
     }
+    else if (nFlags & FloatWinPopupFlags::Right)
+    {
+        rect_anchor = GDK_GRAVITY_NORTH_EAST;
+    }
+
+    GdkSurface* gdkWindow = widget_get_surface(mpFrame->getMouseEventWidget());
+    gtk_menu_popup_at_rect(GTK_MENU(mpMenuWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
 #endif
 
     if (g_main_loop_is_running(pLoop))

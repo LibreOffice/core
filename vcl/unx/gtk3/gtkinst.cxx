@@ -11295,78 +11295,45 @@ public:
 #else
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
 
-#if GTK_CHECK_VERSION(3,22,0)
-        if (gtk_check_version(3, 22, 0) == nullptr)
+        GdkRectangle aRect;
+        pWidget = getPopupRect(pWidget, rRect, aRect);
+        gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
+
+        // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
+        // before trying to launch the menu
+        // https://gitlab.gnome.org/GNOME/gtk/issues/1785
+        // Fixed in GTK 3.24
+        GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
+        gtk_main_do_event(pKeyEvent);
+
+        GdkEvent *pTriggerEvent = gtk_get_current_event();
+        bool bEventOwnership = true;
+        if (!pTriggerEvent)
         {
-            GdkRectangle aRect;
-            pWidget = getPopupRect(pWidget, rRect, aRect);
-            gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
+            pTriggerEvent = pKeyEvent;
+            bEventOwnership = false;
+        }
 
-            // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
-            // before trying to launch the menu
-            // https://gitlab.gnome.org/GNOME/gtk/issues/1785
-            // Fixed in GTK 3.24
-            GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
-            gtk_main_do_event(pKeyEvent);
+        bool bSwapForRTL = SwapForRTL(pWidget);
 
-            GdkEvent *pTriggerEvent = gtk_get_current_event();
-            bool bEventOwnership = true;
-            if (!pTriggerEvent)
-            {
-                pTriggerEvent = pKeyEvent;
-                bEventOwnership = false;
-            }
-
-            bool bSwapForRTL = SwapForRTL(pWidget);
-
-            if (ePlace == weld::Placement::Under)
-            {
-                if (bSwapForRTL)
-                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_EAST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
-                else
-                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
-            }
+        if (ePlace == weld::Placement::Under)
+        {
+            if (bSwapForRTL)
+                gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_EAST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
             else
-            {
-                if (bSwapForRTL)
-                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
-                else
-                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_EAST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
-            }
-            if (bEventOwnership)
-                gdk_event_free(pTriggerEvent);
-
-            gdk_event_free(pKeyEvent);
+                gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
         }
         else
-#else
-        (void) rRect;
-#endif
         {
-            gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
-
-            guint nButton;
-            guint32 nTime;
-
-            //typically there is an event, and we can then distinguish if this was
-            //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
-            //doesn't)
-            GdkEvent *pEvent = gtk_get_current_event();
-            if (pEvent)
-            {
-                if (!gdk_event_get_button(pEvent, &nButton))
-                    nButton = 0;
-                nTime = gdk_event_get_time(pEvent);
-                gdk_event_free(pEvent);
-            }
+            if (bSwapForRTL)
+                gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
             else
-            {
-                nButton = 0;
-                nTime = GtkSalFrame::GetLastInputEventTime();
-            }
-
-            gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
+                gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_EAST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
         }
+        if (bEventOwnership)
+            gdk_event_free(pTriggerEvent);
+
+        gdk_event_free(pKeyEvent);
 #endif
 
         if (g_main_loop_is_running(pLoop))
