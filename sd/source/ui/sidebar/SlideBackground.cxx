@@ -697,6 +697,7 @@ void SlideBackground::updatePaperSizeBoxSelection()
         Paper ePaper = SvxPaperInfo::GetSvxPaper(pPage->GetSize(), MapUnit::Map100thMM);
         mxPaperSizeBox->set_active_id(ePaper);
     }
+    GetBindings()->Invalidate(SID_ATTR_PAGE_SIZE);
 }
 
 SlideBackground::~SlideBackground()
