@@ -71,6 +71,8 @@ namespace core {
 
 namespace oox::drawingml {
 
+struct LabelPlacementParam;
+
 enum AxesType
 {
     AXIS_PRIMARY_X = 1,
@@ -282,6 +284,11 @@ private:
     void exportMissingValueTreatment(const css::uno::Reference<css::beans::XPropertySet>& xPropSet);
 
     OUString getNumberFormatCode(sal_Int32 nKey) const;
+
+    void writeLabelProperties(
+        const css::uno::Reference<css::beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
+        sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
+        bool bIsChartex);
 
 public:
 
