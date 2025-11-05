@@ -4427,8 +4427,6 @@ void ChartExport::exportOneAxis_chartex(
     pFS->endElement( FSNS( XML_cx, XML_axis ) );
 }
 
-namespace {
-
 struct LabelPlacementParam
 {
     bool mbExport;
@@ -4454,6 +4452,8 @@ struct LabelPlacementParam
         )
     {}
 };
+
+namespace {
 
 const char* toOOXMLPlacement( sal_Int32 nPlacement )
 {
@@ -4590,13 +4590,17 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pFS->endElement(FSNS(XML_c, XML_tx));
 }
 
-void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
+}
+
+void ChartExport::writeLabelProperties(
     const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
     sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
     bool bIsChartex)
 {
     if (!xPropSet.is())
         return;
+
+    FSHelperPtr pFS = GetFS();
 
     const sal_Int32 nChartNS = bIsChartex ? XML_cx : XML_c;
 
@@ -4606,11 +4610,37 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     sal_Int32 nLabelBorderColor = 0x00FFFFFF;
     sal_Int32 nLabelFillColor = -1;
 
-    xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     xPropSet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aCustomLabelFields;
     xPropSet->getPropertyValue(u"LabelBorderWidth"_ustr) >>= nLabelBorderWidth;
     xPropSet->getPropertyValue(u"LabelBorderColor"_ustr) >>= nLabelBorderColor;
     xPropSet->getPropertyValue(u"LabelFillColor"_ustr) >>= nLabelFillColor;
+
+    if (aCustomLabelFields.hasElements())
+        writeCustomLabel(pFS, this, aCustomLabelFields, nLabelIndex, rDLblsRange); // c:tx
+
+    bool bLinkedNumFmt = false;
+    if( GetProperty(xPropSet, u"LinkNumberFormatToSource"_ustr) )
+        mAny >>= bLinkedNumFmt;
+
+    bool bLabelIsNumberFormat = true;
+    if( xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
+        bLabelIsNumberFormat = aLabel.ShowNumber;
+
+    if (GetProperty(xPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
+    {
+        sal_Int32 nKey = 0;
+        mAny >>= nKey;
+
+        OUString aNumberFormatString = getNumberFormatCode(nKey);
+
+        if (bIsChartex) {
+            pFS->singleElement(FSNS(XML_cx, XML_numFmt), XML_formatCode, aNumberFormatString,
+                               XML_sourceLinked, ToPsz10(bLinkedNumFmt));
+        } else {
+            pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, aNumberFormatString,
+                               XML_sourceLinked, ToPsz10(bLinkedNumFmt));
+        }
+    }
 
     if (nLabelBorderWidth > 0 || nLabelFillColor != -1)
     {
@@ -4620,9 +4650,9 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         {
             ::Color nColor(ColorTransparency, nLabelFillColor);
             if (nColor.IsTransparent())
-                pChartExport->WriteSolidFill(nColor, nColor.GetAlpha());
+                WriteSolidFill(nColor, nColor.GetAlpha());
             else
-                pChartExport->WriteSolidFill(nColor);
+                WriteSolidFill(nColor);
         }
 
         if (nLabelBorderWidth > 0)
@@ -4634,9 +4664,9 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
             {
                 ::Color nColor(ColorTransparency, nLabelBorderColor);
                 if (nColor.IsTransparent())
-                    pChartExport->WriteSolidFill(nColor, nColor.GetAlpha());
+                    WriteSolidFill(nColor, nColor.GetAlpha());
                 else
-                    pChartExport->WriteSolidFill(nColor);
+                    WriteSolidFill(nColor);
             }
 
             pFS->endElement(FSNS(XML_a, XML_ln));
@@ -4645,10 +4675,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         pFS->endElement(FSNS(nChartNS, XML_spPr));
     }
 
-    pChartExport->exportTextProps(xPropSet, bIsChartex);
-
-    if (aCustomLabelFields.hasElements())
-        writeCustomLabel(pFS, pChartExport, aCustomLabelFields, nLabelIndex, rDLblsRange);
+    exportTextProps(xPropSet, bIsChartex); // c:txPr
 
     if (!bIsChartex) {
         // In chartex label position is an attribute of cx:dataLabel
@@ -4687,15 +4714,13 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         // TODO: is the following correct for chartex?
         pFS->startElement(FSNS(nChartNS, XML_ext), XML_uri,
             "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15),
-            pChartExport->GetFB()->getNamespaceURL(OOX_NS(c15)));
+            GetFB()->getNamespaceURL(OOX_NS(c15)));
 
         pFS->singleElement(FSNS(XML_c15, XML_showDataLabelsRange), XML_val, "1");
 
         pFS->endElement(FSNS(nChartNS, XML_ext));
         pFS->endElement(FSNS(nChartNS, XML_extLst));
     }
-}
-
 }
 
 void ChartExport::exportDataLabels(
@@ -4824,69 +4849,13 @@ void ChartExport::exportDataLabels(
             }
         }
 
-        bool bLinkedNumFmt = false;
-        if( GetProperty(xLabelPropSet, u"LinkNumberFormatToSource"_ustr) )
-            mAny >>= bLinkedNumFmt;
-
-        chart2::DataPointLabel aLabel;
-        bool bLabelIsNumberFormat = true;
-        if( xLabelPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
-            bLabelIsNumberFormat = aLabel.ShowNumber;
-        else
-            bLabelIsNumberFormat = true;
-
-        if (GetProperty(xLabelPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
-        {
-            sal_Int32 nKey = 0;
-            mAny >>= nKey;
-
-            OUString aNumberFormatString = getNumberFormatCode(nKey);
-
-            if (bIsChartex) {
-                pFS->singleElement(FSNS(XML_cx, XML_numFmt), XML_formatCode, aNumberFormatString,
-                                   XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-            } else {
-                pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, aNumberFormatString,
-                                   XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-            }
-        }
-
         // Individual label property that overwrites the baseline.
-        writeLabelProperties(pFS, this, xLabelPropSet, aParam, nIdx,
-                rDLblsRange, bIsChartex);
+        writeLabelProperties(xLabelPropSet, aParam, nIdx, rDLblsRange, bIsChartex);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
-    bool bLinkedNumFmt = true;
-    if (GetProperty(xPropSet, u"LinkNumberFormatToSource"_ustr))
-        mAny >>= bLinkedNumFmt;
-
-    chart2::DataPointLabel aLabel;
-    bool bLabelIsNumberFormat = true;
-    if( xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
-        bLabelIsNumberFormat = aLabel.ShowNumber;
-
-    if (GetProperty(xPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
-    {
-        sal_Int32 nKey = 0;
-        mAny >>= nKey;
-
-        OUString aNumberFormatString = getNumberFormatCode(nKey);
-
-        if (bIsChartex) {
-            pFS->singleElement(FSNS(XML_cx, XML_numFmt),
-                XML_formatCode, aNumberFormatString,
-                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-        } else {
-            pFS->singleElement(FSNS(XML_c, XML_numFmt),
-                XML_formatCode, aNumberFormatString,
-                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-        }
-    }
-
     // Baseline label properties for all labels.
-    writeLabelProperties(pFS, this, xPropSet, aParam, -1, rDLblsRange,
-            bIsChartex);
+    writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, bIsChartex);
 
     if (!bIsChartex) {
         bool bShowLeaderLines = false;
