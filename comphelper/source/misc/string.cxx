@@ -474,7 +474,7 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         nRHSChunkLen = nRHSLastNonDigitPos - nRHSFirstDigitPos;
 
         //To-Do: Possibly scale down those unicode codepoints that relate to
-        //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
+        //numbers outside of the normal 0-9 range, e.g. see LocalizeDigitsInString in
         //vcl
 
         sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.subView(nLHSFirstDigitPos, nLHSChunkLen));
