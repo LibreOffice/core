@@ -196,6 +196,19 @@ CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
     CPPUNIT_ASSERT_EQUAL(10, countXPathNodes(pXmlNum, "//w:numbering/w:num"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169274)
+{
+    loadAndSave("tdf169274.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    const OString sPath = "//w:body/w:tbl/w:tr/w:tc/w:p/w:sdt/"_ostr;
+
+    // Verify SDT exists with dataBinding property
+    assertXPath(pXmlDoc, sPath + "w:sdtPr/w:dataBinding", 1);
+    // Verify there are no nested SDTs
+    assertXPath(pXmlDoc, sPath + "w:sdtContent/w:sdt", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

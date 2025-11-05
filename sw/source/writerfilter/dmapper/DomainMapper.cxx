@@ -4463,12 +4463,21 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
             m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             return;
         }
-        if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_checkbox"_ustr) ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_text"_ustr) ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_dataBinding"_ustr) ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_citation"_ustr) ||
-                (m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_id"_ustr) &&
-                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
+        const SdtControlType aControlType = m_pImpl->m_pSdtHelper->getControlType();
+        if (aControlType != SdtControlType::unsupported && aControlType != SdtControlType::unknown
+            && m_pImpl->m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
+        {
+            m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+        }
+        else if ((m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_checkbox"_ustr)
+                  || m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_text"_ustr)
+                  || m_pImpl->m_pSdtHelper->containedInInteropGrabBag(
+                      u"ooxml:CT_SdtPr_dataBinding"_ustr)
+                  || m_pImpl->m_pSdtHelper->containedInInteropGrabBag(
+                      u"ooxml:CT_SdtPr_citation"_ustr)
+                  || (m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_id"_ustr)
+                      && m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1))
+                 && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
         {
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
 
@@ -4477,20 +4486,15 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 pContext = m_pImpl->GetTopFieldContext()->getProperties();
 
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-            if (m_pImpl->GetSdtStarts().empty()
-                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown
-                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::comboBox))
-            {
-                pContext->Insert(PROP_SDTPR, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
-            }
+            pContext->Insert(PROP_SDTPR, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
         }
         else
         {
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             if (m_pImpl->GetSdtStarts().empty()
-                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown
-                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::comboBox
-                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::richText))
+                || (aControlType != SdtControlType::dropDown
+                    && aControlType != SdtControlType::comboBox
+                    && aControlType != SdtControlType::richText))
             {
                 m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
                         uno::Any(aGrabBag), true, PARA_GRAB_BAG);
