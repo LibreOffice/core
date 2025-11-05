@@ -3438,7 +3438,7 @@ sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >
     return 0;
 }
 
-const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment )
+const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment, bool bPlaceHolder )
 {
     const char* sAlignment = nullptr;
 
@@ -3452,6 +3452,10 @@ const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment )
             break;
         case style::ParagraphAdjust_BLOCK:
             sAlignment = "just";
+            break;
+        case style::ParagraphAdjust_LEFT:
+            if (bPlaceHolder) // in case of PPTX placeholder objects, "l" is necessary for MSO
+                sAlignment = "l";
             break;
         default:
             ;
@@ -3590,7 +3594,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number((bForceZeroIndent && nParaFirstLineIndent == 0) ? 0 : oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), (bForceZeroIndent || nParaFirstLineIndent != 0)),
-                           XML_algn, GetAlignment( nAlignment ),
+                           XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
@@ -3598,7 +3602,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
-                           XML_algn, GetAlignment( nAlignment ),
+                           XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
 

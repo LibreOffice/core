@@ -533,7 +533,7 @@ public:
 
     static ::Color ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
-    static const char* GetAlignment( css::style::ParagraphAdjust nAlignment );
+    static const char* GetAlignment( css::style::ParagraphAdjust nAlignment, bool bPlaceHolder = false );
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,

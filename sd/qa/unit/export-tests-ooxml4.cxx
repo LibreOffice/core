@@ -1550,6 +1550,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextStylesXML)
                 u"6000");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextAlignLeft)
+{
+    createSdImpressDoc("pptx/presLeftAlign.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr", "algn", u"l");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
