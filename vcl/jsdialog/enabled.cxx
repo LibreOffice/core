@@ -416,6 +416,7 @@ constexpr auto SidebarList
         { u"modules/scalc/ui/functionpanel.ui" },
         { u"modules/scalc/ui/sidebaralignment.ui" },
         { u"modules/scalc/ui/sidebarcellappearance.ui" },
+        { u"modules/scalc/ui/sidebardatabase.ui" },
         { u"modules/scalc/ui/sidebarnumberformat.ui" },
         // schart
         { u"modules/schart/ui/sidebaraxis.ui" },
