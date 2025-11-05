@@ -2989,6 +2989,20 @@ bool SfxObjectShell::ConvertTo
     return false;
 }
 
+static Any getItemSetInteractionHandler(const SfxItemSet& rItemSet)
+{
+    if (const SfxUnoAnyItem *pItem = rItemSet.GetItemIfSet(SID_INTERACTIONHANDLER, false))
+        return pItem->GetValue();
+    return Any();
+}
+
+static void setItemSetInteractionHandler(SfxItemSet& rItemSet, const Any& rOriginalInteract)
+{
+    if (rOriginalInteract.hasValue())
+        rItemSet.Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, rOriginalInteract));
+    else
+        rItemSet.ClearItem(SID_INTERACTIONHANDLER);
+}
 
 bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 {
@@ -3032,16 +3046,9 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
 
     // Save the original interaction handler
-    Any aOriginalInteract;
-    if (const SfxUnoAnyItem *pItem = pRetrMedium->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false))
-    {
-        aOriginalInteract = pItem->GetValue();
-#ifndef NDEBUG
-        // The original pRetrMedium and potential replacement pMediumTmp have the same interaction handler at this point
-        const SfxUnoAnyItem *pMediumItem = pMediumTmp->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false);
-        assert(pMediumItem && pMediumItem->GetValue() == aOriginalInteract);
-#endif
-    }
+    Any aOriginalInteract = getItemSetInteractionHandler(pRetrMedium->GetItemSet());
+    // The original pRetrMedium and potential replacement pMediumTmp have the same interaction handler at this point
+    assert(getItemSetInteractionHandler(pMediumTmp->GetItemSet()) == aOriginalInteract);
 
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
@@ -3059,10 +3066,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     {
         bSaved = true;
 
-        if (aOriginalInteract.hasValue())
-            pMediumTmp->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, aOriginalInteract));
-        else
-            pMediumTmp->GetItemSet().ClearItem(SID_INTERACTIONHANDLER);
+        setItemSetInteractionHandler(pMediumTmp->GetItemSet(), aOriginalInteract);
         pMediumTmp->GetItemSet().ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         SetError(pMediumTmp->GetErrorCode());
@@ -3088,10 +3092,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         // reconnect to object storage
         DoSaveCompleted();
 
-        if (aOriginalInteract.hasValue())
-            pRetrMedium->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, aOriginalInteract));
-        else
-            pRetrMedium->GetItemSet().ClearItem(SID_INTERACTIONHANDLER);
+        setItemSetInteractionHandler(pRetrMedium->GetItemSet(), aOriginalInteract);
         pRetrMedium->GetItemSet().ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         delete pMediumTmp;
@@ -3217,12 +3218,18 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 #endif
 
-    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName,
-                         rItemSet, rArgs))
+    // Save the original interaction handler
+    Any aOriginalInteract = getItemSetInteractionHandler(GetMedium()->GetItemSet());
+
+    bool bResult = PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName,
+                                    rItemSet, rArgs);
+
+    setItemSetInteractionHandler(GetMedium()->GetItemSet(), aOriginalInteract);
+
+    if (bResult)
     {
         // Update Data on media
         SfxItemSet& rSet = GetMedium()->GetItemSet();
-        rSet.ClearItem( SID_INTERACTIONHANDLER );
         rSet.ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         rSet.ClearItem( SID_PATH );
 
