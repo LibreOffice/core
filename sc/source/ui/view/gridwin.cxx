@@ -6979,6 +6979,7 @@ void ScGridWindow::UpdateSelectionOverlay()
 
 void ScGridWindow::DeleteDatabaseOverlay()
 {
+    mpDBExpandRect.reset();
     mpOODatabase.reset();
 }
 
@@ -7026,16 +7027,22 @@ void ScGridWindow::UpdateDatabaseOverlay()
 
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-        std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
-            sdr::overlay::OverlayType::NoFill,
-            aDBColor,
-            std::move(aRanges),
-            true, true));
+        if (xOverlayManager.is())
+        {
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+                sdr::overlay::OverlayType::NoFill,
+                aDBColor,
+                std::move(aRanges),
+                true, true));
 
-        xOverlayManager->add(*pOverlay);
-        std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect);
-        mpOODatabase.swap(pOverlayList);
-        mpOODatabase->append(std::move(pOverlay));
+            xOverlayManager->add(*pOverlay);
+            std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect);
+            if (pOverlayList)
+            {
+                mpOODatabase.swap(pOverlayList);
+                mpOODatabase->append(std::move(pOverlay));
+            }
+        }
     }
 }
 
