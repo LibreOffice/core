@@ -366,16 +366,17 @@ void SwTextIter::TwipsToLine( const SwTwips y)
 // Local helper function to check, if pCurr needs a field rest portion:
 static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 {
-    const SwLinePortion *pPor = pCurr->GetNextPortion();
-    bool bRet = false;
-    while( pPor && !bRet )
+    // first, find the *last* field portion on the line
+    SwFieldPortion const* pLastField{nullptr};
+    for (SwLinePortion const* pPor{pCurr->GetNextPortion()};
+            pPor != nullptr; pPor = pPor->GetNextPortion())
     {
-        bRet = pPor->InFieldGrp() && static_cast<const SwFieldPortion*>(pPor)->HasFollow();
-        if( !pPor->GetNextPortion() || !pPor->GetNextPortion()->InFieldGrp() )
-            break;
-        pPor = pPor->GetNextPortion();
+        if (pPor->InFieldGrp())
+        {
+            pLastField = static_cast<const SwFieldPortion*>(pPor);
+        }
     }
-    return bRet;
+    return pLastField != nullptr ? pLastField->HasFollow() : false;
 }
 
 void SwTextIter::TruncLines( bool bNoteFollow )

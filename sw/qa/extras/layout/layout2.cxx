@@ -215,6 +215,52 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
     assertXPath(pXmlDoc, "/root/page", 4);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136220)
+{
+    createSwDoc("footer_field_rest_portion.fodt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]/SwFieldPortion[1]",
+                    "expand", u"the subject is testing a text formatting bug");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]/SwFieldPortion[2]",
+                    "expand", u"the subject is testing a text formatting bug");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout/*[1]", "portion",
+                    u"and some plain text in follow on page 2 to test it properly");
+    }
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->Down(false, 4);
+    pWrtShell->Insert(u"X"_ustr);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]/SwFieldPortion[1]",
+                    "expand", u"the subject is testing a text formatting bug");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]/SwFieldPortion[2]",
+                    "expand", u"the subject is testing a text formatting ");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout", 1);
+        // the problem was that the field follow / rest portion was missing
+        assertXPath(pXmlDoc,
+                    "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFieldPortion[1]",
+                    "expand", u"bug");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]/*[2]",
+                    "portion", u" and some plain text in follow on page 2 to test it properly");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
 {
     createSwDoc("redline_charatr.fodt");
