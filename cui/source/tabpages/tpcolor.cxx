@@ -213,12 +213,27 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         NamedColor aNamedColor;
         aNamedColor.m_aColor = aColor;
         ChangeColor(aNamedColor);
-        sal_Int32 nPos = FindInPalette( aColor );
 
-        if ( nPos != -1 )
+        for (size_t i = 0, nSize = maPaletteManager.GetPaletteList().size(); i < nSize; ++i)
+        {
+            maPaletteManager.SetPalette(i, true/*bPosOnly*/);
+
+            m_pColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+                XPropertyListType::Color, maPaletteManager.GetSelectedPalettePath()));
+            if (!m_pColorList->Load())
+                continue;
+
+            sal_Int32 nPos = FindInPalette(aColor);
+            if (nPos == -1)
+                continue;
+
+            m_xSelectPalette->set_active_text(maPaletteManager.GetPaletteName());
+            SelectPaletteLBHdl(*m_xSelectPalette);
+
             m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nPos));
-        // else search in other palettes?
 
+            break;
+        }
     }
 
     m_aCtlPreviewOld.SetAttributes(m_aXFillAttr.GetItemSet());
