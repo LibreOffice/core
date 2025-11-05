@@ -3688,13 +3688,9 @@ public:
     virtual OUString get_accessible_id() const override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#if ATK_CHECK_VERSION(2, 34, 0)
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_accessible_id(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-#else
-        return OUString();
-#endif
 #else
         return OUString();
 #endif
@@ -18575,7 +18571,6 @@ public:
                 g_object_ref(m_pAccessible);
         }
 
-#if ATK_CHECK_VERSION(2, 34, 0)
         // if set, take over accessible ID from the XAccessible to the GtkWidget
         // (While e.g. accessible name and description can be handled on demand by overriding
         // AtkObjectClass::get_name and AtkObjectClass::get_description, s. atk_object_wrapper_class_init),
@@ -18591,7 +18586,6 @@ public:
                     m_pAccessible, OUStringToOString(sId, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
-#endif
         return m_pAccessible;
     }
 #endif
@@ -18754,13 +18748,9 @@ public:
     virtual OUString get_accessible_id() const override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#if ATK_CHECK_VERSION(2, 34, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_accessible_id(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-#else
-        return OUString();
-#endif
 #else
         return OUString();
 #endif

@@ -59,7 +59,6 @@ text_type_from_boundary(AtkTextBoundary boundary_type)
 
 /*****************************************************************************/
 
-#if ATK_CHECK_VERSION(2,32,0)
 static accessibility::AccessibleScrollType
 scroll_type_from_scroll_type(AtkScrollType type)
 {
@@ -83,7 +82,6 @@ scroll_type_from_scroll_type(AtkScrollType type)
             throw lang::NoSupportException();
     }
 }
-#endif
 
 /*****************************************************************************/
 
@@ -828,7 +826,6 @@ text_wrapper_set_selection (AtkText *text,
     return FALSE;
 }
 
-#if ATK_CHECK_VERSION(2,32,0)
 static gboolean
 text_wrapper_scroll_substring_to(AtkText       *text,
                                  gint           start_offset,
@@ -849,7 +846,6 @@ text_wrapper_scroll_substring_to(AtkText       *text,
 
     return FALSE;
 }
-#endif
 
 } // extern "C"
 
@@ -876,9 +872,7 @@ textIfaceInit (gpointer iface_, gpointer)
   iface->get_default_attributes = text_wrapper_get_default_attributes;
   iface->get_character_extents = text_wrapper_get_character_extents;
   iface->get_offset_at_point = text_wrapper_get_offset_at_point;
-#if ATK_CHECK_VERSION(2,32,0)
   iface->scroll_substring_to = text_wrapper_scroll_substring_to;
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
