@@ -1007,6 +1007,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 );
 
             aExtraInfo.append(", \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
+            aExtraInfo.append(", \"isDiagram\": " + OString::boolean(pO->isDiagram()));
 
             if (mpMarkedObj && !pOtherShell)
             {
