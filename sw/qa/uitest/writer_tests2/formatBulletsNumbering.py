@@ -307,9 +307,9 @@ class formatBulletsNumbering(UITestCase):
    def test_bullets_and_numbering_bullet_from_smp(self):
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
 
-            # Change the bullet to U+107B5 MODIFIER LETTER BILABIAL CLICK. This is a character
-            # outside of the basic multilingual plane which means that it can’t be stored in a
-            # single sal_Unicode variable. Verifies tdf#166488
+            # Change the bullet to U+1F431 CAT FACE. This is a character outside of the basic
+            # multilingual plane which means that it can’t be stored in a single sal_Unicode
+            # variable. Verifies tdf#166488
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
                 # Select the BulletPage's selector
                 xTabs = xDialog.getChild("tabcontrol")
@@ -322,22 +322,21 @@ class formatBulletsNumbering(UITestCase):
                 self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "1")
                 xChangeBulletBtn = xBulletPage.getChild("changeBulletBtn")
                 with self.ui_test.execute_blocking_action(xChangeBulletBtn.executeAction, args=('CLICK', ())) as xCharSetDialog:
-                    # Select the Noto Sans font because that should contain the character
+                    # Select the DejaVu Sans font because that should contain the character
                     xFontName = xCharSetDialog.getChild("fontlb")
-                    xFontName.executeAction("SET", mkPropertyValues({"TEXT": "Noto Sans"}))
+                    xFontName.executeAction("SET", mkPropertyValues({"TEXT": "DejaVu Sans"}))
                     # Use the hex entry to select the character
                     xHexText = xCharSetDialog.getChild("hexvalue")
-                    xHexText.executeAction("SET", mkPropertyValues({"TEXT": "107B5"}))
+                    xHexText.executeAction("SET", mkPropertyValues({"TEXT": "1F431"}))
                     # Check that the character was selected by checking the name
                     xCharName = xCharSetDialog.getChild("charname")
-                    self.assertEqual(get_state_as_dict(xCharName)["Text"],
-                                     "MODIFIER LETTER BILABIAL CLICK")
+                    self.assertEqual(get_state_as_dict(xCharName)["Text"], "CAT FACE")
 
             # Check that the numbering level was updated for the paragraph in the document
             xDocCursor = xComponent.getText().createTextCursor()
             xNumberingRules = xDocCursor.getPropertyValue("NumberingRules")
             xNumberingLevel = xNumberingRules.getByIndex(0)
             self.assertEqual(convert_property_values_to_dict(xNumberingLevel)["BulletChar"],
-                             "\U000107B5")
+                             "\U0001F431")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
