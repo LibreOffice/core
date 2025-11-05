@@ -5816,17 +5816,24 @@ void ChartExport::exportView3D()
     {
         sal_Int32 nRotationX = 0;
         mAny >>= nRotationX;
-        if( nRotationX < 0 )
+        if(eChartType == chart::TYPEID_PIE)
         {
-            if(eChartType == chart::TYPEID_PIE)
-            {
             /* In OOXML we get value in 0..90 range for pie chart X rotation , whereas we expect it to be in -90..90 range,
                so we convert that during import. It is modified in View3DConverter::convertFromModel()
                here we convert it back to 0..90 as we received in import */
-               nRotationX += 90;  // X rotation (map Chart2 [-179,180] to OOXML [0..90])
-            }
-            else
-                nRotationX += 360; // X rotation (map Chart2 [-179,180] to OOXML [-90..90])
+            if( nRotationX < 0 )
+                nRotationX += 90;  // X rotation (map Chart2 [-179,180] to OOXML [0..90])
+        }
+        else
+        {
+            assert(nRotationX >= -180 && nRotationX <= 180);
+            // X rotation (map Chart2 [-179,180] to OOXML [-90..90])
+            // This is not ideal, we are losing information, but that is unavoidable since OOXML does not
+            // allow upside down 3d charts.
+            if( nRotationX < -90 )
+                nRotationX = -90;
+            else if( nRotationX > 90 )
+                nRotationX = 90;
         }
         pFS->singleElement(FSNS(XML_c, XML_rotX), XML_val, OString::number(nRotationX));
     }
