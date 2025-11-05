@@ -1960,7 +1960,7 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x11380, 0x113FF, SvxResId(RID_SUBSETSTR_TULU_TIGALARI) );
                     break;
 #endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 77)
+#if (U_ICU_VERSION_MAJOR_NUM >= 78)
                 case UBLOCK_BERIA_ERFE:
                     aAllSubsets.emplace_back( 0x16EA0, 0x16EDF, SvxResId(RID_SUBSETSTR_BERIA_ERFE) );
                     break;

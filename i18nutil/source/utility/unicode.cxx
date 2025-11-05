@@ -1026,7 +1026,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "sa-Tutg"_ostr;
             break;
 #endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 77)
+#if (U_ICU_VERSION_MAJOR_NUM >= 78)
         case USCRIPT_BERIA_ERFE:
             sRet = "zag-Berf"_ostr;
             break;
