@@ -6581,7 +6581,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
 }
 
-void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)
+void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
     uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY);
 
@@ -6625,7 +6625,10 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // generate a unique id
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nDiagramId));
+    // id in cNvPr under cNvGraphicFramePr must be unique among shapes,
+    // but can be different from diagram's own id
+    const sal_Int32 nExpShapeId = nShapeId != -1 ? nShapeId : nDiagramId;
+    pDocPrAttrList->add(XML_id, OString::number(nExpShapeId));
     OString sName = "Diagram" + OString::number(nDiagramId);
     pDocPrAttrList->add(XML_name, sName);
 

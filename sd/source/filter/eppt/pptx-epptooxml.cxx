@@ -2894,11 +2894,15 @@ OUString PowerPointExport::getImplementationName()
     return u"com.sun.star.comp.Impress.oox.PowerPointExport"_ustr;
 }
 
-void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)
+void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
+                                    const css::uno::Reference<css::drawing::XShape>& rXShape,
+                                    sal_Int32 nDiagramId)
 {
-    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId));
+    sal_Int32 nShapeId = rDML.GetNewShapeID(rXShape);
+    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId) + " with Shape Id "
+                            + OUString::number(nShapeId));
     pFS->startElementNS(XML_p, XML_graphicFrame);
-    rDML.WriteDiagram(rXShape, nDiagramId);
+    rDML.WriteDiagram(rXShape, nDiagramId, nShapeId);
     pFS->endElementNS(XML_p, XML_graphicFrame);
 }
 

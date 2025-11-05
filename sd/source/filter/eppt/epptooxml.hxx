@@ -123,7 +123,9 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
+    static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
+                             const css::uno::Reference<css::drawing::XShape>& rXShape,
+                             sal_Int32 nDiagramId);
 
     /** Create a new placeholder index for a master placeholder shape
 
@@ -159,7 +161,7 @@ private:
     sal_uInt32 mnAnimationNodeIdMax;
     sal_uInt32 mnThemeIdMax;
 
-    sal_uInt32 mnDiagramId;
+    sal_Int32 mnDiagramId;
 
     std::vector<OUString> maRelId;
 

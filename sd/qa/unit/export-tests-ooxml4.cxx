@@ -115,6 +115,37 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSmartArtPreserve)
         "ContentType", u"application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf168755_anim_on_SmartArt)
+{
+    createSdImpressDoc("pptx/tdf168755_anim_on_SmartArt.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    const OUString aDiagramId = getXPath(
+        pXmlDocContent, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "id");
+    OUString aSpTgtId
+        = getXPath(pXmlDocContent,
+                   "//p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
+                   "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
+                   "p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt",
+                   "spid");
+    // Before the fix this would fail, as the "spid" attribute of the target was -1
+    CPPUNIT_ASSERT_MESSAGE("Shape id in animation target can't be -1", aSpTgtId != "-1");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape id in animation target differs from original", aDiagramId,
+                                 aSpTgtId);
+    // Repeat the same with a slightly different path (contains "animEffect" instead of "set")
+    aSpTgtId
+        = getXPath(pXmlDocContent,
+                   "//p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
+                   "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
+                   "p:childTnLst/p:animEffect/p:cBhvr/p:tgtEl/p:spTgt",
+                   "spid");
+    CPPUNIT_ASSERT_MESSAGE("Shape id in animation target can't be -1", aSpTgtId != "-1");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape id in animation target differs from original", aDiagramId,
+                                 aSpTgtId);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346)
 {
     // There are two themes in the test document, make sure we use the right theme
