@@ -1370,7 +1370,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
                     pDrawing->startElementNS(XML_a, XML_p);
                     pDrawing->startElementNS(XML_a, XML_r);
                     pDrawing->startElementNS(XML_a, XML_t);
-                    pDrawing->write(msLabel);
+                    pDrawing->writeEscaped(msLabel);
                     pDrawing->endElementNS(XML_a, XML_t);
                     pDrawing->endElementNS(XML_a, XML_r);
                     pDrawing->endElementNS(XML_a, XML_p);
