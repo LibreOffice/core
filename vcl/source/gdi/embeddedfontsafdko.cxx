@@ -371,8 +371,8 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     OString charMapPathA(charMapPath.toUtf8());
     OString featuresPathA(featuresPath.toUtf8());
 
-    OString makeotfCommand = MAKEOTF " -nshw -mf " + fontMenuNameDBPathA + " -f " + srcFontPathA
-                             + " -o " + destFilePathA;
+    OString makeotfCommand
+        = MAKEOTF " -mf " + fontMenuNameDBPathA + " -f " + srcFontPathA + " -o " + destFilePathA;
     if (!charMapPathA.isEmpty())
         makeotfCommand += " -ch "_ostr + charMapPathA;
     if (!featuresPathA.isEmpty())
