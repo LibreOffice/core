@@ -1,9 +1,9 @@
 --- Configurations/windows-makefile.tmpl	2022-09-09 15:18:35.849924899 +0100
 +++ Configurations/windows-makefile.tmpl	2022-09-09 15:20:28.895825331 +0100
-@@ -790,7 +790,7 @@
+@@ -792,7 +792,7 @@
            return <<"EOF";
  $target: "$gen0" $deps
- 	\$(CPP) $incs $cppflags $defs "$gen0" > \$@.i
+ 	\$(CPP) /D__ASSEMBLER__ $incs $cppflags $defs "$gen0" > \$@.i
 -	move /Y \$@.i \$@
 +	mv -f \$@.i \$@
  EOF
