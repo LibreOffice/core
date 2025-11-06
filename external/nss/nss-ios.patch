@@ -58,6 +58,15 @@
  
 --- a/a/nss/lib/pk11wrap/pk11load.c
 +++ a/a/nss/lib/pk11wrap/pk11load.c
+@@ -31,6 +31,8 @@
+ #include "debug_module.c"
+ #endif
+ 
++extern CK_RV NSSCKBI_C_GetFunctionList();
++
+ /* build the PKCS #11 2.01 lock files */
+ CK_RV PR_CALLBACK
+ secmodCreateMutext(CK_VOID_PTR_PTR pmutex)
 @@ -456,6 +456,7 @@
  /* load the library. If this succeeds, then we have to remember to
   * unload the library if anything goes wrong from here on out...
@@ -91,16 +100,6 @@
      return SECFailure;
  }
  
-@@ -656,6 +664,8 @@
- /*
-  * load a new module into our address space and initialize it.
-  */
-+extern CK_RV NSSCKBI_C_GetFunctionList();
-+
- SECStatus
- secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
- {
-
 --- a/a/nss/lib/ckfw/nssck.api
 +++ a/a/nss/lib/ckfw/nssck.api
 @@ -1842,7 +1842,11 @@
