@@ -377,14 +377,15 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     }
 
     cbFree(cbctx);
+    return ret;
 #else
     (void)srcFontUrl;
     (void)destFileUrl;
     (void)fontMenuNameDBUrl;
     (void)charMapUrl;
     (void)featuresUrl;
+    return false;
 #endif
-    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
