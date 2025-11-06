@@ -1581,7 +1581,8 @@ bool SfxObjectShell::SaveTo_Impl
         pMedium->DisableUnlockWebDAV();
         bStoreToSameLocation = true;
 
-        if ( pMedium->DocNeedsFileDateCheck() )
+        const bool bDocNeedsFileDateCheck = pMedium->DocNeedsFileDateCheck();
+        if (bDocNeedsFileDateCheck)
         {
             rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
             if (rMedium.GetErrorCode() == ERRCODE_ABORT)
@@ -1700,6 +1701,13 @@ bool SfxObjectShell::SaveTo_Impl
             }
         }
         pMedium->DisableUnlockWebDAV(false);
+        if (bDocNeedsFileDateCheck)
+        {
+            // If we have already fetched 'DateModified' (via GetInitFileDate) then in
+            // this overwrite scenario that cached date is no longer necessarily true.
+            // Fetch it again on next demand.
+            pMedium->ClearInitFileDateCache();
+        }
     }
     else
     {
