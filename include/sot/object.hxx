@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <cppuhelper/weak.hxx>
-#include <rtl/ref.hxx>
 #include <sot/sotdllapi.h>
 
 class SOT_DLLPUBLIC SotObject : public cppu::OWeakObject

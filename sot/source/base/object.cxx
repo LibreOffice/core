@@ -18,6 +18,7 @@
  */
 
 #include <sot/object.hxx>
+#include <rtl/ref.hxx>
 
 SotObject::SotObject()
     : nOwnerLockCount(0)

@@ -21,6 +21,7 @@
 #define INCLUDED_SOT_STORAGE_HXX
 
 #include <sot/object.hxx>
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/errcode.hxx>
