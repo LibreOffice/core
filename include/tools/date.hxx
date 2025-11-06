@@ -20,11 +20,11 @@
 
 #include <tools/toolsdllapi.h>
 
+#include <compare>
+#include <cstdlib>
 #include <ostream>
 
 #include <com/sun/star/util/Date.hpp>
-
-#include <compare>
 
 namespace com::sun::star::util { struct DateTime; }
 
@@ -89,7 +89,7 @@ public:
     void            SetDate( sal_Int32 nNewDate );
     sal_Int32       GetDate() const { return mnDate; }
     /** Type safe access for values that are guaranteed to be unsigned, like Date::SYSTEM. */
-    sal_uInt32      GetDateUnsigned() const { return static_cast<sal_uInt32>(mnDate < 0 ? -mnDate : mnDate); }
+    sal_uInt32      GetDateUnsigned() const { return std::abs(mnDate); }
     css::util::Date GetUNODate() const { return css::util::Date(GetDay(), GetMonth(), GetYear()); }
 
                     /** nNewDay must be <100 */
@@ -99,21 +99,11 @@ public:
                     /** nNewYear must be != 0 */
     void            SetYear( sal_Int16 nNewYear );
 
-    sal_uInt16      GetDay() const
-                    {
-                        return mnDate < 0 ?
-                            static_cast<sal_uInt16>(-mnDate % 100) :
-                            static_cast<sal_uInt16>( mnDate % 100);
-                    }
-    sal_uInt16      GetMonth() const
-                    {
-                        return mnDate < 0 ?
-                            static_cast<sal_uInt16>((-mnDate / 100) % 100) :
-                            static_cast<sal_uInt16>(( mnDate / 100) % 100);
-                    }
-    sal_Int16       GetYear() const { return static_cast<sal_Int16>(mnDate / 10000); }
+    sal_uInt16      GetDay() const { return std::abs(mnDate) % 100; }
+    sal_uInt16      GetMonth() const { return (std::abs(mnDate) / 100) % 100; }
+    sal_Int16       GetYear() const { return mnDate / 10000; }
     /** Type safe access for values that are guaranteed to be unsigned, like Date::SYSTEM. */
-    sal_uInt16      GetYearUnsigned() const { return static_cast<sal_uInt16>((mnDate < 0 ? -mnDate : mnDate) / 10000); }
+    sal_uInt16      GetYearUnsigned() const { return std::abs(GetYear()); }
     sal_Int16       GetNextYear() const { sal_Int16 nY = GetYear(); return nY == -1 ? 1 : nY + 1; }
     sal_Int16       GetPrevYear() const { sal_Int16 nY = GetYear(); return nY == 1 ? -1 : nY - 1; }
 
