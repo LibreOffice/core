@@ -20,7 +20,6 @@
 
 #include <unotools/confignode.hxx>
 #include <map>
-#include <vcl/EnumContext.hxx>
 #include <vector>
 #include <set>
 

@@ -13,10 +13,8 @@
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
-#include <vcl/WeldedTabbedNotebookbar.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include <memory>
 #include <string_view>
 
 namespace com::sun::star::frame

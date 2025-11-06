@@ -19,7 +19,6 @@
 #pragma once
 
 #include <memory>
-#include <optional>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
