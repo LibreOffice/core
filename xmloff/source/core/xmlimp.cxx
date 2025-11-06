@@ -589,8 +589,8 @@ namespace {
 
         static OUString cleanDomain(const OUString &str)
         {
-            sal_Int32 idx = str.indexOf('|');
-            if (idx > 0)
+            sal_Int32 idx = str.indexOf('_');
+            if (idx > -1)
                 return str.copy(idx+1);
             else
                 return str;
