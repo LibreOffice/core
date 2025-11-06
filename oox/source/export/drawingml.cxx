@@ -2697,7 +2697,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    assert(nSize >= 200 && "Minimum accepted value for fontsize(ST_TextFontSize) is 200");
+    assert(nSize >= 100 && "Minimum accepted value for fontsize(ST_TextFontSize) is 100");
 
     mpFS->startElementNS( XML_a, nElement,
                           XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()),
