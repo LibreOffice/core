@@ -18,6 +18,7 @@
 #include <dbdocfun.hxx>
 #include <generalfunction.hxx>
 #include <tabprotection.hxx>
+#include <undomanager.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -155,7 +156,30 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
     return refresh(pDPObj);
 }
 
+ScDPObject* getDPObject(ScDocument* pDoc, size_t index)
+{
+    ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table collection.", pDPCollection);
+    return &(*pDPCollection)[index];
 }
+
+sal_Int32 getNumberOfPivotTables(ScDocument* pDoc)
+{
+    ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+    if (!pDPCollection)
+        return -1;
+    return pDPCollection->GetCount();
+}
+
+void updatePivotTable(ScDocShellRef const& xDocShell, size_t index)
+{
+    ScDBDocFunc aFunc(*xDocShell);
+    ScDPObject* pDPObject = getDPObject(&xDocShell->GetDocument(), index);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table object.", pDPObject);
+    aFunc.RefreshPivotTables(pDPObject, true);
+}
+
+} // end anonymous
 
 class TestPivottable : public ScUcalcTestBase
 {
@@ -2644,6 +2668,217 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableMedianFunc)
 
     bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableUndoCreate)
+{
+    // Test Undo and Redo creating a pivot table
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    bool bSuccess{};
+    ScDBDocFunc aFunc(*m_xDocShell);
+    ScRange aDataRange;
+
+    // Insert data
+    {
+        const std::vector<std::vector<const char*>> aData = {
+            { "Name", "Value" },
+            { "A", "1" },
+            { "B", "2" },
+        };
+
+        static const ScAddress aPosition(1, 1, 0);
+        aDataRange = insertRangeData(m_pDoc, aPosition, aData);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPosition, aDataRange.aStart);
+    }
+
+    // Create pivot table
+    {
+        // Dimension definition
+        static constexpr auto aFields = std::to_array<DPFieldDef>({
+            { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
+        });
+
+        std::unique_ptr<ScDPObject> pDPObject(createDPFromRange(m_pDoc, aDataRange, aFields.data(), aFields.size(), false));
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObject);
+
+        // Create a new pivot table output.
+        bSuccess = aFunc.CreatePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
+    }
+
+    // Check output
+    std::function functionCheckNotFiltered = [this, &bSuccess](int nLine)
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+
+        ScRange aOutRange = pDPObject->GetOutRange();
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { "Name", "Count - Value" },
+                { "A", "1" },
+                { "B", "1" },
+                { "Total Result", "2" },
+            };
+
+            bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Unfiltered data not as expected");
+            CPPUNIT_ASSERT_MESSAGE(OString::number(nLine).getStr(), bSuccess);
+        }
+    };
+    functionCheckNotFiltered(__LINE__);
+
+    // Undo
+    m_pDoc->GetUndoManager()->Undo();
+    {
+        ScDPCollection* pDPCollection = m_pDoc->GetDPCollection();
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pDPCollection->GetCount());
+    }
+
+    // Redo
+    m_pDoc->GetUndoManager()->Redo();
+    {
+        ScDPCollection* pDPCollection = m_pDoc->GetDPCollection();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDPCollection->GetCount());
+    }
+
+    functionCheckNotFiltered(__LINE__);
+
+    // Remove Pivot Table
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        bSuccess = aFunc.RemovePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
+    }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilterValueUndoRedo)
+{
+    // Test Undo and Redo when a value is filtered out
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    bool bSuccess{};
+    ScDBDocFunc aFunc(*m_xDocShell);
+    ScRange aDataRange;
+
+    // Insert data
+    {
+        const std::vector<std::vector<const char*>> aData = {
+            { "Name", "Value" },
+            { "A", "1" },
+            { "B", "2" },
+        };
+
+        static const ScAddress aPosition(1, 1, 0);
+        aDataRange = insertRangeData(m_pDoc, aPosition, aData);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPosition, aDataRange.aStart);
+    }
+
+    // Create pivot table
+    {
+        // Dimension definition
+        static constexpr auto aFields = std::to_array<DPFieldDef>({
+            { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
+        });
+
+        std::unique_ptr<ScDPObject> pDPObject(createDPFromRange(m_pDoc, aDataRange, aFields.data(), aFields.size(), false));
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObject);
+
+        // Create a new pivot table output.
+        bSuccess = aFunc.CreatePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
+    }
+
+    // Check output
+    std::function functionCheckNotFiltered = [this, &bSuccess](int nLine)
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+
+        ScRange aOutRange = pDPObject->GetOutRange();
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { "Name", "Count - Value" },
+                { "A", "1" },
+                { "B", "1" },
+                { "Total Result", "2" },
+            };
+
+            bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Unfiltered data not as expected");
+            OString sMessage("Vales don't match. Called at line " + OString::number(nLine));
+            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), bSuccess);
+        }
+    };
+    functionCheckNotFiltered(__LINE__);
+
+    // Filter value "A" in "Name" Dimension
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        ScDPObject aNewObject(*pDPObject);
+
+        ScDPSaveData* pSaveData = aNewObject.GetSaveData();
+        CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(u"Name"_ustr);
+        CPPUNIT_ASSERT_MESSAGE("Name dimension should exist.", pDim);
+        ScDPSaveMember* pMember = pDim->GetMemberByName(u"A"_ustr);
+        CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMember);
+        pMember->SetIsVisible(false);
+
+        aNewObject.SetSaveData(*pSaveData);
+        aNewObject.ReloadGroupTableData();
+        aNewObject.InvalidateData();
+
+        bSuccess = aFunc.DataPilotUpdate(pDPObject, &aNewObject, true, true);
+        //TODO - We need to fix UpdatePivotTable too
+        // bSuccess = aFunc.UpdatePivotTable(aNewObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Pivot table should update.", bSuccess);
+    }
+
+    std::function functionCheckFiltered = [this, &bSuccess](int nLine)
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        ScRange aOutRange = pDPObject->GetOutRange();
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { "Name", "Count - Value" },
+                { "B", "1" },
+                { "Total Result", "1" },
+            };
+
+            bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Filtered data not as expected");
+            OString sMessage("Vales don't match. Called at line " + OString::number(nLine));
+            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), bSuccess);
+        }
+    };
+    functionCheckFiltered(__LINE__);
+    updatePivotTable(m_xDocShell, 0);
+    functionCheckFiltered(__LINE__);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfPivotTables(m_pDoc));
+
+    // Undo
+    m_pDoc->GetUndoManager()->Undo();
+
+    functionCheckNotFiltered(__LINE__);
+    updatePivotTable(m_xDocShell, 0);
+    functionCheckNotFiltered(__LINE__);
+
+    // Remove Pivot Table
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        bSuccess = aFunc.RemovePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
+    }
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
