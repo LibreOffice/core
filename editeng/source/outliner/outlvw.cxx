@@ -1196,6 +1196,14 @@ void OutlinerView::SwitchOffBulletsNumbering(
             {
                 SfxItemSet aAttrs(rAttrs);
                 aAttrs.ClearItem( EE_PARA_BULLETSTATE );
+
+                if (pOwner->GetOutlinerMode() == OutlinerMode::OutlineObject)
+                {
+                    // Outliner shape: also clear the SvxNumRule, so a next "switch on" will again
+                    // work with styles from the master page.
+                    aAttrs.ClearItem(EE_PARA_NUMBULLET);
+                }
+
                 pOwner->SetParaAttribs( nPara, aAttrs );
             }
         }
