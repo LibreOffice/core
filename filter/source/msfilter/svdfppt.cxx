@@ -5591,7 +5591,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nDestinationInstance ) ) // Font size in Point
     {
-        constexpr sal_uInt32 MIN_FONT_HEIGHT_PT = 2;
+        constexpr sal_uInt32 MIN_FONT_HEIGHT_PT = 1;
         sal_uInt32 nHeight = rManager.ScalePoint(std::max(nVal, MIN_FONT_HEIGHT_PT));
 
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
