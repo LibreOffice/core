@@ -13,11 +13,14 @@
 #include <svx/svdpage.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 
 #include <conditio.hxx>
 #include <document.hxx>
 #include <scitems.hxx>
+
+#include <chrono>
 
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
@@ -1046,6 +1049,30 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testDdePoke)
     CPPUNIT_ASSERT_EQUAL(u"Hello from Sender"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
 }
 #endif
+
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testVbaOnTime)
+{
+    // A document with a sub that sets value in its A1, and a sub scheduling the other sub's
+    // execution using Application.OnTime:
+    createScDoc("OnTime.fods");
+    ScDocument* pDoc = getScDoc();
+    // A1 is empty initially:
+    CPPUNIT_ASSERT(pDoc->IsEmptyData(0, 0, 0, 0, 0));
+
+    executeMacro(u"vnd.sun.star.script:Standard.Module1.ScheduleOnTime"
+                 "?language=Basic&location=document"_ustr);
+
+    // A1 is still empty, because the timer has not yet fired:
+    CPPUNIT_ASSERT(pDoc->IsEmptyData(0, 0, 0, 0, 0));
+
+    // Let the timer fire and run the OnTime sub. The minimal timeout of VbaTimer is 50 ms:
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(50ms);
+    Scheduler::ProcessEventsToIdle();
+
+    // A1 has the expected number now:
+    CPPUNIT_ASSERT_EQUAL(42.0, pDoc->GetValue(0, 0, 0));
+}
 
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)

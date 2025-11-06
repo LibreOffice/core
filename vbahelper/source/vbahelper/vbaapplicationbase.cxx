@@ -21,6 +21,7 @@
 #include <sal/macros.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -382,11 +383,17 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
     if ( aFunction.isEmpty() )
         throw uno::RuntimeException( u"Unexpected function name!"_ustr );
 
-    double nEarliestTime = 0;
-    double nLatestTime = 0;
-    if ( !( aEarliestTime >>= nEarliestTime )
-      || ( aLatestTime.hasValue() && !( aLatestTime >>= nLatestTime ) ) )
-        throw uno::RuntimeException( u"Only double is supported as time for now!"_ustr );
+    auto getTime = [](const uno::Any& aTime)
+    {
+        if (double nTime; aTime >>= nTime)
+            return nTime;
+        if (css::bridge::oleautomation::Date date; aTime >>= date)
+            return date.Value;
+        throw uno::RuntimeException(u"Invalid type of argument"_ustr);
+    };
+
+    double nEarliestTime = getTime(aEarliestTime);
+    double nLatestTime = aLatestTime.hasValue() ? getTime(aLatestTime) : 0;
 
     bool bSetTimer = true;
     aSchedule >>= bSetTimer;
