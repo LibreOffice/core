@@ -451,7 +451,7 @@ void GenericSalLayout::Justify(double nNewWidth)
 // to enable automatic halfwidth substitution for fullwidth punctuation
 // return value is negative for l, positive for r, zero for neutral
 // TODO: handle vertical layout as proposed in commit 43bf2ad49c2b3989bbbe893e4fee2e032a3920f5?
-static int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
+static int lcl_CalcAsianKerning(sal_Unicode c, bool bLeft)
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static const signed char nTable[0x30] =
