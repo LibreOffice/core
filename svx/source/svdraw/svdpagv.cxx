@@ -501,64 +501,92 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
             const tools::Rectangle aDrawingArea(x1, y1, x2, y2);
             if( bHoriLines )
             {
-                DrawGridFlags nGridFlags = ( bHoriSolid ? DrawGridFlags::HorzLines : DrawGridFlags::Dots );
-                sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
-                sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000)/ nSteps) - (nx2 * 1000) ) : 0;
-                sal_uInt32 nStepOffset = 0;
-                sal_uInt16 nPointOffset = 0;
-
-                for(sal_uInt16 a=0;a<nSteps;a++)
+                if( bHoriSolid )
                 {
                     // Make sure the origin of the subgrid is within the drawing area
-                    const Point aSubGridPosition(xFinOrg + (a * nx2) + nPointOffset, yBigOrg);
-                    if (!aDrawingArea.Contains(aSubGridPosition))
+                    const Point aSubGridPosition(x1, yBigOrg);
+                    if (aDrawingArea.Contains(aSubGridPosition))
                     {
-                        continue;
+                        // draw
+                        rOut.DrawGrid(
+                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                            Size( nx1, ny1 ), DrawGridFlags::HorzLines );
                     }
+                }
+                else
+                {
+                    sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
+                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000)/ nSteps) - (nx2 * 1000) ) : 0;
+                    sal_uInt32 nStepOffset = 0;
+                    sal_uInt16 nPointOffset = 0;
 
-                    // draw
-                    rOut.DrawGrid(
-                        tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
-                        Size( nx1, ny1 ), nGridFlags );
-
-                    // do a step
-                    nStepOffset += nRestPerStepMul1000;
-                    while(nStepOffset >= 1000)
+                    for(sal_uInt16 a=0;a<nSteps;a++)
                     {
-                        nStepOffset -= 1000;
-                        nPointOffset++;
+                        // Make sure the origin of the subgrid is within the drawing area
+                        const Point aSubGridPosition(xFinOrg + (a * nx2) + nPointOffset, yBigOrg);
+                        if (!aDrawingArea.Contains(aSubGridPosition))
+                        {
+                            continue;
+                        }
+
+                        // draw
+                        rOut.DrawGrid(
+                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                            Size( nx1, ny1 ), DrawGridFlags::Dots );
+
+                        // do a step
+                        nStepOffset += nRestPerStepMul1000;
+                        while(nStepOffset >= 1000)
+                        {
+                            nStepOffset -= 1000;
+                            nPointOffset++;
+                        }
                     }
                 }
             }
 
             if( bVertLines )
             {
-                DrawGridFlags nGridFlags = ( bVertSolid ? DrawGridFlags::VertLines : DrawGridFlags::Dots );
-                sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
-                sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
-                sal_uInt32 nStepOffset = 0;
-                sal_uInt16 nPointOffset = 0;
-
-                for(sal_uInt16 a=0;a<nSteps;a++)
+                if( bVertSolid )
                 {
                     // Make sure the origin of the subgrid is within the drawing area
-                    const Point aSubGridPosition(xBigOrg, yFinOrg + (a * ny2) + nPointOffset);
-                    if (!aDrawingArea.Contains(aSubGridPosition))
+                    const Point aSubGridPosition(xBigOrg, y1);
+                    if (aDrawingArea.Contains(aSubGridPosition))
                     {
-                        continue;
+                        // draw
+                        rOut.DrawGrid(
+                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                            Size( nx1, ny1 ), DrawGridFlags::VertLines );
                     }
+                }
+                else
+                {
+                    sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
+                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
+                    sal_uInt32 nStepOffset = 0;
+                    sal_uInt16 nPointOffset = 0;
 
-                    // draw
-                    rOut.DrawGrid(
-                        tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
-                        Size( nx1, ny1 ), nGridFlags );
-
-                    // do a step
-                    nStepOffset += nRestPerStepMul1000;
-                    while(nStepOffset >= 1000)
+                    for(sal_uInt16 a=0;a<nSteps;a++)
                     {
-                        nStepOffset -= 1000;
-                        nPointOffset++;
+                        // Make sure the origin of the subgrid is within the drawing area
+                        const Point aSubGridPosition(xBigOrg, yFinOrg + (a * ny2) + nPointOffset);
+                        if (!aDrawingArea.Contains(aSubGridPosition))
+                        {
+                            continue;
+                        }
+
+                        // draw
+                        rOut.DrawGrid(
+                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                            Size( nx1, ny1 ), DrawGridFlags::Dots );
+
+                        // do a step
+                        nStepOffset += nRestPerStepMul1000;
+                        while(nStepOffset >= 1000)
+                        {
+                            nStepOffset -= 1000;
+                            nPointOffset++;
+                        }
                     }
                 }
             }
