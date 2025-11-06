@@ -2015,6 +2015,55 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHAR_SPECIAL, nNumberingType);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
+{
+    // Given a document with a shape, last paragraph is has a bullet:
+    createSdImpressDoc("odp/bullet-off-on.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pShape = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    // When turning the bullet off & then back on again:
+    // Start text edit:
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeString(pImpressDocument, u"x");
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    // Toggle off:
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    // Toggle on:
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    // End text edit:
+    typeKey(pImpressDocument, KEY_ESCAPE);
+
+    // Then make sure the result is Level 1 from the master page:
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // 5th, last paragraph.
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(4, xShape),
+                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNumberingRules;
+    xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+    // Level 1.
+    comphelper::SequenceAsHashMap aNumberingRule(xNumberingRules->getByIndex(0));
+    sal_Int32 nLeftMargin = 0;
+    aNumberingRule[u"LeftMargin"_ustr] >>= nLeftMargin;
+    sal_Int32 nFirstLineOffset = 0;
+    aNumberingRule[u"FirstLineOffset"_ustr] >>= nFirstLineOffset;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 300
+    // - Actual  : 0
+    // i.e. the indent was 0cm, even if Level1 and Level2 had other values.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(300), nLeftMargin + nFirstLineOffset);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
