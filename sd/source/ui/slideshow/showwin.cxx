@@ -98,12 +98,6 @@ void ShowWindow::dispose()
 
 void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    // Ignore workaround of https://gitlab.gnome.org/GNOME/gtk/issues/1785
-    // See calls to GtkSalFrame::makeFakeKeyPress (Fixed in GTK 3.24)
-    bool bFakeKeyPress = rKEvt.GetKeyCode().GetFullCode() == 0;
-    if (bFakeKeyPress)
-        return;
-
     bool bReturn = false;
 
     if( SHOWWINDOWMODE_PREVIEW == meShowWindowMode )

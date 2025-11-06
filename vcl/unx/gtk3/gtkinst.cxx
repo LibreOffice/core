@@ -11299,20 +11299,7 @@ public:
         pWidget = getPopupRect(pWidget, rRect, aRect);
         gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
 
-        // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
-        // before trying to launch the menu
-        // https://gitlab.gnome.org/GNOME/gtk/issues/1785
-        // Fixed in GTK 3.24
-        GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
-        gtk_main_do_event(pKeyEvent);
-
         GdkEvent *pTriggerEvent = gtk_get_current_event();
-        bool bEventOwnership = true;
-        if (!pTriggerEvent)
-        {
-            pTriggerEvent = pKeyEvent;
-            bEventOwnership = false;
-        }
 
         bool bSwapForRTL = SwapForRTL(pWidget);
 
@@ -11330,10 +11317,8 @@ public:
             else
                 gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_EAST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
         }
-        if (bEventOwnership)
+        if (pTriggerEvent)
             gdk_event_free(pTriggerEvent);
-
-        gdk_event_free(pKeyEvent);
 #endif
 
         if (g_main_loop_is_running(pLoop))
