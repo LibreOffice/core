@@ -4177,7 +4177,8 @@ void ChartExport::exportOneAxis_chart(
         }
 
         // FIXME: seems not support? noMultiLvlLbl
-        pFS->singleElement(FSNS(XML_c, XML_noMultiLvlLbl), XML_val, OString::number(0));
+        if( nAxisType == XML_catAx )
+            pFS->singleElement(FSNS(XML_c, XML_noMultiLvlLbl), XML_val, OString::number(0));
     }
 
     // crossBetween
