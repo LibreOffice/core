@@ -636,6 +636,10 @@ util::DateTime const & SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
     return pImpl->m_aDateTime;
 }
 
+void SfxMedium::ClearInitFileDateCache()
+{
+    pImpl->m_bGotDateTime = false;
+}
 
 Reference < XContent > SfxMedium::GetContent() const
 {

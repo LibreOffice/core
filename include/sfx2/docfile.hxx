@@ -143,7 +143,12 @@ public:
 
     void                CheckFileDate( const css::util::DateTime& aInitDate );
     [[nodiscard]] bool  DocNeedsFileDateCheck() const;
+    // Returns the 'DateModified' of the URLObject. With bIgnoreOldValue of
+    // false returns previously cached value. If true, or no cached value
+    // available, fetches it anew.
     css::util::DateTime const & GetInitFileDate( bool bIgnoreOldValue );
+    // Clear a previously cached 'DateModified' cache.
+    void ClearInitFileDateCache();
 
     css::uno::Reference< css::ucb::XContent > GetContent() const;
     const OUString& GetPhysicalName() const;
