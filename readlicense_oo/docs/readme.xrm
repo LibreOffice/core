@@ -73,11 +73,11 @@
 					</li>
 
 					<li>
-						<p id="s256we" xml:lang="en-US">GTK version 3.20 or higher;</p>
+						<p id="s256we" xml:lang="en-US">GTK version 3.24 and ATK version 2.36 or higher;</p>
 					</li>
 
 					<li>
-						<p id="wd2dff" xml:lang="en-US">Gnome 3.18 or higher, with the at-spi2 1.32 package (required for support for assistive technology [AT] tools), or another compatible GUI (such as KDE, among others).</p>
+						<p id="wd2dff" xml:lang="en-US">Gnome 3.18 or higher, or another compatible desktop environment (such as KDE Plasma, among others).</p>
 					</li>
 				</ul>
 				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and there may be different installation options (KDE vs Gnome, etc.) available from the same Linux vendor. Some distributions ship with their own “native” version of ${PRODUCTNAME}, which may have different features from this community-supplied version of ${PRODUCTNAME}. In many cases, you can install the community-supplied ${PRODUCTNAME} alongside a native version. However, you may prefer to remove the “native” version before installing this community-supplied version. For details on how to do that, please consult the user help resources provided by your particular Linux vendor.</p>
