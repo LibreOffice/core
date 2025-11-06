@@ -36,7 +36,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

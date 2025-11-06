@@ -24,7 +24,6 @@
 
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <editeng/outlobj.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <oox/dllapi.h>

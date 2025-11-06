@@ -21,11 +21,9 @@
 #define INCLUDED_OOX_DUMP_OLEDUMPER_HXX
 
 #include <map>
-#include <memory>
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dump/dumperbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/storagebase.hxx>

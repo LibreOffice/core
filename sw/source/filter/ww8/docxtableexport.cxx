@@ -28,6 +28,7 @@
 #include <comphelper/string.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <oox/token/tokens.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <fmtfsize.hxx>

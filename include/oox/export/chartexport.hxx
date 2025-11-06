@@ -25,10 +25,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
-#include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>

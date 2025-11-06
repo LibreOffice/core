@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
 
 #include <cstddef>
-#include <functional>
 #include <memory>
 #include <stack>
 

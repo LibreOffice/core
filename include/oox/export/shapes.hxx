@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_EXPORT_SHAPES_HXX
 #define INCLUDED_OOX_EXPORT_SHAPES_HXX
 
-#include <cstddef>
 #include <memory>
 #include <string_view>
 #include <unordered_map>
@@ -34,7 +33,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sax/fshelper.hxx>
-#include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
 
 namespace com::sun::star {

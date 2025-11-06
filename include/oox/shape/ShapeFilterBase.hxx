@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <oox/dllapi.h>
-#include <oox/vml/vmldrawing.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>

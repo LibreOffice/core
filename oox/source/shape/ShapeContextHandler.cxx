@@ -30,6 +30,7 @@
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <oox/vml/vmldrawing.hxx>
 #include <oox/vml/vmldrawingfragment.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 #define INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 
-#include <functional>
 #include <memory>
 #include <vector>
 

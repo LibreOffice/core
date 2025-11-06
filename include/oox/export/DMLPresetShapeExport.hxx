@@ -10,7 +10,6 @@
 #ifndef INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
 #define INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

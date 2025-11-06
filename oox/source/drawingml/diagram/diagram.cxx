@@ -31,6 +31,7 @@
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <oox/drawingml/theme.hxx>
 #include <oox/token/namespaces.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpage.hxx>

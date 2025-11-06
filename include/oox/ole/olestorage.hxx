@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_OLE_OLESTORAGE_HXX
 #define INCLUDED_OOX_OLE_OLESTORAGE_HXX
 
-#include <vector>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/storagebase.hxx>

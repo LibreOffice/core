@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <oox/drawingml/theme.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/core/xmlfilterbase.hxx>

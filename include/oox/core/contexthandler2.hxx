@@ -24,7 +24,6 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>

@@ -20,9 +20,7 @@
 #ifndef INCLUDED_OOX_CORE_FRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_CORE_FRAGMENTHANDLER_HXX
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <oox/core/contexthandler.hxx>

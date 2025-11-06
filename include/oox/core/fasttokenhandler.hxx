@@ -22,7 +22,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_PROGRESSBAR_HXX
 #define INCLUDED_OOX_HELPER_PROGRESSBAR_HXX
 
-#include <config_options.h>
 #include <memory>
 
 #include <com/sun/star/uno/Reference.hxx>

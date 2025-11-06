@@ -38,6 +38,7 @@
 #include <svx/strings.hrc>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/theme.hxx>
 #include <oox/dump/pptxdumper.hxx>
 #include <drawingml/table/tablestylelistfragmenthandler.hxx>
 #include <oox/helper/graphichelper.hxx>
