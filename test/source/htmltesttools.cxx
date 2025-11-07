@@ -10,6 +10,8 @@
 #include <test/htmltesttools.hxx>
 #include <sal/log.hxx>
 
+#include <libxml/HTMLparser.h>
+
 #include <memory>
 
 htmlDocUniquePtr HtmlTestTools::parseHtml(utl::TempFileNamed const & aTempFile)

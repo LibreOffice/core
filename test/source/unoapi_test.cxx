@@ -15,6 +15,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <osl/file.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>

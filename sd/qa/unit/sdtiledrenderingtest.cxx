@@ -19,6 +19,8 @@
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 
+#include <libxml/xmlwriter.h>
+
 using namespace css;
 
 SdTiledRenderingTest::SdTiledRenderingTest()

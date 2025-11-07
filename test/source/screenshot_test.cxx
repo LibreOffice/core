@@ -16,6 +16,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/environment.hxx>
+#include <osl/file.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>

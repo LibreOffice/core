@@ -18,6 +18,8 @@
 
 #include <memory>
 
+#include <libxml/xpathInternals.h>
+
 using namespace ::com::sun::star;
 
 class MathMLExportTest : public UnoApiXmlTest

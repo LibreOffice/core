@@ -62,6 +62,7 @@
 #include <expfld.hxx>
 
 #if defined(_WIN32)
+#include <osl/file.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/securityoptions.hxx>
 #include <systools/win32/comtools.hxx>

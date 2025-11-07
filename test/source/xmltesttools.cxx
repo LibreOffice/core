@@ -15,6 +15,8 @@
 #include <sal/log.hxx>
 #include <test/cppunitasserthelper.hxx>
 
+#include <libxml/xpathInternals.h>
+
 namespace {
 
 OUString convert(xmlChar const * string) {

@@ -29,6 +29,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace ::com::sun::star;
 
 namespace

@@ -20,13 +20,12 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/OAccessible.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/window.hxx>
 
 #include <rtl/ustring.hxx>
 #include <test/bootstrapfixture.hxx>

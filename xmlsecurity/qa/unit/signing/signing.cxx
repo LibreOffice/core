@@ -60,6 +60,8 @@
 #include <vcl/scheduler.hxx>
 #include <svl/cryptosign.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace com::sun::star;
 
 /// Testsuite for the document signing feature.

@@ -12,10 +12,7 @@
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
-#include <test/xmltesttools.hxx>
-
-#include <libxml/HTMLparser.h>
-#include <libxml/HTMLtree.h>
+#include <test/xmldocptr.hxx>
 
 #include <unotools/tempfile.hxx>
 

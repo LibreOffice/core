@@ -25,6 +25,8 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace ::com::sun::star;
 
 /// SVG filter tests.

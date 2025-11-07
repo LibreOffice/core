@@ -65,6 +65,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/file.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 

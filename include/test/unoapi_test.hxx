@@ -19,7 +19,6 @@
 #include <test/testinteractionhandler.hxx>
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 

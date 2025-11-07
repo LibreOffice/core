@@ -11,6 +11,8 @@
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
+#include <cppunit/extensions/HelperMacros.h>
+
 using namespace css;
 using namespace css::uno;
 

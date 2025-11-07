@@ -31,6 +31,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace css;
 
 /// Testsuite for the document signing feature.
