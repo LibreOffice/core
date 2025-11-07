@@ -29,6 +29,7 @@
 #include <unotools/datetime.hxx>
 
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 #include <limits.h>

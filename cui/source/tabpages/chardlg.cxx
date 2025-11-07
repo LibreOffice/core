@@ -64,6 +64,7 @@
 #include <osl/diagnose.h>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 

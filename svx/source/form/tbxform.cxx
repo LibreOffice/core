@@ -23,6 +23,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <tools/debug.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 

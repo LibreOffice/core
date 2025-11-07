@@ -29,6 +29,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

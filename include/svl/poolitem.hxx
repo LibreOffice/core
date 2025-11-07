@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <vector>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>

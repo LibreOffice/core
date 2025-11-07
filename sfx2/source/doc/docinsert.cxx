@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>

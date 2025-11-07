@@ -20,6 +20,7 @@
 #include <swpossizetabpage.hxx>
 #include <o3tl/untaint.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/svddef.hxx>
 #include <svx/sxcecitm.hxx>

@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/debug.hxx>
 #include <tools/UnitConversion.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>

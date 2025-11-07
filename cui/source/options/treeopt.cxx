@@ -29,6 +29,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 
 #include <treeopt.hrc>
 #include <helpids.h>

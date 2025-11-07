@@ -26,7 +26,6 @@
 #include <o3tl/strong_int.hxx>
 
 #include <memory>
-#include <optional>
 #include <vector>
 
 typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;

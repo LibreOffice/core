@@ -31,6 +31,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <svtools/unitconv.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 

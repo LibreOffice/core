@@ -47,6 +47,7 @@
 #include <svl/memberid.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/graphicfilter.hxx>

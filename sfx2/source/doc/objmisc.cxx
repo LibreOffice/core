@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <tools/debug.hxx>
 #include <tools/inetmsg.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/eitem.hxx>

@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 #include <svl/intitem.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/selctrl.hxx>

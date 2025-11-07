@@ -57,6 +57,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>

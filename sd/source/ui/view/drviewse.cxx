@@ -62,6 +62,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <osl/diagnose.h>
 #include <svl/cryptosign.hxx>
+#include <tools/debug.hxx>
 
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>

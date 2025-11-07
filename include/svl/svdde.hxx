@@ -25,7 +25,6 @@
 #include <svl/svldllapi.h>
 #include <sot/formats.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <memory>

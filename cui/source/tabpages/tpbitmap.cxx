@@ -51,6 +51,7 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 

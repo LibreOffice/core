@@ -21,6 +21,8 @@
 #include <svl/svldllapi.h>
 
 #include <svl/nfengine.hxx>
+#include <svl/nfkeytab.hxx>
+#include <tools/link.hxx>
 
 class SvNumberFormatterRegistry_Impl;
 class NfCurrencyTable;

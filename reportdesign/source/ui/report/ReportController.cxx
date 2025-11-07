@@ -105,6 +105,7 @@
 #include <svx/flagsdef.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
+#include <tools/debug.hxx>
 
 #include <core_resource.hxx>
 #include <DesignView.hxx>

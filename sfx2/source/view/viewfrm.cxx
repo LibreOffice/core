@@ -135,6 +135,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/cryptosign.hxx>
+#include <tools/debug.hxx>
 
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>

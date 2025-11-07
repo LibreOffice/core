@@ -26,6 +26,7 @@
 #include <svx/flagsdef.hxx>
 #include <svx/svxids.hrc>
 #include <svx/sdtaitm.hxx>
+#include <tools/debug.hxx>
 
 #include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>

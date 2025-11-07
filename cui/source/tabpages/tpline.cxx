@@ -21,6 +21,7 @@
 #include <editeng/sizeitem.hxx>
 #include <o3tl/untaint.hxx>
 #include <osl/file.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
 #include <strings.hrc>

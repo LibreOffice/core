@@ -33,6 +33,7 @@
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/debug.hxx>
 
 #include <measure.hxx>
 

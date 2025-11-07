@@ -57,6 +57,7 @@
 #include <svtools/sfxecode.hxx>
 #include <preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
+#include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/moduleoptions.hxx>

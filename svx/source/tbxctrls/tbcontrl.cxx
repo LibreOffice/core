@@ -108,6 +108,7 @@
 #include <tools/json_writer.hxx>
 
 #include <editeng/editeng.hxx>
+#include <tools/debug.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 

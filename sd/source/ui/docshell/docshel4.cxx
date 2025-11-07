@@ -49,6 +49,7 @@
 #include <vcl/syswin.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <tools/debug.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

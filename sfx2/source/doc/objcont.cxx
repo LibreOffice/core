@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/datetime.hxx>
+#include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <rtl/uri.hxx>

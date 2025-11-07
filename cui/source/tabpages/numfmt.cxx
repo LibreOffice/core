@@ -28,6 +28,7 @@
 #include <i18nlangtag/lang.h>
 #include <svx/svxids.hrc>
 #include <svtools/colorcfg.hxx>
+#include <tools/debug.hxx>
 
 #include <numcategories.hrc>
 #include <strings.hrc>

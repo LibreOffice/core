@@ -20,6 +20,7 @@
 #pragma once
 
 #include <unotools/configitem.hxx>
+#include <tools/solar.h>
 #include <sfx2/module.hxx>
 #include <svx/optgrid.hxx>
 #include <tools/degree.hxx>

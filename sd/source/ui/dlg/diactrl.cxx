@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
+#include <tools/debug.hxx>
 
 #include <strings.hrc>
 

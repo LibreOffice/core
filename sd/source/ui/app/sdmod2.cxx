@@ -19,6 +19,7 @@
 
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
+#include <tools/debug.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/styfitem.hxx>
 #include <svl/inethist.hxx>

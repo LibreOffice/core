@@ -56,6 +56,7 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <tools/UnitConversion.hxx>

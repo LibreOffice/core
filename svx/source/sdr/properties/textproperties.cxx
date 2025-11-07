@@ -41,6 +41,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
+#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 

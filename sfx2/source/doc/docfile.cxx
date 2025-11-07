@@ -73,6 +73,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>

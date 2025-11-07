@@ -36,6 +36,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/evntconf.hxx>
 

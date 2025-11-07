@@ -52,6 +52,7 @@
 #include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <tools/debug.hxx>
 
 // #UndoRedo#
 #include <svtools/insdlg.hxx>

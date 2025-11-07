@@ -25,6 +25,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
+#include <tools/debug.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

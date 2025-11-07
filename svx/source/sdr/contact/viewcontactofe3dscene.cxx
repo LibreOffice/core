@@ -29,6 +29,7 @@
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 

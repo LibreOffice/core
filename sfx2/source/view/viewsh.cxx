@@ -71,6 +71,7 @@
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <editeng/unoprnms.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <svtools/soerr.hxx>

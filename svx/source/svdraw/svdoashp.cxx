@@ -84,6 +84,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svdobjplusdata.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <o3tl/string_view.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 #include <editeng/frmdiritem.hxx>

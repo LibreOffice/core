@@ -31,6 +31,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>

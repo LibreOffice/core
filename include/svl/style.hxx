@@ -32,7 +32,6 @@
 #include <svl/stylesheetuser.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/solar.h>
 
 #include <memory>
 #include <optional>

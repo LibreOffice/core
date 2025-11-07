@@ -21,7 +21,6 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
-#include <tools/debug.hxx>
 
 class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 {

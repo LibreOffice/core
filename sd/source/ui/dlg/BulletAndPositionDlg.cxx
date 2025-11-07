@@ -31,6 +31,7 @@
 #include <vcl/graph.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <memory>

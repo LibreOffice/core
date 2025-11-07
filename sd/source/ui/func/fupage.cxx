@@ -28,6 +28,7 @@
 #include <svl/itempool.hxx>
 #include <svl/grabbagitem.hxx>
 #include <sfx2/request.hxx>
+#include <tools/debug.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <stlsheet.hxx>

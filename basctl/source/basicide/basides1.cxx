@@ -55,6 +55,7 @@
 #include <svl/intitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <tools/debug.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>

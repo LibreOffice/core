@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
+#include <tools/debug.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>

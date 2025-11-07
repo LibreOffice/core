@@ -66,6 +66,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sberrors.hxx>
+#include <tools/debug.hxx>
 #include <vcl/help.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>

@@ -57,6 +57,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <cstdlib>

@@ -117,6 +117,7 @@
 
 #include <svx/scene3d.hxx>
 #include <rtl/character.hxx>
+#include <tools/debug.hxx>
 #include <tools/UnitConversion.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/lazydelete.hxx>

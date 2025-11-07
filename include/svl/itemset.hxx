@@ -22,7 +22,6 @@
 
 #include <cassert>
 #include <memory>
-#include <utility>
 #include <unordered_map>
 
 #include <svl/svldllapi.h>

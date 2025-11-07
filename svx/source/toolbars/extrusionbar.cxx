@@ -42,6 +42,7 @@
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/extrusionbar.hxx>
 #include <extrusiondepthdialog.hxx>

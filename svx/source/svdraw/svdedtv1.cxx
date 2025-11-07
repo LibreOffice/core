@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <svl/whiter.hxx>
 #include <tools/bigint.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

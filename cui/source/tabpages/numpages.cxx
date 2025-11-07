@@ -22,6 +22,7 @@
 #include <numpages.hxx>
 #include <dialmgr.hxx>
 #include <o3tl/untaint.hxx>
+#include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/numitem.hxx>

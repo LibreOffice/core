@@ -22,7 +22,6 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <tools/gen.hxx>
-#include <tools/debug.hxx>
 
 class SVL_DLLPUBLIC SfxPointItem final : public SfxPoolItem
 {
