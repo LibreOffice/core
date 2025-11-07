@@ -80,6 +80,7 @@ void TickerThread::execute()
         else
         {
             // Wait until the next deadline or a notification
+            // coverity[wait_not_in_locked_loop : SUPPRESS] - a spurious wakeup is ok
             m_rLockStore.m_aCondition.wait_for(aGuard, sleep_duration);
         }
     }
