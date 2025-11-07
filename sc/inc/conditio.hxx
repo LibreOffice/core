@@ -546,15 +546,14 @@ private:
 
 class ScColorFormatCache final : public SvtListener
 {
-private:
-    ScDocument& mrDoc;
-
 public:
     explicit ScColorFormatCache(ScDocument& rDoc, const ScRangeList& rRanges);
     virtual ~ScColorFormatCache() override;
 
     void Notify( const SfxHint& rHint ) override;
 
+    ScDocument& mrDoc;
+    ScRangeList maRanges;
     std::vector<double> maValues;
 };
 
