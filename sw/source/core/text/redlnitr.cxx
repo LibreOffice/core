@@ -517,10 +517,12 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     }
     for (auto const pTextNode : nodes)
     {
-        if (pTextNode != pRet->pParaPropsNode)
-        {
-            pTextNode->RemoveFromListRLHidden();
-        }
+        if (pTextNode == pRet->pParaPropsNode)
+            continue;
+        auto& rIDRA = pTextNode->getIDocumentRedlineAccess();
+        if (rIDRA.GetRedlinePos(*pTextNode, RedlineType::Delete) == SwRedlineTable::npos)
+            continue; // This is hidden by paragraph mark, not by a redline
+        pTextNode->RemoveFromListRLHidden();
     }
     if (eMode == FrameMode::Existing)
     {

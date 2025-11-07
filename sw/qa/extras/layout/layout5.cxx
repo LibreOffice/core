@@ -1994,6 +1994,52 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168116)
     assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169320)
+{
+    // A list with one item hidden by usual hidden text property, and another having a hidden
+    // paragraph mark:
+    createSwDoc("tdf169320-list_item_hidden_by_para_mark.fodt");
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//body/txt", 5);
+
+    // This node has a redline
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[1]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[1]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[1]", u"item 1 added text");
+    assertXPath(pXmlDoc, "//body/txt[1]//SwFieldPortion", "expand", u"1.");
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[2]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[2]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[2]", u"item 2");
+    assertXPath(pXmlDoc, "//body/txt[2]//SwFieldPortion", "expand", u"2.");
+
+    // Compare the layout structure of a hidden paragraph (txt[3]) to a merged one (txt[5]).
+
+    // This is hidden:
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getXPath(pXmlDoc, "//body/txt[3]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[3]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[3]", u"item 3");
+    assertXPath(pXmlDoc, "//body/txt[3]//SwFieldPortion", 0);
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[4]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[4]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[4]", u"subitem 3.1");
+    assertXPath(pXmlDoc, "//body/txt[4]//SwFieldPortion", "expand", u"3.1");
+
+    // This is merged:
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[5]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[5]/merged", 1);
+    assertXPathContent(pXmlDoc, "//body/txt[5]", u"item 4subitem 4.1");
+    // Without a fix, this was "3.2[4.1]":
+    assertXPath(pXmlDoc, "//body/txt[5]//SwFieldPortion", "expand", u"4.1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
