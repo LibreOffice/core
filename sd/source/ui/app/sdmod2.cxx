@@ -299,11 +299,20 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         if( !bMasterView )
         {
-            if( pPage && (pPage->GetPageKind() == PageKind::Handout) && pViewSh )
+            if (pPage)
             {
-                nPageCount = pViewSh->GetPrintedHandoutPageCount();
+                const auto ePageKind = pPage->GetPageKind();
+                if (pViewSh && ePageKind == PageKind::Handout)
+                {
+                    nPageCount = pViewSh->GetPrintedHandoutPageCount();
+                }
+                else if (pDoc)
+                {
+                    // tdf#68320 - include hidden pages in slide count field
+                    nPageCount = pDoc->GetSdPageCount(ePageKind);
+                }
             }
-            else if( pDoc )
+            else if (pDoc)
             {
                 nPageCount = pDoc->GetActiveSdPageCount();
             }
