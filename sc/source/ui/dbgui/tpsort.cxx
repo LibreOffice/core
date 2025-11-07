@@ -720,15 +720,16 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     if (!pDlg)
         return;
 
+    //tdf#168905 If sort by row, then include affects boundary columns.
     if (aSortData.bByRow)
-    {
-        m_xBtnIncComments->set_label(aStrCommentsRowLabel);
-        m_xBtnIncImages->set_label(aStrImgRowLabel);
-    }
-    else
     {
         m_xBtnIncComments->set_label(aStrCommentsColLabel);
         m_xBtnIncImages->set_label(aStrImgColLabel);
+    }
+    else
+    {
+        m_xBtnIncComments->set_label(aStrCommentsRowLabel);
+        m_xBtnIncImages->set_label(aStrImgRowLabel);
     }
 }
 
