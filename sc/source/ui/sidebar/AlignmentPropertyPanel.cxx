@@ -148,7 +148,7 @@ IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::Button&, rToggle, void
 
 IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, weld::MetricSpinButton&, void )
 {
-    Degree100 nAngle(mxMtrAngle->get_value(FieldUnit::DEGREE) * 100);
+    Degree100 nAngle((mxMtrAngle->get_value(FieldUnit::DEGREE) % 360) * 100);
     ScRotateValueItem aAngleItem(nAngle);
 
     GetBindings()->GetDispatcher()->ExecuteList(
