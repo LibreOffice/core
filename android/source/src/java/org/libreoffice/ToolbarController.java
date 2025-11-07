@@ -246,27 +246,16 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 Toast.makeText(mContext, mContext.getString(R.string.readonly_file), Toast.LENGTH_LONG).show();
             }
         } else {
-            hideItem(R.id.action_save);
+            setItemVisible(R.id.action_save, false);
         }
-        mMainMenu.findItem(R.id.action_parts).setVisible(mContext.isDrawerEnabled());
+        setItemVisible(R.id.action_parts, mContext.isDrawerEnabled());
     }
 
-    public void showItem(final int item){
+    public void setItemVisible(final int item, boolean visible){
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                mMainMenu.findItem(item).setVisible(true);
-
-            }
-        });
-    }
-
-    public void hideItem(final int item){
-        LOKitShell.getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                mMainMenu.findItem(item).setVisible(false);
-
+                mMainMenu.findItem(item).setVisible(visible);
             }
         });
     }
