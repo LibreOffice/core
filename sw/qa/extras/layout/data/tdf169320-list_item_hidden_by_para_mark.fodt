@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:view-settings">
+   <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <text:list-style style:name="MyList">
+   <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-15mm" fo:margin-left="15mm"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="2" style:num-format="1" text:display-levels="2">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-15mm" fo:margin-left="15mm"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+  </text:list-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties text:display="none"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties text:display="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct1" text:id="ct1">
+     <text:format-change>
+      <office:change-info>
+       <dc:creator>Unknown Author</dc:creator>
+       <dc:date>2000-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:format-change>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:list text:style-name="MyList">
+    <text:list-item>
+     <text:p>item 1<text:change-start text:change-id="ct1"/> added text<text:change-end text:change-id="ct1"/></text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>item 2</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="P1">item 3</text:p>
+     <text:list>
+      <text:list-item>
+       <text:p>subitem 3.1</text:p>
+      </text:list-item>
+     </text:list>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="P1" loext:marker-style-name="T1">item 4</text:p>
+     <text:list>
+      <text:list-item>
+       <text:p>subitem 4.1</text:p>
+      </text:list-item>
+     </text:list>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>
