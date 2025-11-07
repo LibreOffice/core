@@ -205,6 +205,7 @@ public:
     void            ExecIMap( SfxRequest const & rReq );
     void            GetIMapState( SfxItemSet& rSet );
 
+    void            FuTransformDocumentStructure(SfxRequest& rReq);
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
     void            FuSupport(SfxRequest& rReq);
