@@ -815,6 +815,19 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169072_illegalDates)
+{
+    // Given a document that MS Word reports as corrupt
+    loadAndSave("tdf169072_illegalDates.docx");
+
+    // Date Years MUST be greater than 1600 and less than 10,000
+    // so by dropping invalid entries, we have a document that MS Word can now cleanly open
+    xmlDocUniquePtr pXmlCore = parseExport(u"docProps/core.xml"_ustr);
+    assertXPathContent(pXmlCore, "/cp:coreProperties/dcterms:created", u"9999-10-10T13:07:54Z");
+    assertXPathContent(pXmlCore, "/cp:coreProperties/dcterms:modified", u"1601-01-01T13:09:08Z");
+    assertXPath(pXmlCore, "/cp:coreProperties/cp:lastPrinted", 0); // was 1600-12-31T00:00:52Z
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")
 {
     // given a document with a v:background bitmap, but no w:background fillcolor
