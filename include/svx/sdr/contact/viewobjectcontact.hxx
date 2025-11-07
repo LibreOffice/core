@@ -65,6 +65,7 @@ private:
     // This bool gets set when the object gets invalidated by ActionChanged() and
     // can be used from the OC to late-invalidates
     bool                                            mbLazyInvalidate : 1;
+    mutable bool                                    mbInvalidateViewOnDestruct : 1;
 
 protected:
     // make redirector a protected friend, it needs to call createPrimitives as default action

@@ -155,7 +155,8 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 :   mrObjectContact(rObjectContact),
     mrViewContact(rViewContact),
     mnActionChangedCount(0),
-    mbLazyInvalidate(false)
+    mbLazyInvalidate(false),
+    mbInvalidateViewOnDestruct(false)
 {
     // make the ViewContact remember me
     mrViewContact.AddViewObjectContact(*this);
@@ -166,11 +167,21 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 
 ViewObjectContact::~ViewObjectContact()
 {
-    // if the object range is empty, then we have never had the primitive range change, so nothing to invalidate
-    if (!maObjectRange.isEmpty())
+    if (mbInvalidateViewOnDestruct)
     {
-        // invalidate in view
-        GetObjectContact().InvalidatePartOfView(maObjectRange);
+        // used cached object range to limit invalidation
+        if (!maObjectRange.isEmpty())
+        {
+            // invalidate in view
+            GetObjectContact().InvalidatePartOfView(maObjectRange);
+        }
+        else
+        {
+            // we do not currently have cached range information, so just invalidate the whole viewport
+            const drawinglayer::geometry::ViewInformation2D& rViewInfo2D = GetObjectContact().getViewInformation2D();
+            if (!rViewInfo2D.getViewport().isEmpty())
+                GetObjectContact().InvalidatePartOfView(rViewInfo2D.getViewport());
+        }
     }
 
     // delete PrimitiveAnimation
@@ -518,6 +529,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
         const_cast< ViewObjectContact* >(this)->maObjectRange.reset();
+        mbInvalidateViewOnDestruct = true;
     }
 
     // return current Primitive2DContainer
