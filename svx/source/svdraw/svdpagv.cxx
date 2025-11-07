@@ -429,6 +429,11 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
         if (nTgl>=3) nTgl=0;
     }
 
+    assert(nx1 > 0);
+    assert(nx2 > 0);
+    assert(ny1 > 0);
+    assert(ny2 > 0);
+
     bool bHoriFine=nx2<nx1;
     bool bVertFine=ny2<ny1;
     bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
@@ -439,9 +444,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
     bool bMap0=rOut.IsMapModeEnabled();
 
-    tools::Long nWrX=0;
-    tools::Long nWrY=0;
-    Point aOrg(maPageOrigin);
+    Point aGridOrigin(maPageOrigin);
     tools::Long x1 = 0;
     tools::Long x2 = 0;
     if (GetPage()->GetWidth() < 0) // ScDrawPage of RTL sheet
@@ -463,14 +466,11 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintCnt; nGridPaintNum++) {
         if (pFrames!=nullptr) {
             const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
-            nWrX=rGF.GetPaperRect().Left();
-            nWrY=rGF.GetPaperRect().Top();
             x1=rGF.GetUserArea().Left();
             x2=rGF.GetUserArea().Right();
             y1=rGF.GetUserArea().Top();
             y2=rGF.GetUserArea().Bottom();
-            aOrg=rGF.GetUserArea().TopLeft();
-            aOrg-=rGF.GetPaperRect().TopLeft();
+            aGridOrigin=rGF.GetUserArea().TopLeft();
         }
         if (!rRect.IsEmpty()) {
             Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
@@ -482,14 +482,14 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
             if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
         }
 
-        tools::Long xBigOrg=aOrg.X()+nWrX;
+        tools::Long xBigOrg=aGridOrigin.X();
         while (xBigOrg>=x1) xBigOrg-=nx1;
         while (xBigOrg<x1) xBigOrg+=nx1;
         tools::Long xFinOrg=xBigOrg;
         while (xFinOrg>=x1) xFinOrg-=nx2;
         while (xFinOrg<x1) xFinOrg+=nx2;
 
-        tools::Long yBigOrg=aOrg.Y()+nWrY;
+        tools::Long yBigOrg=aGridOrigin.Y();
         while (yBigOrg>=y1) yBigOrg-=ny1;
         while (yBigOrg<y1) yBigOrg+=ny1;
         tools::Long yFinOrg=yBigOrg;
@@ -515,31 +515,32 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
                 }
                 else
                 {
-                    sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
-                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000)/ nSteps) - (nx2 * 1000) ) : 0;
-                    sal_uInt32 nStepOffset = 0;
-                    sal_uInt16 nPointOffset = 0;
-
-                    for(sal_uInt16 a=0;a<nSteps;a++)
+                    const sal_uInt16 nSteps = static_cast<sal_uInt16>(nx1 / nx2);
+                    if (nSteps != 0)
                     {
-                        // Make sure the origin of the subgrid is within the drawing area
-                        const Point aSubGridPosition(xFinOrg + (a * nx2) + nPointOffset, yBigOrg);
-                        if (!aDrawingArea.Contains(aSubGridPosition))
+                        // Use one of the main grid points as anchor for consistent positioning
+                        const tools::Long nAnchorPos = aGridOrigin.X() + (((xFinOrg - aGridOrigin.X()) / nx1) * nx1);
+                        sal_uInt16 nStartStep = std::round(static_cast<double>(xFinOrg - nAnchorPos) / static_cast<double>(nx2));
+
+                        // The first grid position might be outside of the drawing area, then start with the next one
+                        if(nAnchorPos + ((nx1 * nStartStep) / nSteps) < aDrawingArea.Left())
                         {
-                            continue;
+                            nStartStep += 1;
                         }
 
-                        // draw
-                        rOut.DrawGrid(
-                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
-                            Size( nx1, ny1 ), DrawGridFlags::Dots );
-
-                        // do a step
-                        nStepOffset += nRestPerStepMul1000;
-                        while(nStepOffset >= 1000)
+                        for(sal_uInt16 a=0;a<nSteps;a++)
                         {
-                            nStepOffset -= 1000;
-                            nPointOffset++;
+                            // Make sure the origin of the subgrid is within the drawing area
+                            const Point aSubGridPosition(nAnchorPos + ((nx1 * (nStartStep + a)) / nSteps), yBigOrg);
+                            if (!aDrawingArea.Contains(aSubGridPosition))
+                            {
+                                continue;
+                            }
+
+                            // draw
+                            rOut.DrawGrid(
+                                tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                                Size( nx1, ny1 ), DrawGridFlags::Dots );
                         }
                     }
                 }
@@ -561,31 +562,32 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
                 }
                 else
                 {
-                    sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
-                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
-                    sal_uInt32 nStepOffset = 0;
-                    sal_uInt16 nPointOffset = 0;
-
-                    for(sal_uInt16 a=0;a<nSteps;a++)
+                    const sal_uInt16 nSteps = static_cast<sal_uInt16>(ny1 / ny2);
+                    if (nSteps != 0)
                     {
-                        // Make sure the origin of the subgrid is within the drawing area
-                        const Point aSubGridPosition(xBigOrg, yFinOrg + (a * ny2) + nPointOffset);
-                        if (!aDrawingArea.Contains(aSubGridPosition))
+                        // Use one of the main grid points as anchor for consistent positioning
+                        const tools::Long nAnchorPos = aGridOrigin.Y() + (((yFinOrg - aGridOrigin.Y()) / ny1) * ny1);
+                        sal_uInt16 nStartStep = std::round(static_cast<double>(yFinOrg - nAnchorPos) / static_cast<double>(ny2));
+
+                        // The first grid position might be outside of the drawing area, then start with the next one
+                        if(nAnchorPos + ((ny1 * nStartStep) / nSteps) < aDrawingArea.Top())
                         {
-                            continue;
+                            nStartStep += 1;
                         }
 
-                        // draw
-                        rOut.DrawGrid(
-                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
-                            Size( nx1, ny1 ), DrawGridFlags::Dots );
-
-                        // do a step
-                        nStepOffset += nRestPerStepMul1000;
-                        while(nStepOffset >= 1000)
+                        for(sal_uInt16 a=0;a<nSteps;a++)
                         {
-                            nStepOffset -= 1000;
-                            nPointOffset++;
+                            // Make sure the origin of the subgrid is within the drawing area
+                            const Point aSubGridPosition(xBigOrg, nAnchorPos + ((ny1 * (nStartStep + a)) / nSteps));
+                            if (!aDrawingArea.Contains(aSubGridPosition))
+                            {
+                                continue;
+                            }
+
+                            // draw
+                            rOut.DrawGrid(
+                                tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                                Size( nx1, ny1 ), DrawGridFlags::Dots );
                         }
                     }
                 }
