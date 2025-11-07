@@ -1740,7 +1740,7 @@ void ScCondDateFormatEntry::endRendering()
 }
 
 ScColorFormatCache::ScColorFormatCache(ScDocument& rDoc, const ScRangeList& rRanges) :
-    mrDoc(rDoc)
+    mrDoc(rDoc), maRanges(rRanges)
 {
     if (mrDoc.IsClipOrUndo())
         return;
@@ -2144,8 +2144,29 @@ void ScConditionalFormat::CalcAll()
     }
 }
 
+/// whether rRlist1 contains rRlist2.
+static bool lcl_RangeContains(const ScRangeList& rRlist1, const ScRangeList& rRlist2)
+{
+    for (const auto& rRange: rRlist2)
+    {
+        if (!rRlist1.Contains(rRange))
+            return false;
+    }
+
+    return true;
+}
+
 void ScConditionalFormat::ResetCache() const
 {
+    if (mpCache && &mrDoc == &mpCache->mrDoc && lcl_RangeContains(mpCache->maRanges, maRanges))
+    {
+        // Cache is already listening to a super-set of maRanges.
+        // Don't shrink the range of mpCache yet as it is expensive.
+        // Just clear the cache.
+        mpCache->maValues.clear();
+        return;
+    }
+
     if (!maRanges.empty())
         mpCache = std::make_unique<ScColorFormatCache>(mrDoc, maRanges);
     else
