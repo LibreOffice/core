@@ -11,6 +11,7 @@ package org.libreoffice;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -249,6 +250,10 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             setItemVisible(R.id.action_save, false);
         }
         setItemVisible(R.id.action_parts, mContext.isDrawerEnabled());
+
+        final boolean enablePrint = mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PRINTING);
+        enableMenuItem(R.id.action_print, enablePrint);
+        setItemVisible(R.id.action_print, enablePrint);
     }
 
     public void setItemVisible(final int item, boolean visible){
