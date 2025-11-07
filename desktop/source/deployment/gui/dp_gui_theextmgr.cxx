@@ -465,16 +465,13 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     pDialogHelper->checkEntries();
 }
 
-
-::rtl::Reference< TheExtensionManager > TheExtensionManager::get( const uno::Reference< uno::XComponentContext > &xContext,
-                                                                  const uno::Reference< awt::XWindow > &xParent,
-                                                                  const OUString & extensionURL )
+::rtl::Reference<TheExtensionManager>
+TheExtensionManager::get(const uno::Reference<uno::XComponentContext>& xContext,
+                         const uno::Reference<awt::XWindow>& xParent)
 {
     if ( s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        if ( !extensionURL.isEmpty() )
-            s_ExtMgr->installPackage( extensionURL, true );
         return s_ExtMgr;
     }
 
@@ -486,9 +483,6 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         s_ExtMgr = std::move(that);
     }
-
-    if ( !extensionURL.isEmpty() )
-        s_ExtMgr->installPackage( extensionURL, true );
 
     return s_ExtMgr;
 }

@@ -105,11 +105,9 @@ public:
     const css::uno::Reference< css::deployment::XExtensionManager >& getExtensionManager() const { return m_xExtensionManager; }
     bool isReadOnly( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const;
 
-
-    static ::rtl::Reference<TheExtensionManager> get(
-        css::uno::Reference< css::uno::XComponentContext> const & xContext,
-        css::uno::Reference< css::awt::XWindow> const & xParent = nullptr,
-        OUString const & view = OUString() );
+    static ::rtl::Reference<TheExtensionManager>
+    get(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+        css::uno::Reference<css::awt::XWindow> const& xParent = nullptr);
 
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt ) override;
