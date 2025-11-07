@@ -8123,7 +8123,7 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
 {
-    double fontSize = ( rFontSize.GetHeight() + 5 ) / 10;
+    sal_uInt32 fontSize = ( rFontSize.GetHeight() + 5 ) / 10;
 
     switch ( rFontSize.Which() )
     {
