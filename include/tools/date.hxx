@@ -20,7 +20,6 @@
 
 #include <tools/toolsdllapi.h>
 
-#include <compare>
 #include <cstdlib>
 #include <ostream>
 

@@ -261,9 +261,6 @@ excludelist:
     include/package/Deflater.hxx:
     # Needed in --fwdecl mode
     - struct z_stream_s
-    include/tools/debug.hxx:
-    # Used behind #ifndef
-    - tools/toolsdllapi.h
     include/comphelper/diagnose_ex.hxx:
     # Needed for macros
     - com/sun/star/lang/IllegalArgumentException.hpp

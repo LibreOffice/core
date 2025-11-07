@@ -10,8 +10,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <sal/config.h>
 #include <sal/types.h>
-#include <tools/long.hxx>
-#include <limits>
 #include <string>
 #include <type_traits>
 

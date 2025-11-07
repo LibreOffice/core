@@ -22,8 +22,6 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <compare>
-
 struct SAL_WARN_UNUSED SvGUID
 {
     sal_uInt32 Data1;
