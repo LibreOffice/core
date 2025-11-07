@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 
 // class AccessibleIconChoiceCtrl ----------------------------------------------

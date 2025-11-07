@@ -27,6 +27,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <accessibility/vclxaccessibledropdowncombobox.hxx>
 #include <accessibility/vclxaccessiblecombobox.hxx>

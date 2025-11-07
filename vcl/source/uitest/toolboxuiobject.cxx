@@ -12,6 +12,7 @@
 
 #include <o3tl/string_view.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/vclevent.hxx>
 
 constexpr OUString TOOLBOX_ITEM_ID_PREFIX = u"toolboxitem-"_ustr;
 

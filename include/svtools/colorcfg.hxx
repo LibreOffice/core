@@ -25,9 +25,6 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-#include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
-
 namespace svtools{
 enum ColorConfigEntry : int
 {
