@@ -63,7 +63,7 @@ public:
                               const css::uno::Reference< css::uno::XComponentContext > &xContext );
         virtual ~TheExtensionManager() override;
 
-    void createDialog( const bool bCreateUpdDlg );
+    DialogHelper& createDialog(const bool bCreateUpdDlg);
     sal_Int16 execute();
 
     bool isModified() const { return m_bModified; }
@@ -93,7 +93,7 @@ public:
 
 
     void checkUpdates();
-    bool installPackage( const OUString &rPackageURL, bool bWarnUser = false );
+    bool installPackage(const OUString& rPackageURL, DialogHelper& rDialog, bool bWarnUser = false);
     void createPackageList();
 
     void terminateDialog();

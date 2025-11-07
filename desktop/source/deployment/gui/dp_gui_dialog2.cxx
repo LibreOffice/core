@@ -690,7 +690,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, weld::Button&, void)
 
     if ( aFileList.hasElements() )
     {
-        m_rManager.installPackage(aFileList[0]);
+        m_rManager.installPackage(aFileList[0], *this);
     }
 
     decBusy();

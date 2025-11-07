@@ -105,7 +105,7 @@ TheExtensionManager::~TheExtensionManager()
     Close();
 }
 
-void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
+DialogHelper& TheExtensionManager::createDialog(const bool bCreateUpdDlg)
 {
     const SolarMutexGuard guard;
 
@@ -118,8 +118,10 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
             m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xUpdReqDialog, *this, m_xContext));
             createPackageList();
         }
+        return *m_xUpdReqDialog;
     }
-    else if ( !m_xExtMgrDialog )
+
+    if (!m_xExtMgrDialog)
     {
         m_xExtMgrDialog
             = std::make_shared<ExtMgrDialog>(Application::GetFrameWeld(m_xParent), *this);
@@ -127,6 +129,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
         m_xExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
     }
+    return *m_xExtMgrDialog;
 }
 
 void TheExtensionManager::Show()
@@ -232,20 +235,18 @@ void TheExtensionManager::checkUpdates()
     m_xExecuteCmdQueue->checkForUpdates( std::move(vEntries) );
 }
 
-
-bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWarnUser )
+bool TheExtensionManager::installPackage(const OUString& rPackageURL, DialogHelper& rDialog,
+                                         bool bWarnUser)
 {
     if ( rPackageURL.isEmpty() )
         return false;
-
-    createDialog( false );
 
     bool bInstall = true;
     bool bInstallForAll = false;
 
     // DV! missing function is read only repository from extension manager
     if ( !bWarnUser && ! m_xExtensionManager->isReadOnlyRepository( SHARED_PACKAGE_MANAGER ) )
-        bInstall = getDialogHelper()->installForAllUsers( bInstallForAll );
+        bInstall = rDialog.installForAllUsers(bInstallForAll);
 
     if ( !bInstall )
         return false;
