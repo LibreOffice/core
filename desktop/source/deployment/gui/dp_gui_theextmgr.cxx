@@ -53,13 +53,10 @@ namespace dp_gui {
 
 //                             TheExtensionManager
 
-
-TheExtensionManager::TheExtensionManager( uno::Reference< awt::XWindow > xParent,
-                                          const uno::Reference< uno::XComponentContext > &xContext ) :
-    m_xContext( xContext ),
-    m_xParent(std::move( xParent )),
-    m_bModified(false),
-    m_bExtMgrDialogExecuting(false)
+TheExtensionManager::TheExtensionManager(const uno::Reference<uno::XComponentContext>& xContext)
+    : m_xContext(xContext)
+    , m_bModified(false)
+    , m_bExtMgrDialogExecuting(false)
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
     m_xExtensionManager->addModifyListener( this );
@@ -105,7 +102,9 @@ TheExtensionManager::~TheExtensionManager()
     Close();
 }
 
-DialogHelper& TheExtensionManager::createDialog(const bool bCreateUpdDlg)
+DialogHelper&
+TheExtensionManager::createDialog(const bool bCreateUpdDlg,
+                                  const css::uno::Reference<css::awt::XWindow>& xParent)
 {
     const SolarMutexGuard guard;
 
@@ -114,7 +113,7 @@ DialogHelper& TheExtensionManager::createDialog(const bool bCreateUpdDlg)
         if ( !m_xUpdReqDialog )
         {
             m_xUpdReqDialog.reset(
-                new UpdateRequiredDialog(Application::GetFrameWeld(m_xParent), *this));
+                new UpdateRequiredDialog(Application::GetFrameWeld(xParent), *this));
             m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xUpdReqDialog, *this, m_xContext));
             createPackageList();
         }
@@ -123,8 +122,7 @@ DialogHelper& TheExtensionManager::createDialog(const bool bCreateUpdDlg)
 
     if (!m_xExtMgrDialog)
     {
-        m_xExtMgrDialog
-            = std::make_shared<ExtMgrDialog>(Application::GetFrameWeld(m_xParent), *this);
+        m_xExtMgrDialog = std::make_shared<ExtMgrDialog>(Application::GetFrameWeld(xParent), *this);
         m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xExtMgrDialog, *this, m_xContext));
         m_xExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
@@ -467,8 +465,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
 }
 
 ::rtl::Reference<TheExtensionManager>
-TheExtensionManager::get(const uno::Reference<uno::XComponentContext>& xContext,
-                         const uno::Reference<awt::XWindow>& xParent)
+TheExtensionManager::get(const uno::Reference<uno::XComponentContext>& xContext)
 {
     if ( s_ExtMgr.is() )
     {
@@ -476,7 +473,7 @@ TheExtensionManager::get(const uno::Reference<uno::XComponentContext>& xContext,
         return s_ExtMgr;
     }
 
-    ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( xParent, xContext ) );
+    ::rtl::Reference<TheExtensionManager> that(new TheExtensionManager(xContext));
 
     const SolarMutexGuard guard;
     if ( ! s_ExtMgr.is() )

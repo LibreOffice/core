@@ -236,9 +236,10 @@ void ServiceImpl::startExecuteModal(
 
     {
         const SolarMutexGuard guard;
-        rtl::Reference<::dp_gui::TheExtensionManager> myExtMgr(::dp_gui::TheExtensionManager::get(
-            m_xComponentContext, m_parent ? *m_parent : Reference<awt::XWindow>()));
-        DialogHelper& rDialog = myExtMgr->createDialog(false);
+        rtl::Reference<::dp_gui::TheExtensionManager> myExtMgr(
+            dp_gui::TheExtensionManager::get(m_xComponentContext));
+        DialogHelper& rDialog
+            = myExtMgr->createDialog(false, m_parent ? *m_parent : Reference<awt::XWindow>());
         if (m_extensionURL)
             myExtMgr->installPackage(*m_extensionURL, rDialog, true);
 

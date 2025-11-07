@@ -1189,7 +1189,7 @@ sal_Int16 UpdateRequiredDialogService::execute()
 {
     ::rtl::Reference< ::dp_gui::TheExtensionManager > xManager( TheExtensionManager::get(
                                                               m_xComponentContext) );
-    xManager->createDialog( true );
+    xManager->createDialog(true, {});
     sal_Int16 nRet = xManager->execute();
 
     return nRet;

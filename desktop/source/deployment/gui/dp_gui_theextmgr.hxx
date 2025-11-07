@@ -47,7 +47,6 @@ private:
     css::uno::Reference< css::frame::XDesktop2 >              m_xDesktop;
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
     css::uno::Reference< css::container::XNameAccess >        m_xNameAccessNodes;
-    css::uno::Reference< css::awt::XWindow >                  m_xParent;
     std::shared_ptr<ExtMgrDialog> m_xExtMgrDialog;
     std::unique_ptr<UpdateRequiredDialog> m_xUpdReqDialog;
     std::unique_ptr<ExtensionCmdQueue> m_xExecuteCmdQueue;
@@ -59,11 +58,11 @@ private:
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
 
-         TheExtensionManager( css::uno::Reference< css::awt::XWindow > xParent,
-                              const css::uno::Reference< css::uno::XComponentContext > &xContext );
-        virtual ~TheExtensionManager() override;
+    TheExtensionManager(const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    virtual ~TheExtensionManager() override;
 
-    DialogHelper& createDialog(const bool bCreateUpdDlg);
+    DialogHelper& createDialog(const bool bCreateUpdDlg,
+                               const css::uno::Reference<css::awt::XWindow>& xParent);
     sal_Int16 execute();
 
     bool isModified() const { return m_bModified; }
@@ -106,8 +105,7 @@ public:
     bool isReadOnly( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const;
 
     static ::rtl::Reference<TheExtensionManager>
-    get(css::uno::Reference<css::uno::XComponentContext> const& xContext,
-        css::uno::Reference<css::awt::XWindow> const& xParent = nullptr);
+    get(css::uno::Reference<css::uno::XComponentContext> const& xContext);
 
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt ) override;
