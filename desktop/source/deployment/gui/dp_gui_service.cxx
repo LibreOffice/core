@@ -112,7 +112,7 @@ class ServiceImpl
     Reference<XComponentContext> const m_xComponentContext;
     std::optional< Reference<awt::XWindow> > /* const */ m_parent;
     std::optional<OUString> m_extensionURL;
-    OUString m_initialTitle;
+    OUString m_sTitle;
     bool m_bShowUpdateOnly;
 
 public:
@@ -178,17 +178,13 @@ css::uno::Sequence< OUString > ServiceImpl::getSupportedServiceNames()
 
 void ServiceImpl::setDialogTitle( OUString const & title )
 {
+    m_sTitle = title;
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
         const SolarMutexGuard guard;
-        ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
-            ::dp_gui::TheExtensionManager::get( m_xComponentContext,
-                                                m_parent ? *m_parent : Reference<awt::XWindow>(),
-                                                m_extensionURL ? *m_extensionURL : OUString() ) );
-        dialog->SetText( title );
+        if (weld::Window* pDialog = dp_gui::TheExtensionManager::s_ExtMgr->getDialog())
+            pDialog->set_title(title);
     }
-    else
-        m_initialTitle = title;
 }
 
 
@@ -246,9 +242,8 @@ void ServiceImpl::startExecuteModal(
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
                 m_extensionURL ? *m_extensionURL : OUString() ) );
         myExtMgr->createDialog( false );
-        if (!m_initialTitle.isEmpty()) {
-            myExtMgr->SetText( m_initialTitle );
-            m_initialTitle.clear();
+        if (!m_sTitle.isEmpty()) {
+            myExtMgr->SetText(m_sTitle);
         }
         if ( m_bShowUpdateOnly )
         {
