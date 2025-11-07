@@ -259,7 +259,8 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         }
     }
 
-    rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid);
+    rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
+        | PaintPartFlags::Size);
 
     if (bUndo)
     {
