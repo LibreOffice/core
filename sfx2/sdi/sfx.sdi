@@ -134,6 +134,23 @@ SfxVoidItem About SID_ABOUT
     GroupId = SfxGroupId::Application;
 ]
 
+SfxVoidItem ExtensionManager SID_EXTENSION_MANAGER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
+
 SfxVoidItem Activate SID_ACTIVATE
 ()
 [

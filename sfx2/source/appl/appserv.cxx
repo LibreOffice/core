@@ -35,6 +35,7 @@
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -874,6 +875,20 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
             pDlg->StartExecuteAsync(nullptr);
+            bDone = true;
+            break;
+        }
+
+        case SID_EXTENSION_MANAGER:
+        {
+            const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
+            css::uno::Reference<css::uno::XInterface> xService
+                = xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.deployment.ui.PackageManagerDialog", xContext);
+            css::uno::Reference<css::task::XJobExecutor> xJobExecutor(xService,
+                                                                      css::uno::UNO_QUERY);
+            if (xJobExecutor.is())
+                xJobExecutor->trigger(u""_ustr);
             bDone = true;
             break;
         }

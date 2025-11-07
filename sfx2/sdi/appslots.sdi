@@ -250,6 +250,10 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_EXTENSION_MANAGER
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
 }
 
 

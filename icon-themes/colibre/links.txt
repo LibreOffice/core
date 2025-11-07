@@ -1900,6 +1900,10 @@ res/queries_32.png cmd/32/dbviewqueries.png
 res/reports_32.png cmd/32/dbviewreports.png
 res/tables_32.png cmd/32/dbviewtables.png
 
+# extension manager
+cmd/sc_extensionmanager.png cmd/sc_insertplugin.png
+cmd/lc_extensionmanager.png cmd/lc_insertplugin.png
+
 # desktop
 # ==============================================
 desktop/res/caution_16.png dbaccess/res/exwarning.png

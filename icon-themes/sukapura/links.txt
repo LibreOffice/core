@@ -26,6 +26,10 @@ cmd/lc_objectforwardone.png cmd/lc_forward.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 cmd/sc_objectforwardone.png cmd/sc_forward.png
 
+# extension manager
+cmd/sc_extensionmanager.png cmd/sc_insertplugin.png
+cmd/lc_extensionmanager.png cmd/lc_insertplugin.png
+
 # chart2
 # ==============================================
 chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png

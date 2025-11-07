@@ -2025,6 +2025,10 @@ cmd/sc_previousslide.png cmd/sc_prevrecord.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 cmd/sc_nextslide.png cmd/sc_nextrecord.png
 
+# extension manager
+cmd/sc_extensionmanager.png cmd/sc_insertplugin.png
+cmd/lc_extensionmanager.png cmd/lc_insertplugin.png
+
 # dbaccess
 # ==============================================
 dbaccess/res/linked_text_table.png cmd/sc_dataimport.png

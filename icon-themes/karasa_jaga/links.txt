@@ -797,6 +797,7 @@ cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/lc_exportasgraphic.png cmd/lc_graphic.png
 cmd/lc_exportasmenu.png cmd/lc_exportto.png
+cmd/lc_extensionmanager.png cmd/lc_addons.png
 cmd/lc_extrusionsurfacefloater.png cmd/lc_cube.png
 cmd/lc_extrusiontoggle.png cmd/lc_convertinto3d.png
 cmd/lc_fielddialog.png cmd/lc_fields.png
@@ -1217,6 +1218,7 @@ cmd/sc_endnotedialog.png cmd/sc_footnotedialog.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png
 cmd/sc_exportasgraphic.png cmd/sc_graphic.png
 cmd/sc_exportasmenu.png cmd/sc_exportto.png
+cmd/sc_extensionmanager.png cmd/sc_addons.png
 cmd/sc_extrusionsurfacefloater.png cmd/sc_cube.png
 cmd/sc_extrusiontoggle.png cmd/sc_convertinto3d.png
 cmd/sc_fielddialog.png cmd/sc_fields.png

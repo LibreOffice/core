@@ -1867,6 +1867,10 @@ cmd/sc_moveslideup.png cmd/sc_upsearch.png
 cmd/sc_nextslide.png cmd/sc_nextrecord.png
 cmd/sc_previousslide.png cmd/sc_prevrecord.png
 
+# extension manager
+cmd/sc_extensionmanager.png cmd/sc_insertplugin.png
+cmd/lc_extensionmanager.png cmd/lc_insertplugin.png
+
 # dbaccess
 # ==============================================
 dbaccess/res/all_left.png cmd/sc_firstrecord.png

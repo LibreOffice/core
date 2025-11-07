@@ -2223,7 +2223,7 @@
       <object class="GtkMenuItem" id="ExtensionsD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
+        <property name="action_name">.uno:ExtensionManager</property>
       </object>
     </child>
     <child>
@@ -2712,7 +2712,7 @@
       <object class="GtkMenuItem" id="PackageManagerDialogD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
+        <property name="action_name">.uno:ExtensionManager</property>
       </object>
     </child>
     <child>

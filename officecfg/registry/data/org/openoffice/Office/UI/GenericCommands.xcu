@@ -6779,7 +6779,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Breakpoint Enabled/Disabled</value>
         </prop>
       </node>
-      <node oor:name="service:com.sun.star.deployment.ui.PackageManagerDialog" oor:op="replace">
+      <node oor:name=".uno:ExtensionManager" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Extensions...</value>
         </prop>

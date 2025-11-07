@@ -1464,6 +1464,10 @@ cmd/sc_sortdown.png cmd/sc_sortdescending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
 
+# extension manager
+cmd/sc_extensionmanager.png cmd/sc_insertplugin.png
+cmd/lc_extensionmanager.png cmd/lc_insertplugin.png
+
 # Code
 cmd/32/sourceview.png cmd/32/managexmlsource.png
 
