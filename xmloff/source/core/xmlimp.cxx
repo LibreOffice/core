@@ -524,7 +524,9 @@ namespace {
                                     break;
                             }
                         }
-                        if (aKeyString.isEmpty())
+                        if (aLocale.isEmpty())
+                            ; // Do nothing, we don't have a matching translation
+                        else if (aKeyString.isEmpty())
                             aKeyString = aStr;
                         else
                         {
