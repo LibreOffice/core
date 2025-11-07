@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <config_wasm_strip.h>
 
+#include <com/sun/star/deployment/ui/PackageManagerDialog.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
@@ -35,7 +36,6 @@
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -881,14 +881,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_EXTENSION_MANAGER:
         {
-            const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
-            css::uno::Reference<css::uno::XInterface> xService
-                = xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.deployment.ui.PackageManagerDialog", xContext);
-            css::uno::Reference<css::task::XJobExecutor> xJobExecutor(xService,
-                                                                      css::uno::UNO_QUERY);
-            if (xJobExecutor.is())
-                xJobExecutor->trigger(u""_ustr);
+            css::uno::Reference<css::awt::XWindow> xParent;
+            if (weld::Window* pWindow = rReq.GetFrameWeld())
+                xParent = pWindow->GetXWindow();
+
+            Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
+                css::deployment::ui::PackageManagerDialog::create(
+                    comphelper::getProcessComponentContext(), xParent, OUString()));
+            assert(xDialog.is());
+            xDialog->startExecuteModal({});
             bDone = true;
             break;
         }
