@@ -81,7 +81,7 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 
 // number of columns when creating it from scratch
-#define NEWCOLS        128
+constexpr sal_Int32 NEWCOLS = 128;
 
 namespace
 {
