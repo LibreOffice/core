@@ -10,6 +10,7 @@
 #include "rustproduce.hxx"
 #include "rustfile.hxx"
 #include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 #include <sal/log.hxx>
 #include <iostream>
 #include <set>
