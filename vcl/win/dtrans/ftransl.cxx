@@ -41,7 +41,6 @@
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 
 constexpr OUString Windows_FormatName = u"windows_formatname"_ustr;
-const css::uno::Type CppuType_ByteSequence = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
 const css::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
 
 using namespace osl;
@@ -57,12 +56,26 @@ namespace
 struct FormatEntry
 {
     FormatEntry(
-        const char *mime_content_type,
-        const char *human_presentable_name,
-        const char *native_format_name,
+        const OUString& mime_content_type,
+        const OUString& human_presentable_name,
+        const OUString& native_format_name,
         CLIPFORMAT std_clipboard_format_id,
-        css::uno::Type const & cppu_type
+        css::uno::Type const & cppu_type = CPPUTYPE_DEFAULT
     );
+
+    FormatEntry(const OUString& mime_content_type, const OUString& human_presentable_name,
+                CLIPFORMAT std_clipboard_format_id,
+                css::uno::Type const& cppu_type = CPPUTYPE_DEFAULT)
+        : FormatEntry(mime_content_type, human_presentable_name, human_presentable_name,
+                      std_clipboard_format_id, cppu_type)
+    {
+    }
+
+    FormatEntry(const OUString& mime_content_type, const OUString& human_presentable_name,
+                css::uno::Type const& cppu_type = CPPUTYPE_DEFAULT)
+        : FormatEntry(mime_content_type, human_presentable_name, CF_INVALID, cppu_type)
+    {
+    }
 
     css::datatransfer::DataFlavor aDataFlavor;
     OUString                      aNativeFormatName;
@@ -72,19 +85,15 @@ struct FormatEntry
 }
 
 FormatEntry::FormatEntry(
-    const char *mime_content_type,
-    const char *human_presentable_name,
-    const char *native_format_name,
+    const OUString& mime_content_type,
+    const OUString& human_presentable_name,
+    const OUString& native_format_name,
     CLIPFORMAT std_clipboard_format_id,
     css::uno::Type const & cppu_type)
-  : aDataFlavor( OUString::createFromAscii(mime_content_type),  OUString::createFromAscii(human_presentable_name), cppu_type)
+    : aDataFlavor(mime_content_type, human_presentable_name, cppu_type)
+    , aNativeFormatName(native_format_name)
+    , aStandardFormatId(std_clipboard_format_id)
 {
-    if (native_format_name)
-        aNativeFormatName =  OUString::createFromAscii(native_format_name);
-    else
-        aNativeFormatName =  OUString::createFromAscii(human_presentable_name);
-
-    aStandardFormatId = std_clipboard_format_id;
 }
 
 // to optimize searching we add all entries with a
@@ -96,261 +105,261 @@ FormatEntry::FormatEntry(
 
 const std::array g_TranslTable {
     //SotClipboardFormatId::DIF
-        FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", "DIF", CF_DIF, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", CF_DIF),
     // SotClipboardFormatId::BITMAP
 
     // #i124085# CF_DIBV5 disabled, leads to problems at export. To fully support, using
     // an own mime-type may be necessary. I have tried that, but saw no real advantages
     // with different apps when exchanging bitmap-based data. So, disabled for now. At
     // the same time increased png format exchange for better interoperability
-    //    FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIBV5, CPPUTYPE_DEFAULT),
+    //    FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", CF_DIBV5),
 
-        FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIB, CPPUTYPE_DEFAULT),
-        FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_BITMAP, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", CF_DIB),
+        FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", CF_BITMAP),
     // SotClipboardFormatId::STRING
         FormatEntry("text/plain;charset=utf-16", "Unicode-Text", "", CF_UNICODETEXT, CppuType_String),
     // Format Locale - for internal use
-        FormatEntry("application/x-openoffice-locale;windows_formatname=\"Locale\"", "Locale", "Locale", CF_LOCALE, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-locale;windows_formatname=\"Locale\"", "Locale", CF_LOCALE),
     // SOT_FORMAT_WMF
-        FormatEntry("application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", "Windows MetaFile", "Image WMF", CF_METAFILEPICT, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", "Windows MetaFile", "Image WMF", CF_METAFILEPICT),
     // SOT_FORMAT_EMF
-        FormatEntry("application/x-openoffice-emf;windows_formatname=\"Image EMF\"", "Windows Enhanced MetaFile", "Image EMF", CF_ENHMETAFILE, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-emf;windows_formatname=\"Image EMF\"", "Windows Enhanced MetaFile", "Image EMF", CF_ENHMETAFILE),
     // SotClipboardFormatId::FILE_LIST
-        FormatEntry("application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", "FileList", CF_HDROP, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", CF_HDROP),
     //SotClipboardFormatId::SYLK
-        FormatEntry("application/x-openoffice-sylk;windows_formatname=\"Sylk\"", "Sylk", "Sylk", CF_SYLK, CPPUTYPE_DEFAULT ),
+        FormatEntry("application/x-openoffice-sylk;windows_formatname=\"Sylk\"", "Sylk", CF_SYLK),
     // SotClipboardFormatId::GDIMETAFILE
-        FormatEntry("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile"),
     // SotClipboardFormatId::PRIVATE
-        FormatEntry("application/x-openoffice-private;windows_formatname=\"Private\"", "Private", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-private;windows_formatname=\"Private\"", "Private"),
     // SotClipboardFormatId::SIMPLE_FILE
-        FormatEntry("application/x-openoffice-file;windows_formatname=\"FileNameW\"", "FileName", nullptr, CF_INVALID, CppuType_String),
+        FormatEntry("application/x-openoffice-file;windows_formatname=\"FileNameW\"", "FileName", CppuType_String),
     // SotClipboardFormatId::RTF
-        FormatEntry("text/rtf", "Rich Text Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("text/rtf", "Rich Text Format"),
     // SotClipboardFormatId::DRAWING
-        FormatEntry("application/x-openoffice-drawing;windows_formatname=\"Drawing Format\"", "Drawing Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-drawing;windows_formatname=\"Drawing Format\"", "Drawing Format"),
     // SotClipboardFormatId::SVXB
-        FormatEntry("application/x-openoffice-svbx;windows_formatname=\"SVXB (StarView Bitmap/Animation)\"", "SVXB (StarView Bitmap/Animation)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-svbx;windows_formatname=\"SVXB (StarView Bitmap/Animation)\"", "SVXB (StarView Bitmap/Animation)"),
     // SotClipboardFormatId::SVIM
-        FormatEntry("application/x-openoffice-svim;windows_formatname=\"SVIM (StarView ImageMap)\"", "SVIM (StarView ImageMap)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-svim;windows_formatname=\"SVIM (StarView ImageMap)\"", "SVIM (StarView ImageMap)"),
     // SotClipboardFormatId::XFA
-        FormatEntry("application/x-libreoffice-xfa;windows_formatname=\"XFA (XOutDev FillAttr Any)\"", "XFA (XOutDev FillAttr Any)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-libreoffice-xfa;windows_formatname=\"XFA (XOutDev FillAttr Any)\"", "XFA (XOutDev FillAttr Any)"),
     // SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT
-        FormatEntry("application/vnd.oasis.opendocument.text-flat-xml", "EditEngine ODF", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.oasis.opendocument.text-flat-xml", "EditEngine ODF"),
     // SotClipboardFormatId::INTERNALLINK_STATE
-        FormatEntry("application/x-openoffice-internallink-state;windows_formatname=\"StatusInfo of SvxInternalLink\"", "StatusInfo of SvxInternalLink", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-internallink-state;windows_formatname=\"StatusInfo of SvxInternalLink\"", "StatusInfo of SvxInternalLink"),
     // SotClipboardFormatId::SOLK
-        FormatEntry("application/x-openoffice-solk;windows_formatname=\"SOLK (StarOffice Link)\"", "SOLK (StarOffice Link)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-solk;windows_formatname=\"SOLK (StarOffice Link)\"", "SOLK (StarOffice Link)"),
     // SotClipboardFormatId::NETSCAPE_BOOKMARK
-        FormatEntry("application/x-openoffice-netscape-bookmark;windows_formatname=\"Netscape Bookmark\"", "Netscape Bookmark", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-netscape-bookmark;windows_formatname=\"Netscape Bookmark\"", "Netscape Bookmark"),
     // SotClipboardFormatId::TREELISTBOX
-        FormatEntry("application/x-openoffice-treelistbox;windows_formatname=\"SV_LBOX_DD_FORMAT\"", "SV_LBOX_DD_FORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-treelistbox;windows_formatname=\"SV_LBOX_DD_FORMAT\"", "SV_LBOX_DD_FORMAT"),
     // SotClipboardFormatId::NATIVE
-        FormatEntry("application/x-openoffice-native;windows_formatname=\"Native\"", "Native", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-native;windows_formatname=\"Native\"", "Native"),
     // SotClipboardFormatId::OWNERLINK
-        FormatEntry("application/x-openoffice-ownerlink;windows_formatname=\"OwnerLink\"", "OwnerLink", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-ownerlink;windows_formatname=\"OwnerLink\"", "OwnerLink"),
     // SotClipboardFormatId::STARSERVER
-        FormatEntry("application/x-openoffice-starserver;windows_formatname=\"StarServerFormat\"", "StarServerFormat", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starserver;windows_formatname=\"StarServerFormat\"", "StarServerFormat"),
     // SotClipboardFormatId::STAROBJECT
-        FormatEntry("application/x-openoffice-starobject;windows_formatname=\"StarObjectFormat\"", "StarObjectFormat", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starobject;windows_formatname=\"StarObjectFormat\"", "StarObjectFormat"),
     // SotClipboardFormatId::APPLETOBJECT
-        FormatEntry("application/x-openoffice-appletobject;windows_formatname=\"Applet Object\"", "Applet Object", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-appletobject;windows_formatname=\"Applet Object\"", "Applet Object"),
     // SotClipboardFormatId::PLUGIN_OBJECT
-        FormatEntry("application/x-openoffice-plugin-object;windows_formatname=\"PlugIn Object\"", "PlugIn Object", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-plugin-object;windows_formatname=\"PlugIn Object\"", "PlugIn Object"),
     // SotClipboardFormatId::STARWRITER_30
-        FormatEntry("application/x-openoffice-starwriter-30;windows_formatname=\"StarWriter 3.0\"", "StarWriter 3.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriter-30;windows_formatname=\"StarWriter 3.0\"", "StarWriter 3.0"),
     //SotClipboardFormatId::STARWRITER_40
-        FormatEntry("application/x-openoffice-starwriter-40;windows_formatname=\"StarWriter 4.0\"", "StarWriter 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriter-40;windows_formatname=\"StarWriter 4.0\"", "StarWriter 4.0"),
     //SotClipboardFormatId::STARWRITER_50
-        FormatEntry("application/x-openoffice-starwriter-50;windows_formatname=\"StarWriter 5.0\"", "StarWriter 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriter-50;windows_formatname=\"StarWriter 5.0\"", "StarWriter 5.0"),
     //SotClipboardFormatId::STARWRITERWEB_40
-        FormatEntry("application/x-openoffice-starwriterweb-40;windows_formatname=\"StarWriter/Web 4.0\"", "StarWriter/Web 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriterweb-40;windows_formatname=\"StarWriter/Web 4.0\"", "StarWriter/Web 4.0"),
     //SotClipboardFormatId::STARWRITERWEB_50
-        FormatEntry("application/x-openoffice-starwriterweb-50;windows_formatname=\"StarWriter/Web 5.0\"", "StarWriter/Web 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriterweb-50;windows_formatname=\"StarWriter/Web 5.0\"", "StarWriter/Web 5.0"),
     //SotClipboardFormatId::STARWRITERGLOB_40
-        FormatEntry("application/x-openoffice-starwriterglob-40;windows_formatname=\"StarWriter/Global 4.0\"", "StarWriter/Global 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriterglob-40;windows_formatname=\"StarWriter/Global 4.0\"", "StarWriter/Global 4.0"),
     // SotClipboardFormatId::STARWRITERGLOB_50
-        FormatEntry("application/x-openoffice-starwriterglob-50;windows_formatname=\"StarWriter/Global 5.0\"", "StarWriter/Global 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starwriterglob-50;windows_formatname=\"StarWriter/Global 5.0\"", "StarWriter/Global 5.0"),
     //SotClipboardFormatId::STARDRAW
-        FormatEntry("application/x-openoffice-stardraw;windows_formatname=\"StarDrawDocument\"", "StarDrawDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-stardraw;windows_formatname=\"StarDrawDocument\"", "StarDrawDocument"),
     //SotClipboardFormatId::STARDRAW_40
-        FormatEntry("application/x-openoffice-stardraw-40;windows_formatname=\"StarDrawDocument 4.0\"", "StarDrawDocument 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-stardraw-40;windows_formatname=\"StarDrawDocument 4.0\"", "StarDrawDocument 4.0"),
     //SotClipboardFormatId::STARIMPRESS_50
-        FormatEntry("application/x-openoffice-starimpress-50;windows_formatname=\"StarImpress 5.0\"", "StarImpress 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starimpress-50;windows_formatname=\"StarImpress 5.0\"", "StarImpress 5.0"),
     // SotClipboardFormatId::STARDRAW_50
-        FormatEntry("application/x-openoffice-stardraw-50;windows_formatname=\"StarDraw 5.0\"", "StarDraw 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-stardraw-50;windows_formatname=\"StarDraw 5.0\"", "StarDraw 5.0"),
     //SotClipboardFormatId::STARCALC
-        FormatEntry("application/x-openoffice-starcalc;windows_formatname=\"StarCalcDocument\"", "StarCalcDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starcalc;windows_formatname=\"StarCalcDocument\"", "StarCalcDocument"),
     //SotClipboardFormatId::STARCALC_40
-        FormatEntry("application/x-openoffice-starcalc-40;windows_formatname=\"StarCalc 4.0\"", "StarCalc 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starcalc-40;windows_formatname=\"StarCalc 4.0\"", "StarCalc 4.0"),
     // SotClipboardFormatId::STARCALC_50
-        FormatEntry("application/x-openoffice-starcalc-50;windows_formatname=\"StarCalc 5.0\"", "StarCalc 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starcalc-50;windows_formatname=\"StarCalc 5.0\"", "StarCalc 5.0"),
     // SotClipboardFormatId::STARCHART
-        FormatEntry("application/x-openoffice-starchart;windows_formatname=\"StarChartDocument\"", "StarChartDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starchart;windows_formatname=\"StarChartDocument\"", "StarChartDocument"),
     // SotClipboardFormatId::STARCHART_40
-        FormatEntry("application/x-openoffice-starchart-40;windows_formatname=\"StarChartDocument 4.0\"", "StarChartDocument 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starchart-40;windows_formatname=\"StarChartDocument 4.0\"", "StarChartDocument 4.0"),
     // SotClipboardFormatId::STARCHART_50
-        FormatEntry("application/x-openoffice-starchart-50;windows_formatname=\"StarChart 5.0\"", "StarChart 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starchart-50;windows_formatname=\"StarChart 5.0\"", "StarChart 5.0"),
     //SotClipboardFormatId::STARIMAGE
-        FormatEntry("application/x-openoffice-starimage;windows_formatname=\"StarImageDocument\"", "StarImageDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starimage;windows_formatname=\"StarImageDocument\"", "StarImageDocument"),
     //SotClipboardFormatId::STARIMAGE_40
-        FormatEntry("application/x-openoffice-starimage-40;windows_formatname=\"StarImageDocument 4.0\"", "StarImageDocument 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starimage-40;windows_formatname=\"StarImageDocument 4.0\"", "StarImageDocument 4.0"),
     //SotClipboardFormatId::STARIMAGE_50
-        FormatEntry("application/x-openoffice-starimage-50;windows_formatname=\"StarImage 5.0\"",  "StarImage 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starimage-50;windows_formatname=\"StarImage 5.0\"",  "StarImage 5.0"),
     //SotClipboardFormatId::STARMATH
-        FormatEntry("application/x-openoffice-starmath;windows_formatname=\"StarMath\"", "StarMath", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starmath;windows_formatname=\"StarMath\"", "StarMath"),
     //SotClipboardFormatId::STARMATH_40
-        FormatEntry("application/x-openoffice-starmath-40;windows_formatname=\"StarMathDocument 4.0\"", "StarMathDocument 4.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starmath-40;windows_formatname=\"StarMathDocument 4.0\"", "StarMathDocument 4.0"),
     //SotClipboardFormatId::STARMATH_50
-        FormatEntry("application/x-openoffice-starmath-50;windows_formatname=\"StarMath 5.0\"", "StarMath 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starmath-50;windows_formatname=\"StarMath 5.0\"", "StarMath 5.0"),
     //SotClipboardFormatId::STAROBJECT_PAINTDOC
-        FormatEntry("application/x-openoffice-starobject-paintdoc;windows_formatname=\"StarObjectPaintDocument\"", "StarObjectPaintDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starobject-paintdoc;windows_formatname=\"StarObjectPaintDocument\"", "StarObjectPaintDocument"),
     //SotClipboardFormatId::FILLED_AREA
-        FormatEntry("application/x-openoffice-filled-area;windows_formatname=\"FilledArea\"", "FilledArea", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-filled-area;windows_formatname=\"FilledArea\"", "FilledArea"),
     //SotClipboardFormatId::HTML
-        FormatEntry("text/html", "HTML (HyperText Markup Language)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("text/html", "HTML (HyperText Markup Language)"),
     //SotClipboardFormatId::HTML_SIMPLE
-        FormatEntry("application/x-openoffice-html-simple;windows_formatname=\"HTML Format\"", "HTML Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-html-simple;windows_formatname=\"HTML Format\"", "HTML Format"),
     //SotClipboardFormatId::CHAOS
-        FormatEntry("application/x-openoffice-chaos;windows_formatname=\"FORMAT_CHAOS\"", "FORMAT_CHAOS", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-chaos;windows_formatname=\"FORMAT_CHAOS\"", "FORMAT_CHAOS"),
     //SotClipboardFormatId::CNT_MSGATTACHFILE
-        FormatEntry("application/x-openoffice-msgattachfile;windows_formatname=\"CNT_MSGATTACHFILE_FORMAT\"", "CNT_MSGATTACHFILE_FORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-msgattachfile;windows_formatname=\"CNT_MSGATTACHFILE_FORMAT\"", "CNT_MSGATTACHFILE_FORMAT"),
     //SotClipboardFormatId::BIFF_5
-        FormatEntry("application/x-openoffice-biff5;windows_formatname=\"Biff5\"", "Biff5", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-biff5;windows_formatname=\"Biff5\"", "Biff5"),
     //SotClipboardFormatId::BIFF__5
-        FormatEntry("application/x-openoffice-biff-5;windows_formatname=\"Biff 5\"", "Biff 5", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-biff-5;windows_formatname=\"Biff 5\"", "Biff 5"),
     //SotClipboardFormatId::BIFF_8
-        FormatEntry("application/x-openoffice-biff-8;windows_formatname=\"Biff8\"", "Biff8", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-biff-8;windows_formatname=\"Biff8\"", "Biff8"),
     //SotClipboardFormatId::SYLK_BIGCAPS
-        FormatEntry("application/x-openoffice-sylk-bigcaps;windows_formatname=\"SYLK\"", "SYLK", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sylk-bigcaps;windows_formatname=\"SYLK\"", "SYLK"),
     //SotClipboardFormatId::LINK
-        FormatEntry("application/x-openoffice-link;windows_formatname=\"Link\"", "Link", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-link;windows_formatname=\"Link\"", "Link"),
     //SotClipboardFormatId::STARDRAW_TABBAR
-        FormatEntry("application/x-openoffice-stardraw-tabbar;windows_formatname=\"StarDraw TabBar\"", "StarDraw TabBar", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-stardraw-tabbar;windows_formatname=\"StarDraw TabBar\"", "StarDraw TabBar"),
     //SotClipboardFormatId::SONLK
-        FormatEntry("application/x-openoffice-sonlk;windows_formatname=\"SONLK (StarOffice Navi Link)\"", "SONLK (StarOffice Navi Link)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sonlk;windows_formatname=\"SONLK (StarOffice Navi Link)\"", "SONLK (StarOffice Navi Link)"),
     //SotClipboardFormatId::MSWORD_DOC
-        FormatEntry("application/msword", "MSWordDoc", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/msword", "MSWordDoc"),
     //SotClipboardFormatId::STAR_FRAMESET_DOC
-        FormatEntry("application/x-openoffice-star-frameset-doc;windows_formatname=\"StarFrameSetDocument\"", "StarFrameSetDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-star-frameset-doc;windows_formatname=\"StarFrameSetDocument\"", "StarFrameSetDocument"),
     //SotClipboardFormatId::OFFICE_DOC
-        FormatEntry("application/x-openoffice-office-doc;windows_formatname=\"OfficeDocument\"", "OfficeDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-office-doc;windows_formatname=\"OfficeDocument\"", "OfficeDocument"),
     //SotClipboardFormatId::NOTES_DOCINFO
-        FormatEntry("application/x-openoffice-notes-docinfo;windows_formatname=\"NotesDocInfo\"", "NotesDocInfo", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-notes-docinfo;windows_formatname=\"NotesDocInfo\"", "NotesDocInfo"),
     //SotClipboardFormatId::NOTES_HNOTE
-        FormatEntry("application/x-openoffice-notes-hnote;windows_formatname=\"NoteshNote\"", "NoteshNote", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-notes-hnote;windows_formatname=\"NoteshNote\"", "NoteshNote"),
     //SotClipboardFormatId::NOTES_NATIVE
-        FormatEntry("application/x-openoffice-notes-native;windows_formatname=\"Native\"", "Native", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-notes-native;windows_formatname=\"Native\"", "Native"),
     //SotClipboardFormatId::SFX_DOC
-        FormatEntry("application/x-openoffice-sfx-doc;windows_formatname=\"SfxDocument\"", "SfxDocument", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sfx-doc;windows_formatname=\"SfxDocument\"", "SfxDocument"),
     //SotClipboardFormatId::EVDF
-        FormatEntry("application/x-openoffice-evdf;windows_formatname=\"EVDF (Explorer View Dummy Format)\"", "EVDF (Explorer View Dummy Format)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-evdf;windows_formatname=\"EVDF (Explorer View Dummy Format)\"", "EVDF (Explorer View Dummy Format)"),
     //SotClipboardFormatId::ESDF
-        FormatEntry("application/x-openoffice-esdf;windows_formatname=\"ESDF (Explorer Search Dummy Format)\"", "ESDF (Explorer Search Dummy Format)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-esdf;windows_formatname=\"ESDF (Explorer Search Dummy Format)\"", "ESDF (Explorer Search Dummy Format)"),
     //SotClipboardFormatId::IDF
-        FormatEntry("application/x-openoffice-idf;windows_formatname=\"IDF (Iconview Dummy Format)\"", "IDF (Iconview Dummy Format)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-idf;windows_formatname=\"IDF (Iconview Dummy Format)\"", "IDF (Iconview Dummy Format)"),
     //SotClipboardFormatId::EFTP
-        FormatEntry("application/x-openoffice-eftp;windows_formatname=\"EFTP (Explorer Ftp File)\"", "EFTP (Explorer Ftp File)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-eftp;windows_formatname=\"EFTP (Explorer Ftp File)\"", "EFTP (Explorer Ftp File)"),
     //SotClipboardFormatId::EFD
-        FormatEntry("application/x-openoffice-efd;windows_formatname=\"EFD (Explorer Ftp Dir)\"", "EFD (Explorer Ftp Dir)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-efd;windows_formatname=\"EFD (Explorer Ftp Dir)\"", "EFD (Explorer Ftp Dir)"),
     //SotClipboardFormatId::SVX_FORMFIELDEXCH
-        FormatEntry("application/x-openoffice-svx-formfieldexch;windows_formatname=\"SvxFormFieldExch\"", "SvxFormFieldExch", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-svx-formfieldexch;windows_formatname=\"SvxFormFieldExch\"", "SvxFormFieldExch"),
     //SotClipboardFormatId::EXTENDED_TABBAR
-        FormatEntry("application/x-openoffice-extended-tabbar;windows_formatname=\"ExtendedTabBar\"", "ExtendedTabBar", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-extended-tabbar;windows_formatname=\"ExtendedTabBar\"", "ExtendedTabBar"),
     //SotClipboardFormatId::SBA_DATAEXCHANGE
-        FormatEntry("application/x-openoffice-sba-dataexchange;windows_formatname=\"SBA-DATAFORMAT\"", "SBA-DATAFORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-dataexchange;windows_formatname=\"SBA-DATAFORMAT\"", "SBA-DATAFORMAT"),
     //SotClipboardFormatId::SBA_FIELDDATAEXCHANGE
-        FormatEntry("application/x-openoffice-sba-fielddataexchange;windows_formatname=\"SBA-FIELDFORMAT\"", "SBA-FIELDFORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-fielddataexchange;windows_formatname=\"SBA-FIELDFORMAT\"", "SBA-FIELDFORMAT"),
     //SotClipboardFormatId::SBA_PRIVATE_URL
-        FormatEntry("application/x-openoffice-sba-private-url;windows_formatname=\"SBA-PRIVATEURLFORMAT\"", "SBA-PRIVATEURLFORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-private-url;windows_formatname=\"SBA-PRIVATEURLFORMAT\"", "SBA-PRIVATEURLFORMAT"),
     //SotClipboardFormatId::SBA_TABED
-        FormatEntry("application/x-openoffice-sba-tabed;windows_formatname=\"Tabed\"", "Tabed", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-tabed;windows_formatname=\"Tabed\"", "Tabed"),
     //SotClipboardFormatId::SBA_TABID
-        FormatEntry("application/x-openoffice-sba-tabid;windows_formatname=\"Tabid\"", "Tabid", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-tabid;windows_formatname=\"Tabid\"", "Tabid"),
     //SotClipboardFormatId::SBA_JOIN
-        FormatEntry("application/x-openoffice-sba-join;windows_formatname=\"SBA-JOINFORMAT\"", "SBA-JOINFORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-join;windows_formatname=\"SBA-JOINFORMAT\"", "SBA-JOINFORMAT"),
     //SotClipboardFormatId::OBJECTDESCRIPTOR
-        FormatEntry("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"", "Star Object Descriptor (XML)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"", "Star Object Descriptor (XML)"),
     //SotClipboardFormatId::LINKSRCDESCRIPTOR
-        FormatEntry("application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"", "Star Link Source Descriptor (XML)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"", "Star Link Source Descriptor (XML)"),
     //SotClipboardFormatId::EMBED_SOURCE
-        FormatEntry("application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"", "Star Embed Source (XML)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"", "Star Embed Source (XML)"),
     //SotClipboardFormatId::LINK_SOURCE
-        FormatEntry("application/x-openoffice-link-source-xml;windows_formatname=\"Star Link Source (XML)\"", "Star Link Source (XML)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-link-source-xml;windows_formatname=\"Star Link Source (XML)\"", "Star Link Source (XML)"),
     //SotClipboardFormatId::EMBEDDED_OBJ
-        FormatEntry("application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star Embedded Object (XML)\"", "Star Embedded Object (XML)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star Embedded Object (XML)\"", "Star Embedded Object (XML)"),
     //SotClipboardFormatId::FILECONTENT
-        FormatEntry("application/x-openoffice-filecontent;windows_formatname=\"" CFSTR_FILECONTENTS "\"", CFSTR_FILECONTENTS, nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-filecontent;windows_formatname=\"" CFSTR_FILECONTENTS "\"", CFSTR_FILECONTENTS),
     //SotClipboardFormatId::FILEGRPDESCRIPTOR
-        FormatEntry("application/x-openoffice-filegrpdescriptor;windows_formatname=\"" CFSTR_FILEDESCRIPTOR "\"", CFSTR_FILEDESCRIPTOR, nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-filegrpdescriptor;windows_formatname=\"" CFSTR_FILEDESCRIPTOR "\"", CFSTR_FILEDESCRIPTOR),
     //SotClipboardFormatId::FILENAME
-        FormatEntry("application/x-openoffice-filename;windows_formatname=\"" CFSTR_FILENAME "\"", CFSTR_FILENAME, nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-filename;windows_formatname=\"" CFSTR_FILENAME "\"", CFSTR_FILENAME),
     //SotClipboardFormatId::SD_OLE
-        FormatEntry("application/x-openoffice-sd-ole;windows_formatname=\"SD-OLE\"", "SD-OLE", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sd-ole;windows_formatname=\"SD-OLE\"", "SD-OLE"),
     //SotClipboardFormatId::EMBEDDED_OBJ_OLE
-        FormatEntry("application/x-openoffice-embedded-obj-ole;windows_formatname=\"Embedded Object\"", "Embedded Object", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-embedded-obj-ole;windows_formatname=\"Embedded Object\"", "Embedded Object"),
     //SotClipboardFormatId::EMBED_SOURCE_OLE
-        FormatEntry("application/x-openoffice-embed-source-ole;windows_formatname=\"Embed Source\"", "Embed Source", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-embed-source-ole;windows_formatname=\"Embed Source\"", "Embed Source"),
     //SotClipboardFormatId::OBJECTDESCRIPTOR_OLE
-        FormatEntry("application/x-openoffice-objectdescriptor-ole;windows_formatname=\"Object Descriptor\"", "Object Descriptor", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-objectdescriptor-ole;windows_formatname=\"Object Descriptor\"", "Object Descriptor"),
     //SotClipboardFormatId::LINKSRCDESCRIPTOR_OLE
-        FormatEntry("application/x-openoffice-linkdescriptor-ole;windows_formatname=\"Link Source Descriptor\"", "Link Source Descriptor", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-linkdescriptor-ole;windows_formatname=\"Link Source Descriptor\"", "Link Source Descriptor"),
     //SotClipboardFormatId::LINK_SOURCE_OLE
-        FormatEntry("application/x-openoffice-link-source-ole;windows_formatname=\"Link Source\"", "Link Source", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-link-source-ole;windows_formatname=\"Link Source\"", "Link Source"),
     //SotClipboardFormatId::SBA_CTRLDATAEXCHANGE
-        FormatEntry("application/x-openoffice-sba-ctrldataexchange;windows_formatname=\"SBA-CTRLFORMAT\"", "SBA-CTRLFORMAT", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-ctrldataexchange;windows_formatname=\"SBA-CTRLFORMAT\"", "SBA-CTRLFORMAT"),
     //SotClipboardFormatId::OUTPLACE_OBJ
-        FormatEntry("application/x-openoffice-outplace-obj;windows_formatname=\"OutPlace Object\"", "OutPlace Object", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-outplace-obj;windows_formatname=\"OutPlace Object\"", "OutPlace Object"),
     //SotClipboardFormatId::CNT_OWN_CLIP
-        FormatEntry("application/x-openoffice-cnt-own-clip;windows_formatname=\"CntOwnClipboard\"", "CntOwnClipboard", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-cnt-own-clip;windows_formatname=\"CntOwnClipboard\"", "CntOwnClipboard"),
     //SotClipboardFormatId::INET_IMAGE
-        FormatEntry("application/x-openoffice-inet-image;windows_formatname=\"SO-INet-Image\"", "SO-INet-Image", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-inet-image;windows_formatname=\"SO-INet-Image\"", "SO-INet-Image"),
     //SotClipboardFormatId::NETSCAPE_IMAGE
-        FormatEntry("application/x-openoffice-netscape-image;windows_formatname=\"Netscape Image Format\"", "Netscape Image Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-netscape-image;windows_formatname=\"Netscape Image Format\"", "Netscape Image Format"),
     //SotClipboardFormatId::SBA_FORMEXCHANGE
-        FormatEntry("application/x-openoffice-sba-formexchange;windows_formatname=\"SBA_FORMEXCHANGE\"", "SBA_FORMEXCHANGE", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-formexchange;windows_formatname=\"SBA_FORMEXCHANGE\"", "SBA_FORMEXCHANGE"),
     //SotClipboardFormatId::SBA_REPORTEXCHANGE
-        FormatEntry("application/x-openoffice-sba-reportexchange;windows_formatname=\"SBA_REPORTEXCHANGE\"", "SBA_REPORTEXCHANGE", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-sba-reportexchange;windows_formatname=\"SBA_REPORTEXCHANGE\"", "SBA_REPORTEXCHANGE"),
     //SotClipboardFormatId::UNIFORMRESOURCELOCATOR
-        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", nullptr, CF_INVALID, CppuType_String),
+        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", CF_INVALID, CppuType_String),
     //SotClipboardFormatId::STARCHARTDOCUMENT_50
-        FormatEntry("application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0"),
     //SotClipboardFormatId::GRAPHOBJ
-        FormatEntry("application/x-openoffice-graphobj;windows_formatname=\"Graphic Object\"", "Graphic Object", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-graphobj;windows_formatname=\"Graphic Object\"", "Graphic Object"),
     //SotClipboardFormatId::STARWRITER_60
-        FormatEntry("application/vnd.sun.xml.writer", "Writer 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.writer", "Writer 6.0"),
     //SotClipboardFormatId::STARWRITERWEB_60
-        FormatEntry("application/vnd.sun.xml.writer.web", "Writer/Web 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.writer.web", "Writer/Web 6.0"),
     //SotClipboardFormatId::STARWRITERGLOB_60
-        FormatEntry("application/vnd.sun.xml.writer.global", "Writer/Global 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.writer.global", "Writer/Global 6.0"),
     //SotClipboardFormatId::STARWDRAW_60
-        FormatEntry("application/vnd.sun.xml.draw", "Draw 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.draw", "Draw 6.0"),
     //SotClipboardFormatId::STARIMPRESS_60
-        FormatEntry("application/vnd.sun.xml.impress", "Impress 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.impress", "Impress 6.0"),
     //SotClipboardFormatId::STARCALC_60
-        FormatEntry("application/vnd.sun.xml.calc", "Calc 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.calc", "Calc 6.0"),
     //SotClipboardFormatId::STARCHART_60
-        FormatEntry("application/vnd.sun.xml.chart", "Chart 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.chart", "Chart 6.0"),
     //SotClipboardFormatId::STARMATH_60
-        FormatEntry("application/vnd.sun.xml.math", "Math 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.math", "Math 6.0"),
     //SotClipboardFormatId::DIALOG_60
-        FormatEntry("application/vnd.sun.xml.dialog", "Dialog 6.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/vnd.sun.xml.dialog", "Dialog 6.0"),
     //SotClipboardFormatId::BMP
-        FormatEntry("image/bmp", "Windows Bitmap", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("image/bmp", "Windows Bitmap"),
     //SotClipboardFormatId::PNG
-        FormatEntry("image/png", "PNG", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("image/png", "PNG"),
     //SotClipboardFormatId::SVG
-        FormatEntry("image/svg+xml", "image/svg+xml", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("image/svg+xml", "image/svg+xml"),
     //SotClipboardFormatId::MATHML
-        FormatEntry("application/mathml+xml", "MathML", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/mathml+xml", "MathML"),
     //SotClipboardFormatId::DUMMY3
-        FormatEntry("application/x-openoffice-dummy3;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-dummy3;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3"),
     //SotClipboardFormatId::DUMMY4
-        FormatEntry("application/x-openoffice-dummy4;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-dummy4;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4"),
     // SotClipboardFormatId::RICHTEXT
-        FormatEntry("text/richtext", "Richtext Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("text/richtext", "Richtext Format"),
     // SotClipboardFormatId::MARKDOWN
-        FormatEntry("text/markdown", "Markdown", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("text/markdown", "Markdown"),
     };
 
 namespace {
