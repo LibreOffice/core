@@ -102,20 +102,7 @@ TheExtensionManager::TheExtensionManager( uno::Reference< awt::XWindow > xParent
 
 TheExtensionManager::~TheExtensionManager()
 {
-    if (m_xUpdReqDialog)
-        m_xUpdReqDialog->response(RET_CANCEL);
-    assert(!m_xUpdReqDialog);
-    if (m_xExtMgrDialog)
-    {
-        if (m_bExtMgrDialogExecuting)
-            m_xExtMgrDialog->response(RET_CANCEL);
-        else
-        {
-            m_xExtMgrDialog->Close();
-            m_xExtMgrDialog.reset();
-        }
-    }
-    assert(!m_xExtMgrDialog);
+    Close();
 }
 
 void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
@@ -178,12 +165,19 @@ void TheExtensionManager::Close()
     if (m_xExtMgrDialog)
     {
         if (m_bExtMgrDialogExecuting)
+        {
             m_xExtMgrDialog->response(RET_CANCEL);
+        }
         else
+        {
             m_xExtMgrDialog->Close();
+            m_xExtMgrDialog.reset();
+        }
     }
-    else if (m_xUpdReqDialog)
+    assert(!m_xExtMgrDialog);
+    if (m_xUpdReqDialog)
         m_xUpdReqDialog->response(RET_CANCEL);
+    assert(!m_xUpdReqDialog);
 }
 
 sal_Int16 TheExtensionManager::execute()
@@ -271,20 +265,7 @@ void TheExtensionManager::terminateDialog()
         return;
 
     const SolarMutexGuard guard;
-    if (m_xExtMgrDialog)
-    {
-        if (m_bExtMgrDialogExecuting)
-            m_xExtMgrDialog->response(RET_CANCEL);
-        else
-        {
-            m_xExtMgrDialog->Close();
-            m_xExtMgrDialog.reset();
-        }
-    }
-    assert(!m_xExtMgrDialog);
-    if (m_xUpdReqDialog)
-        m_xUpdReqDialog->response(RET_CANCEL);
-    assert(!m_xUpdReqDialog);
+    Close();
     Application::Quit();
 }
 
@@ -443,20 +424,7 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     if ( dp_misc::office_is_running() )
     {
         const SolarMutexGuard guard;
-        if (m_xExtMgrDialog)
-        {
-            if (m_bExtMgrDialogExecuting)
-                m_xExtMgrDialog->response(RET_CANCEL);
-            else
-            {
-                m_xExtMgrDialog->Close();
-                m_xExtMgrDialog.reset();
-            }
-        }
-        assert(!m_xExtMgrDialog);
-        if (m_xUpdReqDialog)
-            m_xUpdReqDialog->response(RET_CANCEL);
-        assert(!m_xUpdReqDialog);
+        Close();
     }
     s_ExtMgr.clear();
 }
@@ -476,18 +444,7 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     else
     {
         clearModified();
-        if (m_xExtMgrDialog)
-        {
-            if (m_bExtMgrDialogExecuting)
-                m_xExtMgrDialog->response(RET_CANCEL);
-            else
-            {
-                m_xExtMgrDialog->Close();
-                m_xExtMgrDialog.reset();
-            }
-        }
-        if (m_xUpdReqDialog)
-            m_xUpdReqDialog->response(RET_CANCEL);
+        Close();
     }
 }
 
