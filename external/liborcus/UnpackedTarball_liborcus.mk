@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/gcc9.patch.0 \
 	external/liborcus/libtool.patch.0 \
+	external/liborcus/boost_system.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
