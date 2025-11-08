@@ -419,30 +419,65 @@ void CDOTransferable::tryToGetIDataObjectIfAbsent()
 // in case of failures because nothing should have been
 // allocated etc.
 
+namespace
+{
+// Uses a fallback to try TYMED_ISTREAM instead of TYMED_HGLOBAL
+HRESULT getClipboardData_impl(const IDataObjectPtr& pDataObject, CFormatEtc& rFormatEtc,
+                              STGMEDIUM& rStgmedium)
+{
+    const HRESULT hr = pDataObject->GetData( rFormatEtc, &rStgmedium );
+    if (SUCCEEDED(hr))
+        return hr;
+
+    const DWORD nOrigTymed = rFormatEtc.getTymed();
+
+    // in case of failure to get a WMF metafile handle, try to get a memory block
+    if( ( CF_METAFILEPICT == rFormatEtc.getClipformat() ) &&
+        ( TYMED_MFPICT ==  nOrigTymed) )
+    {
+        rFormatEtc.setTymed(TYMED_HGLOBAL);
+        // Do not overwrite original error
+        HRESULT hr2 = pDataObject->GetData(rFormatEtc, &rStgmedium);
+        if (SUCCEEDED(hr2))
+            return hr2;
+    }
+
+    if (nOrigTymed == TYMED_HGLOBAL)
+    {
+        // Handle type is not memory, try stream.
+        rFormatEtc.setTymed(TYMED_ISTREAM);
+        HRESULT hr2 = pDataObject->GetData(rFormatEtc, &rStgmedium);
+        if (SUCCEEDED(hr2))
+            return hr2;
+    }
+
+    if (rFormatEtc.getClipformat() == CF_BITMAP && nOrigTymed != TYMED_GDI)
+    {
+        // Try GDI
+        rFormatEtc.setTymed(TYMED_GDI);
+        HRESULT hr2 = pDataObject->GetData(rFormatEtc, &rStgmedium);
+        if (SUCCEEDED(hr2))
+            return hr2;
+    }
+
+    return hr; // original error
+}
+}
+
 CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
 {
+    CFormatEtc aLocalFormatEtc(aFormatEtc);
     STGMEDIUM stgmedium;
     tryToGetIDataObjectIfAbsent();
     if (!m_rDataObject.is()) // Maybe we are shutting down, and clipboard is already destroyed?
         throw RuntimeException();
-    HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
+    HRESULT hr = getClipboardData_impl(m_rDataObject, aLocalFormatEtc, stgmedium);
 
-    // in case of failure to get a WMF metafile handle, try to get a memory block
-    if( FAILED( hr ) &&
-        ( CF_METAFILEPICT == aFormatEtc.getClipformat() ) &&
-        ( TYMED_MFPICT == aFormatEtc.getTymed() ) )
+    if (FAILED(hr) && aFormatEtc.getClipformat() == CF_DIB)
     {
-        CFormatEtc aTempFormat( aFormatEtc );
-        aTempFormat.setTymed( TYMED_HGLOBAL );
-        hr = m_rDataObject->GetData( aTempFormat, &stgmedium );
-    }
-
-    if (FAILED(hr) && aFormatEtc.getTymed() == TYMED_HGLOBAL)
-    {
-        // Handle type is not memory, try stream.
-        CFormatEtc aTempFormat(aFormatEtc);
-        aTempFormat.setTymed(TYMED_ISTREAM);
-        hr = m_rDataObject->GetData(aTempFormat, &stgmedium);
+        aLocalFormatEtc = aFormatEtc;
+        aLocalFormatEtc.setClipformat(CF_BITMAP);
+        hr = getClipboardData_impl(m_rDataObject, aLocalFormatEtc, stgmedium);
     }
 
     if ( FAILED( hr ) )
@@ -464,14 +499,14 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
 
     try
     {
-        if ( CF_ENHMETAFILE == aFormatEtc.getClipformat() )
+        if (CF_ENHMETAFILE == aLocalFormatEtc.getClipformat())
             byteStream = WinENHMFPictToOOMFPict( stgmedium.hEnhMetaFile );
-        else if (CF_HDROP == aFormatEtc.getClipformat())
+        else if (CF_HDROP == aLocalFormatEtc.getClipformat())
             byteStream = CF_HDROPToFileList(stgmedium.hGlobal);
-        else if ( CF_BITMAP == aFormatEtc.getClipformat() )
+        else if (CF_BITMAP == aLocalFormatEtc.getClipformat())
         {
             byteStream = WinBITMAPToOOBMP(stgmedium.hBitmap);
-            if( aFormatEtc.getTymed() == TYMED_GDI &&
+            if (aLocalFormatEtc.getTymed() == TYMED_GDI &&
                 ! stgmedium.pUnkForRelease )
             {
                 DeleteObject(stgmedium.hBitmap);
@@ -479,15 +514,16 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
         }
         else
         {
-            clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
+            clipDataToByteStream(aLocalFormatEtc.getClipformat(), stgmedium, byteStream);
 
             // format conversion if necessary
             // #i124085# DIBV5 should not happen currently, but keep as a hint here
-            if(CF_DIBV5 == aFormatEtc.getClipformat() || CF_DIB == aFormatEtc.getClipformat())
+            if (CF_DIBV5 == aLocalFormatEtc.getClipformat()
+                || CF_DIB == aLocalFormatEtc.getClipformat())
             {
                 byteStream = WinDIBToOOBMP(byteStream);
             }
-            else if(CF_METAFILEPICT == aFormatEtc.getClipformat())
+            else if (CF_METAFILEPICT == aLocalFormatEtc.getClipformat())
             {
                 byteStream = WinMFPictToOOMFPict(byteStream);
             }
