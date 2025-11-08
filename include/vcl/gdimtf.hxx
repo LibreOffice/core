@@ -136,7 +136,7 @@ public:
 
     void            Convert( MtfConversion eConversion );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
-                                   sal_uLong nColorCount );
+                                   sal_uInt32 nColorCount );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
@@ -177,7 +177,7 @@ public:
     void            SetPrefMapMode( const MapMode& rMapMode ) { m_aPrefMapMode = rMapMode; }
 
 
-    SAL_DLLPRIVATE sal_uLong GetSizeBytes() const;
+    SAL_DLLPRIVATE sal_uInt32 GetSizeBytes() const;
 
     /// Creates an antialiased thumbnail
     bool            CreateThumbnail(Bitmap& rBitmapEx,

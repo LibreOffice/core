@@ -91,21 +91,21 @@ struct ImplBmpMonoParam
 
 struct ImplColReplaceParam
 {
-    std::unique_ptr<sal_uLong[]>     pMinR;
-    std::unique_ptr<sal_uLong[]>     pMaxR;
-    std::unique_ptr<sal_uLong[]>     pMinG;
-    std::unique_ptr<sal_uLong[]>     pMaxG;
-    std::unique_ptr<sal_uLong[]>     pMinB;
-    std::unique_ptr<sal_uLong[]>     pMaxB;
+    std::unique_ptr<sal_uInt8[]>     pMinR;
+    std::unique_ptr<sal_uInt8[]>     pMaxR;
+    std::unique_ptr<sal_uInt8[]>     pMinG;
+    std::unique_ptr<sal_uInt8[]>     pMaxG;
+    std::unique_ptr<sal_uInt8[]>     pMinB;
+    std::unique_ptr<sal_uInt8[]>     pMaxB;
     const Color *                  pDstCols;
-    sal_uLong                      nCount;
+    sal_uInt32                     nCount;
 };
 
 struct ImplBmpReplaceParam
 {
     const Color*        pSrcCols;
     const Color*        pDstCols;
-    sal_uLong           nCount;
+    sal_uInt32          nCount;
 };
 
 }
@@ -1328,9 +1328,9 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
     std::vector<vcl::PushFlags> aPushFlagStack;
 
     tools::Rectangle aBound;
-    const sal_uLong nCount(GetActionSize());
+    const sal_uInt32 nCount(GetActionSize());
 
-    for(sal_uLong a(0); a < nCount; a++)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
         MetaAction* pAction = GetAction(a);
         const MetaActionType nActionType = pAction->GetType();
@@ -1780,9 +1780,9 @@ Bitmap GDIMetaFile::ImplBmpMonoFnc( const Bitmap& rBmp, const void* pBmpParam )
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
 {
-    const sal_uLong nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
+    const sal_uInt8 nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
 
-    for( sal_uLong i = 0; i < static_cast<const ImplColReplaceParam*>(pColParam)->nCount; i++ )
+    for( sal_uInt32 i = 0; i < static_cast<const ImplColReplaceParam*>(pColParam)->nCount; i++ )
     {
         if( ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinR[ i ] <= nR ) &&
             ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxR[ i ] >= nR ) &&
@@ -2154,33 +2154,33 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
     ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
 }
 
-void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount )
+void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uInt32 nColorCount )
 {
     ImplColReplaceParam aColParam;
     ImplBmpReplaceParam aBmpParam;
 
-    aColParam.pMinR.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMaxR.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMinG.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMaxG.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMinB.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMaxB.reset(new sal_uLong[ nColorCount ]);
+    aColParam.pMinR.reset(new sal_uInt8[ nColorCount ]);
+    aColParam.pMaxR.reset(new sal_uInt8[ nColorCount ]);
+    aColParam.pMinG.reset(new sal_uInt8[ nColorCount ]);
+    aColParam.pMaxG.reset(new sal_uInt8[ nColorCount ]);
+    aColParam.pMinB.reset(new sal_uInt8[ nColorCount ]);
+    aColParam.pMaxB.reset(new sal_uInt8[ nColorCount ]);
 
-    for( sal_uLong i = 0; i < nColorCount; i++ )
+    for( sal_uInt32 i = 0; i < nColorCount; i++ )
     {
-        tools::Long        nVal;
+        sal_uInt8           nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
-        aColParam.pMaxR[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
+        aColParam.pMinR[ i ] = std::max( nVal, sal_uInt8(0) );
+        aColParam.pMaxR[ i ] = std::min( nVal, sal_uInt8(255) );
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
-        aColParam.pMaxG[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
+        aColParam.pMinG[ i ] = std::max( nVal, sal_uInt8(0) );
+        aColParam.pMaxG[ i ] = std::min( nVal, sal_uInt8(255) );
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
-        aColParam.pMaxB[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
+        aColParam.pMinB[ i ] = std::max( nVal, sal_uInt8(0) );
+        aColParam.pMaxB[ i ] = std::min( nVal, sal_uInt8(255) );
     }
 
     aColParam.pDstCols = pReplaceColors;
@@ -2208,9 +2208,9 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
     return aRet;
 }
 
-sal_uLong GDIMetaFile::GetSizeBytes() const
+sal_uInt32 GDIMetaFile::GetSizeBytes() const
 {
-    sal_uLong nSizeBytes = 0;
+    sal_uInt32 nSizeBytes = 0;
 
     for( size_t i = 0, nObjCount = GetActionSize(); i < nObjCount; ++i )
     {
