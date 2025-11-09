@@ -136,7 +136,7 @@ const std::array g_TranslTable {
     // SotClipboardFormatId::PRIVATE
         FormatEntry("application/x-openoffice-private;windows_formatname=\"Private\"", "Private"),
     // SotClipboardFormatId::SIMPLE_FILE
-        FormatEntry("application/x-openoffice-file;windows_formatname=\"FileNameW\"", "FileName", CppuType_String),
+        FormatEntry("application/x-openoffice-file;windows_formatname=\"FileNameW\"", "FileNameW", CppuType_String),
     // SotClipboardFormatId::RTF
         FormatEntry("text/rtf", "Rich Text Format"),
     // SotClipboardFormatId::DRAWING
@@ -292,11 +292,11 @@ const std::array g_TranslTable {
     //SotClipboardFormatId::EMBEDDED_OBJ
         FormatEntry("application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star Embedded Object (XML)\"", "Star Embedded Object (XML)"),
     //SotClipboardFormatId::FILECONTENT
-        FormatEntry("application/x-openoffice-filecontent;windows_formatname=\"" CFSTR_FILECONTENTS "\"", CFSTR_FILECONTENTS),
+        FormatEntry("application/x-openoffice-filecontent;windows_formatname=\"FileContents\"", "FileContents"),
     //SotClipboardFormatId::FILEGRPDESCRIPTOR
-        FormatEntry("application/x-openoffice-filegrpdescriptor;windows_formatname=\"" CFSTR_FILEDESCRIPTOR "\"", CFSTR_FILEDESCRIPTOR),
+        FormatEntry("application/x-openoffice-filegrpdescriptor;windows_formatname=\"FileGroupDescriptorW\"", "FileGroupDescriptorW"),
     //SotClipboardFormatId::FILENAME
-        FormatEntry("application/x-openoffice-filename;windows_formatname=\"" CFSTR_FILENAME "\"", CFSTR_FILENAME),
+        FormatEntry("application/x-openoffice-filename;windows_formatname=\"FileNameW\"", "FileNameW", CppuType_String),
     //SotClipboardFormatId::SD_OLE
         FormatEntry("application/x-openoffice-sd-ole;windows_formatname=\"SD-OLE\"", "SD-OLE"),
     //SotClipboardFormatId::EMBEDDED_OBJ_OLE
@@ -324,7 +324,7 @@ const std::array g_TranslTable {
     //SotClipboardFormatId::SBA_REPORTEXCHANGE
         FormatEntry("application/x-openoffice-sba-reportexchange;windows_formatname=\"SBA_REPORTEXCHANGE\"", "SBA_REPORTEXCHANGE"),
     //SotClipboardFormatId::UNIFORMRESOURCELOCATOR
-        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", CppuType_String),
+        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocatorW", CppuType_String),
     //SotClipboardFormatId::STARCHARTDOCUMENT_50
         FormatEntry("application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0"),
     //SotClipboardFormatId::GRAPHOBJ
