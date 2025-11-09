@@ -128,6 +128,9 @@ const std::array g_TranslTable {
         FormatEntry("application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", CF_HDROP),
     //SotClipboardFormatId::SYLK
         FormatEntry("application/x-openoffice-sylk;windows_formatname=\"Sylk\"", "Sylk", CF_SYLK),
+
+    // End of standard clipboard format numbers
+
     // SotClipboardFormatId::GDIMETAFILE
         FormatEntry("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile"),
     // SotClipboardFormatId::PRIVATE
@@ -321,7 +324,7 @@ const std::array g_TranslTable {
     //SotClipboardFormatId::SBA_REPORTEXCHANGE
         FormatEntry("application/x-openoffice-sba-reportexchange;windows_formatname=\"SBA_REPORTEXCHANGE\"", "SBA_REPORTEXCHANGE"),
     //SotClipboardFormatId::UNIFORMRESOURCELOCATOR
-        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", CF_INVALID, CppuType_String),
+        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", CppuType_String),
     //SotClipboardFormatId::STARCHARTDOCUMENT_50
         FormatEntry("application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0"),
     //SotClipboardFormatId::GRAPHOBJ
