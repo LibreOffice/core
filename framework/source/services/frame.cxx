@@ -516,32 +516,32 @@ void XFrameImpl::initListeners()
     // set information about all supported properties
     impl_setPropertyChangeBroadcaster(*this);
     impl_addPropertyInfo(
-        FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER,
+        FramePropNames[FramePropHandle::DispatchRecorderSupplier],
         FramePropHandle::DispatchRecorderSupplier,
         cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
         css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION,
+        FramePropNames[FramePropHandle::IndicatorInterception],
         FramePropHandle::IndicatorInterception,
         cppu::UnoType<css::task::XStatusIndicator>::get(),
         css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        FRAME_PROPNAME_ASCII_ISHIDDEN,
+        FramePropNames[FramePropHandle::IsHidden],
         FramePropHandle::IsHidden,
         cppu::UnoType<bool>::get(),
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
     impl_addPropertyInfo(
-        FRAME_PROPNAME_ASCII_LAYOUTMANAGER,
+        FramePropNames[FramePropHandle::LayoutManager],
         FramePropHandle::LayoutManager,
         cppu::UnoType<css::frame::XLayoutManager>::get(),
         css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        FRAME_PROPNAME_ASCII_TITLE,
+        FramePropNames[FramePropHandle::Title],
         FramePropHandle::Title,
         cppu::UnoType<OUString>::get(),
         css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
-        FRAME_PROPNAME_ASCII_URL,
+        FramePropNames[FramePropHandle::Url],
         FramePropHandle::Url,
         cppu::UnoType<OUString>::get(),
         css::beans::PropertyAttribute::TRANSIENT);
@@ -3220,7 +3220,7 @@ void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::X
     {
         css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        xFrameProps->getPropertyValue(FRAME_PROPNAME_ASCII_LAYOUTMANAGER) >>= xLayoutManager;
+        xFrameProps->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY_THROW);
         xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::Any(bState));
     }

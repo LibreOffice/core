@@ -104,7 +104,7 @@ void FrameListAnalyzer::impl_analyze()
     css::uno::Reference< css::beans::XPropertySet > xSet(m_xReferenceFrame, css::uno::UNO_QUERY);
     if ( (m_eDetectMode & FrameAnalyzerFlags::Hidden) && xSet.is() )
     {
-        xSet->getPropertyValue(FRAME_PROPNAME_ASCII_ISHIDDEN) >>= m_bReferenceIsHidden;
+        xSet->getPropertyValue(FramePropNames[FramePropHandle::IsHidden]) >>= m_bReferenceIsHidden;
     }
 
     // check, if the reference frame includes the backing component.
@@ -224,7 +224,7 @@ void FrameListAnalyzer::impl_analyze()
                 xSet.set(xFrame, css::uno::UNO_QUERY);
                 if (xSet.is())
                 {
-                    xSet->getPropertyValue(FRAME_PROPNAME_ASCII_ISHIDDEN) >>= bHidden;
+                    xSet->getPropertyValue(FramePropNames[FramePropHandle::IsHidden]) >>= bHidden;
                 }
             }
 

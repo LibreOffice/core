@@ -238,7 +238,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 
     try
     {
-        xPropSet->getPropertyValue( FRAME_PROPNAME_ASCII_LAYOUTMANAGER ) >>= xLayoutManager;
+        xPropSet->getPropertyValue( FramePropNames[FramePropHandle::LayoutManager] ) >>= xLayoutManager;
 
         if ( xLayoutManager.is() )
         {

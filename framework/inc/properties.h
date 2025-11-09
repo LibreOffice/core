@@ -19,18 +19,10 @@
 
 #pragma once
 
+#include <o3tl/enumarray.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 namespace framework{
-
-/** properties for "Frame" class */
-
-inline constexpr OUString FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER = u"DispatchRecorderSupplier"_ustr;
-inline constexpr OUString FRAME_PROPNAME_ASCII_ISHIDDEN = u"IsHidden"_ustr;
-inline constexpr OUString FRAME_PROPNAME_ASCII_LAYOUTMANAGER = u"LayoutManager"_ustr;
-inline constexpr OUString FRAME_PROPNAME_ASCII_TITLE = u"Title"_ustr;
-inline constexpr OUString FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION = u"IndicatorInterception"_ustr;
-inline constexpr OUString FRAME_PROPNAME_ASCII_URL = u"URL"_ustr;
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
@@ -41,7 +33,19 @@ enum class FramePropHandle : sal_Int32
     LayoutManager = 2,
     Title = 3,
     IndicatorInterception = 4,
-    Url = 5
+    Url = 5,
+    LAST = Url
+};
+
+/** properties for "Frame" class */
+inline constexpr o3tl::enumarray<FramePropHandle, OUString> FramePropNames =
+{
+    u"DispatchRecorderSupplier"_ustr,
+    u"IsHidden"_ustr,
+    u"LayoutManager"_ustr,
+    u"Title"_ustr,
+    u"IndicatorInterception"_ustr,
+    u"URL"_ustr
 };
 
 /** properties for "LayoutManager" class */
