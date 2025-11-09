@@ -731,7 +731,7 @@ void ScTabViewShell::SetTableShell(bool bActive)
         bActiveMediaSh=false;
         bActiveOleObjectSh=false;
         bActiveChartSh=false;
-        SetCurSubShell(OST_Table);
+        SetCurSubShell(OST_Table, true);
     }
     else
         SetCurSubShell(OST_Cell);
