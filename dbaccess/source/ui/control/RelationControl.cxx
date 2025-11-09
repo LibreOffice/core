@@ -524,7 +524,7 @@ namespace dbaui
                 pOther = m_xRightTable.get();
             else
                 pOther = m_xLeftTable.get();
-            pOther->set_active(1 - pOther->get_active());
+            pOther->set_active(1 - rListBox.get_active());
 
             OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
             OTableWindow* pFirst = aIter->second;
