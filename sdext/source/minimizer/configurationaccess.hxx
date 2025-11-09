@@ -80,8 +80,6 @@ class ConfigurationAccess
         ~ConfigurationAccess();
         void SaveConfiguration();
 
-        OUString getString( const PPPOptimizerTokenEnum ) const;
-
         // access to current OptimizerSettings (stored in the first entry of maSettings)
         css::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
         void SetConfigProperty( const PPPOptimizerTokenEnum, const css::uno::Any& aValue );

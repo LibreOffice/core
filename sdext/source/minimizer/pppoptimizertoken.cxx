@@ -73,32 +73,6 @@ constexpr TokenTable pTokenTableArray[] =
     { u"Status"_ustr,             TK_Status },
     { u"Pages"_ustr,              TK_Pages },
 
-    { u"STR_SUN_OPTIMIZATION_WIZARD2"_ustr,STR_SUN_OPTIMIZATION_WIZARD2 },
-    { u"STR_INTRODUCTION"_ustr,           STR_INTRODUCTION },
-    { u"STR_IMAGE_OPTIMIZATION"_ustr,     STR_IMAGE_OPTIMIZATION },
-    { u"STR_OLE_OBJECTS"_ustr,            STR_OLE_OBJECTS },
-    { u"STR_OLE_OBJECTS_DESC"_ustr,       STR_OLE_OBJECTS_DESC },
-    { u"STR_NO_OLE_OBJECTS_DESC"_ustr,    STR_NO_OLE_OBJECTS_DESC },
-    { u"STR_SLIDES"_ustr,                 STR_SLIDES },
-    { u"STR_SUMMARY"_ustr,                STR_SUMMARY },
-    { u"STR_DELETE_SLIDES"_ustr,          STR_DELETE_SLIDES },
-    { u"STR_OPTIMIZE_IMAGES"_ustr,        STR_OPTIMIZE_IMAGES },
-    { u"STR_CREATE_REPLACEMENT"_ustr,     STR_CREATE_REPLACEMENT },
-    { u"MY_SETTINGS"_ustr,                STR_MY_SETTINGS },
-    { u"STR_OK"_ustr,                     STR_OK },
-    { u"STR_INFO_PRIMARY"_ustr,           STR_INFO_PRIMARY },
-    { u"STR_INFO_SECONDARY_1"_ustr,       STR_INFO_SECONDARY_1 },
-    { u"STR_INFO_SECONDARY_2"_ustr,       STR_INFO_SECONDARY_2 },
-    { u"STR_INFO_SECONDARY_3"_ustr,       STR_INFO_SECONDARY_3 },
-    { u"STR_INFO_SECONDARY_4"_ustr,       STR_INFO_SECONDARY_4 },
-    { u"STR_DUPLICATING_PRESENTATION"_ustr,STR_DUPLICATING_PRESENTATION },
-    { u"STR_DELETING_SLIDES"_ustr,        STR_DELETING_SLIDES },
-    { u"STR_OPTIMIZING_GRAPHICS"_ustr,    STR_OPTIMIZING_GRAPHICS },
-    { u"STR_CREATING_OLE_REPLACEMENTS"_ustr,STR_CREATING_OLE_REPLACEMENTS },
-    { u"STR_FileSizeSeparator"_ustr,      STR_FILESIZESEPARATOR },
-    { u"STR_FILENAME_SUFFIX"_ustr,        STR_FILENAME_SUFFIX },
-    { u"STR_WARN_UNSAVED_PRESENTATION"_ustr, STR_WARN_UNSAVED_PRESENTATION },
-
 
     { u"NotFound"_ustr,           TK_NotFound }
 };

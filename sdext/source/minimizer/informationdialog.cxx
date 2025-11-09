@@ -19,6 +19,8 @@
 
 
 #include "informationdialog.hxx"
+#include <sdextresid.hxx>
+#include <strings.hrc>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -48,27 +50,27 @@ static OUString ImpValueOfInMB( sal_Int64 rVal )
 
 void InformationDialog::InitDialog()
 {
-    set_title(getString(STR_SUN_OPTIMIZATION_WIZARD2));
+    set_title( SdextResId( STR_SUN_OPTIMIZATION_WIZARD2 ) );
 
     sal_Int64 nSource = mnSourceSize;
     sal_Int64 nDest   = mnDestSize;
 
-    PPPOptimizerTokenEnum eInfoString( STR_INFO_SECONDARY_1 );
+    OUString eInfoString( SdextResId( STR_INFO_SECONDARY_1 ) );
     if ( mnSourceSize )
     {
         if ( mnDestSize )
-            eInfoString = STR_INFO_SECONDARY_1;
+            eInfoString = SdextResId( STR_INFO_SECONDARY_1 ) ;
         else
         {
-            eInfoString = STR_INFO_SECONDARY_2;
+            eInfoString = SdextResId( STR_INFO_SECONDARY_2 );
             nDest = mnApproxSize;
         }
     }
     else if ( mnDestSize )
-        eInfoString = STR_INFO_SECONDARY_3;
+        eInfoString = SdextResId( STR_INFO_SECONDARY_3 );
     else
     {
-        eInfoString = STR_INFO_SECONDARY_4;
+        eInfoString = SdextResId( STR_INFO_SECONDARY_4 );
         nDest = mnApproxSize;
     }
 
@@ -88,8 +90,8 @@ void InformationDialog::InitDialog()
             aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), u"" );
     }
 
-    OUString sPrimary( getString( STR_INFO_PRIMARY ) );
-    OUString sSecondary( getString( eInfoString ) );
+    OUString sPrimary( SdextResId( STR_INFO_PRIMARY ) );
+    OUString sSecondary( eInfoString );
     static constexpr OUString aOldSizePlaceholder( u"%OLDFILESIZE"_ustr  );
     static constexpr OUString aNewSizePlaceholder( u"%NEWFILESIZE"_ustr  );
     const OUString aTitlePlaceholder( !aTitle.isEmpty() ? u"%TITLE"_ustr

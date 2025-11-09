@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#define STR_SUN_OPTIMIZATION_WIZARD2            NC_("STR_SUN_OPTIMIZATION_WIZARD2", "Presentation Minimizer")
+#define STR_INTRODUCTION                        NC_("STR_INTRODUCTION", "Introduction")
+#define STR_IMAGE_OPTIMIZATION                  NC_("STR_IMAGE_OPTIMIZATION", "Images")
+#define STR_OLE_OBJECTS                         NC_("STR_OLE_OBJECTS", "OLE Objects")
+#define STR_OLE_OBJECTS_DESC                    NC_("STR_OLE_OBJECTS_DESC", "Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.\n\nThe current presentation contains OLE objects.")
+#define STR_NO_OLE_OBJECTS_DESC                 NC_("STR_NO_OLE_OBJECTS_DESC", "Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.\n\nThe current presentation contains no OLE objects.")
+#define STR_SLIDES                              NC_("STR_SLIDES", "Slides")
+#define STR_SUMMARY                             NC_("STR_SUMMARY", "Summary")
+#define STR_DELETE_SLIDES                       NC_("STR_DELETE_SLIDES", "Delete %SLIDES slides.")
+// The following string is only used in plural.
+#define STR_OPTIMIZE_IMAGES                     NC_("STR_OPTIMIZE_IMAGES", "Optimize %IMAGES images to %QUALITY% JPEG quality at %RESOLUTION DPI.")
+#define STR_CREATE_REPLACEMENT                  NC_("STR_CREATE_REPLACEMENT", "Create replacement images for %OLE objects.")
+#define STR_MY_SETTINGS                         NC_("STR_MY_SETTINGS", "My Settings ")
+#define STR_OK                                  NC_("STR_OK", "OK")
+#define STR_INFO_PRIMARY                        NC_("STR_INFO_PRIMARY", "Successfully updated the presentation “%TITLE”.")
+#define STR_INFO_SECONDARY_1                    NC_("STR_INFO_SECONDARY_1", "The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.")
+#define STR_INFO_SECONDARY_2                    NC_("STR_INFO_SECONDARY_2", "The file size has changed from %OLDFILESIZE MB to approximately %NEWFILESIZE MB.")
+#define STR_INFO_SECONDARY_3                    NC_("STR_INFO_SECONDARY_3", "The file size has changed to %NEWFILESIZE MB.")
+#define STR_INFO_SECONDARY_4                    NC_("STR_INFO_SECONDARY_4", "The file size has changed to approximately %NEWFILESIZE MB.")
+#define STR_DUPLICATING_PRESENTATION            NC_("STR_DUPLICATING_PRESENTATION", "Duplicating presentation...")
+#define STR_DELETING_SLIDES                     NC_("STR_DELETING_SLIDES", "Deleting slides...")
+#define STR_OPTIMIZING_GRAPHICS                 NC_("STR_OPTIMIZING_GRAPHICS", "Optimizing images...")
+#define STR_CREATING_OLE_REPLACEMENTS           NC_("STR_CREATING_OLE_REPLACEMENTS", "Creating replacement images for OLE objects...")
+#define STR_FILESIZESEPARATOR                   NC_("STR_FILESIZESEPARATOR", ".")
+#define STR_FILENAME_SUFFIX                     NC_("STR_FILENAME_SUFFIX", "(minimized)")
+#define STR_WARN_UNSAVED_PRESENTATION           NC_("STR_WARN_UNSAVED_PRESENTATION", "Do you want to minimize presentation without saving?")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

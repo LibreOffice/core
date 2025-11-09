@@ -145,7 +145,6 @@ bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSettings 
 ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext ) :
     mxContext( rxContext )
 {
-    LoadStrings();
     maSettings.emplace_back( );
     maSettings.back().maName = "LastUsedSettings";
     LoadConfiguration();
@@ -153,46 +152,6 @@ ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContex
 
 ConfigurationAccess::~ConfigurationAccess()
 {
-}
-
-OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
-{
-    std::map< PPPOptimizerTokenEnum, OUString >::const_iterator aIter( maStrings.find( eToken ) );
-    return aIter != maStrings.end() ? ((*aIter).second) : OUString();
-}
-
-void ConfigurationAccess::LoadStrings()
-{
-    try
-    {
-        do
-        {
-            Reference< XInterface > xRoot( OpenConfiguration( true ) );
-            if ( !xRoot.is() )
-                break;
-            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, u"Strings"_ustr ), UNO_QUERY );
-            if ( xSet.is() )
-            {
-                const Sequence< OUString > aElements( xSet->getElementNames() );
-                for ( const auto& rElement : aElements )
-                {
-                    try
-                    {
-                        OUString aString, aPropertyName( rElement );
-                        if ( xSet->getByName( aPropertyName ) >>= aString )
-                            maStrings[ TKGet( aPropertyName ) ] = aString;
-                    }
-                    catch (const Exception&)
-                    {
-                    }
-                }
-            }
-        }
-        while( false );
-    }
-    catch (const Exception&)
-    {
-    }
 }
 
 void ConfigurationAccess::LoadConfiguration()

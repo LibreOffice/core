@@ -13,6 +13,10 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Library_PresentationMinimizer \
 ))
 
+$(eval $(call gb_Module_add_l10n_targets,sdext,\
+       AllLangMoTarget_sdext \
+))
+
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
     CustomTarget_pdfimport \
