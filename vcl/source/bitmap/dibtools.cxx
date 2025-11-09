@@ -1570,27 +1570,17 @@ bool ImplWriteDIB(
     if(!aSizePix.Width() || !aSizePix.Height())
         return false;
 
-    BitmapScopedReadAccess pAcc(rSource);
     const SvStreamEndian nOldFormat(rOStm.GetEndian());
     const sal_uInt64 nOldPos(rOStm.Tell());
 
     rOStm.SetEndian(SvStreamEndian::LITTLE);
 
-    if (pAcc)
+    if (BitmapScopedReadAccess pAcc{ rSource })
     {
-        if(bFileHeader)
-        {
-            if(ImplWriteDIBFileHeader(rOStm, *pAcc))
-            {
-                bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, bCompressed);
-            }
-        }
-        else
+        if (!bFileHeader || ImplWriteDIBFileHeader(rOStm, *pAcc))
         {
             bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, bCompressed);
         }
-
-        pAcc.reset();
     }
 
     if(!bRet)
