@@ -29,6 +29,7 @@
 #include <shlguid.h>
 #include <objidl.h>
 #include <shellapi.h>
+#include <win/scoped_gdi.hxx>
 
 #include <string>
 #include <sstream>
@@ -397,8 +398,6 @@ css::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal)
 
 Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
 {
-    Sequence< sal_Int8 > ooBmpStream;
-
     if (BITMAP bm{}; GetObjectW(aHBMP, sizeof(bm), &bm))
     {
         size_t nDataBytes = ((bm.bmWidth * bm.bmBitsPixel + 31) / 32) * 4 * bm.bmHeight;
@@ -414,15 +413,14 @@ Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
         pBmp->bmiHeader.biBitCount = bm.bmBitsPixel;
         pBmp->bmiHeader.biCompression = BI_RGB;
 
-        HDC hdc = GetDC(nullptr);
-        if (GetDIBits(hdc, aHBMP, 0, bm.bmHeight, pBmp + 1, pBmp, DIB_RGB_COLORS))
+        ScopedHDC hdc(CreateCompatibleDC(nullptr));
+        if (GetDIBits(hdc.get(), aHBMP, 0, bm.bmHeight, pBmp + 1, pBmp, DIB_RGB_COLORS))
         {
-            ooBmpStream = WinDIBToOOBMP( aBitmapStream );
+            return WinDIBToOOBMP(aBitmapStream);
         }
-        ReleaseDC(nullptr, hdc);
     }
 
-    return ooBmpStream;
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
