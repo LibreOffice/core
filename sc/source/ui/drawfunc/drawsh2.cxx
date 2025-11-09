@@ -47,6 +47,7 @@
 #include <gridwin.hxx>
 #include <scmod.hxx>
 #include <appoptio.hxx>
+#include <dbdata.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
@@ -573,9 +574,28 @@ void ScDrawShell::Activate (const bool)
 
 const OUString & ScDrawShell::GetSidebarContextName()
 {
-    return vcl::EnumContext::GetContextName(
-        svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
-            GetDrawView()->GetMarkedObjectList()));
+    vcl::EnumContext::Context eContext = svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
+            GetDrawView()->GetMarkedObjectList());
+
+    // If no special context detected, check for table context
+    if (eContext == vcl::EnumContext::Context::Unknown)
+    {
+        ScDocument& rDocument = rViewData.GetDocument();
+        if (!rDocument.HasDataPilotAtPosition(rViewData.GetCurPos()))
+        {
+            const ScAddress aAddr = rViewData.GetCurPos();
+            if (!rDocument.HasSparkline(aAddr))
+            {
+                const ScDBData* pDbData = rDocument.GetDBAtCursor(
+                    aAddr.Col(), aAddr.Row(), aAddr.Tab(), ScDBDataPortion::AREA);
+                if (pDbData && pDbData->GetTableStyleInfo())
+                {
+                    eContext = vcl::EnumContext::Context::Table;
+                }
+            }
+        }
+    }
+    return vcl::EnumContext::GetContextName(eContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
