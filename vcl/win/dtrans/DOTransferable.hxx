@@ -41,8 +41,6 @@ class CDOTransferable : public ::cppu::WeakImplHelper<
                             css::datatransfer::XTransferable>
 {
 public:
-    typedef css::uno::Sequence< sal_Int8 > ByteSequence_t;
-
     // XTransferable
 
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
@@ -70,7 +68,7 @@ private:
     css::datatransfer::DataFlavor formatEtcToDataFlavor(sal_uInt32 cfFormat);
 
     void tryToGetIDataObjectIfAbsent();
-    ByteSequence_t getClipboardData( CFormatEtc& aFormatEtc );
+    css::uno::Sequence<sal_Int8> getClipboardData(CFormatEtc& aFormatEtc);
     OUString synthesizeUnicodeText( );
 
     LCID getLocaleFromClipboard( );
