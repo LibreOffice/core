@@ -10,8 +10,10 @@
 Option VBASupport 1
 
 Sub ScheduleOnTime
+  Dim startTime As Date
   ' Make start time 1 s in the past, to force minimal timer timeout:
-  Application.OnTime Now() - TimeSerial(0, 0, 1), &quot;Standard.Module1.OnTime&quot;
+  startTime = Now() - TimeSerial(0, 0, 1)
+  Application.OnTime startTime, &quot;Standard.Module1.OnTime&quot;
 End Sub
 
 Sub OnTime()
