@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/scopeguard.hxx>
 #include <sal/types.h>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
@@ -495,6 +498,7 @@ Sequence<sal_Int8> CDOTransferable::getClipboardData(CFormatEtc& aFormatEtc)
             throw RuntimeException( );
     }
 
+    comphelper::ScopeGuard stgMediumReleaser([&stgmedium] { ReleaseStgMedium(&stgmedium); });
     Sequence<sal_Int8> byteStream;
 
     try
@@ -504,14 +508,7 @@ Sequence<sal_Int8> CDOTransferable::getClipboardData(CFormatEtc& aFormatEtc)
         else if (CF_HDROP == aLocalFormatEtc.getClipformat())
             byteStream = CF_HDROPToFileList(stgmedium.hGlobal);
         else if (CF_BITMAP == aLocalFormatEtc.getClipformat())
-        {
             byteStream = WinBITMAPToOOBMP(stgmedium.hBitmap);
-            if (aLocalFormatEtc.getTymed() == TYMED_GDI &&
-                ! stgmedium.pUnkForRelease )
-            {
-                DeleteObject(stgmedium.hBitmap);
-            }
-        }
         else
         {
             clipDataToByteStream(aLocalFormatEtc.getClipformat(), stgmedium, byteStream);
@@ -528,12 +525,9 @@ Sequence<sal_Int8> CDOTransferable::getClipboardData(CFormatEtc& aFormatEtc)
                 byteStream = WinMFPictToOOMFPict(byteStream);
             }
         }
-
-        ReleaseStgMedium( &stgmedium );
     }
     catch( CStgTransferHelper::CStgTransferException& )
     {
-        ReleaseStgMedium( &stgmedium );
         throw IOException( );
     }
 
