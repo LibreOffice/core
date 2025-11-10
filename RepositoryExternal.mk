@@ -146,6 +146,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+ifneq ($(OS),WNT)
 ifneq ($(filter SQLITE3,$(BUILD_TYPE)),)
 ifneq ($(SYSTEM_SQLITE3),)
 
@@ -185,6 +186,7 @@ endef
 
 endif # SYSTEM_SQLITE3
 endif # SQLITE3
+endif # !WNT
 
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
