@@ -71,7 +71,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			$(if $(DISABLE_OPENSSL),,--with-openssl \
 				$(if $(WITH_GSSAPI),--with-gssapi)) \
 				$(if $(ENABLE_LDAP),,--with-ldap=no) \
-			CFLAGS="-fPIC" \
+			CFLAGS="-fPIC -std=c99" \
 			CPPFLAGS="$(postgresql_CPPFLAGS)" \
 			LDFLAGS="$(postgresql_LDFLAGS)" \
 			$(if $(ENABLE_LDAP),EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4") \
