@@ -22,7 +22,6 @@
 
 #include <unotools/unotoolsdllapi.h>
 
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>

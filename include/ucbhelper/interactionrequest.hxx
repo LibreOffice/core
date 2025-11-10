@@ -21,7 +21,6 @@
 #define INCLUDED_UCBHELPER_INTERACTIONREQUEST_HXX
 
 #include <config_options.h>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>

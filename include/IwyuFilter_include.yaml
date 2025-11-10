@@ -278,6 +278,10 @@ excludelist:
     include/tools/simdsupport.hxx:
     # Needed for CPU intrinsics detection to work
     - emmintrin.h
+    include/unotest/bootstrapfixturebase.hxx:
+    # These are used in virtually all test files, too much work to move them everywhere
+    - cppunit/TestAssert.h
+    - cppunit/plugin/TestPlugIn.h
     include/unotools/accessiblerelationsethelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleRelationSet.hpp

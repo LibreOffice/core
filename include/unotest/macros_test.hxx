@@ -14,7 +14,6 @@
 
 #include <memory>
 #include <functional>
-#include <config_gpgme.h>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 

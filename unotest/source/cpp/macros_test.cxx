@@ -8,6 +8,7 @@
  */
 
 #include <unotest/macros_test.hxx>
+#include <config_gpgme.h>
 
 #include <vector>
 
