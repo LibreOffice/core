@@ -12,6 +12,7 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	bzip2 \
 	expat \
+	$(if $(filter-out WNT,$(OS)),$(call gb_Helper_optional,LZMA,lzma)) \
 	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
 	$(if $(filter LINUX,$(OS)),$(call gb_Helper_optional,SQLITE3,sqlite3)) \
@@ -44,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
 			/p:zlibDir=$(gb_UnpackedTarball_workdir)/zlib \
 			/p:sqlite3Dir=$(gb_UnpackedTarball_workdir)/sqlite3 \
+			/p:lzmaDir=$(gb_UnpackedTarball_workdir)/lzma/ \
 			/p:libffiOutDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs \
 			/p:libffiIncludeDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/include \
 			/maxcpucount \
@@ -115,6 +117,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSTEM_BZIP2),,-I$(gb_UnpackedTarball_workdir)/bzip2) \
 			$(if $(SYSTEM_EXPAT),,-I$(gb_UnpackedTarball_workdir)/expat/lib) \
 			$(if $(SYSTEM_SQLITE3),,-I$(gb_UnpackedTarball_workdir)/sqlite3) \
+			$(if $(SYSTEM_LZMA),,-I$(gb_UnpackedTarball_workdir)/lzma/src/liblzma/api) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
@@ -125,6 +128,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_SQLITE3),,-L$(gb_StaticLibrary_WORKDIR)) \
+			$(if $(SYSTEM_LZMA),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
 			$(gb_LTOFLAGS) \
 			)" \

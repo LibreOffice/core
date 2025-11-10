@@ -61,5 +61,12 @@ class ImportsTest(unittest.TestCase):
         with open(os.devnull, "w") as devnull:
             print(str(_hashlib), file=devnull)
 
+    def test_lzma_import(self):
+        import lzma
+
+        # use imported lzma module for pyflakes
+        with open(os.devnull, "w") as devnull:
+            print(str(lzma), file=devnull)
+
 if __name__ == '__main__':
     unittest.main()

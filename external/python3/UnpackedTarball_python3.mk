@@ -43,6 +43,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/init-sys-streams-cant-initialize-stdin.patch.0 \
 	external/python3/setuptools.patch.1 \
 	external/python3/sqlite3.patch.1 \
+	external/python3/lzma.patch.1 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)

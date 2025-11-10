@@ -35,6 +35,7 @@ python3_EXTENSION_MODULES= \
 	PCbuild/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_elementtree$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_hashlib$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_lzma$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_msi$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_multiprocessing$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_overlapped$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -103,6 +104,7 @@ python3_EXTENSION_MODULES= \
 	Modules/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_json.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_lsprof.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_lzma.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/math.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_md5.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/mmap.$(python3_EXTENSION_MODULE_SUFFIX).so \
