@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// so_activex.cpp : Implementation of DLL Exports.
-
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f so_activexps.mk in the project directory.
+// Implementation of DLL Exports
 
 #include <stdio.h>
 #include "StdAfx2.h"
