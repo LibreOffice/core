@@ -78,25 +78,25 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable
 {
 private:
-    std::unique_ptr<comphelper::string::NaturalStringSorter> xSorter;
-    std::unique_ptr<weld::TreeView> xWriterTreeView;
-    std::unique_ptr<weld::TreeView> xCalcTreeView;
-    weld::TreeView* pTreeView;
+    std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
+    std::unique_ptr<weld::TreeView> m_xWriterTreeView;
+    std::unique_ptr<weld::TreeView> m_xCalcTreeView;
+    weld::TreeView* m_pTreeView;
 
     weld::ComboBox* m_pSortByComboBox;
 
-    sal_uInt16      nDatePos;
-    bool            bAuthor;
-    bool            bDate;
-    bool            bComment;
-    bool            bSorted;
-    SvxRedlinDateMode nDaTiMode;
-    DateTime        aDaTiFirst;
-    DateTime        aDaTiLast;
-    DateTime        aDaTiFilterFirst;
-    DateTime        aDaTiFilterLast;
-    OUString        aAuthor;
-    std::unique_ptr<utl::TextSearch> pCommentSearcher;
+    sal_uInt16      m_nDatePos;
+    bool            m_bAuthor;
+    bool            m_bDate;
+    bool            m_bComment;
+    bool            m_bSorted;
+    SvxRedlinDateMode m_nDaTiMode;
+    DateTime        m_aDaTiFirst;
+    DateTime        m_aDaTiLast;
+    DateTime        m_aDaTiFilterFirst;
+    DateTime        m_aDaTiFilterLast;
+    OUString        m_aAuthor;
+    std::unique_ptr<utl::TextSearch> m_pCommentSearcher;
 
     int ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter& rRight);
 
@@ -105,8 +105,8 @@ public:
                    std::unique_ptr<weld::TreeView> xCalcControl,
                    weld::ComboBox* pSortByControl);
 
-    weld::TreeView& GetWidget() { return *pTreeView; }
-    bool IsSorted() const { return bSorted; }
+    weld::TreeView& GetWidget() { return *m_pTreeView; }
+    bool IsSorted() const { return m_bSorted; }
 
     ~SvxRedlinTable();
 
