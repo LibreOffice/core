@@ -21,7 +21,7 @@ ifeq ($(OS),LINUX) # i.e., assuming glibc
 # pthread_setconcurrency in <pthread.h> (and once that is defined, it also needs either
 # _DEFUALT_SOURCE (glibc >= 2.19) or the deprecated _BSD_SOURCE (glibc <= 2.18) to be defined
 # explicitly, so that e.g. u_char is declared in <sys/types.h>):
-openldap_CFLAGS = -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_BSD_SOURCE
+openldap_CFLAGS = -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_BSD_SOURCE -Wno-error=incompatible-pointer-types
 endif
 
 openldap_LDFLAGS =

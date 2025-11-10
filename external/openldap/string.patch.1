@@ -1,0 +1,23 @@
+GCC now complains about these bogus prototypes, error: conflicting types for...
+--- openldap/include/ac/string.h.orig	2025-11-10 12:55:36.853472895 +0100
++++ openldap/include/ac/string.h	2025-11-10 12:56:35.124352637 +0100
+@@ -58,7 +58,7 @@
+ #elif !defined(_WIN32)
+ 	/* some systems fail to declare strdup */
+ 	/* Windows does not require this declaration */
+-	LDAP_LIBC_F(char *) (strdup)();
++/*	LDAP_LIBC_F(char *) (strdup)(); */
+ #endif
+ 
+ /*
+@@ -68,8 +68,8 @@
+ 
+ /* we don't want these declared for Windows or Mingw */
+ #ifndef _WIN32
+-int (strcasecmp)();
+-int (strncasecmp)();
++/*int (strcasecmp)();
++int (strncasecmp)();*/
+ #endif
+ 
+ #ifndef SAFEMEMCPY
