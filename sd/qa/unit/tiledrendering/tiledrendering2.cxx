@@ -137,6 +137,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
     CPPUNIT_ASSERT_EQUAL(2, aView.editModeOfInvalidation);
 }
 
+#if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPdfiumLinks)
 {
     // Given a pdf file with links:
@@ -170,6 +171,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPdfiumLinks)
     links = get_links_array();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), links.size());
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
