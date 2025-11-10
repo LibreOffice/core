@@ -370,18 +370,22 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
                 MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin, aScaleX,
                                  aScaleY);
-
-                if (fCurrentRotate)
-                    aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
-                aStartPoint = Point(basegfx::fround<tools::Long>(aTextTranslate.getX()),
-                                    basegfx::fround<tools::Long>(aTextTranslate.getY()));
-
                 bChangeMapMode = aMapMode != mpOutputDevice->GetMapMode();
                 if (bChangeMapMode)
                 {
                     mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
                     mpOutputDevice->SetRelativeMapMode(aMapMode);
                 }
+
+                basegfx::B2DHomMatrix aFinalTransform(aCombinedTransform
+                                                      * rTextCandidate.getTextTransform());
+                const basegfx::B2DPoint aPoint(aFinalTransform * basegfx::B2DPoint(0.0, 0.0));
+
+                Point aFinalPoint(
+                    basegfx::fround<tools::Long>(aPoint.getX() / aCurrentScaling.getX()),
+                    basegfx::fround<tools::Long>(aPoint.getY() / aCurrentScaling.getY()));
+
+                aStartPoint = Point(aFinalPoint.X() - aOrigin.X(), aFinalPoint.Y() - aOrigin.Y());
             }
             else
             {
