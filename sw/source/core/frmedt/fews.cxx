@@ -875,7 +875,22 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
         }
         if ( _opPercent )
-            *_opPercent = pFrame->getFramePrintArea().SSize();
+        {
+            if (RndStdIds::FLY_AT_FLY == _nAnchorId || !pFormatFrameSize)
+                *_opPercent = pFrame->getFramePrintArea().SSize();
+            else
+            {
+                if (pFormatFrameSize->GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                    _opPercent->setWidth(pFrame->getFrameArea().Width());
+                else
+                    _opPercent->setWidth(pFrame->getFramePrintArea().Width());
+
+                if (pFormatFrameSize->GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                     _opPercent->setHeight(pFrame->getFrameArea().Height());
+                else
+                    _opPercent->setHeight(pFrame->getFramePrintArea().Height());
+            }
+        }
     }
     else
     {
