@@ -100,8 +100,14 @@ TipOfTheDayDialog::~TipOfTheDayDialog()
 {
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::LastTipOfTheDayID::set(m_nCurrentTip, xChanges);
-    officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
+    if (!officecfg::Office::Common::Misc::LastTipOfTheDayID::isReadOnly())
+    {
+        officecfg::Office::Common::Misc::LastTipOfTheDayID::set(m_nCurrentTip, xChanges);
+    }
+    if (!officecfg::Office::Common::Misc::ShowTipOfTheDay::isReadOnly())
+    {
+        officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
+    }
     xChanges->commit();
 
     if (m_xParent.is())
