@@ -110,8 +110,8 @@ namespace
 class Status
 {
 public:
-    explicit Status(bool bTrow)
-        : m_bThrow(bTrow)
+    explicit Status(bool bThrow)
+        : m_bThrow(bThrow)
     {
     }
     // used to check success of an operation, and update the status if it's still ERROR_SUCCESS
