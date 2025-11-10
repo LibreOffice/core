@@ -415,10 +415,9 @@ bool UpdateDialog::Thread::update(
 }
 
 // UpdateDialog ----------------------------------------------------------
-UpdateDialog::UpdateDialog(
-    uno::Reference< uno::XComponentContext > const & context,
-    weld::Window * parent, std::vector<uno::Reference< deployment::XPackage > > && vExtensionList,
-    std::vector< dp_gui::UpdateData > * updateData)
+UpdateDialog::UpdateDialog(uno::Reference<uno::XComponentContext> const& context,
+                           weld::Window* parent,
+                           std::vector<uno::Reference<deployment::XPackage>>&& vExtensionList)
     : GenericDialogController(parent, u"desktop/ui/updatedialog.ui"_ustr, u"UpdateDialog"_ustr)
     , m_context(context)
     , m_none(DpResId(RID_DLG_UPDATE_NONE))
@@ -432,7 +431,6 @@ UpdateDialog::UpdateDialog(
     , m_browserbased(DpResId(RID_DLG_UPDATE_BROWSERBASED))
     , m_version(DpResId(RID_DLG_UPDATE_VERSION))
     , m_ignoredUpdate(DpResId(RID_DLG_UPDATE_IGNORED_UPDATE))
-    , m_updateData(*updateData)
     , m_thread(new UpdateDialog::Thread(context, *this, std::move(vExtensionList)))
     , m_xChecking(m_xBuilder->weld_label(u"UPDATE_CHECKING"_ustr))
     , m_xThrobber(m_xBuilder->weld_spinner(u"THROBBER"_ustr))
@@ -455,8 +453,6 @@ UpdateDialog::UpdateDialog(
     m_xUpdates->set_size_request(nWidth, nHeight);
 
     m_xUpdates->enable_toggle_buttons(weld::ColumnToggleType::Check);
-
-    OSL_ASSERT(updateData != nullptr);
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 

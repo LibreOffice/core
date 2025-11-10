@@ -905,22 +905,21 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 
     m_rDialogHelper.incBusy();
 
-    std::vector< UpdateData > vData;
-    UpdateDialog aUpdateDialog(m_xContext, m_rDialogHelper.getDialog(),
-                               std::move(vExtensionList), &vData);
+    UpdateDialog aUpdateDialog(m_xContext, m_rDialogHelper.getDialog(), std::move(vExtensionList));
 
     aUpdateDialog.notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
     bool bOk = aUpdateDialog.run() == RET_OK;
     m_rDialogHelper.decBusy();
 
-    if (bOk && !vData.empty())
+    const std::vector<UpdateData>& rUpdateData = aUpdateDialog.getUpdateData();
+    if (bOk && !rUpdateData.empty())
     {
         // If there is at least one directly downloadable extension then we
         // open the install dialog.
         std::vector< UpdateData > dataDownload;
 
-        for (auto const& data : vData)
+        for (auto const& data : rUpdateData)
         {
             if ( data.sWebsiteURL.isEmpty() )
                 dataDownload.push_back(data);
@@ -941,7 +940,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         //Now start the webbrowser and navigate to the websites where we get the updates
         if ( RET_OK == nDialogResult )
         {
-            for (auto const& data : vData)
+            for (auto const& data : rUpdateData)
             {
                 if (!data.sWebsiteURL.isEmpty())
                     m_rDialogHelper.openWebBrowser(data.sWebsiteURL,

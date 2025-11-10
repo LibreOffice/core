@@ -63,11 +63,9 @@ public:
        one with the highest version must be used, because it contains the latest known update
        information.
     */
-    UpdateDialog(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
-        weld::Window * parent,
-        std::vector< css::uno::Reference< css::deployment::XPackage > > && vExtensionList,
-        std::vector< dp_gui::UpdateData > * updateData);
+    UpdateDialog(css::uno::Reference<css::uno::XComponentContext> const& context,
+                 weld::Window* parent,
+                 std::vector<css::uno::Reference<css::deployment::XPackage>>&& vExtensionList);
 
     virtual ~UpdateDialog() override;
 
@@ -76,6 +74,7 @@ public:
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,
         css::uno::Sequence< css::uno::Sequence< OUString > > const &rItemList );
+    const std::vector<dp_gui::UpdateData>& getUpdateData() { return m_updateData; }
 
 private:
     UpdateDialog(UpdateDialog const &) = delete;
@@ -138,7 +137,7 @@ private:
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
     std::vector< std::unique_ptr<UpdateDialog::IgnoredUpdate> > m_ignoredUpdates;
     std::vector< std::unique_ptr<Index> > m_ListboxEntries;
-    std::vector< dp_gui::UpdateData > & m_updateData;
+    std::vector<dp_gui::UpdateData> m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
 
