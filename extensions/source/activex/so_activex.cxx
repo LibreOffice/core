@@ -274,7 +274,6 @@ EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerNative(
 static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
 {
     char        aSubKey[513];
-    int         ind;
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
     // In case SO7 is installed for this user he can have local registry entries that will prevent him from
