@@ -72,27 +72,25 @@ PersistentMap::~PersistentMap()
 // replace "%" with "%%"
 static OString encodeString( const OString& rStr)
 {
-    const char* pChar = rStr.getStr();
-    const sal_Int32 nLen = rStr.getLength();
-    sal_Int32 i = nLen;
+    const char *pChar = rStr.getStr(), *const pEnd = pChar + rStr.getLength();
     // short circuit for the simple non-encoded case
-    while( --i >= 0)
+    for (; pChar != pEnd; ++pChar)
     {
-        const unsigned char c = static_cast<unsigned char>(*(pChar++));
+        const unsigned char c = static_cast<unsigned char>(*pChar);
         if( c <= 0x0F )
             break;
         if( c == '%')
             break;
     }
-    if( i < 0)
+    if (pChar == pEnd)
         return rStr;
 
     // escape chars 0x00..0x0F with "%0".."%F"
-    OStringBuffer aEncStr( nLen + 32);
-    aEncStr.append( pChar - (nLen-i), nLen - i);
-    while( --i >= 0)
+    OStringBuffer aEncStr(rStr.getLength() + 32);
+    aEncStr.append(rStr.getStr(), pChar - rStr.getStr());
+    for (; pChar != pEnd; ++pChar)
     {
-        unsigned char c = static_cast<unsigned char>(*(pChar++));
+        unsigned char c = static_cast<unsigned char>(*pChar);
         if( c <= 0x0F )
         {
             aEncStr.append( '%');
@@ -109,30 +107,31 @@ static OString encodeString( const OString& rStr)
 // replace "%%" with "%"
 static OString decodeString( const char* pEncChars, int nLen)
 {
-    const char* pChar = pEncChars;
-    sal_Int32 i = nLen;
+    const char *pChar = pEncChars, *const pEnd = pChar + nLen;
     // short circuit for the simple non-encoded case
-    while( --i >= 0)
-        if( *(pChar++) == '%')
+    for (; pChar != pEnd; ++pChar)
+        if (*pChar == '%')
             break;
-    if( i < 0)
+    if (pChar == pEnd)
         return OString( pEncChars, nLen);
 
     // replace escaped chars with their decoded counterparts
     OStringBuffer aDecStr( nLen);
-    pChar = pEncChars;
-    for( i = nLen; --i >= 0;)
+    aDecStr.append(pEncChars, pChar - pEncChars);
+    for (; pChar != pEnd; ++pChar)
     {
-        char c = *(pChar++);
+        char c = *pChar;
         // handle escaped character
         if( c == '%')
         {
-            --i;
-            OSL_ASSERT( i >= 0);
-            c = *(pChar++);
+            ++pChar;
+            OSL_ASSERT(pChar != pEnd);
+            if (pChar == pEnd)
+                break;
+            c = *pChar;
             if( ('0' <= c) && (c <= '9'))
                 c -= '0';
-            else
+            else if (c != '%')
             {
                 OSL_ASSERT( ('A' <= c) && (c <= 'F'));
                 c -= ('A'-10);
