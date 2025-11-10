@@ -204,6 +204,8 @@ const Mapping aMappingArray[]{
     { ".odf", MIMETYPE_OASIS_OPENDOCUMENT_FORMULA.getStr(), AppBits::Math },
 };
 
+const char* const aSOActiveXClass = "SOActiveX Class";
+
 const char* const aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* const aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
 
@@ -299,7 +301,8 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSA
                                       aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
                                       nullptr, &hkey, nullptr));
                 s.upd(RegSetValueExA(hkey, "", 0, REG_SZ,
-                                     reinterpret_cast<const BYTE*>("SOActiveX Class"), 17));
+                                     reinterpret_cast<const BYTE*>(aSOActiveXClass),
+                                     sal::static_int_cast<DWORD>(strlen(aSOActiveXClass))));
                 s.upd(createKey(hkey, "Control", nKeyAccess));
                 s.upd(createKey(hkey, "EnableFullPage", nKeyAccess));
                 s.upd(createKey(hkey, L"InprocServer32", nKeyAccess, pActiveXPath,
@@ -319,7 +322,7 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSA
                 s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
                                       aPrefix, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
                                       nullptr, &hkey, nullptr));
-                s.upd(createKey(hkey, "so_activex.SOActiveX", nKeyAccess, "SOActiveX Class"));
+                s.upd(createKey(hkey, "so_activex.SOActiveX", nKeyAccess, aSOActiveXClass));
                 {
                     HRegKey hkey1;
                     s.upd(RegCreateKeyExA(hkey, "so_activex.SOActiveX", 0, nullptr,
@@ -328,7 +331,7 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSA
                     s.upd(createKey(hkey1, "CLSID", nKeyAccess, aClassID));
                     s.upd(createKey(hkey1, "CurVer", nKeyAccess, "so_activex.SOActiveX.1"));
                 }
-                s.upd(createKey(hkey, "so_activex.SOActiveX.1", nKeyAccess, "SOActiveX Class"));
+                s.upd(createKey(hkey, "so_activex.SOActiveX.1", nKeyAccess, aSOActiveXClass));
                 {
                     HRegKey hkey1;
                     s.upd(RegCreateKeyExA(hkey, "so_activex.SOActiveX.1", 0, nullptr,
