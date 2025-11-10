@@ -152,57 +152,57 @@ private:
 }
 
 // for now database component and chart are always installed
-#define SUPPORTED_EXT_NUM 30
-const char* const aFileExt[] = { ".vor",
-                           ".sds", ".sda", ".sdd", ".sdp", ".sdc", ".sdw", ".smf",
-                           ".stw", ".stc", ".sti", ".std",
-                           ".sxw", ".sxc", ".sxi", ".sxd", ".sxg", ".sxm",
-                           ".ott", ".otg", ".otp", ".ots", ".otf",
-                           ".odt", ".oth", ".odm", ".odg", ".odp", ".ods", ".odf"};
-const sal_Unicode* const aMimeType[] = {
-                          u"application/vnd.stardivision.writer",
 
-                          u"application/vnd.stardivision.chart",
-                          u"application/vnd.stardivision.draw",
-                          u"application/vnd.stardivision.impress",
-                          u"application/vnd.stardivision.impress-packed",
-                          u"application/vnd.stardivision.calc",
-                          u"application/vnd.stardivision.writer",
-                          u"application/vnd.stardivision.math",
+enum AppBits
+{
+    Chart = 1,
+    Draw = 2,
+    Impress = 4,
+    Calc = 8,
+    Writer = 16,
+    Math = 32,
+};
 
-                          MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE.getStr(),
-                          MIMETYPE_VND_SUN_XML_CALC_TEMPLATE.getStr(),
-                          MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE.getStr(),
-                          MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE.getStr(),
+struct Mapping
+{
+    const char* sFileExt;
+    const sal_Unicode* sMimeType;
+    AppBits nForModes;
+};
 
-                          MIMETYPE_VND_SUN_XML_WRITER.getStr(),
-                          MIMETYPE_VND_SUN_XML_CALC.getStr(),
-                          MIMETYPE_VND_SUN_XML_IMPRESS.getStr(),
-                          MIMETYPE_VND_SUN_XML_DRAW.getStr(),
-                          MIMETYPE_VND_SUN_XML_WRITER_GLOBAL.getStr(),
-                          MIMETYPE_VND_SUN_XML_MATH.getStr(),
-
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE.getStr(),
-
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET.getStr(),
-                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA.getStr() };
-
-const int nForModes[] = { 16,
-                           1,  2,  4,  4,  8, 16, 32,
-                          16,  8,  4,  2,
-                          16,  8,  4,  2, 16, 32,
-                          16,  2,  4,  8, 32,
-                          16, 16, 16,  2,  4,  8, 32 };
+const Mapping aMappingArray[]{
+    { ".vor", u"application/vnd.stardivision.writer", AppBits::Writer },
+    { ".sds", u"application/vnd.stardivision.chart", AppBits::Chart },
+    { ".sda", u"application/vnd.stardivision.draw", AppBits::Draw },
+    { ".sdd", u"application/vnd.stardivision.impress", AppBits::Impress },
+    { ".sdp", u"application/vnd.stardivision.impress-packed", AppBits::Impress },
+    { ".sdc", u"application/vnd.stardivision.calc", AppBits::Calc },
+    { ".sdw", u"application/vnd.stardivision.writer", AppBits::Writer },
+    { ".smf", u"application/vnd.stardivision.math", AppBits::Math },
+    { ".stw", MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE.getStr(), AppBits::Writer },
+    { ".stc", MIMETYPE_VND_SUN_XML_CALC_TEMPLATE.getStr(), AppBits::Calc },
+    { ".sti", MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE.getStr(), AppBits::Impress },
+    { ".std", MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE.getStr(), AppBits::Draw },
+    { ".sxw", MIMETYPE_VND_SUN_XML_WRITER.getStr(), AppBits::Writer },
+    { ".sxc", MIMETYPE_VND_SUN_XML_CALC.getStr(), AppBits::Calc },
+    { ".sxi", MIMETYPE_VND_SUN_XML_IMPRESS.getStr(), AppBits::Impress },
+    { ".sxd", MIMETYPE_VND_SUN_XML_DRAW.getStr(), AppBits::Draw },
+    { ".sxg", MIMETYPE_VND_SUN_XML_WRITER_GLOBAL.getStr(), AppBits::Writer },
+    { ".sxm", MIMETYPE_VND_SUN_XML_MATH.getStr(), AppBits::Math },
+    { ".ott", MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE.getStr(), AppBits::Writer },
+    { ".otm", MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE.getStr(), AppBits::Writer },
+    { ".otg", MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE.getStr(), AppBits::Draw },
+    { ".otp", MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE.getStr(), AppBits::Impress },
+    { ".ots", MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE.getStr(), AppBits::Calc },
+    { ".otf", MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE.getStr(), AppBits::Math },
+    { ".odt", MIMETYPE_OASIS_OPENDOCUMENT_TEXT.getStr(), AppBits::Writer },
+    { ".oth", MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB.getStr(), AppBits::Writer },
+    { ".odm", MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL.getStr(), AppBits::Writer },
+    { ".odg", MIMETYPE_OASIS_OPENDOCUMENT_DRAWING.getStr(), AppBits::Draw },
+    { ".odp", MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION.getStr(), AppBits::Impress },
+    { ".ods", MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET.getStr(), AppBits::Calc },
+    { ".odf", MIMETYPE_OASIS_OPENDOCUMENT_FORMULA.getStr(), AppBits::Math },
+};
 
 const char* const aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* const aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
@@ -400,11 +400,11 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSA
             }
         }
 
-        for (ind = 0; ind < SUPPORTED_EXT_NUM; ind++)
+        for (auto& m : aMappingArray)
         {
-            if (nForModes[ind] & nMode)
+            if (m.nForModes & nMode)
             {
-                wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%ls", aPrefix, aMimeType[ind]);
+                wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%ls", aPrefix, m.sMimeType);
                 HRegKey hkey;
                 s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
                                       aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
@@ -420,9 +420,9 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSA
             HRegKey hkey;
             s.upd(RegOpenKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0,
                                 nKeyAccess, &hkey));
-            for (ind = 0; ind < SUPPORTED_EXT_NUM; ind++)
+            for (auto& m : aMappingArray)
             {
-                wsprintfA(aSubKey, "EnableFullPage\\%s", aFileExt[ind]);
+                wsprintfA(aSubKey, "EnableFullPage\\%s", m.sFileExt);
                 HRegKey hkey1;
                 s.upd(RegCreateKeyExA(hkey, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE,
                                       nKeyAccess, nullptr, &hkey1, nullptr));
@@ -471,12 +471,12 @@ static HRESULT DllUnregisterServerNative_Impl( int nMode, bool bForAllUsers, REG
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
     Status s(false); // no throw
-    for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
+    for (auto& m : aMappingArray)
     {
-        if( nForModes[ind] & nMode )
+        if (m.nForModes & nMode)
         {
             DWORD nSubKeys = 0, nValues = 0;
-            wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%ls", aPrefix, aMimeType[ind]);
+            wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%ls", aPrefix, m.sMimeType);
             Status s1(false); // no throw
             {
                 HRegKey hkey;
@@ -494,7 +494,7 @@ static HRESULT DllUnregisterServerNative_Impl( int nMode, bool bForAllUsers, REG
                               nKeyAccess);
             s.upd(s1.get());
 
-            wsprintfA(aSubKey, "%s%s", aPrefix, aFileExt[ind]);
+            wsprintfA(aSubKey, "%s%s", aPrefix, m.sFileExt);
             Status s2(false); // no throw
             {
                 HRegKey hkey;
@@ -736,15 +736,18 @@ STDAPI DllRegisterServer()
             pPathEnd = wcsrchr(pProgramPath, '\\');
         if (pPathEnd)
         {
+            // No idea why Math is excluded
+            const int nMode = AppBits::Chart | AppBits::Draw | AppBits::Impress | AppBits::Calc
+                              | AppBits::Writer;
             *pPathEnd = 0;
-            aResult = DllRegisterServerNative( 31, TRUE, bX64, pProgramPath );
+            aResult = DllRegisterServerNative(nMode, TRUE, bX64, pProgramPath);
             if( SUCCEEDED( aResult ) )
-                aResult = DllRegisterServerDoc( 31, TRUE, bX64 );
+                aResult = DllRegisterServerDoc(nMode, TRUE, bX64);
             else
             {
-                aResult = DllRegisterServerNative( 31, FALSE, bX64, pProgramPath );
+                aResult = DllRegisterServerNative(nMode, FALSE, bX64, pProgramPath);
                 if( SUCCEEDED( aResult ) )
-                    aResult = DllRegisterServerDoc( 31, FALSE, bX64 );
+                    aResult = DllRegisterServerDoc(nMode, FALSE, bX64);
             }
         }
     }
@@ -757,10 +760,12 @@ STDAPI DllRegisterServer()
 
 STDAPI DllUnregisterServer()
 {
-    DllUnregisterServerDoc( 63, FALSE, bX64 );
-    DllUnregisterServerNative( 63, FALSE, bX64 );
-    DllUnregisterServerDoc( 63, TRUE, bX64 );
-    return DllUnregisterServerNative( 63, TRUE, bX64 );
+    const int nMode = AppBits::Chart | AppBits::Draw | AppBits::Impress | AppBits::Calc
+                      | AppBits::Writer | AppBits::Math;
+    DllUnregisterServerDoc(nMode, FALSE, bX64);
+    DllUnregisterServerNative(nMode, FALSE, bX64);
+    DllUnregisterServerDoc(nMode, TRUE, bX64);
+    return DllUnregisterServerNative(nMode, TRUE, bX64);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
