@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filter_md, \
     editeng \
     sal \
     subsequenttest \
+    svxcore \
     sw \
     swqahelper \
     test \

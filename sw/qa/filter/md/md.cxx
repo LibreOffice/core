@@ -14,6 +14,8 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <vcl/graphicfilter.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -920,6 +922,35 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedAnchoredImageMdExport)
     // Without the accompanying fix in place, this test would have failed, aActual was 'A  B\n'.
     CPPUNIT_ASSERT(aActual.starts_with("A ![mydesc](data:image/png;base64,"));
     CPPUNIT_ASSERT(aActual.ends_with(") B" SAL_NEWLINE_STRING));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTemplateMdImport)
+{
+    // Given a document with a template:
+    setImportFilterOptions(uR"json({
+    "TemplateURL": {
+        "type": "string",
+        "value": "./template.ott"
+    }
+})json"_ustr);
+
+    // When importing that markdown:
+    createSwDoc("template.md");
+
+    // Then make sure the styles are taken from the template:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+    SwFormatColl* pStyle = pTextNode->GetFormatColl();
+    auto pXFillStyleItem = pStyle->GetAttrSet().GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (drawing::FillStyle_SOLID)
+    // - Actual  : 0 (drawing::FillStyle_NONE)
+    // i.e. the heading 1 style had the default black color instead of ~blue.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, pXFillStyleItem->GetValue());
+    auto pXFillColorItem = pStyle->GetAttrSet().GetItem<XFillColorItem>(XATTR_FILLCOLOR);
+    CPPUNIT_ASSERT_EQUAL(Color(0x156082), pXFillColorItem->GetColorValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
