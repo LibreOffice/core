@@ -10217,9 +10217,12 @@ if test "$with_system_libxml" = "auto"; then
     Emscripten)
         with_system_libxml=no
         ;;
+    Darwin)
+        with_system_libxml=yes
+        ;;
     *)
         if test "$enable_fuzzers" != "yes"; then
-            with_system_libxml=yes
+            with_system_libxml="$with_system_libs"
         else
             with_system_libxml=no
         fi
