@@ -554,8 +554,6 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, weld::Button&, void)
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
 {
-    bool bCallClose = true;
-
     //only suggest restart if modified and this is the first close attempt
     if (!m_bClosed && m_rManager.isModified())
     {
@@ -565,14 +563,13 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
         if (dp_misc::office_is_running())
         {
             SolarMutexGuard aGuard;
-            bCallClose = !::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+            svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
                                                           m_xDialog.get(),
                                                           svtools::RESTART_REASON_EXTENSION_INSTALL);
         }
     }
 
-    if (bCallClose)
-        m_xDialog->response(RET_CANCEL);
+    m_xDialog->response(RET_CANCEL);
 }
 
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
