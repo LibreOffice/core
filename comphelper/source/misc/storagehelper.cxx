@@ -285,13 +285,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     else
     {
         // the mediatype is not known
-        OUString aMsg = __func__
-                      + OUString::Concat(u":")
-                      + OUString::number(__LINE__)
-                      + ": unknown media type '"
-                      + aMediaType
-                      + "'";
-        throw beans::IllegalTypeException(aMsg);
+        throw beans::IllegalTypeException("unknown media type '" + aMediaType + "'");
     }
 
     return nResult;
