@@ -326,6 +326,123 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     EnableMapMode( bOldMap );
 }
 
+void OutputDevice::DrawGridOfCrosses(const tools::Rectangle& rGridArea, const Size& rGridDistance,
+                                     const tools::Rectangle& rDrawingArea)
+{
+    assert(!is_double_buffered_window());
+
+    if (!mbLineColor || ImplIsRecordLayout())
+    {
+        return;
+    }
+
+    if (!mpGraphics && !AcquireGraphics())
+    {
+        return;
+    }
+    assert(mpGraphics);
+
+    if (mbInitClipRegion)
+    {
+        InitClipRegion();
+    }
+
+    if (mbOutputClipped)
+    {
+        return;
+    }
+
+    if (mbInitLineColor)
+    {
+        InitLineColor();
+    }
+
+    if (rDrawingArea.IsEmpty())
+    {
+        return;
+    }
+
+    const tools::Long nDistanceX = rGridDistance.Width();
+    const tools::Long nDistanceY = rGridDistance.Height();
+    tools::Long nX = rGridArea.Left();
+    tools::Long nY = rGridArea.Top();
+
+    // Collect horizontal positions of the grid points
+    std::vector<tools::Long> aHorzBuffer;
+    aHorzBuffer.reserve(rGridArea.GetWidth() / nDistanceX + 1);
+    while (nX <= rGridArea.Right())
+    {
+        aHorzBuffer.push_back(nX);
+        nX += nDistanceX;
+    }
+
+    // Collect vertical positions of the grid points
+    std::vector<tools::Long> aVertBuffer;
+    aVertBuffer.reserve(rGridArea.GetHeight() / nDistanceY + 1);
+    while (nY <= rGridArea.Bottom())
+    {
+        aVertBuffer.push_back(nY);
+        nY += nDistanceY;
+    }
+
+    const tools::Long nTopPixel = ImplLogicYToDevicePixel(rDrawingArea.Top());
+    const tools::Long nBottomPixel = ImplLogicYToDevicePixel(rDrawingArea.Bottom());
+    const tools::Long nLeftPixel = ImplLogicXToDevicePixel(rDrawingArea.Left());
+    const tools::Long nRightPixel = ImplLogicXToDevicePixel(rDrawingArea.Right());
+
+    // Draw 3x3 pixel crosses within the drawing area
+    const tools::Long nHalfCrossSize = 1;
+    for (const tools::Long nPositionX : aHorzBuffer)
+    {
+        const tools::Long nPositionXPixel = ImplLogicXToDevicePixel(nPositionX);
+        for (const tools::Long nPositionY : aVertBuffer)
+        {
+            const tools::Long nPositionYPixel = ImplLogicYToDevicePixel(nPositionY);
+            const tools::Long nStartXPixel = std::max(nPositionXPixel - nHalfCrossSize, nLeftPixel);
+            if (nStartXPixel > nRightPixel)
+            {
+                continue;
+            }
+            const tools::Long nEndXPixel
+                = std::min(nPositionXPixel + nHalfCrossSize + 1, nRightPixel);
+            if (nEndXPixel < nLeftPixel)
+            {
+                continue;
+            }
+            const tools::Long nStartYPixel = std::max(nPositionYPixel - nHalfCrossSize, nTopPixel);
+            if (nStartYPixel > nBottomPixel)
+            {
+                continue;
+            }
+            const tools::Long nEndYPixel
+                = std::min(nPositionYPixel + nHalfCrossSize + 1, nBottomPixel);
+            if (nEndYPixel < nTopPixel)
+            {
+                continue;
+            }
+
+            const bool bOldMap = mbMap;
+            EnableMapMode(false);
+
+            // Draw horizontal line if visible
+            if (nPositionY >= rDrawingArea.Top() && nPositionY <= rDrawingArea.Bottom())
+            {
+                mpGraphics->DrawLine(nStartXPixel, nPositionYPixel, nEndXPixel, nPositionYPixel,
+                                     *this);
+            }
+
+            // Draw vertical line if visible
+            if (nPositionX >= rDrawingArea.Left() && nPositionX <= rDrawingArea.Right())
+            {
+                mpGraphics->DrawLine(nPositionXPixel, nStartYPixel, nPositionXPixel, nEndYPixel,
+                                     *this);
+            }
+
+            EnableMapMode(bOldMap);
+        }
+    }
+}
+
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
 {
     BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;

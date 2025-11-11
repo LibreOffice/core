@@ -472,6 +472,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
             y2=rGF.GetUserArea().Bottom();
             aGridOrigin=rGF.GetUserArea().TopLeft();
         }
+        const tools::Rectangle aGridBoundingBox(x1, y1, x2, y2);
         if (!rRect.IsEmpty()) {
             Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
             tools::Long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
@@ -530,17 +531,37 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
                         for(sal_uInt16 a=0;a<nSteps;a++)
                         {
-                            // Make sure the origin of the subgrid is within the drawing area
-                            const Point aSubGridPosition(nAnchorPos + ((nx1 * (nStartStep + a)) / nSteps), yBigOrg);
-                            if (!aDrawingArea.Contains(aSubGridPosition))
+                            Point aSubGridPosition(nAnchorPos + ((nx1 * (nStartStep + a)) / nSteps), yBigOrg);
+                            if(aSubGridPosition.X() == xBigOrg) // Main grid points
                             {
-                                continue;
-                            }
+                                // For cross rendering we need an extended grid area to handle partly rendered grid markers
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X() - nx1, aSubGridPosition.Y())))
+                                {
+                                    aSubGridPosition.Move(-nx1, 0);
+                                }
 
-                            // draw
-                            rOut.DrawGrid(
-                                tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
-                                Size( nx1, ny1 ), DrawGridFlags::Dots );
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X(), aSubGridPosition.Y() - ny1)))
+                                {
+                                    aSubGridPosition.Move(0, -ny1);
+                                }
+                                rOut.DrawGridOfCrosses(
+                                    tools::Rectangle( aSubGridPosition,
+                                        Point(std::min(x2 + nx1, aGridBoundingBox.Right()), std::min(y2 + ny1, aGridBoundingBox.Bottom()))),
+                                    Size( nx1, ny1 ), aDrawingArea );
+                            }
+                            else // Subdivision points
+                            {
+                                // Make sure the origin of the subgrid is within the drawing area
+                                if(!aDrawingArea.Contains(aSubGridPosition))
+                                {
+                                    continue;
+                                }
+
+                                // draw
+                                rOut.DrawGrid(
+                                    tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                                    Size( nx1, ny1 ), DrawGridFlags::Dots );
+                            }
                         }
                     }
                 }
@@ -577,17 +598,37 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
                         for(sal_uInt16 a=0;a<nSteps;a++)
                         {
-                            // Make sure the origin of the subgrid is within the drawing area
-                            const Point aSubGridPosition(xBigOrg, nAnchorPos + ((ny1 * (nStartStep + a)) / nSteps));
-                            if (!aDrawingArea.Contains(aSubGridPosition))
+                            Point aSubGridPosition(xBigOrg, nAnchorPos + ((ny1 * (nStartStep + a)) / nSteps));
+                            if(aSubGridPosition.Y() == yBigOrg) // Main grid points
                             {
-                                continue;
-                            }
+                                // For cross rendering we need an extended grid area to handle partly rendered grid markers
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X() - nx1, aSubGridPosition.Y())))
+                                {
+                                    aSubGridPosition.Move(-nx1, 0);
+                                }
 
-                            // draw
-                            rOut.DrawGrid(
-                                tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
-                                Size( nx1, ny1 ), DrawGridFlags::Dots );
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X(), aSubGridPosition.Y() - ny1)))
+                                {
+                                    aSubGridPosition.Move(0, -ny1);
+                                }
+                                rOut.DrawGridOfCrosses(
+                                    tools::Rectangle( aSubGridPosition,
+                                        Point(std::min(x2 + nx1, aGridBoundingBox.Right()), std::min(y2 + ny1, aGridBoundingBox.Bottom()))),
+                                    Size( nx1, ny1 ), aDrawingArea );
+                            }
+                            else // Subdivision points
+                            {
+                                // Make sure the origin of the subgrid is within the drawing area
+                                if(!aDrawingArea.Contains(aSubGridPosition))
+                                {
+                                    continue;
+                                }
+
+                                // draw
+                                rOut.DrawGrid(
+                                    tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                                    Size( nx1, ny1 ), DrawGridFlags::Dots );
+                            }
                         }
                     }
                 }
