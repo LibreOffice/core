@@ -175,8 +175,6 @@ public class GeckoLayerClient implements PanZoomTarget {
     private void adjustViewport(DisplayPortMetrics displayPort) {
         ImmutableViewportMetrics metrics = getViewportMetrics();
 
-        ImmutableViewportMetrics clampedMetrics = metrics.clamp();
-
         if (displayPort == null) {
             displayPort = mDisplayPortCalculator.calculate(metrics, mPanZoomController.getVelocityVector());
         }
