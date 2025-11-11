@@ -48,8 +48,8 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     private boolean mInitialized = false;
 
     private List<RectF> mSelections = new ArrayList<RectF>();
-    private List<RectF> mScaledSelections = new ArrayList<RectF>();
-    private Paint mSelectionPaint = new Paint();
+    private final List<RectF> mScaledSelections = new ArrayList<RectF>();
+    private final Paint mSelectionPaint = new Paint();
     private boolean mSelectionsVisible;
 
     private GraphicSelection mGraphicSelection;
