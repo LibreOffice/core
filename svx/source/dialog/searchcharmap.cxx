@@ -180,7 +180,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFont(aFont);
     rRenderContext.GetFontCharMap(mxFontCharMap);
     m_aItems.clear();
-    getFavCharacterList();
+    loadFavCharacterList();
 
     mnX = aSize.Width() / COLUMN_COUNT;
     mnY = aSize.Height() / ROW_COUNT;
