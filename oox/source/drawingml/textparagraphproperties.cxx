@@ -422,7 +422,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     if ( maBulletList.mnNumberingType.hasValue() )
     {
         maBulletList.mnNumberingType >>= nNumberingType;
-        aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, getLevel() );
+        if (aPropSet.hasProperty(PROP_NumberingLevel))
+            aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, getLevel() );
     }
     else if ( pMasterBuList && pMasterBuList->mnNumberingType.hasValue() )
         pMasterBuList->mnNumberingType >>= nNumberingType;
