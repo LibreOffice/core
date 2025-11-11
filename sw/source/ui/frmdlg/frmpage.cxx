@@ -1861,8 +1861,7 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
         {
             //FillItemSet doesn't set the anchor into the set when it matches
             //the original. But for the other pages we need the current anchor.
-            SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
-                                : getFrameDlgParentShell();
+            SwWrtShell* pSh = getFrameDlgParentShell();
             if (pSh)
             {
                 RndStdIds eAnchorId = GetAnchor();
