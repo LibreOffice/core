@@ -201,7 +201,6 @@ public:
     void WriteTableCellBorders(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
     sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
-    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ::oox::core::XmlFilterBase* pFB );
     sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
     static sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ShapeHashMap* pShapeMap );
 };

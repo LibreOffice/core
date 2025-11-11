@@ -2999,15 +2999,10 @@ ShapeExport& ShapeExport::WriteUnknownShape( const Reference< XShape >& )
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape )
 {
-    return GetNewShapeID( rXShape, GetFB() );
-}
-
-sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape, XmlFilterBase* pFB )
-{
     if( !rXShape.is() )
         return -1;
 
-    sal_Int32 nID = pFB->GetUniqueId();
+    sal_Int32 nID = GetFB()->GetUniqueId();
 
     auto it = mpShapeMap->find(rXShape);
     if (it == mpShapeMap->end())
