@@ -433,6 +433,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                         const Size& rRelativeSize = pSizeItem->GetSize();
                         aSize.SetWidthPercent( static_cast< sal_uInt8 >( rRelativeSize.Width() ) );
                         aSize.SetHeightPercent( static_cast< sal_uInt8 >( rRelativeSize.Height() ) );
+
+                        SwFormatFrameSize aCopyRelation = pSet->Get(RES_FRM_SIZE);
+                        aSize.SetWidthPercentRelation(aCopyRelation.GetWidthPercentRelation());
+                        aSize.SetHeightPercentRelation(aCopyRelation.GetHeightPercentRelation());
                     }
                     pSet->Put( aSize );
                 }
