@@ -190,10 +190,6 @@ public class LayerView extends FrameLayout {
         mListener = listener;
     }
 
-    Listener getListener() {
-        return mListener;
-    }
-
     public GLController getGLController() {
         return mGLController;
     }
