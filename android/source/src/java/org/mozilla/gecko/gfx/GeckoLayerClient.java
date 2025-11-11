@@ -20,7 +20,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     private LayerRenderer mLayerRenderer;
 
-    private LibreOfficeMainActivity mContext;
+    private final LibreOfficeMainActivity mContext;
     private IntSize mScreenSize;
     private DisplayPortMetrics mDisplayPort;
 

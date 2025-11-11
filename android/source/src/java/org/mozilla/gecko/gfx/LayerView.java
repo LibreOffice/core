@@ -37,19 +37,19 @@ import org.mozilla.gecko.OnSlideSwipeListener;
  * mediator between the LayerRenderer and the LayerController.
  */
 public class LayerView extends FrameLayout {
-    private static String LOGTAG = LayerView.class.getName();
+    private static final String LOGTAG = LayerView.class.getName();
 
     private GeckoLayerClient mLayerClient;
     private PanZoomController mPanZoomController;
-    private GLController mGLController;
+    private final GLController mGLController;
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;
 
-    private SurfaceView mSurfaceView;
+    private final SurfaceView mSurfaceView;
 
     private Listener mListener;
     private OnInterceptTouchListener mTouchIntercepter;
-    private LibreOfficeMainActivity mContext;
+    private final LibreOfficeMainActivity mContext;
 
     public LayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
