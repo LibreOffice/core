@@ -3352,7 +3352,7 @@ void ImpEditEngine::DrawText_ToPosition(
         }
     }
 
-    static bool bBlendForTest(true);
+    static bool bBlendForTest(false);
     if(bBlendForTest)
     {
         aContent = drawinglayer::primitive2d::Primitive2DContainer{
