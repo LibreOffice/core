@@ -39,23 +39,11 @@ final class DisplayPortCalculator {
         return sStrategy.aboutToCheckerboard(metrics, (velocity == null ? ZERO_VELOCITY : velocity), displayPort);
     }
 
-    boolean drawTimeUpdate(long millis, int pixels) {
-        return sStrategy.drawTimeUpdate(millis, pixels);
-    }
-
-    void resetPageState() {
-        sStrategy.resetPageState();
-    }
-
     private static abstract class DisplayPortStrategy {
         /** Calculates a displayport given a viewport and panning velocity. */
         public abstract DisplayPortMetrics calculate(ImmutableViewportMetrics metrics, PointF velocity);
         /** Returns true if a checkerboard is about to be visible and we should not throttle drawing. */
         public abstract boolean aboutToCheckerboard(ImmutableViewportMetrics metrics, PointF velocity, DisplayPortMetrics displayPort);
-        /** Notify the strategy of a new recorded draw time. Return false to turn off draw time recording. */
-        public boolean drawTimeUpdate(long millis, int pixels) { return false; }
-        /** Reset any page-specific state stored, as the page being displayed has changed. */
-        public void resetPageState() {}
     }
 
     /**
