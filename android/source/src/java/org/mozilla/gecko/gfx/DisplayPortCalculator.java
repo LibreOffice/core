@@ -9,7 +9,6 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
@@ -61,21 +60,6 @@ final class DisplayPortCalculator {
 
     void resetPageState() {
         sStrategy.resetPageState();
-    }
-
-    static void addPrefNames(JSONArray prefs) {
-        prefs.put(PREF_DISPLAYPORT_STRATEGY);
-        prefs.put(PREF_DISPLAYPORT_FM_MULTIPLIER);
-        prefs.put(PREF_DISPLAYPORT_FM_DANGER_X);
-        prefs.put(PREF_DISPLAYPORT_FM_DANGER_Y);
-        prefs.put(PREF_DISPLAYPORT_VB_MULTIPLIER);
-        prefs.put(PREF_DISPLAYPORT_VB_VELOCITY_THRESHOLD);
-        prefs.put(PREF_DISPLAYPORT_VB_REVERSE_BUFFER);
-        prefs.put(PREF_DISPLAYPORT_VB_DANGER_X_BASE);
-        prefs.put(PREF_DISPLAYPORT_VB_DANGER_Y_BASE);
-        prefs.put(PREF_DISPLAYPORT_VB_DANGER_X_INCR);
-        prefs.put(PREF_DISPLAYPORT_VB_DANGER_Y_INCR);
-        prefs.put(PREF_DISPLAYPORT_PB_VELOCITY_THRESHOLD);
     }
 
     /**
