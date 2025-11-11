@@ -36,7 +36,8 @@ class formatBulletsNumbering(UITestCase):
                 xChangeBulletBtn = xBulletPage.getChild("changeBulletBtn")
                 with self.ui_test.execute_blocking_action(xChangeBulletBtn.executeAction, args=('CLICK', ())) as xCharSetDialog:
                     xCharSet = xCharSetDialog.getChild("showcharset")
-                    xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "21", "ROW": "1"}))
+                    character6 = xCharSet.getChild("5")
+                    character6.executeAction("SELECT", mkPropertyValues({}))
 
             # Check that the "black down-pointing triangle" bullet is the third item
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
@@ -56,8 +57,8 @@ class formatBulletsNumbering(UITestCase):
                     xHexText = xCharSetDialog.getChild("hexvalue")
                     xDecText = xCharSetDialog.getChild("decimalvalue")
                     # Check the "black down-pointing triangle" bullet Hex and Decimal value
-                    self.assertEqual(get_state_as_dict(xHexText)["Text"], "25BC")
-                    self.assertEqual(get_state_as_dict(xDecText)["Text"], "9660")
+                    self.assertEqual(get_state_as_dict(xHexText)["Text"], "A2")
+                    self.assertEqual(get_state_as_dict(xDecText)["Text"], "162")
 
 
    def test_bullets_and_numbering_dialog_tab_position(self):

@@ -2,6 +2,22 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="showcharset_model">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="searchcharset_model">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="SpecialCharactersDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
@@ -828,18 +844,19 @@
                     <property name="vscrollbar-policy">always</property>
                     <property name="shadow-type">in</property>
                     <child>
-                      <object class="GtkViewport">
+                      <object class="GtkIconView" id="showcharset">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child>
-                          <object class="GtkDrawingArea" id="showcharset">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                          </object>
-                        </child>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">showcharset_model</property>
+                        <property name="pixbuf-column">0</property>
+                        <property name="columns">16</property>
+                        <property name="item-padding">4</property>
+                        <property name="margin">6</property>
+                        <property name="column-spacing">2</property>
+                        <property name="row-spacing">2</property>
+                        <property name="activate-on-single-click">False</property>
                       </object>
                     </child>
                   </object>
@@ -859,18 +876,19 @@
                     <property name="vscrollbar-policy">always</property>
                     <property name="shadow-type">in</property>
                     <child>
-                      <object class="GtkViewport">
+                      <object class="GtkIconView" id="searchcharset">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child>
-                          <object class="GtkDrawingArea" id="searchcharset">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                          </object>
-                        </child>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">searchcharset_model</property>
+                        <property name="pixbuf-column">0</property>
+                        <property name="columns">16</property>
+                        <property name="item-padding">4</property>
+                        <property name="margin">6</property>
+                        <property name="column-spacing">2</property>
+                        <property name="row-spacing">2</property>
+                        <property name="activate-on-single-click">False</property>
                       </object>
                     </child>
                   </object>

@@ -51,7 +51,7 @@ private:
     DECL_LINK(CharClickHdl, SvxCharView*, void);
     DECL_LINK(OpenDlgHdl, weld::Button&, void);
     DECL_LINK(DlgBtnFocusInHdl, weld::Widget&, void);
-    DECL_LINK(UpdateRecentHdl, void*, void);
+    DECL_LINK(UpdateRecentHdl, SfxCharmapContainer::CharChange*, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

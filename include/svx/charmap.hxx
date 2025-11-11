@@ -80,7 +80,7 @@ public:
     vcl::Font const & GetFont() const { return maFont; }
     SVX_DLLPUBLIC FontCharMapRef const & GetFontCharMap();
     bool            isFavChar(std::u16string_view sTitle, std::u16string_view rFont);
-    void            getFavCharacterList(); //gets both Fav char and Fav char font list
+    void            loadFavCharacterList(); //loads both Fav char and Fav char font list
     void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
 
     virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );

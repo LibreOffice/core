@@ -76,6 +76,14 @@ public:
 
 class SFX2_DLLPUBLIC SfxCharmapContainer
 {
+public:
+    struct CharChange {
+        OUString sChar;
+        OUString sFont;
+        bool bRemoved;
+    };
+
+private:
     std::deque<OUString>   m_aRecentCharList;
     std::deque<OUString>   m_aRecentCharFontList;
     std::deque<OUString>   m_aFavCharList;
@@ -89,8 +97,8 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     std::unique_ptr<weld::Widget> m_xRecentGrid;
     std::unique_ptr<weld::Widget> m_xFavGrid;
 
-    Link<void*, void> m_aUpdateFavHdl;
-    Link<void*, void> m_aUpdateRecentHdl;
+    Link<CharChange*, void> m_aUpdateFavHdl;
+    Link<CharChange*, void> m_aUpdateRecentHdl;
 
     DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView*, void);
     DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView*, void);
@@ -101,14 +109,17 @@ public:
     SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev, bool bLockGridSizes);
 
     void            init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
-                         const Link<void*,void> &rUpdateFavHdl,
-                         const Link<void*,void> &rUpdateRecentHdl,
+                         const Link<CharChange*,void> &rUpdateFavHdl,
+                         const Link<CharChange*,void> &rUpdateRecentHdl,
                          const Link<SvxCharView *,void> &rFocusInHdl = Link<SvxCharView *,void>());
 
-    void            getFavCharacterList();
+    void            loadFavCharacterList();
     void            updateFavCharControl();
 
-    void            getRecentCharacterList(); //gets both recent char and recent char font list
+    std::deque<OUString> getFavCharList() { return m_aFavCharList; }
+    std::deque<OUString> getFavCharFontList() { return m_aFavCharFontList; }
+
+    void            loadRecentCharacterList(); //loads both recent char and recent char font list
     void            updateRecentCharControl();
 
     void            updateRecentCharacterList(const OUString& sTitle, const OUString& rFont);

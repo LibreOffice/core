@@ -23,22 +23,18 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/itemset.hxx>
-#include <svx/charmap.hxx>
-#include <svx/searchcharmap.hxx>
 #include <svx/ucsubset.hxx>
 #include <sfx2/charwin.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <string_view>
 #include <memory>
+#include <map>
 
 using namespace ::com::sun::star;
-class SubsetMap;
 
-namespace svx
-{
-struct SvxShowCharSetItem;
-}
+struct ImplSVEvent;
 
 /// Provides the show characters or texts in a drawing area with special sizes and fonts.
 class SVX_DLLPUBLIC SvxShowText final : public weld::CustomWidgetController
@@ -73,6 +69,40 @@ class SVX_DLLPUBLIC SvxCharacterMap final : public SfxDialogController
 private:
     void init();
 
+    // Character bitmap generation and model population
+    VclPtr<VirtualDevice> generateCharGraphic(sal_UCS4 cChar);
+    void clearSearchCharModel();
+    void populateShowCharModel();
+    void populateSearchCharModel();
+
+    // Character selection and retrieval
+    void selectCharacter(sal_UCS4 cChar);
+    void selectSearchSetCharFromSubset(const Subset* pSubset);
+    static sal_UCS4 getCharacterFromId(std::u16string_view rId);
+    static OUString getCharacterNameFromId(std::u16string_view sId);
+
+    void modifyFavCharacterList(const OUString& sChar, const OUString& sFont);
+    void rerenderCharacter(std::u16string_view favChar, std::u16string_view favCharFont);
+
+    // Context menu and clipboard
+    void createContextMenu(const Point& rPos, bool bSearchMode);
+    void contextMenuSelect(std::u16string_view rIdent);
+    void contextMenuHdl(weld::IconView& rIconView, const Point& pPos, bool bSearchMode);
+    static void copyToClipboard(const OUString& rText);
+
+    // Performance optimization via scheduling(lazy loading)
+    void scheduleShowSetBackgroundRendering();
+    void scheduleSearchSetBackgroundRendering();
+    void renderShowSetBatch(sal_Int32 nStartPos, sal_Int32 nCount);
+    void renderSearchSetBatch(sal_Int32 nStartPos, sal_Int32 nCount);
+
+    sal_Int32 m_nShowSetRenderedCount = 0;
+    sal_Int32 m_nSearchSetRenderedCount = 0;
+    static constexpr sal_Int32 RENDER_BATCH_SIZE = 500;
+
+    ImplSVEvent* m_nShowRenderIdleEvent = nullptr;
+    ImplSVEvent* m_nSearchRenderIdleEvent = nullptr;
+
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     vcl::Font aFont;
     std::unique_ptr<const SubsetMap> pSubsetMap;
@@ -82,6 +112,14 @@ private:
     SfxCharmapContainer m_aCharmapContents;
 
     SvxShowText m_aShowChar;
+
+    FontCharMapRef mxFontCharMap;
+    std::map<sal_Int32, sal_UCS4> m_aSearchItemList;
+
+    std::unordered_map<OUString, sal_Int32> m_aShowCharPos;
+    std::unordered_map<OUString, sal_Int32> m_aSearchCharPos;
+
+    static sal_UCS4 m_cSelectedChar;
 
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Label> m_xFontText;
@@ -94,10 +132,10 @@ private:
     std::unique_ptr<weld::Button> m_xFavouritesBtn;
     std::unique_ptr<weld::Label> m_xCharName;
     std::unique_ptr<weld::CustomWeld> m_xShowChar;
-    std::unique_ptr<SvxShowCharSet> m_xShowSet;
-    std::unique_ptr<weld::CustomWeld> m_xShowSetArea;
-    std::unique_ptr<SvxSearchCharSet> m_xSearchSet;
-    std::unique_ptr<weld::CustomWeld> m_xSearchSetArea;
+    std::unique_ptr<weld::ScrolledWindow> m_xShowSetArea;
+    std::unique_ptr<weld::ScrolledWindow> m_xSearchSetArea;
+    std::unique_ptr<weld::IconView> m_xShowSet;
+    std::unique_ptr<weld::IconView> m_xSearchSet;
 
     std::unique_ptr<SfxAllItemSet> m_xOutputSet;
 
@@ -107,18 +145,18 @@ private:
         hexadecimal = 16
     };
 
-    // inserts the character that is currently selected in the given SvxShowCharSet
-    void insertSelectedCharacter(const SvxShowCharSet* pCharSet);
+    // inserts the character that is currently selected in the given IconView
+    void insertSelectedCharacter(weld::IconView& rIconView);
 
     DECL_DLLPRIVATE_LINK(FontSelectHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(SubsetSelectHdl, weld::ComboBox&, void);
-    DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(ReturnKeypressOnCharHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(FavClickHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(SearchCharHighlightHdl, SvxShowCharSet*, void);
+    DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, weld::IconView&, bool);
+    DECL_DLLPRIVATE_LINK(CharSelectHdl, weld::IconView&, void);
+    DECL_DLLPRIVATE_LINK(CharKeyPressHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(ShowCharMousePressHdl, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(SearchCharMousePressHdl, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(ShowCharQueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_DLLPRIVATE_LINK(SearchCharQueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(HexCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);
@@ -126,7 +164,12 @@ private:
     DECL_DLLPRIVATE_LINK(FavSelectHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(SearchFieldGetFocusHdl, weld::Widget&, void);
-    DECL_DLLPRIVATE_LINK(UpdateFavHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(UpdateFavHdl, SfxCharmapContainer::CharChange*, void);
+    DECL_DLLPRIVATE_LINK(UpdateRecentHdl, SfxCharmapContainer::CharChange*, void);
+    DECL_DLLPRIVATE_LINK(ShowSetScrollHdl, weld::ScrolledWindow&, void);
+    DECL_DLLPRIVATE_LINK(ShowRenderIdleHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(SearchSetScrollHdl, weld::ScrolledWindow&, void);
+    DECL_DLLPRIVATE_LINK(SearchRenderIdleHdl, void*, void);
 
     static void fillAllSubsets(weld::ComboBox& rListBox);
     void selectCharByCode(Radix radix);
@@ -134,6 +177,8 @@ private:
 public:
     SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
                     css::uno::Reference<css::frame::XFrame> xFrame);
+
+    virtual ~SvxCharacterMap() override;
 
     // for explicit use before AsyncRun
     void prepForRun();
