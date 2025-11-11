@@ -278,14 +278,20 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = rVal.nAnchorType;
-    const SwFormatFrameSize& rSize = m_aSet.Get(RES_FRM_SIZE);
+
+    SwFormatFrameSize aFormatFrameSize;
+    if (rVal.bEntirePageWidth)
+        aFormatFrameSize.SetWidthPercentRelation(text::RelOrientation::PAGE_FRAME);
+    if (rVal.bEntirePageHeight)
+        aFormatFrameSize.SetHeightPercentRelation(text::RelOrientation::PAGE_FRAME);
+
     m_pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
                            rVal.nHRelOrient,
                            rVal.nVRelOrient,
                            pToCharContentPos,
                            rVal.bFollowTextFlow,
                            rVal.bMirror, nullptr, &rVal.aPercentSize,
-                           &rSize);
+                           &aFormatFrameSize);
 
     if (bOnlyPercentRefValue)
         return;

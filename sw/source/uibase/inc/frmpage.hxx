@@ -153,6 +153,7 @@ class SwFramePage final : public SfxTabPage
 
     DECL_LINK(RealSizeHdl, weld::Button&, void);
     DECL_LINK(RelSizeClickHdl, weld::Toggleable&, void);
+    DECL_LINK(RelRelationClickHdl, weld::ComboBox&, void);
     DECL_LINK(MirrorHdl, weld::Toggleable&, void);
 
     DECL_LINK(AutoWidthClickHdl, weld::Toggleable&, void);

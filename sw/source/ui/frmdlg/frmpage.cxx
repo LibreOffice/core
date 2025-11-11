@@ -724,6 +724,9 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     m_xRelWidthCB->connect_toggled(aLk2);
     m_xRelHeightCB->connect_toggled(aLk2);
 
+    m_xRelWidthRelationLB->connect_changed(LINK(this, SwFramePage, RelRelationClickHdl));
+    m_xRelHeightRelationLB->connect_changed(LINK(this, SwFramePage, RelRelationClickHdl));
+
     m_xAutoWidthCB->connect_toggled(LINK(this, SwFramePage, AutoWidthClickHdl));
     m_xAutoHeightCB->connect_toggled(LINK(this, SwFramePage, AutoHeightClickHdl));
 
@@ -1898,6 +1901,10 @@ IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::Toggleable&, rBtn, void )
         ModifyHdl(*m_xHeightED->get());
 }
 
+IMPL_LINK_NOARG(SwFramePage, RelRelationClickHdl, weld::ComboBox&, void)
+{
+    RangeModifyHdl();
+}
 // range check
 IMPL_LINK_NOARG(SwFramePage, RangeModifyClickHdl, weld::Toggleable&, void)
 {
@@ -1950,6 +1957,11 @@ void SwFramePage::RangeModifyHdl()
 
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
+
+    if (m_xRelWidthRelationLB->get_active() == 1)
+        aVal.bEntirePageWidth = true;
+    if (m_xRelHeightRelationLB->get_active() == 1)
+        aVal.bEntirePageHeight = true;
 
     aMgr.ValidateMetrics(aVal, mpToCharContentPos, true);   // one time, to get reference values for percental values
 
