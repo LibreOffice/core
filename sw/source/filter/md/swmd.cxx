@@ -19,14 +19,14 @@
 
 #include <boost/property_tree/json_parser/error.hpp>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+
 #include <osl/diagnose.h>
-#include <list.hxx>
 #include <numrule.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
-#include <fmthdft.hxx>
 #include <fltini.hxx>
-#include <itabenum.hxx>
 #include <fchrfmt.hxx>
 #include <swerror.h>
 #include <strings.hrc>
@@ -36,7 +36,6 @@
 #include <hintids.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svl/itemiter.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
@@ -49,9 +48,11 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <rtl/uri.hxx>
 #include <ndgrf.hxx>
-#include <fmtcntnt.hxx>
 #include <swtypes.hxx>
 #include <fmturl.hxx>
 #include <formatcontentcontrol.hxx>
@@ -799,17 +800,30 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
         return;
     }
 
-    SfxObjectShellLock xTemplateDoc = SfxObjectShell::CreateObjectByFactoryName(
-        pDocShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
-    xTemplateDoc->DoInitNew();
-    SfxMedium aTemplateMedium(aTemplateURL, StreamMode::STD_READ);
-    if (!xTemplateDoc->LoadFrom(aTemplateMedium))
+    // Go via filter detection so non-ODF templates work, too.
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
+        comphelper::makePropertyValue("Hidden", true),
+    };
+    uno::Reference<lang::XComponent> xTemplateComponent
+        = xComponentLoader->loadComponentFromURL(aTemplateURL, u"_blank"_ustr, 0, aTemplateArgs);
+    auto pTemplateModel = dynamic_cast<SfxBaseModel*>(xTemplateComponent.get());
+    if (!pTemplateModel)
+    {
+        return;
+    }
+
+    SfxObjectShell* pTemplateShell = pTemplateModel->GetObjectShell();
+    if (!pTemplateShell)
     {
         return;
     }
 
     // Copy the styles from the template doc to our document.
-    pDocShell->LoadStyles(*xTemplateDoc);
+    pDocShell->LoadStyles(*pTemplateShell);
+
+    xTemplateComponent->dispose();
 }
 
 ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString&)

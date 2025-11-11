@@ -943,6 +943,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTemplateMdImport)
     CPPUNIT_ASSERT_EQUAL(Color(0x156082), pXFillColorItem->GetColorValue());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDocxTemplateMdImport)
+{
+    // Given a document with a DOCX template:
+    setImportFilterOptions(uR"json({
+    "TemplateURL": {
+        "type": "string",
+        "value": "./template.docx"
+    }
+})json"_ustr);
+
+    // When importing that markdown:
+    // Without the accompanying fix in place, this crashed.
+    createSwDoc("template.md");
+
+    // Then make sure the styles are taken from the template:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+    SwFormatColl* pStyle = pTextNode->GetFormatColl();
+    auto pXFillStyleItem = pStyle->GetAttrSet().GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, pXFillStyleItem->GetValue());
+    auto pXFillColorItem = pStyle->GetAttrSet().GetItem<XFillColorItem>(XATTR_FILLCOLOR);
+    CPPUNIT_ASSERT_EQUAL(Color(0x156082), pXFillColorItem->GetColorValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
