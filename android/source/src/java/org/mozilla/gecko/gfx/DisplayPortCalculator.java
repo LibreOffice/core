@@ -78,41 +78,6 @@ final class DisplayPortCalculator {
     }
 
     /**
-     * Return the dimensions for a rect that has area (width*height) that does not exceed the page size in the
-     * given metrics object. The area in the returned FloatSize may be less than width*height if the page is
-     * small, but it will never be larger than width*height.
-     * Note that this process may change the relative aspect ratio of the given dimensions.
-     */
-    private static FloatSize reshapeForPage(float width, float height, ImmutableViewportMetrics metrics) {
-        // figure out how much of the desired buffer amount we can actually use on the horizontal axis
-        float usableWidth = Math.min(width, metrics.getPageWidth());
-        // if we reduced the buffer amount on the horizontal axis, we should take that saved memory and
-        // use it on the vertical axis
-        float extraUsableHeight = (float)Math.floor(((width - usableWidth) * height) / usableWidth);
-        float usableHeight = Math.min(height + extraUsableHeight, metrics.getPageHeight());
-        if (usableHeight < height && usableWidth == width) {
-            // and the reverse - if we shrunk the buffer on the vertical axis we can add it to the horizontal
-            float extraUsableWidth = (float)Math.floor(((height - usableHeight) * width) / usableHeight);
-            usableWidth = Math.min(width + extraUsableWidth, metrics.getPageWidth());
-        }
-        return new FloatSize(usableWidth, usableHeight);
-    }
-
-    /**
-     * Expand the given rect in all directions by a "danger zone". The size of the danger zone on an axis
-     * is the size of the view on that axis multiplied by the given multiplier. The expanded rect is then
-     * clamped to page bounds and returned.
-     */
-    private static RectF expandByDangerZone(RectF rect, float dangerZoneXMultiplier, float dangerZoneYMultiplier, ImmutableViewportMetrics metrics) {
-        // calculate the danger zone amounts in pixels
-        float dangerZoneX = metrics.getWidth() * dangerZoneXMultiplier;
-        float dangerZoneY = metrics.getHeight() * dangerZoneYMultiplier;
-        rect = RectUtils.expand(rect, dangerZoneX, dangerZoneY);
-        // clamp to page bounds
-        return clampToPageBounds(rect, metrics);
-    }
-
-    /**
      * Expand the given margins such that when they are applied on the viewport, the resulting rect
      * does not have any partial tiles, except when it is clipped by the page bounds. This assumes
      * the tiles are TILE_SIZE by TILE_SIZE and start at the origin, such that there will always be
@@ -161,17 +126,6 @@ final class DisplayPortCalculator {
             margins.top += bottomOverflow;
         }
         return margins;
-    }
-
-    /**
-     * Clamp the given rect to the page bounds and return it.
-     */
-    private static RectF clampToPageBounds(RectF rect, ImmutableViewportMetrics metrics) {
-        if (rect.top < metrics.pageRectTop) rect.top = metrics.pageRectTop;
-        if (rect.left < metrics.pageRectLeft) rect.left = metrics.pageRectLeft;
-        if (rect.right > metrics.pageRectRight) rect.right = metrics.pageRectRight;
-        if (rect.bottom > metrics.pageRectBottom) rect.bottom = metrics.pageRectBottom;
-        return rect;
     }
 
     /**
