@@ -418,16 +418,14 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         public void drawForeground() {
             /* Draw any extra layers that were added (likely plugins) */
-            if (mExtraLayers.size() > 0) {
-                for (Layer layer : mExtraLayers) {
-                    if (!layer.usesDefaultProgram())
-                        deactivateDefaultProgram();
+            for (Layer layer : mExtraLayers) {
+                if (!layer.usesDefaultProgram())
+                    deactivateDefaultProgram();
 
-                    layer.draw(mPageContext);
+                layer.draw(mPageContext);
 
-                    if (!layer.usesDefaultProgram())
-                        activateDefaultProgram();
-                }
+                if (!layer.usesDefaultProgram())
+                    activateDefaultProgram();
             }
 
             /* Draw the vertical scrollbar. */
