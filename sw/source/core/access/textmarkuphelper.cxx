@@ -110,6 +110,10 @@ std::unique_ptr<sw::WrongListIteratorCounter> SwTextMarkupHelper::getIterator(sa
 
 sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
 {
+    if (nTextMarkupType == text::TextMarkupType::SPELLCHECK && mrPortionData.GetViewOptions()
+        && !mrPortionData.GetViewOptions()->IsOnlineSpell())
+        return 0;
+
     sal_Int32 nTextMarkupCount( 0 );
 
     std::unique_ptr<sw::WrongListIteratorCounter> pIter = getIterator(nTextMarkupType);
@@ -190,6 +194,10 @@ css::uno::Sequence< css::accessibility::TextSegment >
 {
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)
+
+    if (nTextMarkupType == text::TextMarkupType::SPELLCHECK && mrPortionData.GetViewOptions()
+        && !mrPortionData.GetViewOptions()->IsOnlineSpell())
+        return {};
 
     const TextFrameIndex nCoreCharIndex = mrPortionData.GetCoreViewPosition(nCharIndex);
     // Handling of portions with core length == 0 at the beginning of the
