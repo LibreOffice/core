@@ -2726,8 +2726,6 @@ void SfxViewShell::SetWindow
     //SfxGetpApp()->GrabFocus( pWindow );
 }
 
-ViewShellDocId SfxViewShell::mnCurrentDocId(0);
-
 SfxViewShell::SfxViewShell
 (
     SfxViewFrame&     rViewFrame,     /*  <SfxViewFrame>, which will be
@@ -2736,7 +2734,7 @@ SfxViewShell::SfxViewShell
 )
 
 :   SfxShell(this)
-,   pImpl( new SfxViewShell_Impl(nFlags, SfxViewShell::mnCurrentDocId) )
+,   pImpl( new SfxViewShell_Impl(nFlags, comphelper::LibreOfficeKit::getDocId()) )
 ,   rFrame(rViewFrame)
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
@@ -3547,11 +3545,6 @@ int SfxViewShell::getEditMode() const
 ViewShellId SfxViewShell::GetViewShellId() const
 {
     return pImpl->m_nViewShellId;
-}
-
-void SfxViewShell::SetCurrentDocId(ViewShellDocId nId)
-{
-    mnCurrentDocId = nId;
 }
 
 ViewShellDocId SfxViewShell::GetDocId() const

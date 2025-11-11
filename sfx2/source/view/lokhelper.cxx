@@ -125,7 +125,7 @@ int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
     // something has likely cleared the original SID_INTERACTIONHANDLER
     assert(!isSfxMediumMissingInteractionHandled(rViewFrame) && "original XInteractionHandler missing");
 
-    SfxViewShell::SetCurrentDocId(docId);
+    comphelper::LibreOfficeKit::setDocId(docId);
     SfxRequest aRequest(rViewFrame, SID_NEWWINDOW);
     rViewFrame.ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();

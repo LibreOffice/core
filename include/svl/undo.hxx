@@ -20,6 +20,7 @@
 #define INCLUDED_SVL_UNDO_HXX
 
 #include <svl/svldllapi.h>
+#include <comphelper/lok.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
 #include <o3tl/strong_int.hxx>
@@ -29,7 +30,6 @@
 #include <vector>
 
 typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;
-typedef o3tl::strong_int<int, struct ViewShellDocIdTag> ViewShellDocId;
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
