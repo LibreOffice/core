@@ -22,7 +22,6 @@ final class DisplayPortCalculator {
     // Keep this in sync with the TILEDLAYERBUFFER_TILE_SIZE defined in gfx/layers/TiledLayerBuffer.h
     private static final int TILE_SIZE = 256;
 
-    private static final String PREF_DISPLAYPORT_STRATEGY = "gfx.displayport.strategy";
     private static final String PREF_DISPLAYPORT_FM_MULTIPLIER = "gfx.displayport.strategy_fm.multiplier";
     private static final String PREF_DISPLAYPORT_FM_DANGER_X = "gfx.displayport.strategy_fm.danger_x";
     private static final String PREF_DISPLAYPORT_FM_DANGER_Y = "gfx.displayport.strategy_fm.danger_y";
@@ -60,41 +59,6 @@ final class DisplayPortCalculator {
 
     void resetPageState() {
         sStrategy.resetPageState();
-    }
-
-    /**
-     * Set the active strategy to use.
-     * See the gfx.displayport.strategy pref in mobile/android/app/mobile.js to see the
-     * mapping between ints and strategies.
-     */
-    boolean setStrategy(Map<String, Integer> prefs) {
-        Integer strategy = prefs.get(PREF_DISPLAYPORT_STRATEGY);
-        if (strategy == null) {
-            return false;
-        }
-
-        switch (strategy) {
-            case 0:
-                sStrategy = new FixedMarginStrategy(prefs);
-                break;
-            case 1:
-                sStrategy = new VelocityBiasStrategy(mMainActivity, prefs);
-                break;
-            case 2:
-                sStrategy = new DynamicResolutionStrategy(mMainActivity, prefs);
-                break;
-            case 3:
-                sStrategy = new NoMarginStrategy(prefs);
-                break;
-            case 4:
-                sStrategy = new PredictionBiasStrategy(mMainActivity, prefs);
-                break;
-            default:
-                Log.e(LOGTAG, "Invalid strategy index specified");
-                return false;
-        }
-        Log.i(LOGTAG, "Set strategy " + sStrategy.toString());
-        return true;
     }
 
     private static float getFloatPref(Map<String, Integer> prefs, String prefName, int defaultValue) {
