@@ -97,16 +97,6 @@ public class LayerView extends FrameLayout {
         }
     }
 
-    public void setTouchIntercepter(final OnInterceptTouchListener touchIntercepter) {
-        // this gets run on the gecko thread, but for thread safety we want the assignment
-        // on the UI thread.
-        post(new Runnable() {
-            public void run() {
-                mTouchIntercepter = touchIntercepter;
-            }
-        });
-    }
-
     public void setInputConnectionHandler(InputConnectionHandler inputConnectionHandler) {
         mInputConnectionHandler = inputConnectionHandler;
     }
