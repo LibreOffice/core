@@ -119,7 +119,6 @@ public class LayerView extends FrameLayout {
     }
 
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
-    public PanZoomController getPanZoomController() { return mPanZoomController; }
 
     public ImmutableViewportMetrics getViewportMetrics() {
         return mLayerClient.getViewportMetrics();
