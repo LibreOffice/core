@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-11-08 17:05:53 using:
+ Generated on 2023-08-15 08:05:49 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,6 +47,7 @@
 #include <new>
 #include <numeric>
 #include <ostream>
+#include <queue>
 #include <set>
 #include <setjmp.h>
 #include <sstream>
@@ -187,6 +188,7 @@
 #include <core/fpdfapi/parser/cpdf_syntax_parser.h>
 #include <core/fpdfapi/parser/fpdf_parser_decode.h>
 #include <core/fpdfapi/parser/fpdf_parser_utility.h>
+#include <core/fpdfapi/parser/object_tree_traversal_util.h>
 #include <core/fpdfapi/render/charposlist.h>
 #include <core/fpdfapi/render/cpdf_devicebuffer.h>
 #include <core/fpdfapi/render/cpdf_docrenderdata.h>
@@ -283,8 +285,7 @@
 #include <core/fxcrt/cfx_read_only_vector_stream.h>
 #include <core/fxcrt/cfx_seekablestreamproxy.h>
 #include <core/fxcrt/cfx_timer.h>
-#include <core/fxcrt/cfx_utf8decoder.h>
-#include <core/fxcrt/cfx_utf8encoder.h>
+#include <core/fxcrt/code_point_view.h>
 #include <core/fxcrt/css/cfx_css.h>
 #include <core/fxcrt/css/cfx_csscolorvalue.h>
 #include <core/fxcrt/css/cfx_csscomputedstyle.h>
@@ -317,6 +318,7 @@
 #include <core/fxcrt/fx_coordinates.h>
 #include <core/fxcrt/fx_extension.h>
 #include <core/fxcrt/fx_folder.h>
+#include <core/fxcrt/fx_memcpy_wrappers.h>
 #include <core/fxcrt/fx_memory.h>
 #include <core/fxcrt/fx_memory_wrappers.h>
 #include <core/fxcrt/fx_number.h>
@@ -337,7 +339,10 @@
 #include <core/fxcrt/stl_util.h>
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
+#include <core/fxcrt/string_view_template.h>
 #include <core/fxcrt/unowned_ptr.h>
+#include <core/fxcrt/unowned_ptr_exclusion.h>
+#include <core/fxcrt/utf16.h>
 #include <core/fxcrt/widestring.h>
 #include <core/fxcrt/widetext_buffer.h>
 #include <core/fxcrt/xml/cfx_xmlchardata.h>
@@ -374,7 +379,6 @@
 #include <core/fxge/dib/cfx_bitmapstorer.h>
 #include <core/fxge/dib/cfx_cmyk_to_srgb.h>
 #include <core/fxge/dib/cfx_dibbase.h>
-#include <core/fxge/dib/cfx_dibextractor.h>
 #include <core/fxge/dib/cfx_dibitmap.h>
 #include <core/fxge/dib/cfx_imagerenderer.h>
 #include <core/fxge/dib/cfx_imagestretcher.h>
@@ -455,6 +459,7 @@
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
 #include <third_party/abseil-cpp/absl/types/optional.h>
+#include <third_party/abseil-cpp/absl/types/variant.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>
@@ -469,16 +474,14 @@
 #include <third_party/base/compiler_specific.h>
 #include <third_party/base/containers/adapters.h>
 #include <third_party/base/containers/contains.h>
-#include <third_party/base/cxx17_backports.h>
+#include <third_party/base/containers/span.h>
 #include <third_party/base/debug/alias.h>
 #include <third_party/base/memory/aligned_memory.h>
+#include <third_party/base/memory/ptr_util.h>
 #include <third_party/base/no_destructor.h>
 #include <third_party/base/notreached.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>
-#include <third_party/base/ptr_util.h>
-#include <third_party/base/span.h>
-#include <third_party/skia_shared/SkFloatToDecimal.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

@@ -1,0 +1,21 @@
+GCC 15 fix
+--- pdfium/core/fxcodec/jbig2/JBig2_DocumentContext.h.orig	2025-11-11 11:42:49.394310384 +0100
++++ pdfium/core/fxcodec/jbig2/JBig2_DocumentContext.h	2025-11-11 11:43:00.141433331 +0100
+@@ -10,6 +10,7 @@
+ #include <list>
+ #include <memory>
+ #include <utility>
++#include <cstdint>
+ 
+ class CJBig2_SymbolDict;
+ 
+--- pdfium/third_party/base/containers/span.h.orig	2025-11-11 11:46:46.901027677 +0100
++++ pdfium/third_party/base/containers/span.h	2025-11-11 11:46:48.815049574 +0100
+@@ -6,6 +6,7 @@
+ #define THIRD_PARTY_BASE_CONTAINERS_SPAN_H_
+ 
+ #include <stddef.h>
++#include <stdint.h>
+ 
+ #include <algorithm>
+ #include <array>
