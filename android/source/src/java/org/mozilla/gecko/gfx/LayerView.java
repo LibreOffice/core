@@ -27,7 +27,6 @@ import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
-import org.mozilla.gecko.OnInterceptTouchListener;
 import org.mozilla.gecko.OnSlideSwipeListener;
 
 /**
@@ -48,7 +47,6 @@ public class LayerView extends FrameLayout {
     private final SurfaceView mSurfaceView;
 
     private Listener mListener;
-    private OnInterceptTouchListener mTouchIntercepter;
     private final LibreOfficeMainActivity mContext;
 
     public LayerView(Context context, AttributeSet attrs) {
@@ -107,21 +105,12 @@ public class LayerView extends FrameLayout {
             requestFocus();
         }
 
-        if (mTouchIntercepter != null && mTouchIntercepter.onInterceptTouchEvent(this, event)) {
-            return true;
-        }
-        if (mPanZoomController != null && mPanZoomController.onTouchEvent(event)) {
-            return true;
-        }
-        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
-            return true;
-        }
-        return false;
+        return mPanZoomController != null && mPanZoomController.onTouchEvent(event);
     }
 
     @Override
     public boolean onHoverEvent(MotionEvent event) {
-        return mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event);
+        return false;
     }
 
     @Override
