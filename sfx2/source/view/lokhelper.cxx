@@ -104,7 +104,7 @@ int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
 {
     assert(docId >= ViewShellDocId(0) && "Cannot createView for invalid (negative) DocId.");
 
-    SfxViewShell::SetCurrentDocId(docId);
+    comphelper::LibreOfficeKit::setDocId(docId);
     SfxRequest aRequest(rViewFrame, SID_NEWWINDOW);
     rViewFrame.ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
