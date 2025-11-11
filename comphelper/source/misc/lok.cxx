@@ -44,6 +44,9 @@ static bool g_bSlideshowRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
 
+/// Used to set the DocId at ViewShell construction time.
+static ViewShellDocId g_nCurrentDocId;
+
 static std::function<bool(void*, int)> g_pAnyInputCallback;
 static void* g_pAnyInputCallbackData;
 static std::function<int()> g_pMostUrgentPriorityGetter;
@@ -398,6 +401,16 @@ int getView()
     }
 
     return g_pViewGetter();
+}
+
+ViewShellDocId getDocId()
+{
+    return g_nCurrentDocId;
+}
+
+void setDocId(ViewShellDocId nDocId)
+{
+    g_nCurrentDocId = nDocId;
 }
 
 void setInitialClientVisibleArea(const awt::Rectangle& rClientVisibleArea)

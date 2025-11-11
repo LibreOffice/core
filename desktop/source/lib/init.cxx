@@ -2997,7 +2997,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
 
         const int nThisDocumentId = nDocumentIdCounter++;
-        SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
+        comphelper::LibreOfficeKit::setDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
@@ -3010,6 +3010,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
             return nullptr;
         }
+
+        assert(comphelper::LibreOfficeKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
 
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
 

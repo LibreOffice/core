@@ -184,9 +184,6 @@ friend class SfxPrinterController;
     bool maLOKIsTimezoneSet;
     bool                        mbLOKColorPreviewEnabled;
 
-    /// Used to set the DocId at construction time. See SetCurrentDocId.
-    static ViewShellDocId       mnCurrentDocId;
-
     /// Used for async export
     std::shared_ptr<SfxStoringHelper> m_xHelper;
 
@@ -425,14 +422,6 @@ public:
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;
 
-    /// Set the current DocId, which is used by Mobile LOKit to
-    /// load multiple documents and yet identify the views of each.
-    /// There are events that are fired while creating a new view,
-    /// and if we don't have a DocId, we can't know which other views
-    /// within the same document (if any) should get those events.
-    /// By setting this static value, we are able to set the DocId
-    /// of each SfxViewShell at construction time.
-    static void SetCurrentDocId(ViewShellDocId nId);
     /// Get the DocId used by Mobile LOKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
 
