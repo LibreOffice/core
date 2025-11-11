@@ -1391,7 +1391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169173)
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
 
-    // Get the last row first coloumn in the table
+    // Get the last row first column in the table
     uno::Reference<text::XText> xCell(
         xCellRange->getCellByPosition(0, xTable->getRows()->getCount() - 1), uno::UNO_QUERY);
 
