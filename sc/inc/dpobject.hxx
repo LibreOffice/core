@@ -55,7 +55,11 @@ namespace com::sun::star {
     }
 }
 
-namespace tools { class Rectangle; }
+namespace tools
+{
+    class Rectangle;
+    class XmlWriter;
+}
 class ScDPSaveData;
 class ScDPOutput;
 struct ScImportSourceDesc;
@@ -281,6 +285,9 @@ public:
         return { false, css::uno::Any() };
     }
 
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
+    void dumpXmlFile() const;
+
 #if DUMP_PIVOT_TABLE
     void Dump() const;
     void DumpCache() const;
@@ -434,10 +441,6 @@ public:
     bool IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const;
     bool IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const;
     bool HasTable( const ScRange& rRange ) const;
-
-#if DEBUG_PIVOT_TABLE
-    void DumpTables() const;
-#endif
 
 private:
     /** Only to be called from ScDPCache::RemoveReference(). */

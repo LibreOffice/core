@@ -37,6 +37,7 @@ struct ScQueryParam;
 class ScDPObject;
 class ScDocument;
 struct ScInterpreterContext;
+namespace tools { class XmlWriter; }
 
 enum class SvNumFormatType : sal_Int16;
 
@@ -202,6 +203,8 @@ public:
     const ScDPCache& operator=(const ScDPCache&) = delete;
     ScDPCache(ScDocument& rDoc);
     ~ScDPCache();
+
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;

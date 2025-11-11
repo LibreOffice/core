@@ -46,6 +46,7 @@ class ScDPDimensionSaveData;
 class ScDPTableData;
 enum class ScGeneralFunction;
 namespace sc { class PivotTableFormats; }
+namespace tools { class XmlWriter; }
 
 // classes to save Data Pilot settings
 
@@ -85,6 +86,8 @@ public:
 
     void WriteToSource( const css::uno::Reference<css::uno::XInterface>& xMember,
                             sal_Int32 nPosition );
+
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
 
 #if DUMP_PIVOT_TABLE
     void Dump(int nIndent = 0) const;
@@ -226,6 +229,8 @@ public:
 
     void RemoveObsoleteMembers(const MemberSetType& rMembers);
 
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
+
 #if DUMP_PIVOT_TABLE
     void Dump(int nIndent = 0) const;
 #endif
@@ -364,6 +369,8 @@ public:
      * @param rDimName dimension name
      */
     SC_DLLPUBLIC bool HasInvisibleMember(std::u16string_view rDimName) const;
+
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;

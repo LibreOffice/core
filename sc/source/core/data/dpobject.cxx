@@ -76,10 +76,12 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <tools/XmlWriter.hxx>
 
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <filesystem>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -2900,6 +2902,40 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     return xRet;
 }
 
+void ScDPObject::dumpAsXml(tools::XmlWriter& rWriter) const
+{
+    rWriter.startElement("pivot");
+    rWriter.attribute("name", GetName());
+
+    if (mpSaveData)
+        mpSaveData->dumpAsXml(rWriter);
+
+    if (mpTableData)
+    {
+        mpTableData->dumpAsXml(rWriter);
+        const ScDPCache &rCache = mpTableData->GetCacheTable().getCache();
+        rCache.dumpAsXml(rWriter);
+    }
+
+    rWriter.endElement();
+}
+
+void ScDPObject::dumpXmlFile() const
+{
+    auto aFilePath = std::filesystem::current_path() / "pivot_table_dump.xml";
+    OUString aFilePathString(aFilePath.u16string());
+
+    SAL_WARN("sc", "Dumping Pivot Table to " << aFilePathString);
+
+    SvFileStream aStream(aFilePathString, StreamMode::STD_READWRITE | StreamMode::TRUNC);
+    tools::XmlWriter aWriter(&aStream);
+    aWriter.startDocument();
+    aWriter.startElement("pivotTable");
+    dumpAsXml(aWriter);
+    aWriter.endElement();
+    aWriter.endDocument();
+}
+
 #if DUMP_PIVOT_TABLE
 
 void ScDPObject::Dump() const
@@ -3850,34 +3886,6 @@ bool ScDPCollection::HasTable( const ScRange& rRange ) const
 {
     return std::any_of(maTables.begin(), maTables.end(), FindIntersectingTable(rRange));
 }
-
-#if DEBUG_PIVOT_TABLE
-
-namespace {
-
-struct DumpTable
-{
-    void operator() (const std::unique_ptr<ScDPObject>& rObj) const
-    {
-        cout << "-- '" << rObj->GetName() << "'" << endl;
-        ScDPSaveData* pSaveData = rObj->GetSaveData();
-        if (!pSaveData)
-            return;
-
-        pSaveData->Dump();
-
-        cout << endl; // blank line
-    }
-};
-
-}
-
-void ScDPCollection::DumpTables() const
-{
-    std::for_each(maTables.begin(), maTables.end(), DumpTable());
-}
-
-#endif
 
 void ScDPCollection::RemoveCache(const ScDPCache* pCache)
 {

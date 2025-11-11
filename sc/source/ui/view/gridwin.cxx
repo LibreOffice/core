@@ -3744,6 +3744,10 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             }
             return;
         }
+        else if (rKeyCode.IsMod2() && rKeyCode.GetCode() == KEY_F5)
+        {
+            dumpPivotTable();
+        }
     }
 
 #endif
