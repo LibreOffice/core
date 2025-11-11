@@ -13,8 +13,6 @@ import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
-import java.util.Map;
-
 final class DisplayPortCalculator {
     private static final String LOGTAG = DisplayPortCalculator.class.getSimpleName();
     private static final PointF ZERO_VELOCITY = new PointF(0, 0);
@@ -22,24 +20,12 @@ final class DisplayPortCalculator {
     // Keep this in sync with the TILEDLAYERBUFFER_TILE_SIZE defined in gfx/layers/TiledLayerBuffer.h
     private static final int TILE_SIZE = 256;
 
-    private static final String PREF_DISPLAYPORT_FM_MULTIPLIER = "gfx.displayport.strategy_fm.multiplier";
-    private static final String PREF_DISPLAYPORT_FM_DANGER_X = "gfx.displayport.strategy_fm.danger_x";
-    private static final String PREF_DISPLAYPORT_FM_DANGER_Y = "gfx.displayport.strategy_fm.danger_y";
-    private static final String PREF_DISPLAYPORT_VB_MULTIPLIER = "gfx.displayport.strategy_vb.multiplier";
-    private static final String PREF_DISPLAYPORT_VB_VELOCITY_THRESHOLD = "gfx.displayport.strategy_vb.threshold";
-    private static final String PREF_DISPLAYPORT_VB_REVERSE_BUFFER = "gfx.displayport.strategy_vb.reverse_buffer";
-    private static final String PREF_DISPLAYPORT_VB_DANGER_X_BASE = "gfx.displayport.strategy_vb.danger_x_base";
-    private static final String PREF_DISPLAYPORT_VB_DANGER_Y_BASE = "gfx.displayport.strategy_vb.danger_y_base";
-    private static final String PREF_DISPLAYPORT_VB_DANGER_X_INCR = "gfx.displayport.strategy_vb.danger_x_incr";
-    private static final String PREF_DISPLAYPORT_VB_DANGER_Y_INCR = "gfx.displayport.strategy_vb.danger_y_incr";
-    private static final String PREF_DISPLAYPORT_PB_VELOCITY_THRESHOLD = "gfx.displayport.strategy_pb.threshold";
-
     private DisplayPortStrategy sStrategy;
     private final LibreOfficeMainActivity mMainActivity;
 
     DisplayPortCalculator(LibreOfficeMainActivity context) {
         this.mMainActivity = context;
-        sStrategy = new VelocityBiasStrategy(mMainActivity, null);
+        sStrategy = new VelocityBiasStrategy(mMainActivity);
     }
 
     DisplayPortMetrics calculate(ImmutableViewportMetrics metrics, PointF velocity) {
@@ -59,11 +45,6 @@ final class DisplayPortCalculator {
 
     void resetPageState() {
         sStrategy.resetPageState();
-    }
-
-    private static float getFloatPref(Map<String, Integer> prefs, String prefName, int defaultValue) {
-        Integer value = (prefs == null ? null : prefs.get(prefName));
-        return (float)(value == null || value < 0 ? defaultValue : value) / 1000f;
     }
 
     private static abstract class DisplayPortStrategy {
@@ -154,14 +135,14 @@ final class DisplayPortCalculator {
         private final float DANGER_ZONE_INCR_X_MULTIPLIER;
         private final float DANGER_ZONE_INCR_Y_MULTIPLIER;
 
-        VelocityBiasStrategy(LibreOfficeMainActivity context, Map<String, Integer> prefs) {
-            SIZE_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_MULTIPLIER, 2000);
-            VELOCITY_THRESHOLD = LOKitShell.getDpi(context) * getFloatPref(prefs, PREF_DISPLAYPORT_VB_VELOCITY_THRESHOLD, 32);
-            REVERSE_BUFFER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_REVERSE_BUFFER, 200);
-            DANGER_ZONE_BASE_X_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_DANGER_X_BASE, 1000);
-            DANGER_ZONE_BASE_Y_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_DANGER_Y_BASE, 1000);
-            DANGER_ZONE_INCR_X_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_DANGER_X_INCR, 0);
-            DANGER_ZONE_INCR_Y_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_DANGER_Y_INCR, 0);
+        VelocityBiasStrategy(LibreOfficeMainActivity context) {
+            SIZE_MULTIPLIER = 2.0f;
+            VELOCITY_THRESHOLD = LOKitShell.getDpi(context) * 0.032f;
+            REVERSE_BUFFER = 0.2f;
+            DANGER_ZONE_BASE_X_MULTIPLIER = 1.0f;
+            DANGER_ZONE_BASE_Y_MULTIPLIER = 1.0f;
+            DANGER_ZONE_INCR_X_MULTIPLIER = 0;
+            DANGER_ZONE_INCR_Y_MULTIPLIER = 0;
         }
 
         /**
