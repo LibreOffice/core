@@ -36,7 +36,6 @@
 #include <unotools/useroptions.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -116,14 +115,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 
         // invoke a second  dictionary manager to get the shared dictionary list
 #ifdef MACOSX
-        OUString aUsePlugin;
-        rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", aUsePlugin);
-        if (aUsePlugin == "svp")
-        {
-            // The API call to get availableLanguages hangs indefinitely when the Cocoa main loop is not running
-            aSuppLocales.realloc(0);
-            return aSuppLocales;
-        }
         NSArray *aSpellCheckLanguages = [[NSSpellChecker sharedSpellChecker] availableLanguages];
 #else
         NSArray *aSpellCheckLanguages = [UITextChecker availableLanguages];
