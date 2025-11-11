@@ -19,15 +19,10 @@
 #ifndef INCLUDED_VBAHELPER_VBASHAPES_HXX
 #define INCLUDED_VBAHELPER_VBASHAPES_HXX
 
-#include <exception>
 #include <string_view>
 
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
 #include <ooo/vba/msforms/XShapes.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

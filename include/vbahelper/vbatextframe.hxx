@@ -19,12 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
 #define INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
 
-#include <exception>
-
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <ooo/vba/msforms/XTextFrame.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

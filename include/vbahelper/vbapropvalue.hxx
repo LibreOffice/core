@@ -19,10 +19,7 @@
 #ifndef SC_VBA_PROPVALULE_HXX
 #define SC_VBA_PROPVALULE_HXX
 
-#include <exception>
-
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/XPropValue.hpp>
 #include <rtl/ustring.hxx>

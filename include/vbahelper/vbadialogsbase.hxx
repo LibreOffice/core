@@ -19,15 +19,9 @@
 #ifndef INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 #define INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 
-#include <exception>
-
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <ooo/vba/XDialogsBase.hpp>
 #include <sal/types.h>
 #include <vbahelper/vbadllapi.h>
-#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 

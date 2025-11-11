@@ -19,17 +19,9 @@
 #ifndef INCLUDED_VBAHELPER_VBASHAPE_HXX
 #define INCLUDED_VBAHELPER_VBASHAPE_HXX
 
-#include <exception>
-#include <memory>
-
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <ooo/vba/msforms/XShape.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

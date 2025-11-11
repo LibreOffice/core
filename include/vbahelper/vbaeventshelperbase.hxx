@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>

@@ -19,13 +19,9 @@
 #ifndef INCLUDED_VBAHELPER_VBAAPPLICATIONBASE_HXX
 #define INCLUDED_VBAHELPER_VBAAPPLICATIONBASE_HXX
 
-#include <exception>
 #include <memory>
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <ooo/vba/XApplicationBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

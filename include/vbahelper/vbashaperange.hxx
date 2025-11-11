@@ -19,13 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBASHAPERANGE_HXX
 #define INCLUDED_VBAHELPER_VBASHAPERANGE_HXX
 
-#include <exception>
-
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
 #include <ooo/vba/msforms/XShapeRange.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
