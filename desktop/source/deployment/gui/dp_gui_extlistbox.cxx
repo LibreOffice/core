@@ -735,6 +735,8 @@ bool ExtensionBox::MouseButtonDown(const MouseEvent& rMEvt)
     if ( !rMEvt.IsLeft() )
         return false;
 
+    GrabFocus();
+
     if (rMEvt.IsMod1() && m_nActive >= 0)
         selectEntry(ExtensionBox::ENTRY_NOTFOUND);   // Selecting a not existing entry will deselect the current one
     else
