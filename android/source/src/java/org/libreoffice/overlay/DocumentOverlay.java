@@ -69,9 +69,6 @@ public class DocumentOverlay {
     public DocumentOverlay(LibreOfficeMainActivity context, LayerView layerView) {
         mDocumentOverlayView = context.findViewById(R.id.text_cursor_view);
         mDocumentOverlayLayer = new DocumentOverlayLayer();
-        if (mDocumentOverlayView == null) {
-            Log.e(LOGTAG, "Failed to initialize TextCursorLayer - CursorView is null");
-        }
         layerView.addLayer(mDocumentOverlayLayer);
         mDocumentOverlayView.initialize(layerView);
     }
