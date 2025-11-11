@@ -55,7 +55,7 @@ static sal_Int64 UpscaleTwoDecimalPlaces(sal_Int64 nCurrentWidth, int nOldDigits
     return nCurrentWidth;
 }
 
-void SwPercentField::ShowPercent(bool bPercent)
+void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
 {
     if ((bPercent && m_pField->get_unit() == FieldUnit::PERCENT)
         || (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
@@ -81,7 +81,7 @@ void SwPercentField::ShowPercent(bool bPercent)
         // round to 0.5 percent
         int nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
 
-        m_pField->set_range(std::max(1, nPercent), 100, FieldUnit::NONE);
+        m_pField->set_range(std::max(1, nPercent), nMaxPercent, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
         if (nOldValue != m_nLastValue)
         {

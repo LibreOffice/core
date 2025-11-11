@@ -75,7 +75,7 @@ public:
 
     sal_Int64 Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
-    void ShowPercent(bool bPercent);
+    void ShowPercent(bool bPercent, sal_uInt16 nMaxPercent = 100);
 
     void LockAutoCalculation(bool bLock) {m_bLockAutoCalculation = bLock;}
 };

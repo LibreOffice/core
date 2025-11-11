@@ -1881,17 +1881,13 @@ IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::Toggleable&, rBtn, void )
 {
     if (&rBtn == m_xRelWidthCB.get())
     {
-        m_xWidthED->ShowPercent(rBtn.get_active());
+        m_xWidthED->ShowPercent(rBtn.get_active(), MAX_PERCENT_WIDTH);
         m_xRelWidthRelationLB->set_sensitive(rBtn.get_active());
-        if (rBtn.get_active())
-            m_xWidthED->get()->set_max(MAX_PERCENT_WIDTH, FieldUnit::NONE);
     }
     else // rBtn == m_xRelHeightCB.get()
     {
-        m_xHeightED->ShowPercent(rBtn.get_active());
+        m_xHeightED->ShowPercent(rBtn.get_active(), MAX_PERCENT_WIDTH);
         m_xRelHeightRelationLB->set_sensitive(rBtn.get_active());
-        if (rBtn.get_active())
-            m_xHeightED->get()->set_max(MAX_PERCENT_HEIGHT, FieldUnit::NONE);
     }
 
     RangeModifyHdl();  // correct the values again
