@@ -48,7 +48,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private RenderContext mLastPageContext;
     private int mMaxTextureSize;
 
-    private CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
+    private final CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
 
     // Used by GLES 2.0
     private int mProgram;
@@ -297,9 +297,11 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     public class Frame {
         // A fixed snapshot of the viewport metrics that this frame is using to render content.
-        private ImmutableViewportMetrics mFrameMetrics;
-        // A rendering context for page-positioned layers, and one for screen-positioned layers.
-        private RenderContext mPageContext, mScreenContext;
+        private final ImmutableViewportMetrics mFrameMetrics;
+        // A rendering context for page-positioned layers.
+        private final RenderContext mPageContext;
+        // A rendering context for screen-positioned layers.
+        private final RenderContext mScreenContext;
         // Whether a layer was updated.
         private boolean mUpdated;
         private final Rect mPageRect;
