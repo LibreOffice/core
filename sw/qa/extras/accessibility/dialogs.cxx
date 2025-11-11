@@ -13,6 +13,7 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 #include <vcl/scheduler.hxx>
 
@@ -41,7 +42,25 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSpecialCharactersDialog)
         dialog.postExtTextEventAsync(u"copyright"_ustr);
         Scheduler::ProcessEventsToIdle();
 
-        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u"©"));
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::LIST, u""));
+
+        auto xList = getFocusedObject(dialog.getAccessible());
+        dialog.postKeyEventAsync(0, awt::Key::DOWN);
+        Scheduler::ProcessEventsToIdle();
+
+        uno::Reference<css::accessibility::XAccessibleSelection> xSelection(xList, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xSelection.is());
+
+        sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+        CPPUNIT_ASSERT(nSelected > 0);
+
+        auto xSelectedChild = xSelection->getSelectedAccessibleChild(0);
+        CPPUNIT_ASSERT(xSelectedChild.is());
+
+        auto xSelectedContext = xSelectedChild->getAccessibleContext();
+        CPPUNIT_ASSERT(xSelectedContext.is());
+
+        CPPUNIT_ASSERT_EQUAL(u"COPYRIGHT SIGN"_ustr, xSelectedContext->getAccessibleDescription());
 
         /* there was a focus issue in this dialog: the table holding the characters always had the
          * selected element as focused, even when tabbing outside.
@@ -68,19 +87,35 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestSpecialCharactersDialogFocus)
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Special Characters", [](Dialog& dialog) {
-        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u" "));
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::LIST, u""));
 
         /* as there is a bug that focusing the character table doesn't enable the Insert button
          * (https://bugs.documentfoundation.org/show_bug.cgi?id=153806), we move to another cell
          * so it works. */
 
         // tdf#153918: Check that '!' char has correct accessible name and insert it
+        auto xList = getFocusedObject(dialog.getAccessible());
+
+        dialog.postKeyEventAsync(0, awt::Key::HOME);
+        Scheduler::ProcessEventsToIdle();
+
         dialog.postKeyEventAsync(0, awt::Key::RIGHT);
         Scheduler::ProcessEventsToIdle();
-        CPPUNIT_ASSERT_EQUAL(
-            AccessibilityTools::getAccessibleObjectForName(
-                dialog.getAccessible(), accessibility::AccessibleRole::TABLE_CELL, u"!"),
-            getFocusedObject(dialog.getAccessible()));
+
+        uno::Reference<css::accessibility::XAccessibleSelection> xSelection(xList, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xSelection.is());
+
+        sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+        CPPUNIT_ASSERT(nSelected > 0);
+
+        auto xSelectedChild = xSelection->getSelectedAccessibleChild(0);
+        CPPUNIT_ASSERT(xSelectedChild.is());
+
+        auto xSelectedContext = xSelectedChild->getAccessibleContext();
+        CPPUNIT_ASSERT(xSelectedContext.is());
+
+        CPPUNIT_ASSERT_EQUAL(u"EXCLAMATION MARK"_ustr,
+                             xSelectedContext->getAccessibleDescription());
 
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::PUSH_BUTTON, u"Insert"));
         dialog.postKeyEventAsync(0, awt::Key::RETURN);

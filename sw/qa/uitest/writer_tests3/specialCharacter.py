@@ -38,7 +38,8 @@ class specialCharacter(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
                 xCharSet = xDialog.getChild("showcharset")  # default charset
 
-                xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "1", "ROW": "4"}))  # digit 4 selected
+                element21 = xCharSet.getChild("20") # digit 4 selected
+                element21.executeAction("SELECT", mkPropertyValues({}))
 
                 xHexText = xDialog.getChild("hexvalue")
                 xDecText = xDialog.getChild("decimalvalue")
@@ -70,9 +71,10 @@ class specialCharacter(UITestCase):
                 # Markus: Actually after a round of debugging I think the problem is actually that the test depends on the used font.
                 # Therefore, if the font is not available or not selected by default the test fails.
                 #        xCharSet = xDialog.getChild("searchcharset")    #another charset -> search charset
-                #        xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "0", "ROW": "0"}))   #digit 4 selected, we have only one result;
+                #        element = xCharSet.getChild("0")   #digit 4 selected, we have only one result;
+                #        element.executeAction("SELECT", mkPropertyValues({}))
                 #        sleep(1)                                                  #try sleep here
-                #        xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "0", "ROW": "0"}))   #try it twice, because it works at local,but fail on gerrit
+                #        element.executeAction("SELECT", mkPropertyValues({}))   #try it twice, because it works at local,but fail on gerrit
                 ##gerrit:self.assertEqual(get_state_as_dict(xHexText)["Text"], "34")    # check the values for digit 4; AssertionError: '1' != '34'
 
                 #        xHexText = xDialog.getChild("hexvalue")

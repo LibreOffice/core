@@ -99,7 +99,7 @@ void SvxShowCharSet::init()
     m_nYGap = 0;
 
     mxScrollArea->connect_vadjustment_value_changed(LINK(this, SvxShowCharSet, VscrollHdl));
-    getFavCharacterList();
+    loadFavCharacterList();
     // other settings depend on selected font => see RecalculateFont
 
     mbDrag = false;
@@ -216,7 +216,7 @@ sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)
     return _nPos / COLUMN_COUNT ;
 }
 
-void SvxShowCharSet::getFavCharacterList()
+void SvxShowCharSet::loadFavCharacterList()
 {
     maFavCharList.clear();
     maFavCharFontList.clear();
@@ -701,7 +701,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFont(aFont);
     rRenderContext.GetFontCharMap(mxFontCharMap);
     m_aItems.clear();
-    getFavCharacterList();
+    loadFavCharacterList();
 
     mnX = aSize.Width() / COLUMN_COUNT;
     mnY = aSize.Height() / ROW_COUNT;

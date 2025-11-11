@@ -104,16 +104,16 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
 }
 
 void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
-                               const Link<void*, void>& rUpdateFavHdl,
-                               const Link<void*, void>& rUpdateRecentHdl,
+                               const Link<CharChange*, void>& rUpdateFavHdl,
+                               const Link<CharChange*, void>& rUpdateRecentHdl,
                                const Link<SvxCharView*,void> &rFocusInHdl)
 {
     m_aUpdateFavHdl = rUpdateFavHdl;
     m_aUpdateRecentHdl = rUpdateRecentHdl;
 
-    getRecentCharacterList();
+    loadRecentCharacterList();
     updateRecentCharControl();
-    getFavCharacterList();
+    loadFavCharacterList();
     updateFavCharControl();
 
     for(int i = 0; i < 16; i++)
@@ -143,7 +143,7 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
     m_xCharInfoLabel->set_size_request(-1, m_xCharInfoLabel->get_text_height() * 2);
 
     m_aCharmapContents.init(false, LINK(this, SfxCharmapCtrl, CharClickHdl),
-                            Link<void*,void>(), LINK(this, SfxCharmapCtrl, UpdateRecentHdl),
+                            Link<SfxCharmapContainer::CharChange*,void>(), LINK(this, SfxCharmapCtrl, UpdateRecentHdl),
                             LINK(this, SfxCharmapCtrl, CharFocusInHdl));
 
     m_xDlgBtn->connect_clicked(LINK(this, SfxCharmapCtrl, OpenDlgHdl));
@@ -154,7 +154,7 @@ SfxCharmapCtrl::~SfxCharmapCtrl()
 {
 }
 
-void SfxCharmapContainer::getFavCharacterList()
+void SfxCharmapContainer::loadFavCharacterList()
 {
     m_aFavCharList.clear();
     m_aFavCharFontList.clear();
@@ -198,7 +198,7 @@ void SfxCharmapContainer::updateFavCharControl()
     m_aUpdateFavHdl.Call(nullptr);
 }
 
-void SfxCharmapContainer::getRecentCharacterList()
+void SfxCharmapContainer::loadRecentCharacterList()
 {
     m_aRecentCharList.clear();
     m_aRecentCharFontList.clear();
@@ -444,11 +444,17 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
     officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
     batch->commit();
 
+    CharChange change{sTitle, sFont, true};
+    m_aUpdateRecentHdl.Call(&change);
+
     updateRecentCharControl();
 }
 
 IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView*, void)
 {
+    std::deque<OUString> oldChars = m_aRecentCharList;
+    std::deque<OUString> oldFonts = m_aRecentCharFontList;
+
     m_aRecentCharList.clear();
     m_aRecentCharFontList.clear();
 
@@ -457,17 +463,33 @@ IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView*, void)
     officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set({ }, batch);
     batch->commit();
 
+    for (size_t i = 0; i < oldChars.size(); ++i)
+    {
+        CharChange change{oldChars[i], oldFonts[i], true};
+        m_aUpdateRecentHdl.Call(&change);
+    }
+
     updateRecentCharControl();
 }
 
 IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, SvxCharView*, rView, void)
 {
+    OUString sChar = rView->GetText();
+    OUString sFont = rView->GetFont().GetFamilyName();
+
     deleteFavCharacterFromList(rView->GetText(), rView->GetFont().GetFamilyName());
+
+    CharChange change{sChar, sFont, true};
+    m_aUpdateFavHdl.Call(&change);
+
     updateFavCharControl();
 }
 
 IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView*, void)
 {
+    std::deque<OUString> oldChars = m_aFavCharList;
+    std::deque<OUString> oldFonts = m_aFavCharFontList;
+
     m_aFavCharList.clear();
     m_aFavCharFontList.clear();
 
@@ -476,6 +498,11 @@ IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView*, void)
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set({ }, batch);
     batch->commit();
 
+    for (size_t i = 0; i < oldChars.size(); ++i)
+    {
+        CharChange change{oldChars[i], oldFonts[i], true};
+        m_aUpdateFavHdl.Call(&change);
+    }
     updateFavCharControl();
 }
 
@@ -489,7 +516,7 @@ bool SfxCharmapContainer::hasRecentChars() const
     return !m_aRecentCharList.empty();
 }
 
-IMPL_LINK_NOARG(SfxCharmapCtrl, UpdateRecentHdl, void*, void)
+IMPL_LINK_NOARG(SfxCharmapCtrl, UpdateRecentHdl, SfxCharmapContainer::CharChange*, void)
 {
     //checking if the characters are recently used or no
     m_xRecentLabel->set_label(m_aCharmapContents.hasRecentChars() ? SfxResId(STR_RECENT) : SfxResId(STR_NORECENT));

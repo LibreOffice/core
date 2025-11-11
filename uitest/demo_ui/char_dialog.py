@@ -18,8 +18,8 @@ class CharDialogText(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xCharDialog:
 
                 xCharSet = xCharDialog.getChild("showcharset")
-
-                xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
+                element35 = xCharSet.getChild("34")
+                element35.executeAction("SELECT", mkPropertyValues({}))
 
 
 
