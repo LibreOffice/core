@@ -1182,7 +1182,8 @@ css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
         }
         else
         {
-            SAL_WARN_IF(aAny.hasValue(), "sd", "SvxShape::GetAnyForItem() Returnvalue has wrong Type!");
+            SAL_WARN_IF(aAny.hasValue(), "sd", "SvxShape::GetAnyForItem() Return value has wrong type, expected "
+                << pEntry->aType << " but got " << aAny.getValueType());
         }
     }
 
