@@ -496,6 +496,7 @@ void WindowListMenuController::itemActivated( const css::awt::MenuEvent& rEvent 
             for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 pVCLMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
+                pVCLMenu->SetHelpId( nItemId, u"HID_WINDOW_DOC_LIST"_ustr );
                 if ( nItemId == nActiveItemId )
                     pVCLMenu->CheckItem( nItemId );
                 ++nItemId;
