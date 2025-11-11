@@ -1564,6 +1564,33 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testTdf168943)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCondformat, testWholeSheetCondFormatCopyPaste)
+{
+    // cool#13378
+    // Without the fix, this test will cause OOM and crash.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    auto pFormat = std::make_unique<ScConditionalFormat>(1, *m_pDoc);
+    ScRangeList aRangeList(ScRange(0, 0, 0, m_pDoc->MaxCol(), m_pDoc->MaxRow(), 0));
+    pFormat->SetRange(aRangeList);
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, u"=42"_ustr, u""_ustr,
+            *m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(std::move(pFormat));
+
+    // Copy row 1:1
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0, 0, 0, m_pDoc->MaxCol(), 0, 0), &aClipDoc);
+
+    // Paste to row 4:4
+    pasteFromClip(m_pDoc, ScRange(0, 3, 0, m_pDoc->MaxCol(), 3, 0), &aClipDoc);
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
