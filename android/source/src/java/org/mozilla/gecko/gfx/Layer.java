@@ -20,7 +20,6 @@ public abstract class Layer {
     private Rect mNewPosition;
 
     protected Rect mPosition;
-    protected float mResolution;
     protected boolean mUsesDefaultProgram = true;
 
     public Layer() {
@@ -34,7 +33,6 @@ public abstract class Layer {
         } else {
             mPosition = new Rect(0, 0, size.width, size.height);
         }
-        mResolution = 1.0f;
     }
 
     /**
@@ -64,7 +62,7 @@ public abstract class Layer {
 
     /** Given the intrinsic size of the layer, returns the pixel boundaries of the layer rect. */
     protected RectF getBounds(RenderContext context) {
-        return RectUtils.scale(new RectF(mPosition), context.zoomFactor / mResolution);
+        return RectUtils.scale(new RectF(mPosition), context.zoomFactor);
     }
 
     /**
