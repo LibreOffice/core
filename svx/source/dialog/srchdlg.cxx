@@ -359,6 +359,12 @@ void SvxSearchDialog::Present()
     m_aPresentIdle.Start();
 }
 
+void SvxSearchDialog::SetSearchLBEntryTextAndGrabFocus(const OUString& rStr)
+{
+    m_xSearchLB->set_entry_text(rStr);
+    m_xSearchLB->grab_focus();
+}
+
 void SvxSearchDialog::ChildWinDispose()
 {
     m_rBindings.EnterRegistrations();

@@ -143,6 +143,8 @@ public:
     // bring this window back to the foreground
     void Present();
 
+    void SetSearchLBEntryTextAndGrabFocus(const OUString& rStr);
+
 private:
     SfxBindings& m_rBindings;
     Timer           m_aPresentIdle;
