@@ -165,35 +165,6 @@ class JavaPanZoomController
         return false;
     }
 
-    /** This function must be called from the UI thread. */
-    public void abortAnimation() {
-        checkMainThread();
-        // this happens when gecko changes the viewport on us or if the device is rotated.
-        // if that's the case, abort any animation in progress and re-zoom so that the page
-        // snaps to edges. for other cases (where the user's finger(s) are down) don't do
-        // anything special.
-        switch (mState) {
-        case FLING:
-            mX.stopFling();
-            mY.stopFling();
-            // fall through
-        case BOUNCE:
-        case ANIMATED_ZOOM:
-            // the zoom that's in progress likely makes no sense any more (such as if
-            // the screen orientation changed) so abort it
-            setState(PanZoomState.NOTHING);
-            // fall through
-        case NOTHING:
-            // Don't do animations here; they're distracting and can cause flashes on page
-            // transitions.
-            synchronized (mTarget.getLock()) {
-                mTarget.setViewportMetrics(getValidViewportMetrics());
-                mTarget.forceRedraw();
-            }
-            break;
-        }
-    }
-
     /** This function must be called on the UI thread. */
     void startingNewEventBlock(MotionEvent event, boolean waitingForTouchListeners) {
         checkMainThread();

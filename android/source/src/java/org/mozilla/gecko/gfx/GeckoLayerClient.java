@@ -184,19 +184,6 @@ public class GeckoLayerClient implements PanZoomTarget {
         reevaluateTiles();
     }
 
-    /**
-     * Aborts any pan/zoom animation that is currently in progress.
-     */
-    public void abortPanZoomAnimation() {
-        if (mPanZoomController != null) {
-            mView.post(new Runnable() {
-                public void run() {
-                    mPanZoomController.abortAnimation();
-                }
-            });
-        }
-    }
-
     public void setZoomConstraints(ZoomConstraints constraints) {
         mZoomConstraints = constraints;
     }
