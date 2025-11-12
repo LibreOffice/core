@@ -1415,7 +1415,9 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sFunction = "INT";
                         uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
                         xCountFunction->setInitialFormula(beans::Optional< OUString>(true,u"rpt:0"_ustr));
-                        OUString sCountName = sFunction + "_count_" + sExpression;
+                        OUString sCountName = sFunction + "_count_"
+                            + OUString::number(xGroup->getGroupInterval())
+                            + "_" + sExpression;
                         xCountFunction->setName(sCountName);
                         xCountFunction->setFormula( "rpt:[" + sCountName + "] + 1" );
                         exportFunction(xCountFunction);
