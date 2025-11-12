@@ -57,9 +57,6 @@ public final class TouchEventHandler {
     private final SimpleScaleGestureDetector mScaleGestureDetector;
     private final JavaPanZoomController mPanZoomController;
 
-    // the queue of events that we are holding on to while waiting for a preventDefault
-    // notification
-    private final Queue<MotionEvent> mEventQueue;
     private final ListenerTimeoutProcessor mListenerTimeoutProcessor;
 
     // this next variable requires some explanation. strap yourself in.
@@ -105,7 +102,6 @@ public final class TouchEventHandler {
     TouchEventHandler(Context context, View view, JavaPanZoomController panZoomController) {
         mView = view;
 
-        mEventQueue = new LinkedList<MotionEvent>();
         mPanZoomController = panZoomController;
         mGestureDetector = new GestureDetector(context, mPanZoomController);
         mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);
@@ -121,12 +117,6 @@ public final class TouchEventHandler {
     public boolean handleEvent(MotionEvent event) {
         if (isDownEvent(event)) {
             // this is the start of a new block of events! whee!
-
-            // we're not going to be holding this block of events in the queue, but we need
-            // a marker of some sort so that the processEventBlock loop deals with the blocks
-            // in the right order as notifications come in. we use a single null event in
-            // the queue as a placeholder for a block of events that has already been dispatched.
-            mEventQueue.add(null);
             mPanZoomController.startingNewEventBlock(event, false);
 
             // set the timeout so that we dispatch these events and update mProcessingBalance
@@ -163,46 +153,8 @@ public final class TouchEventHandler {
         mPanZoomController.handleEvent(event);
     }
 
-    /**
-     * Process the block of events at the head of the queue now that we know
-     * whether it has been default-prevented or not.
-     */
     private void processEventBlock() {
-        if (mEventQueue.isEmpty()) {
-            Log.e(LOGTAG, "Unexpected empty event queue in processEventBlock!", new Exception());
-            return;
-        }
-
-        // the odd loop condition is because the first event in the queue will
-        // always be a DOWN or POINTER_DOWN event, and we want to process all
-        // the events in the queue starting at that one, up to but not including
-        // the next DOWN or POINTER_DOWN event.
-
-        MotionEvent event = mEventQueue.poll();
-        while (true) {
-            // event being null here is valid and represents a block of events
-            // that has already been dispatched.
-
-            if (event != null) {
-                dispatchEvent(event);
-            }
-            if (mEventQueue.isEmpty()) {
-                // we have processed the backlog of events, and are all caught up.
-                break;
-            }
-            event = mEventQueue.peek();
-            if (event == null || isDownEvent(event)) {
-                // we have finished processing the block we were interested in.
-                // now we wait for the next call to processEventBlock
-                if (event != null) {
-                    mPanZoomController.startingNewEventBlock(event, true);
-                }
-                break;
-            }
-            // pop the event we peeked above, as it is still part of the block and
-            // we want to keep processing
-            mEventQueue.remove();
-        }
+        // no more logic here
     }
 
     private class ListenerTimeoutProcessor implements Runnable {
