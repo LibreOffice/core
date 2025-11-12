@@ -48,56 +48,10 @@ import java.util.Queue;
 public final class TouchEventHandler {
     private static final String LOGTAG = "GeckoTouchEventHandler";
 
-    // The time limit for listeners to respond with preventDefault on touchevents
-    // before we begin panning the page
-    private static final int EVENT_LISTENER_TIMEOUT = 200;
-
     private final View mView;
     private final GestureDetector mGestureDetector;
     private final SimpleScaleGestureDetector mScaleGestureDetector;
     private final JavaPanZoomController mPanZoomController;
-
-    private final ListenerTimeoutProcessor mListenerTimeoutProcessor;
-
-    // this next variable requires some explanation. strap yourself in.
-    //
-    // for each block of events, we do two things: (1) send the events to gecko and expect
-    // exactly one default-prevented notification in return, and (2) kick off a delayed
-    // ListenerTimeoutProcessor that triggers in case we don't hear from the listener in
-    // a timely fashion.
-    // since events are constantly coming in, we need to be able to handle more than one
-    // block of events in the queue.
-    //
-    // this means that there are ordering restrictions on these that we can take advantage of,
-    // and need to abide by. blocks of events in the queue will always be in the order that
-    // the user generated them. default-prevented notifications we get from gecko will be in
-    // the same order as the blocks of events in the queue. the ListenerTimeoutProcessors that
-    // have been posted will also fire in the same order as the blocks of events in the queue.
-    // HOWEVER, we may get multiple default-prevented notifications interleaved with multiple
-    // ListenerTimeoutProcessor firings, and that interleaving is not predictable.
-    //
-    // therefore, we need to make sure that for each block of events, we process the queued
-    // events exactly once, either when we get the default-prevented notification, or when the
-    // timeout expires (whichever happens first). there is no way to associate the
-    // default-prevented notification with a particular block of events other than via ordering,
-    //
-    // so what we do to accomplish this is to track a "processing balance", which is the number
-    // of default-prevented notifications that we have received, minus the number of ListenerTimeoutProcessors
-    // that have fired. (think "balance" as in teeter-totter balance). this value is:
-    // - zero when we are in a state where the next default-prevented notification we expect
-    //   to receive and the next ListenerTimeoutProcessor we expect to fire both correspond to
-    //   the next block of events in the queue.
-    // - positive when we are in a state where we have received more default-prevented notifications
-    //   than ListenerTimeoutProcessors. This means that the next default-prevented notification
-    //   does correspond to the block at the head of the queue, but the next n ListenerTimeoutProcessors
-    //   need to be ignored as they are for blocks we have already processed. (n is the absolute value
-    //   of the balance.)
-    // - negative when we are in a state where we have received more ListenerTimeoutProcessors than
-    //   default-prevented notifications. This means that the next ListenerTimeoutProcessor that
-    //   we receive does correspond to the block at the head of the queue, but the next n
-    //   default-prevented notifications need to be ignored as they are for blocks we have already
-    //   processed. (n is the absolute value of the balance.)
-    private int mProcessingBalance;
 
     TouchEventHandler(Context context, View view, JavaPanZoomController panZoomController) {
         mView = view;
@@ -105,7 +59,6 @@ public final class TouchEventHandler {
         mPanZoomController = panZoomController;
         mGestureDetector = new GestureDetector(context, mPanZoomController);
         mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);
-        mListenerTimeoutProcessor = new ListenerTimeoutProcessor();
 
         mGestureDetector.setOnDoubleTapListener(mPanZoomController);
     }
@@ -118,10 +71,6 @@ public final class TouchEventHandler {
         if (isDownEvent(event)) {
             // this is the start of a new block of events! whee!
             mPanZoomController.startingNewEventBlock(event, false);
-
-            // set the timeout so that we dispatch these events and update mProcessingBalance
-            // if we don't get a default-prevented notification
-            mView.postDelayed(mListenerTimeoutProcessor, EVENT_LISTENER_TIMEOUT);
         }
 
         dispatchEvent(event);
@@ -151,23 +100,5 @@ public final class TouchEventHandler {
             return;
         }
         mPanZoomController.handleEvent(event);
-    }
-
-    private void processEventBlock() {
-        // no more logic here
-    }
-
-    private class ListenerTimeoutProcessor implements Runnable {
-        /* This MUST be run on the UI thread */
-        public void run() {
-            if (mProcessingBalance < 0) {
-                // gecko already responded with default-prevented notification, and so
-                // the block of events this ListenerTimeoutProcessor corresponds to have
-                // already been removed from the queue.
-            } else {
-                processEventBlock();
-            }
-            mProcessingBalance++;
-        }
     }
 }
