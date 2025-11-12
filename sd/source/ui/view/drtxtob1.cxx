@@ -64,6 +64,7 @@
 #include <futempl.hxx>
 #include <DrawDocShell.hxx>
 #include <futext.hxx>
+#include <fuolbull.hxx>
 #include <editeng/colritem.hxx>
 
 #include <memory>
@@ -427,7 +428,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                 {
                     // Set all levels of the list, so later increase/decrease of the list level
                     // works, too.
-                    SfxUInt16Item aItem(FN_SVX_SET_BULLET, sal_uInt16(0xFFFF));
+                    SfxUInt16Item aItem(FN_SVX_SET_BULLET, FuBulletAndPosition::BULLET_TOGGLE);
                     mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
                         FN_SVX_SET_BULLET, SfxCallMode::RECORD, { &aItem });
                 }
