@@ -18,7 +18,6 @@ public abstract class Layer {
     private final ReentrantLock mTransactionLock;
     private boolean mInTransaction;
     private Rect mNewPosition;
-    private float mNewResolution;
 
     protected Rect mPosition;
     protected float mResolution;
@@ -89,7 +88,6 @@ public abstract class Layer {
             throw new RuntimeException("Nested transactions are not supported");
         mTransactionLock.lock();
         mInTransaction = true;
-        mNewResolution = mResolution;
     }
 
     /** Call this when you're done modifying the layer. */
@@ -136,10 +134,6 @@ public abstract class Layer {
         if (mNewPosition != null) {
             mPosition = mNewPosition;
             mNewPosition = null;
-        }
-        if (mNewResolution != 0.0f) {
-            mResolution = mNewResolution;
-            mNewResolution = 0.0f;
         }
     }
 
