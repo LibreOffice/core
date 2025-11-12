@@ -1116,6 +1116,23 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
                     }
                 }
+                if (GetDoc()->HasCanvasPage() && getCurrentPage()->IsCanvasPage() && bAllowChangeFocus)
+                {
+                    ::tools::JsonWriter aJsonWriter;
+                    aJsonWriter.put("commandName", "CanvasPageVisArea");
+                    {
+                        auto jsonState = aJsonWriter.startNode("state");
+                        aJsonWriter.put("x", maCanvasPageVisArea.Left());
+                        aJsonWriter.put("y", maCanvasPageVisArea.Top());
+                        aJsonWriter.put("width", maCanvasPageVisArea.GetWidth());
+                        aJsonWriter.put("height", maCanvasPageVisArea.GetHeight());
+                    }
+                    OString aPayload = aJsonWriter.finishAndGetAsOString();
+                    if (SfxViewShell* pViewShell = GetViewShell())
+                    {
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+                    }
+                }
             }
             else
             {
