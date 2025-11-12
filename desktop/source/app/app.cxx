@@ -356,7 +356,7 @@ void RemoveIconCacheDirectory()
 
 namespace {
 
-#if !defined(EMSCRIPTEN)
+#if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
 void runGraphicsRenderTests()
 {
     if (comphelper::LibreOfficeKit::isActive())
@@ -1645,7 +1645,7 @@ int Desktop::Main()
         CheckOpenCLCompute(xDesktop);
 #endif
 
-#if !defined(EMSCRIPTEN)
+#if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
         //Running the VCL graphics rendering tests
         const char * pDisplay = std::getenv("DISPLAY");
         if (!pDisplay || pDisplay[0] == ':')
