@@ -1069,12 +1069,6 @@ class JavaPanZoomController
         return true;
     }
 
-    /** This function must be called from the UI thread. */
-    public void abortPanning() {
-        checkMainThread();
-        bounce();
-    }
-
     public void setOverScrollMode(int overscrollMode) {
         mX.setOverScrollMode(overscrollMode);
         mY.setOverScrollMode(overscrollMode);
