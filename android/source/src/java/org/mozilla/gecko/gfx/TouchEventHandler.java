@@ -62,12 +62,6 @@ public final class TouchEventHandler {
     private final Queue<MotionEvent> mEventQueue;
     private final ListenerTimeoutProcessor mListenerTimeoutProcessor;
 
-    // true if we should dispatch incoming events to the gesture detector and the pan/zoom
-    // controller. if this is false, then the current block of events has been
-    // default-prevented, and we should not dispatch these events (although we'll still send
-    // them to gecko listeners).
-    private boolean mDispatchEvents;
-
     // this next variable requires some explanation. strap yourself in.
     //
     // for each block of events, we do two things: (1) send the events to gecko and expect
@@ -116,7 +110,6 @@ public final class TouchEventHandler {
         mGestureDetector = new GestureDetector(context, mPanZoomController);
         mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);
         mListenerTimeoutProcessor = new ListenerTimeoutProcessor();
-        mDispatchEvents = true;
 
         mGestureDetector.setOnDoubleTapListener(mPanZoomController);
     }
@@ -128,11 +121,6 @@ public final class TouchEventHandler {
     public boolean handleEvent(MotionEvent event) {
         if (isDownEvent(event)) {
             // this is the start of a new block of events! whee!
-
-            // Set mDispatchEvents to true so that we are guaranteed to either queue these
-            // events or dispatch them. The only time we should not do either is once we've
-            // heard back from content to preventDefault this block.
-            mDispatchEvents = true;
 
             // we're not going to be holding this block of events in the queue, but we need
             // a marker of some sort so that the processEventBlock loop deals with the blocks
@@ -146,15 +134,7 @@ public final class TouchEventHandler {
             mView.postDelayed(mListenerTimeoutProcessor, EVENT_LISTENER_TIMEOUT);
         }
 
-        // If we need to dispatch events directly, do that. It is possible that mDispatchEvents
-        // is false, in which case we are processing a block of events that we know
-        // has been default-prevented. in that case we don't keep the events as we don't
-        // need them (but we still pass them to the gecko listener).
-        if (mDispatchEvents) {
-            dispatchEvent(event);
-        } else if (touchFinished(event)) {
-            mPanZoomController.preventedTouchFinished();
-        }
+        dispatchEvent(event);
 
         return true;
     }
@@ -208,11 +188,6 @@ public final class TouchEventHandler {
             }
             if (mEventQueue.isEmpty()) {
                 // we have processed the backlog of events, and are all caught up.
-                // now we can set the dispatch flag so
-                // that the handleEvent() function can do the right thing for all
-                // remaining events in this block (which is still ongoing) without
-                // having to put them in the queue.
-                mDispatchEvents = true;
                 break;
             }
             event = mEventQueue.peek();
