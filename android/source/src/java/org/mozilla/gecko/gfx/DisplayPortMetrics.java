@@ -42,11 +42,6 @@ public final class DisplayPortMetrics {
         return mPosition.contains(rect);
     }
 
-    public boolean fuzzyEquals(DisplayPortMetrics metrics) {
-        return RectUtils.fuzzyEquals(mPosition, metrics.mPosition)
-            && FloatUtils.fuzzyEquals(mResolution, metrics.mResolution);
-    }
-
     @Override
     public String toString() {
         return "DisplayPortMetrics v=(" + mPosition.left + ","
