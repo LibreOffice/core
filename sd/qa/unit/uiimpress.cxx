@@ -1186,6 +1186,38 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, tdf139269_prevent_pasting_into_readonly_master_objects)
+{
+    createSdImpressDoc();
+
+    insertStringToObject(0, u"Test", /*bUseEscape*/ false);
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+
+    // Use tab key to select the first object and try to type something to go
+    // into edit mode although it's not possible to add text to it
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeKey(pXImpressDocument, KEY_TAB);
+    typeString(pXImpressDocument, u"test");
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
+    CPPUNIT_ASSERT(xMasterPages.is());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xMasterPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Click to edit the title text format
+    // - Actual  : Click to edit the title text formatTest
+    CPPUNIT_ASSERT_EQUAL(u"Click to edit the title text format"_ustr, xShape->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
 {
     createSdImpressDoc();
