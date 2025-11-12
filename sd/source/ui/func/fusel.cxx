@@ -20,6 +20,7 @@
 #include <fusel.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdopage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
 #include <vcl/imapobj.hxx>
@@ -349,6 +350,16 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             if (!bSelectionOnly
                                 && pObj->getSdrPageFromSdrObject() == pPV->GetPage())
                                 bReturn = pPV->EnterGroup(pObj);
+                        }
+                    }
+                    else if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+                    {
+                        if (rMEvt.GetClicks() == 2)
+                        {
+                            SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+                            sal_uInt16 nPageNum = (pPageObj->GetReferencedPage()->GetPageNum() - 1) / 2;
+                            DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
+                            pDrawViewShell->SwitchPage(nPageNum);
                         }
                     }
                 }
