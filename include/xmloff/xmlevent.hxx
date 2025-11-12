@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_XMLEVENT_HXX
 
 #include <rtl/ustring.hxx>
-#include <utility>
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }

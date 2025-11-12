@@ -26,8 +26,6 @@
 #include <tools/fontenum.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <set>
-#include <unordered_set>
-#include <unordered_map>
 #include <memory>
 
 namespace com::sun::star {

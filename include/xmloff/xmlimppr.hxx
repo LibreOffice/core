@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
-#include <salhelper/simplereferenceobject.hxx>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
 namespace com::sun::star::beans { class XPropertySet; }
