@@ -859,6 +859,7 @@ Try:
 								Case &quot;SetArray&quot;			:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
 								Case &quot;SetFormula&quot;		:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
 								Case &quot;SetValue&quot;			:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
+								Case &quot;Shapes&quot;			:	vReturn = vBasicObject.Shapes(vArgs(0), vArgs(1))
 								Case &quot;Styles&quot;			:	vReturn = vBasicObject.Styles(vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
 							End Select

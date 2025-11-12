@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SF_Shape" script:language="StarBasic" script:moduleType="normal">REM =======================================================================================================================
+REM ===			The ScriptForge library and its associated libraries are part of the LibreOffice project.				===
+REM	===						The SFDocuments library is one of the associated libraries.									===
+REM ===					Full documentation is available on https://help.libreoffice.org/								===
+REM =======================================================================================================================
+
+Option Compatible
+Option ClassModule
+
+Option Explicit
+
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
+&apos;&apos;&apos;	SF_Shape
+&apos;&apos;&apos;	========
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The SF_Shape module is focused on the description of shapes/images/drawing objects
+&apos;&apos;&apos;		stored in documents.
+&apos;&apos;&apos;		In the actual release only shapes in Calc sheets are considered.
+&apos;&apos;&apos;		Charts are a special type of shapes. The &quot;Chart&quot; service is a subclass of the actual service.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Definitions
+&apos;&apos;&apos;			Shapes have 2 distinct names:
+&apos;&apos;&apos;				-	an internal name, given by the LibreOffice application
+&apos;&apos;&apos;				-	an optional user-defined name
+&apos;&apos;&apos;			In the scope of the ScriptForge libraries, the Shape name is the name given by the user.
+&apos;&apos;&apos;			Only when there is no user name, the internal name may be used instead.
+&apos;&apos;&apos;			The name of a shape must be unique within the sheet where it is located.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Service invocation from the &quot;Calc&quot; service
+&apos;&apos;&apos;			Either make a new Shape
+&apos;&apos;&apos;				calc.CreateShapeFromFile(ShapeName, SheetName, ImageFile, AsLink := False)
+&apos;&apos;&apos;			or select an existing one within a given sheet
+&apos;&apos;&apos;				calc.Shapes(SheetName, ShapeName)
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_shape.html?DbPAR=BASIC
+&apos;&apos;&apos;
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
+
+REM ================================================================== EXCEPTIONS
+
+Private Const SHAPEEXPORTERROR		=	&quot;SHAPEEXPORTERROR&quot;
+
+REM ============================================================= PRIVATE MEMBERS
+
+Private [Me]					As Object
+Private [_Parent]				As Object		&apos;	Parent Calc document
+Private ObjectType				As String		&apos;	Must be SHAPE
+Private ServiceName				As String
+
+&apos;	Shape description
+Private _SheetName				As String		&apos;	Name of the Calc sheet containing the Shape
+Private _DrawIndex				As Long			&apos;	Index of the Shape in the sheet&apos;s draw page
+Private _ShapeName				As String		&apos;	User name
+Private _PersistentName			As String		&apos;	Internal name
+Private _Shape					As Object		&apos;	com.sun.star.drawing.XShape
+Private _XPos					As Long			&apos;	Initial X position
+Private _YPos					As Long			&apos;	Initial Y position
+Private _IsChart				As Boolean		&apos;	When True, instance is a superclass of a chart instance
+
+REM ============================================================ MODULE CONSTANTS
+
+
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
+
+REM -----------------------------------------------------------------------------
+Private Sub Class_Initialize()
+	Set [Me] = Nothing
+	Set [_Parent] = Nothing
+	ObjectType = &quot;SHAPE&quot;
+	ServiceName = &quot;SFDocuments.Shape&quot;
+	_SheetName = &quot;&quot;
+	_DrawIndex = -1
+	_ShapeName = &quot;&quot;
+	_PersistentName = &quot;&quot;
+	Set _Shape = Nothing
+	_XPos = -1
+	_YPos = -1
+	_IsChart = False
+End Sub		&apos;	SFDocuments.SF_Shape Constructor
+
+REM -----------------------------------------------------------------------------
+Private Sub Class_Terminate()
+	Call Class_Initialize()
+End Sub		&apos;	SFDocuments.SF_Shape Destructor
+
+REM -----------------------------------------------------------------------------
+Public Function Dispose() As Variant
+	Call Class_Terminate()
+	Set Dispose = Nothing
+End Function	&apos;	SFDocuments.SF_Shape Explicit Destructor
+
+REM ================================================================== PROPERTIES
+
+REM -----------------------------------------------------------------------------
+Property Get XRectangle() As Variant
+&apos;&apos;&apos;	A com.sun.star.awt.XRectangle object. Distances are expressed in 1/100th mm.
+	XRectangle = _PropertyGet(&quot;XRectangle&quot;)
+End Property	&apos;	SFDocuments.SF_Shape.XRectangle (get)
+
+REM -----------------------------------------------------------------------------
+Property Get XShape() As Variant
+&apos;&apos;&apos;	com.sun.star.drawing.XShape
+	XShape = _PropertyGet(&quot;XShape&quot;)
+End Property	&apos;	SFDocuments.SF_Shape.XShape (get)
+
+REM ===================================================================== METHODS
+
+REM -----------------------------------------------------------------------------
+Public Function Anchor(Optional ByVal AnchorType As Variant _
+								, Optional ByVal Cell As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Define the anchor type and the cell to which the shape has to be anchored.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		AnchorType: next strings are accepted,
+&apos;&apos;&apos;			CELL: the shape is anchored &quot;to cell&quot;
+&apos;&apos;&apos;			CELLRESIZE: the shape is anchored &quot;to cell (resize with cell)&quot;
+&apos;&apos;&apos;			PAGE: the shape is anchored to the sheet
+&apos;&apos;&apos;		Cell: a unique cell or a cell range in the sheet where the shape is located.
+&apos;&apos;&apos;			Only the top-left cell of a range will be considered.
+&apos;&apos;&apos;			The argument is ignored and may be omitted when AnchorType = &quot;PAGE&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oShape.Anchor(&quot;CELL&quot;, Cell := &quot;B6&quot;)
+
+Dim bAnchor As Boolean				&apos;	Return value
+Dim oCell As Object					&apos;	Alias of cell argument
+Dim oPosition As New com.sun.star.awt.Point		&apos;	Position of shape when anchor type is &quot;PAGE&quot;
+
+Const cstThisSub = &quot;SFDocuments.Shape.Anchor&quot;
+Const cstSubArgs = &quot;AnchorType=&quot;&quot;CELL&quot;&quot;|&quot;&quot;CELLRESIZE&quot;&quot;|&quot;&quot;PAGE&quot;&quot;, [Cell]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bAnchor = False
+
+Check:
+	If IsMissing(Cell) Or IsEmpty(Cell) Then Cell = &quot;~.A1&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not [_Parent]._IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(AnchorType, &quot;AnchorType&quot;, V_STRING, Array(&quot;CELL&quot;, &quot;CELLRESIZE&quot;, &quot;PAGE&quot;)) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Cell, &quot;Cell&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oCell = [_Parent]._ParseAddress(Cell)
+	With _Shape
+		Select Case UCase(AnchorType)
+			Case &quot;CELL&quot;, &quot;CELLRESIZE&quot;
+				.Anchor = oCell.XCellRange.getCellByPosition(0, 0)
+				.ResizeWithCell = ( UCase(AnchorType) = &quot;CELLRESIZE&quot; )
+				bAnchor = True
+			Case &quot;PAGE&quot;
+				Set oPosition = .getPosition()
+				.Anchor = oCell.XSpreadsheet
+				.ResizeWithCell = False
+				.setposition(oPosition)		&apos;	Restore the initial position (if not, position = A1)
+				bAnchor = True
+			Case Else
+		End Select
+	End With
+
+Finally:
+	Anchor = bAnchor
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Shape.Anchor
+
+REM -----------------------------------------------------------------------------
+Public Function ExportToFile(Optional ByVal FileName As Variant _
+							, Optional ByVal ImageType As Variant _
+							, Optional ByVal Overwrite As Variant _
+							) As Boolean
+&apos;&apos;&apos; Store the shape as an image to the given file location
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FileName: Identifies the file where to save. It must follow the SF_FileSystem.FileNaming notation
+&apos;&apos;&apos;		ImageType: the name of the targeted image type
+&apos;&apos;&apos;			Allowed values: gif, jpeg, png (default), svg and tiff
+&apos;&apos;&apos;		Overwrite: True if the destination file may be overwritten (default = False)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False if the document could not be saved
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		SHAPEEXPORTERROR		The destination has its readonly attribute set or overwriting rejected
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oShape.ExportToFile(&quot;C:\Me\Shape2.gif&quot;, ImageType := &quot;gif&quot;, Overwrite := True)
+
+Dim bSaved As Boolean				&apos;	return value
+Dim oSfa As Object					&apos;	com.sun.star.ucb.SimpleFileAccess
+Dim sFile As String					&apos;	Alias of FileName
+Dim vStoreArguments As Variant		&apos;	Array of com.sun.star.beans.PropertyValue
+Dim FSO As Object					&apos;	SF_FileSystem
+Dim oExport As Object				&apos;	com.sun.star.drawing.GraphicExportFilter
+Dim vImageTypes As Variant			&apos;	Array of permitted image types
+Dim vMimeTypes As Variant			&apos;	Array of corresponding mime types in the same order as vImageTypes
+
+Const cstImageTypes =	&quot;gif,jpeg,png,svg,tiff&quot;
+Const cstMimeTypes =	&quot;image/gif,image/jpeg,image/png,image/svg+xml,image/tiff&quot;
+
+Const cstThisSub = &quot;SFDocuments.Shape.ExportToFile&quot;
+Const cstSubArgs = &quot;FileName, [ImageType=&quot;&quot;png&quot;&quot;|&quot;&quot;gif&quot;&quot;|&quot;&quot;jpeg&quot;&quot;|&quot;&quot;svg&quot;&quot;|&quot;&quot;tiff&quot;&quot;], [Overwrite=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo CatchError
+	bSaved = False
+
+Check:
+	If IsMissing(ImageType) Or IsEmpty(ImageType) Then ImageType = &quot;png&quot;
+	If IsMissing(Overwrite) Or IsEmpty(Overwrite) Then Overwrite = False
+
+	vImageTypes = Split(cstImageTypes, &quot;,&quot;)
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not [_Parent]._IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ImageType, &quot;ImageType&quot;, V_STRING, vImageTypes) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+	&apos;	Check destination file overwriting
+	Set FSO = CreateScriptService(&quot;FileSystem&quot;)
+	sFile = FSO._ConvertToUrl(FileName)
+	If FSO.FileExists(FileName) Then
+		If Overwrite = False Then GoTo CatchError
+		Set oSfa = ScriptForge.SF_Utils._GetUNOService(&quot;FileAccess&quot;)
+		If oSfa.isReadonly(sFile) Then GoTo CatchError
+	End If
+
+Try:
+	&apos;	Setup arguments
+	vMimeTypes = Split(cstMimeTypes, &quot;,&quot;)
+	vStoreArguments = Array( _
+								ScriptForge.SF_Utils._MakePropertyValue(&quot;URL&quot;, sFile) _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;MediaType&quot; _
+									, vMimeTypes(ScriptForge.SF_Array.IndexOf(vImageTypes, ImageType, CaseSensitive := False))) _
+							)
+	&apos;	Export with the com.sun.star.drawing.GraphicExportFilter UNO service
+	Set oExport = ScriptForge.SF_Utils._GetUNOService(&quot;GraphicExportFilter&quot;)
+	With oExport
+		.setSourceDocument(_Shape)
+		.filter(vStoreArguments)
+	End With
+	bSaved = True
+
+Finally:
+	ExportToFile = bSaved
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchError:
+	ScriptForge.SF_Exception.RaiseFatal(SHAPEEXPORTERROR, &quot;FileName&quot;, FileName, &quot;Overwrite&quot;, Overwrite)
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Shape.ExportToFile
+
+REM -----------------------------------------------------------------------------
+Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
+&apos;&apos;&apos;	Return the actual value of the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The actual value of the property
+&apos;&apos;&apos;		If the property does not exist, returns Null
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;SFDocuments.Shape.GetProperty&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	GetProperty = Null
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	GetProperty = _PropertyGet(PropertyName)
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Shape.GetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function Methods() As Variant
+&apos;&apos;&apos;	Return the list of public methods of the Shape service as an array
+
+	Methods = Array( _
+					&quot;Anchor&quot; _
+					, &quot;ExportToFile&quot; _
+					, &quot;Pick&quot; _
+					, &quot;Resize&quot; _
+					)
+
+End Function	&apos;	SFDocuments.SF_Shape.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function Pick() As Boolean	&apos;	&quot;Select&quot; would have been more convenient but is a reserved word in Basic
+&apos;&apos;&apos;	Make the actual shape the current selection
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oShape.Pick()
+
+Dim bPick As Boolean				&apos;	Return value
+Const cstThisSub = &quot;SFDocuments.Shape.Pick&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPick = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not [_Parent]._IsStillAlive() Then GoTo Finally
+	End If
+
+Try:
+	[_Parent]._Component.CurrentController.select(_Shape)
+	bPick = True
+
+Finally:
+	Pick = bPick
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Shape.Pick
+
+REM -----------------------------------------------------------------------------
+Public Function Properties() As Variant
+&apos;&apos;&apos;	Return the list or properties of the Shape class as an array
+
+	Properties = Array( _
+					&quot;XRectangle&quot; _
+					, &quot;XShape&quot; _
+					)
+
+End Function	&apos;	SFDocuments.SF_Shape.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function Resize(Optional ByVal XPos As Variant _
+								, Optional ByVal YPos As Variant _
+								, Optional ByVal Width As Variant _
+								, Optional ByVal Height As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Move the topleft corner of a shape to new coordinates and/or modify its dimensions
+&apos;&apos;&apos;	Missing arguments are ignored.
+&apos;&apos;&apos;	All distances are expressed in 1/100th mm
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		XPos : the vertical distance from the topleft corner
+&apos;&apos;&apos;		YPos : the horizontal distance from the topleft corner
+&apos;&apos;&apos;		Width : the horizontal width of the shape
+&apos;&apos;&apos;		Height : the vertical height of the shape
+&apos;&apos;&apos;		Negative or missing arguments are left unchanged
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oShape.Resize(1000, 2000, Height := 6000)	&apos;	Width is not changed
+
+Dim bResize As Boolean				&apos;	Return value
+Dim oPosition As Object				&apos;	com.sun.star.awt.Point
+Dim oSize As Object					&apos;	com.sun.star.awt.Size
+Const cstThisSub = &quot;SFDocuments.Shape.Resize&quot;
+Const cstSubArgs = &quot;[XPos], [YPos], [Width], [Height]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bResize = False
+
+Check:
+	If IsMissing(XPos) Or IsEmpty(XPos) Then XPos = -1
+	If IsMissing(YPos) Or IsEmpty(YPos) Then YPos = -1
+	If IsMissing(Height) Or IsEmpty(Height) Then Height = -1
+	If IsMissing(Width) Or IsEmpty(Width) Then Width = -1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not [_Parent]._IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(XPos, &quot;XPos&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(YPos, &quot;YPos&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Width, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Height, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	With _Shape
+		&apos;	Get the current values
+		Set oPosition = .Position
+		Set oSize = .Size
+		&apos;	Modify relevant elements
+		If XPos &gt;= 0 Then
+			_XPos = CLng(XPos)
+			oPosition.X = _XPos
+		End If
+		If YPos &gt;= 0 Then
+			_YPos = CLng(YPos)
+			oPosition.Y = _YPos
+		End If
+		If Width &gt; 0 Then oSize.Width = CLng(Width)
+		If Height &gt; 0 Then oSize.Height = CLng(Height)
+		&apos;	Rewrite
+		.setPosition(oPosition)
+		.setSize(oSize)
+	End With
+	bResize = True
+
+Finally:
+	Resize = bResize
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Shape.Resize
+
+REM -----------------------------------------------------------------------------
+Public Function Rotate(Optional ByVal Angle As Variant _
+							, Optional ByRef Pivot As Variant _
+							) As Boolean
+&apos;&apos;&apos;	Rotate the shape using a given pivot point with a given angle.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Angle : the magnitude of the rotation, expressed in degrees.
+&apos;&apos;&apos;				An angle may be positive or negative. Positive = counterclockwise.
+&apos;&apos;&apos;				Angle is to be understood as absolute vs. the usual X-axis orientation.
+&apos;&apos;&apos;		Pivot: the point about which the rotation will take place.
+&apos;&apos;&apos;			It can be 
+&apos;&apos;&apos;			- either an array (x, y) being the coordinates of the pivot point in 1/100 mm
+&apos;&apos;&apos;			- or, when the intent is to use the shape&apos;s natural pivot points,
+&apos;&apos;&apos;			  a string combining 2 of next uppercase characters (other characters are ignored):
+&apos;&apos;&apos;					L	Left
+&apos;&apos;&apos;					R	Right
+&apos;&apos;&apos;					C	Center
+&apos;&apos;&apos;					T	Top
+&apos;&apos;&apos;					B	Bottom
+&apos;&apos;&apos;					M	Middle
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oShape.Rotate(30, &quot;Middle,Right&quot;)
+&apos;&apos;&apos;			&apos;	Rotate about the middle-right pivot point
+&apos;&apos;&apos;		oShape.Rotate(90, Array(1000, 2500)
+&apos;&apos;&apos;			&apos;	Rotate about the given pivot. The origin is the top-left corner of the sheet where the shape is located.
+
+Dim bRotate As Boolean			&apos;	Return value
+Dim dTheta As Double			&apos;	Angle in radians
+Dim dSTheta As Double			&apos;	Sin(θ)
+Dim dCTheta As Double			&apos;	Cos(θ)
+Dim lPivotX As Long				&apos;	The pivot X-coordinate in 1mm/100
+Dim lPivotY As Long				&apos;	The pivot Y-coordinate in 1mm/100
+Dim lWidth As Long				&apos;	Actual shape&apos;s width
+Dim lHeight As Long				&apos;	Actual shape&apos;s height
+Dim lXPos As Long				&apos;	Actual top-left point position
+Dim lYPos As Long				&apos;	Actual top-left point position
+Dim lX As Long					&apos;	Future top-left point position
+Dim lY As Long					&apos;	Future top-left point position
+Dim oTransform As New com.sun.star.drawing.HomogenMatrix3	&apos;	Transformation matrix
+Const cstThisSub = &quot;SFDocuments.Shape.Rotate&quot;
+Const cstSubArgs = &quot;Angle, Pivot=&quot;&quot;CM&quot;&quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bRotate = False
+
+Check:
+	If IsMissing(Pivot) Or IsEmpty(Pivot) Then Pivot = &quot;CM&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not [_Parent]._IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Angle, &quot;Angle&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If IsArray(Pivot) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(Pivot, &quot;Pivot&quot;, 1, ScriptForge.V_NUMERIC, True)  Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(Pivot, &quot;Pivot&quot;, V_STRING) Then GoTo Finally
+			If Len(Pivot) &lt;= 1 Then Pivot = &quot;CM&quot;
+		End If
+	End If
+
+Try:
+	REM	Derived from	https://en.wikipedia.org/wiki/Rotation_matrix and similar sources
+	REM					https://forum.openoffice.org/en/forum/viewtopic.php?t=57754
+	REM	The objective is to inject a transformation (3x3) matrix into the XShape.Transformation property
+	REM	with next values:
+	REM		W * cos θ		H * sin θ		X
+	REM		W * -sin θ		H * cos θ		Y
+	REM		0				0				1
+	REM	where	W, H = the width and height of the shape BEFORE rotation
+	REM			θ = the rotation angle in radians
+	REM			X, Y = the coordinates of the shape(s position AFTER rotation about the pivot point
+	REM			the last row states that only the z-axis is involved in the rotation
+
+	&apos;	Determine the angle in radians
+	dTheta = CDbl(Angle) * PI() / 180.0
+	dSTheta = Sin(dTheta)
+	dCTheta = Cos(dTheta)
+
+	With _Shape
+	&apos;	Determine the pivot point
+		lWidth = .Size.Width
+		lHeight = .Size.Height
+		&apos;	Prefer initial positions for the case shape has already been rotated
+		lXPos = _XPos
+		lYPos = _YPos
+		If IsArray(Pivot) Then
+			lPivotX = CLng(Pivot(0))
+			lPivotY = CLng(Pivot(1))
+		Else
+			If InStr(1, Pivot, &quot;L&quot;, 0) &gt; 0 Then lPivotX = lXPos
+			If InStr(1, Pivot, &quot;C&quot;, 0) &gt; 0 Then lPivotX = lXPos + lWidth / 2
+			If InStr(1, Pivot, &quot;R&quot;, 0) &gt; 0 Then lPivotX = lXPos + lWidth
+			If InStr(1, Pivot, &quot;T&quot;, 0) &gt; 0 Then lPivotY = lYPos
+			If InStr(1, Pivot, &quot;M&quot;, 0) &gt; 0 Then lPivotY = lYPos + lHeight / 2
+			If InStr(1, Pivot, &quot;B&quot;, 0) &gt; 0 Then lPivotY = lYPos + lHeight
+		End If
+
+	&apos;	Determine the position of the top-left point of the shape after location
+		&apos;	The general expression computing the coordinates (x′,y′) of a point (x,y) after a rotation
+		&apos;	of an angle θ about a pivot P=(xp,yp), when the Y-axis is oriented downwards, is:
+		&apos;		x′= (x − xp).cos⁡ θ + (y − yp).sin⁡ θ + xp
+		&apos;		y′= −(x − xp).sin⁡ θ + (y − yp).cos⁡ θ + yp
+		&apos;	This includes
+		&apos;		(1) consider the pivot as the new origin (0,0)
+		&apos;		(2) rotate the point about the new origin
+		&apos;		(3) reset the origin
+		lX = CLng((lXPos - lPivotX) * dCTheta + (lYPos - lPivotY) * dSTheta) + lPivotX
+		lY = CLng(-(lXPos - lPivotX) * dSTheta + (lYPos - lPivotY) * dCTheta) + lPivotY
+
+	&apos;	Feed the rotation matrix row by row
+		With oTransform		&apos;	All Long items
+			.Line1.Column1 = CLng(lWidth * dCTheta)
+			.Line1.Column2 = CLng(lHeight * dSTheta)
+			.Line1.Column3 = lX
+			.Line2.Column1 = CLng(lWidth * -dSTheta)
+			.Line2.Column2 = CLng(lHeight * dCTheta)
+			.Line2.Column3 = lY
+			.Line3.Column1 = 0
+			.Line3.Column2 = 0
+			.Line3.Column3 = 1
+		End With
+
+	&apos;	Inject the matrix into the Transformation property
+		Set .Transformation = oTransform
+
+	End With
+
+	bRotate = True
+
+Finally:
+	Rotate = bRotate
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Shape.Rotate
+
+REM -----------------------------------------------------------------------------
+Public Function SetProperty(Optional ByVal PropertyName As Variant _
+								, Optional ByRef Value As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set a new value to the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;		Value: its new value
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;SFDocuments.Shape.SetProperty&quot;
+Const cstSubArgs = &quot;PropertyName, Value&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	SetProperty = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	SetProperty = _PropertySet(PropertyName, Value)
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Shape.SetProperty
+
+REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Public Function _Initialize()
+&apos;&apos;&apos;	Achieve the creation of a SF_Form instance.
+&apos;&apos;&apos;	The _Shape object (com.sun.star.drawing.XShape) must be defined before calling this routine.
+
+	&apos;	Store the initial (x, y) coordinates of the shape.
+	&apos;	They are needed for smooth successive rotations
+	If Not IsNull(_Shape) Then
+		With _Shape
+			_XPos = .Position.X
+			_YPos = .Position.Y
+		End With
+	End If
+
+
+End Function	&apos;	SFDocuments.SF_Shape._Initialize
+
+REM -----------------------------------------------------------------------------
+Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
+&apos;&apos;&apos;	Return the value of the named property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+
+Dim oRectangle As Object			&apos;	com.sun.star.awt.Rectangle
+
+Dim cstThisSub As String
+Const cstSubArgs = &quot;&quot;
+
+	cstThisSub = &quot;SFDocuments.Shape.get&quot; &amp; psProperty
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+	If Not [_Parent]._IsStillAlive() Then GoTo Finally
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;XRectangle&quot;)
+			With _Shape
+				Set oRectangle = New com.sun.star.awt.Rectangle
+				oRectangle.X = .Position.X
+				oRectangle.Y = .Position.Y
+				oRectangle.Width = .Size.Width
+				oRectangle.Height = .Size.Height
+			End With
+			Set _PropertyGet = oRectangle
+		Case UCase(&quot;XShape&quot;)
+			Set _PropertyGet = _Shape
+		Case Else
+			_PropertyGet = Null
+	End Select
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Shape._PropertyGet
+
+REM -----------------------------------------------------------------------------
+Private Function _PropertySet(Optional ByVal psProperty As String _
+								, Optional ByVal pvValue As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set the new value of the named property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+&apos;&apos;&apos;		pvValue: the new value of the given property
+
+Dim bSet As Boolean							&apos;	Return value
+Const cstShape = &quot;com.sun.star.Shape.&quot;
+
+Dim cstThisSub As String
+Const cstSubArgs = &quot;Value&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bSet = False
+
+	cstThisSub = &quot;SFDocuments.Shape.set&quot; &amp; psProperty
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+	If Not [_Parent]._IsStillAlive() Then GoTo Catch
+
+	bSet = True
+
+Finally:
+	_PropertySet = bSet
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	bSet = False
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_FormControl._PropertySet
+
+REM -----------------------------------------------------------------------------
+Private Function _Repr() As String
+&apos;&apos;&apos;	Convert the Shape instance to a readable string, typically for debugging purposes (DebugPrint ...)
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Return:
+&apos;&apos;&apos;		&quot;[Shape]: Name
+	_Repr = &quot;[Shape]: &quot; &amp; _ShapeName
+
+End Function	&apos;	SFDocuments.SF_Shape._Repr
+
+REM ============================================ END OF SFDOCUMENTS.SF_SHAPE
+</script:module>
