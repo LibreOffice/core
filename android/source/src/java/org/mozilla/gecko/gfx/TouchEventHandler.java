@@ -180,26 +180,6 @@ public final class TouchEventHandler {
         return true;
     }
 
-    /**
-     * This function is how gecko sends us a default-prevented notification. It is called
-     * once gecko knows definitively whether the block of events has had preventDefault
-     * called on it (either on the initial down event that starts the block, or on
-     * the first event following that down event).
-     *
-     * This function MUST be called on the UI thread.
-     */
-    public void handleEventListenerAction(boolean allowDefaultAction) {
-        if (mProcessingBalance > 0) {
-            // this event listener that triggered this took too long, and the corresponding
-            // ListenerTimeoutProcessor runnable already ran for the event in question. the
-            // block of events this is for has already been processed, so we don't need to
-            // do anything here.
-        } else {
-            processEventBlock(allowDefaultAction);
-        }
-        mProcessingBalance--;
-    }
-
     /* This function MUST be called on the UI thread. */
     public void setWaitForTouchListeners(boolean aValue) {
         mWaitForTouchListeners = aValue;

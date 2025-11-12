@@ -165,11 +165,6 @@ class JavaPanZoomController
         return false;
     }
 
-    /** This function MUST be called on the UI thread */
-    public void notifyDefaultActionPrevented(boolean prevented) {
-        mTouchEventHandler.handleEventListenerAction(!prevented);
-    }
-
     /** This function must be called from the UI thread. */
     public void abortAnimation() {
         checkMainThread();

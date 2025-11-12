@@ -22,7 +22,6 @@ interface PanZoomController {
 
     boolean onTouchEvent(MotionEvent event);
     boolean onMotionEvent(MotionEvent event);
-    void notifyDefaultActionPrevented(boolean prevented);
 
     boolean getRedrawHint();
     PointF getVelocityVector();
