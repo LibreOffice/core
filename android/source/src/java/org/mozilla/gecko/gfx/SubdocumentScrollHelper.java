@@ -39,9 +39,6 @@ class SubdocumentScrollHelper {
         mPendingDisplacement = new PointF();
     }
 
-    void destroy() {
-    }
-
     boolean scrollBy(PointF displacement) {
         if (! mOverridePanning) {
             return false;

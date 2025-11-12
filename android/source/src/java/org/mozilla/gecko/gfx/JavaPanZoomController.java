@@ -112,7 +112,6 @@ class JavaPanZoomController
     }
 
     public void destroy() {
-        mSubscroller.destroy();
         mTouchEventHandler.destroy();
     }
 
