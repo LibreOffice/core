@@ -49,12 +49,14 @@ namespace vclcanvas
     void SpriteHelper::init( const geometry::RealSize2D&               rSpriteSize,
                              const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
                              const BackBufferSharedPtr&                rBackBuffer,
+                             const BackBufferSharedPtr&                rBackBufferMask,
                              bool                                      bShowSpriteBounds )
     {
-        ENSURE_OR_THROW( rOwningSpriteCanvas && rBackBuffer,
+        ENSURE_OR_THROW( rOwningSpriteCanvas && rBackBuffer && rBackBufferMask,
                          "SpriteHelper::init(): Invalid sprite canvas or back buffer" );
 
         mpBackBuffer        = rBackBuffer;
+        mpBackBufferMask    = rBackBufferMask;
         mbShowSpriteBounds  = bShowSpriteBounds;
 
         init( rSpriteSize, rOwningSpriteCanvas );
@@ -63,6 +65,7 @@ namespace vclcanvas
     void SpriteHelper::disposing()
     {
         mpBackBuffer.reset();
+        mpBackBufferMask.reset();
 
         // forward to parent
         CanvasCustomSpriteHelper::disposing();
@@ -73,7 +76,8 @@ namespace vclcanvas
                                bool&                        io_bSurfacesDirty,
                                bool                         /*bBufferedUpdate*/ ) const
     {
-        if( !mpBackBuffer )
+        if( !mpBackBuffer ||
+            !mpBackBufferMask )
         {
             return; // we're disposed
         }
@@ -117,10 +121,28 @@ namespace vclcanvas
             Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint,
                                                               aOutputSize ) );
 
-            // Note: since we retrieved aBmp directly
-            // from an OutDev, it's already a 'display bitmap'
-            // on windows.
-            maContent = aBmp;
+            if( isContentFullyOpaque() )
+            {
+                // optimized case: content canvas is fully
+                // opaque. Note: since we retrieved aBmp directly
+                // from an OutDev, it's already a 'display bitmap'
+                // on windows.
+                maContent = aBmp;
+            }
+            else
+            {
+                // sprite content might contain alpha, create
+                // BmpEx, then.
+                Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint,
+                                                                           aOutputSize ) );
+                AlphaMask aAlpha( aMask );
+                aAlpha.Invert();
+
+                // Note: since we retrieved aBmp and aMask
+                // directly from an OutDev, it's already a
+                // 'display bitmap' on windows.
+                maContent = Bitmap( aBmp, aAlpha );
+            }
         }
 
         ::basegfx::B2DHomMatrix aTransform( getTransformation() );

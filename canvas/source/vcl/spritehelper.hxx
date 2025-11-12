@@ -64,6 +64,7 @@ namespace vclcanvas
         void init( const css::geometry::RealSize2D&              rSpriteSize,
                    const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
                    const BackBufferSharedPtr&                    rBackBuffer,
+                   const BackBufferSharedPtr&                    rBackBufferMask,
                    bool                                          bShowSpriteBounds );
 
         void disposing();
@@ -93,6 +94,7 @@ namespace vclcanvas
 
         // for the redraw
         BackBufferSharedPtr                                 mpBackBuffer;
+        BackBufferSharedPtr                                 mpBackBufferMask;
 
         /// Cached bitmap for the current sprite content
         mutable ::canvas::vcltools::VCLObject<Bitmap>       maContent;

@@ -1251,16 +1251,33 @@ Bitmap CairoPixelProcessor2D::extractBitmap() const
 void CairoPixelProcessor2D::processBitmapPrimitive2D(
     const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
-    const bool bDrawModeFlagsUsed(aDrawModeFlags & DrawModeFlags::GrayBitmap);
+    const bool bDrawModeFlagsUsed(aDrawModeFlags & BITMAP);
 
     if (bDrawModeFlagsUsed)
     {
         // if DrawModeFlags for Bitmap are used, encapsulate with
         // corresponding BColorModifier
-        const basegfx::BColorModifierSharedPtr aBColorModifier(
-            std::make_shared<basegfx::BColorModifier_gray>());
-        maBColorModifierStack.push(aBColorModifier);
+        if (aDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0, 0, 0)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else if (aDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1, 1, 1)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
     }
 
     paintBitmapAlpha(rBitmapCandidate.getBitmap(), rBitmapCandidate.getTransform());
@@ -2083,12 +2100,29 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
     // prepare Marker's Bitmap
     Bitmap aBitmap(rMarkerArrayCandidate.getMarker());
 
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
-    if (aDrawModeFlags & DrawModeFlags::GrayBitmap)
+    if (aDrawModeFlags & BITMAP)
     {
-        const basegfx::BColorModifierSharedPtr aBColorModifier(
-            std::make_shared<basegfx::BColorModifier_gray>());
-        maBColorModifierStack.push(aBColorModifier);
+        if (aDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0, 0, 0)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else if (aDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1, 1, 1)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
 
         // need to apply ColorModifier to Bitmap data
         aBitmap = aBitmap.Modify(maBColorModifierStack);
@@ -2541,15 +2575,30 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
         return;
     }
 
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
     basegfx::BColor aReplacementColor(0, 0, 0);
     bool bTemporaryGrayColorModifier(false);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
-    if (aDrawModeFlags & DrawModeFlags::GrayBitmap)
+    if (aDrawModeFlags & BITMAP)
     {
-        bTemporaryGrayColorModifier = true;
-        const basegfx::BColorModifierSharedPtr aBColorModifier(
-            std::make_shared<basegfx::BColorModifier_gray>());
-        maBColorModifierStack.push(aBColorModifier);
+        if (aDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            // aReplacementColor already set
+            aPreparedBitmap.SetEmpty();
+        }
+        else if (aDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            aReplacementColor = basegfx::BColor(1, 1, 1);
+            aPreparedBitmap.SetEmpty();
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            bTemporaryGrayColorModifier = true;
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
     }
 
     if (!aPreparedBitmap.IsEmpty() && maBColorModifierStack.count())
@@ -3630,14 +3679,31 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
 void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
     const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D)
 {
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
-    const bool bDrawModeFlagsUsed(aDrawModeFlags & DrawModeFlags::GrayBitmap);
+    const bool bDrawModeFlagsUsed(aDrawModeFlags & BITMAP);
 
     if (bDrawModeFlagsUsed)
     {
-        const basegfx::BColorModifierSharedPtr aBColorModifier(
-            std::make_shared<basegfx::BColorModifier_gray>());
-        maBColorModifierStack.push(aBColorModifier);
+        if (aDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0, 0, 0)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else if (aDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1, 1, 1)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
     }
 
     if (!rBitmapAlphaPrimitive2D.hasTransparency())

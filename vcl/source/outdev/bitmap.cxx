@@ -92,6 +92,23 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         return;
     }
 
+    if (mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
+    {
+        sal_uInt8 cCmpVal;
+
+        if (mnDrawMode & DrawModeFlags::BlackBitmap)
+            cCmpVal = 0;
+        else
+            cCmpVal = 255;
+
+        Color aCol(cCmpVal, cCmpVal, cCmpVal);
+        auto popIt = ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        SetLineColor(aCol);
+        SetFillColor(aCol);
+        DrawRect(tools::Rectangle(rDestPt, rDestSize));
+        return;
+    }
+
     Bitmap aBmp(rBitmap);
 
     if (mnDrawMode & DrawModeFlags::GrayBitmap && !aBmp.IsEmpty())

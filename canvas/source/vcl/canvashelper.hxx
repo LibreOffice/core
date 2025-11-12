@@ -86,6 +86,13 @@ namespace vclcanvas
         void setOutDev( const OutDevProviderSharedPtr&  rOutDev,
                         bool                            bProtect);
 
+        /** Set secondary output device
+
+            Used for sprites, to generate mask bitmap.
+         */
+        void setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev );
+
+
         // CanvasHelper functionality
         // ==========================
 
@@ -274,6 +281,9 @@ namespace vclcanvas
 
         /// Rendering to this outdev does not preserve its state
         OutDevProviderSharedPtr                      mpOutDevProvider;
+
+        /// Rendering to this outdev does not preserve its state
+        OutDevProviderSharedPtr                      mp2ndOutDevProvider;
 
         /// When true, content is able to represent alpha
         bool                                         mbHaveAlpha;

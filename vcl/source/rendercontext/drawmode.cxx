@@ -235,6 +235,36 @@ Bitmap GetBitmap(Bitmap const& rBitmap, DrawModeFlags nDrawMode)
 {
     Bitmap aBmp(rBitmap);
 
+    if (nDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
+    {
+        Bitmap aColorBmp(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP,
+                         &Bitmap::GetGreyPalette(256));
+        sal_uInt8 cCmpVal;
+
+        if (nDrawMode & DrawModeFlags::BlackBitmap)
+            cCmpVal = 0;
+        else
+            cCmpVal = 255;
+
+        aColorBmp.Erase(Color(cCmpVal, cCmpVal, cCmpVal));
+
+        if (aBmp.HasAlpha())
+        {
+            // Create one-bit mask out of alpha channel, by thresholding it at alpha=0.5. As
+            // DRAWMODE_BLACK/WHITEBITMAP requires monochrome output, having alpha-induced
+            // grey levels is not acceptable
+            Bitmap aMask(aBmp.CreateAlphaMask().GetBitmap());
+            aMask.Invert(); // convert to transparency
+            BitmapFilter::Filter(aMask, BitmapMonochromeFilter(129));
+            aMask.Invert(); // convert to alpha
+            aBmp = Bitmap(aColorBmp, aMask);
+        }
+        else
+        {
+            aBmp = std::move(aColorBmp);
+        }
+    }
+
     if (nDrawMode & DrawModeFlags::GrayBitmap && !aBmp.IsEmpty())
         aBmp.Convert(BmpConversion::N8BitGreys);
 
