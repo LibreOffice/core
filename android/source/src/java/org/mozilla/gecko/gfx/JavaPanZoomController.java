@@ -75,7 +75,6 @@ class JavaPanZoomController
     }
 
     private final PanZoomTarget mTarget;
-    private final SubdocumentScrollHelper mSubscroller;
     private final Axis mX;
     private final Axis mY;
     private final TouchEventHandler mTouchEventHandler;
@@ -100,7 +99,6 @@ class JavaPanZoomController
         PAN_THRESHOLD = 1/16f * LOKitShell.getDpi(view.getContext());
         MAX_SCROLL = 0.075f * LOKitShell.getDpi(view.getContext());
         mTarget = target;
-        mSubscroller = new SubdocumentScrollHelper();
         mX = new AxisX();
         mY = new AxisY();
         mTouchEventHandler = new TouchEventHandler(view.getContext(), view, this);
@@ -167,7 +165,6 @@ class JavaPanZoomController
     /** This function must be called on the UI thread. */
     void startingNewEventBlock(MotionEvent event, boolean waitingForTouchListeners) {
         checkMainThread();
-        mSubscroller.cancel();
         if (waitingForTouchListeners && (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
             // this is the first touch point going down, so we enter the pending state
             // setting the state will kill any animations in progress, possibly leaving
@@ -530,10 +527,8 @@ class JavaPanZoomController
         if (FloatUtils.fuzzyEquals(displacement.x, 0.0f) && FloatUtils.fuzzyEquals(displacement.y, 0.0f)) {
             return;
         }
-        if (! mSubscroller.scrollBy(displacement)) {
-            synchronized (mTarget.getLock()) {
-                scrollBy(displacement.x, displacement.y);
-            }
+        synchronized (mTarget.getLock()) {
+            scrollBy(displacement.x, displacement.y);
         }
     }
 
@@ -649,7 +644,7 @@ class JavaPanZoomController
                  * coast smoothly to a stop when not. In other words, require a greater velocity to
                  * maintain the fling once we enter overscroll.
                  */
-                float threshold = (overscrolled && !mSubscroller.scrolling() ? STOPPED_THRESHOLD : FLING_STOPPED_THRESHOLD);
+                float threshold = (overscrolled ? STOPPED_THRESHOLD : FLING_STOPPED_THRESHOLD);
                 if (getVelocity() >= threshold) {
                     mContext.getDocumentOverlay().showPageNumberRect();
                     // we're still flinging
