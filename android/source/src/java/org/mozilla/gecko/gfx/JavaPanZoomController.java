@@ -101,8 +101,8 @@ class JavaPanZoomController
         MAX_SCROLL = 0.075f * LOKitShell.getDpi(view.getContext());
         mTarget = target;
         mSubscroller = new SubdocumentScrollHelper();
-        mX = new AxisX(mSubscroller);
-        mY = new AxisY(mSubscroller);
+        mX = new AxisX();
+        mY = new AxisY();
         mTouchEventHandler = new TouchEventHandler(view.getContext(), view, this);
 
         mMainThread = mContext.getMainLooper().getThread();
@@ -750,7 +750,6 @@ class JavaPanZoomController
     }
 
     private class AxisX extends Axis {
-        AxisX(SubdocumentScrollHelper subscroller) { super(subscroller); }
         @Override
         public float getOrigin() { return getMetrics().viewportRectLeft; }
         @Override
@@ -762,7 +761,6 @@ class JavaPanZoomController
     }
 
     private class AxisY extends Axis {
-        AxisY(SubdocumentScrollHelper subscroller) { super(subscroller); }
         @Override
         public float getOrigin() { return getMetrics().viewportRectTop; }
         @Override

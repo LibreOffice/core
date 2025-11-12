@@ -98,8 +98,6 @@ abstract class Axis {
         BOTH,       // Overscrolled in both directions (page is zoomed to smaller than screen)
     }
 
-    private final SubdocumentScrollHelper mSubscroller;
-
     private int mOverscrollMode; /* Default to only overscrolling if we're allowed to scroll in a direction */
     private float mFirstTouchPos;           /* Position of the first touch event on the current drag. */
     private float mTouchPos;                /* Position of the most recent touch event on the current drag. */
@@ -116,8 +114,7 @@ abstract class Axis {
     protected abstract float getPageStart();
     protected abstract float getPageLength();
 
-    Axis(SubdocumentScrollHelper subscroller) {
-        mSubscroller = subscroller;
+    Axis() {
         mOverscrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS;
     }
 
@@ -207,12 +204,6 @@ abstract class Axis {
      * possible and this axis has not been scroll locked while panning. Otherwise, returns false.
      */
     boolean scrollable() {
-        // If we're scrolling a subdocument, ignore the viewport length restrictions (since those
-        // apply to the top-level document) and only take into account axis locking.
-        if (mSubscroller.scrolling()) {
-            return !mScrollingDisabled;
-        }
-
         // if we are axis locked, return false
         if (mScrollingDisabled) {
             return false;
@@ -248,7 +239,7 @@ abstract class Axis {
     }
 
     void startFling(boolean stopped) {
-        mDisableSnap = mSubscroller.scrolling();
+        mDisableSnap = false;
 
         if (stopped) {
             mFlingState = FlingStates.STOPPED;
@@ -260,12 +251,6 @@ abstract class Axis {
     /* Advances a fling animation by one step. */
     boolean advanceFling() {
         if (mFlingState != FlingStates.FLINGING) {
-            return false;
-        }
-        if (mSubscroller.scrolling() && !mSubscroller.lastScrollSucceeded()) {
-            // if the subdocument stopped scrolling, it's because it reached the end
-            // of the subdocument. we don't do overscroll on subdocuments, so there's
-            // no point in continuing this fling.
             return false;
         }
 
