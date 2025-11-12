@@ -6,14 +6,8 @@
 package org.mozilla.gecko.gfx;
 
 import android.content.Context;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
-
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * This class handles incoming touch events from the user and sends them to
