@@ -35,10 +35,13 @@ enum class FormatResultDirection
     COLUMN
 };
 
+/// Data dimension constant
+constexpr tools::Long constDataDimension = -2;
+
 /// A field data for a format output,
 struct FormatOutputField
 {
-    tools::Long nDimension = -2;
+    tools::Long nDimension = constDataDimension;
     OUString aName;
     sal_Int32 nIndex = -1;
     bool bMatchesAll = false;
@@ -59,9 +62,9 @@ struct FormatOutputEntry
 /// data of one "field" that is part of a line
 struct FieldData
 {
-    tools::Long mnDimension = -2;
+    tools::Long mnDimension = constDataDimension;
     OUString aName;
-    tools::Long nIndex;
+    tools::Long nIndex = -1;
 
     bool bIsSet = false;
     bool bIsMember = false;
