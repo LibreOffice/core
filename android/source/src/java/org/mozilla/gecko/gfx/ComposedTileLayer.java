@@ -133,7 +133,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         return validRegion;
     }
 
-    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics, DisplayPortMetrics mDisplayPort) {
+    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
         RectF newViewPort = getViewPort(viewportMetrics);
         float newZoom = getZoom(viewportMetrics);
 

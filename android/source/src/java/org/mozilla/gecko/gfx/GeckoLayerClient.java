@@ -338,8 +338,8 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     /* Root Layer Access */
     private void reevaluateTiles() {
-        mLowResLayer.reevaluateTiles(mViewportMetrics, mDisplayPort);
-        mRootLayer.reevaluateTiles(mViewportMetrics, mDisplayPort);
+        mLowResLayer.reevaluateTiles(mViewportMetrics);
+        mRootLayer.reevaluateTiles(mViewportMetrics);
     }
 
     public void clearAndResetlayers() {
