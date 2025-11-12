@@ -52,7 +52,7 @@ final class DisplayPortCalculator {
      * the tiles are TILE_SIZE by TILE_SIZE and start at the origin, such that there will always be
      * a tile at (0,0)-(TILE_SIZE,TILE_SIZE)).
      */
-    private static DisplayPortMetrics getTileAlignedDisplayPortMetrics(RectF margins, float zoom, ImmutableViewportMetrics metrics) {
+    private static DisplayPortMetrics getTileAlignedDisplayPortMetrics(RectF margins, ImmutableViewportMetrics metrics) {
         float left = metrics.viewportRectLeft - margins.left;
         float top = metrics.viewportRectTop - margins.top;
         float right = metrics.viewportRectRight + margins.right;
@@ -61,7 +61,7 @@ final class DisplayPortCalculator {
         top = (float) Math.max(metrics.pageRectTop, TILE_SIZE * Math.floor(top / TILE_SIZE));
         right = (float) Math.min(metrics.pageRectRight, TILE_SIZE * Math.ceil(right / TILE_SIZE));
         bottom = (float) Math.min(metrics.pageRectBottom, TILE_SIZE * Math.ceil(bottom / TILE_SIZE));
-        return new DisplayPortMetrics(left, top, right, bottom, zoom);
+        return new DisplayPortMetrics(left, top, right, bottom);
     }
 
     /**
@@ -189,7 +189,7 @@ final class DisplayPortCalculator {
             RectF margins = velocityBiasedMargins(horizontalBuffer, verticalBuffer, velocity);
             margins = shiftMarginsForPageBounds(margins, metrics);
 
-            return getTileAlignedDisplayPortMetrics(margins, metrics.zoomFactor, metrics);
+            return getTileAlignedDisplayPortMetrics(margins, metrics);
         }
 
         public boolean aboutToCheckerboard(ImmutableViewportMetrics metrics, PointF velocity, DisplayPortMetrics displayPort) {
