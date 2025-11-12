@@ -48,14 +48,11 @@ import java.util.Queue;
 public final class TouchEventHandler {
     private static final String LOGTAG = "GeckoTouchEventHandler";
 
-    private final View mView;
     private final GestureDetector mGestureDetector;
     private final SimpleScaleGestureDetector mScaleGestureDetector;
     private final JavaPanZoomController mPanZoomController;
 
-    TouchEventHandler(Context context, View view, JavaPanZoomController panZoomController) {
-        mView = view;
-
+    TouchEventHandler(Context context, JavaPanZoomController panZoomController) {
         mPanZoomController = panZoomController;
         mGestureDetector = new GestureDetector(context, mPanZoomController);
         mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);

@@ -101,7 +101,7 @@ class JavaPanZoomController
         mTarget = target;
         mX = new AxisX();
         mY = new AxisY();
-        mTouchEventHandler = new TouchEventHandler(view.getContext(), view, this);
+        mTouchEventHandler = new TouchEventHandler(view.getContext(), this);
 
         mMainThread = mContext.getMainLooper().getThread();
         checkMainThread();
