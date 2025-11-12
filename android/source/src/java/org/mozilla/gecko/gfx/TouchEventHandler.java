@@ -80,11 +80,6 @@ public final class TouchEventHandler {
         return (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN);
     }
 
-    private boolean touchFinished(MotionEvent event) {
-        int action = (event.getAction() & MotionEvent.ACTION_MASK);
-        return (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL);
-    }
-
     /**
      * Dispatch the event to the gesture detectors and the pan/zoom controller.
      */
