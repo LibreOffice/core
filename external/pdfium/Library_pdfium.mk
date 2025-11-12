@@ -15,6 +15,13 @@ $(eval $(call gb_Library_set_warnings_disabled,pdfium))
 
 $(eval $(call gb_Library_set_precompiled_header,pdfium,external/pdfium/inc/pch/precompiled_pdfium))
 
+# force C++20 with MSVC
+ifneq ($(filter -std:c++17,$(CXXFLAGS_CXX11)),)
+$(eval $(call gb_Library_add_cxxflags,pdfium, \
+    -std:c++20 \
+))
+endif
+
 $(eval $(call gb_Library_set_include,pdfium,\
     -I$(call gb_UnpackedTarball_get_dir,pdfium) \
     -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party \
