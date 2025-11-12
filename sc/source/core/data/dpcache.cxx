@@ -1049,13 +1049,15 @@ const ScDPCache::IndexArrayType* ScDPCache::GetFieldIndexArray( size_t nDim ) co
 
 const ScDPCache::ScDPItemDataVec& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
-    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
+    SAL_WARN_IF(!IsValidDimensionIndex(nDim) ,"sc.core", "dimension index out of bound");
+
+    assert(IsValidDimensionIndex(nDim));
     return maFields.at(nDim)->maItems;
 }
 
 sal_uInt32 ScDPCache::GetNumberFormat( tools::Long nDim ) const
 {
-    if ( nDim >= mnColumnCount )
+    if (!IsValidDimensionIndex(nDim))
         return 0;
 
     // TODO: Find a way to determine the dominant number format in presence of
@@ -1065,7 +1067,7 @@ sal_uInt32 ScDPCache::GetNumberFormat( tools::Long nDim ) const
 
 bool ScDPCache::IsDateDimension( tools::Long nDim ) const
 {
-    if (nDim >= mnColumnCount)
+    if (!IsValidDimensionIndex(nDim))
         return false;
 
     ScInterpreterContext& rContext = mrDoc.GetNonThreadedContext();
@@ -1075,7 +1077,11 @@ bool ScDPCache::IsDateDimension( tools::Long nDim ) const
 
 tools::Long ScDPCache::GetDimMemberCount(tools::Long nDim) const
 {
-    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
+    SAL_WARN_IF(!IsValidDimensionIndex(nDim) ,"sc.core", "dimension index out of bound");
+
+    if (!IsValidDimensionIndex(nDim))
+        return 0;
+
     return maFields[nDim]->maItems.size();
 }
 
@@ -1087,6 +1093,11 @@ SCCOL ScDPCache::GetDimensionIndex(std::u16string_view sName) const
             return static_cast<SCCOL>(i-1);
     }
     return -1;
+}
+
+bool ScDPCache::IsValidDimensionIndex(tools::Long nDimensionIndex) const
+{
+    return nDimensionIndex >= 0 && nDimensionIndex < mnColumnCount;
 }
 
 rtl_uString* ScDPCache::InternString( size_t nDim, const OUString& rStr )
