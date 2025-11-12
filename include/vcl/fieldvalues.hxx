@@ -25,7 +25,6 @@
 #include <string_view>
 
 #include <vcl/dllapi.h>
-#include <rtl/ustring.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 

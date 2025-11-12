@@ -11,7 +11,6 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <comphelper/diagnose_ex.hxx>
-#include <sal/log.hxx>
 #include <vcl/builderbase.hxx>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>

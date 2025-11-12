@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <config_options.h>
-
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/EnumContext.hxx>

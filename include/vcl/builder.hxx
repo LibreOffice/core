@@ -11,8 +11,6 @@
 
 #include <typeinfo>
 #include <sal/log.hxx>
-#include <unotools/resmgr.hxx>
-#include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <utility>
 #include <vcl/menu.hxx>

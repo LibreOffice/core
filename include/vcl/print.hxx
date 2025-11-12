@@ -34,7 +34,6 @@
 #include <comphelper/errcode.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
-#include <vcl/region.hxx>
 #include <vcl/jobset.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

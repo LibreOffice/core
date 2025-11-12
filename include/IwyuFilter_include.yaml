@@ -316,6 +316,9 @@ excludelist:
     # Needed for macro #define
     - vcl/builder.hxx
     - vcl/vclptr.hxx
+    include/vcl/CairoFormats.hxx:
+    # Needed for macro #define
+    - vcl/Scanline.hxx
     include/vcl/keycodes.hxx:
     # Needed for macros
     - com/sun/star/awt/Key.hpp

@@ -23,7 +23,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BinaryDataContainer.hxx>
-#include <rtl/ustring.hxx>
 #include <deque>
 #include <algorithm>
 #include <optional>

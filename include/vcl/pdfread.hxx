@@ -17,7 +17,7 @@
 #include <vcl/graph.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFAnnotationMarker.hxx>

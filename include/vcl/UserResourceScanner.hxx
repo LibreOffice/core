@@ -11,7 +11,6 @@
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <memory>
 #include <vector>
 #include <deque>
 #include <osl/file.hxx>

@@ -23,7 +23,6 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>

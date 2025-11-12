@@ -24,7 +24,6 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <tools/degree.hxx>
-#include <tools/helpers.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
@@ -35,7 +34,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <algorithm>
 #include <memory>
 
 class AlphaMask;

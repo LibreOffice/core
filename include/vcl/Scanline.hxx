@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <o3tl/typed_flags_set.hxx>
 #include <sal/types.h>
 
 typedef sal_uInt8*        Scanline;

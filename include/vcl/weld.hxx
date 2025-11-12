@@ -25,7 +25,6 @@
 #include <vcl/windowstate.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <assert.h>
 #include <memory>
