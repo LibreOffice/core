@@ -110,7 +110,6 @@ class JavaPanZoomController
     }
 
     public void destroy() {
-        mTouchEventHandler.destroy();
     }
 
     private static float easeOut(float t) {

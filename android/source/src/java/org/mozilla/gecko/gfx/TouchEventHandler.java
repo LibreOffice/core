@@ -48,9 +48,6 @@ public final class TouchEventHandler {
         mGestureDetector.setOnDoubleTapListener(mPanZoomController);
     }
 
-    void destroy() {
-    }
-
     /* This function MUST be called on the UI thread */
     public boolean handleEvent(MotionEvent event) {
         dispatchEvent(event);
