@@ -74,8 +74,8 @@ class JavaPanZoomController
     private final Axis mX;
     private final Axis mY;
     private final TouchEventHandler mTouchEventHandler;
-    private Thread mMainThread;
-    private LibreOfficeMainActivity mContext;
+    private final Thread mMainThread;
+    private final LibreOfficeMainActivity mContext;
 
     /* The timer that handles flings or bounces. */
     private Timer mAnimationTimer;
