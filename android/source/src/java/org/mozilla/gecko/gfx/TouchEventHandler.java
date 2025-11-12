@@ -62,15 +62,6 @@ public final class TouchEventHandler {
     private final Queue<MotionEvent> mEventQueue;
     private final ListenerTimeoutProcessor mListenerTimeoutProcessor;
 
-    // whether or not we should wait for touch listeners to respond (this state is
-    // per-tab and is updated when we switch tabs).
-    private boolean mWaitForTouchListeners;
-
-    // true if we should hold incoming events in our queue. this is re-set for every
-    // block of events, this is cleared once we find out if the block has been
-    // default-prevented or not (or we time out waiting for that).
-    private boolean mHoldInQueue;
-
     // true if we should dispatch incoming events to the gesture detector and the pan/zoom
     // controller. if this is false, then the current block of events has been
     // default-prevented, and we should not dispatch these events (although we'll still send
@@ -137,41 +128,29 @@ public final class TouchEventHandler {
     public boolean handleEvent(MotionEvent event) {
         if (isDownEvent(event)) {
             // this is the start of a new block of events! whee!
-            mHoldInQueue = mWaitForTouchListeners;
 
             // Set mDispatchEvents to true so that we are guaranteed to either queue these
             // events or dispatch them. The only time we should not do either is once we've
             // heard back from content to preventDefault this block.
             mDispatchEvents = true;
-            if (mHoldInQueue) {
-                // if the new block we are starting is the current block (i.e. there are no
-                // other blocks waiting in the queue, then we should let the pan/zoom controller
-                // know we are waiting for the touch listeners to run
-                if (mEventQueue.isEmpty()) {
-                    mPanZoomController.startingNewEventBlock(event, true);
-                }
-            } else {
-                // we're not going to be holding this block of events in the queue, but we need
-                // a marker of some sort so that the processEventBlock loop deals with the blocks
-                // in the right order as notifications come in. we use a single null event in
-                // the queue as a placeholder for a block of events that has already been dispatched.
-                mEventQueue.add(null);
-                mPanZoomController.startingNewEventBlock(event, false);
-            }
+
+            // we're not going to be holding this block of events in the queue, but we need
+            // a marker of some sort so that the processEventBlock loop deals with the blocks
+            // in the right order as notifications come in. we use a single null event in
+            // the queue as a placeholder for a block of events that has already been dispatched.
+            mEventQueue.add(null);
+            mPanZoomController.startingNewEventBlock(event, false);
 
             // set the timeout so that we dispatch these events and update mProcessingBalance
             // if we don't get a default-prevented notification
             mView.postDelayed(mListenerTimeoutProcessor, EVENT_LISTENER_TIMEOUT);
         }
 
-        // if we need to hold the events, add it to the queue. if we need to dispatch
-        // it directly, do that. it is possible that both mHoldInQueue and mDispatchEvents
-        // are false, in which case we are processing a block of events that we know
+        // If we need to dispatch events directly, do that. It is possible that mDispatchEvents
+        // is false, in which case we are processing a block of events that we know
         // has been default-prevented. in that case we don't keep the events as we don't
         // need them (but we still pass them to the gecko listener).
-        if (mHoldInQueue) {
-            mEventQueue.add(MotionEvent.obtain(event));
-        } else if (mDispatchEvents) {
+        if (mDispatchEvents) {
             dispatchEvent(event);
         } else if (touchFinished(event)) {
             mPanZoomController.preventedTouchFinished();
@@ -242,11 +221,10 @@ public final class TouchEventHandler {
             }
             if (mEventQueue.isEmpty()) {
                 // we have processed the backlog of events, and are all caught up.
-                // now we can set clear the hold flag and set the dispatch flag so
+                // now we can set the dispatch flag so
                 // that the handleEvent() function can do the right thing for all
                 // remaining events in this block (which is still ongoing) without
                 // having to put them in the queue.
-                mHoldInQueue = false;
                 mDispatchEvents = allowDefaultAction;
                 break;
             }
