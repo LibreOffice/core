@@ -174,10 +174,6 @@ public class LayerView extends FrameLayout {
         mRenderer = renderer;
     }
 
-    public LayerRenderer getLayerRenderer() {
-        return mRenderer;
-    }
-
     public LayerRenderer getRenderer() {
         return mRenderer;
     }
