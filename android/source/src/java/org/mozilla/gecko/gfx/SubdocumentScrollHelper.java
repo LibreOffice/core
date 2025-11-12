@@ -6,12 +6,9 @@
 package org.mozilla.gecko.gfx;
 
 import android.graphics.PointF;
-import android.os.Handler;
 
 class SubdocumentScrollHelper {
     private static final String LOGTAG = "GeckoSubdocumentScrollHelper";
-
-    private final Handler mUiHandler;
 
     /* This is the amount of displacement we have accepted but not yet sent to JS. */
     private final PointF mPendingDisplacement;
@@ -29,8 +26,6 @@ class SubdocumentScrollHelper {
     private boolean mScrollSucceeded;
 
     SubdocumentScrollHelper() {
-        // mUiHandler will be bound to the UI thread since that's where this constructor runs
-        mUiHandler = new Handler();
         mPendingDisplacement = new PointF();
     }
 
