@@ -59,11 +59,9 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
         || (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
         return;
 
-    sal_Int64 nOldValue;
-
     if (bPercent)
     {
-        nOldValue = get_value();
+        sal_Int64 nOldValue = get_value();
 
         m_eOldUnit = m_pField->get_unit();
         m_nOldDigits = m_pField->get_digits();
@@ -81,26 +79,22 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
 
         m_pField->set_range(std::max(1, nPercent), nMaxPercent, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
-        {
-            nCurrentWidth
-                = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
-            nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
-            nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
-            m_pField->set_value(nPercent, FieldUnit::NONE);
-        }
+
+        nCurrentWidth = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
+        nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
+        nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
+        m_pField->set_value(nPercent, FieldUnit::NONE);
     }
     else
     {
-        nOldValue = Convert(get_value(), m_pField->get_unit(), m_eOldUnit);
+        const sal_Int64 nValue = Convert(get_value(), m_pField->get_unit(), m_eOldUnit);
 
         m_pField->set_unit(m_eOldUnit);
         m_pField->set_digits(m_nOldDigits);
         m_pField->set_range(m_nOldMin, m_nOldMax, FieldUnit::NONE);
         m_pField->set_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
 
-        {
-            set_value(nOldValue, m_eOldUnit);
-        }
+        set_value(nValue, m_eOldUnit);
     }
 }
 
