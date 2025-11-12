@@ -180,11 +180,6 @@ public final class TouchEventHandler {
         return true;
     }
 
-    /* This function MUST be called on the UI thread. */
-    public void setWaitForTouchListeners(boolean aValue) {
-        mWaitForTouchListeners = aValue;
-    }
-
     private boolean isDownEvent(MotionEvent event) {
         int action = (event.getAction() & MotionEvent.ACTION_MASK);
         return (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN);
