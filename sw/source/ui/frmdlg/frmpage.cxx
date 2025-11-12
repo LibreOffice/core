@@ -1282,8 +1282,10 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             aSz.SetHeightPercentRelation(text::RelOrientation::PAGE_FRAME);
     }
 
-    bool bValueModified = m_xWidthED->get_value_changed_from_saved() ||
-                          m_xHeightED->get_value_changed_from_saved();
+    bool bValueModified = m_xWidthED->get_value_changed_from_saved()
+                          || m_xHeightED->get_value_changed_from_saved()
+                          || m_xRelWidthRelationLB->get_value_changed_from_saved()
+                          || m_xRelHeightRelationLB->get_value_changed_from_saved();
     bool bCheckChanged = m_xRelWidthCB->get_state_changed_from_saved() ||
                          m_xRelHeightCB->get_state_changed_from_saved() ||
                          m_xFixedRatioCB->get_state_changed_from_saved();
