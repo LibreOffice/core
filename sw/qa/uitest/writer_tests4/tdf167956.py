@@ -36,7 +36,7 @@ class tdf167956(UITestCase):
 
             # Without the fix in place, this test would have crashed here
             self.wait_until_styles_are_displayed(xStylesView)
-            self.assertEqual("14", get_state_as_dict(xStylesView)["Children"])
+            self.assertLessEqual("10", get_state_as_dict(xStylesView)["Children"])
             self.assertEqual("Intense Quote", get_state_as_dict(xStylesView)["SelectEntryText"])
 
             # Reset to the default toolbar

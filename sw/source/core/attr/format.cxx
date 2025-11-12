@@ -756,6 +756,25 @@ void SwFormat::RemoveAllUnos()
     SwClientNotify(*this, aMsgHint);
 }
 
+bool SwFormat::IsFavourite() const
+{
+    if (!m_pGrabBagItem) return false;
+
+    const auto& rItems = m_pGrabBagItem->GetGrabBag();
+    const auto aIt = rItems.find(u"qFormat"_ustr);
+    if (aIt != rItems.end())
+    {
+        sal_Int32 nVal = 0;
+        if (aIt->second >>= nVal)
+        {
+            if (nVal == 1)
+                return true;
+        }
+    }
+
+    return false;
+}
+
 bool SwFormat::IsUsed() const
 {
     bool isUsed = false;

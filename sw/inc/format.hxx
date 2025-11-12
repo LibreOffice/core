@@ -179,6 +179,8 @@ public:
     bool IsAuto() const                 { return m_bAutoFormat; }
     void SetAuto( bool bNew )           { m_bAutoFormat = bNew; }
 
+    bool IsFavourite() const;
+
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }
 

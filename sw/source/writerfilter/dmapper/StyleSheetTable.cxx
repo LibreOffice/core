@@ -582,6 +582,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 break;
                 case NS_ooxml::LN_CT_Style_qFormat:
                     aValue.Name = "qFormat";
+                    aValue.Value <<= nIntValue;
                 break;
                 case NS_ooxml::LN_CT_Style_semiHidden:
                     aValue.Name = "semiHidden";
