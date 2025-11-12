@@ -3373,8 +3373,10 @@ void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
     if (aTabStops.getLength() > 0)
         mpFS->startElementNS(XML_a, XML_tabLst);
 
-    for (const css::style::TabStop& rTabStop : aTabStops)
+    const sal_uInt8 MAX_TAB_STOPS = 32;
+    for (sal_uInt8 i = 0; i < aTabStops.getLength() && i < MAX_TAB_STOPS; i++)
     {
+        const css::style::TabStop& rTabStop = aTabStops[i];
         OString sPosition = OString::number(GetPointFromCoordinate(rTabStop.Position));
         OString sAlignment;
         switch (rTabStop.Alignment)
