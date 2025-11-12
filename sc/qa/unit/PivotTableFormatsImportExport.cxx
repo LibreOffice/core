@@ -23,6 +23,8 @@
 
 using namespace css;
 
+namespace
+{
 class ScPivotTableFormatsImportExport : public ScModelTestBase
 {
 public:
@@ -34,8 +36,6 @@ ScPivotTableFormatsImportExport::ScPivotTableFormatsImportExport()
 {
 }
 
-namespace
-{
 ScAddress parseAddress(ScDocument& rDoc, OUString const& rAddressString)
 {
     ScAddress aAddress;
@@ -82,9 +82,7 @@ template <typename T> OUString checkNonEmptyAddresses(ScDocument& rDoc, T const&
     return aString;
 }
 
-} // end anonymous namespace
-
-static void assertDataFieldInRow_RowLabelColor(ScDocument& rDoc)
+void assertDataFieldInRow_RowLabelColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G6"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"G7"_ustr));
@@ -106,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInRow_RowLabelColor(*getScDoc());
 }
 
-static void assertDataFieldInRow_ColumnLabelColor(ScDocument& rDoc)
+void assertDataFieldInRow_ColumnLabelColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDoc, u"H5"_ustr));
 
@@ -128,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInRow_ColumnLabelColor(*getScDoc());
 }
 
-static void assertDataFieldInColumn_ColumnLabelColor(ScDocument& rDoc)
+void assertDataFieldInColumn_ColumnLabelColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H4"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I4"_ustr));
@@ -151,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInColumn_ColumnLabelColor(*getScDoc());
 }
 
-static void assertDataFieldInColumn_DataColor(ScDocument& rDoc)
+void assertDataFieldInColumn_DataColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H6"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I8"_ustr));
@@ -172,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInColumn_DataColor(*getScDoc());
 }
 
-static void assertDataFieldInColumnAndTwoRowFields_DataColor(ScDocument& rDoc)
+void assertDataFieldInColumnAndTwoRowFields_DataColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"I10"_ustr));
@@ -199,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInColumnAndTwoRowFields_DataColor(*getScDoc());
 }
 
-static void assertSingleDataFieldInColumn_DataColor(ScDocument& rDoc)
+void assertSingleDataFieldInColumn_DataColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"J8"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J12"_ustr));
@@ -215,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertSingleDataFieldInColumn_DataColor(*getScDoc());
 }
 
-static void assertTwoRowTwoColumnFields_DataColor(ScDocument& rDoc)
+void assertTwoRowTwoColumnFields_DataColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), getBackgroundColor(rDoc, u"J8"_ustr));
@@ -235,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertTwoRowTwoColumnFields_DataColor(*getScDoc());
 }
 
-static void assertDataFieldInRow_DataColor(ScDocument& rDoc)
+void assertDataFieldInRow_DataColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"I6"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"K7"_ustr));
@@ -257,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInRow_DataColor(*getScDoc());
 }
 
-static void assertMultipleSelections(ScDocument& rDoc)
+void assertMultipleSelections(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I5"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I6"_ustr));
@@ -295,7 +293,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     CPPUNIT_ASSERT_EQUAL(u"60"_ustr, rDoc.GetString(aAddress));
 }
 
-static void assertWholeDataColumnSelected(ScDocument& rDoc)
+void assertWholeDataColumnSelected(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G2"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G3"_ustr));
@@ -321,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertWholeDataColumnSelected(*getScDoc());
 }
 
-static void assertWholeLabelColumnSelected(ScDocument& rDoc)
+void assertWholeLabelColumnSelected(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F2"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F3"_ustr));
@@ -347,7 +345,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertWholeLabelColumnSelected(*getScDoc());
 }
 
-static void assertSelectionInLabelAndData(ScDocument& rDoc)
+void assertSelectionInLabelAndData(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F5"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"G5"_ustr));
@@ -369,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertSelectionInLabelAndData(*getScDoc());
 }
 
-static void assertTwoRowsDataFieldInColumn_LabelColor(ScDocument& rDoc)
+void assertTwoRowsDataFieldInColumn_LabelColor(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I4"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J4"_ustr));
@@ -396,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertTwoRowsDataFieldInColumn_LabelColor(*getScDoc());
 }
 
-static void assertTwoDataFieldColumns_WholeDataColumnSelected(ScDocument& rDoc)
+void assertTwoDataFieldColumns_WholeDataColumnSelected(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H2"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H3"_ustr));
@@ -424,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
 }
 
-static void assertFields_WithCellProtection(ScDocument& rDoc)
+void assertFields_WithCellProtection(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F18"_ustr));
     CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F19"_ustr));
@@ -448,6 +446,15 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, Pivot_Table_with_Cell_Prot
     saveAndReload(u"Calc Office Open XML"_ustr);
     assertFields_WithCellProtection(*getScDoc());
 }
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, Pivot_Table_with_No_Source_Data)
+{
+    // We need to round-trip this document without crashing
+    createScDoc("xlsx/pivot-table/PivotTableWithNoSourceData.xlsx");
+    saveAndReload(u"Calc Office Open XML"_ustr);
+}
+
+} // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
