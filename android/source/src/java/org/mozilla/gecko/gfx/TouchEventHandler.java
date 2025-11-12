@@ -187,14 +187,7 @@ public final class TouchEventHandler {
      * Process the block of events at the head of the queue now that we know
      * whether it has been default-prevented or not.
      */
-    private void processEventBlock(boolean allowDefaultAction) {
-        if (!allowDefaultAction) {
-            // if the block has been default-prevented, cancel whatever stuff we had in
-            // progress in the gesture detector and pan zoom controller
-            long now = SystemClock.uptimeMillis();
-            dispatchEvent(MotionEvent.obtain(now, now, MotionEvent.ACTION_CANCEL, 0, 0, 0));
-        }
-
+    private void processEventBlock() {
         if (mEventQueue.isEmpty()) {
             Log.e(LOGTAG, "Unexpected empty event queue in processEventBlock!", new Exception());
             return;
@@ -211,13 +204,7 @@ public final class TouchEventHandler {
             // that has already been dispatched.
 
             if (event != null) {
-                // for each event we process, only dispatch it if the block hasn't been
-                // default-prevented.
-                if (allowDefaultAction) {
-                    dispatchEvent(event);
-                } else if (touchFinished(event)) {
-                    mPanZoomController.preventedTouchFinished();
-                }
+                dispatchEvent(event);
             }
             if (mEventQueue.isEmpty()) {
                 // we have processed the backlog of events, and are all caught up.
@@ -225,7 +212,7 @@ public final class TouchEventHandler {
                 // that the handleEvent() function can do the right thing for all
                 // remaining events in this block (which is still ongoing) without
                 // having to put them in the queue.
-                mDispatchEvents = allowDefaultAction;
+                mDispatchEvents = true;
                 break;
             }
             event = mEventQueue.peek();
@@ -251,7 +238,7 @@ public final class TouchEventHandler {
                 // the block of events this ListenerTimeoutProcessor corresponds to have
                 // already been removed from the queue.
             } else {
-                processEventBlock(true);
+                processEventBlock();
             }
             mProcessingBalance++;
         }
