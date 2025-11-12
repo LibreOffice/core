@@ -543,7 +543,7 @@ rtl::Reference< HyphenatedWord > RebuildHyphensAndControlChars(
 
     if (nOrigHyphenPos != -1  &&  nOrigHyphenationPos != -1)
     {
-        SAL_WARN( "linguistic", "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
+        SAL_INFO( "linguistic", "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
         return nullptr;
     }
 
