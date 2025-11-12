@@ -43,6 +43,8 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
+    constexpr static sal_uInt16 BULLET_TOGGLE = 0xFFFF;
+
 private:
     FuBulletAndPosition (
         ViewShell& rViewShell,

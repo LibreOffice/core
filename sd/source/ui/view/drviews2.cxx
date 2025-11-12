@@ -2145,8 +2145,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case FN_NUM_BULLET_ON:
         {
-            // The value (sal_uInt16)0xFFFF means set bullet on/off.
-            SfxUInt16Item aItem(FN_SVX_SET_BULLET, sal_uInt16(0xFFFF));
+            SfxUInt16Item aItem(FN_SVX_SET_BULLET, FuBulletAndPosition::BULLET_TOGGLE);
             GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET,
                     SfxCallMode::RECORD, { &aItem });
         }
@@ -2154,8 +2153,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case FN_NUM_NUMBERING_ON:
         {
-            // The value (sal_uInt16)0xFFFF means set bullet on/off.
-            SfxUInt16Item aItem(FN_SVX_SET_NUMBER, sal_uInt16(0xFFFF));
+            SfxUInt16Item aItem(FN_SVX_SET_NUMBER, FuBulletAndPosition::BULLET_TOGGLE);
             GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER,
                     SfxCallMode::RECORD, { &aItem });
         }

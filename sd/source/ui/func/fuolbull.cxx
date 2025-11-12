@@ -164,9 +164,9 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     sal_uInt16 nIdx = pItem->GetValue();
     bool bToggle = false;
-    if( nIdx == sal_uInt16(0xFFFF) )
+    if( nIdx == BULLET_TOGGLE )
     {
-        // If the nIdx is (sal_uInt16)0xFFFF, means set bullet status to on/off
+        // Set bullet status to on/off
         nIdx = 1;
         bToggle = true;
     }
