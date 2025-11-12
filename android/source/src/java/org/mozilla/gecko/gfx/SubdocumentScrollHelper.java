@@ -13,8 +13,7 @@ class SubdocumentScrollHelper {
 
     private final Handler mUiHandler;
 
-    /* This is the amount of displacement we have accepted but not yet sent to JS; this is
-     * only valid when mOverrideScrollPending is true. */
+    /* This is the amount of displacement we have accepted but not yet sent to JS. */
     private final PointF mPendingDisplacement;
 
     /* When this is true, we're sending scroll events to JS to scroll the active subdocument. */
@@ -24,10 +23,6 @@ class SubdocumentScrollHelper {
      * are ready to send the next scroll event. Note we only ever have one scroll event inflight
      * at a time. */
     private boolean mOverrideScrollAck;
-
-    /* When this is true, we have a pending scroll that we need to send to JS; we were unable
-     * to send it when it was initially requested because mOverrideScrollAck was not true. */
-    private boolean mOverrideScrollPending;
 
     /* When this is true, the last scroll event we sent actually did some amount of scrolling on
      * the subdocument; we use this to decide when we have reached the end of the subdocument. */
@@ -45,14 +40,12 @@ class SubdocumentScrollHelper {
         }
 
         if (! mOverrideScrollAck) {
-            mOverrideScrollPending = true;
             mPendingDisplacement.x += displacement.x;
             mPendingDisplacement.y += displacement.y;
             return true;
         }
 
         mOverrideScrollAck = false;
-        mOverrideScrollPending = false;
         // clear the |mPendingDisplacement| after serializing |displacement| to
         // JSON because they might be the same object
         mPendingDisplacement.x = 0;
