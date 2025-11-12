@@ -427,6 +427,8 @@ public:
      */
     virtual void onGrabFocus(){};
 
+    virtual void RememberCanvasPageVisArea(const ::tools::Rectangle & /*aRect*/) {};
+
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Gets the current selection

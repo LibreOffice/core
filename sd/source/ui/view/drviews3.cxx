@@ -1136,6 +1136,13 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
     }
 }
 
+void DrawViewShell::RememberCanvasPageVisArea(const ::tools::Rectangle &aRect)
+{
+    if (!GetDoc()->HasCanvasPage())
+        return;
+    maCanvasPageVisArea = aRect;
+}
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
