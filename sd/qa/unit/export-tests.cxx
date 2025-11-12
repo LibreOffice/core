@@ -76,20 +76,6 @@ public:
         };
     };
 
-    xmlDocUniquePtr parseLayout() const
-    {
-        SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-        CPPUNIT_ASSERT(pModel);
-        SfxObjectShell* pShell = pModel->GetObjectShell();
-        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
-        MetafileXmlDump dumper;
-
-        xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-        CPPUNIT_ASSERT(pXmlDoc);
-
-        return pXmlDoc;
-    }
-
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
 };

@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <test/unoapixml_test.hxx>
+#include "sdmodeltestbase.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -15,32 +15,12 @@
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 
-class SdLayoutTest : public UnoApiXmlTest
+class SdLayoutTest : public SdModelTestBase
 {
 public:
     SdLayoutTest()
-        : UnoApiXmlTest(u"/sd/qa/unit/data/"_ustr)
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
-    }
-
-    xmlDocUniquePtr parseLayout() const
-    {
-        SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-        CPPUNIT_ASSERT(pModel);
-        SfxObjectShell* pShell = pModel->GetObjectShell();
-        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
-        MetafileXmlDump dumper;
-
-        xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-        CPPUNIT_ASSERT(pXmlDoc);
-
-        return pXmlDoc;
-    }
-
-    xmlDocUniquePtr load(const char* pName)
-    {
-        loadFromFile(OUString::createFromAscii(pName));
-        return parseLayout();
     }
 
     SdDrawDocument* getDoc()
@@ -55,7 +35,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tdf104722.pptx");
+    createSdImpressDoc("pptx/tdf104722.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix in place, this would have failed with
     // - Expected: 2093
@@ -67,7 +48,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tdf135843.pptx");
+    createSdImpressDoc("pptx/tdf135843.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix, the test fails with:
     // - Expected: 21165
@@ -81,7 +63,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
 {
-    xmlDocUniquePtr pXmlDoc = load("odp/tdf146876.odp");
+    createSdImpressDoc("odp/tdf146876.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Check the shape is inside the (5000,8500) - (11500,12500) area
     for (size_t i = 2; i < 4; ++i)
@@ -107,7 +90,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf136949)
 {
-    xmlDocUniquePtr pXmlDoc = load("odp/tdf136949.odp");
+    createSdImpressDoc("odp/tdf136949.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 13687
@@ -118,7 +102,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf136949)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tdf128212.pptx");
+    createSdImpressDoc("pptx/tdf128212.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 7795
@@ -205,7 +190,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
         { 2, 608, 30, 10725, 6739 },
     };
 
-    xmlDocUniquePtr pXmlDoc = load("odg/two_columns.odg");
+    createSdDrawDoc("odg/two_columns.odg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
     {
@@ -247,7 +233,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
         { 1, 40, 3, 3213, 9600 },
     };
 
-    xmlDocUniquePtr pXmlDoc = load("odg/tb-rl-textbox.odg");
+    createSdDrawDoc("odg/tb-rl-textbox.odg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", SAL_N_ELEMENTS(strings));
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", SAL_N_ELEMENTS(strings));
@@ -296,7 +283,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, numberedList)
         "Outer, four",
     };
 
-    xmlDocUniquePtr pXmlDoc = load("pptx/NumberedList-12ab-ab-34.pptx");
+    createSdImpressDoc("pptx/NumberedList-12ab-ab-34.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
     const OString sXPathBase = "/metafile/push[1]/push[1]/textarray["_ostr;
 
     for (size_t i = 0; i < std::size(sText); i++)
@@ -307,7 +295,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, numberedList)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tdf146731.pptx");
+    createSdImpressDoc("pptx/tdf146731.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]", "width", u"187");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]", "width", u"187");
@@ -322,7 +311,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tdf135843_insideH.pptx");
+    createSdImpressDoc("pptx/tdf135843_insideH.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix, the test fails with:
     //- Expected: 34
@@ -334,7 +324,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBnc480256)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/bnc480256-2.pptx");
+    createSdImpressDoc("pptx/bnc480256-2.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix, the test fails with:
     //- Expected: #ff0000
@@ -356,7 +347,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
     // into new line) by shrinking or expanding the text horizontally
     // and vertically.
 
-    xmlDocUniquePtr pXmlDoc = load("odg/FitToFrameText.odg");
+    createSdDrawDoc("odg/FitToFrameText.odg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", u"0");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"406");
@@ -368,7 +360,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
 {
-    xmlDocUniquePtr pXmlDoc = load("odp/tdf156955.odp");
+    createSdImpressDoc("odp/tdf156955.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Make sure text box has the right size - without the fix it was 2759.
     assertXPath(pXmlDoc, "/metafile/push/push/textarray[5]", "y", u"3183");
@@ -378,7 +371,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
 {
     // Test related to IgnoreBreakAfterMultilineField compatibility flag.
     {
-        xmlDocUniquePtr pXmlDoc = load("pptx/tdf148966.pptx");
+        createSdImpressDoc("pptx/tdf148966.pptx");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
         // Without the accompanying fix, would fail with:
         // - Expected: 5952
         // - Actual  : 7814
@@ -386,7 +380,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
     }
     {
-        xmlDocUniquePtr pXmlDoc = load("odp/tdf148966-withflag.odp");
+        createSdImpressDoc("odp/tdf148966-withflag.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
         // Without the accompanying fix, would fail with:
         // - Expected: 5952
         // - Actual  : 7814
@@ -395,14 +390,16 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
     }
     {
-        xmlDocUniquePtr pXmlDoc = load("odp/tdf148966-withoutflag.odp");
+        createSdImpressDoc("odp/tdf148966-withoutflag.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"7814");
     }
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tcPr-vert-roundtrip.pptx");
+    createSdImpressDoc("pptx/tcPr-vert-roundtrip.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the accompanying fix, would fail with:
     // - Expected: -900
@@ -416,7 +413,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
 {
-    xmlDocUniquePtr pXmlDoc = load("odp/Tdf112594.fodp");
+    createSdImpressDoc("odp/Tdf112594.fodp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Test that a NNBSP is grouped with the Mongolian characters after it, so
     // we have two text arrays, one covering the digits, and the other with the rest.
@@ -461,7 +459,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
         { 504, 22, 7499, 19312 }, //           pellentesque est orci.
     };
 
-    xmlDocUniquePtr pXmlDoc = load("odg/adjust-to-contour.fodg");
+    createSdDrawDoc("odg/adjust-to-contour.fodg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", std::size(strings));
     for (size_t i = 0; i < std::size(strings); ++i)
@@ -478,7 +477,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf164622)
 {
-    xmlDocUniquePtr pXmlDoc = load("pptx/tdf164622.pptx");
+    createSdImpressDoc("pptx/tdf164622.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix, the test fails with:
     // - Expected: 8998

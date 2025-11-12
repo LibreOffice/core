@@ -170,6 +170,20 @@ public:
         xPropSet->getPropertyValue(u"TextField"_ustr) >>= xField;
         return xField;
     }
+
+    xmlDocUniquePtr parseLayout() const
+    {
+        SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+        CPPUNIT_ASSERT(pModel);
+        SfxObjectShell* pShell = pModel->GetObjectShell();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+        MetafileXmlDump dumper;
+
+        xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        return pXmlDoc;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
