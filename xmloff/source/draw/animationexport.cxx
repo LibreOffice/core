@@ -980,7 +980,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 
-    // if something goes wrong, its always a good idea to clear the attribute list
+    // if something goes wrong, it's always a good idea to clear the attribute list
     mxExport->ClearAttrList();
 }
 
