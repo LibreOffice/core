@@ -50,7 +50,7 @@ public final class TouchEventHandler {
 
     // The time limit for listeners to respond with preventDefault on touchevents
     // before we begin panning the page
-    private final int EVENT_LISTENER_TIMEOUT = 200;
+    private static final int EVENT_LISTENER_TIMEOUT = 200;
 
     private final View mView;
     private final GestureDetector mGestureDetector;
