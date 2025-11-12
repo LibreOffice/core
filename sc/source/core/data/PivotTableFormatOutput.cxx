@@ -25,29 +25,43 @@ namespace
 class NameResolver
 {
 private:
-    ScDPTableData& mrTableData;
     ScDPCache const& mrCache;
 
     std::unordered_map<sal_Int32, std::vector<OUString>> maNameCache;
 
-    void fillNamesForDimension(std::vector<OUString>& rNames, sal_Int32 nDimension)
+    void fillNamesForItems(std::vector<OUString>& rNames, ScDPCache::ScDPItemDataVec const& rItems,
+                           sal_Int32 nDimension)
     {
-        for (const auto& rItemData : mrCache.GetDimMemberValues(nDimension))
+        for (const auto& rItemData : rItems)
         {
             OUString sFormattedName;
             if (rItemData.HasStringData() || rItemData.IsEmpty())
                 sFormattedName = rItemData.GetString();
             else
-                sFormattedName = ScDPObject::GetFormattedString(&mrTableData, nDimension,
-                                                                rItemData.GetValue());
+                sFormattedName = mrCache.GetFormattedString(nDimension, rItemData, false);
             rNames.push_back(sFormattedName);
         }
     }
 
+    void fillNamesForDimension(std::vector<OUString>& rNames, sal_Int32 nDimension)
+    {
+        if (mrCache.IsValidDimensionIndex(nDimension))
+        {
+            fillNamesForItems(rNames, mrCache.GetDimMemberValues(nDimension), nDimension);
+        }
+        else
+        {
+            auto* pGroup = mrCache.GetGroupItems(nDimension);
+            if (pGroup)
+            {
+                fillNamesForItems(rNames, pGroup->maItems, nDimension);
+            }
+        }
+    }
+
 public:
-    NameResolver(ScDPTableData& rTableData, ScDPCache const& rCache)
-        : mrTableData(rTableData)
-        , mrCache(rCache)
+    NameResolver(ScDPCache const& rCache)
+        : mrCache(rCache)
     {
     }
 
@@ -165,7 +179,7 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
     ScDPFilteredCache const& rFilteredCache = pTableData->GetCacheTable();
     ScDPCache const& rCache = rFilteredCache.getCache();
 
-    NameResolver aNameResolver(*pTableData, rCache);
+    NameResolver aNameResolver(rCache);
 
     // Initialize format output entries (FormatOutputEntry) and set the data already available from output fields
     // (rColumnFields and rRowFields) and the pivot table format list (PivotTableFormat).
