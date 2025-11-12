@@ -115,11 +115,6 @@ public abstract class Layer {
         mNewPosition = newPosition;
     }
 
-    /** Returns the current layer's resolution. */
-    public float getResolution() {
-        return mResolution;
-    }
-
     public boolean usesDefaultProgram() {
         return mUsesDefaultProgram;
     }
