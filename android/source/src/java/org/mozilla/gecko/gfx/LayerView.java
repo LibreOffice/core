@@ -170,10 +170,6 @@ public class LayerView extends FrameLayout {
         mRenderer.removeLayer(layer);
     }
 
-    public int getMaxTextureSize() {
-        return mRenderer.getMaxTextureSize();
-    }
-
     public void setLayerRenderer(LayerRenderer renderer) {
         mRenderer = renderer;
     }
