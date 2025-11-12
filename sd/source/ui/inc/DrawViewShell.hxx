@@ -394,6 +394,8 @@ public:
 
     DECL_LINK(SearchDialogHdl, SfxRequest&, void);
 
+    virtual void RememberCanvasPageVisArea(const ::tools::Rectangle &aRect) override;
+
 protected:
                     DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );
@@ -514,6 +516,8 @@ private:
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
 
     css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
+
+    ::tools::Rectangle  maCanvasPageVisArea;
 };
 
 /// Merge the background properties together and deposit the result in rMergeAttr
