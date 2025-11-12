@@ -23,15 +23,6 @@ import java.util.Queue;
  * "Dispatching" an event refers to performing the default actions for the event,
  * which at our level of abstraction just means sending it off to the gesture
  * detectors and the pan/zoom controller.
- *
- * If an event is "default-prevented" that means one or more listeners in Gecko
- * has called preventDefault() on the event, which means that the default action
- * for that event should not occur.
- *
- * Note that even if all events are default-prevented, we still send specific types
- * of notifications to the pan/zoom controller. The notifications are needed
- * to respond to user actions a timely manner regardless of default-prevention,
- * and fix issues like bug 749384.
  */
 public final class TouchEventHandler {
     private static final String LOGTAG = "GeckoTouchEventHandler";

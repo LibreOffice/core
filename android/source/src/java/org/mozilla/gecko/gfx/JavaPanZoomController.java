@@ -68,10 +68,6 @@ class JavaPanZoomController
         PINCHING,       /* nth touch-start, where n > 1. this mode allows pan and zoom */
         ANIMATED_ZOOM,  /* animated zoom to a new rect */
         BOUNCE,         /* in a bounce animation */
-
-        WAITING_LISTENERS, /* a state halfway between NOTHING and TOUCHING - the user has
-                        put a finger down, but we don't yet know if a touch listener has
-                        prevented the default actions yet. we still need to abort animations. */
     }
 
     private final PanZoomTarget mTarget;
@@ -161,17 +157,6 @@ class JavaPanZoomController
         return false;
     }
 
-    /** This function must be called on the UI thread. */
-    void preventedTouchFinished() {
-        checkMainThread();
-        if (mState == PanZoomState.WAITING_LISTENERS) {
-            // if we enter here, we just finished a block of events whose default actions
-            // were prevented by touch listeners. Now there are no touch points left, so
-            // we need to reset our state and re-bounce because we might be in overscroll
-            bounce();
-        }
-    }
-
     /** This must be called on the UI thread. */
     public void pageRectUpdated() {
         if (mState == PanZoomState.NOTHING) {
@@ -205,7 +190,6 @@ class JavaPanZoomController
         case FLING:
         case BOUNCE:
         case NOTHING:
-        case WAITING_LISTENERS:
             startTouch(event.getX(0), event.getY(0), event.getEventTime());
             return false;
         case TOUCHING:
@@ -231,7 +215,6 @@ class JavaPanZoomController
         switch (mState) {
         case FLING:
         case BOUNCE:
-        case WAITING_LISTENERS:
             // should never happen
             Log.e(LOGTAG, "Received impossible touch move while in " + mState);
             // fall through
@@ -278,7 +261,6 @@ class JavaPanZoomController
         switch (mState) {
         case FLING:
         case BOUNCE:
-        case WAITING_LISTENERS:
             // should never happen
             Log.e(LOGTAG, "Received impossible touch end while in " + mState);
             // fall through
@@ -313,16 +295,6 @@ class JavaPanZoomController
 
     private boolean handleTouchCancel(MotionEvent event) {
         cancelTouch();
-
-        if (mState == PanZoomState.WAITING_LISTENERS) {
-            // we might get a cancel event from the TouchEventHandler while in the
-            // WAITING_LISTENERS state if the touch listeners prevent-default the
-            // block of events. at this point being in WAITING_LISTENERS is equivalent
-            // to being in NOTHING with the exception of possibly being in overscroll.
-            // so here we don't want to do anything right now; the overscroll will be
-            // corrected in preventedTouchFinished().
-            return false;
-        }
 
         // ensure we snap back if we're overscrolled
         bounce();
