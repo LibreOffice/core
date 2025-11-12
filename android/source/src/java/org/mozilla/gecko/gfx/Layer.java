@@ -122,17 +122,6 @@ public abstract class Layer {
         return mResolution;
     }
 
-    /**
-     * Sets the layer resolution. This value is used to determine how many pixels per
-     * device pixel this layer was rendered at. This will be reflected by scaling by
-     * the reciprocal of the resolution in the layer's transform() function.
-     * Only valid inside a transaction. */
-    public void setResolution(float newResolution) {
-        if (!mInTransaction)
-            throw new RuntimeException("setResolution() is only valid inside a transaction");
-        mNewResolution = newResolution;
-    }
-
     public boolean usesDefaultProgram() {
         return mUsesDefaultProgram;
     }

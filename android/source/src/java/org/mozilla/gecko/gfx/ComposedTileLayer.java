@@ -133,16 +133,6 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         return validRegion;
     }
 
-    @Override
-    public void setResolution(float newResolution) {
-        super.setResolution(newResolution);
-        tilesReadLock.lock();
-        for (SubTile tile : tiles) {
-            tile.setResolution(newResolution);
-        }
-        tilesReadLock.unlock();
-    }
-
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics, DisplayPortMetrics mDisplayPort) {
         RectF newViewPort = getViewPort(viewportMetrics);
         float newZoom = getZoom(viewportMetrics);
