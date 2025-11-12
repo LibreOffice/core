@@ -525,8 +525,8 @@ class JavaPanZoomController
          * The viewport metrics that represent the start and end of the bounce-back animation,
          * respectively.
          */
-        private ImmutableViewportMetrics mBounceStartMetrics;
-        private ImmutableViewportMetrics mBounceEndMetrics;
+        private final ImmutableViewportMetrics mBounceStartMetrics;
+        private final ImmutableViewportMetrics mBounceEndMetrics;
 
         BounceRunnable(ImmutableViewportMetrics startMetrics, ImmutableViewportMetrics endMetrics) {
             mBounceStartMetrics = startMetrics;

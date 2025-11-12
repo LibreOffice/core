@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class TextureReaper {
     private static TextureReaper sSharedInstance;
-    private ArrayList<Integer> mDeadTextureIDs = new ArrayList<Integer>();
+    private final ArrayList<Integer> mDeadTextureIDs = new ArrayList<Integer>();
     private static final String LOGTAG = TextureReaper.class.getSimpleName();
 
     private TextureReaper() {

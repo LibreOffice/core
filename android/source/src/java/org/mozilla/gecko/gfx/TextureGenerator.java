@@ -19,7 +19,7 @@ public class TextureGenerator {
 
     private static TextureGenerator sSharedInstance;
 
-    private ArrayBlockingQueue<Integer> mTextureIds;
+    private final ArrayBlockingQueue<Integer> mTextureIds;
     private EGLContext mContext;
 
     private TextureGenerator() {

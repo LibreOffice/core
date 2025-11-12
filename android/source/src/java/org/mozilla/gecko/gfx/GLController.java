@@ -16,7 +16,7 @@ public class GLController {
     private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
     private static final String LOGTAG = "GeckoGLController";
 
-    private LayerView mView;
+    private final LayerView mView;
     private int mGLVersion;
     private int mWidth, mHeight;
 
