@@ -20,25 +20,13 @@ import java.util.Queue;
  * listeners in Gecko and/or performs the "default action" (asynchronous pan/zoom
  * behaviour. EVERYTHING IN THIS CLASS MUST RUN ON THE UI THREAD.
  *
- * In the following code/comments, a "block" of events refers to a contiguous
- * sequence of events that starts with a DOWN or POINTER_DOWN and goes up to
- * but not including the next DOWN or POINTER_DOWN event.
- *
  * "Dispatching" an event refers to performing the default actions for the event,
  * which at our level of abstraction just means sending it off to the gesture
  * detectors and the pan/zoom controller.
  *
  * If an event is "default-prevented" that means one or more listeners in Gecko
  * has called preventDefault() on the event, which means that the default action
- * for that event should not occur. Usually we care about a "block" of events being
- * default-prevented, which means that the DOWN/POINTER_DOWN event that started
- * the block, or the first MOVE event following that, were prevent-defaulted.
- *
- * A "default-prevented notification" is when we here in Java-land receive a notification
- * from gecko as to whether or not a block of events was default-prevented. This happens
- * at some point after the first or second event in the block is processed in Gecko.
- * This code assumes we get EXACTLY ONE default-prevented notification for each block
- * of events.
+ * for that event should not occur.
  *
  * Note that even if all events are default-prevented, we still send specific types
  * of notifications to the pan/zoom controller. The notifications are needed
@@ -65,19 +53,8 @@ public final class TouchEventHandler {
 
     /* This function MUST be called on the UI thread */
     public boolean handleEvent(MotionEvent event) {
-        if (isDownEvent(event)) {
-            // this is the start of a new block of events! whee!
-            mPanZoomController.startingNewEventBlock(event, false);
-        }
-
         dispatchEvent(event);
-
         return true;
-    }
-
-    private boolean isDownEvent(MotionEvent event) {
-        int action = (event.getAction() & MotionEvent.ACTION_MASK);
-        return (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN);
     }
 
     /**

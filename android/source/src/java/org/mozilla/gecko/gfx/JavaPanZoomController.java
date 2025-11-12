@@ -163,17 +163,6 @@ class JavaPanZoomController
     }
 
     /** This function must be called on the UI thread. */
-    void startingNewEventBlock(MotionEvent event, boolean waitingForTouchListeners) {
-        checkMainThread();
-        if (waitingForTouchListeners && (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
-            // this is the first touch point going down, so we enter the pending state
-            // setting the state will kill any animations in progress, possibly leaving
-            // the page in overscroll
-            setState(PanZoomState.WAITING_LISTENERS);
-        }
-    }
-
-    /** This function must be called on the UI thread. */
     void preventedTouchFinished() {
         checkMainThread();
         if (mState == PanZoomState.WAITING_LISTENERS) {
