@@ -2887,6 +2887,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
     bool bSearchHidden( nMask & SfxStyleSearchBits::Hidden );
     bool bOnlyHidden = nMask == SfxStyleSearchBits::Hidden;
+    bool bFavourite = nMask == SfxStyleSearchBits::Favourite;
 
     const bool bOrganizer = static_cast<const SwDocStyleSheetPool*>(pBasePool)->IsOrganizerMode();
     bool bAll = ( nSrchMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible;
@@ -2982,7 +2983,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             SwTextFormatColl* pColl = (*rDoc.GetTextFormatColls())[ i ];
 
             const bool bUsed = bOrganizer || rDoc.IsUsed(*pColl) || IsUsedInComments(pColl->GetName());
-            if ( ( !bSearchHidden && pColl->IsHidden( ) && !bUsed ) || pColl->IsDefault() )
+            if ( ( !bSearchHidden && pColl->IsHidden( ) && !bUsed && !bFavourite ) || pColl->IsDefault() )
                 continue;
 
             if ( nSMask == SfxStyleSearchBits::Hidden && !pColl->IsHidden( ) )
@@ -3054,6 +3055,12 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 }
                 else
                 {
+                    if ( tmpMask & SfxStyleSearchBits::Favourite )
+                    {
+                        SwFormat* pFormat = rDoc.FindTextFormatCollByName( pColl->GetName() );
+                        if (!(pFormat && pFormat->IsFavourite())) continue;
+                    }
+
                     // searched for used and found none
                     if( bIsSearchUsed )
                         continue;
@@ -3335,6 +3342,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
     for (const auto & i : rList)
     {
         bool bHidden = false;
+        bool bFavourite = false;
         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(i, nSection);
         switch ( nSection )
         {
@@ -3343,6 +3351,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( nId );
                     SwFormat* pFormat = rDoc.FindTextFormatCollByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
+                    bFavourite = pFormat && pFormat->IsFavourite();
                 }
                 break;
             case SwGetPoolIdFromName::ChrFmt:
@@ -3350,6 +3359,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolFormatUsed( nId );
                     SwFormat* pFormat = rDoc.FindCharFormatByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
+                    bFavourite = pFormat && pFormat->IsFavourite();
                 }
                 break;
             case SwGetPoolIdFromName::FrmFmt:
@@ -3378,7 +3388,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
         }
 
         bool bMatchHidden = ( bTestHidden && ( bHidden || !bOnlyHidden ) ) || ( !bTestHidden && ( !bHidden || bUsed ) );
-        if ( ( !bTestUsed && bMatchHidden ) || ( bTestUsed && bUsed ) )
+        if ( ( !bTestUsed && bMatchHidden ) || ( bTestUsed && bUsed ) || bFavourite )
             m_aLst.Append( eFamily, i );
     }
 }

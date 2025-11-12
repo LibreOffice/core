@@ -627,8 +627,8 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
     if (pStyleSheetPool)
     {
-        auto xIter = pStyleSheetPool->CreateIterator(SfxStyleFamily::Para,
-                                                     SfxStyleSearchBits::UserDefined);
+        auto xIter
+            = pStyleSheetPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::Favourite);
 
         SfxStyleSheetBase* pStyle = xIter->First();
 

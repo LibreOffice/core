@@ -65,6 +65,7 @@ enum class SfxStyleSearchBits {
     SwCondColl  = 0x0040,
 
     Auto        = 0x0000, ///< automatic: flags from application
+    Favourite   = 0x0100, ///< styles selected to be always visible (search mask)
     Hidden      = 0x0200, ///< hidden styles (search mask)
     ReadOnly    = 0x2000, ///< readonly styles (search mask)
     Used        = 0x4000, ///< used styles (search mask)
@@ -73,7 +74,7 @@ enum class SfxStyleSearchBits {
     All         = 0xe27f, ///< all styles
 };
 namespace o3tl {
-    template<> struct typed_flags<SfxStyleSearchBits> : is_typed_flags<SfxStyleSearchBits, 0xe27f> {};
+    template<> struct typed_flags<SfxStyleSearchBits> : is_typed_flags<SfxStyleSearchBits, 0xe37f> {};
 }
 
 
