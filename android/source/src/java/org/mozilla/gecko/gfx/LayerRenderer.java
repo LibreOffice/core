@@ -40,7 +40,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private ByteBuffer mCoordByteBuffer;
     private FloatBuffer mCoordBuffer;
     private RenderContext mLastPageContext;
-    private int mMaxTextureSize;
 
     private final CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
 
@@ -155,10 +154,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTexCoord");
         mSampleHandle = GLES20.glGetUniformLocation(mProgram, "sTexture");
         mTMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uTMatrix");
-
-        int maxTextureSizeResult[] = new int[1];
-        GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, maxTextureSizeResult, 0);
-        mMaxTextureSize = maxTextureSizeResult[0];
     }
 
     // Activates the shader program.
@@ -182,10 +177,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         GLES20.glDisableVertexAttribArray(mTextureHandle);
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glUseProgram(0);
-    }
-
-    public int getMaxTextureSize() {
-        return mMaxTextureSize;
     }
 
     public void addLayer(Layer layer) {
