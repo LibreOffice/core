@@ -538,7 +538,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             {
                 MakeEntryVisible( pCursor );
                 const bool bDown = !rKEvt.GetKeyCode().IsShift();
-                pNewCursor = pImpCursor->GoUpDown(pCursor, bDown);
+                pNewCursor = pImpCursor->GoUpDown(pCursor, bDown, true);
                 SetCursor_Impl(pNewCursor);
                 if( !pNewCursor )
                 {

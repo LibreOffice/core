@@ -353,13 +353,24 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( const SvxIconChoiceCtrlEnt
     return nullptr;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( const SvxIconChoiceCtrlEntry* pCtrlEntry, bool bDown)
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown(const SvxIconChoiceCtrlEntry* pCtrlEntry,
+                                                 bool bDown, bool bWrap /* = false */)
 {
-    sal_uLong nPos = pView->GetEntryListPos( pCtrlEntry );
-    if( bDown && nPos < (pView->maEntries.size() - 1) )
-        return pView->maEntries[ nPos + 1 ].get();
-    else if( !bDown && nPos > 0 )
-        return pView->maEntries[ nPos - 1 ].get();
+    sal_uLong nPos = pView->GetEntryListPos(pCtrlEntry);
+    if (bDown)
+    {
+        if (nPos < (pView->maEntries.size() - 1))
+            return pView->maEntries[nPos + 1].get();
+        else if (bWrap)
+            return pView->maEntries.front().get();
+    }
+    else //!bDown
+    {
+        if (nPos > 0)
+            return pView->maEntries[nPos - 1].get();
+        else if (bWrap)
+            return pView->maEntries.back().get();
+    }
     return nullptr;
 }
 
