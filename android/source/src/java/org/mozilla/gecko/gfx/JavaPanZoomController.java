@@ -644,7 +644,6 @@ class JavaPanZoomController
     private ImmutableViewportMetrics getValidViewportMetrics(ImmutableViewportMetrics viewportMetrics) {
         /* First, we adjust the zoom factor so that we can make no overscrolled area visible. */
         float zoomFactor = viewportMetrics.zoomFactor;
-        RectF pageRect = viewportMetrics.getPageRect();
         RectF viewport = viewportMetrics.getViewport();
 
         float focusX = viewport.width() / 2.0f;
@@ -925,8 +924,6 @@ class JavaPanZoomController
      * pixels.
      */
     boolean animatedZoomTo(RectF zoomToRect) {
-        final float startZoom = getMetrics().zoomFactor;
-
         RectF viewport = getMetrics().getViewport();
         // 1. adjust the aspect ratio of zoomToRect to match that of the current viewport,
         // enlarging as necessary (if it gets too big, it will get shrunk in the next step).
