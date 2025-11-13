@@ -4414,6 +4414,8 @@ map_vs_year_to_version()
     case $1 in
     2022)
         vsversion=17;;
+    2026)
+        vsversion=18;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -4539,6 +4541,9 @@ find_msvc()
             vcyear=2022
             vctoolset=v143
             ;;
+        18.0)
+            vcyear=2026
+            vctoolset=v145
         esac
         vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
 
@@ -4706,7 +4711,7 @@ if test "$_os" = "WINNT"; then
         # are always "better", we list them in reverse chronological order.
 
         case "$vcnumwithdot" in
-        16.0 | 17.0 | 17.14)
+        16.0 | 17.0 | 17.14 | 18.0)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
