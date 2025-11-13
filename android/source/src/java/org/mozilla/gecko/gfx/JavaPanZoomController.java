@@ -980,13 +980,4 @@ class JavaPanZoomController
         bounce(finalMetrics, PanZoomState.ANIMATED_ZOOM);
         return true;
     }
-
-    public void setOverScrollMode(int overscrollMode) {
-        mX.setOverScrollMode(overscrollMode);
-        mY.setOverScrollMode(overscrollMode);
-    }
-
-    public int getOverScrollMode() {
-        return mX.getOverScrollMode();
-    }
 }

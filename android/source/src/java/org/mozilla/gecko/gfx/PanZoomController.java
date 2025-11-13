@@ -25,7 +25,4 @@ interface PanZoomController {
     PointF getVelocityVector();
 
     void pageRectUpdated();
-
-    void setOverScrollMode(int overscrollMode);
-    int getOverScrollMode();
 }

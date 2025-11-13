@@ -118,10 +118,6 @@ abstract class Axis {
         mOverscrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS;
     }
 
-    public void setOverScrollMode(int overscrollMode) {
-        mOverscrollMode = overscrollMode;
-    }
-
     public int getOverScrollMode() {
         return mOverscrollMode;
     }
