@@ -74,7 +74,6 @@ class JavaPanZoomController
     private final Axis mX;
     private final Axis mY;
     private final TouchEventHandler mTouchEventHandler;
-    private final Thread mMainThread;
     private final LibreOfficeMainActivity mContext;
 
     /* The timer that handles flings or bounces. */
@@ -99,7 +98,6 @@ class JavaPanZoomController
         mY = new AxisY();
         mTouchEventHandler = new TouchEventHandler(view.getContext(), this);
 
-        mMainThread = mContext.getMainLooper().getThread();
         checkMainThread();
 
         setState(PanZoomState.NOTHING);
@@ -124,7 +122,7 @@ class JavaPanZoomController
 
     // for debugging bug 713011; it can be taken out once that is resolved.
     private void checkMainThread() {
-        if (mMainThread != Thread.currentThread()) {
+        if (mContext.getMainLooper().getThread() != Thread.currentThread()) {
             // log with full stack trace
             Log.e(LOGTAG, "Uh-oh, we're running on the wrong thread!", new Exception());
         }
