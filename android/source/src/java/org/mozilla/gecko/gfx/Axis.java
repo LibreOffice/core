@@ -5,12 +5,9 @@
 
 package org.mozilla.gecko.gfx;
 
-import android.util.Log;
 import android.view.View;
 
 import org.mozilla.gecko.util.FloatUtils;
-
-import java.util.Map;
 
 /**
  * This class represents the physics for one axis of movement (i.e. either
@@ -19,14 +16,6 @@ import java.util.Map;
  * a particular axis.
  */
 abstract class Axis {
-    private static final String LOGTAG = "GeckoAxis";
-
-    private static final String PREF_SCROLLING_FRICTION_SLOW = "ui.scrolling.friction_slow";
-    private static final String PREF_SCROLLING_FRICTION_FAST = "ui.scrolling.friction_fast";
-    private static final String PREF_SCROLLING_MAX_EVENT_ACCELERATION = "ui.scrolling.max_event_acceleration";
-    private static final String PREF_SCROLLING_OVERSCROLL_DECEL_RATE = "ui.scrolling.overscroll_decel_rate";
-    private static final String PREF_SCROLLING_OVERSCROLL_SNAP_LIMIT = "ui.scrolling.overscroll_snap_limit";
-    private static final String PREF_SCROLLING_MIN_SCROLLABLE_DISTANCE = "ui.scrolling.min_scrollable_distance";
 
     // This fraction of velocity remains after every animation frame when the velocity is low.
     private static float FRICTION_SLOW;
@@ -48,16 +37,6 @@ abstract class Axis {
     // in pixels.
     private static float MIN_SCROLLABLE_DISTANCE;
 
-    private static float getFloatPref(Map<String, Integer> prefs, String prefName, int defaultValue) {
-        Integer value = (prefs == null ? null : prefs.get(prefName));
-        return (float)(value == null || value < 0 ? defaultValue : value) / 1000f;
-    }
-
-    private static int getIntPref(Map<String, Integer> prefs, String prefName, int defaultValue) {
-        Integer value = (prefs == null ? null : prefs.get(prefName));
-        return (value == null || value < 0 ? defaultValue : value);
-    }
-
     static final float MS_PER_FRAME = 4.0f;
     private static final float FRAMERATE_MULTIPLIER = (1000f/60f) / MS_PER_FRAME;
 
@@ -68,21 +47,19 @@ abstract class Axis {
         return (float)Math.pow(Math.E, (Math.log(baseFriction) / FRAMERATE_MULTIPLIER));
     }
 
-    static void setPrefs(Map<String, Integer> prefs) {
-        FRICTION_SLOW = getFrameAdjustedFriction(getFloatPref(prefs, PREF_SCROLLING_FRICTION_SLOW, 850));
-        FRICTION_FAST = getFrameAdjustedFriction(getFloatPref(prefs, PREF_SCROLLING_FRICTION_FAST, 970));
+    static void setPrefs() {
+        FRICTION_SLOW = getFrameAdjustedFriction(0.85f);
+        FRICTION_FAST = getFrameAdjustedFriction(0.97f);
         VELOCITY_THRESHOLD = 10 / FRAMERATE_MULTIPLIER;
-        MAX_EVENT_ACCELERATION = getFloatPref(prefs, PREF_SCROLLING_MAX_EVENT_ACCELERATION, 12);
-        OVERSCROLL_DECEL_RATE = getFrameAdjustedFriction(getFloatPref(prefs, PREF_SCROLLING_OVERSCROLL_DECEL_RATE, 40));
-        SNAP_LIMIT = getFloatPref(prefs, PREF_SCROLLING_OVERSCROLL_SNAP_LIMIT, 300);
-        MIN_SCROLLABLE_DISTANCE = getFloatPref(prefs, PREF_SCROLLING_MIN_SCROLLABLE_DISTANCE, 500);
-        Log.i(LOGTAG, "Prefs: " + FRICTION_SLOW + "," + FRICTION_FAST + "," + VELOCITY_THRESHOLD + ","
-                + MAX_EVENT_ACCELERATION + "," + OVERSCROLL_DECEL_RATE + "," + SNAP_LIMIT + "," + MIN_SCROLLABLE_DISTANCE);
+        MAX_EVENT_ACCELERATION = 0.012f;
+        OVERSCROLL_DECEL_RATE = getFrameAdjustedFriction(0.04f);
+        SNAP_LIMIT = 0.3f;
+        MIN_SCROLLABLE_DISTANCE = 0.5f;
     }
 
     static {
         // set the scrolling parameters to default values on startup
-        setPrefs(null);
+        setPrefs();
     }
 
     private enum FlingStates {
