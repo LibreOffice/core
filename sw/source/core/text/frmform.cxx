@@ -1598,11 +1598,8 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
 
     // Due to performance reasons we set rReformat to COMPLETE_STRING in Init()
     // In this case we adjust rReformat
-    if( rReformat.Len() > nStrLen )
-        rReformat.Len() = nStrLen;
-
-    if( rReformat.Start() + rReformat.Len() > nStrLen )
-        rReformat.Len() = nStrLen - rReformat.Start();
+    if (auto nMax = nStrLen - rReformat.Start(); rReformat.Len() > nMax)
+        rReformat.Len() = nMax;
 
     SwTwips nOldBottom;
     if( GetOffset() && !IsFollow() )
