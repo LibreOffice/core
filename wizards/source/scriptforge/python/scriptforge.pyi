@@ -6607,7 +6607,7 @@ class SFDocuments:
             """
                 Define the anchor type and the cell to which the shape has to be anchored.
                     Args
-                        ``ancortype``: 'CELL' = the shape is anchored "to cell",
+                        ``anchortype``: 'CELL' = the shape is anchored "to cell",
                         'CELLRESIZE' = the shape is anchored "to cell (resize with cell)",
                         'PAGE' = the shape is anchored to the sheet.
 
