@@ -44,6 +44,7 @@ skia_patches := \
 	0003-loong64-Fix-missing-rounding-in-loong64-scaled_mult-.patch \
 	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
     msvc-unknown-attributes.patch.1 \
+	fix-semaphore-include.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
