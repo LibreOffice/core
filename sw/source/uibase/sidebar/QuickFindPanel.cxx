@@ -27,6 +27,9 @@
 #include <vcl/sysdata.hxx>
 #include <swwait.hxx>
 
+#include <svx/srchdlg.hxx>
+#include <comphelper/processfactory.hxx>
+
 const int CharactersBeforeAndAfter = 40;
 
 namespace
@@ -97,7 +100,8 @@ IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilaritySettingsDialogBut
 
 std::unique_ptr<PanelLayout>
 QuickFindPanel::Create(weld::Widget* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                       SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to QuickFindPanel::Create",
@@ -105,20 +109,23 @@ QuickFindPanel::Create(weld::Widget* pParent,
     if (!rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to QuickFindPanel::Create", nullptr,
                                              0);
-    return std::make_unique<QuickFindPanel>(pParent, rxFrame);
+    return std::make_unique<QuickFindPanel>(pParent, rxFrame, pBindings);
 }
 
-QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame)
+QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame,
+                               SfxBindings* pBindings)
     : PanelLayout(pParent, u"QuickFindPanel"_ustr, u"modules/swriter/ui/sidebarquickfind.ui"_ustr)
     , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
     , m_xSearchOptionsToolbar(m_xBuilder->weld_toolbar(u"searchoptionstoolbar"_ustr))
     , m_xFindAndReplaceToolbar(m_xBuilder->weld_toolbar(u"findandreplacetoolbar"_ustr))
-    , m_xFindAndReplaceToolbarDispatch(
-          new ToolbarUnoDispatcher(*m_xFindAndReplaceToolbar, *m_xBuilder, rxFrame))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
     , m_pWrtShell(::GetActiveWrtShell())
+    , m_xAcceleratorExecute(svt::AcceleratorExecute::createAcceleratorHelper())
+    , m_pBindings(pBindings)
 {
+    m_xAcceleratorExecute->init(comphelper::getProcessComponentContext(), rxFrame);
+
     m_nMinimumPanelWidth
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
     m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);
@@ -127,6 +134,8 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xSearchFindEntry->connect_activate(
         LINK(this, QuickFindPanel, SearchFindEntryActivateHandler));
     m_xSearchFindEntry->connect_changed(LINK(this, QuickFindPanel, SearchFindEntryChangedHandler));
+    m_xSearchFindEntry->connect_key_press(
+        LINK(this, QuickFindPanel, SearchFindEntryKeyInputHandler));
 
     m_xSearchOptionsToolbar->connect_clicked(
         LINK(this, QuickFindPanel, SearchOptionsToolbarClickedHandler));
@@ -181,25 +190,46 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUStri
 // tdf#162580 related: When upgrading from Find toolbar search to advanced Find and Replace
 // search dialog, inherit (pre-fill) search field's term from current value of find bar's
 // focused search entry
+
+bool QuickFindPanel::UpgradeSearchToSearchDialog()
+{
+    m_pWrtShell->AssureStdMode();
+    SvxSearchDialog* pSearchDialog = SwView::GetSearchDialog();
+    if (!pSearchDialog)
+    {
+        m_pBindings->ExecuteSynchron(SID_SEARCH_DLG);
+        pSearchDialog = SwView::GetSearchDialog();
+    }
+    if (pSearchDialog)
+    {
+        pSearchDialog->SetSearchLabel(EMPTY_OUSTRING);
+        pSearchDialog->SetSearchLBEntryTextAndGrabFocus(m_xSearchFindEntry->get_text());
+        pSearchDialog->Present();
+        return true;
+    }
+    return false;
+}
+
 IMPL_LINK(QuickFindPanel, FindAndReplaceToolbarClickedHandler, const OUString&, rCommand, void)
 {
-    if (!SwView::GetSearchDialog())
-    {
-        SvxSearchItem* pSearchItem = SwView::GetSearchItem();
-        if (!pSearchItem)
-        {
-            pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
-            SwView::SetSearchItem(pSearchItem);
-        }
-        pSearchItem->SetSearchString(m_xSearchFindEntry->get_text());
-    }
-    m_xFindAndReplaceToolbarDispatch->Select(rCommand);
+    if (rCommand == "searchdialog")
+        UpgradeSearchToSearchDialog();
+}
+
+IMPL_LINK(QuickFindPanel, SearchFindEntryKeyInputHandler, const KeyEvent&, rKeyEvent, bool)
+{
+    const OUString aCommand(m_xAcceleratorExecute->findCommand(
+        svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyEvent.GetKeyCode())));
+    if (aCommand == ".uno:SearchDialog")
+        return UpgradeSearchToSearchDialog();
+    return false;
 }
 
 QuickFindPanel::~QuickFindPanel()
 {
     m_xSearchFindEntry.reset();
     m_xSearchFindsList.reset();
+    m_xAcceleratorExecute.reset();
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryFocusInHandler, weld::Widget&, void)

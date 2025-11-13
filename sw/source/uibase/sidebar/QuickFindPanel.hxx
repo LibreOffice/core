@@ -12,7 +12,9 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdlg.hxx>
 #include <wrtsh.hxx>
-#include <sfx2/weldutils.hxx>
+
+#include <sfx2/bindings.hxx>
+#include <svtools/acceleratorexecute.hxx>
 
 namespace sw::sidebar
 {
@@ -45,9 +47,11 @@ class QuickFindPanel : public PanelLayout
 
 public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
-                                               const uno::Reference<frame::XFrame>& rxFrame);
+                                               const uno::Reference<frame::XFrame>& rxFrame,
+                                               SfxBindings* pBindings);
 
-    QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame);
+    QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame,
+                   SfxBindings* pBindings);
     virtual ~QuickFindPanel() override;
 
 private:
@@ -56,11 +60,13 @@ private:
     std::unique_ptr<weld::Entry> m_xSearchFindEntry;
     std::unique_ptr<weld::Toolbar> m_xSearchOptionsToolbar;
     std::unique_ptr<weld::Toolbar> m_xFindAndReplaceToolbar;
-    std::unique_ptr<ToolbarUnoDispatcher> m_xFindAndReplaceToolbarDispatch;
     std::unique_ptr<weld::TreeView> m_xSearchFindsList;
     std::unique_ptr<weld::Label> m_xSearchFindFoundTimesLabel;
 
     SwWrtShell* m_pWrtShell;
+    std::unique_ptr<svt::AcceleratorExecute> m_xAcceleratorExecute;
+
+    SfxBindings* m_pBindings;
 
     int m_nMinimumPanelWidth;
 
@@ -75,6 +81,7 @@ private:
     DECL_LINK(SearchFindEntryFocusInHandler, weld::Widget&, void);
     DECL_LINK(SearchFindEntryActivateHandler, weld::Entry&, bool);
     DECL_LINK(SearchFindEntryChangedHandler, weld::Entry&, void);
+    DECL_LINK(SearchFindEntryKeyInputHandler, const KeyEvent&, bool);
     DECL_LINK(SearchFindsListCustomGetSizeHandler, weld::TreeView::get_size_args, Size);
     DECL_LINK(SearchFindsListRender, weld::TreeView::render_args, void);
     DECL_LINK(SearchFindsListSelectionChangedHandler, weld::TreeView&, void);
@@ -84,6 +91,7 @@ private:
     DECL_LINK(FindAndReplaceToolbarClickedHandler, const OUString&, void);
 
     void FillSearchFindsList();
+    bool UpgradeSearchToSearchDialog();
 };
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
