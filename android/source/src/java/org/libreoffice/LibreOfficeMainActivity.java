@@ -150,9 +150,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
         loKitThread = new LOKitThread(this);
         loKitThread.start();
 
-        mLayerClient = new GeckoLayerClient(this);
         LayerView layerView = findViewById(R.id.layer_view);
-        mLayerClient.setView(layerView);
+        mLayerClient = new GeckoLayerClient(this, layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
 

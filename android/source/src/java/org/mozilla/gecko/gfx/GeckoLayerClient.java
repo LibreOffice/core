@@ -47,11 +47,11 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     private boolean mIsReady;
 
-    private PanZoomController mPanZoomController;
-    private LayerView mView;
+    private final PanZoomController mPanZoomController;
+    private final LayerView mView;
     private final DisplayPortCalculator mDisplayPortCalculator;
 
-    public GeckoLayerClient(LibreOfficeMainActivity context) {
+    public GeckoLayerClient(LibreOfficeMainActivity context, LayerView view ) {
         // we can fill these in with dummy values because they are always written
         // to before being read
         mContext = context;
@@ -62,11 +62,9 @@ public class GeckoLayerClient implements PanZoomTarget {
         mForceRedraw = true;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
-    }
 
-    public void setView(LayerView view) {
         mView = view;
-        mPanZoomController = PanZoomController.Factory.create(mContext, this, view);
+        mPanZoomController = PanZoomController.Factory.create(mContext, this, mView);
         mView.connect(this);
     }
 
