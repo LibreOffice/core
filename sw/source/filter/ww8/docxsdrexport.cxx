@@ -1362,11 +1362,13 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
     SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
 
+    m_pImpl->getExport().VMLExporter().SetSkipwzName(true);
     rtl::Reference<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
     m_pImpl->getExport().VMLExporter().AddSdrObject(
         *sdrObj, rFlow.GetValue(), rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
         rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient(), pAttrList.get(), true);
     m_pImpl->getSerializer()->endElementNS(XML_w, XML_pict);
+    m_pImpl->getExport().VMLExporter().SetSkipwzName(false); // restore
 }
 
 static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)

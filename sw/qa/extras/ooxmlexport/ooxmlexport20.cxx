@@ -829,7 +829,7 @@ CPPUNIT_TEST_FIXTURE(Test, testKDE302504)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//v:shape", "ID", u"KoPathShape");
+    assertXPath(pXmlDoc, "//v:shape", "id", u"shape_0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testKDE216114)

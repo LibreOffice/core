@@ -912,7 +912,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79591)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", u"_x0000_t0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", u"_x0000_t0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "id", u"shape_0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
