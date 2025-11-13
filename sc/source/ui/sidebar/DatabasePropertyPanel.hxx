@@ -14,6 +14,7 @@
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 namespace sc::sidebar
 {
@@ -51,10 +52,12 @@ private:
     std::unique_ptr<weld::CheckButton> m_xChkBandedColumns;
     std::unique_ptr<weld::CheckButton> m_xChkFirstColumn;
     std::unique_ptr<weld::CheckButton> m_xChkLastColumn;
+    std::unique_ptr<weld::ComboBox> m_xCmbStyle;
 
     ::sfx2::sidebar::ControllerItem maHeaderRowCtrl;
 
     DECL_LINK(EntryChanged, weld::Toggleable&, void);
+    DECL_LINK(StyleChanged, weld::ComboBox&, void);
 
     vcl::EnumContext maContext;
     SfxBindings* mpBindings;

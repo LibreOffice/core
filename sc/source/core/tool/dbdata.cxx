@@ -58,7 +58,10 @@ ScDatabaseSettingItem::ScDatabaseSettingItem():
 {
 }
 
-ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol, bool bStripedRows, bool bStripedCols, bool bShowFilters):
+ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol,
+                                             bool bLastCol, bool bStripedRows, bool bStripedCols,
+                                             bool bShowFilters, const OUString& aStyleID)
+    :
     SfxPoolItem(SCITEM_DATABASE_SETTING),
     mbHeaderRow(bHeaderRow),
     mbTotalRow(bTotalRow),
@@ -66,7 +69,8 @@ ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bo
     mbLastCol(bLastCol),
     mbStripedRows(bStripedRows),
     mbStripedCols(bStripedCols),
-    mbShowFilters(bShowFilters)
+    mbShowFilters(bShowFilters),
+    maStyleID(aStyleID)
 {
 }
 
@@ -78,7 +82,8 @@ ScDatabaseSettingItem::ScDatabaseSettingItem(const ScDatabaseSettingItem& rItem)
     mbLastCol(rItem.mbLastCol),
     mbStripedRows(rItem.mbStripedRows),
     mbStripedCols(rItem.mbStripedCols),
-    mbShowFilters(rItem.mbShowFilters)
+    mbShowFilters(rItem.mbShowFilters),
+    maStyleID(rItem.maStyleID)
 {
 }
 
@@ -111,6 +116,9 @@ bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) con
         case 6:
             rVal <<= mbShowFilters;
             break;
+        case 7:
+            rVal <<= maStyleID;
+            break;
         default:
             return false;
     }
@@ -121,8 +129,13 @@ bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) con
 bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bVal = false;
+    bool bRet = false;
 
-    bool bRet = (rVal >>= bVal);
+    OUString aStyleID;
+    if (nMemberId == 7)
+        bRet = (rVal >>= aStyleID);
+    else
+        bRet = (rVal >>= bVal);
 
     if(!bRet)
         return false;
@@ -150,6 +163,9 @@ bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId )
         case 6:
             mbShowFilters = bVal;
             break;
+        case 7:
+            maStyleID = std::move(aStyleID);
+            break;
         default:
             return false;
     }
@@ -176,6 +192,7 @@ ScDatabaseSettingItem& ScDatabaseSettingItem::operator=(const ScDatabaseSettingI
     mbStripedRows = rItem.mbStripedRows;
     mbStripedCols = rItem.mbStripedCols;
     mbShowFilters = rItem.mbShowFilters;
+    maStyleID = rItem.maStyleID;
 
     return *this;
 }
@@ -187,7 +204,9 @@ bool ScDatabaseSettingItem::operator==(const SfxPoolItem& rItem) const
         return false;
 
     const ScDatabaseSettingItem& rDBItem = static_cast<const ScDatabaseSettingItem&>(rItem);
-    return mbHeaderRow == rDBItem.mbHeaderRow && mbTotalRow == rDBItem.mbTotalRow && mbFirstCol == rDBItem.mbFirstCol && mbLastCol == rDBItem.mbLastCol && mbStripedRows == rDBItem.mbStripedRows && mbStripedCols == rDBItem.mbStripedCols && mbShowFilters == rDBItem.mbShowFilters;
+    return mbHeaderRow == rDBItem.mbHeaderRow && mbTotalRow == rDBItem.mbTotalRow && mbFirstCol == rDBItem.mbFirstCol &&
+        mbLastCol == rDBItem.mbLastCol && mbStripedRows == rDBItem.mbStripedRows && mbStripedCols == rDBItem.mbStripedCols &&
+        mbShowFilters == rDBItem.mbShowFilters && maStyleID == rDBItem.maStyleID;
 }
 
 bool ScDatabaseSettingItem::HasHeaderRow() const
@@ -225,6 +244,11 @@ bool ScDatabaseSettingItem::HasShowFilters() const
     return mbShowFilters;
 }
 
+const OUString& ScDatabaseSettingItem::GetStyleID() const
+{
+    return maStyleID;
+}
+
 ScTableStyleParam::ScTableStyleParam():
     mbRowStripes(true),
     mbColumnStripes(false),
@@ -235,7 +259,7 @@ ScTableStyleParam::ScTableStyleParam():
 
 bool ScTableStyleParam::operator==(const ScTableStyleParam& rParam) const
 {
-    if(maStyleName != rParam.maStyleName)
+    if(maStyleID != rParam.maStyleID)
         return false;
 
     if (mbRowStripes != rParam.mbRowStripes)

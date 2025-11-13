@@ -47,12 +47,15 @@ class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
     bool mbStripedRows;
     bool mbStripedCols;
     bool mbShowFilters;
+    OUString maStyleID;
 
 public:
     static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(ScDatabaseSettingItem)
     ScDatabaseSettingItem();
-    ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol, bool bStripedRows, bool bStripedCols, bool bShowFilter);
+    ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol,
+                          bool bStripedRows, bool bStripedCols, bool bShowFilter,
+                          const OUString& aStyleID);
     ScDatabaseSettingItem( const ScDatabaseSettingItem& rItem );
     virtual ~ScDatabaseSettingItem() override;
 
@@ -70,6 +73,7 @@ public:
     bool HasStripedRows() const;
     bool HasStripedCols() const;
     bool HasShowFilters() const;
+    const OUString& GetStyleID() const;
 };
 
 /** Enum used to indicate which portion of the DBArea is to be considered. */
@@ -126,7 +130,7 @@ protected:
 
 struct SAL_DLLPUBLIC_RTTI ScTableStyleParam
 {
-    OUString maStyleName;
+    OUString maStyleID;
     bool mbRowStripes;
     bool mbColumnStripes;
     bool mbFirstColumn;

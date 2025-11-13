@@ -560,6 +560,7 @@ public:
               bool bTakeOwnership);
     virtual void remove(int pos) override;
     virtual void do_set_active(int pos) override;
+    virtual void do_set_active_id(const OUString& rStr) override;
 };
 
 class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>,

@@ -421,7 +421,7 @@ void ScDocument::FillInfo(
         ScRange aDBRange;
         pDBData->GetArea(aDBRange);
         ScRange aIntersectionRange = aDBRange.Intersection(aTargetRange);
-        const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleName);
+        const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleID);
         if (!pTableStyle)
             continue;
 
