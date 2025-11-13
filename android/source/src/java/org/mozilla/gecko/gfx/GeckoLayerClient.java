@@ -131,7 +131,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
         mScreenSize = newScreenSize;
 
-        LOKitShell.sendSizeChangedEvent(mScreenSize.width, mScreenSize.height);
+        LOKitShell.sendSizeChangedEvent();
     }
 
     /**
