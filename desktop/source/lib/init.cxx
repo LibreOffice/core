@@ -8379,11 +8379,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     rtl_alloc_preInit(2);
 #endif
 
-    char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST");
-    if (pAllowlist)
-    {
+    if (const char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST"))
         HostFilter::setAllowedHostsRegex(pAllowlist);
-    }
+
+    if (const char* pHostExemptVerifyHost = ::getenv("LOK_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST"))
+        HostFilter::setAllowedHostsExemptVerifyHost(strncmp(pHostExemptVerifyHost,"1", 1) == 0);
 
     // What stage are we at ?
     if (pThis == nullptr)
