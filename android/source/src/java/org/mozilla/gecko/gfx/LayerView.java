@@ -87,9 +87,6 @@ public class LayerView extends FrameLayout {
     }
 
     public void destroy() {
-        if (mLayerClient != null) {
-            mLayerClient.destroy();
-        }
         if (mRenderer != null) {
             mRenderer.destroy();
         }

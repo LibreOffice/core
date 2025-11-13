@@ -541,7 +541,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
             .unregisterOnSharedPreferenceChangeListener(this);
 
         LOKitShell.sendCloseEvent();
-        mLayerClient.destroy();
         super.onDestroy();
 
         if (isFinishing()) { // Not an orientation change
