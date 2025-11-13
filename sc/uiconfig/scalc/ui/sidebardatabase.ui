@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <!-- n-columns=2 n-rows=5 -->
@@ -8,19 +8,22 @@
     <property name="can-focus">False</property>
     <property name="margin-top">2</property>
     <property name="margin-bottom">2</property>
+    <property name="row-spacing">5</property>
     <child>
       <!-- n-columns=2 n-rows=5 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
         <property name="row-spacing">2</property>
         <property name="column-spacing">2</property>
         <child>
           <object class="GtkCheckButton" id="chk_header_row">
-            <property name="label" translatable="yes" context="sidebardatabase|show_header_row_checkbox">Show Header Row</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_header_row">Show Header Row</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -30,10 +33,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_total_row">
-            <property name="label" translatable="yes" context="sidebardatabase|show_total_row_checkbox">Show Total Row</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_total_row">Show Total Row</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -43,10 +47,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_filter_buttons">
-            <property name="label" translatable="yes" context="sidebardatabase|show_filter_buttons_checkbox">Show Filter Buttons</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_filter_buttons">Show Filter Buttons</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -58,6 +63,7 @@
           <object class="GtkSeparator">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -68,6 +74,7 @@
           <object class="GtkSeparator">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -76,10 +83,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_banded_rows">
-            <property name="label" translatable="yes" context="sidebardatabase|banded_rows_formatting_checkbox">Banded Rows</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_banded_rows">Banded Rows</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -89,10 +97,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_banded_cols">
-            <property name="label" translatable="yes" context="sidebardatabase|banded_columns_formatting_checkbox">Banded Columns</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_banded_cols">Banded Columns</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -102,10 +111,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_first_column">
-            <property name="label" translatable="yes" context="sidebardatabase|first_column_formatting_checkbox">First Column</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_first_column">First Column</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -115,10 +125,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_last_column">
-            <property name="label" translatable="yes" context="sidebardatabase|last_column_formatting_checkbox">Last Column</property>
+            <property name="label" translatable="yes" context="sidebardatabase|chk_last_column">Last Column</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="hexpand">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -133,6 +144,125 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="GtkLabel" id="lbl_styles">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebardatabase|lbl_styles">Table Styles</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">cb_styles</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="cb_styles">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="active">0</property>
+            <items>
+              <item id="none" translatable="yes" context="sidebardatabase|none">None</item>
+              <item id="TableStyleLight1" translatable="yes" context="sidebardatabase|tablestylelight1">Table Style Light 1</item>
+              <item id="TableStyleLight2" translatable="yes" context="sidebardatabase|tablestylelight2">Table Style Light 2</item>
+              <item id="TableStyleLight3" translatable="yes" context="sidebardatabase|tablestylelight3">Table Style Light 3</item>
+              <item id="TableStyleLight4" translatable="yes" context="sidebardatabase|tablestylelight4">Table Style Light 4</item>
+              <item id="TableStyleLight5" translatable="yes" context="sidebardatabase|tablestylelight5">Table Style Light 5</item>
+              <item id="TableStyleLight6" translatable="yes" context="sidebardatabase|tablestylelight6">Table Style Light 6</item>
+              <item id="TableStyleLight7" translatable="yes" context="sidebardatabase|tablestylelight7">Table Style Light 7</item>
+              <item id="TableStyleLight8" translatable="yes" context="sidebardatabase|tablestylelight8">Table Style Light 8</item>
+              <item id="TableStyleLight9" translatable="yes" context="sidebardatabase|tablestylelight9">Table Style Light 9</item>
+              <item id="TableStyleLight10" translatable="yes" context="sidebardatabase|tablestylelight10">Table Style Light 10</item>
+              <item id="TableStyleLight11" translatable="yes" context="sidebardatabase|tablestylelight11">Table Style Light 11</item>
+              <item id="TableStyleLight12" translatable="yes" context="sidebardatabase|tablestylelight12">Table Style Light 12</item>
+              <item id="TableStyleLight13" translatable="yes" context="sidebardatabase|tablestylelight13">Table Style Light 13</item>
+              <item id="TableStyleLight14" translatable="yes" context="sidebardatabase|tablestylelight14">Table Style Light 14</item>
+              <item id="TableStyleLight15" translatable="yes" context="sidebardatabase|tablestylelight15">Table Style Light 15</item>
+              <item id="TableStyleLight16" translatable="yes" context="sidebardatabase|tablestylelight16">Table Style Light 16</item>
+              <item id="TableStyleLight17" translatable="yes" context="sidebardatabase|tablestylelight17">Table Style Light 17</item>
+              <item id="TableStyleLight18" translatable="yes" context="sidebardatabase|tablestylelight18">Table Style Light 18</item>
+              <item id="TableStyleLight19" translatable="yes" context="sidebardatabase|tablestylelight19">Table Style Light 19</item>
+              <item id="TableStyleLight20" translatable="yes" context="sidebardatabase|tablestylelight20">Table Style Light 20</item>
+              <item id="TableStyleLight21" translatable="yes" context="sidebardatabase|tablestylelight21">Table Style Light 21</item>
+              <item id="TableStyleMedium1" translatable="yes" context="sidebardatabase|tablestylemedium1">Table Style Medium 1</item>
+              <item id="TableStyleMedium2" translatable="yes" context="sidebardatabase|tablestylemedium2">Table Style Medium 2</item>
+              <item id="TableStyleMedium3" translatable="yes" context="sidebardatabase|tablestylemedium3">Table Style Medium 3</item>
+              <item id="TableStyleMedium4" translatable="yes" context="sidebardatabase|tablestylemedium4">Table Style Medium 4</item>
+              <item id="TableStyleMedium5" translatable="yes" context="sidebardatabase|tablestylemedium5">Table Style Medium 5</item>
+              <item id="TableStyleMedium6" translatable="yes" context="sidebardatabase|tablestylemedium6">Table Style Medium 6</item>
+              <item id="TableStyleMedium7" translatable="yes" context="sidebardatabase|tablestylemedium7">Table Style Medium 7</item>
+              <item id="TableStyleMedium8" translatable="yes" context="sidebardatabase|tablestylemedium8">Table Style Medium 8</item>
+              <item id="TableStyleMedium9" translatable="yes" context="sidebardatabase|tablestylemedium9">Table Style Medium 9</item>
+              <item id="TableStyleMedium10" translatable="yes" context="sidebardatabase|tablestylemedium10">Table Style Medium 10</item>
+              <item id="TableStyleMedium11" translatable="yes" context="sidebardatabase|tablestylemedium11">Table Style Medium 11</item>
+              <item id="TableStyleMedium12" translatable="yes" context="sidebardatabase|tablestylemedium12">Table Style Medium 12</item>
+              <item id="TableStyleMedium13" translatable="yes" context="sidebardatabase|tablestylemedium13">Table Style Medium 13</item>
+              <item id="TableStyleMedium14" translatable="yes" context="sidebardatabase|tablestylemedium14">Table Style Medium 14</item>
+              <item id="TableStyleMedium15" translatable="yes" context="sidebardatabase|tablestylemedium15">Table Style Medium 15</item>
+              <item id="TableStyleMedium16" translatable="yes" context="sidebardatabase|tablestylemedium16">Table Style Medium 16</item>
+              <item id="TableStyleMedium17" translatable="yes" context="sidebardatabase|tablestylemedium17">Table Style Medium 17</item>
+              <item id="TableStyleMedium18" translatable="yes" context="sidebardatabase|tablestylemedium18">Table Style Medium 18</item>
+              <item id="TableStyleMedium19" translatable="yes" context="sidebardatabase|tablestylemedium19">Table Style Medium 19</item>
+              <item id="TableStyleMedium20" translatable="yes" context="sidebardatabase|tablestylemedium20">Table Style Medium 20</item>
+              <item id="TableStyleMedium21" translatable="yes" context="sidebardatabase|tablestylemedium21">Table Style Medium 21</item>
+              <item id="TableStyleMedium22" translatable="yes" context="sidebardatabase|tablestylemedium22">Table Style Medium 22</item>
+              <item id="TableStyleMedium23" translatable="yes" context="sidebardatabase|tablestylemedium23">Table Style Medium 23</item>
+              <item id="TableStyleMedium24" translatable="yes" context="sidebardatabase|tablestylemedium24">Table Style Medium 24</item>
+              <item id="TableStyleMedium25" translatable="yes" context="sidebardatabase|tablestylemedium25">Table Style Medium 25</item>
+              <item id="TableStyleMedium26" translatable="yes" context="sidebardatabase|tablestylemedium26">Table Style Medium 26</item>
+              <item id="TableStyleMedium27" translatable="yes" context="sidebardatabase|tablestylemedium27">Table Style Medium 27</item>
+              <item id="TableStyleMedium28" translatable="yes" context="sidebardatabase|tablestylemedium28">Table Style Medium 28</item>
+              <item id="TableStyleDark1" translatable="yes" context="sidebardatabase|tablestyledark1">Table Style Dark 1</item>
+              <item id="TableStyleDark2" translatable="yes" context="sidebardatabase|tablestyledark2">Table Style Dark 2</item>
+              <item id="TableStyleDark3" translatable="yes" context="sidebardatabase|tablestyledark3">Table Style Dark 3</item>
+              <item id="TableStyleDark4" translatable="yes" context="sidebardatabase|tablestyledark4">Table Style Dark 4</item>
+              <item id="TableStyleDark5" translatable="yes" context="sidebardatabase|tablestyledark5">Table Style Dark 5</item>
+              <item id="TableStyleDark6" translatable="yes" context="sidebardatabase|tablestyledark6">Table Style Dark 6</item>
+              <item id="TableStyleDark7" translatable="yes" context="sidebardatabase|tablestyledark7">Table Style Dark 7</item>
+              <item id="TableStyleDark8" translatable="yes" context="sidebardatabase|tablestyledark8">Table Style Dark 8</item>
+              <item id="TableStyleDark9" translatable="yes" context="sidebardatabase|tablestyledark9">Table Style Dark 9</item>
+              <item id="TableStyleDark10" translatable="yes" context="sidebardatabase|tablestyledark10">Table Style Dark 10</item>
+              <item id="TableStyleDark11" translatable="yes" context="sidebardatabase|tablestyledark11">Table Style Dark 11</item>
+            </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="cb_styles-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="sidebardatabase|tablestylenames">Table Style Names</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="sidebardatabase|defaulttablestylenames">Default Table Style Names</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
   </object>

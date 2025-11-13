@@ -1991,15 +1991,15 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
     }
     else if (aPropertyName == SC_UNONAME_TABLE_STYLENAME)
     {
-        OUString aStyleName;
-        aValue >>= aStyleName;
+        OUString aStyleID;
+        aValue >>= aStyleID;
         ScTableStyleParam aParam;
         const ScTableStyleParam* pOldParam = pData->GetTableStyleInfo();
         if (pOldParam)
         {
             aParam = *pOldParam;
         }
-        aParam.maStyleName = aStyleName;
+        aParam.maStyleID = aStyleID;
 
         aNewData.SetTableStyleInfo(aParam);
     }
@@ -2119,7 +2119,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         {
             const ScTableStyleParam* pTableStyleInfo = GetDBData_Impl()->GetTableStyleInfo();
             if (pTableStyleInfo)
-                aRet <<= pTableStyleInfo->maStyleName;
+                aRet <<= pTableStyleInfo->maStyleID;
             else
                 aRet <<= OUString();
 

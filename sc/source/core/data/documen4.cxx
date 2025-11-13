@@ -802,7 +802,7 @@ const SfxItemSet* ScDocument::GetTableFormatSet(SCCOL nCol, SCROW nRow, SCTAB nT
         if (!pTableStyleInfo)
             return nullptr;
 
-        const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleName);
+        const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleID);
         if (!pTableStyle)
             return nullptr;
 
