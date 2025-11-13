@@ -1355,6 +1355,44 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     CPPUNIT_ASSERT_EQUAL(u"Test 2"_ustr, pViewShell->GetActualPage()->GetName());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf68320_hidden_pages_total_slide_count)
+{
+    createSdImpressDoc();
+
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:HideSlide"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    checkCurrentPageNumber(3);
+
+    insertStringToObject(0, u"Pages: ", /*bUseEscape*/ false);
+
+    dispatchCommand(mxComponent, u".uno:InsertPagesField"_ustr, {});
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeString(pXImpressDocument, u"/");
+
+    dispatchCommand(mxComponent, u".uno:InsertPageField"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
+
+    // Paste as Unformatted text in order to get the field's values
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(2),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed wiht
+    // - Expected: Pages: 3/3
+    // - Actual  : Pages: 2/3
+    CPPUNIT_ASSERT_EQUAL(u"Pages: 3/3"_ustr, xShape->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
 {
     createSdImpressDoc();
