@@ -1880,11 +1880,15 @@ void JSTreeView::render_entry(int pos, int dpix, int dpiy)
     pDevice->SetDPIX(96.0 * dpix / 100);
     pDevice->SetDPIY(96.0 * dpiy / 100);
 
-    SvTreeListEntry* rEntry = m_xTreeView->GetEntryAtAbsPos(pos);
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntryAtAbsPos(pos);
+    if (!pEntry)
+    {
+        return;
+    }
 
     Size aRenderSize = signal_custom_get_size(*pDevice, get_id(pos));
     pDevice->SetOutputSize(aRenderSize);
-    m_xTreeView->DrawCustomEntry(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), *rEntry);
+    m_xTreeView->DrawCustomEntry(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), *pEntry);
 
     BitmapEx aImage = pDevice->GetBitmapEx(Point(0, 0), aRenderSize);
 
