@@ -795,7 +795,7 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                     // This looks complicated. TODO
                     return nullptr;
                 case CX_TOKEN( axisId ):
-                    // TODO
+                    mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
                     return nullptr;
             }
     }

@@ -159,19 +159,26 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( areaChart ):      ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_AREA;      mb3dChart = false;  break;
         case C_TOKEN( bar3DChart ):     ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_BAR;       mb3dChart = true;   break;
         case C_TOKEN( barChart ):       ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
+        case CX_TOKEN( boxWhisker ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BOXWHISKER;mb3dChart = false;  break;
         case C_TOKEN( bubbleChart ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BUBBLE;    mb3dChart = false;  break;
+        case CX_TOKEN( clusteredColumn ): ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;     mb3dChart = false;  break;
         case C_TOKEN( doughnutChart ):  ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_DOUGHNUT;  mb3dChart = false;  break;
         case CX_TOKEN( funnel ):        ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_FUNNEL;    mb3dChart = false;  break;
         case C_TOKEN( line3DChart ):    ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_LINE;      mb3dChart = true;   break;
         case C_TOKEN( lineChart ):      ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_LINE;      mb3dChart = false;  break;
         case C_TOKEN( ofPieChart ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_OFPIE;     mb3dChart = false;  break;
+        case CX_TOKEN( paretoLine ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_PARETOLINE;mb3dChart = false;  break;
         case C_TOKEN( pie3DChart ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_PIE;       mb3dChart = true;   break;
         case C_TOKEN( pieChart ):       ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_PIE;       mb3dChart = false;  break;
+        case CX_TOKEN( regionMap ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_REGIONMAP; mb3dChart = false;  break;
         case C_TOKEN( radarChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_RADARLINE; mb3dChart = false;  break;
         case C_TOKEN( scatterChart ):   ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_SCATTER;   mb3dChart = false;  break;
         case C_TOKEN( stockChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_STOCK;     mb3dChart = false;  break;
+        case CX_TOKEN( sunburst ):      ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_SUNBURST;  mb3dChart = false;  break;
         case C_TOKEN( surface3DChart ): ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;
         case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    // 3D bar chart from all surface charts
+        case CX_TOKEN( treemap ):       ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_TREEMAP;   mb3dChart = false;  break;
+        case CX_TOKEN( waterfall ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
         default:    OSL_FAIL( "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
 #undef ENSURE_AXESCOUNT
     }

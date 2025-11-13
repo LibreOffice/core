@@ -52,6 +52,12 @@ enum TypeId
     TYPEID_BUBBLE,                  /// Bubble chart.
     TYPEID_SURFACE,                 /// Surface chart.
     TYPEID_FUNNEL,                  /// Funnel chart.
+    TYPEID_HISTO,                   /// Histogram chart.
+    TYPEID_BOXWHISKER,              /// Box & whisker
+    TYPEID_PARETOLINE,              /// Pareto (sorted column + cumulative line)
+    TYPEID_REGIONMAP,               /// Geographic map
+    TYPEID_SUNBURST,                /// Multi-level hierarchical
+    TYPEID_TREEMAP,                 /// Two-level hierarchical
     TYPEID_UNKNOWN,                 /// Default for unknown chart types.
 };
 
