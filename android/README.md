@@ -70,13 +70,13 @@ and rendering the layers to the document.
 - `GeckoLayerClient` (`org.mozilla.gecko.gfx.GeckoLayerClient`) is the middle man of the
   application, which connects all the bits together. It is the document view layer
   holder so the any management (including tiled rendering) usually go through this
-  class. It listens to draw requests and viewport changes from `PanZoomController`
+  class. It listens to draw requests and viewport changes from `JavaPanZoomController`
   (see "Touch events").
 
 ### Touch Events, Scrolling and Zooming
 
 The main class that handles the touch event, scrolling and zooming is `JavaPanZoomController`
-`org.mozilla.gecko.gfx.JavaPanZoomController` (implementation of `PanZoomController` interface).
+`org.mozilla.gecko.gfx.JavaPanZoomController`.
 When the user performs a touch action, the document view needs to change, which means the
 viewport changes. `JavaPanZoomController` changes the viewport and signals the change through
 `PanZoomTarget` (`org.mozilla.gecko.gfx.PanZoomTarget`).

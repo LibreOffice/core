@@ -39,7 +39,7 @@ public class LayerView extends FrameLayout {
     private static final String LOGTAG = LayerView.class.getName();
 
     private GeckoLayerClient mLayerClient;
-    private PanZoomController mPanZoomController;
+    private JavaPanZoomController mPanZoomController;
     private final GLController mGLController;
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;

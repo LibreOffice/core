@@ -43,7 +43,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     private ZoomConstraints mZoomConstraints;
 
-    private final PanZoomController mPanZoomController;
+    private final JavaPanZoomController mPanZoomController;
     private final LayerView mView;
     private final DisplayPortCalculator mDisplayPortCalculator;
 
@@ -60,7 +60,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
 
         mView = view;
-        mPanZoomController = PanZoomController.Factory.create(mContext, this, mView);
+        mPanZoomController = new JavaPanZoomController(mContext, this, mView);
         mView.connect(this);
 
         mRootLayer = new DynamicTileLayer(mContext);
@@ -114,7 +114,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         sendResizeEventIfNecessary(forceResizeEvent);
     }
 
-    PanZoomController getPanZoomController() {
+    JavaPanZoomController getPanZoomController() {
         return mPanZoomController;
     }
 
@@ -280,18 +280,14 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     public void zoomTo(RectF rect) {
-        if (mPanZoomController instanceof JavaPanZoomController) {
-            ((JavaPanZoomController) mPanZoomController).animatedZoomTo(rect);
-        }
+        mPanZoomController.animatedZoomTo(rect);
     }
 
     /**
      * Move the viewport to the desired point, and change the zoom level.
      */
     public void moveTo(PointF point, Float zoom) {
-        if (mPanZoomController instanceof JavaPanZoomController) {
-            ((JavaPanZoomController) mPanZoomController).animatedMove(point, zoom);
-        }
+        mPanZoomController.animatedMove(point, zoom);
     }
 
     public void zoomTo(float pageWidth, float pageHeight) {

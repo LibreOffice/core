@@ -30,7 +30,7 @@ import java.lang.StrictMath;
  */
 class JavaPanZoomController
         extends GestureDetector.SimpleOnGestureListener
-        implements PanZoomController, SimpleScaleGestureDetector.SimpleScaleGestureListener
+        implements SimpleScaleGestureDetector.SimpleScaleGestureListener
 {
     private static final String LOGTAG = "GeckoPanZoomController";
 
