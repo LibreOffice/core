@@ -49,3 +49,14 @@
  
  using namespace std;
  
+--- include/orcus/env.hpp.orig	2025-11-13 14:52:11.931714242 +0100
++++ include/orcus/env.hpp	2025-11-13 14:51:51.200547313 +0100
+@@ -136,6 +136,8 @@
+   #endif
+ #endif
+ 
++#include <cstdint>
++
+ #endif
+ 
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
