@@ -20,7 +20,7 @@ libnumbertext_CXXFLAGS=$(CXXFLAGS) $(CXXFLAGS_CXX11)
 
 ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
-libnumbertext_CPPFLAGS+=-D_GLIBCXX_DEBUG
+libnumbertext_CPPFLAGS+=-D_GLIBCXX_DEBUG -Wno-deprecated-declarations
 endif
 endif
 

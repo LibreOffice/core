@@ -68,6 +68,8 @@ liborcus_CXXFLAGS=$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) 
 liborcus_LDFLAGS=$(LDFLAGS) $(gb_LTOFLAGS)
 ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
+else
+liborcus_CXXFLAGS+= -Wno-deprecated-declarations
 endif
 ifeq ($(SYSTEM_BOOST),)
 liborcus_CXXFLAGS+=${BOOST_CPPFLAGS}
