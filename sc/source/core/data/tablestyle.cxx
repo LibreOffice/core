@@ -20,8 +20,23 @@ ScTableStyle::ScTableStyle(const OUString& rName, const std::optional<OUString>&
 {
 }
 
-const SfxItemSet* ScTableStyle::GetTableCellItemSet(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
-                                                    SCROW nRowIndex) const
+bool ScTableStyle::HasFontAttrSet(ScPatternAttr* pPattern)
+{
+    // TODO: maybe different pPatterns can have different font attributes, and
+    // now we only check if any font attribute is set on a pattern.
+    // e.g.: mpFirstRowStripePattern only has ATTR_FONT_WEIGHT set and we will retirn that one,
+    // but mpTablePattern also can have ATTR_FONT_COLOR set (need to merge them and return that
+    // one for custom styles, but now it is enough for the ooxml default styles).
+    for (sal_Int16 nWhich = ATTR_FONT; nWhich <= ATTR_FONT_RELIEF; nWhich++)
+    {
+        if (pPattern->GetItemSet().GetItemState(nWhich) == SfxItemState::SET)
+            return true;
+    }
+    return false;
+}
+
+const SfxItemSet* ScTableStyle::GetFontItemSet(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                               SCROW nRowIndex) const
 {
     const ScTableStyleParam* pParam = rDBData.GetTableStyleInfo();
     ScRange aRange;
@@ -32,33 +47,39 @@ const SfxItemSet* ScTableStyle::GetTableCellItemSet(const ScDBData& rDBData, SCC
     if (bHasHeader && mpLastHeaderCellPattern && nRow == aRange.aStart.Row()
         && nCol == aRange.aEnd.Col())
     {
-        return &mpLastHeaderCellPattern->GetItemSet();
+        if (HasFontAttrSet(mpLastHeaderCellPattern.get()))
+            return &mpLastHeaderCellPattern->GetItemSet();
     }
 
     if (bHasHeader && mpFirstHeaderCellPattern && nRow == aRange.aStart.Row()
         && nCol == aRange.aStart.Col())
     {
-        return &mpFirstHeaderCellPattern->GetItemSet();
+        if (HasFontAttrSet(mpFirstHeaderCellPattern.get()))
+            return &mpFirstHeaderCellPattern->GetItemSet();
     }
 
     if (bHasTotal && mpTotalRowPattern && nRow == aRange.aEnd.Row())
     {
-        return &mpTotalRowPattern->GetItemSet();
+        if (HasFontAttrSet(mpTotalRowPattern.get()))
+            return &mpTotalRowPattern->GetItemSet();
     }
 
     if (bHasHeader && mpHeaderRowPattern && nRow == aRange.aStart.Row())
     {
-        return &mpHeaderRowPattern->GetItemSet();
+        if (HasFontAttrSet(mpHeaderRowPattern.get()))
+            return &mpHeaderRowPattern->GetItemSet();
     }
 
     if (pParam->mbFirstColumn && mpFirstColumnPattern && nCol == aRange.aStart.Col())
     {
-        return &mpFirstColumnPattern->GetItemSet();
+        if (HasFontAttrSet(mpFirstColumnPattern.get()))
+            return &mpFirstColumnPattern->GetItemSet();
     }
 
     if (pParam->mbLastColumn && mpLastColumnPattern && nCol == aRange.aEnd.Col())
     {
-        return &mpLastColumnPattern->GetItemSet();
+        if (HasFontAttrSet(mpLastColumnPattern.get()))
+            return &mpLastColumnPattern->GetItemSet();
     }
 
     if (!bHasTotal || aRange.aEnd.Row() != nRow)
@@ -69,12 +90,14 @@ const SfxItemSet* ScTableStyle::GetTableCellItemSet(const ScDBData& rDBData, SCC
             bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
             if (mpSecondRowStripePattern && !bFirstRowStripe)
             {
-                return &mpSecondRowStripePattern->GetItemSet();
+                if (HasFontAttrSet(mpSecondRowStripePattern.get()))
+                    return &mpSecondRowStripePattern->GetItemSet();
             }
 
             if (mpFirstRowStripePattern && bFirstRowStripe)
             {
-                return &mpFirstRowStripePattern->GetItemSet();
+                if (HasFontAttrSet(mpFirstRowStripePattern.get()))
+                    return &mpFirstRowStripePattern->GetItemSet();
             }
         }
 
@@ -85,19 +108,22 @@ const SfxItemSet* ScTableStyle::GetTableCellItemSet(const ScDBData& rDBData, SCC
             bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
             if (mpSecondColumnStripePattern && !bFirstColStripe)
             {
-                return &mpSecondColumnStripePattern->GetItemSet();
+                if (HasFontAttrSet(mpSecondColumnStripePattern.get()))
+                    return &mpSecondColumnStripePattern->GetItemSet();
             }
 
             if (mpFirstColumnStripePattern && bFirstColStripe)
             {
-                return &mpFirstColumnStripePattern->GetItemSet();
+                if (HasFontAttrSet(mpFirstColumnStripePattern.get()))
+                    return &mpFirstColumnStripePattern->GetItemSet();
             }
         }
     }
 
     if (mpTablePattern)
     {
-        return &mpTablePattern->GetItemSet();
+        if (HasFontAttrSet(mpTablePattern.get()))
+            return &mpTablePattern->GetItemSet();
     }
 
     return nullptr;
