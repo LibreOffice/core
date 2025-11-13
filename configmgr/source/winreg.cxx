@@ -113,7 +113,12 @@ namespace {
 //     </prop>
 //  </item>
 
-void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFileHandle)
+char const* winRegTypeName(WinRegType type) {
+    return type == LOCAL_MACHINE ? "HKEY_LOCAL_MACHINE" : "HKEY_CURRENT_USER";
+}
+
+void dumpWindowsRegistryKey(
+    WinRegType type, HKEY hKey, OUString const & aKeyName, TempFile &aFileHandle)
 {
     HKEY hCurKey;
 
@@ -146,7 +151,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                     aSubkeyName = aKeyName + "\\" + o3tl::toU(buffKeyName);
 
                 //Recursion, until no more subkeys are found
-                dumpWindowsRegistryKey(hKey, aSubkeyName, aFileHandle);
+                dumpWindowsRegistryKey(type, hKey, aSubkeyName, aFileHandle);
             }
         }
         else if(nValues)
@@ -195,7 +200,8 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             }
             SAL_INFO(
                 "configmgr",
-                "winreg \"" << aKeyName << "\": value=\"" << aValue << "\" type=\"" << aType
+                "winreg " << winRegTypeName(type) << " \"" << aKeyName << "\": value=\"" << aValue
+                << "\" type=\"" << aType
                 << "\" final=" << bFinal << " nil=" << bNil << " ext=" << bExternal
                 << "\" extback=\"" << aExternalBackend << "\"");
             if (bExternal)
@@ -299,7 +305,8 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
     {
         SAL_INFO(
             "configmgr",
-            ("Windows registry settings do not exist in HKLM\\SOFTWARE\\Policies\\LibreOffice"));
+            "Windows registry settings do not exist in " << winRegTypeName(eType)
+            << " HKLM\\SOFTWARE\\Policies\\LibreOffice");
         return false;
     }
 
@@ -322,7 +329,7 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
         " xmlns:oor=\"http://openoffice.org/2001/registry\""
         " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
         " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
-    dumpWindowsRegistryKey(hKey, "", aFileHandle);
+    dumpWindowsRegistryKey(eType, hKey, "", aFileHandle);
     aFileHandle.writeString("</oor:items>");
     oslFileError e = aFileHandle.closeWithoutUnlink();
     if (e != osl_File_E_None)
