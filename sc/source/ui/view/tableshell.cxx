@@ -89,6 +89,7 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                     aNewParam.mbColumnStripes = pDBItem->HasStripedCols();
                     aNewParam.mbFirstColumn = pDBItem->HasFirstCol();
                     aNewParam.mbLastColumn = pDBItem->HasLastCol();
+                    aNewParam.maStyleID = pDBItem->GetStyleID();
                     aNewDBData.SetTableStyleInfo(aNewParam);
 
                     ScDBDocFunc aFunc(*rViewData.GetDocShell());
@@ -150,13 +151,13 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                         rSet.Put(ScDatabaseSettingItem(
                             pDBData->HasHeader(), pDBData->HasTotals(), pParam->mbFirstColumn,
                             pParam->mbLastColumn, pParam->mbRowStripes, pParam->mbColumnStripes,
-                            pDBData->HasAutoFilter()));
+                            pDBData->HasAutoFilter(), pParam->maStyleID));
                     }
                     else
                     {
                         rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pDBData->HasTotals(),
                                                        false, false, false, false,
-                                                       pDBData->HasAutoFilter()));
+                                                       pDBData->HasAutoFilter(), u""_ustr));
                     }
                 }
                 break;

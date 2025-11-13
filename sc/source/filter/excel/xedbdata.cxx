@@ -320,7 +320,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
     if (const ScTableStyleParam* pParam = rData.GetTableStyleInfo())
     {
-        const OUString& rStyleName = pParam->maStyleName;
+        const OUString& rStyleName = pParam->maStyleID;
         const ScTableStyle* pTableStyle = rStrm.GetRoot().GetDoc().GetTableStyles().GetTableStyle(rStyleName);
         if (pTableStyle)
         {

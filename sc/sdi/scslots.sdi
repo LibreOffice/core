@@ -30,6 +30,7 @@ module StarCalc
         BOOL StripedRows            MID_5;
         BOOL StripedCols            MID_6;
         BOOL ShowFilters            MID_7;
+        String StyleID              MID_8
     };
     item ScDatabaseSetting ScDatabaseSettingItem;
 

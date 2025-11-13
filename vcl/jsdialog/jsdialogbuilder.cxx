@@ -1266,6 +1266,12 @@ void JSListBox::set_active(int pos)
     sendUpdate();
 }
 
+void JSListBox::set_active_id(const OUString& rStr)
+{
+    sal_uInt16 nPos = find_id(rStr);
+    set_active(nPos);
+}
+
 JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
                        bool bTakeOwnership)
     : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(pSender, pComboBox, pBuilder,

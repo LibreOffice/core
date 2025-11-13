@@ -41,6 +41,7 @@ ScDatabasePropertyPanel::ScDatabasePropertyPanel(weld::Widget* pParent,
     , m_xChkBandedColumns(m_xBuilder->weld_check_button(u"chk_banded_cols"_ustr))
     , m_xChkFirstColumn(m_xBuilder->weld_check_button(u"chk_first_column"_ustr))
     , m_xChkLastColumn(m_xBuilder->weld_check_button(u"chk_last_column"_ustr))
+    , m_xCmbStyle(m_xBuilder->weld_combo_box(u"cb_styles"_ustr))
     , maHeaderRowCtrl(SID_DATABASE_SETTINGS, *pBindings, *this)
     , mpBindings(pBindings)
 {
@@ -56,6 +57,7 @@ ScDatabasePropertyPanel::~ScDatabasePropertyPanel()
     m_xChkBandedColumns.reset();
     m_xChkFirstColumn.reset();
     m_xChkLastColumn.reset();
+    m_xCmbStyle.reset();
 
     maHeaderRowCtrl.dispose();
 }
@@ -69,6 +71,7 @@ void ScDatabasePropertyPanel::Initialize()
     m_xChkBandedColumns->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
     m_xChkFirstColumn->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
     m_xChkLastColumn->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
+    m_xCmbStyle->connect_changed(LINK(this, ScDatabasePropertyPanel, StyleChanged));
 }
 
 std::unique_ptr<PanelLayout>
@@ -118,6 +121,7 @@ void ScDatabasePropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eSt
                 m_xChkBandedRows->set_active(pItem->HasStripedRows());
                 m_xChkBandedColumns->set_active(pItem->HasStripedCols());
                 m_xChkFilterButtons->set_active(pItem->HasShowFilters());
+                m_xCmbStyle->set_active_id(pItem->GetStyleID());
             }
             break;
     }
@@ -128,7 +132,17 @@ IMPL_LINK_NOARG(ScDatabasePropertyPanel, EntryChanged, weld::Toggleable&, void)
     ScDatabaseSettingItem aItem(m_xChkHeaderRow->get_active(), m_xChkTotalRow->get_active(),
                                 m_xChkFirstColumn->get_active(), m_xChkLastColumn->get_active(),
                                 m_xChkBandedRows->get_active(), m_xChkBandedColumns->get_active(),
-                                m_xChkFilterButtons->get_active());
+                                m_xChkFilterButtons->get_active(), m_xCmbStyle->get_active_id());
+    GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::RECORD,
+                                                { &aItem });
+}
+
+IMPL_LINK_NOARG(ScDatabasePropertyPanel, StyleChanged, weld::ComboBox&, void)
+{
+    ScDatabaseSettingItem aItem(m_xChkHeaderRow->get_active(), m_xChkTotalRow->get_active(),
+                                m_xChkFirstColumn->get_active(), m_xChkLastColumn->get_active(),
+                                m_xChkBandedRows->get_active(), m_xChkBandedColumns->get_active(),
+                                m_xChkFilterButtons->get_active(), m_xCmbStyle->get_active_id());
     GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::RECORD,
                                                 { &aItem });
 }
