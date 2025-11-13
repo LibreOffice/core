@@ -303,6 +303,9 @@ def parse_table_style(style) -> TableStyle:
     if table_style_name == "TableStyleDark9 2":
         # this looks like a bug in the OOXML spec documents
         table_style_name = "TableStyleDark9"
+    elif table_style_name == "TableStyleDark4 ":
+        # Trim unintended trailing space
+        table_style_name = "TableStyleDark4"
 
     return TableStyle(table_style_name, [parse_table_style_element(element, style_defs) for element in list(tableStyle)])
 
