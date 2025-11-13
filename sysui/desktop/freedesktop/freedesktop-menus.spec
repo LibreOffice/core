@@ -32,8 +32,8 @@ Conflicts: %pkgprefix-redhat-menus
 Conflicts: %pkgprefix-mandriva-menus
 BuildArch: noarch
 AutoReqProv: no
-%define _binary_filedigest_algorithm 1
-%define _binary_payload w1T.xzdio
+%define _binary_filedigest_algorithm 8
+%define _binary_payload w2.xzdio
 
 %define gnome_dir /usr
 

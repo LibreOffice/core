@@ -1225,7 +1225,7 @@ sub set_autoprovreq_in_specfile
         close (FINDREQUIRES);
     }
 
-    $autoreqprovline .= "%define _binary_filedigest_algorithm 1\n%define _binary_payload w1T.xzdio\n";
+    $autoreqprovline .= "%define _binary_filedigest_algorithm 8\n%define _binary_payload w2.xzdio\n";
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {

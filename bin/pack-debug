@@ -105,7 +105,7 @@ cat $DEBUGSRC | awk '
 
  # debug build source package
 
- rpmbuild -bb --define "_unpackaged_files_terminate_build  0" --define "_binary_payload w1T.xzdio" ${DEBUGSRC}-debugsource --target $build_cpu --buildroot=$buildroot
+ rpmbuild -bb --define "_unpackaged_files_terminate_build  0" --define "_binary_payload w2.xzdio" --define "_binary_filedigest_algorithm 8" ${DEBUGSRC}-debugsource --target $build_cpu --buildroot=$buildroot
 
 
 echo Update RPM download tar.gz
