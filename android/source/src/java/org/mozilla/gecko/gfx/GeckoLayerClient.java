@@ -45,8 +45,6 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     private ZoomConstraints mZoomConstraints;
 
-    private boolean mIsReady;
-
     private final PanZoomController mPanZoomController;
     private final LayerView mView;
     private final DisplayPortCalculator mDisplayPortCalculator;
@@ -66,7 +64,6 @@ public class GeckoLayerClient implements PanZoomTarget {
         mView = view;
         mPanZoomController = PanZoomController.Factory.create(mContext, this, mView);
         mView.connect(this);
-        mIsReady = true;
 
         mRootLayer = new DynamicTileLayer(mContext);
         mLowResLayer = new FixedZoomTileLayer(mContext);
@@ -80,11 +77,11 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     Layer getRoot() {
-        return mIsReady ? mRootLayer : null;
+        return mRootLayer;
     }
 
     Layer getLowResLayer() {
-        return mIsReady ? mLowResLayer : null;
+        return mLowResLayer;
     }
 
     public LayerView getView() {
@@ -232,14 +229,12 @@ public class GeckoLayerClient implements PanZoomTarget {
     /** Implementation of PanZoomTarget */
     @Override
     public void setAnimationTarget(ImmutableViewportMetrics viewport) {
-        if (mIsReady) {
-            // We know what the final viewport of the animation is going to be, so
-            // immediately request a draw of that area by setting the display port
-            // accordingly. This way we should have the content pre-rendered by the
-            // time the animation is done.
-            DisplayPortMetrics displayPort = mDisplayPortCalculator.calculate(viewport, null);
-            adjustViewport(displayPort);
-        }
+        // We know what the final viewport of the animation is going to be, so
+        // immediately request a draw of that area by setting the display port
+        // accordingly. This way we should have the content pre-rendered by the
+        // time the animation is done.
+        DisplayPortMetrics displayPort = mDisplayPortCalculator.calculate(viewport, null);
+        adjustViewport(displayPort);
     }
 
     /** Implementation of PanZoomTarget
@@ -249,18 +244,14 @@ public class GeckoLayerClient implements PanZoomTarget {
     public void setViewportMetrics(ImmutableViewportMetrics viewport) {
         mViewportMetrics = viewport;
         mView.requestRender();
-        if (mIsReady) {
-            geometryChanged();
-        }
+        geometryChanged();
     }
 
     /** Implementation of PanZoomTarget */
     @Override
     public void forceRedraw() {
         mForceRedraw = true;
-        if (mIsReady) {
-            geometryChanged();
-        }
+        geometryChanged();
     }
 
     /** Implementation of PanZoomTarget */
