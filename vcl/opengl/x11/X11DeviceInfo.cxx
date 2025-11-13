@@ -16,6 +16,7 @@
 #include <sal/log.hxx>
 
 #include <unistd.h>
+#include <stdint.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
