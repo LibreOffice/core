@@ -318,6 +318,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkColorPalette \
     UnpackedTarball/skia/src/codec/SkExif \
     UnpackedTarball/skia/src/codec/SkGainmapInfo \
+    UnpackedTarball/skia/src/codec/SkHdrMetadata \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkPixmapUtils \
