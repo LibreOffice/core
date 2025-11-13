@@ -31,6 +31,7 @@ libraryIds = {
     "zlib": 1,
     "libwebp": 1,
     "libffi": 1,
+    "xz": 1,
     "zstd": 1
 }
 
