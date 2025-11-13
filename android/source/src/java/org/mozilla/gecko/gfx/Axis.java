@@ -15,51 +15,38 @@ import org.mozilla.gecko.util.FloatUtils;
  * like displacement, velocity, viewport dimensions, etc. pertaining to
  * a particular axis.
  */
+
 abstract class Axis {
 
     // This fraction of velocity remains after every animation frame when the velocity is low.
-    private static float FRICTION_SLOW;
+    private static final float FRICTION_SLOW = getFrameAdjustedFriction(0.85f);
     // This fraction of velocity remains after every animation frame when the velocity is high.
-    private static float FRICTION_FAST;
+    private static final float FRICTION_FAST = getFrameAdjustedFriction(0.97f);
     // Below this velocity (in pixels per frame), the friction starts increasing from FRICTION_FAST
     // to FRICTION_SLOW.
-    private static float VELOCITY_THRESHOLD;
-    // The maximum velocity change factor between events, per ms, in %.
-    // Direction changes are excluded.
-    private static float MAX_EVENT_ACCELERATION;
-
-    // The rate of deceleration when the surface has overscrolled.
-    private static float OVERSCROLL_DECEL_RATE;
-    // The percentage of the surface which can be overscrolled before it must snap back.
-    private static float SNAP_LIMIT;
-
-    // The minimum amount of space that must be present for an axis to be considered scrollable,
-    // in pixels.
-    private static float MIN_SCROLLABLE_DISTANCE;
 
     static final float MS_PER_FRAME = 4.0f;
     private static final float FRAMERATE_MULTIPLIER = (1000f/60f) / MS_PER_FRAME;
+    private static final float VELOCITY_THRESHOLD = 10 / FRAMERATE_MULTIPLIER;
+    // The maximum velocity change factor between events, per ms, in %.
+    // Direction changes are excluded.
+    private static final float MAX_EVENT_ACCELERATION = 0.012f;
+
+    // The rate of deceleration when the surface has overscrolled.
+    private static final float OVERSCROLL_DECEL_RATE = getFrameAdjustedFriction(0.04f);
+    // The percentage of the surface which can be overscrolled before it must snap back.
+    private static final float SNAP_LIMIT = 0.3f;
+
+    // The minimum amount of space that must be present for an axis to be considered scrollable,
+    // in pixels.
+    private static final float MIN_SCROLLABLE_DISTANCE = 0.5f;
+
 
     //  The values we use for friction are based on a 16.6ms frame, adjust them to MS_PER_FRAME:
     //  FRICTION^1 = FRICTION_ADJUSTED^(16/MS_PER_FRAME)
     //  FRICTION_ADJUSTED = e ^ ((ln(FRICTION))/FRAMERATE_MULTIPLIER)
     static float getFrameAdjustedFriction(float baseFriction) {
         return (float)Math.pow(Math.E, (Math.log(baseFriction) / FRAMERATE_MULTIPLIER));
-    }
-
-    static void setPrefs() {
-        FRICTION_SLOW = getFrameAdjustedFriction(0.85f);
-        FRICTION_FAST = getFrameAdjustedFriction(0.97f);
-        VELOCITY_THRESHOLD = 10 / FRAMERATE_MULTIPLIER;
-        MAX_EVENT_ACCELERATION = 0.012f;
-        OVERSCROLL_DECEL_RATE = getFrameAdjustedFriction(0.04f);
-        SNAP_LIMIT = 0.3f;
-        MIN_SCROLLABLE_DISTANCE = 0.5f;
-    }
-
-    static {
-        // set the scrolling parameters to default values on startup
-        setPrefs();
     }
 
     private enum FlingStates {
