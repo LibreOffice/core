@@ -28,6 +28,7 @@
 #include <codemaker/commoncpp.hxx>
 #include <codemaker/global.hxx>
 #include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
