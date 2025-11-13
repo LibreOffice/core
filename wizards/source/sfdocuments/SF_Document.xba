@@ -1758,7 +1758,7 @@ Public Function _ConvertRectangle(ByRef poRect As Object _
 &apos;&apos;&apos;	or vice-versa
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		poRect: a com.sun.star.awt.Rectangle
-&apos;&apos;&apos;		piTargetUnit: a A com.sun.star.util.MeasureUnit constant
+&apos;&apos;&apos;		piTargetUnit: a com.sun.star.util.MeasureUnit constant
 &apos;&apos;&apos;			Only PIXEL and MM_100TH are admitted.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A com.sun.star.awt.Rectangle object after conversion of the position and size
