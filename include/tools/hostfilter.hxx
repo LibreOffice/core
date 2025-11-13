@@ -20,6 +20,8 @@ class TOOLS_DLLPUBLIC HostFilter
 public:
     static void setAllowedHostsRegex(const char* sAllowedRegex);
 
+    static void setAllowedHostsExemptVerifyHost(bool allowedHostExceptVerifyHost);
+
     static bool isForbidden(const OUString& rHost);
 
     static void setExemptVerifyHost(const OUString& rExemptVerifyHost);
