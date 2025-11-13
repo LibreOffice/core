@@ -119,6 +119,8 @@ interface TableDraw
     SID_ALIGN_ANY_LEFT      [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
+    SID_ALIGN_ANY_START     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
+    SID_ALIGN_ANY_END       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_ALIGN_ANY_TOP       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_ALIGN_ANY_VCENTER   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_ALIGN_ANY_BOTTOM    [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]

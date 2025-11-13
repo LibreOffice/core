@@ -705,6 +705,16 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
             break;
 
+        case SID_ALIGN_ANY_START:
+        case SID_ATTR_PARA_ADJUST_START:
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::ParaStart, EE_PARA_JUST ) );
+            break;
+
+        case SID_ALIGN_ANY_END:
+        case SID_ATTR_PARA_ADJUST_END:
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::ParaEnd, EE_PARA_JUST ) );
+            break;
+
         case SID_ATTR_PARA_LINESPACE_10:
             {
                 SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
@@ -1079,6 +1089,16 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
         }
         break;
+    case SvxAdjust::ParaStart:
+        {
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, true ) );
+        }
+        break;
+    case SvxAdjust::ParaEnd:
+        {
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, true ) );
+        }
+        break;
         default:
         {
             // added to avoid warnings
@@ -1088,6 +1108,8 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_LEFT,      eAdj == SvxAdjust::Left ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_HCENTER,   eAdj == SvxAdjust::Center ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SvxAdjust::Right ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_START,     eAdj == SvxAdjust::ParaStart ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_END,       eAdj == SvxAdjust::ParaEnd ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SvxAdjust::Block ) );
 
     SvxLRSpaceItem aLR = aAttrSet.Get( EE_PARA_LRSPACE );

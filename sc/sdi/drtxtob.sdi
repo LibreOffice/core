@@ -75,6 +75,8 @@ interface TableDrawText
     SID_ATTR_PARA_ADJUST_CENTER             [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_PARA_ADJUST_RIGHT              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_PARA_ADJUST_BLOCK              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_PARA_ADJUST_START              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_PARA_ADJUST_END                [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_PARA_LRSPACE                   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_PARA_LINESPACE                 [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_PARA_ULSPACE                   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
@@ -100,6 +102,8 @@ interface TableDrawText
     SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ALIGN_ANY_JUSTIFIED [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ALIGN_ANY_START     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ALIGN_ANY_END       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
 
     SID_FORMTEXT_STYLE      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; ]
     SID_FORMTEXT_ADJUST     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; ]

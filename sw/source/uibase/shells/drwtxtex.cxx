@@ -229,6 +229,12 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_ADJUST_BLOCK:
             aNewAttr.Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST));
         break;
+        case SID_ATTR_PARA_ADJUST_START:
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::ParaStart, EE_PARA_JUST));
+        break;
+        case SID_ATTR_PARA_ADJUST_END:
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::ParaEnd, EE_PARA_JUST));
+        break;
         case SID_ATTR_PARA_LRSPACE:
             {
                 SvxLRSpaceItem aParaMargin(static_cast<const SvxLRSpaceItem&>(rReq.
@@ -754,6 +760,12 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 goto ASK_ADJUST;
             case SID_ATTR_PARA_ADJUST_BLOCK:
                 eAdjust = SvxAdjust::Block;
+                goto ASK_ADJUST;
+            case SID_ATTR_PARA_ADJUST_START:
+                eAdjust = SvxAdjust::ParaStart;
+                goto ASK_ADJUST;
+            case SID_ATTR_PARA_ADJUST_END:
+                eAdjust = SvxAdjust::ParaEnd;
                 goto ASK_ADJUST;
             ASK_ADJUST:
             {

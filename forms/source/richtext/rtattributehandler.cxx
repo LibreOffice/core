@@ -123,6 +123,8 @@ namespace frm
         case SID_ATTR_PARA_ADJUST_CENTER:
         case SID_ATTR_PARA_ADJUST_RIGHT :
         case SID_ATTR_PARA_ADJUST_BLOCK :
+        case SID_ATTR_PARA_ADJUST_START :
+        case SID_ATTR_PARA_ADJUST_END   :
             pReturn = new ParaAlignmentHandler( _nAttributeId );
             break;
 
@@ -174,6 +176,8 @@ namespace frm
             case SID_ATTR_PARA_ADJUST_CENTER: m_eAdjust = SvxAdjust::Center;  break;
             case SID_ATTR_PARA_ADJUST_RIGHT : m_eAdjust = SvxAdjust::Right;   break;
             case SID_ATTR_PARA_ADJUST_BLOCK : m_eAdjust = SvxAdjust::Block;   break;
+            case SID_ATTR_PARA_ADJUST_START : m_eAdjust = SvxAdjust::ParaStart; break;
+            case SID_ATTR_PARA_ADJUST_END   : m_eAdjust = SvxAdjust::ParaEnd; break;
             default:
                 OSL_FAIL( "ParaAlignmentHandler::ParaAlignmentHandler: invalid slot!" );
                 break;

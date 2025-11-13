@@ -4276,11 +4276,15 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
         pBindings->Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
         pBindings->Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
         pBindings->Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_START );
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_END );
         // pseudo slots for Format menu
         pBindings->Invalidate( SID_ALIGN_ANY_HDEFAULT );
         pBindings->Invalidate( SID_ALIGN_ANY_LEFT );
         pBindings->Invalidate( SID_ALIGN_ANY_HCENTER );
         pBindings->Invalidate( SID_ALIGN_ANY_RIGHT );
+        pBindings->Invalidate( SID_ALIGN_ANY_START );
+        pBindings->Invalidate( SID_ALIGN_ANY_END );
         pBindings->Invalidate( SID_ALIGN_ANY_JUSTIFIED );
     }
 

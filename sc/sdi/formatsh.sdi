@@ -57,6 +57,8 @@ interface FormatForSelection
     SID_ALIGN_ANY_LEFT      [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_START     [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_END       [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_JUSTIFIED [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_TOP       [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_VCENTER   [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]

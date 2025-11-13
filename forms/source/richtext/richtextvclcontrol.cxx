@@ -123,6 +123,8 @@ namespace frm
             case SID_ATTR_PARA_ADJUST_CENTER:
             case SID_ATTR_PARA_ADJUST_RIGHT:
             case SID_ATTR_PARA_ADJUST_BLOCK:
+            case SID_ATTR_PARA_ADJUST_START:
+            case SID_ATTR_PARA_ADJUST_END:
             case SID_SET_SUPER_SCRIPT:
             case SID_SET_SUB_SCRIPT:
             case SID_ATTR_PARA_LINESPACE_10:

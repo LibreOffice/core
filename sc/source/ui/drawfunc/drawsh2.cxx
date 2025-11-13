@@ -195,6 +195,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_ALIGN_ANY_LEFT );
         rSet.DisableItem( SID_ALIGN_ANY_HCENTER );
         rSet.DisableItem( SID_ALIGN_ANY_RIGHT );
+        rSet.DisableItem( SID_ALIGN_ANY_START );
+        rSet.DisableItem( SID_ALIGN_ANY_END );
         rSet.DisableItem( SID_ALIGN_ANY_TOP );
         rSet.DisableItem( SID_ALIGN_ANY_VCENTER );
         rSet.DisableItem( SID_ALIGN_ANY_BOTTOM );

@@ -345,6 +345,38 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 Invalidate(nSlotId);
             }
             break;
+            case SID_ATTR_PARA_ADJUST_START:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
+                if ( eAdj == SvxAdjust::Left)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, true ) );
+                }
+
+                bAttr = true;
+
+                Invalidate(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_ADJUST_END:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
+                if ( eAdj == SvxAdjust::Left)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, true ) );
+                }
+
+                bAttr = true;
+
+                Invalidate(nSlotId);
+            }
+            break;
             case SID_ATTR_PARA_LRSPACE:
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );

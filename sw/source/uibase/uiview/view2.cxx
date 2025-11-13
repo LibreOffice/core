@@ -1614,6 +1614,8 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ALIGN_ANY_LEFT :
         case SID_ALIGN_ANY_HCENTER  :
         case SID_ALIGN_ANY_RIGHT    :
+        case SID_ALIGN_ANY_START    :
+        case SID_ALIGN_ANY_END      :
         case SID_ALIGN_ANY_JUSTIFIED:
         case SID_ALIGN_ANY_TOP      :
         case SID_ALIGN_ANY_VCENTER  :
@@ -1629,6 +1631,8 @@ void SwView::Execute(SfxRequest &rReq)
                     case SID_ALIGN_ANY_LEFT :       nAlias = SID_ATTR_PARA_ADJUST_LEFT; break;
                     case SID_ALIGN_ANY_HCENTER  :   nAlias = SID_ATTR_PARA_ADJUST_CENTER; break;
                     case SID_ALIGN_ANY_RIGHT    :   nAlias = SID_ATTR_PARA_ADJUST_RIGHT; break;
+                    case SID_ALIGN_ANY_START    :   nAlias = SID_ATTR_PARA_ADJUST_START; break;
+                    case SID_ALIGN_ANY_END      :   nAlias = SID_ATTR_PARA_ADJUST_END; break;
                     case SID_ALIGN_ANY_JUSTIFIED:   nAlias = SID_ATTR_PARA_ADJUST_BLOCK; break;
                     case SID_ALIGN_ANY_TOP      :   nAlias = SID_TABLE_VERT_NONE; break;
                     case SID_ALIGN_ANY_VCENTER  :   nAlias = SID_TABLE_VERT_CENTER; break;

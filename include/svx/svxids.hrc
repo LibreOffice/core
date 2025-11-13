@@ -844,7 +844,7 @@ class XFillGradientItem;
 
 #define SID_ATTR_TRANSFORM_HORI_POSITION                TypedWhichId<SfxInt32Item>( SID_SVX_START + 999 )
 #define SID_ATTR_TRANSFORM_VERT_POSITION                TypedWhichId<SfxInt32Item>( SID_SVX_START + 1000 )
-// Available for use 1001
+#define SID_ALIGN_ANY_START                             ( SID_SVX_START + 1001 )
 #define SID_ALIGN_ANY_LEFT                              ( SID_SVX_START + 1002 )
 #define SID_ALIGN_ANY_HCENTER                           ( SID_SVX_START + 1003 )
 #define SID_ALIGN_ANY_RIGHT                             ( SID_SVX_START + 1004 )
@@ -889,6 +889,7 @@ class XFillGradientItem;
 #define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar
 #define SID_COLOR_SETTINGS                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 1044 )
+#define SID_ALIGN_ANY_END                               ( SID_SVX_START + 1045 )
 
 #define SID_FM_FORM_DESIGN_TOOLS                        TypedWhichId<SfxBoolItem>( SID_SVX_START + 1046 )
 #define SID_DRAWTBX_CS_BASIC                            ( SID_SVX_START + 1047 )

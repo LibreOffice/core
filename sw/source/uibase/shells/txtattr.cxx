@@ -353,6 +353,8 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
         case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjst =  SvxAdjust::Right;     goto SET_ADJUST;
         case SID_ATTR_PARA_ADJUST_CENTER:   eAdjst =  SvxAdjust::Center;    goto SET_ADJUST;
         case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjst =  SvxAdjust::Block;     goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_START:    eAdjst =  SvxAdjust::ParaStart; goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_END:      eAdjst =  SvxAdjust::ParaEnd;   goto SET_ADJUST;
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
@@ -672,6 +674,24 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 }
             }
             break;
+            case SID_ATTR_PARA_ADJUST_START:
+                if (!bAdjustGood)
+                {
+                    rSet.InvalidateItem( nSlot );
+                    nSlot = 0;
+                }
+                else
+                    bFlag = SvxAdjust::ParaStart == eAdjust;
+                break;
+            case SID_ATTR_PARA_ADJUST_END:
+                if (!bAdjustGood)
+                {
+                    rSet.InvalidateItem( nSlot );
+                    nSlot = 0;
+                }
+                else
+                    bFlag = SvxAdjust::ParaEnd == eAdjust;
+                break;
             case SID_ATTR_PARA_LINESPACE_10:
                 bFlag = nLineSpace == 100;
             break;

@@ -503,6 +503,8 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_CENTER );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_BLOCK );
+        rSet.DisableItem( SID_ATTR_PARA_ADJUST_START );
+        rSet.DisableItem( SID_ATTR_PARA_ADJUST_END );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_10 );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_15 );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_20 );
@@ -559,24 +561,48 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, false ) );
                 break;
             case SvxAdjust::Center:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, false ) );
                 break;
             case SvxAdjust::Right:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, false ) );
                 break;
             case SvxAdjust::Block:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, false ) );
+                break;
+            case SvxAdjust::ParaStart:
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, true ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, false ) );
+                break;
+            case SvxAdjust::ParaEnd:
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, true ) );
                 break;
             default:
             break;
@@ -588,6 +614,8 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
             pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_CENTER);
             pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_RIGHT);
             pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_START);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_END);
             pTextObjectBar->Invalidate(SID_ATTR_PARA_LINESPACE);
             pTextObjectBar->Invalidate(SID_ATTR_PARA_ULSPACE);
         }

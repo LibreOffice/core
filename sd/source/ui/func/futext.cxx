@@ -124,6 +124,8 @@ const sal_uInt16 SidArray[] = {
     SID_ATTR_PARA_RIGHT_TO_LEFT,      //   10951
     SID_PARASPACE_INCREASE,           //   11145
     SID_PARASPACE_DECREASE,           //   11146
+    SID_ATTR_PARA_ADJUST_START,       //   11579
+    SID_ATTR_PARA_ADJUST_END,         //   11580
     FN_NUM_BULLET_ON,                 //   20138
     FN_NUM_NUMBERING_ON,              //   20144
                             0 };

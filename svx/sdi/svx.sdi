@@ -5422,6 +5422,42 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
 ]
 
 
+SfxBoolItem StartPara SID_ATTR_PARA_ADJUST_START
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SfxBoolItem EndPara SID_ATTR_PARA_ADJUST_END
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
 SvxLRSpaceItem LeftRightMargin SID_ATTR_LRSPACE
 
 [
@@ -10973,6 +11009,40 @@ SfxVoidItem CommonAlignHorizontalCenter SID_ALIGN_ANY_HCENTER
 ]
 
 SfxVoidItem CommonAlignRight SID_ALIGN_ANY_RIGHT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem CommonAlignStart SID_ALIGN_ANY_START
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem CommonAlignEnd SID_ALIGN_ANY_END
 ()
 [
     AutoUpdate = FALSE,

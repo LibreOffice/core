@@ -329,6 +329,12 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_PARA_ADJUST_BLOCK:
             aNewAttr.Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST));
         break;
+        case SID_ATTR_PARA_ADJUST_START:
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::ParaStart, EE_PARA_JUST));
+        break;
+        case SID_ATTR_PARA_ADJUST_END:
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::ParaEnd, EE_PARA_JUST));
+        break;
 
         case SID_ATTR_PARA_LINESPACE_10:
         {
@@ -786,6 +792,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_ADJUST_RIGHT:
             case SID_ATTR_PARA_ADJUST_CENTER:
             case SID_ATTR_PARA_ADJUST_BLOCK:
+            case SID_ATTR_PARA_ADJUST_START:
+            case SID_ATTR_PARA_ADJUST_END:
                 {
                     SvxAdjust eAdjust = SvxAdjust::Left;
                     if (nWhich==SID_ATTR_PARA_ADJUST_LEFT)
@@ -796,6 +804,10 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         eAdjust = SvxAdjust::Center;
                     else if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
                         eAdjust = SvxAdjust::Block;
+                    else if (nWhich==SID_ATTR_PARA_ADJUST_START)
+                        eAdjust = SvxAdjust::ParaStart;
+                    else if (nWhich==SID_ATTR_PARA_ADJUST_END)
+                        eAdjust = SvxAdjust::ParaEnd;
 
                     const SvxAdjustItem *pAdjust = aEditAttr.GetItemIfSet( EE_PARA_JUST, false );
 

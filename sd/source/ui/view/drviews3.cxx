@@ -773,6 +773,28 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
             break;
         }
+        case SID_ATTR_PARA_ADJUST_START:
+        {
+            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
+            SfxItemSetFixed<EE_PARA_JUST, EE_PARA_JUST> aEditAttr( GetPool() );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_START);
+            break;
+        }
+        case SID_ATTR_PARA_ADJUST_END:
+        {
+            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
+            SfxItemSetFixed<EE_PARA_JUST, EE_PARA_JUST> aEditAttr( GetPool() );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_END);
+            break;
+        }
         case SID_ATTR_PARA_ULSPACE:
             if (pArgs)
             {

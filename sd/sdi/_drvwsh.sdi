@@ -1687,6 +1687,16 @@ interface DrawView
         ExecMethod = ExecRuler ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_PARA_ADJUST_START
+    [
+        ExecMethod = ExecRuler ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_PARA_ADJUST_END
+    [
+        ExecMethod = ExecRuler ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_POSITION // ole : no, status : ?
     [
         ExecMethod = ExecStatusBar ;

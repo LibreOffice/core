@@ -62,6 +62,8 @@ static void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_START );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_END );
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
     rBindings.Invalidate( SID_ALIGNRIGHT );
@@ -83,6 +85,8 @@ static void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
     rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_START );
+    rBindings.Invalidate( SID_ALIGN_ANY_END );
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
     rBindings.Invalidate( SID_ATTR_CHAR_KERNING );
     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
