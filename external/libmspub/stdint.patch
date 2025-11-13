@@ -8,3 +8,14 @@
  
  #include <librevenge/librevenge.h>
  
+--- src/lib/Coordinate.h.orig	2025-11-13 14:37:41.397813531 +0100
++++ src/lib/Coordinate.h	2025-11-13 14:36:41.342433546 +0100
+@@ -12,6 +12,8 @@
+ 
+ #include "MSPUBConstants.h"
+ 
++#include <stdint.h>
++
+ namespace libmspub
+ {
+ struct Coordinate
