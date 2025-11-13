@@ -7959,6 +7959,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                     FSNS( XML_w, XML_hint ), "default" );
             aTempSet.ClearItem(RES_CHRATR_FONT);
             aTempSet.ClearItem(RES_CHRATR_CTL_FONT);
+            aTempSet.ClearItem(RES_CHRATR_SCRIPT_HINT);
         }
         m_rExport.OutputItemSet(aTempSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
 
