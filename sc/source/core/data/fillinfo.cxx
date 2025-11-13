@@ -458,7 +458,7 @@ void ScDocument::FillInfo(
                     pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr.get());
                 }
 
-                const SfxItemSet* pPoolItem = pTableStyle->GetTableCellItemSet(*pDBData, nCol, nRow, nRowIndex);
+                const SfxItemSet* pPoolItem = pTableStyle->GetFontItemSet(*pDBData, nCol, nRow, nRowIndex);
                 if (pPoolItem)
                 {
                     pInfo->pTableFormatSet = pPoolItem;

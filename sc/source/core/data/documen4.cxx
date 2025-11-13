@@ -813,7 +813,7 @@ const SfxItemSet* ScDocument::GetTableFormatSet(SCCOL nCol, SCROW nRow, SCTAB nT
         {
             nNonEmptyRowsBeforePaintRange += this->CountNonFilteredRows(aDBRange.aStart.Row(), nRow - 1, nTab);
         }
-        return pTableStyle->GetTableCellItemSet(*pDBData, nCol, nRow, nNonEmptyRowsBeforePaintRange);
+        return pTableStyle->GetFontItemSet(*pDBData, nCol, nRow, nNonEmptyRowsBeforePaintRange);
     }
     return nullptr;
 }
