@@ -83,7 +83,6 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     public void destroy() {
-        mPanZoomController.destroy();
     }
 
     Layer getRoot() {

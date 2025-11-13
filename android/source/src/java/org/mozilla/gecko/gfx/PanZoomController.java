@@ -18,8 +18,6 @@ interface PanZoomController {
         }
     }
 
-    void destroy();
-
     boolean onTouchEvent(MotionEvent event);
     boolean onMotionEvent(MotionEvent event);
 

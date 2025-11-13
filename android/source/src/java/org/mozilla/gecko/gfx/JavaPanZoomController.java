@@ -105,9 +105,6 @@ class JavaPanZoomController
         setState(PanZoomState.NOTHING);
     }
 
-    public void destroy() {
-    }
-
     private static float easeOut(float t) {
         // ease-out approx.
         // -(t-1)^2+1
