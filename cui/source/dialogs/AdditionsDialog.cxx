@@ -57,7 +57,7 @@
 
 #include <bitmaps.hlst>
 
-#define PAGE_SIZE 30
+#define MAX_ITEMS_PER_PAGE 30
 
 using namespace css;
 using ::com::sun::star::uno::Reference;
@@ -448,7 +448,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     m_xButtonClose->connect_clicked(LINK(this, AdditionsDialog, CloseButtonHdl));
 
     m_sTag = sAdditionsTag;
-    m_nMaxItemCount = PAGE_SIZE; // Dialog initialization item count
+    m_nMaxItemCount = MAX_ITEMS_PER_PAGE; // Dialog initialization item count
     m_nCurrentListItemCount = 0; // First, there is no item on the list.
 
     OUString titlePrefix = CuiResId(RID_CUISTR_ADDITIONS_DIALOG_TITLE_PREFIX);
@@ -582,7 +582,7 @@ void AdditionsDialog::RefreshUI()
         m_pSearchThread->StopExecution();
     ClearList();
     m_nCurrentListItemCount = 0;
-    m_nMaxItemCount = PAGE_SIZE;
+    m_nMaxItemCount = MAX_ITEMS_PER_PAGE;
     m_pSearchThread = new SearchAndParseThread(this, false);
     m_pSearchThread->launch();
 }
@@ -743,7 +743,7 @@ IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
 IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
 {
     this->m_xButtonShowMore->set_visible(false);
-    m_pParentDialog->m_nMaxItemCount += PAGE_SIZE;
+    m_pParentDialog->m_nMaxItemCount += MAX_ITEMS_PER_PAGE;
     if (m_pParentDialog->m_pSearchThread.is())
         m_pParentDialog->m_pSearchThread->StopExecution();
     m_pParentDialog->m_pSearchThread = new SearchAndParseThread(m_pParentDialog, false);
