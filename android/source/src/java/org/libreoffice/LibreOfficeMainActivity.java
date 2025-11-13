@@ -153,7 +153,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
         LayerView layerView = findViewById(R.id.layer_view);
         mLayerClient = new GeckoLayerClient(this, layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
-        mLayerClient.notifyReady();
 
         layerView.setOnKeyListener(new View.OnKeyListener() {
             @Override

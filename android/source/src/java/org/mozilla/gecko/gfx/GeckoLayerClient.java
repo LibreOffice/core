@@ -18,14 +18,14 @@ import java.util.List;
 public class GeckoLayerClient implements PanZoomTarget {
     private static final String LOGTAG = GeckoLayerClient.class.getSimpleName();
 
-    private LayerRenderer mLayerRenderer;
+    private final LayerRenderer mLayerRenderer;
 
     private final LibreOfficeMainActivity mContext;
     private IntSize mScreenSize;
     private DisplayPortMetrics mDisplayPort;
 
-    private ComposedTileLayer mLowResLayer;
-    private ComposedTileLayer mRootLayer;
+    private final ComposedTileLayer mLowResLayer;
+    private final ComposedTileLayer mRootLayer;
 
     private boolean mForceRedraw;
 
@@ -66,9 +66,6 @@ public class GeckoLayerClient implements PanZoomTarget {
         mView = view;
         mPanZoomController = PanZoomController.Factory.create(mContext, this, mView);
         mView.connect(this);
-    }
-
-    public void notifyReady() {
         mIsReady = true;
 
         mRootLayer = new DynamicTileLayer(mContext);
