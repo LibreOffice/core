@@ -7,12 +7,14 @@
 
 import time
 import threading
+import tempfile
 from contextlib import contextmanager
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, select_by_text
 
 from com.sun.star.uno import RuntimeException
 
 from libreoffice.uno.eventlistener import EventListener
+from libreoffice.uno.propertyvalue import mkPropertyValues
 
 DEFAULT_SLEEP = 0.1
 
@@ -188,6 +190,49 @@ class UITest(object):
                         self.close_doc()
                     return
                 time.sleep(DEFAULT_SLEEP)
+
+    # Creates an empty HSQLDB database with a temporary file name. On exit UITest.close_doc is
+    # called and the temporary file is deleted.
+    @contextmanager
+    def create_db_in_start_center(self):
+        # We have to give a filename to the database so let’s create a temporary one
+        with tempfile.NamedTemporaryFile(suffix=".odb") as temp:
+            with EventListener(self._xContext, "OnNew") as event:
+                xStartCenter = self._xUITest.getTopFocusWindow()
+                xBtn = xStartCenter.getChild("database_all")
+                with self.execute_dialog_through_action(xBtn, "CLICK",
+                                                        close_button=None) as xDialog:
+                    xDialog.getChild("createDatabase").executeAction("CLICK", tuple())
+                    select_by_text(xDialog.getChild("embeddeddbList"), "HSQLDB Embedded")
+
+                    xFinish = xDialog.getChild("finish")
+
+                    # Clicking finish will open a blocking dialog to set the filename
+                    with self.execute_blocking_action(xFinish.executeAction,
+                                                      ("CLICK", tuple()),
+                                                      close_button=None) as xFileDialog:
+                        xFileName = xFileDialog.getChild("file_name")
+                        xFileName.executeAction("SET", mkPropertyValues({"TEXT": temp.name}))
+
+                        xOpen = xFileDialog.getChild("open")
+
+                        # Clicking the open button will trigger another blocking dialog because the
+                        # file already exists and we have to confirm overwriting it
+                        with self.execute_blocking_action(xOpen.executeAction,
+                                                          ("CLICK", tuple()),
+                                                          close_button="yes"):
+                            pass
+
+                while not event.executed:
+                    time.sleep(DEFAULT_SLEEP)
+
+            frames = self.get_frames()
+            self.get_desktop().setActiveFrame(frames[0])
+            component = self.get_component()
+            try:
+                yield component
+            finally:
+                self.close_doc()
 
     def close_dialog_through_button(self, button, dialog=None):
         if dialog is None:
