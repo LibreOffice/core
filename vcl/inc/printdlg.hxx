@@ -203,7 +203,12 @@ namespace vcl
         DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
         DECL_LINK( ClickHdl, weld::Button&, void );
-        DECL_LINK( SelectHdl, weld::ComboBox&, void );
+        DECL_LINK(SelectPrinterHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectPaperSidesHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectOrientationHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectNupOrderHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectNupPagesHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectPaperSizeHdl, weld::ComboBox&, void);
         DECL_LINK( ActivateHdl, weld::Entry&, bool );
         DECL_LINK( FocusOutHdl, weld::Widget&, void );
         DECL_LINK( SpinModifyHdl, weld::SpinButton&, void );
