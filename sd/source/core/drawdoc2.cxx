@@ -1533,6 +1533,7 @@ void SdDrawDocument::ReshufflePages()
 
             return bIsRTL ? (xCenter1 > xCenter2) : (xCenter1 < xCenter2);
         });
+        rowStart = rowEnd;
     }
 
     for (size_t i = 0; i < aPageOrder.size(); i++)
