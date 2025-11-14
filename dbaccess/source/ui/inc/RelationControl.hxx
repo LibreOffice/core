@@ -36,8 +36,6 @@ namespace dbaui
 
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         IRelationControlInterface*              m_pParentDialog;
-        OUString                                m_strCurrentLeft;
-        OUString                                m_strCurrentRight;
         DECL_LINK( OnTableChanged, weld::ComboBox&, void );
     public:
         OTableListBoxControl(weld::Builder* _pParent,
