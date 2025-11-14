@@ -1536,6 +1536,7 @@ void SdDrawDocument::ReshufflePages()
         rowStart = rowEnd;
     }
 
+    mbSkipCanvasPreviewUpdates = true;
     for (size_t i = 0; i < aPageOrder.size(); i++)
     {
         SdPage* pPage = static_cast<SdPage*>(aPageOrder[i]->GetReferencedPage());
@@ -1544,6 +1545,7 @@ void SdDrawDocument::ReshufflePages()
         MovePage(nCurrentPageNum, nTargetPageNum); // Standard page
         MovePage(nCurrentPageNum + 1, nTargetPageNum + 1); // Notes page
     }
+    mbSkipCanvasPreviewUpdates = false;
 }
 
 sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
@@ -1645,6 +1647,8 @@ void SdDrawDocument::populatePagePreviewsGrid()
 
 void SdDrawDocument::updatePagePreviewsGrid(SdPage* pPage)
 {
+    if (mbSkipCanvasPreviewUpdates)
+        return;
     SdrObjList* pObjList = mpCanvasPage.get();
     sal_uInt16 nTotalPreviews = 0;
     sal_uInt16 nPageCnt = GetSdPageCount(PageKind::Standard) - 1; // do not count canvas page
