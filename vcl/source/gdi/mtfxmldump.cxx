@@ -550,11 +550,11 @@ void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangl
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
     if (rRectangle.IsWidthEmpty())
-        rWriter.attribute("right", "empty"_ostr);
+        rWriter.attribute("right", "empty");
     else
         rWriter.attribute("right", rRectangle.Right());
     if (rRectangle.IsHeightEmpty())
-        rWriter.attribute("bottom", "empty"_ostr);
+        rWriter.attribute("bottom", "empty");
     else
         rWriter.attribute("bottom", rRectangle.Bottom());
 }
@@ -1582,7 +1582,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             default:
             {
                 rWriter.startElement(sCurrentElementTag);
-                rWriter.attribute("note", "not implemented in xml dump"_ostr);
+                rWriter.attribute("note", "not implemented in xml dump");
                 rWriter.endElement();
             }
             break;

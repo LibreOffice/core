@@ -50,8 +50,8 @@ void XmpMetadata::write()
             OString sPdfVersion = OString::number(mnPDF_A);
 
             aXmlWriter.startElement("rdf:Description");
-            aXmlWriter.attribute("rdf:about", ""_ostr);
-            aXmlWriter.attribute("xmlns:pdfaid", "http://www.aiim.org/pdfa/ns/id/"_ostr);
+            aXmlWriter.attribute("rdf:about", "");
+            aXmlWriter.attribute("xmlns:pdfaid", "http://www.aiim.org/pdfa/ns/id/");
 
             aXmlWriter.startElement("pdfaid:part");
             aXmlWriter.content(sPdfVersion);
@@ -60,7 +60,7 @@ void XmpMetadata::write()
             if (mnPDF_A == 4)
             {
                 aXmlWriter.startElement("pdfaid:rev");
-                aXmlWriter.content("2020"_ostr);
+                aXmlWriter.content("2020");
                 aXmlWriter.endElement();
             }
 
@@ -80,11 +80,11 @@ void XmpMetadata::write()
             || !msSource.isEmpty() || !msType.isEmpty())
         {
             aXmlWriter.startElement("rdf:Description");
-            aXmlWriter.attribute("rdf:about", ""_ostr);
-            aXmlWriter.attribute("xmlns:dc", "http://purl.org/dc/elements/1.1/"_ostr);
+            aXmlWriter.attribute("rdf:about", "");
+            aXmlWriter.attribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
 
             aXmlWriter.startElement("dc:format");
-            aXmlWriter.content("application/pdf"_ostr);
+            aXmlWriter.content("application/pdf");
             aXmlWriter.endElement();
 
             aXmlWriter.startElement("dc:date");
@@ -101,7 +101,7 @@ void XmpMetadata::write()
                 aXmlWriter.startElement("dc:title");
                 aXmlWriter.startElement("rdf:Alt");
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("xml:lang", "x-default"_ostr);
+                aXmlWriter.attribute("xml:lang", "x-default");
                 aXmlWriter.content(msTitle);
                 aXmlWriter.endElement();
                 aXmlWriter.endElement();
@@ -122,7 +122,7 @@ void XmpMetadata::write()
                 aXmlWriter.startElement("dc:description");
                 aXmlWriter.startElement("rdf:Alt");
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("xml:lang", "x-default"_ostr);
+                aXmlWriter.attribute("xml:lang", "x-default");
                 aXmlWriter.content(msSubject);
                 aXmlWriter.endElement();
                 aXmlWriter.endElement();
@@ -184,7 +184,7 @@ void XmpMetadata::write()
                 aXmlWriter.startElement("dc:rights");
                 aXmlWriter.startElement("rdf:Alt");
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("xml:lang", "x-default"_ostr);
+                aXmlWriter.attribute("xml:lang", "x-default");
                 aXmlWriter.content(msRights);
                 aXmlWriter.endElement();
                 aXmlWriter.endElement();
@@ -211,74 +211,72 @@ void XmpMetadata::write()
             if (mnPDF_A != 0)
             { // tdf#157517 PDF/A extension schema is required
                 aXmlWriter.startElement("rdf:Description");
-                aXmlWriter.attribute("rdf:about", ""_ostr);
+                aXmlWriter.attribute("rdf:about", "");
                 aXmlWriter.attribute("xmlns:pdfaExtension",
-                                     "http://www.aiim.org/pdfa/ns/extension/"_ostr);
-                aXmlWriter.attribute("xmlns:pdfaSchema",
-                                     "http://www.aiim.org/pdfa/ns/schema#"_ostr);
-                aXmlWriter.attribute("xmlns:pdfaProperty",
-                                     "http://www.aiim.org/pdfa/ns/property#"_ostr);
+                                     "http://www.aiim.org/pdfa/ns/extension/");
+                aXmlWriter.attribute("xmlns:pdfaSchema", "http://www.aiim.org/pdfa/ns/schema#");
+                aXmlWriter.attribute("xmlns:pdfaProperty", "http://www.aiim.org/pdfa/ns/property#");
                 aXmlWriter.startElement("pdfaExtension:schemas");
                 aXmlWriter.startElement("rdf:Bag");
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("rdf:parseType", "Resource"_ostr);
+                aXmlWriter.attribute("rdf:parseType", "Resource");
                 aXmlWriter.startElement("pdfaSchema:namespaceURI");
-                aXmlWriter.content("http://www.aiim.org/pdfua/ns/id/"_ostr);
+                aXmlWriter.content("http://www.aiim.org/pdfua/ns/id/");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaSchema:prefix");
-                aXmlWriter.content("pdfuaid"_ostr);
+                aXmlWriter.content("pdfuaid");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaSchema:schema");
-                aXmlWriter.content("PDF/UA identification schema"_ostr);
+                aXmlWriter.content("PDF/UA identification schema");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaSchema:property");
                 aXmlWriter.startElement("rdf:Seq");
 
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("rdf:parseType", "Resource"_ostr);
+                aXmlWriter.attribute("rdf:parseType", "Resource");
                 aXmlWriter.startElement("pdfaProperty:category");
-                aXmlWriter.content("internal"_ostr);
+                aXmlWriter.content("internal");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:description");
-                aXmlWriter.content("PDF/UA version identifier"_ostr);
+                aXmlWriter.content("PDF/UA version identifier");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:name");
-                aXmlWriter.content("part"_ostr);
+                aXmlWriter.content("part");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:valueType");
-                aXmlWriter.content("Integer"_ostr);
+                aXmlWriter.content("Integer");
                 aXmlWriter.endElement();
                 aXmlWriter.endElement(); // rdf:li
 
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("rdf:parseType", "Resource"_ostr);
+                aXmlWriter.attribute("rdf:parseType", "Resource");
                 aXmlWriter.startElement("pdfaProperty:category");
-                aXmlWriter.content("internal"_ostr);
+                aXmlWriter.content("internal");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:description");
-                aXmlWriter.content("PDF/UA amendment identifier"_ostr);
+                aXmlWriter.content("PDF/UA amendment identifier");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:name");
-                aXmlWriter.content("amd"_ostr);
+                aXmlWriter.content("amd");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:valueType");
-                aXmlWriter.content("Text"_ostr);
+                aXmlWriter.content("Text");
                 aXmlWriter.endElement();
                 aXmlWriter.endElement(); // rdf:li
 
                 aXmlWriter.startElement("rdf:li");
-                aXmlWriter.attribute("rdf:parseType", "Resource"_ostr);
+                aXmlWriter.attribute("rdf:parseType", "Resource");
                 aXmlWriter.startElement("pdfaProperty:category");
-                aXmlWriter.content("internal"_ostr);
+                aXmlWriter.content("internal");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:description");
-                aXmlWriter.content("PDF/UA corrigenda identifier"_ostr);
+                aXmlWriter.content("PDF/UA corrigenda identifier");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:name");
-                aXmlWriter.content("corr"_ostr);
+                aXmlWriter.content("corr");
                 aXmlWriter.endElement();
                 aXmlWriter.startElement("pdfaProperty:valueType");
-                aXmlWriter.content("Text"_ostr);
+                aXmlWriter.content("Text");
                 aXmlWriter.endElement();
                 aXmlWriter.endElement(); // rdf:li
 
@@ -291,8 +289,8 @@ void XmpMetadata::write()
             }
             OString sPdfUaVersion = OString::number(mnPDF_UA);
             aXmlWriter.startElement("rdf:Description");
-            aXmlWriter.attribute("rdf:about", ""_ostr);
-            aXmlWriter.attribute("xmlns:pdfuaid", "http://www.aiim.org/pdfua/ns/id/"_ostr);
+            aXmlWriter.attribute("rdf:about", "");
+            aXmlWriter.attribute("xmlns:pdfuaid", "http://www.aiim.org/pdfua/ns/id/");
 
             aXmlWriter.startElement("pdfuaid:part");
             aXmlWriter.content(sPdfUaVersion);
@@ -301,7 +299,7 @@ void XmpMetadata::write()
             if (mnPDF_UA == 2)
             {
                 aXmlWriter.startElement("pdfuaid:rev");
-                aXmlWriter.content("2024"_ostr);
+                aXmlWriter.content("2024");
                 aXmlWriter.endElement();
             }
             aXmlWriter.endElement();
@@ -311,8 +309,8 @@ void XmpMetadata::write()
         if (!msProducer.isEmpty() || !msKeywords.isEmpty() || !msPDFVersion.isEmpty())
         {
             aXmlWriter.startElement("rdf:Description");
-            aXmlWriter.attribute("rdf:about", ""_ostr);
-            aXmlWriter.attribute("xmlns:pdf", "http://ns.adobe.com/pdf/1.3/"_ostr);
+            aXmlWriter.attribute("rdf:about", "");
+            aXmlWriter.attribute("xmlns:pdf", "http://ns.adobe.com/pdf/1.3/");
             if (!msProducer.isEmpty())
             {
                 aXmlWriter.startElement("pdf:Producer");
@@ -336,8 +334,8 @@ void XmpMetadata::write()
 
         // XMP Basic schema
         aXmlWriter.startElement("rdf:Description");
-        aXmlWriter.attribute("rdf:about", ""_ostr);
-        aXmlWriter.attribute("xmlns:xmp", "http://ns.adobe.com/xap/1.0/"_ostr);
+        aXmlWriter.attribute("rdf:about", "");
+        aXmlWriter.attribute("xmlns:xmp", "http://ns.adobe.com/xap/1.0/");
         if (!m_sCreatorTool.isEmpty())
         {
             aXmlWriter.startElement("xmp:CreatorTool");

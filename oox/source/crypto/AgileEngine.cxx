@@ -769,7 +769,7 @@ void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
     if (aXmlWriter.startDocument(0/*nIndent*/))
     {
         aXmlWriter.startElement(""_ostr, "encryption"_ostr, "http://schemas.microsoft.com/office/2006/encryption"_ostr);
-        aXmlWriter.attribute("xmlns:p", "http://schemas.microsoft.com/office/2006/keyEncryptor/password"_ostr);
+        aXmlWriter.attribute("xmlns:p", "http://schemas.microsoft.com/office/2006/keyEncryptor/password");
 
         aXmlWriter.startElement("keyData");
         aXmlWriter.attribute("saltSize", mInfo.saltSize);
@@ -789,7 +789,7 @@ void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
 
         aXmlWriter.startElement("keyEncryptors");
         aXmlWriter.startElement("keyEncryptor");
-        aXmlWriter.attribute("uri", "http://schemas.microsoft.com/office/2006/keyEncryptor/password"_ostr);
+        aXmlWriter.attribute("uri", "http://schemas.microsoft.com/office/2006/keyEncryptor/password");
 
         aXmlWriter.startElement("p"_ostr, "encryptedKey"_ostr, ""_ostr);
         aXmlWriter.attribute("spinCount", mInfo.spinCount);

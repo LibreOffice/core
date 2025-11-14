@@ -249,8 +249,8 @@ void ColorSets::writeToUserFolder(model::ColorSet const& rNewColorSet)
         {
             Color aColor = rNewColorSet.getColor(eThemeColorType);
             aWriter.startElement("color");
-            aWriter.attribute("name", OString(iterator->second));
-            aWriter.attribute("color", "#"_ostr + aColor.AsRGBHexString().toUtf8());
+            aWriter.attribute("name", iterator->second);
+            aWriter.attribute("color", Concat2View("#" + aColor.AsRGBHexString().toUtf8()));
             aWriter.endElement();
         }
     }

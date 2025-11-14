@@ -120,11 +120,11 @@ void XmlWriter::attributeBase64(const char* pName, std::vector<char> const& rVal
     attributeBase64_impl(mpImpl->mpWriter, pName, rValueInBytes.data(), rValueInBytes.size());
 }
 
-void XmlWriter::attribute(const char* name, const OString& value)
+void XmlWriter::attribute(const char* name, std::string_view value)
 {
     xmlChar* xmlName = BAD_CAST(name);
-    xmlChar* xmlValue = BAD_CAST(value.getStr());
-    (void)xmlTextWriterWriteAttribute(mpImpl->mpWriter, xmlName, xmlValue);
+    (void)xmlTextWriterWriteFormatAttribute(mpImpl->mpWriter, xmlName, "%.*s", int(value.size()),
+                                            value.data());
 }
 
 void XmlWriter::attribute(const char* name, std::u16string_view value)
@@ -142,10 +142,9 @@ void XmlWriter::attributeDouble(const char* name, const double aNumber)
     attribute(name, OString::number(aNumber));
 }
 
-void XmlWriter::content(const OString& sValue)
+void XmlWriter::content(std::string_view value)
 {
-    xmlChar* xmlValue = BAD_CAST(sValue.getStr());
-    (void)xmlTextWriterWriteString(mpImpl->mpWriter, xmlValue);
+    (void)xmlTextWriterWriteFormatString(mpImpl->mpWriter, "%.*s", int(value.size()), value.data());
 }
 
 void XmlWriter::content(std::u16string_view sValue)

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TOOLS_XMLWRITER_HXX
-#define INCLUDED_TOOLS_XMLWRITER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -18,6 +17,7 @@
 #include <memory>
 #include <string_view>
 #include <vector>
+#include <o3tl/concepts.hxx>
 
 class SvStream;
 
@@ -52,33 +52,27 @@ public:
     void startElement(const OString& sPrefix, const OString& sName, const OString& sNamespaceUri);
     void endElement();
 
-    void attribute(const char* sTagName, const OString& aValue);
-    void attribute(const OString& sTagName, const OString& aValue)
-    {
-        attribute(sTagName.getStr(), aValue);
-    }
+    void attribute(const char* sTagName, std::string_view aValue);
     void attribute(const char* sTagName, std::u16string_view aValue);
     void attribute(const char* sTagName, sal_Int64 aNumber);
-    template <typename T>
-    requires std::is_arithmetic_v<T> void attribute(const char* sTagName, T aNumber)
+    template <o3tl::integral T> void attribute(const char* sTagName, T aNumber)
     {
-        if constexpr (std::is_floating_point_v<T>)
-            return attribute(sTagName, basegfx::fround64(aNumber));
-        else
-            return attribute(sTagName, static_cast<sal_Int64>(aNumber));
+        return attribute(sTagName, static_cast<sal_Int64>(aNumber));
+    }
+    template <o3tl::floating_point T> void attribute(const char* sTagName, T aNumber)
+    {
+        return attribute(sTagName, basegfx::fround64(aNumber));
     }
     void attributeDouble(const char* sTagName, double aNumber);
     void attributeBase64(const char* sTagName, std::vector<sal_uInt8> const& rValueInBytes);
     void attributeBase64(const char* sTagName, std::vector<char> const& rValueInBytes);
 
-    void content(const OString& sValue);
+    void content(std::string_view sValue);
     void content(std::u16string_view sValue);
 
     void element(const char* sName);
 };
 
 } // end tools namespace
-
-#endif // INCLUDED_TOOLS_XMLWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

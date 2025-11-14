@@ -164,12 +164,12 @@ void ScDPSaveMember::dumpAsXml(tools::XmlWriter& rWriter) const
     if (mpLayoutName)
         rWriter.attribute("layout_name", *mpLayoutName);
     else
-        rWriter.attribute("layout_name", "(none)"_ostr);
+        rWriter.attribute("layout_name", "(none)");
 
     if (nVisibleMode == SC_DPSAVEMODE_DONTKNOW)
-        rWriter.attribute("visibility", "(unknown)"_ostr);
+        rWriter.attribute("visibility", "(unknown)");
     else
-        rWriter.attribute("visibility", (nVisibleMode ? "visible"_ostr : "hidden"_ostr));
+        rWriter.attribute("visibility", (nVisibleMode ? "visible" : "hidden"));
     rWriter.endElement();
 }
 
@@ -670,9 +670,9 @@ void ScDPSaveDimension::dumpAsXml(tools::XmlWriter& rWriter) const
     rWriter.startElement("dimension");
     rWriter.attribute("name", aName);
     if (nOrientation <= DataPilotFieldOrientation_DATA)
-        rWriter.attribute("orientation", OString(sOrientNames[sal_Int32(nOrientation)]));
+        rWriter.attribute("orientation", sOrientNames[sal_Int32(nOrientation)]);
     else
-        rWriter.attribute("orientation", "invalid"_ostr);
+        rWriter.attribute("orientation", "invalid");
 
     if (mpLayoutName)
         rWriter.attribute("layout_name", *mpLayoutName);
@@ -680,10 +680,10 @@ void ScDPSaveDimension::dumpAsXml(tools::XmlWriter& rWriter) const
     if (mpSubtotalName)
         rWriter.attribute("subtotal_name", *mpSubtotalName);
     else
-        rWriter.attribute("subtotal_name", "(none)"_ostr);
+        rWriter.attribute("subtotal_name", "(none)");
 
-    rWriter.attribute("data_layout", (bIsDataLayout ? "yes"_ostr : "no"_ostr));
-    rWriter.attribute("duplicate", (bDupFlag ? "yes"_ostr : "no"_ostr));
+    rWriter.attribute("data_layout", (bIsDataLayout ? "yes" : "no"));
+    rWriter.attribute("duplicate", (bDupFlag ? "yes" : "no"));
 
     for (ScDPSaveMember* pMember : maMemberList)
     {

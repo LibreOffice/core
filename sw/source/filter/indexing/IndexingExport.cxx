@@ -71,7 +71,7 @@ public:
         m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("alt", pOleNode->GetTitle());
         m_rXmlWriter.attribute("name", pFrameFormat->GetName().toString());
-        m_rXmlWriter.attribute("object_type", "ole"_ostr);
+        m_rXmlWriter.attribute("object_type", "ole");
         m_rXmlWriter.endElement();
     }
 
@@ -81,7 +81,7 @@ public:
         m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("alt", pGraphicNode->GetTitle());
         m_rXmlWriter.attribute("name", pFrameFormat->GetName().toString());
-        m_rXmlWriter.attribute("object_type", "graphic"_ostr);
+        m_rXmlWriter.attribute("object_type", "graphic");
         m_rXmlWriter.endElement();
     }
 
@@ -98,7 +98,7 @@ public:
             return;
         m_rXmlWriter.startElement("paragraph");
         m_rXmlWriter.attribute("index", sal_Int32(pTextNode->GetIndex()));
-        m_rXmlWriter.attribute("node_type", "writer"_ostr);
+        m_rXmlWriter.attribute("node_type", "writer");
         if (nParentIndex >= SwNodeOffset(0))
             m_rXmlWriter.attribute("parent_index", sal_Int32(nParentIndex));
         m_rXmlWriter.content(aString);
@@ -113,7 +113,7 @@ public:
         m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("name", pObject->GetName());
         m_rXmlWriter.attribute("alt", pObject->GetTitle());
-        m_rXmlWriter.attribute("object_type", "shape"_ostr);
+        m_rXmlWriter.attribute("object_type", "shape");
         m_rXmlWriter.attribute("description", pObject->GetDescription());
 
         m_rXmlWriter.endElement();
@@ -133,7 +133,7 @@ public:
 
             m_rXmlWriter.startElement("paragraph");
             m_rXmlWriter.attribute("index", nParagraph);
-            m_rXmlWriter.attribute("node_type", "common"_ostr);
+            m_rXmlWriter.attribute("node_type", "common");
             m_rXmlWriter.attribute("object_name", pObject->GetName());
             m_rXmlWriter.content(sText);
             m_rXmlWriter.endElement();
@@ -148,7 +148,7 @@ public:
         m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("index", sal_Int32(pTableNode->GetIndex()));
         m_rXmlWriter.attribute("name", sName.toString());
-        m_rXmlWriter.attribute("object_type", "table"_ostr);
+        m_rXmlWriter.attribute("object_type", "table");
         m_rXmlWriter.endElement();
 
         maNodeStack.push_back(pTableNode);
@@ -159,7 +159,7 @@ public:
         m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("index", sal_Int32(pSectionNode->GetIndex()));
         m_rXmlWriter.attribute("name", pSectionNode->GetSection().GetSectionName().toString());
-        m_rXmlWriter.attribute("object_type", "section"_ostr);
+        m_rXmlWriter.attribute("object_type", "section");
         m_rXmlWriter.endElement();
 
         maNodeStack.push_back(pSectionNode);

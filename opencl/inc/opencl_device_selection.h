@@ -263,12 +263,12 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
         {
             case DeviceType::NativeCPU:
                 aXmlWriter.startElement("type");
-                aXmlWriter.content("native"_ostr);
+                aXmlWriter.content("native");
                 aXmlWriter.endElement();
                 break;
             case DeviceType::OpenCLDevice:
                 aXmlWriter.startElement("type");
-                aXmlWriter.content("opencl"_ostr);
+                aXmlWriter.content("opencl");
                 aXmlWriter.endElement();
 
                 aXmlWriter.startElement("name");
@@ -285,13 +285,13 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
 
         aXmlWriter.startElement("time");
         if (rtl::math::approxEqual(rDevice.fTime, DBL_MAX))
-            aXmlWriter.content("max"_ostr);
+            aXmlWriter.content("max");
         else
             aXmlWriter.content(OString::number(rDevice.fTime));
         aXmlWriter.endElement();
 
         aXmlWriter.startElement("errors");
-        aXmlWriter.content(rDevice.bErrors ? "true"_ostr : "false"_ostr);
+        aXmlWriter.content(rDevice.bErrors ? "true" : "false");
         aXmlWriter.endElement();
 
         aXmlWriter.endElement();
