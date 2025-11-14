@@ -323,13 +323,13 @@ ScDPObject::ScDPObject(const ScDPObject& rOther)
     , maTableName(rOther.maTableName)
     , maTableTag(rOther.maTableTag)
     , maOutputRange(rOther.maOutputRange)
-    , maInteropGrabBag(rOther.maInteropGrabBag)
     , mnHeaderRows(rOther.mnHeaderRows)
     , mbHeaderLayout(rOther.mbHeaderLayout)
     , mbAllowMove(false)
     , mbSettingsChanged(false)
     , mbEnableGetPivotData(rOther.mbEnableGetPivotData)
     , mbHideHeader(rOther.mbHideHeader)
+    , maStyleInfo(rOther.maStyleInfo)
 {
     if (rOther.mpSaveData)
         mpSaveData.reset(new ScDPSaveData(*rOther.mpSaveData));
@@ -357,13 +357,13 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& rOther)
         maTableName = rOther.maTableName;
         maTableTag = rOther.maTableTag;
         maOutputRange = rOther.maOutputRange;
-        maInteropGrabBag = rOther.maInteropGrabBag;
         mnHeaderRows = rOther.mnHeaderRows;
         mbHeaderLayout =rOther.mbHeaderLayout;
         mbAllowMove = false;
         mbSettingsChanged = false;
         mbEnableGetPivotData = rOther.mbEnableGetPivotData;
         mbHideHeader = rOther.mbHideHeader;
+        maStyleInfo = rOther.maStyleInfo;
 
         if (rOther.mpSaveData)
             mpSaveData.reset(new ScDPSaveData(*rOther.mpSaveData));
@@ -798,13 +798,13 @@ void ScDPObject::InvalidateData()
 
 void ScDPObject::Clear()
 {
+    maStyleInfo = {};
     mpOutput.reset();
     mpSaveData.reset();
     mpSheetDescription.reset();
     mpImportDescription.reset();
     mpServiceDescription.reset();
     ClearTableData();
-    maInteropGrabBag.clear();
 }
 
 void ScDPObject::ClearTableData()

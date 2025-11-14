@@ -711,38 +711,6 @@ sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
     return XML_defaultSubtotal;
 }
 
-// An item is expected to contain sequences of css::xml::FastAttribute and css::xml::Attribute
-void WriteGrabBagItemToStream(XclExpXmlStream& rStrm, sal_Int32 tokenId, const css::uno::Any& rItem)
-{
-    css::uno::Sequence<css::uno::Any> aSeqs;
-    if(!(rItem >>= aSeqs))
-        return;
-
-    auto& pStrm = rStrm.GetCurrentStream();
-    pStrm->write("<")->writeId(tokenId);
-
-    css::uno::Sequence<css::xml::FastAttribute> aFastSeq;
-    css::uno::Sequence<css::xml::Attribute> aUnkSeq;
-    for (const auto& a : aSeqs)
-    {
-        if (a >>= aFastSeq)
-        {
-            for (const auto& rAttr : aFastSeq)
-                rStrm.WriteAttributes(rAttr.Token, rAttr.Value);
-        }
-        else if (a >>= aUnkSeq)
-        {
-            for (const auto& rAttr : aUnkSeq)
-                pStrm->write(" ")
-                    ->write(rAttr.Name)
-                    ->write("=\"")
-                    ->writeEscaped(rAttr.Value)
-                    ->write("\"");
-        }
-    }
-
-    pStrm->write("/>");
-}
 }
 
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
@@ -1253,13 +1221,23 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     savePivotTableFormats(rStrm, rDPObj);
 
     // Now add style info (use grab bag, or just a set which is default on Excel 2007 through 2016)
-    if (const auto [bHas, aVal] = rDPObj.GetInteropGrabBagValue(u"pivotTableStyleInfo"_ustr); bHas)
-        WriteGrabBagItemToStream(rStrm, XML_pivotTableStyleInfo, aVal);
+    auto const& rStyleInfo = rDPObj.getStyleInfo();
+    if (rStyleInfo.isSet())
+    {
+        pPivotStrm->singleElement(XML_pivotTableStyleInfo, XML_name, rStyleInfo.maName,
+                                  XML_showRowHeaders, rStyleInfo.mbShowRowHeaders ? "1" : "0",
+                                  XML_showColHeaders, rStyleInfo.mbShowColHeaders ? "1" : "0",
+                                  XML_showRowStripes, rStyleInfo.mbShowRowStripes ? "1" : "0",
+                                  XML_showColStripes, rStyleInfo.mbShowColStripes ? "1" : "0",
+                                  XML_showLastColumn, rStyleInfo.mbShowLastColumn ? "1" : "0");
+    }
     else
+    {
         pPivotStrm->singleElement(XML_pivotTableStyleInfo, XML_name, "PivotStyleLight16",
                                   XML_showRowHeaders, "1", XML_showColHeaders, "1",
                                   XML_showRowStripes, "0", XML_showColStripes, "0",
                                   XML_showLastColumn, "1");
+    }
 
     OUString aBuf = "../pivotCache/pivotCacheDefinition" +
         OUString::number(nCacheId) +

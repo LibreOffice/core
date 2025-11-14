@@ -80,6 +80,26 @@ struct ScDPServiceDesc
     bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
 
+namespace sc
+{
+
+struct PivotTableStyleInfo
+{
+    OUString maName;
+    bool mbShowRowHeaders = false;
+    bool mbShowColHeaders = false;
+    bool mbShowRowStripes = false;
+    bool mbShowColStripes = false;
+    bool mbShowLastColumn = false;
+
+    bool isSet() const
+    {
+        return !maName.isEmpty();
+    }
+};
+
+}
+
 class ScDPObject
 {
 private:
@@ -108,6 +128,8 @@ private:
     bool mbSettingsChanged : 1;
     bool mbEnableGetPivotData : 1;
     bool mbHideHeader : 1 = false;
+
+    sc::PivotTableStyleInfo maStyleInfo;
 
     void              CreateObjects();
     void              CreateOutput();
@@ -246,6 +268,16 @@ public:
     // (button attribute must be present)
     void                RefreshAfterLoad();
 
+    sc::PivotTableStyleInfo const& getStyleInfo() const
+    {
+        return maStyleInfo;
+    }
+
+    void setStyleInfo(sc::PivotTableStyleInfo const& rStyleInfo)
+    {
+        maStyleInfo = rStyleInfo;
+    }
+
     SC_DLLPUBLIC void BuildAllDimensionMembers();
 
     /**
@@ -269,18 +301,6 @@ public:
         const ScPivotFieldVector* pRefPageFields = nullptr );
 
     SC_DLLPUBLIC static bool IsOrientationAllowed( css::sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags );
-
-    void PutInteropGrabBag(std::map<OUString, css::uno::Any>&& val)
-    {
-        maInteropGrabBag = std::move(val);
-    }
-    std::pair<bool, css::uno::Any> GetInteropGrabBagValue(const OUString& sName) const
-    {
-        if (const auto it = maInteropGrabBag.find(sName); it != maInteropGrabBag.end())
-            return { true, it->second };
-
-        return { false, css::uno::Any() };
-    }
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;
