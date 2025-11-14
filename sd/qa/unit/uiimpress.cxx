@@ -1387,7 +1387,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf68320_hidden_pages_total_slide_coun
                                                  uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
-    // Without the fix in place, this test would have failed wiht
+    // Without the fix in place, this test would have failed with
     // - Expected: Pages: 3/3
     // - Actual  : Pages: 2/3
     CPPUNIT_ASSERT_EQUAL(u"Pages: 3/3"_ustr, xShape->getString());
