@@ -23,6 +23,7 @@
 #include "PivotTableFormat.hxx"
 #include "stylesbuffer.hxx"
 #include <rtl/ref.hxx>
+#include <dpobject.hxx>
 
 namespace com::sun::star {
     namespace sheet { class XDataPilotDescriptor; }
@@ -299,9 +300,6 @@ public:
     void                importPageField( const AttributeList& rAttribs );
     /** Reads the settings of a field located in the data dimension from the dataField element. */
     void                importDataField( const AttributeList& rAttribs );
-    /** Puts the attributes to the named grab bag value. */
-    void putToInteropGrabBag(const OUString& sName, const AttributeList& rAttribs);
-
     /** Reads global pivot table settings from the PTDEFINITION record. */
     void                importPTDefinition( SequenceInputStream& rStrm );
     /** Reads the location of the pivot table from the PTLOCATION record. */
@@ -354,7 +352,7 @@ public:
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;
 
     ScDPObject* getDPObject() { return mpDPObject; }
-
+    sc::PivotTableStyleInfo& getStyleInfo() { return maStyleInfo; }
 private:
     typedef RefVector< PivotTableField >        PivotTableFieldVector;
     typedef RefVector< PivotTableFilter >       PivotTableFilterVector;
@@ -386,7 +384,7 @@ private:
     PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
     rtl::Reference< ScDataPilotDescriptorBase > // css::sheet::XDataPilotDescriptor
                           mxDPDescriptor;     /// Descriptor of the DataPilot object.
-    std::map<OUString, css::uno::Any> maInteropGrabBag;
+    sc::PivotTableStyleInfo maStyleInfo;
 
 };
 
