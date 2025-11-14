@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,sqlite3))
 
 $(eval $(call gb_Module_add_targets,sqlite3,\
-	$(if $(filter LINUX,$(OS)),StaticLibrary_sqlite3) \
+	StaticLibrary_sqlite3 \
 	UnpackedTarball_sqlite3 \
 ))
 

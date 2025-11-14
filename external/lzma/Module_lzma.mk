@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,lzma))
 
 $(eval $(call gb_Module_add_targets,lzma,\
-    $(if $(filter-out WNT,$(OS)),StaticLibrary_lzma) \
+    StaticLibrary_lzma \
     UnpackedTarball_lzma \
 ))
 

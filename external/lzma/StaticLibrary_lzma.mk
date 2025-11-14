@@ -14,6 +14,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,lzma,lzma))
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,lzma))
 
 $(eval $(call gb_StaticLibrary_set_include,lzma,\
+    -I$(gb_UnpackedTarball_workdir)/lzma/dos \
     -I$(gb_UnpackedTarball_workdir)/lzma/src/common \
     -I$(gb_UnpackedTarball_workdir)/lzma/src/liblzma/api \
     -I$(gb_UnpackedTarball_workdir)/lzma/src/liblzma/check \
@@ -29,7 +30,8 @@ $(eval $(call gb_StaticLibrary_set_include,lzma,\
 $(eval $(call gb_StaticLibrary_add_cflags,lzma,\
     -DHAVE_STDINT_H \
     -DHAVE_STDBOOL_H \
-    -DMYTHREAD_POSIX \
+    -DHAVE_CONFIG_H \
+    $(if $(filter WNT,$(OS)),-DMYTHREAD_VISTA,-DMYTHREAD_POSIX) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,lzma,\

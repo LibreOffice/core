@@ -12,10 +12,10 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	bzip2 \
 	expat \
-	$(if $(filter-out WNT,$(OS)),$(call gb_Helper_optional,LZMA,lzma)) \
+	$(call gb_Helper_optional,LZMA,lzma) \
 	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
-	$(if $(filter LINUX,$(OS)),$(call gb_Helper_optional,SQLITE3,sqlite3)) \
+	$(call gb_Helper_optional,SQLITE3,sqlite3) \
 	zlib \
 ))
 
