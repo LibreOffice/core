@@ -2009,9 +2009,9 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
         // preview by calling each active listbox's select handler after
         // changing the active printer.
         if ( mxOrientationBox->get_sensitive() )
-            LINK( this, PrintDialog, SelectHdl ).Call( *mxOrientationBox );
+            SelectHdl(*mxOrientationBox);
         if ( mxPaperSizeBox->get_sensitive() )
-            LINK( this, PrintDialog, SelectHdl ).Call( *mxPaperSizeBox );
+            SelectHdl(*mxPaperSizeBox);
     }
     else if ( &rBox == mxPaperSidesBox.get() )
     {
