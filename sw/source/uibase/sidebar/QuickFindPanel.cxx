@@ -453,11 +453,11 @@ void QuickFindPanel::FillSearchFindsList()
         nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
     aSearchOptions.transliterateFlags = nTransliterationFlags;
 
-    m_pWrtShell->SttSelect();
+    m_pWrtShell->StartAllAction();
     /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
         aSearchOptions, false, SwDocPositions::Start, SwDocPositions::End,
         FindRanges::InBody | FindRanges::InSelAll, false);
-    m_pWrtShell->EndSelect();
+    m_pWrtShell->EndAllAction();
 
     if (m_pWrtShell->HasMark())
     {
