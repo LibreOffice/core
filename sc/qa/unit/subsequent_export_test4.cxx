@@ -1513,10 +1513,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf148820)
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"20"_ustr,
                          getXPathContent(pSheet, "count(/x:worksheet/x:conditionalFormatting)"));
     CPPUNIT_ASSERT_EQUAL(
-        u"5"_ustr, getXPathContent(pSheet, "count(/x:worksheet/x:conditionalFormatting/x:cfRule)"));
+        u"20"_ustr,
+        getXPathContent(pSheet, "count(/x:worksheet/x:conditionalFormatting/x:cfRule)"));
     sal_Int32 nDxfIdCondFormatFirst
         = getXPath(pSheet, "/x:worksheet/x:conditionalFormatting[1]/x:cfRule", "dxfId").toInt32()
           + 1;

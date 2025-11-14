@@ -1166,4 +1166,18 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf79998)
     CPPUNIT_ASSERT_EQUAL(u"Utilities (FX Kurse, Kreditkart"_ustr, aTabNames2[1]);
 }
 
+// Test that we do not deduplicate conditional formats more than we should.
+CPPUNIT_TEST_FIXTURE(CondFormatTest, tdf169379)
+{
+    // previously, we were combining all of these into one conditional format.
+    createScDoc("xlsx/tdf169379.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0); // first column
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), pFormat->GetKey());
+    pFormat = pDoc->GetCondFormat(1, 0, 0); // second column
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), pFormat->GetKey());
+    pFormat = pDoc->GetCondFormat(2, 0, 0); // third column
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), pFormat->GetKey());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
