@@ -77,6 +77,9 @@ namespace drawinglayer::primitive2d
             // get pre-calculated vector and controlPoint for one wave segment
             basegfx::B2DVector aVector(aStop - aStart);
             double fLength(aVector.getLength());
+            // tdf#169112 prevent us from creating enormous polygons
+            if (fLength == 0 || fWaveLength == 0 || (fLength / fWaveLength) > 1024)
+                return nullptr;
             aVector.normalize();
             basegfx::B2DVector aControl(basegfx::getPerpendicular(aVector));
             aVector *= fWaveLength;
