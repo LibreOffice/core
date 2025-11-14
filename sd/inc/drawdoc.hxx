@@ -415,6 +415,8 @@ private:
 
     rtl::Reference<SdPage> mpCanvasPage;
 
+    bool mbSkipCanvasPreviewUpdates = false;
+
     SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
 
 public:
