@@ -491,7 +491,7 @@ class PPTXAnimationExport
     void WriteAnimationNodeEffect();
     void WriteAnimationNodeCommand();
     /// Handles XAudio nodes, used for both video and audio.
-    void WriteAnimationNodeMedia();
+    void WriteAnimationNodeMedia(const sal_Int16 nParentNodeType);
     void WriteAnimationNodeCommonPropsStart();
     void WriteAnimationTarget(const Any& rTarget);
     void WriteAnimationCondList(const std::vector<Cond>& rList, sal_Int32 nToken);
@@ -1074,7 +1074,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
     mpFS->endElementNS(XML_p, XML_cmd);
 }
 
-void PPTXAnimationExport::WriteAnimationNodeMedia()
+void PPTXAnimationExport::WriteAnimationNodeMedia(const sal_Int16 nParentNodeType)
 {
     SAL_INFO("sd.eppt", "write animation node media");
     Reference<XAudio> xAudio(getCurrentNode(), UNO_QUERY);
@@ -1126,6 +1126,10 @@ void PPTXAnimationExport::WriteAnimationNodeMedia()
     }
     else
     {
+        // Don't export audio node if the context doesn't have any triggers
+        if (!convertEffectNodeType(nParentNodeType))
+            return;
+
         bool bNarration = xAudio->getNarration();
         mpFS->startElementNS(XML_p, XML_audio, XML_isNarration, bNarration ? "1" : "0");
         bool bHideDuringShow = xAudio->getHideDuringShow();
@@ -1208,7 +1212,7 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
             WriteAnimationNodeCommand();
             break;
         case XML_audio:
-            WriteAnimationNodeMedia();
+            WriteAnimationNodeMedia(pSavedContext->getEffectNodeType());
             break;
         default:
             SAL_WARN("sd.eppt", "export ooxml node type: " << xmlNodeType);
