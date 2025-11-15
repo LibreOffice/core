@@ -3139,7 +3139,7 @@ void DocxAttributeOutput::CmdEndField_Impl(SwTextNode const*const pNode,
 ///         </w:rPr>
 ///         <w:fldChar w:fldCharType="begin" />
 ///     </w:r>
-///         <w:r>
+///     <w:r>
 ///         <w:rPr>
 ///             <!-- properties written with DoWriteFieldRunProperties()
 ///         </w:rPr>
@@ -10338,19 +10338,22 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteCSTheme =
-                        ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_cs ) ) == sOriginalValue );
+                    (m_pFontsAttrList->getOptionalValue(FSNS( XML_w, XML_cs)) == sOriginalValue)
+                    && !m_pFontsAttrList->hasAttribute(FSNS(XML_w, XML_cstheme));
         }
         else if ( m_pFontsAttrList.is() && rGrabBagElement.first == "CharThemeFontNameAscii" )
         {
             if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteAsciiTheme =
-                        ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sOriginalValue );
+                    (m_pFontsAttrList->getOptionalValue(FSNS( XML_w, XML_ascii)) == sOriginalValue)
+                    && !m_pFontsAttrList->hasAttribute(FSNS(XML_w, XML_asciiTheme));
         }
         else if ( m_pFontsAttrList.is() && rGrabBagElement.first == "CharThemeFontNameEastAsia" )
         {
             if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteEastAsiaTheme =
-                        ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sOriginalValue );
+                    (m_pFontsAttrList->getOptionalValue(FSNS(XML_w, XML_eastAsia)) == sOriginalValue)
+                    && !m_pFontsAttrList->hasAttribute(FSNS(XML_w, XML_eastAsiaTheme));
         }
     }
 
