@@ -947,6 +947,19 @@ void CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
         return;
     }
 
+    static const bool bFuzzing = comphelper::IsFuzzing();
+    if (bFuzzing)
+    {
+        const basegfx::B2DRange aRange(rPolyPolygon.getB2DRange());
+        if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
+            || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
+        {
+            SAL_WARN("vcl.gdi", "drawPolyPolygon, skipping suspicious range of: "
+                                    << aRange << " for fuzzing performance");
+            return;
+        }
+    }
+
     if (!bHasLine)
     {
         // don't bother trying to draw stuff which is effectively invisible, speeds up
