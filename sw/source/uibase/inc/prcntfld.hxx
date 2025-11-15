@@ -32,7 +32,10 @@ class SW_DLLPUBLIC SwPercentField
     sal_Int64 m_nOldSpinSize;
     sal_Int64 m_nOldPageSize;
     sal_Int64 m_nLastPercent;
+    // Re-use the high-precision value,
+    // since re-calculating a value based on the percent may be a bit different because of rounding.
     sal_Int64 m_nLastValue;
+    sal_Int64 m_nLastRefValue;
     sal_uInt16  m_nOldDigits;
     FieldUnit   m_eOldUnit;
     bool m_bLockAutoCalculation; //prevent recalculation of percent values when the

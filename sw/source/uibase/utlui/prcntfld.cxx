@@ -26,6 +26,7 @@ SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     , m_nOldMin(0)
     , m_nLastPercent(-1)
     , m_nLastValue(-1)
+    , m_nLastRefValue(-1)
     , m_nOldDigits(m_pField->get_digits())
     , m_eOldUnit(FieldUnit::NONE)
     , m_bLockAutoCalculation(false)
@@ -83,7 +84,7 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
 
         m_pField->set_range(std::max(1, nPercent), nMaxPercent, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
-        if (nOldValue != m_nLastValue)
+        if (nOldValue != m_nLastValue || m_nRefValue != m_nLastRefValue)
         {
             nCurrentWidth
                 = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
@@ -92,6 +93,7 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
             m_pField->set_value(nPercent, FieldUnit::NONE);
             m_nLastPercent = nPercent;
             m_nLastValue = nOldValue;
+            m_nLastRefValue = m_nRefValue;
         }
         else
             m_pField->set_value(m_nLastPercent, FieldUnit::NONE);
@@ -107,11 +109,12 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
         m_pField->set_range(m_nOldMin, m_nOldMax, FieldUnit::NONE);
         m_pField->set_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
 
-        if (nOldPercent != m_nLastPercent)
+        if (nOldPercent != m_nLastPercent || m_nRefValue != m_nLastRefValue)
         {
             set_value(nOldValue, m_eOldUnit);
             m_nLastPercent = nOldPercent;
             m_nLastValue = nOldValue;
+            m_nLastRefValue = m_nRefValue;
         }
         else
             set_value(m_nLastValue, m_eOldUnit);
