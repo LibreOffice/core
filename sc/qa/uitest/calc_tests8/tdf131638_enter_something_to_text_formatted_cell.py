@@ -12,9 +12,9 @@ from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-class tdf137726(UITestCase):
+class tdf131638(UITestCase):
 
-    def test_tdf137726(self):
+    def test_tdf131638(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf131638.ods")) as calc_doc:
             MainWindow = self.xUITest.getTopFocusWindow()
             grid_window = MainWindow.getChild("grid_window")
