@@ -124,6 +124,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1887), nFlyTop);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169413_asciiTheme)
+{
+    // the document failed to reload without errors after a round-trip
+    createSwDoc("tdf169413_asciiTheme.docx");
+    saveAndReload(mpFilter);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
 {
     createSwDoc();
