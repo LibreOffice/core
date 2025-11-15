@@ -420,6 +420,27 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
+void SfxLokHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKLanguageAndLocale(rBcp47LanguageTag);
+            // sync also global getter if we are the current view
+            bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
+            if (bIsCurrShell)
+            {
+                comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
+                comphelper::LibreOfficeKit::setLocale(LanguageTag(rBcp47LanguageTag));
+            }
+            return;
+        }
+    }
+}
+
 void SfxLokHelper::setViewReadOnly(int nId, bool readOnly)
 {
     std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();

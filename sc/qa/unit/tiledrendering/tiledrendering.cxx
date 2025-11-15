@@ -3668,6 +3668,58 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrintRanges)
     CPPUNIT_ASSERT_EQUAL(u"{\"printranges\":[{\"sheet\":0,\"ranges\":[[2,6,2,6]]}]}"_ustr, printRanges);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLOKLanguageStatus)
+{
+    ScModelObj* pModelObj = createDoc("pivotfr.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // view #1
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(pView1);
+    CPPUNIT_ASSERT(pView);
+
+    {
+        // Pivot table is in the same sheet and first data row starts at A17.
+        pView->SetCursor(0, 16);
+        dispatchCommand(mxComponent, u".uno:RecalcPivotTable"_ustr, {});
+
+        // Document language is French(France), which the view must inherit.
+        CPPUNIT_ASSERT_EQUAL(u"janv."_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    }
+
+    {
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Language", uno::Any(u"Default_Spanish (Spain)"_ustr) },
+            }));
+        dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
+
+        // Pivot table is in the same sheet and first data row starts at A17.
+        pView->SetCursor(0, 16);
+        dispatchCommand(mxComponent, u".uno:RecalcPivotTable"_ustr, {});
+
+        // view language is now Spanish(Spain)
+        CPPUNIT_ASSERT_EQUAL(u"ene"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    }
+
+    {
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Language", uno::Any(u"Default_English (USA)"_ustr) },
+            }));
+        dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
+
+        // Pivot table is in the same sheet and first data row starts at A17.
+        pView->SetCursor(0, 16);
+        dispatchCommand(mxComponent, u".uno:RecalcPivotTable"_ustr, {});
+
+        // view language is now English(USA).
+        CPPUNIT_ASSERT_EQUAL(u"Jan"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

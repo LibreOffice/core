@@ -2185,6 +2185,17 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
+    {
+        // Set the default locale/language of a new view to the document
+        // language.
+        ScDocShell* pDocShell = GetViewData().GetDocShell();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        LanguageType eLatin, eCjk, eCtl;
+        rDoc.GetLanguage(eLatin, eCjk, eCtl);
+        OUString aLang = LanguageTag(eLatin).getBcp47();
+        SetLOKLanguageAndLocale(aLang);
+    }
+
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     // have we already one view ?
     if (!pViewShell)
