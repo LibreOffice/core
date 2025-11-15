@@ -606,7 +606,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* search the codeset in our language list */
     if ( codeset != nullptr )
     {
-        language = pair_search (codeset, nl_language_list, SAL_N_ELEMENTS( nl_language_list ) );
+        language = pair_search (codeset, nl_language_list, std::size( nl_language_list ) );
     }
 
     OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );

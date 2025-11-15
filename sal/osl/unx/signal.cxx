@@ -126,7 +126,7 @@ what looks like a bug in the new handler*/
     { SIGXCPU,   ACT_ABORT,  SIG_DFL, false }, /* exceeded cpu limit */
     { SIGXFSZ,   ACT_ABORT,  SIG_DFL, false }  /* exceeded file size limit */
 };
-const int NoSignals = SAL_N_ELEMENTS(Signals);
+const auto NoSignals = std::ssize(Signals);
 
 bool bSetSEGVHandler = false;
 bool bSetWINCHHandler = false;
