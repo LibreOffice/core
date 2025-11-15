@@ -58,6 +58,7 @@ class SfxLokCallbackInterface;
 class LOKDocumentFocusListener;
 class SfxStoringHelper;
 class VCLXPopupMenu;
+class CalendarWrapper;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
@@ -172,6 +173,7 @@ friend class SfxPrinterController;
     bool                        mbPrinterSettingsModified;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
+    std::unique_ptr<CalendarWrapper> mpCalendar;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
     bool                        mbLOKAccessibilityEnabled;
     rtl::Reference<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
@@ -471,6 +473,10 @@ public:
     void SetLOKLocale(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit locale of this view.
     const LanguageTag& GetLOKLocale() const { return maLOKLocale; }
+    /// Set the LibreOfficeKit locale and language of this view.
+    void SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag);
+    /// Get the LibreOfficeKit calendar of this view.
+    CalendarWrapper& GetLOKCalendar();
     /// Get the form factor of the device where the lok client is running.
     LOKDeviceFormFactor GetLOKDeviceFormFactor() const { return maLOKDeviceFormFactor; }
     /// Check if the lok client is running on a desktop machine.

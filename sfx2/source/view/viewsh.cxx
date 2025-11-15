@@ -114,6 +114,7 @@
 #include <list>
 #include <libxml/xmlwriter.h>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <unotools/calendarwrapper.hxx>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -3531,6 +3532,25 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
         comphelper::LibreOfficeKit::setLanguageTag(GetLOKLanguageTag());
         comphelper::LibreOfficeKit::setLocale(GetLOKLocale());
     }
+}
+
+void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
+{
+    SetLOKLanguageTag(rBcp47LanguageTag);
+    SetLOKLocale(rBcp47LanguageTag);
+    mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
+    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
+}
+
+CalendarWrapper& SfxViewShell::GetLOKCalendar()
+{
+    if (!mpCalendar)
+    {
+        mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
+        mpCalendar->loadDefaultCalendar( GetLOKLocale().getLocale() );
+    }
+
+    return *mpCalendar;
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const

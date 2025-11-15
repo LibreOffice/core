@@ -139,6 +139,8 @@ public:
     static void setLoadLanguage(const OUString& rBcp47LanguageTag);
     /// Set the locale for the given view.
     static void setViewLocale(int nId, const OUString& rBcp47LanguageTag);
+    /// Set the language and locale for the given view.
+    static void setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag);
     /// Get the device form factor that should be used for a new view.
     static LOKDeviceFormFactor getDeviceFormFactor();
     /// Set the device form factor that should be used for a new view.
