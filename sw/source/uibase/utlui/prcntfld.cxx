@@ -24,6 +24,8 @@ SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_pField(std::move(pControl))
     , m_nOldMax(0)
     , m_nOldMin(0)
+    , m_nLastPercent(-1)
+    , m_nLastValue(-1)
     , m_nOldDigits(m_pField->get_digits())
     , m_eOldUnit(FieldUnit::NONE)
     , m_bLockAutoCalculation(false)
@@ -59,9 +61,11 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
         || (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
         return;
 
+    sal_Int64 nOldValue;
+
     if (bPercent)
     {
-        sal_Int64 nOldValue = get_value();
+        nOldValue = get_value();
 
         m_eOldUnit = m_pField->get_unit();
         m_nOldDigits = m_pField->get_digits();
@@ -79,22 +83,38 @@ void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
 
         m_pField->set_range(std::max(1, nPercent), nMaxPercent, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
-
-        nCurrentWidth = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
-        nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
-        nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
-        m_pField->set_value(nPercent, FieldUnit::NONE);
+        if (nOldValue != m_nLastValue)
+        {
+            nCurrentWidth
+                = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
+            nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
+            nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
+            m_pField->set_value(nPercent, FieldUnit::NONE);
+            m_nLastPercent = nPercent;
+            m_nLastValue = nOldValue;
+        }
+        else
+            m_pField->set_value(m_nLastPercent, FieldUnit::NONE);
     }
     else
     {
-        const sal_Int64 nValue = Convert(get_value(), m_pField->get_unit(), m_eOldUnit);
+        sal_Int64 nOldPercent = get_value(FieldUnit::PERCENT);
+
+        nOldValue = Convert(get_value(), m_pField->get_unit(), m_eOldUnit);
 
         m_pField->set_unit(m_eOldUnit);
         m_pField->set_digits(m_nOldDigits);
         m_pField->set_range(m_nOldMin, m_nOldMax, FieldUnit::NONE);
         m_pField->set_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
 
-        set_value(nValue, m_eOldUnit);
+        if (nOldPercent != m_nLastPercent)
+        {
+            set_value(nOldValue, m_eOldUnit);
+            m_nLastPercent = nOldPercent;
+            m_nLastValue = nOldValue;
+        }
+        else
+            set_value(m_nLastValue, m_eOldUnit);
     }
 }
 

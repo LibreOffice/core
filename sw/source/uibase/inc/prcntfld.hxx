@@ -31,6 +31,8 @@ class SW_DLLPUBLIC SwPercentField
     sal_Int64 m_nOldMin;
     sal_Int64 m_nOldSpinSize;
     sal_Int64 m_nOldPageSize;
+    sal_Int64 m_nLastPercent;
+    sal_Int64 m_nLastValue;
     sal_uInt16  m_nOldDigits;
     FieldUnit   m_eOldUnit;
     bool m_bLockAutoCalculation; //prevent recalculation of percent values when the
