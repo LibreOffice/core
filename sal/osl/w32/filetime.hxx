@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_FILETIME_HXX
-#define INCLUDED_SAL_OSL_W32_FILETIME_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -20,7 +19,5 @@
 BOOL TimeValueToFileTime(TimeValue const* cpTimeVal, FILETIME* pFTime);
 // bDuration means cpFTime contains a time interval, not a point in time
 BOOL FileTimeToTimeValue(FILETIME const* cpFTime, TimeValue* pTimeVal, bool bDuration = false);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
