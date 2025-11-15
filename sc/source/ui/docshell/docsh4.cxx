@@ -119,6 +119,7 @@
 #include <svx/xdef.hxx>
 #include <editeng/lrspitem.hxx> // Defines SvxLRSpaceItem
 #include <editeng/ulspitem.hxx> // Defines SvxULSpaceItem
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -240,17 +241,43 @@ IMPL_LINK( ScDocShell, ReloadAllLinksHdl, weld::Button&, rButton, void )
 
 namespace
 {
-    class LinkHelp
+class LinkHelp
+{
+public:
+    DECL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, void);
+};
+
+void lcl_setLOKLanguageAndLocale(ScDocShell& rDocSh, ScTabViewShell& rViewShell, const LanguageType eLang)
+{
+    OUString aLang = LanguageTag(eLang).getBcp47();
+    SfxLokHelper::setViewLanguageAndLocale(SfxLokHelper::getView(rViewShell), aLang);
+    if (SfxBindings* pBindings = rDocSh.GetViewBindings())
     {
-    public:
-        DECL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, void);
-    };
+        pBindings->Invalidate(SID_LANGUAGE_STATUS);
+    }
 }
+
+} // end anonymous namespace
 
 IMPL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, rBtn, void)
 {
     if (Help* pHelp = Application::GetHelp())
         pHelp->Start(HID_UPDATE_LINK_WARNING, &rBtn);
+}
+
+void ScDocShell::SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageType eCtl)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (ScTabViewShell* pViewShell = GetBestViewShell())
+        {
+            lcl_setLOKLanguageAndLocale(*this, *pViewShell, eLatin);
+        }
+    }
+    else
+    {
+        GetDocument().SetLanguage(eLatin, eCjk, eCtl);
+    }
 }
 
 void ScDocShell::Execute( SfxRequest& rReq )
@@ -1351,7 +1378,17 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bParagraph = false;
 
                 ScDocument& rDoc = GetDocument();
-                rDoc.GetLanguage( eLatin, eCjk, eCtl );
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    if (ScTabViewShell* pViewShell = GetBestViewShell())
+                    {
+                        eLatin = pViewShell->GetLOKLocale().getLanguageType();
+                    }
+                }
+                else
+                {
+                    rDoc.GetLanguage( eLatin, eCjk, eCtl );
+                }
 
                 sal_Int32 nPos = 0;
                 if ( aLangText == "*" )
@@ -1369,19 +1406,19 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( aLangText == "LANGUAGE_NONE" )
                     {
                         eLang = LANGUAGE_NONE;
-                        rDoc.SetLanguage( eLang, eCjk, eCtl );
+                        SetLanguage(eLang, eCjk, eCtl);
                     }
                     else if ( aLangText == "RESET_LANGUAGES" )
                     {
                         ScModule::GetSpellSettings(eLang, eCjk, eCtl);
-                        rDoc.SetLanguage(eLang, eCjk, eCtl);
+                        SetLanguage(eLang, eCjk, eCtl);
                     }
                     else
                     {
                         eLang = SvtLanguageTable::GetLanguageType( aLangText );
                         if ( eLang != LANGUAGE_DONTKNOW  && SvtLanguageOptions::GetScriptTypeOfLanguage(eLang) == SvtScriptType::LATIN )
                         {
-                            rDoc.SetLanguage( eLang, eCjk, eCtl );
+                            SetLanguage(eLang, eCjk, eCtl);
                         }
                         else
                         {
@@ -2549,13 +2586,15 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
                     if (comphelper::LibreOfficeKit::isActive())
                     {
-                        GetDocument().GetLanguage( eLatin, eCjk, eCtl );
-                        sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
-
-                        if (eLatin == LANGUAGE_NONE)
-                            sLanguage += ";-";
-                        else
-                            sLanguage += ";" + LanguageTag(eLatin).getBcp47(false);
+                        if (ScTabViewShell* pViewShell = GetBestViewShell())
+                        {
+                            eLatin = pViewShell->GetLOKLocale().getLanguageType();
+                            sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
+                            if (eLatin == LANGUAGE_NONE)
+                                sLanguage += ";-";
+                            else
+                                sLanguage += ";" + LanguageTag(eLatin).getBcp47(false);
+                        }
                     }
                     else if (ScTabViewShell* pViewShell = GetBestViewShell())
                     {

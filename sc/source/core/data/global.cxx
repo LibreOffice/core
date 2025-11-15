@@ -1097,6 +1097,13 @@ const CharClass& ScGlobal::getCharClass()
 CalendarWrapper& ScGlobal::GetCalendar()
 {
     assert(!bThreadedGroupCalcInProgress);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (SfxViewShell* pCurr = SfxViewShell::Current())
+        {
+            return pCurr->GetLOKCalendar();
+        }
+    }
     if ( !oCalendar )
     {
         oCalendar.emplace( ::comphelper::getProcessComponentContext() );
@@ -1144,6 +1151,10 @@ CollatorWrapper& ScGlobal::GetCollator(bool bCaseSensitive)
 }
 css::lang::Locale& ScGlobal::GetLocale()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        return const_cast<css::lang::Locale&>(comphelper::LibreOfficeKit::getLocale().getLocale());
+    }
     return *comphelper::doubleCheckedInit( pLocale,
         []() { return new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale()); });
 }

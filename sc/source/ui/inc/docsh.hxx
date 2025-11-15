@@ -449,6 +449,8 @@ private:
         const OUString& rChartName, const ScRangeListRef& rRangeListRef,
         bool bColHeaders, bool bRowHeaders, bool bAddRange,
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab);
+
+    void SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageType eCtl);
 };
 
 void UpdateAcceptChangesDialog();
