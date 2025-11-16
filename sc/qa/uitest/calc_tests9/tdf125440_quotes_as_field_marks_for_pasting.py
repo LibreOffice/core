@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import get_url_for_data_file
 
-class Tdf1254400(UITestCase):
+class Tdf125440(UITestCase):
 
     def test_tdf125440(self):
         # In order to simulate copy&paste from external source,
