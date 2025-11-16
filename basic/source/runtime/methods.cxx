@@ -4270,38 +4270,34 @@ void SbRtl_DumpAllObjects(StarBASIC * pBasic, SbxArray & rPar, bool)
 
 void SbRtl_FileExists(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() == 2)
-    {
-        OUString aStr = rPar.Get(1)->GetOUString();
-        bool bExists = false;
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-        if( hasUno() )
+    OUString aStr = rPar.Get(1)->GetOUString();
+    bool bExists = false;
+
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
+            try
             {
-                try
-                {
-                    bExists = xSFI->exists( aStr );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
+                bExists = xSFI->exists( aStr );
+            }
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
             }
         }
-        else
-        {
-            DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPath( aStr ), aItem );
-            bExists = (nRet == FileBase::E_None);
-        }
-        rPar.Get(0)->PutBool(bExists);
     }
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        DirectoryItem aItem;
+        FileBase::RC nRet = DirectoryItem::get( getFullPath( aStr ), aItem );
+        bExists = (nRet == FileBase::E_None);
     }
+    rPar.Get(0)->PutBool(bExists);
 }
 
 void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
