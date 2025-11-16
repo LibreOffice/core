@@ -5457,6 +5457,18 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="QueryClearRecentDocuments" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to show the confirmation dialog when clearing recent documents.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="QueryClearUnavailableDocuments" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to show the confirmation dialog when clearing unavailable documents.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="QueryDeleteAllComments" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether to confirm delete all comments or all by user.</desc>

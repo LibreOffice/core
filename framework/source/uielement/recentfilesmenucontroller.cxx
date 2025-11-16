@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
@@ -400,14 +401,40 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
         return;
 
     const OUString aCommand( xPopupMenu->getCommand( rEvent.MenuId ) );
-
     if ( aCommand == CMD_CLEAR_LIST )
     {
-        SvtHistoryOptions::Clear( EHistoryType::PickList, false );
-        dispatchCommand(
+        const bool bDoAsk = officecfg::Office::Common::Misc::QueryClearRecentDocuments::get();
+        short nresult = RET_YES;
+        if (bDoAsk)
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            auto pDlg = pFact->CreateQueryDialog(
+                Application::GetDefDialogParent(),
+                FwkResId(STR_QUERY_CLR_RECENTS_DOCS_TITLE),
+                FwkResId(STR_QUERY_CLR_RECENTS_DOCS_TEXT),
+                FwkResId(STR_QUERY_CLR_RECENTS_DOCS_QUESTION),
+                true);
+            nresult = pDlg->Execute();
+
+            if (pDlg->ShowAgain() == false)
+            {
+                std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Common::Misc::QueryClearRecentDocuments::set(false, xChanges);
+                xChanges->commit();
+            }
+            pDlg->disposeOnce();
+        }
+
+        if ( ! bDoAsk || nresult == RET_YES )
+        {
+            SvtHistoryOptions::Clear( EHistoryType::PickList, false );
+            dispatchCommand(
             u"vnd.org.libreoffice.recentdocs:ClearRecentFileList"_ustr,
             css::uno::Sequence< css::beans::PropertyValue >() );
+        }
     }
+
     if ( aCommand == CMD_TOGGLE_CURRENTMODULE )
     {
         bool bIsExclusive = officecfg::Office::Common::History::ShowCurrentModuleOnly::get();

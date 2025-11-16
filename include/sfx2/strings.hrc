@@ -380,6 +380,9 @@
 #define STR_WINDOW_TITLE_RENAME_NEW_CATEGORY    NC_("STR_WINDOW_TITLE_RENAME_NEW_CATEGORY","New Category")
 
 #define STR_OBJECT_INSPECTOR                    NC_("STR_OBJECT_INSPECTOR", "UNO Object Inspector")
+#define STR_QUERY_CLR_UNAVAILABLE_DOCS_TITLE    NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_TITLE", "Clear Unavailable Documents")
+#define STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT     NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT", "This action is irreversible.")
+#define STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION", "Do you want to clear all unavailable Documents?")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,6 +22,7 @@
 #include <recentdocsview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
@@ -187,16 +188,41 @@ void RecentDocsView::setFilter(ApplicationType aFilter)
     Reload();
 }
 
-void RecentDocsView::clearUnavailableFiles(){
-    std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
-    for ( size_t i = 0; i < aHistoryList.size(); i++ )
+void RecentDocsView::clearUnavailableFiles()
+{
+    const bool bDoAsk = officecfg::Office::Common::Misc::QueryClearUnavailableDocuments::get();
+    short nresult = RET_YES;
+    if (bDoAsk)
     {
-        const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
-        if ( !comphelper::DirectoryHelper::fileExists(rPickListEntry.sURL) ){
-            SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL, false);
+        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+        auto pDlg = pFact->CreateQueryDialog(
+            Application::GetDefDialogParent(),
+            SfxResId(STR_QUERY_CLR_UNAVAILABLE_DOCS_TITLE),
+            SfxResId(STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT),
+            SfxResId(STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION),
+            true);
+        nresult = pDlg->Execute();
+        if (pDlg->ShowAgain() == false)
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Misc::QueryClearUnavailableDocuments::set(false, xChanges);
+            xChanges->commit();
         }
+        pDlg->disposeOnce();
     }
-    Reload();
+    if ( ! bDoAsk || nresult == RET_YES )
+    {
+        std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
+        for ( size_t i = 0; i < aHistoryList.size(); i++ )
+        {
+            const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+            if ( !comphelper::DirectoryHelper::fileExists(rPickListEntry.sURL) ){
+                SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL, false);
+            }
+        }
+        Reload();
+    }
 }
 
 bool RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
