@@ -4159,9 +4159,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                     }
 
                     mxList->addAttribute(u"svg:width"_ustr, sXML_CDATA,
-                                 OUString::number (WTMM( drawobj->extent.w * 2)) + "mm");
+                                 OUString::number (WTMM( drawobj->extent.w * 2.0)) + "mm");
                     mxList->addAttribute(u"svg:height"_ustr, sXML_CDATA,
-                                 OUString::number (WTMM( drawobj->extent.h * 2)) + "mm");
+                                 OUString::number (WTMM( drawobj->extent.h * 2.0)) + "mm");
                     if( drawobj->property.flag & HWPDO_FLAG_DRAW_PIE ||
                                      drawobj->property.fill_color < 0xffffff )
                                 mxList->addAttribute(u"draw:kind"_ustr, sXML_CDATA, u"section"_ustr);
@@ -4169,11 +4169,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                 mxList->addAttribute(u"draw:kind"_ustr, sXML_CDATA, u"arc"_ustr);
 
                     if( drawobj->type == HWPDO_ADVANCED_ARC ){
-                                double start_angle, end_angle;
                                 ZZParall& pal = drawobj->property.parall;
 
-                                start_angle = atan2(pal.pt[0].y - pal.pt[1].y,pal.pt[1].x - pal.pt[0].x );
-                                end_angle = atan2(pal.pt[2].y - pal.pt[1].y, pal.pt[1].x - pal.pt[2].x);
+                                double start_angle = atan2(pal.pt[0].y - pal.pt[1].y,pal.pt[1].x - pal.pt[0].x );
+                                double end_angle = atan2(pal.pt[2].y - pal.pt[1].y, pal.pt[1].x - pal.pt[2].x);
 
                                 if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI ))
                                     std::swap( start_angle, end_angle );
