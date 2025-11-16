@@ -46,36 +46,24 @@ using namespace ::com::sun::star;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
-    static constexpr OUStringLiteral sKeyInfo                     ( u"KeyInfo" );
-    static constexpr OUStringLiteral sPgpKeyIDProperty            ( u"KeyId" );
-    static constexpr OUStringLiteral sPgpKeyPacketProperty        ( u"KeyPacket" );
-    static constexpr OUStringLiteral sCipherValueProperty         ( u"CipherValue" );
-    static constexpr OUString sFullPathProperty     ( u"FullPath"_ustr );
-    static constexpr OUString sVersionProperty  ( u"Version"_ustr );
-    static constexpr OUString sMediaTypeProperty    ( u"MediaType"_ustr );
-    static constexpr OUStringLiteral sIterationCountProperty   ( u"IterationCount" );
-    static constexpr OUStringLiteral sDerivedKeySizeProperty  ( u"DerivedKeySize" );
-    static constexpr OUStringLiteral sSaltProperty         ( u"Salt" );
-    static constexpr OUStringLiteral sInitialisationVectorProperty( u"InitialisationVector" );
-    static constexpr OUStringLiteral sSizeProperty         ( u"Size" );
-    static constexpr OUStringLiteral sDigestProperty       ( u"Digest" );
-    static constexpr OUStringLiteral sEncryptionAlgProperty    ( u"EncryptionAlgorithm" );
-    static constexpr OUStringLiteral sStartKeyAlgProperty  ( u"StartKeyAlgorithm" );
-    static constexpr OUStringLiteral sDigestAlgProperty    ( u"DigestAlgorithm" );
+    static constexpr OUString sKeyInfo                      ( u"KeyInfo"_ustr );
+    static constexpr OUString sPgpKeyIDProperty             ( u"KeyId"_ustr );
+    static constexpr OUString sPgpKeyPacketProperty         ( u"KeyPacket"_ustr );
+    static constexpr OUString sCipherValueProperty          ( u"CipherValue"_ustr );
+    static constexpr OUString sFullPathProperty             ( u"FullPath"_ustr );
+    static constexpr OUString sVersionProperty              ( u"Version"_ustr );
+    static constexpr OUString sMediaTypeProperty            ( u"MediaType"_ustr );
+    static constexpr OUString sIterationCountProperty       ( u"IterationCount"_ustr );
+    static constexpr OUString sDerivedKeySizeProperty       ( u"DerivedKeySize"_ustr );
+    static constexpr OUString sSaltProperty                 ( u"Salt"_ustr );
+    static constexpr OUString sInitialisationVectorProperty ( u"InitialisationVector"_ustr );
+    static constexpr OUString sSizeProperty                 ( u"Size"_ustr );
+    static constexpr OUString sDigestProperty               ( u"Digest"_ustr );
+    static constexpr OUString sEncryptionAlgProperty        ( u"EncryptionAlgorithm"_ustr );
+    static constexpr OUString sStartKeyAlgProperty          ( u"StartKeyAlgorithm"_ustr );
+    static constexpr OUString sDigestAlgProperty            ( u"DigestAlgorithm"_ustr );
 
-    static constexpr OUString sWhiteSpace           ( u" "_ustr );
-
-    const OUString sSHA256_URL_ODF12     ( SHA256_URL_ODF12 );
-    const OUString  sSHA1_Name           ( SHA1_NAME );
-
-    const OUString  sSHA1_1k_Name        ( SHA1_1K_NAME );
-    const OUString  sSHA256_1k_URL       ( SHA256_1K_URL );
-
-    const OUString  sBlowfish_Name       ( BLOWFISH_NAME );
-    const OUString  sAES256_URL          ( AES256_URL );
-
-    const OUString  sPBKDF2_Name         ( PBKDF2_NAME );
-    const OUString  sPGP_Name            ( PGP_NAME );
+    static constexpr OUString sWhiteSpace                   ( u" "_ustr );
 
     rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;
 
@@ -393,9 +381,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 sal_Int32 nDigestAlgID = 0;
                 *pDigestAlg >>= nDigestAlgID;
                 if ( nDigestAlgID == xml::crypto::DigestID::SHA256_1K )
-                    sChecksumType = sSHA256_1k_URL;
+                    sChecksumType = SHA256_1K_URL;
                 else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
-                    sChecksumType = sSHA1_1k_Name;
+                    sChecksumType = SHA1_1K_NAME;
                 else
                     throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!" );
 
@@ -422,7 +410,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 if ( nDerivedKeySize != 32 )
                     throw uno::RuntimeException( THROW_WHERE "Unexpected key size is provided!" );
 
-                sEncAlgName = sAES256_URL;
+                sEncAlgName = AES256_URL;
             }
             else if (nEncAlgID == xml::crypto::CipherID::AES_GCM_W3C)
             {
@@ -436,7 +424,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             }
             else if ( nEncAlgID == xml::crypto::CipherID::BLOWFISH_CFB_8 )
             {
-                sEncAlgName = sBlowfish_Name;
+                sEncAlgName = BLOWFISH_NAME;
             }
             else
                 throw uno::RuntimeException( THROW_WHERE "Unexpected encryption algorithm is provided!" );
@@ -469,14 +457,14 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     }
                     else // to interop with ODF <= 1.4 consumers use bad ODF URL
                     {
-                        sStartKeyAlg = sSHA256_URL_ODF12;
+                        sStartKeyAlg = SHA256_URL_ODF12;
                     }
                     aBuffer.append( sal_Int32(32) );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else if ( nStartKeyAlgID == xml::crypto::DigestID::SHA1 )
                 {
-                    sStartKeyAlg = sSHA1_Name;
+                    sStartKeyAlg = SHA1_NAME;
                     aBuffer.append( sal_Int32(20) );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
@@ -499,7 +487,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             {
                 assert(pKDF->get<sal_Int32>() == xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P);
                 pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
-                                           sPGP_Name);
+                                           PGP_NAME);
             }
             else
             {
@@ -519,7 +507,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 {
                     assert(pKDF->get<sal_Int32>() == xml::crypto::KDFID::PBKDF2);
                     pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
-                                               sPBKDF2_Name);
+                                               PBKDF2_NAME);
 
                     sal_Int32 nCount = 0;
                     *pIterationCount >>= nCount;
