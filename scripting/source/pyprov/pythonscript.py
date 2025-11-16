@@ -26,7 +26,6 @@ import time
 import ast
 import platform
 from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
-from urllib.parse import unquote
 
 from com.sun.star.uno import RuntimeException
 from com.sun.star.lang import IllegalArgumentException
@@ -976,12 +975,10 @@ class PythonScript(unohelper.Base, XScript):
 
 def expandUri(uri):
     if uri.startswith("vnd.sun.star.expand:"):
-        uri = uri.replace("vnd.sun.star.expand:", "", 1)
-        uri = (
-            uno.getComponentContext()
-            .getByName("/singletons/com.sun.star.util.theMacroExpander")
-            .expandMacros(unquote(uri))
-        )
+        ctx = uno.getComponentContext()
+        fac = ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory", ctx)
+        ref = fac.parse(uri)
+        uri = ref.expand(ctx.getValueByName("/singletons/com.sun.star.util.theMacroExpander"))
     if uri.startswith("file:"):
         uri = uno.absolutize("", uri)  # necessary to get rid of .. in uri
     return uri
