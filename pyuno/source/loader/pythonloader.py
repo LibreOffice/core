@@ -85,7 +85,7 @@ class Loader(XImplementationLoader, XServiceInfo, unohelper.Base):
         try:
             if "file" == protocol:
                 # remove \..\ sequence, which may be useful e.g. in the build env
-                url = unohelper.absolutize(url, url)
+                url = uno.absolutize(url, url)
 
                 # did we load the module already ?
                 mod = g_loadedComponents.get(url)

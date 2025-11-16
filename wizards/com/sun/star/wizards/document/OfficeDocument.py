@@ -17,7 +17,7 @@
 #
 import uno
 import traceback
-from unohelper import systemPathToFileUrl, absolutize
+from unohelper import systemPathToFileUrl
 from ..common.Desktop import Desktop
 from ..common.SystemDialog import SystemDialog
 
@@ -174,7 +174,7 @@ class OfficeDocument(object):
             sPath = StorePath[:(StorePath.rfind("/") + 1)]
             sFile = StorePath[(StorePath.rfind("/") + 1):]
             xComponent.storeToURL(
-                absolutize(sPath, sFile), tuple(oStoreProperties))
+                uno.absolutize(sPath, sFile), tuple(oStoreProperties))
             return True
         except ErrorCodeIOException:
             #Throw this exception when trying to save a file

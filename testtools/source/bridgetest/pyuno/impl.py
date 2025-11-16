@@ -135,7 +135,7 @@ class TestHelperCase( unittest.TestCase ):
                   self.assertTrue( "file:///c:/temp" == unohelper.systemPathToFileUrl( "c:\\temp" ) )
 
             systemPath = unohelper.systemPathToFileUrl( systemPath )
-            self.assertTrue( systemPath + "/a" == unohelper.absolutize( systemPath, "a" ) )
+            self.assertTrue( systemPath + "/a" == uno.absolutize( systemPath, "a" ) )
       def testInspect( self ):
             dev = NullDevice()
 #            dev = sys.stdout
