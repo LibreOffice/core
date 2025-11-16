@@ -382,14 +382,14 @@ REM =========================================================== PRIVATE FUNCTION
 
 REM -----------------------------------------------------------------------------
 Private Function _Now() As Double
-&apos;&apos;&apos;	Returns the current date and time
-&apos;&apos;&apos;	Uses the Calc NOW() function to get a higher precision than the usual Basic Now() function
+&apos;&apos;&apos;	Returns the current date and time with a required precision of at least the millisecond.
+&apos;&apos;&apos;	Uses the Basic NOW() (i.o. Calc&apos;s) function as it provides the required precision since LO 25.2 (tdf#161469).
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The actual time as a number
 &apos;&apos;&apos;		The integer part represents the date, the decimal part represents the time
 
-	_Now = SF_Session.ExecuteCalcFunction(&quot;NOW&quot;)
+	_Now = CDbl(Now())
 
 End Function	&apos;	ScriptForge.SF_Timer._Now
 
