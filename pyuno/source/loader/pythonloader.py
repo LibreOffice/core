@@ -21,7 +21,6 @@ import unohelper
 import sys
 import types
 import os
-from urllib.parse import unquote
 from com.sun.star.uno import Exception, RuntimeException
 from com.sun.star.loader import XImplementationLoader
 from com.sun.star.lang import XServiceInfo
@@ -75,7 +74,9 @@ class Loader(XImplementationLoader, XServiceInfo, unohelper.Base):
         protocol, dependent = splitUrl(url)
         if "vnd.sun.star.expand" == protocol:
             exp = self.ctx.getValueByName("/singletons/com.sun.star.util.theMacroExpander")
-            url = exp.expandMacros(unquote(dependent))
+            fac = self.ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory", self.ctx)
+            ref = fac.parse(url)
+            url = ref.expand(exp)
             protocol, dependent = splitUrl(url)
 
         if DEBUG:
