@@ -96,9 +96,6 @@
 #include <output.hxx>
 #include <fillinfo.hxx>
 
-// Maximum Ranges in RangeFinder
-#define RANGEFIND_MAX   128
-
 using namespace formula;
 
 namespace {
@@ -384,6 +381,8 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     sal_Int32 nStart = 0;
     ESelection aSel;
     sal_uInt16 nCount = 0;
+    // Maximum Ranges in RangeFinder
+    constexpr sal_uInt16 RANGEFIND_MAX = 128;
     ScRange aRange;
     while ( nPos < nLen && nCount < RANGEFIND_MAX )
     {
