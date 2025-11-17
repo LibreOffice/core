@@ -15,14 +15,14 @@ class DocbookExportTest : public SwModelTestBase
 {
 public:
     DocbookExportTest() :
-        SwModelTestBase(u"/sw/qa/extras/docbookexport/data/"_ustr, u"DocBook File"_ustr)
+        SwModelTestBase(u"/sw/qa/extras/docbookexport/data/"_ustr)
     {}
 };
 
 CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
 {
     createSwDoc("simple.docx");
-    save(mpFilter);
+    save(u"DocBook File"_ustr);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
 CPPUNIT_TEST_FIXTURE(DocbookExportTest, testtdf91095)
 {
     createSwDoc("tdf91095.docx");
-    save(mpFilter);
+    save(u"DocBook File"_ustr);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 }

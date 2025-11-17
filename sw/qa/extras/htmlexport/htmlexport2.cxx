@@ -489,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
     createSwWebDoc("clearing-break.html");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"HTML (StarWriter)"_ustr);
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
     xBodyText->insertTextContent(xCursor, xTextContent, false);
 
     // When exporting to HTML:
-    save(mpFilter);
+    save(u"HTML (StarWriter)"_ustr);
 
     // Then make sure that the width is not a fixed size, that would break on resizing the browser
     // window:
@@ -623,7 +623,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
     xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u".\\another.odt"_ustr));
 
     // Export
-    save(mpFilter);
+    save(u"HTML (StarWriter)"_ustr);
 
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pHtmlDoc);
@@ -638,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
 {
     createSwDoc("TableWithIndent.fodt");
-    save(mpFilter);
+    save(u"HTML (StarWriter)"_ustr);
 
     // Parse it as XML (strict!)
     xmlDocUniquePtr pDoc = parseXml(maTempFile);

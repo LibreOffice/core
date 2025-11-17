@@ -53,7 +53,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlimport/data/"_ustr, u"Office Open XML Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlimport/data/"_ustr)
     {
     }
 };

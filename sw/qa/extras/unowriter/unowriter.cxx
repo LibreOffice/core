@@ -115,7 +115,7 @@ class SwUnoWriter : public SwModelTestBase
 {
 public:
     SwUnoWriter()
-        : SwModelTestBase(u"/sw/qa/extras/unowriter/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/unowriter/data/"_ustr)
     {
     }
 };

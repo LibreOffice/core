@@ -17,7 +17,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8")
+        : SwModelTestBase("/sw/qa/extras/odfimport/data/")
     {
     }
 };

@@ -35,7 +35,7 @@ namespace
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ww8import/data/"_ustr, u"MS Word 97"_ustr)
+    Test() : SwModelTestBase(u"/sw/qa/extras/ww8import/data/"_ustr)
     {
     }
 };

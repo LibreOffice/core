@@ -46,7 +46,7 @@ class MailMergeTestBase : public SwModelTestBase
 {
 public:
     MailMergeTestBase()
-        : SwModelTestBase(u"/sw/qa/extras/mailmerge/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/mailmerge/data/"_ustr)
         , mnCurOutputType(0)
         , maMMtestFilename(nullptr)
     {

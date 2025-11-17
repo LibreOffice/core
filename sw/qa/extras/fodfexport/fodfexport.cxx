@@ -17,8 +17,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/fodfexport/data/"_ustr,
-                          u"OpenDocument Text Flat XML"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/fodfexport/data/"_ustr)
     {
     }
 };
@@ -83,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvgImageRoundtrip)
 
     createSwDoc("SvgImageTest.fodt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"OpenDocument Text Flat XML"_ustr);
     verify();
 }
 

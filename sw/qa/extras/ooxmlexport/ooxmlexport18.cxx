@@ -40,7 +40,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
     // Without the accompanying fix in place, this test would have failed with an assertion failure,
     // we produced not-well-formed XML on save.
     createSwDoc("inline-sdt-header.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
     // Without the accompanying fix in place, this test would have failed with an assertion failure,
     // we produced not-well-formed XML on save.
     createSwDoc("cell-sdt-redline.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148956_directEndFormatting)
@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148956_directEndFormatting)
     };
     createSwDoc("tdf148956_directEndFormatting.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -166,7 +166,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStriket
 CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 {
     createSwDoc("tdf154478.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
     OUString aValues[5] = { u"Comment1 seen."_ustr, u"Comment2 seen."_ustr, u"Comment3 NOTseen."_ustr, u"Comment4 NOTseen."_ustr, u"Comment5 NOTseen."_ustr };
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 {
     createSwDoc("tdf153592_columnBreaks.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The two column breaks were lost on import. (I wouldn't complain if they were at 3,5)
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 
     createSwDoc("tdf154703_framePr2.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 
     // exported: framed paragraphs without a background should now have a red background
@@ -316,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePrWrapSpacing)
 {
     createSwDoc("tdf154703_framePrWrapSpacing.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -328,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePrTextDirection)
 {
     createSwDoc("tdf154703_framePrTextDirection.docx");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -528,7 +528,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_firstIndentAfterBreak14, "tdf153964_first
 CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
 {
     createSwDoc("tdf148834_lineNumbering.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
 
     xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
     // user specified: do not include in line numbering
@@ -542,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
 CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
 {
     createSwDoc("tdf157598.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
 
     xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
 
@@ -598,7 +598,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 CPPUNIT_TEST_FIXTURE(Test, testTdf151912)
 {
     createSwDoc("tdf151912.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // For now just ensure roundtrip is successful
 
     //tdf#151548 - ensure block SDT preserves id (instead of random re-assignment)
@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak)
 {
     createSwDoc("tdf152636_lostPageBreak.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak2)
 {
     createSwDoc("tdf152636_lostPageBreak2.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
 CPPUNIT_TEST_FIXTURE(Test, testImageCropping)
 {
     createSwDoc("crop-roundtrip.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     // the image has no cropping after roundtrip, because it has been physically cropped
     // NB: this test should be fixed when the core feature to show image cropped when it
@@ -762,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
 CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 {
     createSwDoc("embedded_chart.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
@@ -788,7 +788,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
 {
     createSwDoc("tdf152425.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     // Check that "List Number" and "List 5" styles don't get merged
     const OUString Para3Style = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
@@ -803,7 +803,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
 CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
 {
     createSwDoc("tdf153104.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString numId = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val");
@@ -826,7 +826,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
 CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
 {
     createSwDoc("tdf153128.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     calcLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFirstLineHeight
@@ -844,7 +844,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 {
     // This must not fail assertions
     createSwDoc("UnknownStyleInRedline.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Check that the original unknown style name "UnknownStyle" is roundtripped
     // (maybe this is wrong, because Word does not do this).
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -855,7 +855,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
 {
     createSwDoc("tdf148026.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -868,7 +868,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
 CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
 {
     createSwDoc("Table-of-Figures.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexMax)
 
     createSwDoc("tdf159158_zOrder_zIndexMax.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -1034,7 +1034,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexDuplicate_compat15)
 
     createSwDoc("tdf159158_zOrder_zIndexDuplicate_compat15.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -1063,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexWins)
     };
     createSwDoc("tdf159158_zOrder_zIndexWins.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -1084,7 +1084,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocA)
 
     createSwDoc("tdf159158_zOrder_behindDocA.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -1107,7 +1107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocB)
 
     createSwDoc("tdf159158_zOrder_behindDocB.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 

@@ -35,7 +35,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/filter/xml/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/filter/xml/data/"_ustr)
     {
     }
 };

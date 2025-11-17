@@ -146,7 +146,7 @@ class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 public:
     HtmlExportTest()
-        : SwModelTestBase(u"/sw/qa/extras/htmlexport/data/"_ustr, u"HTML (StarWriter)"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/htmlexport/data/"_ustr)
     {
     }
 

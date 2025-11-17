@@ -46,7 +46,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr, u"MS Word 97"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr)
     {
     }
 };
@@ -54,7 +54,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
 {
     createSwDoc("tdf77964.doc");
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     // both images were loading as AT_PARA instead of AS_CHAR. Image2 visually had text wrapping.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), u"AnchorType"_ustr));
 }
@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLegalNumbering)
 
     createSwDoc("listWithLgl.doc");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCExportDoNotMirrorRtlDrawObjs)
     createSwDoc("draw-obj-rtl-no-mirror-vml.docx");
 
     // When saving that to DOC:
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
 
     // Then make sure the shape is on the right margin:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyGroup)
     CPPUNIT_ASSERT_EQUAL(size_t(0), pObject->GetSubList()->GetObjCount());
 
     // it must not assert/crash on save
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135709)
@@ -600,7 +600,7 @@ nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
     // make sure everything survives roundtrip
     createSwDoc("tdf56738.doc");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -642,7 +642,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf54862)
     };
 
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -665,7 +665,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80596)
     };
 
     fnVerify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     fnVerify();
 }
 
@@ -688,7 +688,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80596Hanging)
     };
 
     fnVerify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     fnVerify();
 }
 
@@ -707,7 +707,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
         CPPUNIT_ASSERT(!rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
     }
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
 
     {
         SwDoc* pDoc = getSwDoc();
@@ -717,7 +717,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
         rIDSA.set(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, true);
     }
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
 
     {
         SwDoc* pDoc = getSwDoc();
@@ -739,7 +739,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
     // Exporting to a Word format, a tab is prepended to the endnote text. When imported, the
     // NoGapAfterNoteNumber compatibility flag is enabled; and the exported tab is the only thing
     // that separates the number and the text. The tab must not be stripped away on import.
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -752,7 +752,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         CPPUNIT_ASSERT_EQUAL(u"\tEndnote text"_ustr, xEndnoteText->getString());
     }
     // Do a second round-trip. It must not duplicate the tab.
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -768,7 +768,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         xEndnoteText->setString(u"Endnote text"_ustr);
     }
     // Do a third round-trip. It must not introduce the tab, because of the compatibility flag.
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
     };
 
     fnVerify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     fnVerify();
 }
 
@@ -817,7 +817,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     fnVerify(true);
 
     // Check that the value is persisted across save-reload
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     fnVerify(true);
 
     // Unset the compat flag
@@ -829,7 +829,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     }
 
     fnVerify(false);
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 97"_ustr);
     fnVerify(false);
 }
 

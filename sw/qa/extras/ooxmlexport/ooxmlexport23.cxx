@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
 {
     createSwDoc("tdf132766.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -121,7 +121,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128245)
 {
     createSwDoc("tdf128245.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -151,7 +151,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf95189)
 {
     createSwDoc("tdf95189.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95189)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128820)
 {
     createSwDoc("tdf128820.fodt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // Import of exported DOCX failed because of wrong namespace used for wsp element
     // Now test the exported XML, in case we stop failing opening invalid files
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
@@ -212,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128820)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128889)
 {
     createSwDoc("tdf128889.fodt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128889)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132754)
 {
     createSwDoc("tdf132754.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"0.0.0."_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
@@ -270,7 +270,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 {
     createSwDoc("tdf77796.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // cell paddings from table style
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128290)
 {
     createSwDoc("tdf128290.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
@@ -386,7 +386,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 {
     createSwDoc("tdf123757.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl", 2);
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 CPPUNIT_TEST_FIXTURE(Test, testTdf141172)
 {
     createSwDoc("tdf141172.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/endnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // This was 1 (lost table during copying endnote content)
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141172)
 CPPUNIT_TEST_FIXTURE(Test, testTdf141548)
 {
     createSwDoc("tdf141548.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/endnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // This was 0 (lost text content of the run with endnoteRef)
@@ -417,7 +417,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141548)
 CPPUNIT_TEST_FIXTURE(Test, testTdf143399)
 {
     createSwDoc("tdf143399.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // These were 0 (lost text content of documents both with footnotes and endnotes)
@@ -436,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143399)
 CPPUNIT_TEST_FIXTURE(Test, testTdf143583)
 {
     createSwDoc("tdf143583_emptyParaAtEndOfFootnote.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:footnotes/w:footnote[3]/w:p", 2);
@@ -451,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143583)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
 {
     createSwDoc("tdf152203.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -469,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
 {
     createSwDoc("tdf152506.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
 CPPUNIT_TEST_FIXTURE(Test, testTdf153255)
 {
     createSwDoc("tdf153255.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -523,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153255)
 CPPUNIT_TEST_FIXTURE(Test, testTdf153804)
 {
     createSwDoc("tdf153804.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -640,7 +640,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_default_paragraph_style)
 {
     // default paragraph style contains hyphenation settings
     createSwDoc("tdf160518_page_in_default_paragraph_style.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -653,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_default_paragraph_style)
 {
     // default paragraph style contains hyphenation settings
     createSwDoc("tdf160518_auto_in_default_paragraph_style.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -667,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_text_body_style)
 {
     // text body style contains hyphenation settings
     createSwDoc("tdf160518_page_in_text_body_style.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -680,7 +680,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_text_body_style)
 {
     // text body style contains hyphenation settings
     createSwDoc("tdf160518_auto_in_text_body_style.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165354)
         return;
 
     createSwDoc("tdf165354.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was "except that it has an at" (hyphenation at the end of the page)
     assertXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[9]", "portion",
@@ -713,7 +713,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165354)
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 {
     createSwDoc("hyphenation.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Explicitly set hyphenation=auto on document level
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
@@ -735,7 +735,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 {
     createSwDoc("tdf131776_StrikeoutGroupShapeText.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // tdf#131776: Check if strikeout is used in shape group texts
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
 
@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 {
     createSwDoc("tdf131539.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //The positions of OLE objects were not exported, check if now it is exported correctly
@@ -812,7 +812,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 CPPUNIT_TEST_FIXTURE(Test, testLineWidthRounding)
 {
     createSwDoc("tdf126363_LineWidthRounding.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // tdf#126363: check if line with stays the same after export
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     // this was 57240 (it differs from the original 57150, losing the preset line width)
@@ -825,7 +825,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLineWidthRounding)
 CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
 {
     createSwDoc("tdf108505.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     uno::Reference<text::XTextRange> xText
         = getRun(xParagraph, 1, u"Wrong font when alone on the line"_ustr);
@@ -837,7 +837,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginHasHeader)
 {
     createSwDoc("tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // tdf#123324 The height was set relative to page print area top,
     // but this was handled relative to page height.
     // Note: page print area top = margin + header height.
@@ -849,7 +849,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginHasHeader)
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginNoHeader)
 {
     createSwDoc("tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
     // Note: the MSO Word margin = LO margin + LO header height.
     // In this case the header does not exist, so MSO Word margin and LO Writer margin are the same.
@@ -865,7 +865,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginNoHeader)
 CPPUNIT_TEST_FIXTURE(Test, testTdf64531)
 {
     createSwDoc("tdf64531.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OString sPathToTabs = "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:pPr/w:tabs/"_ostr;
     assertXPath(pXmlDoc, sPathToTabs + "w:tab[1]", "pos", u"720");
@@ -889,7 +889,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredX)
 {
     // tdf#97517 The "flip:x" was not handled for VML line shapes.
     createSwDoc("tdf97517_testVmlLineShapeMirroredX.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString sStyle = getXPath(
         pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
@@ -901,7 +901,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredY)
 {
     // tdf#137678 The "flip:y" was not handled for VML line shapes.
     createSwDoc("tdf137678_testVmlLineShapeMirroredY.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString sStyle = getXPath(
         pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
@@ -912,7 +912,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredY)
 CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeRotated)
 {
     createSwDoc("tdf137765_testVmlLineShapeRotated.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // tdf#137765 The "rotation" (in style attribute) was not handled correctly for VML line shapes.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // it was 1.55pt,279.5pt

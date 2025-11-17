@@ -23,7 +23,7 @@ class TxtImportTest : public SwModelTestBase
 {
 public:
     TxtImportTest()
-        : SwModelTestBase(u"/sw/qa/extras/txtimport/data/"_ustr, u"Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/txtimport/data/"_ustr)
     {
     }
 

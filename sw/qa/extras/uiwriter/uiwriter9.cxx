@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionShape)
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     // this would assert/crash because the shape was anchored to SwEndNode
-    save(mpFilter);
+    save(u"writer8"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSetStringDeletesShape)

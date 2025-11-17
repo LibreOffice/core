@@ -53,7 +53,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/rtfimport/data/"_ustr, u"Rich Text Format"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/rtfimport/data/"_ustr)
     {
     }
 };

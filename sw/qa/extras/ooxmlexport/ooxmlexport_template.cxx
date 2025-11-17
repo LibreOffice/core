@@ -14,8 +14,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr,
-                          u"MS Word 2007 XML Template"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -23,7 +22,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
 {
     createSwDoc("sample.dotx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"MS Word 2007 XML Template"_ustr);
     xmlDocUniquePtr pXmlDocCT = parseExport(u"[Content_Types].xml"_ustr);
 
     // Ensure that document has correct content type

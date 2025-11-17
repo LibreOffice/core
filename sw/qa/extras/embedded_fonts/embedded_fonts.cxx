@@ -36,7 +36,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/embedded_fonts/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/embedded_fonts/data/"_ustr)
     {
     }
 };

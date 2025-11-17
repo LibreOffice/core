@@ -52,7 +52,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr)
     {
     }
 };
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155663)
     };
     createSwDoc("piccrop.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0)
     };
     createSwDoc("tdf158586_pageBreak0.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0B)
     };
     createSwDoc("tdf158586_pageBreak0B.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -137,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1)
     };
     createSwDoc("tdf158586_pageBreak1.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1header)
     };
     createSwDoc("tdf158586_pageBreak1_header.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
     };
     createSwDoc("tdf158586_lostFrame.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -212,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166953)
     };
     createSwDoc("Tpl-2min3_s1.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndRTF)
     }
 
     // When saving to DOC:
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     // Then make sure the endnote position is section end:
     SwDoc* pDoc = getSwDoc();
@@ -269,7 +269,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158983)
     };
     createSwDoc("fdo55504-1-min.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnnotationPar)
     };
     createSwDoc("tdf136445-1-min.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158826_extraCR)
     };
     createSwDoc("tdf158826_extraCR.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -317,7 +317,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
 {
     // given a frame with an axial gradient (white - green - white)
     createSwDoc("tdf159824_axialGradient.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
@@ -360,7 +360,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle1)
     };
     createSwDoc("tdf159824_gradientAngle1.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -391,7 +391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle2)
     };
     createSwDoc("tdf159824_gradientAngle2.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -421,7 +421,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle3)
     };
     createSwDoc("tdf159824_gradientAngle3.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -452,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle4)
     };
     createSwDoc("tdf159824_gradientAngle4.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter)
     };
     createSwDoc("tdf160976_headerFooter.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify(/*IsExported*/ true);
 
     //tdf#164748: export must have the all same footer settings as the first page
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter2)
     };
     createSwDoc("tdf160976_headerFooter2.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -520,7 +520,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter3)
     };
     createSwDoc("tdf160976_headerFooter3.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -531,7 +531,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionBreakAfterSection)
     createSwDoc("section-break-after-section.rtf");
 
     // When saving that document to RTF:
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     // Then make sure the 2nd paragraph starts on a new page after export, too:
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158830)
     };
     createSwDoc("tdf158830.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -578,7 +578,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158978)
     };
     createSwDoc("tdf158978.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -590,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNotesAuthorDate)
     // Remove all personal info
     officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
     pBatch->commit();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -616,7 +616,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChangesAuthor)
     // Remove all personal info
     officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
     pBatch->commit();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -649,7 +649,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158982)
     };
     createSwDoc("tdf158982.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161864)
     };
     createSwDoc("tdf161864.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -690,7 +690,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161878)
     };
     createSwDoc("tdf161878.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -704,7 +704,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165564)
     };
     createSwDoc("tdf165564.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -721,7 +721,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
     // Exporting to a Word format, a tab is prepended to the endnote text. When imported, the
     // NoGapAfterNoteNumber compatibility flag is enabled; and the exported tab is the only thing
     // that separates the number and the text. The tab must not be stripped away on import.
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -734,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         CPPUNIT_ASSERT_EQUAL(u"\tEndnote text"_ustr, xEndnoteText->getString());
     }
     // Do a second round-trip. It must not duplicate the tab.
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -750,7 +750,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         xEndnoteText->setString(u"Endnote text"_ustr);
     }
     // Do a third round-trip. It must not introduce the tab, because of the compatibility flag.
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -781,7 +781,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155835)
         CPPUNIT_ASSERT_EQUAL(u"Текст сноски"_ustr, xEndnoteText->getString());
     }
     // Check export, too
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         auto xSupplier = mxComponent.queryThrow<text::XFootnotesSupplier>();
         auto xFootnotes = xSupplier->getFootnotes();
@@ -811,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121493)
         assertXPath(pLayout, "//tab[3]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000");
     }
     // Check export, too
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         xmlDocUniquePtr pLayout = parseLayoutDump();
         // Rounding (or maybe off-by-one?) errors sadly hit the test
@@ -861,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167169)
         assertXPath(pLayout, "//tab[4]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000");
     }
     // Check export, too
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         xmlDocUniquePtr pLayout = parseLayoutDump();
         assertXPath(pLayout, "//tab", 4);
@@ -919,7 +919,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167185)
         assertXPath(pLayout, "//tab['pass 1']/row[5]/cell[2]/infos/bounds", "width", u"1517");
     }
     // Check export, too
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         xmlDocUniquePtr pLayout = parseLayoutDump();
         assertXPath(pLayout, "//tab['pass 2']", 1);
@@ -964,7 +964,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167512)
         CPPUNIT_ASSERT(getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
     }
     // Check export
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
     {
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
         auto xTextBox = getShape(1).queryThrow<text::XText>();
@@ -1008,7 +1008,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167569)
 
     // After round-tripping the RTF, the marker properties must not get lost; previously, the
     // bullets became large, which additionally increased overall line height.
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     {
         comphelper::SequenceAsHashMap markerProperties;
@@ -1041,7 +1041,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167660)
     CPPUNIT_ASSERT(getSwDocShell()->GetWrtShell());
     getSwDocShell()->GetWrtShell()->Insert(u"\uFB02"_ustr);
 
-    save(mpFilter);
+    save(u"Rich Text Format"_ustr);
 
     // Test that the character is exported as a negative integer
     OString rtf = read_uInt8s_ToOString(*maTempFile.GetStream(StreamMode::READ), SAL_MAX_INT32);
@@ -1065,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167661)
         CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, level1[u"BulletFontName"_ustr].get<OUString>());
     }
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     {
         // Check that the font of the bullet is not lost
@@ -1130,7 +1130,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167679)
     }
 
     // Check that after export to RTF, the area in the middle still has no border
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     {
         auto xRun = getRun(getParagraph(1), 1, u"s"_ustr);
@@ -1194,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167569_2)
         assertXPath(pLayout, "//anchored/fly/txt[13]/infos/bounds", "height", lineHeight);
     }
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     // 2. After round-tripping the RTF, the lines must keep the same height.
 
@@ -1247,7 +1247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162342)
         assertXPath(pLayout, "//page[3]['pass 1']/infos/prtBounds", "height", u"6497");
     }
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     {
         xmlDocUniquePtr pLayout = parseLayoutDump();
@@ -1292,7 +1292,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168181)
         .queryThrow<beans::XPropertySet>()
         ->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"c:\\\\temp\\doc1.doc"_ustr));
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"Rich Text Format"_ustr);
 
     // Test that the imported target string has correct expected number of backslashes.
     // Without the fix, this returned with single backslashes, because there was no proper

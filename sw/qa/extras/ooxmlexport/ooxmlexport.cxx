@@ -37,13 +37,13 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo81381)
 {
     createSwDoc("fdo81381.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", u"Icon");
 }
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo81381)
 CPPUNIT_TEST_FIXTURE(Test, testSdtAlias)
 {
     createSwDoc("sdt-alias.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // <w:alias> was completely missing.
@@ -61,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtAlias)
 CPPUNIT_TEST_FIXTURE(Test, testFooterBodyDistance)
 {
     createSwDoc("footer-body-distance.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Page break was exported as section break, this was 0
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
@@ -84,7 +84,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
 CPPUNIT_TEST_FIXTURE(Test, testPlausableBorder)
 {
     createSwDoc("plausable-border.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // sw::util::IsPlausableSingleWordSection() did not merge two page styles due to borders.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Page break was exported as section break, this was 0
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlausableBorder)
 CPPUNIT_TEST_FIXTURE(Test, testUnwantedSectionBreak)
 {
     createSwDoc("unwanted-section-break.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 2: an additional sectPr was added to the document.
     assertXPath(pXmlDoc, "//w:sectPr", 1);
@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUnwantedSectionBreak)
 CPPUNIT_TEST_FIXTURE(Test, testfdo80897 )
 {
     createSwDoc("fdo80897.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr/a:prstTxWarp", "prst", u"textTriangle");
 }
@@ -121,7 +121,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80997, "fdo80997.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFdo80902)
 {
     createSwDoc("fdo80902.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // The problem was that the docGrid type was set as default so fix it for other grid type
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80902)
 CPPUNIT_TEST_FIXTURE(Test, testParaShading)
 {
     createSwDoc("para-shading.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // Make sure the themeColor attribute is not written when it would be empty.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd", "themeColor");
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaShading)
 CPPUNIT_TEST_FIXTURE(Test, testFDO83044)
 {
     createSwDoc("fdo83044.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:text", 1);
@@ -157,7 +157,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo83428, "fdo83428.docx")
 CPPUNIT_TEST_FIXTURE(Test, testShapeInFloattable)
 {
     createSwDoc("shape-in-floattable.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // No nested drawingML w:txbxContent.
     assertXPath(pXmlDoc, "//mc:Choice//w:txbxContent//w:txbxContent", 0);
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeInFloattable)
 CPPUNIT_TEST_FIXTURE(Test, testEmptyAnnotationMark)
 {
     createSwDoc("empty-annotation-mark.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Delete the word that is commented, and save again.
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 3);
     CPPUNIT_ASSERT_EQUAL(u"with"_ustr, xRun->getString());
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownInCell)
 
     createSwDoc("dropdown-in-cell.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
@@ -258,7 +258,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableAlignment, "table-alignment.docx")
 CPPUNIT_TEST_FIXTURE(Test, testSdtIgnoredFooter)
 {
     createSwDoc("sdt-ignored-footer.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 1, make sure no w:sdt sneaks into the main document from the footer.
     assertXPath(pXmlDoc, "//w:sdt", 0);
@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtIgnoredFooter)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
 {
     createSwDoc("sdt-run-picture.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // SDT around run was exported as SDT around paragraph
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 1: there was an SDT around w:p.
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartDupe)
 
     createSwDoc("chart-dupe.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 
     xmlDocUniquePtr pXmlDocCT = parseExport(u"[Content_Types].xml"_ustr);
@@ -348,7 +348,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf106541_noinheritChapterNumbering)
 {
     createSwDoc("tdf106541_noinheritChapterNumbering.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // in LO, it appears that styles based on the Chapter Numbering style explicitly set the
     // numbering style/outline level to 0 by default, and that LO prevents inheriting directly from "Outline" style.
@@ -390,7 +390,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104713_undefinedStyles, "tdf104713_undefinedStyl
 CPPUNIT_TEST_FIXTURE(Test, testDrawingmlFlipv)
 {
     createSwDoc("drawingml-flipv.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // The problem was that the shape had vertical flip only, but then we added rotation as well on export.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "rot");
@@ -399,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawingmlFlipv)
 CPPUNIT_TEST_FIXTURE(Test, testRot90Fliph)
 {
     createSwDoc("rot90-fliph.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // The problem was that a shape rotation of 90° got turned into 270° after roundtrip.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//a:xfrm", "flipH", u"1");
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRot90Fliph)
 CPPUNIT_TEST_FIXTURE(Test, testRot180Flipv)
 {
     createSwDoc("rot180-flipv.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // 180° rotation got lost after roundtrip.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//a:xfrm", "flipV", u"1");
@@ -421,7 +421,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRot180Flipv)
 CPPUNIT_TEST_FIXTURE(Test, testRot270Flipv)
 {
     createSwDoc("rot270-flipv.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // 270° rotation got turned into 90° after roundtrip.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//a:xfrm", "flipV", u"1");
@@ -507,7 +507,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxTable, "textbox-table.docx")
 CPPUNIT_TEST_FIXTURE(Test, testCropPixel)
 {
     createSwDoc("crop-pixel.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // If map mode of the graphic is in pixels, then we used to handle original
     // size of the graphic as mm100, but it was in pixels.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -519,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCropPixel)
 CPPUNIT_TEST_FIXTURE(Test, testEffectExtent)
 {
     createSwDoc("effect-extent.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // The problem was that in case there were no shadows on the picture, we
     // wrote a <wp:effectExtent> full or zeros.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -530,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEffectExtent)
 CPPUNIT_TEST_FIXTURE(Test, testEffectExtentInline)
 {
     createSwDoc("effect-extent-inline.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // The problem was that in case there was inline rotated picture, we
     // wrote a <wp:effectExtent> full or zeros.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -590,8 +590,8 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark2, "paragraph-mark2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkNonempty)
 {
     createSwDoc("paragraph-mark-nonempty.odt");
-    save(mpFilter);
-    validate(maTempFile.GetFileName(), mpFilter);
+    save(u"Office Open XML Text"_ustr);
+    validate(maTempFile.GetFileName(), u"Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.
@@ -679,7 +679,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlSymbolChicagoList, "symbol_chicago_list.docx")
 CPPUNIT_TEST_FIXTURE(Test, testOoxmlNumListZHTW)
 {
     createSwDoc("numlist-zhtw.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
 
@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOoxmlNumListZHTW)
 CPPUNIT_TEST_FIXTURE(Test, testOoxmlNumListZHCN)
 {
     createSwDoc("numlist-zhcn.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
 
@@ -699,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOoxmlNumListZHCN)
 CPPUNIT_TEST_FIXTURE(Test, testOOxmlOutlineNumberTypes)
 {
     createSwDoc("outline-number-types.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
 
@@ -800,7 +800,7 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 {
     createSwDoc("tdf88583.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x00cc00), getProperty<Color>(getParagraph(1), u"FillColor"_ustr));
@@ -832,7 +832,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89791)
     uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Titre"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     properties.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Titre"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
@@ -923,7 +923,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf118682)
 {
     createSwDoc("tdf118682.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -952,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118682)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133163)
 {
     createSwDoc("tdf133163.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -980,7 +980,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133163)
 CPPUNIT_TEST_FIXTURE(Test, testTdf166102)
 {
     createSwDoc("tdf166102.fodt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1003,7 +1003,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166102)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133647)
 {
     createSwDoc("tdf133647.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Keep original formula during round-trip
@@ -1020,7 +1020,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133647)
 CPPUNIT_TEST_FIXTURE(Test, testTdf123386)
 {
     createSwDoc("tdf123386.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Keep original formula during round-trip
@@ -1039,7 +1039,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123386)
 CPPUNIT_TEST_FIXTURE(Test, testTdf123389)
 {
     createSwDoc("tdf123389.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Keep original formula during round-trip
@@ -1067,7 +1067,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115094v3)
         // i.e. some unwanted ~-2mm left margin appeared.
         CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1991), pFormat->GetHoriOrient().GetPos());
     }
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // floating table is now exported directly without surrounding frame
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 

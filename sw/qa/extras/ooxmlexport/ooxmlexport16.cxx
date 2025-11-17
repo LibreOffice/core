@@ -35,13 +35,13 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 {
     createSwDoc("tdf143860_NonPrimitiveCustomShape.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The document has a custom shape of type non-primitive without handles. Make sure that the shape
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 {
     createSwDoc("tdf136386_WrapPolygonCurve.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a curve with contour wrap and 'outside only'. Error was, that type 'square' was
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 {
     createSwDoc("tdf136386_WrapPolygonLineShape.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a sloping line with contour wrap. Error was, that type 'square' was written and
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 {
     createSwDoc("tdf142433_WrapPolygonCustomShape.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has 4-point star with contour wrap. Error was, that the enhanced path was written
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
 {
     createSwDoc("tdf143432_Frame_WrapTextMode.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
 CPPUNIT_TEST_FIXTURE(Test, testTdf123569_rotWriterImage)
 {
     createSwDoc("tdf123569_rotWriterImage_46deg.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -203,7 +203,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
 DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
 {
     createSwDoc("151384Hyperlink.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", u"Hyperlink");
@@ -225,7 +225,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 {
     createSwDoc("tdf142486_FrameShadow.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 CPPUNIT_TEST_FIXTURE(Test, testTdf136059)
 {
     createSwDoc("tdf136059.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
@@ -429,7 +429,7 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
     createSwDoc("gutter-top.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     CPPUNIT_ASSERT(pXmlSettings);
     // Without the accompanying fix in place, this test would have failed with:
@@ -442,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 {
     createSwDoc("testCustomShapePresetExport.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Check if the load failed.
     CPPUNIT_ASSERT(getPages());
 
@@ -475,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 {
     createSwDoc("tdf148671.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // Don't assert with 'pFieldMark' failed when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -516,7 +516,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
 CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
     createSwDoc("tdf134619_numberingProps.doc");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Get the third paragraph's numbering style's 1st level's bullet size
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
@@ -532,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 {
     createSwDoc("tdf134951_duplicates.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -561,7 +561,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
     batch->commit();
 
     createSwDoc("tdf135774_numberingShading.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // This test uses a custom setting to export CharBackground as Highlight instead of the 7.0 default of Shading.
 
     // Before the fix, the imported shading was converted into a red highlight.
@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 {
     createSwDoc("tdf140336_paraNoneShading.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), u"ParaBackColor"_ustr));
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 CPPUNIT_TEST_FIXTURE(Test, testTdf141173_missingFrames)
 {
     createSwDoc("tdf141173_missingFrames.rtf");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Without the fix in place, almost all of the text and textboxes were missing.
     // Without the fix, there were only 2 shapes (mostly unseen).
     CPPUNIT_ASSERT_EQUAL(14, getShapes());
@@ -609,7 +609,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabOverMarginC15, "tdf142404_tabOverMargi
 CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
 {
     createSwDoc("tdf142404_tabOverSpacingC15.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Although TabOverMargin no longer applies to compatibilityMode 15 DOCX files,
     // it still applies to a tab over the paragraph end (inside text boundaries).
     // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
@@ -703,7 +703,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
 {
     createSwDoc("tdf139580.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // Without the fix in place, this test would have crashed at export time
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -719,7 +719,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149198, "tdf149198.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
 {
     createSwDoc("footer-margin-lost.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 709
@@ -770,7 +770,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 CPPUNIT_TEST_FIXTURE(Test, testTdf140572_docDefault_superscript)
 {
     createSwDoc("tdf140572_docDefault_superscript.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // A round-trip was crashing.
 
     // Without the fix, everything was DFLT_ESC_AUTO_SUPER (default superscript)
@@ -805,7 +805,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 {
     createSwDoc("croppedAndRotated.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -821,7 +821,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 CPPUNIT_TEST_FIXTURE(Test, testTdf118535)
 {
     createSwDoc("tdf118535.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -919,7 +919,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105688, "tdf105688.docx")
 CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
 {
     createSwDoc("CommentReply.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     xmlDocUniquePtr pXmlCommExt = parseExport(u"word/commentsExtended.xml"_ustr);
     CPPUNIT_ASSERT(pXmlComm);
@@ -938,7 +938,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
 CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
 {
     createSwDoc("CommentDone.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
     OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
@@ -1007,14 +1007,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
 
     createSwDoc("CommentDone.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 {
     createSwDoc("tdf142361ShadowDirection.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The attribute 'rotWithShape' has the default value 'true' in OOXML, so Words interprets a
@@ -1031,7 +1031,7 @@ CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
 {
     createSwDoc("tdf150542.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
 
     xmlDocUniquePtr pSettingsDoc = parseExport(u"word/settings.xml"_ustr);
     // Ensure that all docvars from input are written back and with correct values.
@@ -1053,7 +1053,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
 CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 {
     createSwDoc("tdf139549.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // Document contains a VML textbox, the position of the textbox was incorrect.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape", "style");
@@ -1095,7 +1095,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 {
     createSwDoc("Simple-TOC.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
@@ -1107,7 +1107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 {
     createSwDoc("embedded_images.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
@@ -1128,7 +1128,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
 {
     createSwDoc("artistic_effects.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),

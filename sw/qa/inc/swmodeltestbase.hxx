@@ -27,24 +27,24 @@
 
 #include <doc.hxx>
 
-#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
-    class TestName : public BaseClass { \
+#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, filter) \
+    class TestName : public Test { \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Load_Verify_Reload_Verify); \
     CPPUNIT_TEST_SUITE_END(); \
     \
     void Load_Verify_Reload_Verify() {\
-        executeLoadVerifyReloadVerify(filename, password);\
+        executeLoadVerifyReloadVerify(filename, filter);\
     }\
     void verify() override;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
-#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
-#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, u"Office Open XML Text"_ustr)
+#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, u"writer8"_ustr)
+#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, u"MS Word 97"_ustr)
 
 class SwXTextDocument;
 namespace comphelper
@@ -74,13 +74,12 @@ class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiXmlTest
 {
 protected:
     xmlBufferPtr mpXmlBuffer;
-    OUString mpFilter;
 
     /// Copy&paste helper.
     void paste(std::u16string_view aFilename, const OUString& aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
-    SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const OUString& pFilter = {});
+    SwModelTestBase(const OUString& pTestDocumentPath = OUString());
 
 protected:
     /**
@@ -88,7 +87,7 @@ protected:
      * (Loads the requested file, calls 'verify' function, save it to temp file, load the
      * temp file and then calls 'verify' function again)
      */
-    void executeLoadVerifyReloadVerify(const char* filename, const char* pPassword = nullptr);
+    void executeLoadVerifyReloadVerify(const char* filename, const OUString& filter);
 
     /**
      * Function overridden by unit test. See DECLARE_SW_*_TEST macros
@@ -196,7 +195,7 @@ protected:
 
     void header();
 
-    void saveAndReload(const OUString& pFilter, const char* pPassword = nullptr);
+    void saveAndReload(const OUString& rFilter, const char* pPassword = nullptr);
 
     /// Get page count.
     int getPages() const;

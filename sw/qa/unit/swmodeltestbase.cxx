@@ -55,20 +55,19 @@ void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInst
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 
-SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const OUString& pFilter)
+SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath)
     : UnoApiXmlTest(pTestDocumentPath)
     , mpXmlBuffer(nullptr)
-    , mpFilter(pFilter)
 {
 }
 
-void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const char* pPassword)
+void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const OUString& filter)
 {
     maTempFile.EnableKillingFile(false);
     header();
-    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
+    loadURL(createFileURL(OUString::createFromAscii(filename)));
     verify();
-    saveAndReload(mpFilter, pPassword);
+    saveAndReload(filter);
     verify();
     maTempFile.EnableKillingFile();
 }
@@ -390,9 +389,9 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
     calcLayout();
 }
 
-void SwModelTestBase::saveAndReload(const OUString& pFilter, const char* pPassword)
+void SwModelTestBase::saveAndReload(const OUString& rFilter, const char* pPassword)
 {
-    save(pFilter, pPassword);
+    save(rFilter, pPassword);
 
     loadURL(maTempFile.GetURL(), pPassword);
 }

@@ -43,7 +43,7 @@ namespace
 class HtmlImportTest : public SwModelTestBase
 {
     public:
-        HtmlImportTest() : SwModelTestBase(u"sw/qa/extras/htmlimport/data/"_ustr, u"HTML (StarWriter)"_ustr) {}
+        HtmlImportTest() : SwModelTestBase(u"sw/qa/extras/htmlimport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
@@ -475,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 class SwHtmlOptionsImportTest : public SwModelTestBase
 {
     public:
-        SwHtmlOptionsImportTest() : SwModelTestBase(u"/sw/qa/extras/htmlimport/data/"_ustr, u"HTML (StarWriter)"_ustr) {}
+        SwHtmlOptionsImportTest() : SwModelTestBase(u"/sw/qa/extras/htmlimport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)

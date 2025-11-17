@@ -31,7 +31,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testTdf57589_hashColor, "tdf57589_hashColor.docx")
@@ -77,7 +77,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90906_colAutoB, "tdf90906_colAutoB.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf92524_autoColor)
 {
     createSwDoc("tdf92524_autoColor.doc");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(getParagraph(1), u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getParagraph(1), u"ParaBackColor"_ustr));
 }
@@ -85,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92524_autoColor)
 CPPUNIT_TEST_FIXTURE(Test, testTdf116436_rowFill)
 {
     createSwDoc("tdf116436_rowFill.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -103,7 +103,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121665_back2backColumnBreaks, "tdf121665_back2ba
 CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
 {
     createSwDoc("tdf126795_TabsRelativeToIndent0.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
 CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent1)
 {
     createSwDoc("tdf126795_TabsRelativeToIndent1.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
@@ -152,7 +152,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124384, "tdf124384.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 {
     createSwDoc("tdf121456_tabsOffset.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     for (int i=2; i<8; i++)
     {
         uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( i ), u"ParaTabStops"_ustr);
@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 {
     createSwDoc("tdf121456_tabsOffset.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", u"Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", u" TOC \\f \\o \"1-9\" \\h");
@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 CPPUNIT_TEST_FIXTURE(Test, testTdf129525)
 {
     createSwDoc("tdf129525.rtf");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", u"Overview");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", u"3");
@@ -198,7 +198,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitleDocx)
 {
     createSwDoc("tdf121456_tabsOffset.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -255,7 +255,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
 CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 {
     createSwDoc("tdf76683_negativeTwipsMeasure.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
     sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
@@ -360,7 +360,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
 CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 {
     createSwDoc("parasplit-on-section-border.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -373,7 +373,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 {
     createSwDoc("tdf44832_section_new_header.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
@@ -420,7 +420,7 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
 CPPUNIT_TEST_FIXTURE(Test, testTdf117805)
 {
     createSwDoc("tdf117805.odt");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -471,7 +471,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf113399)
 {
     createSwDoc("tdf113399.doc");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // 0 padding was not preserved
     // In LO 0 is the default, but in OOXML format the default is 254 / 127
     uno::Reference<beans::XPropertySet> xPropSet(getShape(1), uno::UNO_QUERY);
@@ -548,7 +548,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142542_cancelledAutospacing, "tdf142542_cancelle
 CPPUNIT_TEST_FIXTURE(Test, testTdf137655)
 {
     createSwDoc("tdf137655.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 280.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", u"0");
@@ -594,7 +594,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaI
 CPPUNIT_TEST_FIXTURE(Test, testPageBreak_after)
 {
     createSwDoc("pageBreak_after.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     // The problem was that the page breakAfter put the empty page BEFORE the table
     xmlDocUniquePtr pDump = parseLayoutDump();
     assertXPath(pDump, "/root/page[1]/body/tab", 1);
@@ -722,7 +722,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCe
 CPPUNIT_TEST_FIXTURE(Test, testTdf98620_environmentBiDi)
 {
     createSwDoc("tdf98620_environmentBiDi.odt");
-    saveAndReload(mpFilter);
+    saveAndReload(u"Office Open XML Text"_ustr);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( getParagraph(1), u"WritingMode"_ustr ));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(1), u"ParaAdjust"_ustr ));
@@ -871,7 +871,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149996, "lorem_hyperlink.fodt")
 CPPUNIT_TEST_FIXTURE(Test, testGroupedShapeLink)
 {
     createSwDoc("grouped_link.docx");
-    save(mpFilter);
+    save(u"Office Open XML Text"_ustr);
     // tdf#145147 Hyperlink in grouped shape not imported
     // tdf#154469 Hyperlink in grouped shape not exported
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);

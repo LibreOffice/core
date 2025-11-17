@@ -38,7 +38,7 @@ class Test : public SwModelTestBase, public HtmlTestTools
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/filter/html/data/"_ustr, u"HTML (StarWriter)"_ustr)
+        : SwModelTestBase(u"/sw/qa/filter/html/data/"_ustr)
     {
     }
 };

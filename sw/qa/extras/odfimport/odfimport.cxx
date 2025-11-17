@@ -76,7 +76,7 @@ typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > String
 class Test : public SwModelTestBase
 {
     public:
-        Test() : SwModelTestBase(u"/sw/qa/extras/odfimport/data/"_ustr, u"writer8"_ustr) {}
+        Test() : SwModelTestBase(u"/sw/qa/extras/odfimport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptySvgFamilyName)

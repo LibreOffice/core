@@ -49,7 +49,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/filter/md/data/"_ustr, u"Markdown"_ustr)
+        : SwModelTestBase(u"/sw/qa/filter/md/data/"_ustr)
     {
     }
 
@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportFormula)
     createSwDoc("tdf168572.odt");
 
     // Without the fix in place, this test would have crashed here
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     std::string aActual = TempFileToString();
     std::string aExpected("![]()" SAL_NEWLINE_STRING);
@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportTableFrame)
     createSwDoc("table.odt");
 
     // Without the fix in place, this test would have crashed here
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     std::string aActual = TempFileToString();
     std::string aExpected("Text" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
 {
     createSwDoc("basic-elements.fodt");
 
-    save(mpFilter);
+    save(u"Markdown"_ustr);
     std::string aActual = TempFileToString();
     std::string aExpected(
         // clang-format off
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
     createSwDoc("redlines-and-comments.odt");
 
     // Save as a markdown document
-    save(mpFilter);
+    save(u"Markdown"_ustr);
     SvFileStream fileStream(maTempFile.GetURL(), StreamMode::READ);
     OUString aParagraph;
     // 1st paragraph
@@ -248,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     pWrtShell->SetAttrSet(aSet);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the format of B is exported:
     std::string aActual = TempFileToString();
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingList)
     pWrtShell->NumUpDown(/*bDown=*/true);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure list type and level is exported:
     std::string aActual = TempFileToString();
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the image is exported:
     std::string aActual = TempFileToString();
@@ -374,7 +374,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingTable)
     pWrtShell->Insert(u"C3"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the table content is not lost:
     std::string aActual = TempFileToString();
@@ -435,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdExport)
     pWrtShell->Insert(u"test"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the format of the paragraph is exported:
     std::string aActual = TempFileToString();
@@ -469,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCodeBlockMdExport)
     pDoc->SetTextFormatColl(*pCursor, pColl);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the code block is exported:
     std::string aActual = TempFileToString();
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableColumnAdjustMdExport)
     pWrtShell->SetAttrItem(SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST));
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the table content is not lost:
     std::string aActual = TempFileToString();
@@ -580,7 +580,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the image is exported and the link is not lost:
     std::string aActual = TempFileToString();
@@ -603,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNewlineMdExport)
     pWrtShell->Insert(u"B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     std::string aActual = TempFileToString();
     std::string aExpected("A  " SAL_NEWLINE_STRING "B" SAL_NEWLINE_STRING);
@@ -637,7 +637,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageDescTitleExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the image is exported and the desc/title is not lost:
     std::string aActual = TempFileToString();
@@ -685,7 +685,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiParaTableMdExport)
     pWrtShell->Insert(u"C3"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure the A1 cell still only has inlines:
     std::string aActual = TempFileToString();
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTableMdExport)
     pWrtShell->Insert(u"B2 outer"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure that the inner table is exported as flat paragraphs:
     std::string aActual = TempFileToString();
@@ -823,7 +823,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdExport)
     pWrtShell->Insert(u" bar"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure that the task list item markup is used:
     std::string aActual = TempFileToString();
@@ -882,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure that the embedded image is exported:
     std::string aActual = TempFileToString();
@@ -915,7 +915,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedAnchoredImageMdExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(u"Markdown"_ustr);
 
     // Then make sure that the embedded image is exported:
     std::string aActual = TempFileToString();
