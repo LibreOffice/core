@@ -746,7 +746,7 @@ void ScDBData::ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
             {
                 ScDocument& rDoc = mpContainer->GetDocument();
                 const OUString& sFuncName = rxTableColumn.maTotalsFunction.value();
-                if (sFuncName == u"custom")
+                if (sFuncName == u"custom"_ustr)
                 {
                     if (rxTableColumn.maCustomFunction.has_value())
                     {
@@ -880,7 +880,7 @@ std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::Form
                             if (bSubTotal && pTokens)
                             {
                                 OUString aFunctype = GetSimpleSubTotalFunction(pTokens, nCol, rParam.nRow1);
-                                if (aFunctype != u"custom")
+                                if (aFunctype != u"custom"_ustr)
                                     aNameAttr.maTotalsFunction = aFunctype;
                                 else
                                     bSubTotal = false; // fallback to custom
@@ -893,7 +893,7 @@ std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::Form
                                 OUStringBuffer aBuf;
                                 aComp.CreateStringFromTokenArray(aBuf);
                                 OUString aFormula = aBuf.makeStringAndClear();
-                                aNameAttr.maTotalsFunction = "custom";
+                                aNameAttr.maTotalsFunction = u"custom"_ustr;
                                 aNameAttr.maCustomFunction = aFormula;
                             }
                         }
@@ -933,7 +933,7 @@ std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::Form
                         if (bSubTotal)
                         {
                             OUString aFunctype = GetSimpleSubTotalFunction(pTokens, nCol, rParam.nRow1);
-                            if (aFunctype != u"custom")
+                            if (aFunctype != u"custom"_ustr)
                             {
                                 SCCOL nPos = nCol - rParam.nCol1;
                                 if (nPos < nEntryCount)
@@ -962,7 +962,7 @@ std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::Form
                                 SCCOL nPos = nCol - rParam.nCol1;
                                 if (nPos < nEntryCount)
                                 {
-                                    aAttributesVector[nPos].maTotalsFunction = "custom";
+                                    aAttributesVector[nPos].maTotalsFunction = u"custom"_ustr;
                                     aAttributesVector[nPos].maCustomFunction = aFormula;
                                 }
                                 else
