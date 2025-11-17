@@ -200,7 +200,7 @@ const DataFlavor* FormatArray_Impl()
         /*149 MARKDOWN*/                  { u"text/markdown"_ustr, u"Markdown"_ustr, cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*150 BIFF_12*/                   { u"application/x-openoffice-biff-12;windows_formatname=\"Biff12\""_ustr, u"Biff12"_ustr, cppu::UnoType<Sequence<sal_Int8>>::get() },
     };
-    assert(std::size(aInstance) == size_t(SotClipboardFormatId::USER_END) + 1);
+    static_assert(std::size(aInstance) == size_t(SotClipboardFormatId::USER_END) + 1);
     return &aInstance[0];
 };
 
