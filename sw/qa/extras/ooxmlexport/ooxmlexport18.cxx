@@ -680,14 +680,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak)
 {
-    loadAndReload("tdf152636_lostPageBreak.odt");
+    createSwDoc("tdf152636_lostPageBreak.odt");
+    saveAndReload(mpFilter);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak2)
 {
-    loadAndReload("tdf152636_lostPageBreak2.docx");
+    createSwDoc("tdf152636_lostPageBreak2.docx");
+    saveAndReload(mpFilter);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -711,7 +713,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
 
 CPPUNIT_TEST_FIXTURE(Test, testImageCropping)
 {
-    loadAndReload("crop-roundtrip.docx");
+    createSwDoc("crop-roundtrip.docx");
+    saveAndReload(mpFilter);
 
     // the image has no cropping after roundtrip, because it has been physically cropped
     // NB: this test should be fixed when the core feature to show image cropped when it
@@ -750,7 +753,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 {
-    loadAndReload("embedded_chart.odt");
+    createSwDoc("embedded_chart.odt");
+    saveAndReload(mpFilter);
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
@@ -775,7 +779,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
 {
-    loadAndReload("tdf152425.docx");
+    createSwDoc("tdf152425.docx");
+    saveAndReload(mpFilter);
 
     // Check that "List Number" and "List 5" styles don't get merged
     const OUString Para3Style = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
@@ -789,7 +794,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
 {
-    loadAndReload("tdf153104.docx");
+    createSwDoc("tdf153104.docx");
+    saveAndReload(mpFilter);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString numId = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val");
@@ -811,7 +817,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
 {
-    loadAndReload("tdf153128.docx");
+    createSwDoc("tdf153128.docx");
+    saveAndReload(mpFilter);
     calcLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFirstLineHeight
@@ -828,7 +835,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
 CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 {
     // This must not fail assertions
-    loadAndReload("UnknownStyleInRedline.docx");
+    createSwDoc("UnknownStyleInRedline.docx");
+    saveAndReload(mpFilter);
     // Check that the original unknown style name "UnknownStyle" is roundtripped
     // (maybe this is wrong, because Word does not do this).
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -838,7 +846,8 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
 {
-    loadAndReload("tdf148026.fodt");
+    createSwDoc("tdf148026.fodt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -850,7 +859,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
 {
-    loadAndReload("Table-of-Figures.odt");
+    createSwDoc("Table-of-Figures.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);

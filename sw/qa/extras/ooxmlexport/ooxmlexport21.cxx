@@ -953,7 +953,8 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf161509)
 {
-    loadAndReload("special_styles.docx");
+    createSwDoc("special_styles.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
 

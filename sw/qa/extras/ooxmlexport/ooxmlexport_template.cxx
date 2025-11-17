@@ -22,7 +22,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
 {
-    loadAndReload("sample.dotx");
+    createSwDoc("sample.dotx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDocCT = parseExport(u"[Content_Types].xml"_ustr);
 
     // Ensure that document has correct content type

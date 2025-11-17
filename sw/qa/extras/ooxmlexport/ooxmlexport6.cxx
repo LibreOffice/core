@@ -68,7 +68,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlShapeRelsize)
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlPictureInTextframe)
 {
-    loadAndReload("dml-picture-in-textframe.docx");
+    createSwDoc("dml-picture-in-textframe.docx");
+    saveAndReload(mpFilter);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"word/media/image1.gif"_ustr)));
     // This was also true, image was written twice.
@@ -123,7 +124,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlTextshape)
 // testDmlTextshapeB was only made export-only because as an import-export test it failed for an unknown reason
 CPPUNIT_TEST_FIXTURE(Test, testDmlTextshapeB)
 {
-    loadAndReload("dml-textshapeB.docx");
+    createSwDoc("dml-textshapeB.docx");
+    saveAndReload(mpFilter);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
@@ -152,7 +154,8 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testDMLTextFrameNoFill)
 {
-    loadAndReload("frame.fodt");
+    createSwDoc("frame.fodt");
+    saveAndReload(mpFilter);
     // Problem is that default text frame background is white in Writer and transparent in Word
     uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
 // it is re-imported as solid
@@ -909,7 +912,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69616)
 
 CPPUNIT_TEST_FIXTURE(Test, testAlignForShape)
 {
-    loadAndReload("Shape.docx");
+    createSwDoc("Shape.docx");
+    saveAndReload(mpFilter);
     //fdo73545:Shape Horizontal and vertical orientation is wrong
     //The wp:align tag is missing after roundtrip
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -984,7 +988,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType_VML)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo74110)
 {
-    loadAndReload("fdo74110.docx");
+    createSwDoc("fdo74110.docx");
+    saveAndReload(mpFilter);
     /*
     The File contains word art which is being exported as shape and the mapping is defaulted to
     shape type rect since the actual shape type(s) is/are commented out for some reason.
@@ -999,7 +1004,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74110)
 
 CPPUNIT_TEST_FIXTURE(Test, testOuterShdw)
 {
-    loadAndReload("testOuterShdw.docx");
+    createSwDoc("testOuterShdw.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", u"1041400");
 }

@@ -201,9 +201,6 @@ protected:
     /// Combines load() and save().
     void loadAndSave(const char* pName, const char* pPassword = nullptr);
 
-    /// Combines load() and saveAndReload().
-    void loadAndReload(const char* pName);
-
     /// Get page count.
     int getPages() const;
 

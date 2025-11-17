@@ -82,7 +82,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113408)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbi10039)
 {
-    loadAndReload("abi10039.odt");
+    createSwDoc("abi10039.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we don't just crash on export, and additionally the shape should not be inline (as it's at-page anchored originally).
@@ -92,7 +93,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAbi10039)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbi10076)
 {
-    loadAndReload("abi10076.odt");
+    createSwDoc("abi10076.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // Just make sure that we don't crash after exporting a fully calculated layout.
 }
@@ -142,7 +144,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingFont)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82860)
 {
-    loadAndReload("fdo82860.odt");
+    createSwDoc("fdo82860.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that:
@@ -155,7 +158,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82860)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82858)
 {
-    loadAndReload("fdo82858.docx");
+    createSwDoc("fdo82858.docx");
+    saveAndReload(mpFilter);
     // This was table::BorderLineStyle::SOLID, exporter failed to write explicit no line when line color was written.
     CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE,
                          getProperty<table::BorderLine2>(getShape(1), u"TopBorder"_ustr).LineStyle);
@@ -254,7 +258,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104081)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 {
-    loadAndReload("tdf88583.odt");
+    createSwDoc("tdf88583.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was FillStyle_NONE, as background color was missing from the color table during export.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
@@ -370,7 +375,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 {
-    loadAndReload("tdf92521.odt");
+    createSwDoc("tdf92521.odt");
+    saveAndReload(mpFilter);
     // There should be a page break that's in the middle of the document: right after the table.
     // But there wasn't, so this was 1.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -815,7 +821,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTarget)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107620)
 {
-    loadAndReload("tdf107620.docx");
+    createSwDoc("tdf107620.docx");
+    saveAndReload(mpFilter);
     // This failed, RTF export didn't write the \htmautsp compat flag, the
     // original bugdoc resulting in 2 pages instead of 1.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);

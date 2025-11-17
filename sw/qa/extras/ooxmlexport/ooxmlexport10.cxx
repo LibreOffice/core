@@ -102,7 +102,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSmartart)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69548)
 {
-    loadAndReload("fdo69548.docx");
+    createSwDoc("fdo69548.docx");
+    saveAndReload(mpFilter);
     // The problem was that the last space in target URL was removed
     CPPUNIT_ASSERT_EQUAL(u"#this_is_a_bookmark"_ustr, getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
 }
@@ -451,7 +452,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
 {
-    loadAndReload("tdf134569_nestedTable.docx");
+    createSwDoc("tdf134569_nestedTable.docx");
+    saveAndReload(mpFilter);
     // non-overridden w:after spacing in the table was pushing the document to the second page.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }

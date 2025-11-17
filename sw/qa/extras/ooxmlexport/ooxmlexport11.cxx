@@ -76,14 +76,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90906_colAutoB, "tdf90906_colAutoB.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92524_autoColor)
 {
-    loadAndReload("tdf92524_autoColor.doc");
+    createSwDoc("tdf92524_autoColor.doc");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(getParagraph(1), u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getParagraph(1), u"ParaBackColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116436_rowFill)
 {
-    loadAndReload("tdf116436_rowFill.odt");
+    createSwDoc("tdf116436_rowFill.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -100,7 +102,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121665_back2backColumnBreaks, "tdf121665_back2ba
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
 {
-    loadAndReload("tdf126795_TabsRelativeToIndent0.odt");
+    createSwDoc("tdf126795_TabsRelativeToIndent0.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
@@ -110,7 +113,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent1)
 {
-    loadAndReload("tdf126795_TabsRelativeToIndent1.odt");
+    createSwDoc("tdf126795_TabsRelativeToIndent1.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
@@ -147,7 +151,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124384, "tdf124384.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 {
-    loadAndReload("tdf121456_tabsOffset.odt");
+    createSwDoc("tdf121456_tabsOffset.odt");
+    saveAndReload(mpFilter);
     for (int i=2; i<8; i++)
     {
         uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( i ), u"ParaTabStops"_ustr);
@@ -458,7 +463,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113399)
 {
-    loadAndReload("tdf113399.doc");
+    createSwDoc("tdf113399.doc");
+    saveAndReload(mpFilter);
     // 0 padding was not preserved
     // In LO 0 is the default, but in OOXML format the default is 254 / 127
     uno::Reference<beans::XPropertySet> xPropSet(getShape(1), uno::UNO_QUERY);
@@ -579,7 +585,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaI
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBreak_after)
 {
-    loadAndReload("pageBreak_after.odt");
+    createSwDoc("pageBreak_after.odt");
+    saveAndReload(mpFilter);
     // The problem was that the page breakAfter put the empty page BEFORE the table
     xmlDocUniquePtr pDump = parseLayoutDump();
     assertXPath(pDump, "/root/page[1]/body/tab", 1);
@@ -706,7 +713,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCe
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf98620_environmentBiDi)
 {
-    loadAndReload("tdf98620_environmentBiDi.odt");
+    createSwDoc("tdf98620_environmentBiDi.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( getParagraph(1), u"WritingMode"_ustr ));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(1), u"ParaAdjust"_ustr ));

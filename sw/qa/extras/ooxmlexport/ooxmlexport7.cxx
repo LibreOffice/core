@@ -760,7 +760,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
 
 CPPUNIT_TEST_FIXTURE(Test, testRubyHyperlink)
 {
-    loadAndReload("rubyhyperlink.fodt");
+    createSwDoc("rubyhyperlink.fodt");
+    saveAndReload(mpFilter);
     // test that export doesn't assert with overlapping ruby / hyperlink attr
 }
 

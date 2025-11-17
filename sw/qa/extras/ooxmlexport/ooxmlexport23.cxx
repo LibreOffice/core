@@ -148,7 +148,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf95189)
 {
-    loadAndReload("tdf95189.docx");
+    createSwDoc("tdf95189.docx");
+    saveAndReload(mpFilter);
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
@@ -219,7 +220,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128889)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132754)
 {
-    loadAndReload("tdf132754.docx");
+    createSwDoc("tdf132754.docx");
+    saveAndReload(mpFilter);
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"0.0.0."_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
@@ -622,7 +624,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160518_ODT_compatible,
 CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_default_paragraph_style)
 {
     // default paragraph style contains hyphenation settings
-    loadAndReload("tdf160518_page_in_default_paragraph_style.fodt");
+    createSwDoc("tdf160518_page_in_default_paragraph_style.fodt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -634,7 +637,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_default_paragraph_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_default_paragraph_style)
 {
     // default paragraph style contains hyphenation settings
-    loadAndReload("tdf160518_auto_in_default_paragraph_style.fodt");
+    createSwDoc("tdf160518_auto_in_default_paragraph_style.fodt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -647,7 +651,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_default_paragraph_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_text_body_style)
 {
     // text body style contains hyphenation settings
-    loadAndReload("tdf160518_page_in_text_body_style.fodt");
+    createSwDoc("tdf160518_page_in_text_body_style.fodt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -659,7 +664,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_text_body_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_text_body_style)
 {
     // text body style contains hyphenation settings
-    loadAndReload("tdf160518_auto_in_text_body_style.fodt");
+    createSwDoc("tdf160518_auto_in_text_body_style.fodt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']",
@@ -675,7 +681,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165354)
     if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
-    loadAndReload("tdf165354.docx");
+    createSwDoc("tdf165354.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was "except that it has an at" (hyphenation at the end of the page)
     assertXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[9]", "portion",
@@ -690,7 +697,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165354)
 
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 {
-    loadAndReload("hyphenation.odt");
+    createSwDoc("hyphenation.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Explicitly set hyphenation=auto on document level
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
@@ -798,7 +806,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLineWidthRounding)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
 {
-    loadAndReload("tdf108505.docx");
+    createSwDoc("tdf108505.docx");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     uno::Reference<text::XTextRange> xText
         = getRun(xParagraph, 1, u"Wrong font when alone on the line"_ustr);
@@ -809,7 +818,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginHasHeader)
 {
-    loadAndReload("tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx");
+    createSwDoc("tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx");
+    saveAndReload(mpFilter);
     // tdf#123324 The height was set relative to page print area top,
     // but this was handled relative to page height.
     // Note: page print area top = margin + header height.
@@ -820,7 +830,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginHasHeader)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginNoHeader)
 {
-    loadAndReload("tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx");
+    createSwDoc("tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx");
+    saveAndReload(mpFilter);
     // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
     // Note: the MSO Word margin = LO margin + LO header height.
     // In this case the header does not exist, so MSO Word margin and LO Writer margin are the same.
@@ -835,7 +846,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginNoHeader)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf64531)
 {
-    loadAndReload("tdf64531.docx");
+    createSwDoc("tdf64531.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OString sPathToTabs = "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:pPr/w:tabs/"_ostr;
     assertXPath(pXmlDoc, sPathToTabs + "w:tab[1]", "pos", u"720");

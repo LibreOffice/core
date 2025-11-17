@@ -40,7 +40,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 {
-    loadAndReload("tdf143860_NonPrimitiveCustomShape.odt");
+    createSwDoc("tdf143860_NonPrimitiveCustomShape.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The document has a custom shape of type non-primitive without handles. Make sure that the shape
@@ -88,7 +89,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 {
-    loadAndReload("tdf142433_WrapPolygonCustomShape.odt");
+    createSwDoc("tdf142433_WrapPolygonCustomShape.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has 4-point star with contour wrap. Error was, that the enhanced path was written
@@ -171,7 +173,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123569_rotWriterImage)
 {
-    loadAndReload("tdf123569_rotWriterImage_46deg.odt");
+    createSwDoc("tdf123569_rotWriterImage_46deg.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -217,7 +220,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 {
-    loadAndReload("tdf142486_FrameShadow.odt");
+    createSwDoc("tdf142486_FrameShadow.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -238,7 +242,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136059)
 {
-    loadAndReload("tdf136059.odt");
+    createSwDoc("tdf136059.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
@@ -431,7 +436,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 {
-    loadAndReload("testCustomShapePresetExport.odt");
+    createSwDoc("testCustomShapePresetExport.odt");
+    saveAndReload(mpFilter);
     // Check if the load failed.
     CPPUNIT_ASSERT(getPages());
 
@@ -503,7 +509,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
-    loadAndReload("tdf134619_numberingProps.doc");
+    createSwDoc("tdf134619_numberingProps.doc");
+    saveAndReload(mpFilter);
     // Get the third paragraph's numbering style's 1st level's bullet size
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
@@ -518,7 +525,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 {
-    loadAndReload("tdf134951_duplicates.odt");
+    createSwDoc("tdf134951_duplicates.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -556,7 +564,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 {
-    loadAndReload("tdf140336_paraNoneShading.odt");
+    createSwDoc("tdf140336_paraNoneShading.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), u"ParaBackColor"_ustr));
@@ -569,7 +578,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141173_missingFrames)
 {
-    loadAndReload("tdf141173_missingFrames.rtf");
+    createSwDoc("tdf141173_missingFrames.rtf");
+    saveAndReload(mpFilter);
     // Without the fix in place, almost all of the text and textboxes were missing.
     // Without the fix, there were only 2 shapes (mostly unseen).
     CPPUNIT_ASSERT_EQUAL(14, getShapes());
@@ -591,7 +601,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabOverMarginC15, "tdf142404_tabOverMargi
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
 {
-    loadAndReload("tdf142404_tabOverSpacingC15.odt");
+    createSwDoc("tdf142404_tabOverSpacingC15.odt");
+    saveAndReload(mpFilter);
     // Although TabOverMargin no longer applies to compatibilityMode 15 DOCX files,
     // it still applies to a tab over the paragraph end (inside text boundaries).
     // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
@@ -684,7 +695,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
 {
-    loadAndReload("tdf139580.odt");
+    createSwDoc("tdf139580.odt");
+    saveAndReload(mpFilter);
     // Without the fix in place, this test would have crashed at export time
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -749,7 +761,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140572_docDefault_superscript)
 {
-    loadAndReload("tdf140572_docDefault_superscript.docx");
+    createSwDoc("tdf140572_docDefault_superscript.docx");
+    saveAndReload(mpFilter);
     // A round-trip was crashing.
 
     // Without the fix, everything was DFLT_ESC_AUTO_SUPER (default superscript)
@@ -783,7 +796,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 {
-    loadAndReload("croppedAndRotated.odt");
+    createSwDoc("croppedAndRotated.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -798,7 +812,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118535)
 {
-    loadAndReload("tdf118535.odt");
+    createSwDoc("tdf118535.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -1066,7 +1081,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 {
-    loadAndReload("Simple-TOC.odt");
+    createSwDoc("Simple-TOC.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
@@ -1077,7 +1093,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 {
-    loadAndReload("embedded_images.odt");
+    createSwDoc("embedded_images.odt");
+    saveAndReload(mpFilter);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
@@ -1097,7 +1114,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
 {
-    loadAndReload("artistic_effects.docx");
+    createSwDoc("artistic_effects.docx");
+    saveAndReload(mpFilter);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),

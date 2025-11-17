@@ -105,7 +105,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNoDuplicateAttributeExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79008)
 {
-    loadAndReload("fdo79008.docx");
+    createSwDoc("fdo79008.docx");
+    saveAndReload(mpFilter);
     /* File crashing while saving in LO.
      * Check if document.xml file is created after fix
      */
@@ -216,7 +217,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77890 )
 
 CPPUNIT_TEST_FIXTURE(Test, testNumberedList)
 {
-    loadAndReload("NumberedList.docx");
+    createSwDoc("NumberedList.docx");
+    saveAndReload(mpFilter);
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:pStyle", "val", u"NumberedList1");
@@ -333,7 +335,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeTableInTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testHyperlinkContainingPlaceholderField)
 {
-    loadAndReload("hyperlink-field.odt");
+    createSwDoc("hyperlink-field.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     parseExport(u"word/document.xml"_ustr);
 
@@ -375,7 +378,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77725)
 
 CPPUNIT_TEST_FIXTURE(Test, testFieldRotation)
 {
-    loadAndReload("field-rotated.fodt");
+    createSwDoc("field-rotated.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextRange> const xRun(getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
     uno::Reference<text::XTextField> const xField(getProperty<uno::Reference<text::XTextField>>(xRun, u"TextField"_ustr));
     CPPUNIT_ASSERT(xField.is());
@@ -474,7 +478,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
 {
-    loadAndReload("fdo77727.docx");
+    createSwDoc("fdo77727.docx");
+    saveAndReload(mpFilter);
     /* Break to next page was not exported if it is in first paragraph of the section.
      * Now after fix , LO writes Next Page Break and also preserves <w:br> tag.
      */
@@ -494,7 +499,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78284)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78384)
 {
-    loadAndReload("fdo78384.docx");
+    createSwDoc("fdo78384.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii",u"Wingdings");
 }
@@ -626,7 +632,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFo
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79668)
 {
-    loadAndReload("fdo79668.docx");
+    createSwDoc("fdo79668.docx");
+    saveAndReload(mpFilter);
     // fdo#79668: Document was Crashing on DebugUtil build while Saving
     // because of repeated attribute value in same element.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -638,7 +645,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79668)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78907)
 {
-    loadAndReload("fdo78907.docx");
+    createSwDoc("fdo78907.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", u"page" );
 
@@ -648,7 +656,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78907)
 
 CPPUNIT_TEST_FIXTURE(Test, tdf118702)
 {
-    loadAndReload("tdf118702.odt");
+    createSwDoc("tdf118702.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:type", "val", u"nextPage" );

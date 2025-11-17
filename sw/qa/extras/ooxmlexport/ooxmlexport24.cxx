@@ -443,7 +443,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107889)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107837)
 {
-    loadAndReload("tdf107837.odt");
+    createSwDoc("tdf107837.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
@@ -455,7 +456,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107837)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107684)
 {
-    loadAndReload("tdf107684.odt");
+    createSwDoc("tdf107684.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // This was 1, <w:outlineLvl> was duplicated for Heading1.
@@ -464,7 +466,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107684)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107618)
 {
-    loadAndReload("tdf107618.doc");
+    createSwDoc("tdf107618.doc");
+    saveAndReload(mpFilter);
     // This was false, header was lost on export.
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
@@ -511,7 +514,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106062_nonHangingFootnote)
 {
-    loadAndReload("tdf106062_nonHangingFootnote.odt");
+    createSwDoc("tdf106062_nonHangingFootnote.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -587,7 +591,8 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXCheckbox, "activex_checkbox.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
 {
-    loadAndReload("activex_control_align.odt");
+    createSwDoc("activex_control_align.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box aligned as a floating object
@@ -701,7 +706,8 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
 {
-    loadAndReload("activex_control_at_run_end.odt");
+    createSwDoc("activex_control_at_run_end.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Two issues were here:

@@ -79,7 +79,8 @@ CPPUNIT_TEST_FIXTURE(Test, testMathObjectFlatExport)
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Cache::Writer::OLE_Objects::set(1, pBatch);
     pBatch->commit();
-    loadAndReload("2_MathType3.docx");
+    createSwDoc("2_MathType3.docx");
+    saveAndReload(mpFilter);
 
     uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(!xModifiable->isModified());
@@ -194,7 +195,8 @@ void testTdf43569_CheckIfFieldParse()
 // instead of insertion of the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
 CPPUNIT_TEST_FIXTURE(Test, testTdf43569)
 {
-    loadAndReload("tdf43569_conditionalfield.doc");
+    createSwDoc("tdf43569_conditionalfield.doc");
+    saveAndReload(mpFilter);
     // check if our parser is valid
     testTdf43569_CheckIfFieldParse();
 
@@ -209,14 +211,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf43569)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf130314)
 {
-    loadAndReload("tdf130314.docx");
+    createSwDoc("tdf130314.docx");
+    saveAndReload(mpFilter);
     // Without the fix in place, this test would have hung
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133487)
 {
-    loadAndReload("MadeByLO7.odt");
+    createSwDoc("MadeByLO7.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -233,7 +237,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133487)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141467)
 {
-    loadAndReload("Formcontrol needs high z-index.odt");
+    createSwDoc("Formcontrol needs high z-index.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -265,7 +270,8 @@ DECLARE_ODFEXPORT_TEST(testTdf139126, "tdf139126.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125877)
 {
-    loadAndReload("tdf95806.docx");
+    createSwDoc("tdf95806.docx");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(), uno::UNO_QUERY);
@@ -282,7 +288,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125877)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150149)
 {
-    loadAndReload("tdf150149.fodt");
+    createSwDoc("tdf150149.fodt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // This was 0 (lost table header in multi-column section)
@@ -329,7 +336,8 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testUserFieldDecl)
 {
-    loadAndReload("user-field-decl.odt");
+    createSwDoc("user-field-decl.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
@@ -340,7 +348,8 @@ CPPUNIT_TEST_FIXTURE(Test, testUserFieldDecl)
 
 CPPUNIT_TEST_FIXTURE(Test, testUserFieldDeclFly)
 {
-    loadAndReload("user-field-decl-fly.odt");
+    createSwDoc("user-field-decl-fly.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -513,7 +522,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSHA1Wrong)
 
 CPPUNIT_TEST_FIXTURE(Test, testOOoxmlEmbedded)
 {
-    loadAndReload("oooxml_embedded.sxw");
+    createSwDoc("oooxml_embedded.sxw");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
     uno::Sequence<OUString> aSeq(xAccess->getElementNames());
@@ -587,7 +597,8 @@ DECLARE_ODFEXPORT_TEST(testTdf140437, "tdf140437.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131621)
 {
-    loadAndReload("tdf131621.ott");
+    createSwDoc("tdf131621.ott");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(12, getShapes());
     //Crash test, Check number of pages
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
@@ -595,7 +606,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131621)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135144)
 {
-    loadAndReload("tdf135144.docx");
+    createSwDoc("tdf135144.docx");
+    saveAndReload(mpFilter);
     //Crashes at import time after roundtrip
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
@@ -637,7 +649,8 @@ DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testSenderInitials)
 {
-    loadAndReload("sender-initials.fodt");
+    createSwDoc("sender-initials.fodt");
+    saveAndReload(mpFilter);
     // Test sender-initial properties (both annotation metadata and text field)
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -809,7 +822,8 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testDuplicateCrossRefHeadingBookmark)
 {
-    loadAndReload("CrossRefHeadingBookmark.fodt");
+    createSwDoc("CrossRefHeadingBookmark.fodt");
+    saveAndReload(mpFilter);
     // the file contains invalid duplicate heading cross reference bookmarks
     // but we have to round trip them, tdf#94804
 
@@ -914,7 +928,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(false, pBatch);
     pBatch->commit();
-    loadAndReload("fdo58949.docx");
+    createSwDoc("fdo58949.docx");
+    saveAndReload(mpFilter);
 
     /*
      * The problem was that the exporter didn't insert "Obj102" to the
@@ -949,7 +964,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
 {
-    loadAndReload("tdf134987.docx");
+    createSwDoc("tdf134987.docx");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
     uno::Sequence<OUString> aSeq(xAccess->getElementNames());
@@ -1223,7 +1239,8 @@ CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128188)
 {
-    loadAndReload("footnote-collect-at-end-of-section.fodt");
+    createSwDoc("footnote-collect-at-end-of-section.fodt");
+    saveAndReload(mpFilter);
     SwDoc* pDoc = getSwDoc();
     SwFootnoteIdxs const& rFootnotes(pDoc->GetFootnoteIdxs());
     // Section1
@@ -1256,7 +1273,8 @@ DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103091)
 {
-    loadAndReload("tdf103091.fodt");
+    createSwDoc("tdf103091.fodt");
+    saveAndReload(mpFilter);
     // check that all conditional paragraph style conditions are imported
     uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(

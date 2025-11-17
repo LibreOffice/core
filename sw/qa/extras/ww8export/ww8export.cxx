@@ -864,7 +864,8 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo45724)
 {
-    loadAndReload("fdo45724.odt");
+    createSwDoc("fdo45724.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The text and background color of the control shape was not correct.
@@ -876,7 +877,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45724)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136620)
 {
-    loadAndReload("tdf136620.odt");
+    createSwDoc("tdf136620.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -894,7 +896,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136620)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo46020)
 {
-    loadAndReload("fdo46020.odt");
+    createSwDoc("fdo46020.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The footnote in that document wasn't exported, check that it is actually exported
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -940,7 +943,8 @@ DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
 {
-    loadAndReload("fdo42144.odt");
+    createSwDoc("fdo42144.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Footer wasn't disabled -- instead empty footer was exported.
     uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
@@ -949,7 +953,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
 
 CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 {
-    loadAndReload("charborder.odt");
+    createSwDoc("charborder.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // WW8 has just one border attribute (sprmCBrc) for text border so all side has
@@ -987,7 +992,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
 {
-    loadAndReload("tdf41542_imagePadding.odt");
+    createSwDoc("tdf41542_imagePadding.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
@@ -1083,7 +1089,8 @@ DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
 {
-    loadAndReload("bordercolours.odt");
+    createSwDoc("bordercolours.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This is very close to testBorderColours in ww8import.cxx, but for export
@@ -1211,7 +1218,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineExport1)
 {
-    loadAndReload("redline-export-1.odt");
+    createSwDoc("redline-export-1.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
@@ -1226,7 +1234,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineExport1)
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineExport2)
 {
-    loadAndReload("redline-export-2.odt");
+    createSwDoc("redline-export-2.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //there must be redline information on the first portion of the third paragraph before and after reloading
     CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(3), 1), u"RedlineType"_ustr));
@@ -1234,7 +1243,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineExport2)
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineExport3)
 {
-    loadAndReload("redline-export-3.odt");
+    createSwDoc("redline-export-3.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //there must be redline information just on the para-break boundary between para one and two
     CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(1), 1), u"RedlineType"_ustr));
@@ -1245,7 +1255,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineExport3)
 
 CPPUNIT_TEST_FIXTURE(Test, testCellBgColor)
 {
-    loadAndReload("cell-bg-color.odt");
+    createSwDoc("cell-bg-color.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -1370,7 +1381,8 @@ DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
 {
-    loadAndReload("comment-export.odt");
+    createSwDoc("comment-export.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     struct TextPortionInfo {
         OUString sKind;
@@ -1447,7 +1459,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
 #if HAVE_MORE_FONTS
 CPPUNIT_TEST_FIXTURE(Test, testTableKeep)
 {
-    loadAndReload("tdf91083.odt");
+    createSwDoc("tdf91083.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     //emulate table "keep with next" -do not split table
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1458,7 +1471,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableKeep)
 
 CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep2)
 {
-    loadAndReload("tdf91083_tableKeep2.odt");
+    createSwDoc("tdf91083_tableKeep2.odt");
+    saveAndReload(mpFilter);
     //emulate table "keep with next" - split large row in order to keep with previous paragraph
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
@@ -1473,7 +1487,8 @@ CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep2)
 
 CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep3)
 {
-    loadAndReload("tdf91083_tableKeep3.odt");
+    createSwDoc("tdf91083_tableKeep3.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     //emulate table "keep with next" - split single row table in order to keep with previous paragraph
@@ -1495,13 +1510,15 @@ DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc
 
 CPPUNIT_TEST_FIXTURE(Test, testMoveRange)
 {
-    loadAndReload("fdo66304-1.odt");
+    createSwDoc("fdo66304-1.odt");
+    saveAndReload(mpFilter);
     //the save must survive without asserting
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClearFramePams)
 {
-    loadAndReload("tdf46441-2.odt");
+    createSwDoc("tdf46441-2.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //the save must survive without asserting
 }
@@ -1548,7 +1565,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
 {
-    loadAndReload("tdf99474.odt");
+    createSwDoc("tdf99474.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The bullet colour of paragraph #3 should be COL_AUTO
     auto xPara = getParagraph(3);

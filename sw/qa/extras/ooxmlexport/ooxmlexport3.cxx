@@ -76,7 +76,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108944_footnoteSeparator2)
 {
-    loadAndReload("tdf108944_footnoteSeparator2.odt");
+    createSwDoc("tdf108944_footnoteSeparator2.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     //This was zero. The comment was causing the bHasFtnSep flag to be reset to false, so the separator was missing.
@@ -85,7 +86,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108944_footnoteSeparator2)
 
 CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 {
-    loadAndReload("charborder.odt");
+    createSwDoc("charborder.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // OOXML has just one border attribute (<w:bdr>) for text border so all side has
@@ -774,7 +776,8 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
 {
-    loadAndReload("tdf41542_imagePadding.odt");
+    createSwDoc("tdf41542_imagePadding.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
@@ -807,7 +810,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteParagraphTag)
 
 CPPUNIT_TEST_FIXTURE(Test, testSpacingLineRule)
 {
-    loadAndReload("table_lineRule.docx");
+    createSwDoc("table_lineRule.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", u"auto");
 }
@@ -948,7 +952,8 @@ CPPUNIT_TEST_FIXTURE(Test, testcantSplit)
 
 CPPUNIT_TEST_FIXTURE(Test, testDontSplitTable)
 {
-    loadAndReload("tdf101589_dontSplitTable.odt");
+    createSwDoc("tdf101589_dontSplitTable.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     //single row tables need to prevent split by setting row to no split
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1021,7 +1026,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCrashWhileSave)
 
 CPPUNIT_TEST_FIXTURE(Test, testFileOpenInputOutputError)
 {
-    loadAndReload("floatingtbl_with_formula.docx");
+    createSwDoc("floatingtbl_with_formula.docx");
+    saveAndReload(mpFilter);
     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", u"Normal");
@@ -1218,7 +1224,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
 
 CPPUNIT_TEST_FIXTURE(Test, testLostArrow)
 {
-    loadAndReload("tdf99810-lost-arrow.odt");
+    createSwDoc("tdf99810-lost-arrow.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#99810: check whether we use normal shape instead of connector shape if the XML namespace

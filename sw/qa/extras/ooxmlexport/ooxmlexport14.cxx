@@ -83,7 +83,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
 {
-    loadAndReload("tdf135595_HFtableWrap.odt");
+    createSwDoc("tdf135595_HFtableWrap.odt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nRowHeight = getXPath(pXmlDoc, "//page[1]/header/tab/row/infos/bounds", "height").toInt32();
     // tdf#77794: always force bLayoutInCell from false to true for MSO2013+
@@ -159,7 +160,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf78749)
 {
-    loadAndReload("tdf78749.docx");
+    createSwDoc("tdf78749.docx");
+    saveAndReload(mpFilter);
     //Shape lost the background image before, now check if it still has...
     auto xShape = getShape(1);
     uno::Reference<beans::XPropertySet> xShpProps(xShape, uno::UNO_QUERY);
@@ -423,7 +425,8 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
 
 CPPUNIT_TEST_FIXTURE(Test, testListNotCountedIndent)
 {
-    loadAndReload("list_notcounted_indent.fodt");
+    createSwDoc("list_notcounted_indent.fodt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val", u"0");
     // wrong: 720
@@ -460,7 +463,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf130610)
 {
-    loadAndReload("tdf130610_bold_in_2_styles.ott");
+    createSwDoc("tdf130610_bold_in_2_styles.ott");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // check character properties
     {
@@ -517,7 +521,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81567)
 {
-    loadAndReload("tdf81567.odt");
+    createSwDoc("tdf81567.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -613,7 +618,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123116_oversizedRowSplit)
 {
-    loadAndReload("tdf123116_oversizedRowSplit.odt");
+    createSwDoc("tdf123116_oversizedRowSplit.odt");
+    saveAndReload(mpFilter);
     // Intentionally require a very non-backward-compatible, natural continuation of the table
     // instead of an ugly "page break" like MS Word does (and LO used to do).
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 4 pages", 4, getPages());
@@ -632,7 +638,8 @@ DECLARE_OOXMLEXPORT_TEST(testPageContentBottom, "page-content-bottom.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 {
-    loadAndReload("tdf129522_removeShadowStyle.odt");
+    createSwDoc("tdf129522_removeShadowStyle.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
     uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName(u"Shadow"_ustr), uno::UNO_QUERY_THROW);

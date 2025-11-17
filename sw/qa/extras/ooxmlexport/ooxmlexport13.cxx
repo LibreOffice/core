@@ -109,7 +109,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155690, "tdf155690.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
-    loadAndReload("tdf121374_sectionHF.odt");
+    createSwDoc("tdf121374_sectionHF.odt");
+    saveAndReload(mpFilter);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"FooterText"_ustr);
     CPPUNIT_ASSERT_EQUAL( u"footer"_ustr, xFooterText->getString() );
@@ -120,7 +121,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF2)
 {
-    loadAndReload("tdf121374_sectionHF2.doc");
+    createSwDoc("tdf121374_sectionHF2.doc");
+    saveAndReload(mpFilter);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"HeaderText"_ustr);
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
@@ -369,7 +371,8 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement)
 {
-    loadAndReload("tdf127316_autoEscapement.odt");
+    createSwDoc("tdf127316_autoEscapement.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This should be roughly .8*35% of the ORIGINAL(non-reduced) size. However, during export the
     // proportional height has to be changed into direct formatting, which then changes the relative percent.
@@ -412,7 +415,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99602_charStyleSubscript2)
 {
-    loadAndReload("tdf99602_charStyleSubscript2.odt");
+    createSwDoc("tdf99602_charStyleSubscript2.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
     // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
@@ -524,7 +528,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
 
 CPPUNIT_TEST_FIXTURE(Test, tdf123912_protectedForm)
 {
-    loadAndReload("tdf123912_protectedForm.odt");
+    createSwDoc("tdf123912_protectedForm.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Compatibility: Protect form", true,
@@ -548,7 +553,8 @@ DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testDateControl)
 {
-    loadAndReload("empty-date-control.odt");
+    createSwDoc("empty-date-control.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that we exported the empty date control correctly
     // Date form field is converted to date content control.
@@ -580,7 +586,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDateControl)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121867)
 {
-    loadAndReload("tdf121867.odt");
+    createSwDoc("tdf121867.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwEditShell* pEditShell = getSwDocShell()->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);
@@ -656,7 +663,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 {
-    loadAndReload("tdf116371.odt");
+    createSwDoc("tdf116371.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -997,7 +1005,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78657)
 
 CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 {
-    loadAndReload("btlr-frame.odt");
+    createSwDoc("btlr-frame.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
@@ -1314,7 +1323,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
 {
-    loadAndReload("tdf128304.odt");
+    createSwDoc("tdf128304.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;

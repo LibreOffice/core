@@ -133,7 +133,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109063)
 
 CPPUNIT_TEST_FIXTURE(DocmTest, testTdf108269)
 {
-    loadAndReload("tdf108269.docm");
+    createSwDoc("tdf108269.docm");
+    saveAndReload(mpFilter);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: VBA streams were not roundtripped via the doc-level
     // grab-bag.
@@ -494,7 +495,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104420, "tdf104420_lostParagraph.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 {
-    loadAndReload("tdf41542_borderlessPadding.odt");
+    createSwDoc("tdf41542_borderlessPadding.odt");
+    saveAndReload(mpFilter);
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
@@ -581,7 +583,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_do
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf98700_keepWithNext)
 {
-    loadAndReload("tdf98700_keepWithNext.odt");
+    createSwDoc("tdf98700_keepWithNext.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading style keeps with next", true, getProperty<bool>(getParagraph(1), u"ParaKeepTogether"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default style doesn't keep with next", false, getProperty<bool>(getParagraph(2), u"ParaKeepTogether"_ustr));
@@ -775,7 +778,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79329)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103982)
 {
-    loadAndReload("tdf103982.docx");
+    createSwDoc("tdf103982.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
     // This was -260350, which is not a valid value for an unsigned type.

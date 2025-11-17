@@ -209,7 +209,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139759_commentHighlightBackground, "tdf139759_co
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
-    loadAndReload("tdf135906.docx");
+    createSwDoc("tdf135906.docx");
+    saveAndReload(mpFilter);
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
 }
 
@@ -594,7 +595,8 @@ DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148720)
 {
-    loadAndReload("tdf148720.odt");
+    createSwDoc("tdf148720.odt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     const char* sShapeXPaths[] =
@@ -991,7 +993,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf144668)
 {
-    loadAndReload("tdf144668.odt");
+    createSwDoc("tdf144668.odt");
+    saveAndReload(mpFilter);
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1, u"level1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"[0001]"_ustr, getProperty<OUString>(xPara1, u"ListLabelString"_ustr));
 
@@ -1143,7 +1146,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149089, "tdf149089.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139128)
 {
-    loadAndReload("tdf139128.odt");
+    createSwDoc("tdf139128.odt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:

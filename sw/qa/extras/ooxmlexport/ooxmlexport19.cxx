@@ -99,7 +99,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104418)
 {
-    loadAndReload("tdf104418.odt");
+    createSwDoc("tdf104418.odt");
+    saveAndReload(mpFilter);
     // Problem was that <w:hideMark> cell property was ignored.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
@@ -217,7 +218,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf65955)
 {
-    loadAndReload("tdf65955.odt");
+    createSwDoc("tdf65955.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
@@ -240,7 +242,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf65955)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf65955_2)
 {
-    loadAndReload("tdf65955_2.odt");
+    createSwDoc("tdf65955_2.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
@@ -662,7 +665,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99140)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
 {
-    loadAndReload("table.fodt");
+    createSwDoc("table.fodt");
+    saveAndReload(mpFilter);
     // Writer, (new) Word: margin 0 means table border starts at 0
     // (old) Word: margin 0 means paragraph in table starts at 0
 
@@ -750,7 +754,8 @@ DECLARE_OOXMLEXPORT_TEST(testTableCellMargin, "table-cell-margin.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, TestPuzzleExport)
 {
-    loadAndReload("TestPuzzleExport.odt");
+    createSwDoc("TestPuzzleExport.odt");
+    saveAndReload(mpFilter);
     // See tdf#148342 for details
     // Create a metafile
     auto pMeta = getSwDocShell()->GetPreviewMetaFile();
@@ -979,7 +984,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
 {
-    loadAndReload("tdf138093B.docx");
+    createSwDoc("tdf138093B.docx");
+    saveAndReload(mpFilter);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sdt", 3);
@@ -1138,7 +1144,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf156372, "tdf156372.doc")
 CPPUNIT_TEST_FIXTURE(Test, testTdf156548)
 {
     // Given a document using two bookmarks with similar names longer than 40 characters
-    loadAndReload("longBookmarkName.fodt");
+    createSwDoc("longBookmarkName.fodt");
+    saveAndReload(mpFilter);
 
     // After the export, the names must be no longer than 40 characters; they must be unique;
     // and the hyperlinks must use the same names, to still point to the correct targets:

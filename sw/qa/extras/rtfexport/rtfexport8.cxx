@@ -316,7 +316,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158826_extraCR)
 CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
 {
     // given a frame with an axial gradient (white - green - white)
-    loadAndReload("tdf159824_axialGradient.odt");
+    createSwDoc("tdf159824_axialGradient.odt");
+    saveAndReload(mpFilter);
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),

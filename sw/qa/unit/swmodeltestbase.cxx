@@ -403,12 +403,6 @@ void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
     save(mpFilter);
 }
 
-void SwModelTestBase::loadAndReload(const char* pName)
-{
-    loadURL(createFileURL(OUString::createFromAscii(pName)));
-    saveAndReload(mpFilter);
-}
-
 int SwModelTestBase::getPages() const
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

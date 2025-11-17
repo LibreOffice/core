@@ -70,7 +70,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRelorientation)
 
 CPPUNIT_TEST_FIXTURE(Test, testBezier)
 {
-    loadAndReload("bezier.odt");
+    createSwDoc("bezier.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that no shape got lost: a bezier, a line and a text shape.
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
@@ -181,7 +182,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesParagraphProperties)
 
 CPPUNIT_TEST_FIXTURE(Test, testMsoSpt180)
 {
-    loadAndReload("mso-spt180.docx");
+    createSwDoc("mso-spt180.docx");
+    saveAndReload(mpFilter);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), u"CustomShapeGeometry"_ustr);
     OUString aType;
@@ -433,7 +435,8 @@ CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
 
 CPPUNIT_TEST_FIXTURE(Test, testNestedTextFrames)
 {
-    loadAndReload("nested-text-frames.odt");
+    createSwDoc("nested-text-frames.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First problem was LO crashed during export (crash test)
@@ -528,7 +531,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberedLists_StartingWithZero)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBreak)
 {
-    loadAndReload("fdo74566.docx");
+    createSwDoc("fdo74566.docx");
+    saveAndReload(mpFilter);
     /*  Break to next page was written into wrong paragraph as <w:pageBreakBefore />.
      *  LO was not preserving Page Break as <w:br w:type="page" />.
      *  Now after fix , LO writes Page Break as the new paragraph and also
@@ -848,7 +852,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphWithComments)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104707_urlComment)
 {
-    loadAndReload("tdf104707_urlComment.odt");
+    createSwDoc("tdf104707_urlComment.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1061,7 +1066,8 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
 {
-    loadAndReload("tdf83227.docx");
+    createSwDoc("tdf83227.docx");
+    saveAndReload(mpFilter);
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"word/media/image1.png"_ustr)));
@@ -1071,7 +1077,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103001)
 {
-    loadAndReload("tdf103001.docx");
+    createSwDoc("tdf103001.docx");
+    saveAndReload(mpFilter);
     // The same image is featured in the header and in the body text, make sure
     // the header relation is still written, even when caching is enabled.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());

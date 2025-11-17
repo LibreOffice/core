@@ -158,7 +158,8 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeInFloattable)
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptyAnnotationMark)
 {
-    loadAndReload("empty-annotation-mark.docx");
+    createSwDoc("empty-annotation-mark.docx");
+    saveAndReload(mpFilter);
     // Delete the word that is commented, and save again.
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 3);
     CPPUNIT_ASSERT_EQUAL(u"with"_ustr, xRun->getString());
@@ -334,7 +335,8 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106541_noinheritChapterNumbering)
 {
-    loadAndReload("tdf106541_noinheritChapterNumbering.odt");
+    createSwDoc("tdf106541_noinheritChapterNumbering.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // in LO, it appears that styles based on the Chapter Numbering style explicitly set the
     // numbering style/outline level to 0 by default, and that LO prevents inheriting directly from "Outline" style.
@@ -774,7 +776,8 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 {
-    loadAndReload("tdf88583.odt");
+    createSwDoc("tdf88583.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x00cc00), getProperty<Color>(getParagraph(1), u"FillColor"_ustr));
@@ -896,7 +899,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118682)
 {
-    loadAndReload("tdf118682.fodt");
+    createSwDoc("tdf118682.fodt");
+    saveAndReload(mpFilter);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -924,7 +928,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118682)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133163)
 {
-    loadAndReload("tdf133163.fodt");
+    createSwDoc("tdf133163.fodt");
+    saveAndReload(mpFilter);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -951,7 +956,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133163)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf166102)
 {
-    loadAndReload("tdf166102.fodt");
+    createSwDoc("tdf166102.fodt");
+    saveAndReload(mpFilter);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());

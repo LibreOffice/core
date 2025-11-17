@@ -38,7 +38,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123621)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131540)
 {
-    loadAndReload("tdf131540.odt");
+    createSwDoc("tdf131540.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // There are 2 OLEs test if one of them moved on save:
@@ -107,7 +108,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131801)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133334_followPgStyle)
 {
-    loadAndReload("tdf133334_followPgStyle.odt");
+    createSwDoc("tdf133334_followPgStyle.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
@@ -178,7 +180,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123381, "tdf123381.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123401)
 {
-    loadAndReload("tdf123401.fodt");
+    createSwDoc("tdf123401.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -224,7 +227,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116394)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123356)
 {
-    loadAndReload("tdf123356.fodt");
+    createSwDoc("tdf123356.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -241,7 +245,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123356)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136404)
 {
-    loadAndReload("tdf136404.fodt");
+    createSwDoc("tdf136404.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -295,7 +300,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138739, "tdf138739.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf166436)
 {
     // Without the fix in place, this test would have crashed at import time
-    loadAndReload("tdf166436.docx");
+    createSwDoc("tdf166436.docx");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     CPPUNIT_ASSERT(xFieldsAccess->hasElements());
@@ -303,7 +309,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166436)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123390)
 {
-    loadAndReload("tdf123390.fodt");
+    createSwDoc("tdf123390.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -324,7 +331,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123390)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123354)
 {
-    loadAndReload("tdf123354.fodt");
+    createSwDoc("tdf123354.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -345,7 +353,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123354)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123384)
 {
-    loadAndReload("tdf123384.fodt");
+    createSwDoc("tdf123384.fodt");
+    saveAndReload(mpFilter);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -515,7 +524,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122648)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf98000_changePageStyle)
 {
-    loadAndReload("tdf98000_changePageStyle.odt");
+    createSwDoc("tdf98000_changePageStyle.odt");
+    saveAndReload(mpFilter);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
 
@@ -529,7 +539,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98000_changePageStyle)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
 {
-    loadAndReload("tdf145998_unnecessaryPageStyles.odt");
+    createSwDoc("tdf145998_unnecessaryPageStyles.odt");
+    saveAndReload(mpFilter);
 
     // Sanity check - always good to test when dealing with page styles and breaks.
     CPPUNIT_ASSERT_EQUAL(5, getPages());
@@ -561,7 +572,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136929_framesOfParagraph)
 {
-    loadAndReload("tdf136929_framesOfParagraph.odt");
+    createSwDoc("tdf136929_framesOfParagraph.odt");
+    saveAndReload(mpFilter);
     // Before this fix, the image was placed in the footer instead of in the text body - messing everything up.
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 5, getPages() );
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -580,14 +592,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136589_paraHadField, "tdf136589_paraHadField.doc
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133370_columnBreak)
 {
-    loadAndReload("tdf133370_columnBreak.odt");
+    createSwDoc("tdf133370_columnBreak.odt");
+    saveAndReload(mpFilter);
     // Since non-DOCX formats ignores column breaks in non-column situations, don't export to docx.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134649_pageBreak)
 {
-    loadAndReload("tdf134649_pageBreak.fodt");
+    createSwDoc("tdf134649_pageBreak.fodt");
+    saveAndReload(mpFilter);
     // This was 1 (missing page break between tables).
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -607,7 +621,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c14, "tdf135343_column
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135973)
 {
-    loadAndReload("tdf135973.odt");
+    createSwDoc("tdf135973.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
@@ -670,7 +685,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121669_equalColumns, "tdf121669_equalColumns.doc
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak)
 {
-    loadAndReload("tdf132149_pgBreak.odt");
+    createSwDoc("tdf132149_pgBreak.odt");
+    saveAndReload(mpFilter);
     // This 5 page document is designed to visually exaggerate the problems
     // of emulating LO's followed-by-page-style into MSWord's sections.
     // While much has been improved, there are extra pages present, which still need fixing.
@@ -699,7 +715,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreakB)
 {
-    loadAndReload("tdf132149_pgBreakB.odt");
+    createSwDoc("tdf132149_pgBreakB.odt");
+    saveAndReload(mpFilter);
     // This 5 page document is designed to visually exaggerate the problems
     // of emulating LO's followed-by-page-style into MSWord's sections.
     xmlDocUniquePtr pDump = parseLayoutDump();
@@ -712,7 +729,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreakB)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak2)
 {
-    loadAndReload("tdf132149_pgBreak2.odt");
+    createSwDoc("tdf132149_pgBreak2.odt");
+    saveAndReload(mpFilter);
     // This 3 page document is designed to visually exaggerate the problems
     // of emulating LO's followed-by-page-style into MSWord's sections.
 
@@ -727,7 +745,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136952_pgBreak3B)
 {
-    loadAndReload("tdf136952_pgBreak3B.odt");
+    createSwDoc("tdf136952_pgBreak3B.odt");
+    saveAndReload(mpFilter);
     // This 4 page document is designed to visually exaggerate the problems
     // of emulating LO's followed-by-page-style into MSWord's sections.
     xmlDocUniquePtr pDump = parseLayoutDump();
@@ -844,14 +863,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134609_gridAfter, "tdf134609_gridAfter.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135329_lostImage)
 {
-    loadAndReload("tdf135329_lostImage.odt");
+    createSwDoc("tdf135329_lostImage.odt");
+    saveAndReload(mpFilter);
     // the character-anchored image was being skipped, since searchNext didn't notice it.
     uno::Reference<beans::XPropertySet> xImageProps(getShape(2), uno::UNO_QUERY_THROW);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136441_commentInFootnote)
 {
-    loadAndReload("tdf136441_commentInFootnote.odt");
+    createSwDoc("tdf136441_commentInFootnote.odt");
+    saveAndReload(mpFilter);
     // failed to load without error if footnote contained a comment.
     // (MS Word's UI doesn't allow adding comments to a footnote.)
 }
@@ -885,7 +906,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138345_charStyleHighlight, "tdf138345_charStyleH
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125268)
 {
-    loadAndReload("tdf125268.odt");
+    createSwDoc("tdf125268.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     const uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1, u"Hello"_ustr), uno::UNO_QUERY);
     // Without the fix in place, this test would have failed with
@@ -1079,7 +1101,8 @@ CPPUNIT_TEST_FIXTURE(Test, testImageSpaceSettings)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137295)
 {
-    loadAndReload("tdf137295.doc");
+    createSwDoc("tdf137295.doc");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, the test would have failed with

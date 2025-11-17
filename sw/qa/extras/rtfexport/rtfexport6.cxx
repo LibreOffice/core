@@ -859,7 +859,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106950)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 {
-    loadAndReload("tdf116371.odt");
+    createSwDoc("tdf116371.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xShape(getShape(1));
@@ -893,7 +894,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133437)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128320)
 {
-    loadAndReload("tdf128320.odt");
+    createSwDoc("tdf128320.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Shape does exist in RTF output
@@ -952,7 +954,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138210)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137894)
 {
-    loadAndReload("tdf137894.odt");
+    createSwDoc("tdf137894.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     lang::Locale locale1(
         getProperty<lang::Locale>(getRun(getParagraph(1), 1), u"CharLocaleAsian"_ustr));
@@ -974,14 +977,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137894)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138779)
 {
-    loadAndReload("tdf138779.docx");
+    createSwDoc("tdf138779.docx");
+    saveAndReload(mpFilter);
     // The text "2. Kozuka Mincho Pro, 8 pt Ruby ..." has font size 11pt ( was 20pt ).
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(getRun(getParagraph(2), 14), u"CharHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf144437)
 {
-    loadAndReload("tdf144437.odt");
+    createSwDoc("tdf144437.odt");
+    saveAndReload(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));

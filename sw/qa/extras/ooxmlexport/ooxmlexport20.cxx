@@ -350,7 +350,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsm)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
 {
-    loadAndReload("fdo80522.docx");
+    createSwDoc("fdo80522.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
     assertXPath(pXmlDoc,
@@ -371,7 +372,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
 {
-    loadAndReload("fdo80523_pptm.docx");
+    createSwDoc("fdo80523_pptm.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
     assertXPath(pXmlDoc,
@@ -392,7 +394,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80523_sldm)
 {
-    loadAndReload("fdo80523_sldm.docx");
+    createSwDoc("fdo80523_sldm.docx");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
     assertXPath(pXmlDoc,
@@ -632,7 +635,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89774)
 
 CPPUNIT_TEST_FIXTURE(Test, testSectionProtection)
 {
-    loadAndReload("sectionprot.odt");
+    createSwDoc("sectionprot.odt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr/w:formProt", "val", u"true");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:formProt", "val", u"false");
@@ -753,7 +757,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf89991_revisionView)
 
 CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
 {
-    loadAndReload("tdf122201_editUnprotectedText.odt");
+    createSwDoc("tdf122201_editUnprotectedText.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // get the document
 
@@ -774,7 +779,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
 
 CPPUNIT_TEST_FIXTURE(Test, testSectionHeader)
 {
-    loadAndReload("sectionprot.odt");
+    createSwDoc("sectionprot.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // this test must not be zero
@@ -783,7 +789,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionHeader)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146491)
 {
-    loadAndReload("tdf146491.odt");
+    createSwDoc("tdf146491.odt");
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 12 - a page style was unnecessarily created for every section.
     assertXPath(pXmlDoc, "//w:footerReference", 1);
@@ -791,7 +798,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146491)
 
 CPPUNIT_TEST_FIXTURE(Test, testOO47778_1)
 {
-    loadAndReload("ooo47778-3.odt");
+    createSwDoc("ooo47778-3.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(5, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -800,7 +808,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOO47778_1)
 
 CPPUNIT_TEST_FIXTURE(Test, testOO47778_2)
 {
-    loadAndReload("ooo47778-4.odt");
+    createSwDoc("ooo47778-4.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -817,7 +826,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOO47778_2)
 
 CPPUNIT_TEST_FIXTURE(Test, testOO67471)
 {
-    loadAndReload("ooo67471-2.odt");
+    createSwDoc("ooo67471-2.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "(//w:t)[2]", u"B");
@@ -825,7 +835,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOO67471)
 
 CPPUNIT_TEST_FIXTURE(Test, testKDE302504)
 {
-    loadAndReload("kde302504-1.odt");
+    createSwDoc("kde302504-1.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -834,7 +845,8 @@ CPPUNIT_TEST_FIXTURE(Test, testKDE302504)
 
 CPPUNIT_TEST_FIXTURE(Test, testKDE216114)
 {
-    loadAndReload("kde216114-1.odt");
+    createSwDoc("kde216114-1.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -843,7 +855,8 @@ CPPUNIT_TEST_FIXTURE(Test, testKDE216114)
 
 CPPUNIT_TEST_FIXTURE(Test, testOO72950)
 {
-    loadAndReload("ooo72950-1.odt");
+    createSwDoc("ooo72950-1.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:tbl", 1);
@@ -1150,7 +1163,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158451)
 {
     //Without the test, crash occurs when document loads
-    loadAndReload("tdf158451.docx");
+    createSwDoc("tdf158451.docx");
+    saveAndReload(mpFilter);
     //Asserts document contains grouped shapes with Anchor = "As Character"
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -1168,7 +1182,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160827, "tdf160827.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
 {
     // Given a text with an URL with multiple spaces
-    loadAndReload("multi_space_url.fodt");
+    createSwDoc("multi_space_url.fodt");
+    saveAndReload(mpFilter);
 
     static constexpr OUString sExpectedURL
         = u"http://www.example.org/path%20%20with%20%20spaces"_ustr;

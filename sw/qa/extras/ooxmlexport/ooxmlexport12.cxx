@@ -32,7 +32,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 {
-    loadAndReload("table_cross_reference.odt");
+    createSwDoc("table_cross_reference.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
@@ -204,7 +205,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 {
-    loadAndReload("table_cross_reference_custom_format.odt");
+    createSwDoc("table_cross_reference_custom_format.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
@@ -337,7 +339,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 
 CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
 {
-    loadAndReload("object_cross_reference.odt");
+    createSwDoc("object_cross_reference.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(10, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
@@ -734,7 +737,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTd112202)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
 {
-    loadAndReload("tdf79435_legacyInputFields.doc");
+    createSwDoc("tdf79435_legacyInputFields.doc");
+    saveAndReload(mpFilter);
     //using .doc input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField = getProperty<uno::Reference<text::XFormField>>(
         getRun(getParagraph(5), 3), u"Bookmark"_ustr);
@@ -953,7 +957,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138780)
 {
-    loadAndReload("tdf138780.odt");
+    createSwDoc("tdf138780.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraphs were not part of a numbering anymore after roundtrip.
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
@@ -1021,7 +1026,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
 {
-    loadAndReload("tdf94628.docx");
+    createSwDoc("tdf94628.docx");
+    saveAndReload(mpFilter);
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -1817,7 +1823,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
 {
-    loadAndReload("tdf88496.docx");
+    createSwDoc("tdf88496.docx");
+    saveAndReload(mpFilter);
     // Switch off repeating header, there is no place for it.
     // Now there are only 3 pages with complete table content
     // instead of a 51-page long table only with header.
@@ -1834,7 +1841,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf77417)
 {
-    loadAndReload("tdf77417.docx");
+    createSwDoc("tdf77417.docx");
+    saveAndReload(mpFilter);
     // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
     // This was 3 pages with the first invisible blank page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -2139,7 +2147,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
 //
 CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
 {
-    loadAndReload("tdf124678_no_leading_paragraph.odt");
+    createSwDoc("tdf124678_no_leading_paragraph.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
@@ -2155,7 +2164,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
 //
 CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case2)
 {
-    loadAndReload("tdf124678_with_leading_paragraph.odt");
+    createSwDoc("tdf124678_with_leading_paragraph.odt");
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
