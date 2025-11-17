@@ -2188,7 +2188,12 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
     }
 
 protected:
-    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
+    void signal_value_changed()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aValueChangedHdl.Call(*this);
+    }
 
     /** If a custom value formatter was set via <a>set_value_formatter</a>,
      *  that one gets called to create a text representation of the value
@@ -2233,7 +2238,12 @@ protected:
     virtual void get_floating_point_increments(double& rStep, double& rPage) const = 0;
 
 public:
-    void set_value(sal_Int64 value) { set_floating_point_value(convert_value_to_double(value)); }
+    void set_value(sal_Int64 value)
+    {
+        disable_notify_events();
+        set_floating_point_value(convert_value_to_double(value));
+        enable_notify_events();
+    }
 
     sal_Int64 get_value() const { return convert_double_to_value(get_floating_point_value()); }
 
