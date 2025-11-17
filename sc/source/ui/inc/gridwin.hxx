@@ -498,8 +498,8 @@ public:
     void            UpdateCursorOverlay();
     void            DeleteSelectionOverlay();
     void            UpdateSelectionOverlay();
-    void UpdateDatabaseOverlay();
-    void DeleteDatabaseOverlay();
+    void            UpdateDatabaseOverlay();
+    void            DeleteDatabaseOverlay();
     void            UpdateHighlightOverlay();
     void            DeleteAutoFillOverlay();
     void            UpdateAutoFillOverlay();

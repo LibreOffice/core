@@ -1760,17 +1760,17 @@ void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEven
         OUString sChangedEntry;
         if (change.Accessor >>= sChangedEntry)
         {
-            if (sChangedEntry == "ColumnRowHighlighting")
+            if (sChangedEntry == u"ColumnRowHighlighting"_ustr)
             {
                 mrViewShell.HighlightOverlay();
             }
-            else if (sChangedEntry == "ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcCellFocus/Color")
+            else if (sChangedEntry == u"ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcCellFocus/Color"_ustr)
             {
                 mrViewShell.GetActiveWin()->UpdateCursorOverlay();
                 mrViewShell.GetActiveWin()->UpdateAutoFillOverlay();
                 mrViewShell.GetActiveWin()->UpdateHighlightOverlay();
             }
-            else if (sChangedEntry == "ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcDBFocus/Color")
+            else if (sChangedEntry == u"ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcDBFocus/Color"_ustr)
             {
                 mrViewShell.GetActiveWin()->UpdateDatabaseOverlay();
             }

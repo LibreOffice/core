@@ -2633,17 +2633,17 @@ void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
     aInfo.mnDxfID = rAttribs.getInteger(XML_dxfId, -1);
     OUString aTableStyleElementName = rAttribs.getString(XML_type, OUString());
     static const std::unordered_map<OUString, ScTableStyleElement> aTableStyleElementMap
-        = { { "wholeTable", ScTableStyleElement::WholeTable },
-            { "firstColumnStripe", ScTableStyleElement::FirstColumnStripe },
-            { "secondColumnStripe", ScTableStyleElement::SecondColumnStripe },
-            { "firstRowStripe", ScTableStyleElement::FirstRowStripe },
-            { "secondRowStripe", ScTableStyleElement::SecondRowStripe },
-            { "firstColumn", ScTableStyleElement::FirstColumn },
-            { "lastColumn", ScTableStyleElement::LastColumn },
-            { "headerRow", ScTableStyleElement::HeaderRow },
-            { "totalRow", ScTableStyleElement::TotalRow },
-            { "firstHeaderCell", ScTableStyleElement::FirstHeaderCell },
-            { "lastHeaderCell", ScTableStyleElement::LastHeaderCell }
+        = { { u"wholeTable"_ustr, ScTableStyleElement::WholeTable },
+            { u"firstColumnStripe"_ustr, ScTableStyleElement::FirstColumnStripe },
+            { u"secondColumnStripe"_ustr, ScTableStyleElement::SecondColumnStripe },
+            { u"firstRowStripe"_ustr, ScTableStyleElement::FirstRowStripe },
+            { u"secondRowStripe"_ustr, ScTableStyleElement::SecondRowStripe },
+            { u"firstColumn"_ustr, ScTableStyleElement::FirstColumn },
+            { u"lastColumn"_ustr, ScTableStyleElement::LastColumn },
+            { u"headerRow"_ustr, ScTableStyleElement::HeaderRow },
+            { u"totalRow"_ustr, ScTableStyleElement::TotalRow },
+            { u"firstHeaderCell"_ustr, ScTableStyleElement::FirstHeaderCell },
+            { u"lastHeaderCell"_ustr, ScTableStyleElement::LastHeaderCell }
         };
     auto aElementItr = aTableStyleElementMap.find(aTableStyleElementName);
     if (aElementItr == aTableStyleElementMap.end())
