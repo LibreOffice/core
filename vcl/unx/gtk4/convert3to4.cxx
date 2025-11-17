@@ -381,7 +381,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             assert(xLib->getNodeValue() == "gtk+");
             xLib->setNodeValue("gtk");
             css::uno::Reference<css::xml::dom::XNode> xVersion = xMap->getNamedItem("version");
-            assert(xVersion->getNodeValue() == "3.20");
+            assert(xVersion->getNodeValue() == "3.24");
             xVersion->setNodeValue("4.0");
         }
         else if (xChild->getNodeName() == "property")
