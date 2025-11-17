@@ -155,10 +155,10 @@ namespace weld
 /// Tabpage with the filter text entries etc.
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
 {
-    Link<SvxTPFilter*,void>  aReadyLink;
-    Link<SvxTPFilter*,void>  aRefLink;
+    Link<SvxTPFilter*,void>  m_aReadyLink;
+    Link<SvxTPFilter*,void>  m_aRefLink;
 
-    bool                   bModified;
+    bool                   m_bModified;
 
     SvxRedlinTable* m_pRedlinTable;
     std::unique_ptr<weld::CheckButton> m_xCbDate;
@@ -245,11 +245,11 @@ public:
 
     weld::ComboBox* GetLbAction() { return m_xLbAction.get(); }
 
-    void            SetReadyHdl( const Link<SvxTPFilter*,void>& rLink ) { aReadyLink= rLink; }
+    void            SetReadyHdl( const Link<SvxTPFilter*,void>& rLink ) { m_aReadyLink= rLink; }
 
 
     // Methods for Calc {
-    void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { aRefLink = rLink; }
+    void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { m_aRefLink = rLink; }
 
     void            Enable( bool bEnable = true );
     // } Methods for Calc

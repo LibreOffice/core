@@ -477,7 +477,7 @@ SvxTPage::SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, 
 
 SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     : SvxTPage(pParent, u"svx/ui/redlinefilterpage.ui"_ustr, u"RedlineFilterPage"_ustr)
-    , bModified(false)
+    , m_bModified(false)
     , m_pRedlinTable(nullptr)
     , m_xCbDate(m_xBuilder->weld_check_button(u"date"_ustr))
     , m_xLbDate(m_xBuilder->weld_combo_box(u"datecond"_ustr))
@@ -543,7 +543,7 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     SetLastTime(aDateTime);
     HideRange();
     ShowAction();
-    bModified=false;
+    m_bModified=false;
 }
 
 SvxTPFilter::~SvxTPFilter()
@@ -737,35 +737,35 @@ void SvxTPFilter::CheckDate(bool bFlag)
 {
     m_xCbDate->set_active(bFlag);
     RowEnableHdl(*m_xCbDate);
-    bModified=false;
+    m_bModified=false;
 }
 
 void SvxTPFilter::CheckAuthor(bool bFlag)
 {
     m_xCbAuthor->set_active(bFlag);
     RowEnableHdl(*m_xCbAuthor);
-    bModified=false;
+    m_bModified=false;
 }
 
 void SvxTPFilter::CheckRange(bool bFlag)
 {
     m_xCbRange->set_active(bFlag);
     RowEnableHdl(*m_xCbRange);
-    bModified=false;
+    m_bModified=false;
 }
 
 void SvxTPFilter::CheckAction(bool bFlag)
 {
     m_xCbAction->set_active(bFlag);
     RowEnableHdl(*m_xCbAction);
-    bModified=false;
+    m_bModified=false;
 }
 
 void SvxTPFilter::CheckComment(bool bFlag)
 {
     m_xCbComment->set_active(bFlag);
     RowEnableHdl(*m_xCbComment);
-    bModified=false;
+    m_bModified=false;
 }
 
 void SvxTPFilter::ShowAction(bool bShow)
@@ -811,7 +811,7 @@ IMPL_LINK_NOARG(SvxTPFilter, SelDateHdl, weld::ComboBox&, void)
         case SvxRedlinDateMode::NONE:
             break;
     }
-    bModified = true;
+    m_bModified = true;
 }
 
 IMPL_LINK(SvxTPFilter, RowEnableHdl, weld::Toggleable&, rCB, void)
@@ -840,7 +840,7 @@ IMPL_LINK(SvxTPFilter, RowEnableHdl, weld::Toggleable&, rCB, void)
     {
         m_xEdComment->set_sensitive(m_xCbComment->get_active());
     }
-    bModified = true;
+    m_bModified = true;
 }
 
 IMPL_LINK(SvxTPFilter, TimeHdl, weld::Button&, rIB, void)
@@ -856,22 +856,22 @@ IMPL_LINK(SvxTPFilter, TimeHdl, weld::Button&, rIB, void)
         SetLastDate(aDateTime);
         SetLastTime(aDateTime);
     }
-    bModified=true;
+    m_bModified=true;
 }
 
 IMPL_LINK_NOARG(SvxTPFilter, ModifyHdl, weld::Entry&, void)
 {
-    bModified=true;
+    m_bModified=true;
 }
 
 IMPL_LINK_NOARG(SvxTPFilter, ModifyListBoxHdl, weld::ComboBox&, void)
 {
-    bModified=true;
+    m_bModified=true;
 }
 
 void SvxTPFilter::DeactivatePage()
 {
-    if(bModified)
+    if(m_bModified)
     {
         if (m_pRedlinTable)
         {
@@ -894,9 +894,9 @@ void SvxTPFilter::DeactivatePage()
             m_pRedlinTable->UpdateFilterTest();
         }
 
-        aReadyLink.Call(this);
+        m_aReadyLink.Call(this);
     }
-    bModified=false;
+    m_bModified=false;
 }
 
 void SvxTPFilter::Enable(bool bEnable)
@@ -930,7 +930,7 @@ IMPL_LINK(SvxTPFilter, ModifyDate, SvtCalendarBox&, rTF, void)
         if (m_pRedlinTable)
             m_pRedlinTable->SetLastDate(m_xDfDate2->get_date());
     }
-    bModified=true;
+    m_bModified=true;
 }
 
 IMPL_LINK(SvxTPFilter, ModifyTime, weld::FormattedSpinButton&, rTF, void)
@@ -953,12 +953,12 @@ IMPL_LINK(SvxTPFilter, ModifyTime, weld::FormattedSpinButton&, rTF, void)
             m_pRedlinTable->SetLastTime(GetLastTime());
 
     }
-    bModified=true;
+    m_bModified=true;
 }
 
 IMPL_LINK_NOARG(SvxTPFilter, RefHandle, weld::Button&, void)
 {
-    aRefLink.Call(this);
+    m_aRefLink.Call(this);
 }
 
 SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent)
