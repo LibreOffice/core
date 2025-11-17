@@ -1553,6 +1553,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOLEObjectAnimationTarget)
 
     const OUString sOleId = getXPath(
         pXmlDoc, "/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "id");
+    const OUString sPicId = getXPath(pXmlDoc,
+                                     "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/"
+                                     "a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr",
+                                     "id");
+
+    // Check OLE id is different from pic id
+    CPPUNIT_ASSERT_MESSAGE("OLE id is same as pic id", sOleId != sPicId);
 
     // Check animation target spid matches OLE object id
     assertXPath(pXmlDoc,
