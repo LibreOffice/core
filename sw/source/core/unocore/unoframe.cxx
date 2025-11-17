@@ -3076,6 +3076,14 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     if (!::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
         throw lang::IllegalArgumentException();
 
+    if (SwStartNode const*const pFly{aIntPam.GetPoint()->GetNode().FindFlyStartNode()})
+    {
+        if (pFly == &pFormat->GetContent().GetContentIdx()->GetNode())
+        {
+            throw lang::IllegalArgumentException(u"cannot anchor object to itself"_ustr, nullptr, 1);
+        }
+    }
+
     SfxItemSetFixed<RES_ANCHOR, RES_ANCHOR> aSet( rDoc.GetAttrPool() );
     aSet.SetParent(&pFormat->GetAttrSet());
     SwFormatAnchor aAnchor = aSet.Get(RES_ANCHOR);
