@@ -274,7 +274,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162916_nastyTOC, "tdf162916_nastyTOC.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFontEsc)
 {
-    loadAndSave("test_tdf120412.docx");
+    createSwDoc("test_tdf120412.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc =parseExport(u"word/document.xml"_ustr);
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
@@ -428,7 +429,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
 {
-    loadAndSave("fdo73389.docx");
+    createSwDoc("fdo73389.docx");
+    save(mpFilter);
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The second fix used variable width.
     // The recent fix uses fixed width again, according to the fixed width cells.
@@ -440,7 +442,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 {
-    loadAndSave("fdo73389.docx");
+    createSwDoc("fdo73389.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing", "after", u"0");
@@ -460,7 +463,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
 {
-    loadAndSave("tdf59274.docx");
+    createSwDoc("tdf59274.docx");
+    save(mpFilter);
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -727,7 +731,8 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
 {
-    loadAndSave("tdf116194.docx");
+    createSwDoc("tdf116194.docx");
+    save(mpFilter);
     // The problem was that the importer lost consecutive tables with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
@@ -735,7 +740,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 {
-    loadAndSave("tdf134606.docx");
+    createSwDoc("tdf134606.docx");
+    save(mpFilter);
     // The problem was that the importer lost the nested table structure with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl");

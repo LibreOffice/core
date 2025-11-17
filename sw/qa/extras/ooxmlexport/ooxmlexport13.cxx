@@ -130,7 +130,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121666_lostPage)
 {
-    loadAndSave("tdf121666_lostPage.docx");
+    createSwDoc("tdf121666_lostPage.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", u"page");
     // The second page break is exported too.
@@ -152,7 +153,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140182_extraPagebreak, "tdf140182_extraPagebreak
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
 {
-    loadAndSave("tdf121659_loseColumnBrNextToShape.docx");
+    createSwDoc("tdf121659_loseColumnBrNextToShape.docx");
+    save(mpFilter);
     // The third paragraph contains a manual column break and a shape.
     // The column break was moved into the shape during the first import
     // (messing also the shape position), and eliminated during the second import,
@@ -677,7 +679,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameSizeExport)
 {
-    loadAndSave("floating-tables-anchor.docx");
+    createSwDoc("floating-tables-anchor.docx");
+    save(mpFilter);
     // Make sure the table width is 4000
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tblPr/w:tblW", "w", u"4000");
@@ -723,7 +726,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTextInput)
 {
-    loadAndSave("textinput.odt");
+    createSwDoc("textinput.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -830,7 +834,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 {
-    loadAndSave("tdf123460.docx");
+    createSwDoc("tdf123460.docx");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -846,7 +851,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 //tdf#125298: fix charlimit restrictions in bookmarknames and field references if they contain non-ascii characters
 CPPUNIT_TEST_FIXTURE(Test, testTdf125298)
 {
-    loadAndSave("tdf125298_crossreflink_nonascii_charlimit.docx");
+    createSwDoc("tdf125298_crossreflink_nonascii_charlimit.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // check whether test file keeps non-ascii values or not
     OUString bookmarkName1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name");
@@ -903,7 +909,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlFrameVml)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119037)
 {
-    loadAndSave("tdf119037.odt");
+    createSwDoc("tdf119037.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -961,7 +968,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119037)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125657)
 {
-    loadAndSave("tdf125657.docx");
+    createSwDoc("tdf125657.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     auto checkAttrIsInt = [&](const char* sAttrName) {
@@ -995,7 +1003,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf78657)
 {
-    loadAndSave("tdf78657_picture_hyperlink.docx");
+    createSwDoc("tdf78657_picture_hyperlink.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pXmlRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/wp:docPr/a:hlinkClick", 1);
@@ -1019,7 +1028,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125518)
 {
-    loadAndSave("tdf125518.odt");
+    createSwDoc("tdf125518.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1061,7 +1071,8 @@ DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131594)
 {
-    loadAndSave("tdf131594.docx");
+    createSwDoc("tdf131594.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // lnNumType should not be exported if w:countBy="0"
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:lnNumType", 0);
@@ -1069,7 +1080,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131594)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121663)
 {
-    loadAndSave("tdf121663.docx");
+    createSwDoc("tdf121663.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // auto distance of line numbering is 0.5 cm
     assertXPath(pXmlDoc, "//w:lnNumType", "distance", u"283");
@@ -1184,7 +1196,8 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127116)
 {
-    loadAndSave("tdf127116.odt");
+    createSwDoc("tdf127116.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1196,7 +1209,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127116)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127339)
 {
-    loadAndSave("tdf127339.docx");
+    createSwDoc("tdf127339.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='#bookmark']", "TargetMode");
@@ -1204,7 +1218,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127339)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127362)
 {
-    loadAndSave("tdf127362.odt");
+    createSwDoc("tdf127362.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1218,7 +1233,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127362)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127605)
 {
-    loadAndSave("tdf127605.odt");
+    createSwDoc("tdf127605.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1230,7 +1246,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127605)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127732)
 {
-    loadAndSave("internal_hyperlink_frame.odt");
+    createSwDoc("internal_hyperlink_frame.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1242,7 +1259,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127732)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127733)
 {
-    loadAndSave("internal_hyperlink_ole.odt");
+    createSwDoc("internal_hyperlink_ole.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1255,7 +1273,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127733)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127734)
 {
-    loadAndSave("internal_hyperlink_region.odt");
+    createSwDoc("internal_hyperlink_region.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1266,7 +1285,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127734)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127735)
 {
-    loadAndSave("internal_hyperlink_table.odt");
+    createSwDoc("internal_hyperlink_table.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1277,7 +1297,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127735)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123628)
 {
-    loadAndSave("tdf123628.odt");
+    createSwDoc("tdf123628.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1299,7 +1320,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSizeImport)
 {
-    loadAndSave("tdf142693_hugePaperSizeImport.docx");
+    createSwDoc("tdf142693_hugePaperSizeImport.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", u"90369");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", u"104372");
@@ -1307,7 +1329,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSizeImport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
 {
-    loadAndSave("tdf127925.odt");
+    createSwDoc("tdf127925.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FollowedHyperlink']/w:name", "val", u"FollowedHyperlink");
@@ -1315,7 +1338,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 {
-    loadAndSave("tdf127579.odt");
+    createSwDoc("tdf127579.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", u"Hyperlink");

@@ -860,7 +860,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107359, "tdf107359-char-pitch.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf77236_MissingSolidFill)
 {
-    loadAndSave("tdf77236_MissingSolidFill.docx");
+    createSwDoc("tdf77236_MissingSolidFill.docx");
+    save(mpFilter);
     // tdf#77236: solidFill of VML shape was not exported if the colors of line and style were the same
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(
@@ -912,7 +913,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105875_VmlShapeRotationWithFlip)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133363)
 {
-    loadAndSave("tdf133363.docx");
+    createSwDoc("tdf133363.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // tdf#133363: remove extra auto space between first and second list elements
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing", "before",
@@ -1110,7 +1112,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133560)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150408_isLvl_RoundTrip)
 {
-    loadAndSave("listWithLgl.docx");
+    createSwDoc("listWithLgl.docx");
+    save(mpFilter);
 
     // Second level's numbering should use Arabic numbers for first level reference
     auto xPara = getParagraph(1);

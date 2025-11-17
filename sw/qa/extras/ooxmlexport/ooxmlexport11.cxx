@@ -165,7 +165,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 // tdf#121561: make sure w:sdt/w:sdtContent around TOC is written during ODT->DOCX conversion
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 {
-    loadAndSave("tdf121456_tabsOffset.odt");
+    createSwDoc("tdf121456_tabsOffset.odt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", u"Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", u" TOC \\f \\o \"1-9\" \\h");
@@ -175,7 +176,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129525)
 {
-    loadAndSave("tdf129525.rtf");
+    createSwDoc("tdf129525.rtf");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", u"Overview");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", u"3");
@@ -195,7 +197,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitleDocx)
 {
-    loadAndSave("tdf121456_tabsOffset.odt");
+    createSwDoc("tdf121456_tabsOffset.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -251,7 +254,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 {
-    loadAndSave("tdf76683_negativeTwipsMeasure.docx");
+    createSwDoc("tdf76683_negativeTwipsMeasure.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
     sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
@@ -355,7 +359,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 {
-    loadAndSave("parasplit-on-section-border.odt");
+    createSwDoc("parasplit-on-section-border.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -367,7 +372,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 {
-    loadAndSave("tdf44832_section_new_header.odt");
+    createSwDoc("tdf44832_section_new_header.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
@@ -413,7 +419,8 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117805)
 {
-    loadAndSave("tdf117805.odt");
+    createSwDoc("tdf117805.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -540,7 +547,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142542_cancelledAutospacing, "tdf142542_cancelle
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137655)
 {
-    loadAndSave("tdf137655.docx");
+    createSwDoc("tdf137655.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 280.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", u"0");
@@ -862,7 +870,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149996, "lorem_hyperlink.fodt")
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupedShapeLink)
 {
-    loadAndSave("grouped_link.docx");
+    createSwDoc("grouped_link.docx");
+    save(mpFilter);
     // tdf#145147 Hyperlink in grouped shape not imported
     // tdf#154469 Hyperlink in grouped shape not exported
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);

@@ -35,7 +35,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133701)
 {
-    loadAndSave("tdf133701.docx");
+    createSwDoc("tdf133701.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hSpace", u"567");
@@ -50,7 +51,8 @@ DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlZorder)
 {
-    loadAndSave("dml-zorder.odt");
+    createSwDoc("dml-zorder.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -60,7 +62,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlZorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlShapeRelsize)
 {
-    loadAndSave("dml-shape-relsize.docx");
+    createSwDoc("dml-shape-relsize.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Relative size wasn't exported all, then relativeFrom was "page", not "margin".
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", u"margin");
@@ -78,7 +81,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlPictureInTextframe)
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapeRelsize)
 {
-    loadAndSave("dml-groupshape-relsize.docx");
+    createSwDoc("dml-groupshape-relsize.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Relative size wasn't imported.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", u"margin");
@@ -391,7 +395,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDMLGroupShapeChildPosition)
 
 CPPUNIT_TEST_FIXTURE(Test, testDMLGradientFillTheme)
 {
-    loadAndSave("dml-gradientfill-theme.docx");
+    createSwDoc("dml-gradientfill-theme.docx");
+    save(mpFilter);
     // Problem was when a fill gradient was imported from a theme, (fillRef in ooxml)
     // not just the theme was written out but the explicit values too
     // Besides the duplication of values it causes problems with writing out
@@ -497,7 +502,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableFloatingMargins)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127814)
 {
-    loadAndSave("tdf127814.docx");
+    createSwDoc("tdf127814.docx");
+    save(mpFilter);
     // Paragraph top margin was 0 in a table started on a new page
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "before", u"0");
@@ -505,7 +511,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127814)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128752)
 {
-    loadAndSave("tdf128752.docx");
+    createSwDoc("tdf128752.docx");
+    save(mpFilter);
     // Paragraph bottom margin was 200, docDefault instead of table style setting
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", u"0");
@@ -513,7 +520,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128752)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119054)
 {
-    loadAndSave("tdf119054.docx");
+    createSwDoc("tdf119054.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Don't overwrite before and after spacing of Heading2 by table style.
     // Heading2 overrides table style's values from DocDefaults.
@@ -525,7 +533,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119054)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131258)
 {
-    loadAndSave("tdf131258.docx");
+    createSwDoc("tdf131258.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Use table style based bottom margin instead of the docDefaults in empty tables, too
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", u"0");
@@ -533,7 +542,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131258)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132514)
 {
-    loadAndSave("tdf132514.docx");
+    createSwDoc("tdf132514.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Keep table style setting, when the footer also contain a table
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing", "before", u"0");
@@ -547,7 +557,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153891, "tdf153891.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69636)
 {
-    loadAndSave("fdo69636.docx");
+    createSwDoc("fdo69636.docx");
+    save(mpFilter);
     /*
      * The problem was that the exporter didn't mirror the workaround of the
      * importer, regarding the btLr text frame direction: the
@@ -562,7 +573,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69636)
 
 CPPUNIT_TEST_FIXTURE(Test, testVMLData)
 {
-    loadAndSave("TestVMLData.docx");
+    createSwDoc("TestVMLData.docx");
+    save(mpFilter);
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data should not come under w:rPr element.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header3.xml"_ustr);
@@ -571,7 +583,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLData)
 
 CPPUNIT_TEST_FIXTURE(Test, testImageData)
 {
-    loadAndSave("image_data.docx");
+    createSwDoc("image_data.docx");
+    save(mpFilter);
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header3.xml"_ustr);
@@ -580,7 +593,8 @@ CPPUNIT_TEST_FIXTURE(Test, testImageData)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo70838)
 {
-    loadAndSave("fdo70838.docx");
+    createSwDoc("fdo70838.docx");
+    save(mpFilter);
     // The problem was that VMLExport::Commit didn't save the correct width and height,
     // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
 
@@ -705,7 +719,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70838)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo73215)
 {
-    loadAndSave("fdo73215.docx");
+    createSwDoc("fdo73215.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // 'rect' was 'pictureFrame', which isn't valid.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:prstGeom",
@@ -717,7 +732,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73215)
 
 CPPUNIT_TEST_FIXTURE(Test, testBehinddoc)
 {
-    loadAndSave("behinddoc.docx");
+    createSwDoc("behinddoc.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was "0", shape was in the foreground.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", u"1");
@@ -725,7 +741,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBehinddoc)
 
 CPPUNIT_TEST_FIXTURE(Test, testSmartArtAnchoredInline)
 {
-    loadAndSave("fdo73227.docx");
+    createSwDoc("fdo73227.docx");
+    save(mpFilter);
     /* Given file contains 3 DrawingML objects as 1Picture,1SmartArt and 1Shape.
      * Check for SmartArt.
     *  SmartArt should get written as "Floating Object" i.e. inside <wp:anchor> tag.
@@ -746,7 +763,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSmartArtAnchoredInline)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo65833)
 {
-    loadAndSave("fdo65833.docx");
+    createSwDoc("fdo65833.docx");
+    save(mpFilter);
     // The "editas" attribute for vml group shape was not preserved.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", u"canvas");
@@ -754,7 +772,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo65833)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
 {
-    loadAndSave("fdo73247.docx");
+    createSwDoc("fdo73247.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
@@ -763,7 +782,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo70942)
 {
-    loadAndSave("fdo70942.docx");
+    createSwDoc("fdo70942.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
                 "prst", u"ellipse");
@@ -771,7 +791,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70942)
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawinglayerPicPos)
 {
-    loadAndSave("drawinglayer-pic-pos.docx");
+    createSwDoc("drawinglayer-pic-pos.docx");
+    save(mpFilter);
     // The problem was that the position of the picture was incorrect, it was shifted towards the bottom right corner.
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
@@ -784,7 +805,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawinglayerPicPos)
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
 {
-    loadAndSave("shape-theme-preservation.docx");
+    createSwDoc("shape-theme-preservation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // check shape style has been preserved
@@ -895,14 +917,16 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO73546)
 {
-    loadAndSave("FDO73546.docx");
+    createSwDoc("FDO73546.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL",u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69616)
 {
-    loadAndSave("fdo69616.docx");
+    createSwDoc("fdo69616.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // VML
     // FIXME: VML needs correction, because DrawingML WPG shapes from now imported as
@@ -923,7 +947,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignForShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType)
 {
-    loadAndSave("LineStyle_DashType.docx");
+    createSwDoc("LineStyle_DashType.docx");
+    save(mpFilter);
     /* DOCX containing Shape with LineStyle as Dash Type should get preserved inside
      * an XML tag <a:prstDash> with value "dash", "sysDot", "lgDot", etc.
      */
@@ -940,7 +965,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType)
 
 CPPUNIT_TEST_FIXTURE(Test, testGradientFillPreservation)
 {
-    loadAndSave("gradient-fill-preservation.docx");
+    createSwDoc("gradient-fill-preservation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // check rgb colors for every step in the gradient of the first shape
@@ -978,7 +1004,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGradientFillPreservation)
 
 CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType_VML)
 {
-    loadAndSave("LineStyle_DashType_VML.docx");
+    createSwDoc("LineStyle_DashType_VML.docx");
+    save(mpFilter);
     /* DOCX containing "Shape with text inside" having Line Style as "Dash Type" should get
      * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
      */
@@ -1012,7 +1039,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOuterShdw)
 
 CPPUNIT_TEST_FIXTURE(Test, testExtentValue)
 {
-    loadAndSave("fdo74605.docx");
+    createSwDoc("fdo74605.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     sal_Int32 nX = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent", "cx").toInt32();
     // This was negative.
@@ -1027,7 +1055,8 @@ CPPUNIT_TEST_FIXTURE(Test, testExtentValue)
 // other dimension.
 CPPUNIT_TEST_FIXTURE(Test, testSyncedRelativePercent)
 {
-    loadAndSave("tdf93676-1.odt");
+    createSwDoc("tdf93676-1.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1045,7 +1074,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107119, "tdf107119.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133457)
 {
-    loadAndSave("tdf133457.docx");
+    createSwDoc("tdf133457.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[3]/w:pPr/w:framePr", "vAnchor", u"text");
@@ -1053,7 +1083,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133457)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133924)
 {
-    loadAndSave("tdf133924.docx");
+    createSwDoc("tdf133924.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "wrap", u"around");

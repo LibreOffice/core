@@ -29,7 +29,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123621)
 {
-    loadAndSave("tdf123621.docx");
+    createSwDoc("tdf123621.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
@@ -133,7 +134,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137850_compat15ZOrder, "tdf137850_compat15ZOrder
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118701)
 {
-    loadAndSave("tdf118701.docx");
+    createSwDoc("tdf118701.docx");
+    save(mpFilter);
     // This was 6, related to moving inline images after the page breaks
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 
@@ -823,7 +825,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131561_necessaryBorder, "tdf131561_necessaryBord
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135655)
 {
-    loadAndSave("tdf135655.odt");
+    createSwDoc("tdf135655.odt");
+    save(mpFilter);
     const xmlDocUniquePtr pExpDoc = parseExport(u"word/document.xml"_ustr);
     const OUString sXFillColVal = getXPath(pExpDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "fillcolor");
     CPPUNIT_ASSERT_EQUAL(u"#00A933"_ustr, sXFillColVal);
@@ -831,7 +834,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135655)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138374)
 {
-    loadAndSave("tdf138374.odt");
+    createSwDoc("tdf138374.odt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "fillcolor", u"#ffd320");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "coordsize", u"1315,6116");
@@ -919,7 +923,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125268)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138345_numberingHighlight)
 {
-    loadAndSave("tdf138345_numberingHighlight.docx");
+    createSwDoc("tdf138345_numberingHighlight.docx");
+    save(mpFilter);
     // Before the fix, the highlight was completely lost.
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/numbering.xml"_ustr);
     if (pXmlStyles)
@@ -970,7 +975,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135665, "tdf135665.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testAtPageShapeRelOrientation)
 {
-    loadAndSave("rotated_shape.fodt");
+    createSwDoc("rotated_shape.fodt");
+    save(mpFilter);
     // invalid combination of at-page anchor and horizontal-rel="paragraph"
     // caused relativeFrom="column" instead of relativeFrom="page"
 
@@ -1006,7 +1012,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAtPageShapeRelOrientation)
 
 CPPUNIT_TEST_FIXTURE(Test, testVMLallowincell)
 {
-    loadAndSave("shape-atpage-in-table.fodt");
+    createSwDoc("shape-atpage-in-table.fodt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // VML o:allowincell, apparently the default is "t"
@@ -1018,7 +1025,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLallowincell)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromBottomMarginHasFooter)
 {
-    loadAndSave("tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx");
+    createSwDoc("tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx");
+    save(mpFilter);
     // tdf#133070 The height was set relative to page print area bottom,
     // but this was handled relative to page height.
     // Note: page print area bottom = margin + footer height.
@@ -1042,7 +1050,8 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, TestTdf143028)
 {
-    loadAndSave("fail_bracePair.odt");
+    createSwDoc("fail_bracePair.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto pExportXml = parseExport(u"word/document.xml"_ustr);
@@ -1054,7 +1063,8 @@ CPPUNIT_TEST_FIXTURE(Test, TestTdf143028)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromBottomMarginNoFooter)
 {
-    loadAndSave("tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx");
+    createSwDoc("tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx");
+    save(mpFilter);
     // tdf#133070 The height was set relative to page print area bottom,
     // but this was handled relative to page height.
     // Note: page print area bottom = margin + footer height.
@@ -1065,14 +1075,16 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromBottomMarginNoFooter)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133702)
 {
-    loadAndSave("tdf133702.docx");
+    createSwDoc("tdf133702.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135667)
 {
-    loadAndSave("tdf135667.odt");
+    createSwDoc("tdf135667.odt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // This was missing.
@@ -1090,7 +1102,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135667)
 
 CPPUNIT_TEST_FIXTURE(Test, testImageSpaceSettings)
 {
-    loadAndSave("tdf135047_ImageSpaceSettings.fodt");
+    createSwDoc("tdf135047_ImageSpaceSettings.fodt");
+    save(mpFilter);
     // tdf#135047 The spaces of image were not saved.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distT", u"90170");
@@ -1132,7 +1145,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136814)
 {
-    loadAndSave("tdf136814.odt");
+    createSwDoc("tdf136814.odt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // Padding in this document is 0.10 cm which should translate to 3 pt (approx. 1.0583mm)

@@ -397,12 +397,6 @@ void SwModelTestBase::saveAndReload(const OUString& pFilter, const char* pPasswo
     loadURL(maTempFile.GetURL(), pPassword);
 }
 
-void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
-{
-    loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
-    save(mpFilter);
-}
-
 int SwModelTestBase::getPages() const
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

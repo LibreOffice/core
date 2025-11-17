@@ -57,7 +57,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomProperties)
 {
-    loadAndSave("custom-properties.docx");
+    createSwDoc("custom-properties.docx");
+    save(mpFilter);
     // tdf#133377  tdf#103987 FILESAVE XLSX: Make sure the custom/core/application
     // file properties are stored correctly after roundtrip to .docx
 
@@ -634,7 +635,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testCellBtlr)
 {
-    loadAndSave("cell-btlr.docx");
+    createSwDoc("cell-btlr.docx");
+    save(mpFilter);
     /*
      * The problem was that the exporter didn't mirror the workaround of the
      * importer, regarding the btLr text direction: the <w:textDirection
@@ -947,7 +949,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
 {
-    loadAndSave("page-borders-export-case-2.docx");
+    createSwDoc("page-borders-export-case-2.docx");
+    save(mpFilter);
     // The problem was that the exporter didn't mirror the workaround of the
     // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
     // and the inner nodes like <w:top w:space="24" ... />
@@ -969,7 +972,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
 
 CPPUNIT_TEST_FIXTURE(Test, testGrabBag)
 {
-    loadAndSave("grabbag.docx");
+    createSwDoc("grabbag.docx");
+    save(mpFilter);
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
@@ -1156,7 +1160,8 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, NoFillAttrInImagedata)
 {
-    loadAndSave("NoFillAttrInImagedata.docx");
+    createSwDoc("NoFillAttrInImagedata.docx");
+    save(mpFilter);
     //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'. The
     //source file has v:fill and no v:imagedata. Same should be in the file written by LO.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

@@ -39,7 +39,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
 {
-    loadAndSave("tdf165642_glossaryFootnote.docx");
+    createSwDoc("tdf165642_glossaryFootnote.docx");
+    save(mpFilter);
     // round-trip'ing the settings.xml file as is, it contains footnote/endnote references
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/glossary/settings.xml"_ustr);
     assertXPath(pXmlSettings, "//w:endnotePr", 1);
@@ -54,7 +55,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePos)
 {
     // Given a document with an image at the bottom-right placed there by simplePos
 
-    loadAndSave("tdf166201_simplePos.docx");
+    createSwDoc("tdf166201_simplePos.docx");
+    save(mpFilter);
 
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
                          getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
@@ -67,7 +69,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePosCM)
 {
     // Given a document with an image at the bottom-right placed there by simplePos - in cm
 
-    loadAndSave("tdf166201_simplePosCM.docx");
+    createSwDoc("tdf166201_simplePosCM.docx");
+    save(mpFilter);
 
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
@@ -179,7 +182,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165492_exactWithBottomSpacing)
     // Given a document with "exact row height" of 2cm
     // and table bottom border padding of 1.5cm...
 
-    loadAndSave("tdf165492_exactWithBottomSpacing.docx");
+    createSwDoc("tdf165492_exactWithBottomSpacing.docx");
+    save(mpFilter);
 
     // When laying out that document:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -200,7 +204,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165492_atLeastWithBottomSpacing)
     // Given a document with "minimum row height" of 2cm
     // and table bottom border padding of 1.5cm...
 
-    loadAndSave("tdf165492_atLeastWithBottomSpacing.docx");
+    createSwDoc("tdf165492_atLeastWithBottomSpacing.docx");
+    save(mpFilter);
 
     // When laying out that document:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -221,7 +226,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_consolidatedTopMargin)
     // Given a two page document with a section page break
     // which is preceded by a paragraph with a lot of lower spacing
     // and followed by a paragraph with even more upper spacing...
-    loadAndSave("tdf165047_consolidatedTopMargin.docx");
+    createSwDoc("tdf165047_consolidatedTopMargin.docx");
+    save(mpFilter);
 
     // the upper spacing is mostly "absorbed" by the preceding lower spacing, and is barely noticed
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -240,7 +246,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_contextualSpacingTopMargin)
     // which is preceded by a paragraph with a lot of lower spacing
     // and followed by a paragraph with a lot of upper spacing,
     // but that paragraph says "don't add space between identical paragraph styles...
-    loadAndSave("tdf165047_contextualSpacingTopMargin.docx");
+    createSwDoc("tdf165047_contextualSpacingTopMargin.docx");
+    save(mpFilter);
 
     // the upper spacing is ignored since the paragraph styles are the same
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -458,7 +465,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits4, "tdf167721_chUnits4.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf167721_zeroCh)
 {
-    loadAndSave("tdf167721_zeroCh.odt");
+    createSwDoc("tdf167721_zeroCh.odt");
+    save(mpFilter);
 
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
@@ -541,7 +549,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
 {
-    loadAndSave("tdf165933.docx");
+    createSwDoc("tdf165933.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the fix it fails with
@@ -555,7 +564,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDocxExport)
 {
     // Given a document with <del>A<format>B</format>C</del> style redlines:
     // When exporting that document:
-    loadAndSave("del-then-format.docx");
+    createSwDoc("del-then-format.docx");
+    save(mpFilter);
 
     // Then make sure delete "under" format uses the <w:delText> markup:
     // Without the accompanying fix in place, this test would have failed with:
@@ -596,7 +606,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139418, "tdf139418.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testAnnotationRef)
 {
-    loadAndSave("comment-annotationref.docx");
+    createSwDoc("comment-annotationref.docx");
+    save(mpFilter);
 
     // Check that the exported comment also has annotationRef
     xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
@@ -632,7 +643,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf166511)
 {
-    loadAndSave("tdf166511.docx");
+    createSwDoc("tdf166511.docx");
+    save(mpFilter);
 
     // The reproducer for tdf#166511 depends on result having footer2 and footer3.xml
     // Original bugdoc only has footer1.xml, and the result only started having multiples
@@ -688,7 +700,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166511)
 
 CPPUNIT_TEST_FIXTURE(Test, testLineBreakInRef)
 {
-    loadAndSave("line-break-in-ref.docx");
+    createSwDoc("line-break-in-ref.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Without the fix if fails with

@@ -64,14 +64,16 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
 {
     // Without the accompanying fix in place, this test would have failed with an assertion failure,
     // we produced not-well-formed XML on save.
-    loadAndSave("inline-sdt-header.docx");
+    createSwDoc("inline-sdt-header.docx");
+    save(mpFilter);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
 {
     // Without the accompanying fix in place, this test would have failed with an assertion failure,
     // we produced not-well-formed XML on save.
-    loadAndSave("cell-sdt-redline.docx");
+    createSwDoc("cell-sdt-redline.docx");
+    save(mpFilter);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148956_directEndFormatting)
@@ -163,7 +165,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStriket
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 {
-    loadAndSave("tdf154478.docx");
+    createSwDoc("tdf154478.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
     OUString aValues[5] = { u"Comment1 seen."_ustr, u"Comment2 seen."_ustr, u"Comment3 NOTseen."_ustr, u"Comment4 NOTseen."_ustr, u"Comment5 NOTseen."_ustr };
@@ -179,7 +182,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 {
-    loadAndSave("tdf153592_columnBreaks.docx");
+    createSwDoc("tdf153592_columnBreaks.docx");
+    save(mpFilter);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The two column breaks were lost on import. (I wouldn't complain if they were at 3,5)
@@ -311,7 +315,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePrWrapSpacing)
 {
-    loadAndSave("tdf154703_framePrWrapSpacing.docx");
+    createSwDoc("tdf154703_framePrWrapSpacing.docx");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -522,7 +527,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_firstIndentAfterBreak14, "tdf153964_first
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
 {
-    loadAndSave("tdf148834_lineNumbering.odt");
+    createSwDoc("tdf148834_lineNumbering.odt");
+    save(mpFilter);
 
     xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
     // user specified: do not include in line numbering
@@ -535,7 +541,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
 {
-    loadAndSave("tdf157598.docx");
+    createSwDoc("tdf157598.docx");
+    save(mpFilter);
 
     xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
 
@@ -590,7 +597,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf151912)
 {
-    loadAndSave("tdf151912.docx");
+    createSwDoc("tdf151912.docx");
+    save(mpFilter);
     // For now just ensure roundtrip is successful
 
     //tdf#151548 - ensure block SDT preserves id (instead of random re-assignment)

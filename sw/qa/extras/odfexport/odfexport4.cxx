@@ -143,7 +143,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
 {
     // 1. Check we have the original edit time info
-    loadAndSave("personalmetadata.odt");
+    createSwDoc("personalmetadata.odt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration",
                        u"PT21M22S");
@@ -154,7 +155,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
     pBatch->commit();
 
     // 2. Check edit time info is 0
-    loadAndSave("personalmetadata.odt");
+    createSwDoc("personalmetadata.odt");
+    save(mpFilter);
     pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", u"P0D");
 
@@ -389,7 +391,8 @@ CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeWithHyperlink)
 {
-    loadAndSave("shape-with-hyperlink.odt");
+    createSwDoc("shape-with-hyperlink.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);

@@ -224,7 +224,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
 {
-    loadAndSave("para-style-num-level.docx");
+    createSwDoc("para-style-num-level.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -236,7 +237,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 {
     // Given a document with a clearing break, when saving to DOCX:
-    loadAndSave("clearing-break.docx");
+    createSwDoc("clearing-break.docx");
+    save(mpFilter);
 
     // Then make sure that the clearing break is not lost:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -489,7 +491,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 {
-    loadAndSave("tdf148494.docx");
+    createSwDoc("tdf148494.docx");
+    save(mpFilter);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -501,7 +504,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137466)
 {
-    loadAndSave("tdf137466.docx");
+    createSwDoc("tdf137466.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
@@ -538,7 +542,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
     });
 
     // When saving that document:
-    loadAndSave("dont-add-new-styles.docx");
+    createSwDoc("dont-add-new-styles.docx");
+    save(mpFilter);
 
     // Then make sure that export doesn't have additional styles, Caption was one of them:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
@@ -908,7 +913,8 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81507)
 {
-    loadAndSave("tdf81507.docx");
+    createSwDoc("tdf81507.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:text w:multiLine="1"/>
@@ -1010,7 +1016,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_1, "tdf148455_1.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148455_2)
 {
-    loadAndSave("tdf148455_2.docx");
+    createSwDoc("tdf148455_2.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Find list id for restarted list
@@ -1074,7 +1081,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
 {
-    loadAndSave("tdf149200.docx");
+    createSwDoc("tdf149200.docx");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 

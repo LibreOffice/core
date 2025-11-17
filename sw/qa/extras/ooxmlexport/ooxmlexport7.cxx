@@ -46,7 +46,8 @@ protected:
 
 CPPUNIT_TEST_FIXTURE(Test,  testChildNodesOfCubicBezierTo)
 {
-    loadAndSave("FDO74774.docx");
+    createSwDoc("FDO74774.docx");
+    save(mpFilter);
     /* Number of children required by cubicBexTo is 3 of type "pt".
        While exporting, sometimes the child nodes are less than 3.
        The test case ensures that there are 3 child nodes of type "pt"
@@ -60,7 +61,8 @@ CPPUNIT_TEST_FIXTURE(Test,  testChildNodesOfCubicBezierTo)
 
 CPPUNIT_TEST_FIXTURE(Test, testMSwordHang)
 {
-    loadAndSave("test_msword_hang.docx");
+    createSwDoc("test_msword_hang.docx");
+    save(mpFilter);
     // fdo#74771:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline", "distT", u"0");
@@ -78,7 +80,8 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapeThemeFont, "groupshape-theme-font.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testAnchorIdForWP14AndW14)
 {
-    loadAndSave("AnchorId.docx");
+    createSwDoc("AnchorId.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline", "anchorId", u"78735EFD");
@@ -96,7 +99,8 @@ DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTextWatermark)
 {
-    loadAndSave("textWatermark.docx");
+    createSwDoc("textWatermark.docx");
+    save(mpFilter);
     //The problem was that the watermark ID was not preserved,
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'PowerPlusWaterMarkObject' string in it
@@ -111,7 +115,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTextWatermark)
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureWatermark)
 {
-    loadAndSave("pictureWatermark.docx");
+    createSwDoc("pictureWatermark.docx");
+    save(mpFilter);
     //The problem was that the watermark ID was not preserved,
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'WordPictureWaterMarkObject' string in it
@@ -125,7 +130,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureWatermark)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo76249)
 {
-    loadAndSave("fdo76249.docx");
+    createSwDoc("fdo76249.docx");
+    save(mpFilter);
     /*
      * The Locked Canvas is imported correctly, but while exporting
      * the drawing element is exported inside a textbox. However the drawing has to exported
@@ -138,7 +144,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76249)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo76979)
 {
-    loadAndSave("fdo76979.docx");
+    createSwDoc("fdo76979.docx");
+    save(mpFilter);
     // The problem was that black was exported as "auto" fill color, resulting in well-formed, but invalid XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     // This was "auto", not "FFFFFF".
@@ -147,7 +154,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76979)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104539)
 {
-    loadAndSave("tdf104539.odt");
+    createSwDoc("tdf104539.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -158,7 +166,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104539)
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
 {
-    loadAndSave("shape-effect-preservation.docx");
+    createSwDoc("shape-effect-preservation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // first shape with outer shadow, rgb color
@@ -293,7 +302,8 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
 
 CPPUNIT_TEST_FIXTURE(Test, testShape3DEffectPreservation)
 {
-    loadAndSave("shape-3d-effect-preservation.docx");
+    createSwDoc("shape-3d-effect-preservation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // first shape: extrusion and shift on z, rotated camera with zoom, rotated light rig
@@ -403,7 +413,8 @@ CPPUNIT_TEST_FIXTURE(Test, testShape3DEffectPreservation)
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureEffectPreservation)
 {
-    loadAndSave("picture-effects-preservation.docx");
+    createSwDoc("picture-effects-preservation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // first picture: glow effect with theme color and transformations, 3d rotation and extrusion
@@ -458,7 +469,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureEffectPreservation)
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
 {
-    loadAndSave("picture-artistic-effects-preservation.docx");
+    createSwDoc("picture-artistic-effects-preservation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pRelsDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
@@ -556,14 +568,16 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
 
 CPPUNIT_TEST_FIXTURE(Test, fdo77719)
 {
-    loadAndSave("fdo77719.docx");
+    createSwDoc("fdo77719.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:custGeom[1]", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNestedAlternateContent)
 {
-    loadAndSave("nestedAlternateContent.docx");
+    createSwDoc("nestedAlternateContent.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // We check alternateContent  could not contains alternateContent (i.e. nested alternateContent)
     assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
@@ -575,7 +589,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedAlternateContent)
 
 CPPUNIT_TEST_FIXTURE(Test, test76317)
 {
-    loadAndSave("test76317.docx");
+    createSwDoc("test76317.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", "hexagon");
 }
@@ -584,21 +599,24 @@ CPPUNIT_TEST_FIXTURE(Test, test76317)
 
 CPPUNIT_TEST_FIXTURE(Test, fdo76591)
 {
-    loadAndSave("fdo76591.docx");
+    createSwDoc("fdo76591.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "relativeHeight", u"3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test76317_2K10)
 {
-    loadAndSave("test76317_2K10.docx");
+    createSwDoc("test76317_2K10.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]", "name", u"adj");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77122)
 {
-    loadAndSave("LinkedTextBoxes.docx");
+    createSwDoc("LinkedTextBoxes.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     //ensure that the text box links are preserved.
     assertXPath(pXmlDoc, "//wps:txbx[1]", "id", u"1");
@@ -607,14 +625,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77122)
 
 CPPUNIT_TEST_FIXTURE(Test, test76734_2K7)
 {
-    loadAndSave("test76734_2K7.docx");
+    createSwDoc("test76734_2K7.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]", "Requires", u"wps");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test77219)
 {
-    loadAndSave("test77219.docx");
+    createSwDoc("test77219.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "behindDoc", u"1");
 }
@@ -698,7 +718,8 @@ DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo76101)
 {
-    loadAndSave("fdo76101.docx");
+    createSwDoc("fdo76101.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:styles/w:style");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
@@ -708,7 +729,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76101)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtAndShapeOverlapping)
 {
-    loadAndSave("ShapeOverlappingWithSdt.docx");
+    createSwDoc("ShapeOverlappingWithSdt.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]");
@@ -716,7 +738,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtAndShapeOverlapping)
 
 CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
 {
-    loadAndSave("fdo78658.docx");
+    createSwDoc("fdo78658.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for lockedCanvas tag
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/lc:lockedCanvas", 1);
@@ -724,7 +747,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
 
 CPPUNIT_TEST_FIXTURE(Test, fdo78474)
 {
-    loadAndSave("fdo78474.docx");
+    createSwDoc("fdo78474.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"word/document.xml"_ustr);
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", u"rId2");
@@ -735,7 +759,8 @@ CPPUNIT_TEST_FIXTURE(Test, fdo78474)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
 {
-    loadAndSave("fdo78432.docx");
+    createSwDoc("fdo78432.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     xmlXPathObjectPtr pXmlObjs[6];
@@ -767,7 +792,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRubyHyperlink)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78300)
 {
-    loadAndSave("fdo78300.docx");
+    createSwDoc("fdo78300.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r[1]/w:drawing[1]",
@@ -776,7 +802,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78300)
 
 CPPUNIT_TEST_FIXTURE(Test, testWordArtWithinDraingtool)
 {
-    loadAndSave("testWordArtWithinDraingtool.docx");
+    createSwDoc("testWordArtWithinDraingtool.docx");
+    save(mpFilter);
 /*   * Within a file, there is a 2007 wordArt enclosed in a drawing tool
      * LO was exporting it as below:
      * Sample XML as in Original file:
@@ -795,7 +822,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWordArtWithinDraingtool)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78663)
 {
-    loadAndSave("fdo78663.docx");
+    createSwDoc("fdo78663.docx");
+    save(mpFilter);
 /*     * A 2007 word art tool is enclosed in a 2010 drawing toolWithin a file,
      * Originally the file has the following xml tag hierarchy.
      *
@@ -816,7 +844,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78663)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78957)
 {
-    loadAndSave("fdo78957.docx");
+    createSwDoc("fdo78957.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlHeader = parseExport(u"word/header2.xml"_ustr);
 
     const sal_Int64 IntMax = SAL_MAX_INT32;
@@ -830,7 +859,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78957)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79256)
 {
-    loadAndSave("fdo79256.docx");
+    createSwDoc("fdo79256.docx");
+    save(mpFilter);
     /* corruption issue also solved by fixing tdf#108064:
      * since that LO keeps MSO preset dash styles during OOXML export
      */
@@ -841,7 +871,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79256)
 
 CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDash1000thOfPercent)
 {
-    loadAndSave("dashed_line_custdash_1000th_of_percent.docx");
+    createSwDoc("dashed_line_custdash_1000th_of_percent.docx");
+    save(mpFilter);
     /* Make sure that preset line is exported correctly as "1000th of a percent".
      * This test-file has a CUSTOM dash-line that is defined as '1000th of a percent'.
      * This should be imported by LO as-is, and exported back with the same values.
@@ -860,7 +891,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDash1000thOfPercent)
 
 CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDashPercentage)
 {
-    loadAndSave("dashed_line_custdash_percentage.docx");
+    createSwDoc("dashed_line_custdash_percentage.docx");
+    save(mpFilter);
     /* Make sure that preset line is exported correctly as "1000th of a percent".
      * This test-file has a CUSTOM dash-line that is defined as percentages.
      * This should be imported by LO as '1000th of a percent', and exported back
@@ -880,7 +912,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDashPercentage)
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
 {
-    loadAndSave("comment_initials.odt");
+    createSwDoc("comment_initials.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
@@ -904,7 +937,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.doc
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79591)
 {
-    loadAndSave("fdo79591.docx");
+    createSwDoc("fdo79591.docx");
+    save(mpFilter);
     /* Values set for docPr name and shape ID attributes
      * in RT file were not valid as per UTF-8 encoding format
      * and hence was showing RT document as corrupt with error
@@ -924,7 +958,8 @@ DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo80894)
 {
-    loadAndSave("TextFrameRotation.docx");
+    createSwDoc("TextFrameRotation.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Rotation value was not roundtripped for textframe.
@@ -939,7 +974,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80894)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
 {
-    loadAndSave("fdo80895.docx");
+    createSwDoc("fdo80895.docx");
+    save(mpFilter);
     // DML shapes in header and footer were not getting rendered in LO and the same were not preserved after RT.
     // In actual there was a shape but because of fetching wrong theme for header.xml or footer.xml
     // resultant shape was with <a:noFill/> prop in <wps:spPr> hence was not visible.
@@ -956,7 +992,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118242)
 {
-    loadAndSave("tdf118242.odt");
+    createSwDoc("tdf118242.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
@@ -981,7 +1018,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118242)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapTightThrough)
 {
-    loadAndSave("wrap-tight-through.docx");
+    createSwDoc("wrap-tight-through.docx");
+    save(mpFilter);
     // These were wrapSquare without a wrap polygon before.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The first shape should be wrapThrough with a wrap polygon (was wrapSquare).
@@ -1003,7 +1041,8 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeGrayscale)
 {
-    loadAndSave("picture_colormode_grayscale.docx");
+    createSwDoc("picture_colormode_grayscale.docx");
+    save(mpFilter);
     // The problem was that the grayscale was not exported
     xmlDocUniquePtr pXmlDoc = parseExport (u"word/document.xml"_ustr);
 
@@ -1012,7 +1051,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeGrayscale)
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeBlackWhite)
 {
-    loadAndSave("picture_colormode_black_white.odt");
+    createSwDoc("picture_colormode_black_white.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport (u"word/document.xml"_ustr);
@@ -1022,7 +1062,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeBlackWhite)
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeWatermark)
 {
-    loadAndSave("picture_colormode_watermark.odt");
+    createSwDoc("picture_colormode_watermark.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport (u"word/document.xml"_ustr);
@@ -1033,7 +1074,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeWatermark)
 
 CPPUNIT_TEST_FIXTURE(Test, testExportShadow)
 {
-    loadAndSave("bnc637947.odt");
+    createSwDoc("bnc637947.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that shadows of shapes from non-OOXML origin were not exported to DrawingML
@@ -1047,7 +1089,8 @@ CPPUNIT_TEST_FIXTURE(Test, testExportShadow)
 
 CPPUNIT_TEST_FIXTURE(Test, testExportAdjustmentValue)
 {
-    loadAndSave("tdf91429.docx");
+    createSwDoc("tdf91429.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd", "fmla", u"val 50000");
@@ -1144,7 +1187,8 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTDF93675)
 {
-    loadAndSave("no-numlevel-but-indented.odt");
+    createSwDoc("no-numlevel-but-indented.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:ind", "start", u"1418");
@@ -1154,7 +1198,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTDF93675)
 
 CPPUNIT_TEST_FIXTURE(Test, testFlipAndRotateCustomShape)
 {
-    loadAndSave("flip_and_rotate.odt");
+    createSwDoc("flip_and_rotate.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1186,7 +1231,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFlipAndRotateCustomShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92335)
 {
-    loadAndSave("tdf92335.docx");
+    createSwDoc("tdf92335.docx");
+    save(mpFilter);
     // Don't export redundant ListLabel character styles
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 

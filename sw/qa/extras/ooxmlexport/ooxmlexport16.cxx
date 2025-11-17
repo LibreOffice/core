@@ -54,7 +54,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 {
-    loadAndSave("tdf136386_WrapPolygonCurve.odt");
+    createSwDoc("tdf136386_WrapPolygonCurve.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a curve with contour wrap and 'outside only'. Error was, that type 'square' was
@@ -72,7 +73,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 {
-    loadAndSave("tdf136386_WrapPolygonLineShape.odt");
+    createSwDoc("tdf136386_WrapPolygonLineShape.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a sloping line with contour wrap. Error was, that type 'square' was written and
@@ -111,7 +113,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
 {
-    loadAndSave("tdf143432_Frame_WrapTextMode.odt");
+    createSwDoc("tdf143432_Frame_WrapTextMode.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
@@ -199,7 +202,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
 
 DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
 {
-    loadAndSave("151384Hyperlink.odt");
+    createSwDoc("151384Hyperlink.odt");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", u"Hyperlink");
@@ -424,7 +428,8 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
-    loadAndSave("gutter-top.docx");
+    createSwDoc("gutter-top.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     CPPUNIT_ASSERT(pXmlSettings);
     // Without the accompanying fix in place, this test would have failed with:
@@ -469,7 +474,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 {
-    loadAndSave("tdf148671.docx");
+    createSwDoc("tdf148671.docx");
+    save(mpFilter);
     // Don't assert with 'pFieldMark' failed when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -554,7 +560,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
     officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
     batch->commit();
 
-    loadAndSave("tdf135774_numberingShading.docx");
+    createSwDoc("tdf135774_numberingShading.docx");
+    save(mpFilter);
     // This test uses a custom setting to export CharBackground as Highlight instead of the 7.0 default of Shading.
 
     // Before the fix, the imported shading was converted into a red highlight.
@@ -711,7 +718,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149198, "tdf149198.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
 {
-    loadAndSave("footer-margin-lost.docx");
+    createSwDoc("footer-margin-lost.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 709
@@ -910,7 +918,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105688, "tdf105688.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
 {
-    loadAndSave("CommentReply.docx");
+    createSwDoc("CommentReply.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     xmlDocUniquePtr pXmlCommExt = parseExport(u"word/commentsExtended.xml"_ustr);
     CPPUNIT_ASSERT(pXmlComm);
@@ -928,7 +937,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
 {
-    loadAndSave("CommentDone.docx");
+    createSwDoc("CommentDone.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
     OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
@@ -1003,7 +1013,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 {
-    loadAndSave("tdf142361ShadowDirection.odt");
+    createSwDoc("tdf142361ShadowDirection.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The attribute 'rotWithShape' has the default value 'true' in OOXML, so Words interprets a
@@ -1019,7 +1030,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
 {
-    loadAndSave("tdf150542.docx");
+    createSwDoc("tdf150542.docx");
+    save(mpFilter);
 
     xmlDocUniquePtr pSettingsDoc = parseExport(u"word/settings.xml"_ustr);
     // Ensure that all docvars from input are written back and with correct values.
@@ -1040,7 +1052,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 {
-    loadAndSave("tdf139549.docx");
+    createSwDoc("tdf139549.docx");
+    save(mpFilter);
     // Document contains a VML textbox, the position of the textbox was incorrect.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape", "style");

@@ -204,7 +204,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
 {
     // Given a document with two floating tables after each other:
     // When saving that document to DOCX:
-    loadAndSave("floattable-anchorpos.docx");
+    createSwDoc("floattable-anchorpos.docx");
+    save(mpFilter);
 
     // Then make sure that the dummy anchor of the first floating table is not written to the export
     // result:
@@ -292,7 +293,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150822)
 CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
 {
     // Given a document that changes a lot between a few numbering styles and overrides:
-    loadAndSave("mixednumberings.docx");
+    createSwDoc("mixednumberings.docx");
+    save(mpFilter);
 
     // Then make sure that we export a reasonable number of "w:num" elements:
     xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
@@ -304,7 +306,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf169274)
 {
-    loadAndSave("tdf169274.docx");
+    createSwDoc("tdf169274.docx");
+    save(mpFilter);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     const OString sPath = "//w:body/w:tbl/w:tr/w:tc/w:p/w:sdt/"_ostr;

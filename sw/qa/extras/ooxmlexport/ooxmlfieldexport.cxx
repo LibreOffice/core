@@ -1034,7 +1034,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142464_ampm)
 CPPUNIT_TEST_FIXTURE(Test, testSdtDatePicker)
 {
     // Check that roundtrip for date picker field does not lose essential data
-    loadAndSave("test_sdt_datepicker.docx");
+    createSwDoc("test_sdt_datepicker.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Placeholder is here

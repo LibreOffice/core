@@ -172,7 +172,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78749)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128207)
 {
-    loadAndSave("tdf128207.docx");
+    createSwDoc("tdf128207.docx");
+    save(mpFilter);
     //There was the charts on each other, because their horizontal and vertical position was 0!
     xmlDocUniquePtr p_XmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(p_XmlDoc);
@@ -181,7 +182,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128207)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123873)
 {
-    loadAndSave("tdf123873.docx");
+    createSwDoc("tdf123873.docx");
+    save(mpFilter);
     //OLE Object were overlapped due to missing wrap import
     xmlDocUniquePtr p_XmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(p_XmlDoc);
@@ -191,7 +193,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123873)
 
 CPPUNIT_TEST_FIXTURE(Test, Tdf133065)
 {
-    loadAndSave("tdf133065.odt");
+    createSwDoc("tdf133065.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     auto pxmldoc = parseExport(u"word/document.xml"_ustr);
@@ -231,7 +234,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107020)
 {
-    loadAndSave("tdf107020.docx");
+    createSwDoc("tdf107020.docx");
+    save(mpFilter);
     if (!IsDefaultDPI())
         return;
     xmlDocUniquePtr p_XmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -248,7 +252,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107020)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf130814ooxml)
 {
-    loadAndSave("tdf130814.docx");
+    createSwDoc("tdf130814.docx");
+    save(mpFilter);
     xmlDocUniquePtr p_XmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
@@ -297,7 +302,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf130120)
 {
-    loadAndSave("tdf130120.docx");
+    createSwDoc("tdf130120.docx");
+    save(mpFilter);
     // Text for exporting the allowincell attribute:
     xmlDocUniquePtr p_XmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
@@ -306,7 +312,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130120)
 
 CPPUNIT_TEST_FIXTURE(Test, Tdf133030)
 {
-    loadAndSave("tdf133030.docx");
+    createSwDoc("tdf133030.docx");
+    save(mpFilter);
     auto pExport = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pExport);
 
@@ -489,7 +496,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130610)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121045)
 {
-    loadAndSave("tdf121045.docx");
+    createSwDoc("tdf121045.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:sz", "val", u"20");
@@ -552,7 +560,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81567)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92472)
 {
-    loadAndSave("tdf92472.docx");
+    createSwDoc("tdf92472.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:sz", "val", u"20");
@@ -574,7 +583,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92472)
 
 CPPUNIT_TEST_FIXTURE(Test, Tdf133035)
 {
-    loadAndSave("tdf133035.docx");
+    createSwDoc("tdf133035.docx");
+    save(mpFilter);
     auto pxml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pxml);
     OUString aXmlVal = getXPath(pxml, "/w:document/w:body/w:p[1]/w:r[1]/w:object/v:shape", "style");
@@ -713,7 +723,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
 {
-    loadAndSave("tdf121661.docx");
+    createSwDoc("tdf121661.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", u"851");
 
@@ -766,7 +777,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf161628, "tdf132599_frames_on_right_pages_no_hyph
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf155707)
 {
-    loadAndSave("tdf155707.docx");
+    createSwDoc("tdf155707.docx");
+    save(mpFilter);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -778,7 +790,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155707)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 {
-    loadAndSave("fdo76163.docx");
+    createSwDoc("fdo76163.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlSettings, "/w:settings/w:consecutiveHyphenLimit", "val", u"1");
 
@@ -789,14 +802,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121658)
 {
-    loadAndSave("tdf121658.docx");
+    createSwDoc("tdf121658.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStyleConfNested)
 {
-    loadAndSave("table-style-conf-nested.docx");
+    createSwDoc("table-style-conf-nested.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed, as the custom table cell

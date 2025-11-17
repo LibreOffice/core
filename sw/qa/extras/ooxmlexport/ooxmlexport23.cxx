@@ -95,7 +95,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
 {
-    loadAndSave("tdf132766.docx");
+    createSwDoc("tdf132766.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -119,7 +120,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128245)
 {
-    loadAndSave("tdf128245.docx");
+    createSwDoc("tdf128245.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -182,7 +184,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95189)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128820)
 {
-    loadAndSave("tdf128820.fodt");
+    createSwDoc("tdf128820.fodt");
+    save(mpFilter);
     // Import of exported DOCX failed because of wrong namespace used for wsp element
     // Now test the exported XML, in case we stop failing opening invalid files
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
@@ -208,7 +211,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128820)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128889)
 {
-    loadAndSave("tdf128889.fodt");
+    createSwDoc("tdf128889.fodt");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
@@ -265,7 +269,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 {
-    loadAndSave("tdf77796.docx");
+    createSwDoc("tdf77796.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // cell paddings from table style
@@ -278,7 +283,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128290)
 {
-    loadAndSave("tdf128290.odt");
+    createSwDoc("tdf128290.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
@@ -379,7 +385,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 {
-    loadAndSave("tdf123757.docx");
+    createSwDoc("tdf123757.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl", 2);
@@ -387,7 +394,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141172)
 {
-    loadAndSave("tdf141172.docx");
+    createSwDoc("tdf141172.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/endnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // This was 1 (lost table during copying endnote content)
@@ -396,7 +404,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141172)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141548)
 {
-    loadAndSave("tdf141548.docx");
+    createSwDoc("tdf141548.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/endnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // This was 0 (lost text content of the run with endnoteRef)
@@ -407,7 +416,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141548)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143399)
 {
-    loadAndSave("tdf143399.docx");
+    createSwDoc("tdf143399.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     // These were 0 (lost text content of documents both with footnotes and endnotes)
@@ -425,7 +435,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143399)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143583)
 {
-    loadAndSave("tdf143583_emptyParaAtEndOfFootnote.docx");
+    createSwDoc("tdf143583_emptyParaAtEndOfFootnote.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:footnotes/w:footnote[3]/w:p", 2);
@@ -439,7 +450,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143583)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
 {
-    loadAndSave("tdf152203.docx");
+    createSwDoc("tdf152203.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -456,7 +468,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152203)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
 {
-    loadAndSave("tdf152506.docx");
+    createSwDoc("tdf152506.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -473,7 +486,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153255)
 {
-    loadAndSave("tdf153255.docx");
+    createSwDoc("tdf153255.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -508,7 +522,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153255)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153804)
 {
-    loadAndSave("tdf153804.docx");
+    createSwDoc("tdf153804.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXml = parseExport(u"word/footnotes.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
 
@@ -719,7 +734,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 
 CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 {
-    loadAndSave("tdf131776_StrikeoutGroupShapeText.docx");
+    createSwDoc("tdf131776_StrikeoutGroupShapeText.docx");
+    save(mpFilter);
     // tdf#131776: Check if strikeout is used in shape group texts
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
 
@@ -780,7 +796,8 @@ CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 {
-    loadAndSave("tdf131539.odt");
+    createSwDoc("tdf131539.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //The positions of OLE objects were not exported, check if now it is exported correctly
@@ -794,7 +811,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 
 CPPUNIT_TEST_FIXTURE(Test, testLineWidthRounding)
 {
-    loadAndSave("tdf126363_LineWidthRounding.docx");
+    createSwDoc("tdf126363_LineWidthRounding.docx");
+    save(mpFilter);
     // tdf#126363: check if line with stays the same after export
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     // this was 57240 (it differs from the original 57150, losing the preset line width)
@@ -870,7 +888,8 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
 CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredX)
 {
     // tdf#97517 The "flip:x" was not handled for VML line shapes.
-    loadAndSave("tdf97517_testVmlLineShapeMirroredX.docx");
+    createSwDoc("tdf97517_testVmlLineShapeMirroredX.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString sStyle = getXPath(
         pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
@@ -881,7 +900,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredX)
 CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredY)
 {
     // tdf#137678 The "flip:y" was not handled for VML line shapes.
-    loadAndSave("tdf137678_testVmlLineShapeMirroredY.docx");
+    createSwDoc("tdf137678_testVmlLineShapeMirroredY.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString sStyle = getXPath(
         pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
@@ -891,7 +911,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredY)
 
 CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeRotated)
 {
-    loadAndSave("tdf137765_testVmlLineShapeRotated.docx");
+    createSwDoc("tdf137765_testVmlLineShapeRotated.docx");
+    save(mpFilter);
     // tdf#137765 The "rotation" (in style attribute) was not handled correctly for VML line shapes.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // it was 1.55pt,279.5pt

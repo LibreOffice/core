@@ -28,7 +28,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76248)
 {
-    loadAndSave("FDO76248.docx");
+    createSwDoc("FDO76248.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // In two cases the a:graphicData elements had no children, which is invalid.
     assertXPath(pXmlDoc, "//a:graphicData[not(*)]", 0);
@@ -75,7 +76,8 @@ DECLARE_OOXMLEXPORT_TEST(testTscp, "tscp.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo76589 )
 {
-    loadAndSave("fdo76589.docx");
+    createSwDoc("fdo76589.docx");
+    save(mpFilter);
     /* Numbered list was not preserve after RT.
      * In numbering.xml, when NumberingType is "decimal" and level is zero,
      * w:val of w:lvlText was empty.
@@ -88,7 +90,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo76589 )
 
 CPPUNIT_TEST_FIXTURE(Test, testDecimalNumberingNoLeveltext)
 {
-    loadAndSave("decimal-numbering-no-leveltext.docx");
+    createSwDoc("decimal-numbering-no-leveltext.docx");
+    save(mpFilter);
     // This was "%1", not empty: we turned a kind-of-none numbering into a decimal one.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val",u"");
@@ -96,7 +99,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDecimalNumberingNoLeveltext)
 
 CPPUNIT_TEST_FIXTURE(Test, testNoDuplicateAttributeExport)
 {
-    loadAndSave("duplicate-east-asia.odt");
+    createSwDoc("duplicate-east-asia.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // File asserting while saving in LO.
@@ -170,7 +174,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120852_readOnlyUnProtected)
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorPropertySdt)
 {
-    loadAndSave("author-property.docx");
+    createSwDoc("author-property.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath", u"/ns1:coreProperties[1]/ns0:creator[1]");
@@ -182,7 +187,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorPropertySdt)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76586)
 {
-    loadAndSave("fdo76586.docx");
+    createSwDoc("fdo76586.docx");
+    save(mpFilter);
     /*
      * In the test file gridCol had only one value for entire table width
      * while there are two cells in a table row.
@@ -197,7 +203,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76586)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76587 )
 {
-    loadAndSave("fdo76587.docx");
+    createSwDoc("fdo76587.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "line", u"240");
     assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "lineRule", u"auto");
@@ -205,7 +212,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76587 )
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77890 )
 {
-    loadAndSave("fdo77890.docx");
+    createSwDoc("fdo77890.docx");
+    save(mpFilter);
     /*
     Ensure that the page break is preserved i.e it should not be converted to a section break, in case
     if the different first page is set for the pages in the document.
@@ -232,7 +240,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberedList)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
 {
-    loadAndSave("NumberedList.docx");
+    createSwDoc("NumberedList.docx");
+    save(mpFilter);
     // keep width of fixed size cells in the nested table
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 4030 and 4249.
@@ -242,7 +251,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131959)
 {
-    loadAndSave("NumberedList.docx");
+    createSwDoc("NumberedList.docx");
+    save(mpFilter);
     // import tblInd from table style
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 0.
@@ -252,7 +262,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131959)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131203)
 {
-    loadAndSave("tdf131203.docx");
+    createSwDoc("tdf131203.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // loading thrown divide_by_zero()
     assertXPath(pXmlDoc, "//w:tbl", 2);
@@ -260,7 +271,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131203)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76597)
 {
-    loadAndSave("fdo76597.docx");
+    createSwDoc("fdo76597.docx");
+    save(mpFilter);
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", u"96");
@@ -269,7 +281,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76597)
 
 CPPUNIT_TEST_FIXTURE(Test, testContentTypeTIF)
 {
-    loadAndSave("fdo77476.docx");
+    createSwDoc("fdo77476.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tiff']", "PartName", u"/word/media/image1.tif");
@@ -285,7 +298,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTable)
 {
-    loadAndSave("fdo77887.docx");
+    createSwDoc("fdo77887.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "horzAnchor", u"margin");
@@ -301,7 +315,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeRight)
 {
-    loadAndSave("tdf90681-1.odt");
+    createSwDoc("tdf90681-1.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -313,7 +328,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeRight)
 
 CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeleft)
 {
-    loadAndSave("tdf90681-2.odt");
+    createSwDoc("tdf90681-2.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -323,7 +339,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeleft)
 
 CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeTableInTable)
 {
-    loadAndSave("ooo96040-2.odt");
+    createSwDoc("ooo96040-2.odt");
+    save(mpFilter);
     parseExport(u"word/document.xml"_ustr);
 
     // Check tdf#161202 - this document has all kinds of tables inside hidden sections.
@@ -348,7 +365,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkContainingPlaceholderField)
 
 CPPUNIT_TEST_FIXTURE(Test, testTablePreferredWidth)
 {
-    loadAndSave("tablePreferredWidth.docx");
+    createSwDoc("tablePreferredWidth.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Problem :If the table preferred width is in percent, then after RT it changes to 0 & width type changes
@@ -359,7 +377,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTablePreferredWidth)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO75431)
 {
-    loadAndSave("fdo75431.docx");
+    createSwDoc("fdo75431.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "//w:tbl", 2);
@@ -368,7 +387,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO75431)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77725)
 {
-    loadAndSave("fdo77725.docx");
+    createSwDoc("fdo77725.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlFootnotes = parseExport(u"word/footnotes.xml"_ustr);
 
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[1]", 0);
@@ -391,7 +411,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldRotation)
 
 CPPUNIT_TEST_FIXTURE(Test, testFootnoteSeparator)
 {
-    loadAndSave("footnotesep.fodt");
+    createSwDoc("footnotesep.fodt");
+    save(mpFilter);
     // footnote separator definitions - taken from default page style
     xmlDocUniquePtr pXmlFootnotes = parseExport(u"word/footnotes.xml"_ustr);
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "id", u"0");
@@ -411,7 +432,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteSeparator)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121441)
 {
-    loadAndSave("tdf121441.docx");
+    createSwDoc("tdf121441.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlFootnotes = parseExport(u"word/footnotes.xml"_ustr);
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r[1]/w:rPr/w:rStyle", 1);
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r[2]/w:rPr/w:rStyle", 0);
@@ -426,7 +448,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121441)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77812)
 {
-    loadAndSave("fdo77812.docx");
+    createSwDoc("fdo77812.docx");
+    save(mpFilter);
     /* Additional sectPr was getting inserted and hence Column properties
      * were getting added into this additional sectPr instead of Default setPr.
      */
@@ -443,7 +466,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77812)
 
 CPPUNIT_TEST_FIXTURE(Test, testContentTypeOLE)
 {
-    loadAndSave("fdo77759.docx");
+    createSwDoc("fdo77759.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
     assertXPath(pXmlDoc,
@@ -467,7 +491,8 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeOLE)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
 {
-    loadAndSave("fdo78420.docx");
+    createSwDoc("fdo78420.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlHeader = parseExport(u"word/header2.xml"_ustr);
 
     xmlDocUniquePtr pXmlHeaderRels = parseExport(u"word/_rels/header2.xml.rels"_ustr);
@@ -490,7 +515,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78284)
 {
-    loadAndSave("fdo78284.docx");
+    createSwDoc("fdo78284.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
     assertXPath(pXmlDoc,"/ContentType:Types/ContentType:Default[@Extension='png']",
                         "ContentType",
@@ -507,7 +533,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78384)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78469)
 {
-    loadAndSave("fdo78469.docx");
+    createSwDoc("fdo78469.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header1.xml"_ustr);
     // make sure dataBinding & text tags not present in sdtcontent
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:dataBinding[1]",0);
@@ -516,7 +543,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78469)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78887)
 {
-    loadAndSave("fdo78887.docx");
+    createSwDoc("fdo78887.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[1]", 1);
@@ -526,7 +554,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78887)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78887b)
 {
-    loadAndSave("missing_newline.odt");
+    createSwDoc("missing_newline.odt");
+    save(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -538,7 +567,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78887b)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78651)
 {
-    loadAndSave("fdo78651.docx");
+    createSwDoc("fdo78651.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // ensure that there are only two tables
     assertXPath(pXmlDoc, "//w:tbl", 2);
@@ -546,7 +576,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78651)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78882)
 {
-    loadAndSave("fdo78882.docx");
+    createSwDoc("fdo78882.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that Section Break is getting written inside second paragraph
@@ -558,7 +589,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78882)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo76934)
 {
-    loadAndSave("fdo76934.docx");
+    createSwDoc("fdo76934.docx");
+    save(mpFilter);
     /* Issue was, AutoSpacing property if present inside styles.xml, LO was not able to
      * preserve it.
      */
@@ -571,7 +603,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo76934)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79540)
 {
-    loadAndSave("fdo79540.docx");
+    createSwDoc("fdo79540.docx");
+    save(mpFilter);
     /* Issue was, <w:drawing> was getting written inside <w:drawing>.
      * So postpone the writing of Inner Drawing tag.
      * MS Office does not allow nesting of drawing tags.
@@ -586,7 +619,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79540)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO79062)
 {
-    loadAndSave("fdo79062.docx");
+    createSwDoc("fdo79062.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlFootNotes = parseExport(u"word/footnotes.xml"_ustr);
     assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", u"w14 wp14 w15");
 
@@ -666,7 +700,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf118702)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79822)
 {
-    loadAndSave("fdo79822.docx");
+    createSwDoc("fdo79822.docx");
+    save(mpFilter);
     /* File getting crash while saving in LO.
      * The Docx contain smartart and the file was created in ms word 2007
      */
@@ -675,7 +710,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79822)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO79915)
 {
-    loadAndSave("fdo79915.docx");
+    createSwDoc("fdo79915.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[9]/w:t", u"How much buoyancy does the water provide?");
@@ -683,7 +719,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO79915)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79817)
 {
-    loadAndSave("fdo79817.docx");
+    createSwDoc("fdo79817.docx");
+    save(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "storeItemID", u"{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath", u"/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
@@ -692,7 +729,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79817)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79968_sldx)
 {
-    loadAndSave("fdo79968.docx");
+    createSwDoc("fdo79968.docx");
+    save(mpFilter);
     // This UT for DOCX embedded with powerpoint slide
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -718,7 +756,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79968_sldx)
 CPPUNIT_TEST_FIXTURE(Test, testLostFooterStyle)
 {
     // Given a document with many numberings and a Footer para style:
-    loadAndSave("lost-footer-style.docx");
+    createSwDoc("lost-footer-style.docx");
+    save(mpFilter);
 
     // When saving that to DOCX and checking the Footer style:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
