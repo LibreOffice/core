@@ -31,7 +31,7 @@ class StylesPreviewToolBoxControl final
     VclPtr<StylesPreviewWindow_Impl> m_xVclBox;
     std::unique_ptr<StylesPreviewWindow_Base> m_xWeldBox;
 
-    std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
+    StylePreviewList m_aDefaultStyles;
 
 public:
     StylesPreviewToolBoxControl();

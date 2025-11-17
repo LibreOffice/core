@@ -174,7 +174,7 @@ void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHi
     m_pPreviewControl->RequestStylesListUpdate();
 }
 
-StyleItemController::StyleItemController(std::pair<OUString, OUString> aStyleName)
+StyleItemController::StyleItemController(StylePreviewDescriptor aStyleName)
     : m_eStyleFamily(SfxStyleFamily::Para)
     , m_aStyleName(std::move(aStyleName))
 {
@@ -436,12 +436,12 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 }
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
-    weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
+    weld::Builder& xBuilder, StylePreviewList& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : m_xFrame(xFrame)
     , m_xStylesView(xBuilder.weld_icon_view(u"stylesview"_ustr))
     , m_aUpdateTask(*this)
-    , m_aDefaultStyles(std::move(rDefaultStyles))
+    , m_aDefaultStyles(rDefaultStyles)
 {
     StylePreviewCache::RegisterClient();
 
@@ -565,7 +565,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     const weld::TreeIter& rIter = std::get<1>(rQuery);
     OUString sStyleId(m_xStylesView->get_id(rIter));
     OUString sStyleName(m_xStylesView->get_text(rIter));
-    OString sBase64Png(GetCachedPreviewJson(std::pair<OUString, OUString>(sStyleId, sStyleName)));
+    OString sBase64Png(GetCachedPreviewJson(StylePreviewDescriptor(sStyleId, sStyleName)));
     if (sBase64Png.isEmpty())
         return false;
 
@@ -575,7 +575,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-Bitmap StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
+Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.second);
     if (aFound != StylePreviewCache::Get().end())
@@ -595,7 +595,7 @@ Bitmap StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUSt
     }
 }
 
-OString StylesPreviewWindow_Base::GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle)
+OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle)
 {
     auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.second);
     if (aJsonFound != StylePreviewCache::GetJson().end())
@@ -651,11 +651,11 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
-    vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
+    vcl::Window* pParent, StylePreviewList& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-    , StylesPreviewWindow_Base(*m_xBuilder, std::move(rDefaultStyles), xFrame)
+    , StylesPreviewWindow_Base(*m_xBuilder, rDefaultStyles, xFrame)
 {
     SetOptimalSize();
 }
