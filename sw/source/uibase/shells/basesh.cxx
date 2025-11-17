@@ -377,7 +377,14 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
-                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable, true);
+
+                    // See if detection should be used.
+                    bool bSkipDetection = false;
+                    const SfxBoolItem* pSkipDetection = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
+                    if (pSkipDetection)
+                        bSkipDetection = pSkipDetection->GetValue();
+
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable, !bSkipDetection);
 
                     if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
                         rSh.EnterSelFrameMode();

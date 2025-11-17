@@ -6269,6 +6269,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     {
         {"AnchorType", uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
         {"IgnoreComments", uno::Any(true)},
+        // The MIME type is specified explicitly, don't guess.
+        {"SkipDetection", uno::Any(true)},
     }));
     if (!comphelper::dispatchCommand(u".uno:Paste"_ustr, aPropertyValues))
     {

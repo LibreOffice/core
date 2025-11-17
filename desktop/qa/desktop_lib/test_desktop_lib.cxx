@@ -755,6 +755,26 @@ void DesktopLOKTest::testPasteWriter()
     // Without the accompanying fix in place, this test would have failed, as we had a comment
     // between "foo" and "baz".
     CPPUNIT_ASSERT(!xTextPortionEnumeration->hasMoreElements());
+
+    // Overwrite the doc contents with an explicitly plain text paste.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    OString aPlainText("foo _bar_ baz"_ostr);
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain", aPlainText.getStr(),
+                                            aPlainText.getLength()));
+
+    // Check if '_bar_' was pasted as-is.
+    xParagraphEnumeration = xParagraphEnumerationAccess->createEnumeration();
+    xParagraph.set(xParagraphEnumeration->nextElement(), uno::UNO_QUERY);
+    xTextPortionEnumeration = xParagraph->createEnumeration();
+    uno::Reference<text::XTextRange> xTextPortionRange(xTextPortionEnumeration->nextElement(),
+                                                       uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: foo _bar_ baz
+    // - Actual  : foo
+    // i.e. the text/plain input was parsed as markdown, while that should not happen when
+    // specifying the text/plain mimetype explicitly (and not text/markdown).
+    CPPUNIT_ASSERT_EQUAL(u"foo _bar_ baz"_ustr, xTextPortionRange->getString());
 }
 
 void DesktopLOKTest::testPasteWriterJPEG()
