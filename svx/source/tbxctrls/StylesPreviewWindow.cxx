@@ -520,7 +520,10 @@ void StylesPreviewWindow_Base::Select(const OUString& rStyleName)
 
 void StylesPreviewWindow_Base::UpdateSelection()
 {
-    for (std::vector<std::pair<OUString, OUString>>::size_type i = 0; i < m_aAllStyles.size(); ++i)
+    if (!m_xStylesView || !m_xStylesView->n_children())
+        return;
+
+    for (StylePreviewList::size_type i = 0; i < m_aAllStyles.size(); ++i)
     {
         if (m_aAllStyles[i].first == m_sSelectedStyle || m_aAllStyles[i].second == m_sSelectedStyle)
         {
@@ -607,6 +610,36 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescrip
     return sResult;
 }
 
+namespace
+{
+inline void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                                 SfxStyleSearchBits eBits)
+{
+    if (!pPool)
+        return;
+
+    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, eBits);
+
+    SfxStyleSheetBase* pStyle = xIter->First();
+
+    while (pStyle)
+    {
+        const OUString sName(pStyle->GetName());
+
+        // do not duplicate
+        const auto aFound = std::find_if(
+            rAllStyles.begin(), rAllStyles.end(), [sName](const StylePreviewDescriptor& element) {
+                return element.first == sName || element.second == sName;
+            });
+
+        if (aFound == rAllStyles.end())
+            rAllStyles.push_back(StylePreviewDescriptor(sName, sName));
+
+        pStyle = xIter->Next();
+    }
+}
+}
+
 void StylesPreviewWindow_Base::UpdateStylesList()
 {
     m_aAllStyles = m_aDefaultStyles;
@@ -615,20 +648,13 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     SfxStyleSheetBasePool* pStyleSheetPool = nullptr;
 
     if (pDocShell)
+    {
         pStyleSheetPool = pDocShell->GetStyleSheetPool();
 
-    if (pStyleSheetPool)
-    {
-        auto xIter
-            = pStyleSheetPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::Favourite);
-
-        SfxStyleSheetBase* pStyle = xIter->First();
-
-        while (pStyle)
+        if (pStyleSheetPool)
         {
-            OUString sName(pStyle->GetName());
-            m_aAllStyles.push_back(std::pair<OUString, OUString>(sName, sName));
-            pStyle = xIter->Next();
+            lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+                                 SfxStyleSearchBits::Favourite | SfxStyleSearchBits::UserDefined);
         }
     }
 
