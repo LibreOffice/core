@@ -29,44 +29,32 @@ cat <<EOF >"${1?}${3?}".appdata.xml
  <id>${3?}</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>MPL-2.0</project_license>
- <name>Collabora Office</name>
+ <name>Collabora Office Desktop</name>
  <summary>The Collabora Office productivity suite</summary>
  <description>
-  <p>Collabora Office is a powerful office suite.  Its clean interface and
-  feature-rich tools help you unleash your creativity and enhance your
-  productivity.  Collabora Office includes several applications that make it the most
-  powerful Free and Open Source office suite on the market: Writer (word
-  processing), Calc (spreadsheets), Impress (presentations), Draw (vector
-  graphics and flowcharts), Base (databases), and Math (formula editing).</p>
-  <p>Collabora Office supports opening and saving into a wide variety of formats, so
-  you can easily share documents with users of other popular office suites
-  without worrying about compatibility.</p>
+  <p>Collabora Office Desktop is a powerful office suite.</p>
  </description>
  <launchable type="desktop-id">${3?}.desktop</launchable>
- <url type="homepage">https://collabora.com</url>
+ <url type="homepage">https://collaboraoffice.com</url>
  <screenshots>
   <screenshot type="default">
-   <image>https://hub.libreoffice.org/screenshots/writer-01.png</image>
+   <image>writer.png</image>
    <caption>Sample Writer document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
+   <image>calc.png</image>
    <caption>Sample Calc document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/impress-01.png</image>
+   <image>impress.png</image>
    <caption>Sample Impress document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
+   <image>draw.png</image>
    <caption>Sample Draw document</caption>
   </screenshot>
-  <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/base-02.png</image>
-   <caption>Sample Base document</caption>
-  </screenshot>
  </screenshots>
- <developer_name>Collabora Limited</developer_name>
+ <developer_name>Collabora Productivity Limited</developer_name>
  <kudos>
   <kudo>HiDpiIcon</kudo>
   <kudo>HighContrast</kudo>
