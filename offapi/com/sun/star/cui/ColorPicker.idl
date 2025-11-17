@@ -23,7 +23,7 @@ module com { module sun { module star { module cui {
 /**
     @since LibreOffice 4.1
  */
-service ColorPicker : com::sun::star::ui::dialogs::XExecutableDialog
+published service ColorPicker : com::sun::star::ui::dialogs::XExecutableDialog
 {
     createWithParent([in] com::sun::star::awt::XWindow Parent);
 };
