@@ -41,16 +41,11 @@
 #include <shlobj.h>
 
 #define CPPUTYPE_SEQSALINT8       cppu::UnoType<Sequence< sal_Int8 >>::get()
-#define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 
 constexpr OUString Windows_FormatName = u"windows_formatname"_ustr;
 
-using namespace osl;
-using namespace cppu;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
-using namespace com::sun::star::container;
 
 namespace
 {
@@ -74,7 +69,7 @@ struct FormatEntry
 {
     FormatEntry(const OUString& mime_content_type, const OUString& human_presentable_name,
                 CLIPFORMAT std_clipboard_format_id,
-                css::uno::Type const& cppu_type = CPPUTYPE_DEFAULT)
+                css::uno::Type const& cppu_type = CPPUTYPE_SEQSALINT8)
     : aDataFlavor(mime_content_type, human_presentable_name, cppu_type)
     , aNativeFormatName(human_presentable_name)
     , aStandardFormatId(std_clipboard_format_id)
@@ -250,7 +245,9 @@ const auto& g_TranslTable()
     return table;
 }
 
-void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor )
+bool isStandardFormat(sal_Int32 fmtid) { return fmtid != CF_INVALID; }
+
+const auto& EndOfStandardFormats()
 {
     /*
         we stop search if we find the first CF_INVALID
@@ -258,21 +255,30 @@ void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor&
         standard clipboard format id appear before the other
         entries with CF_INVALID
     */
-    auto citer = std::find_if(g_TranslTable().begin(), g_TranslTable().end(),
+    static const auto end
+        = std::find_if(g_TranslTable().begin(), g_TranslTable().end(), [](const FormatEntry& rEntry)
+                       { return !isStandardFormat(rEntry.aStandardFormatId); });
+    return end;
+}
+
+void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor )
+{
+    const auto& end = EndOfStandardFormats();
+    auto citer = std::find_if(g_TranslTable().begin(), end,
         [&aStandardFormatId](const FormatEntry& rEntry) {
-            return rEntry.aStandardFormatId == aStandardFormatId
-                || rEntry.aStandardFormatId == CF_INVALID;
+            return rEntry.aStandardFormatId == aStandardFormatId;
         });
-    if (citer != g_TranslTable().end() && citer->aStandardFormatId == aStandardFormatId)
+    if (citer != end)
         aDataFlavor = citer->aDataFlavor;
 }
 
 void findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor )
 {
-    auto citer = std::find_if(g_TranslTable().begin(), g_TranslTable().end(),
+    const auto& end = g_TranslTable().end();
+    auto citer = std::find_if(g_TranslTable().begin(), end,
         [&aNativeFormatName](const FormatEntry& rEntry) {
             return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName); });
-    if (citer != g_TranslTable().end())
+    if (citer != end)
         aDataFlavor = citer->aDataFlavor;
 }
 
@@ -290,12 +296,12 @@ void findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny )
 
 void setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny )
 {
-    auto citer = std::find_if(g_TranslTable().begin(), g_TranslTable().end(),
+    const auto& end = EndOfStandardFormats();
+    auto citer = std::find_if(g_TranslTable().begin(), end,
         [&aNativeFormatName](const FormatEntry& rEntry) {
-            return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName)
-                && (CF_INVALID != rEntry.aStandardFormatId);
+            return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName);
         });
-    if (citer != g_TranslTable().end())
+    if (citer != end)
         aAny <<= citer->aStandardFormatId;
 }
 
@@ -304,15 +310,15 @@ void findStdFormatIdOrNativeFormatNameForFullMediaType(
     const OUString& aFullMediaType,
     Any& aAny )
 {
-    auto citer = std::find_if(g_TranslTable().begin(), g_TranslTable().end(),
+    const auto& end = g_TranslTable().end();
+    auto citer = std::find_if(g_TranslTable().begin(), end,
         [&aRefXMimeFactory, &aFullMediaType](const FormatEntry& rEntry) {
             Reference<XMimeContentType> refXMime( aRefXMimeFactory->createMimeContentType(rEntry.aDataFlavor.MimeType) );
             return aFullMediaType.equalsIgnoreAsciiCase(refXMime->getFullMediaType());
         });
-    if (citer != g_TranslTable().end())
+    if (citer != end)
     {
-        sal_Int32 cf = citer->aStandardFormatId;
-        if ( CF_INVALID != cf )
+        if (sal_Int32 cf = citer->aStandardFormatId; isStandardFormat(cf))
             aAny <<= cf;
         else
         {
@@ -322,21 +328,6 @@ void findStdFormatIdOrNativeFormatNameForFullMediaType(
         }
     }
 }
-
-bool isTextPlainMediaType( std::u16string_view fullMediaType )
-{
-    return o3tl::equalsIgnoreAsciiCase(fullMediaType, u"text/plain");
-}
-
-DataFlavor mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
-{
-    DataFlavor dflv;
-    dflv.MimeType             = cnttype;
-    dflv.HumanPresentableName = hpname;
-    dflv.DataType             = dtype;
-    return dflv;
-}
-
 }
 
 CDataFormatTranslatorUNO::CDataFormatTranslatorUNO( const Reference< XComponentContext >& rxContext ) :
@@ -356,7 +347,7 @@ Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const Da
             refXMimeCntType( refXMimeCntFactory->createMimeContentType( aDataFlavor.MimeType ) );
 
         OUString fullMediaType = refXMimeCntType->getFullMediaType( );
-        if ( isTextPlainMediaType( fullMediaType ) )
+        if (fullMediaType.equalsIgnoreAsciiCase("text/plain"))
         {
             // default is CF_TEXT
             aAny <<= static_cast< sal_Int32 >( CF_TEXT );
@@ -381,11 +372,11 @@ Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const Da
                 findStdFormatIdOrNativeFormatNameForFullMediaType( refXMimeCntFactory, fullMediaType, aAny );
         }
     }
-    catch( IllegalArgumentException& )
+    catch (css::lang::IllegalArgumentException&)
     {
         OSL_FAIL( "Invalid content-type detected!" );
     }
-    catch( NoSuchElementException& )
+    catch (css::container::NoSuchElementException&)
     {
         OSL_FAIL( "Illegal content-type parameter" );
     }
@@ -402,20 +393,14 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 {
     OSL_PRECOND( aSysDataType.hasValue( ), "Empty system data type delivered" );
 
-    DataFlavor aFlavor = mkDataFlv( OUString(), OUString(), CPPUTYPE_SEQSALINT8 );
+    DataFlavor aFlavor({}, {}, CPPUTYPE_SEQSALINT8);
 
-    if ( aSysDataType.getValueType( ) == cppu::UnoType<sal_Int32>::get() )
+    if (sal_Int32 clipformat; aSysDataType >>= clipformat)
     {
-        sal_Int32 clipformat = CF_INVALID;
-        aSysDataType >>= clipformat;
-        if ( CF_INVALID != clipformat )
-            findDataFlavorForStandardFormatId( clipformat, aFlavor );
+        findDataFlavorForStandardFormatId(clipformat, aFlavor);
     }
-    else if ( aSysDataType.getValueType( ) == cppu::UnoType<OUString>::get() )
+    else if (OUString nativeFormatName; aSysDataType >>= nativeFormatName)
     {
-        OUString nativeFormatName;
-        aSysDataType >>= nativeFormatName;
-
         findDataFlavorForNativeFormatName( nativeFormatName, aFlavor );
     }
     else
