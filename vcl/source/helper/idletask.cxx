@@ -32,19 +32,31 @@ bool IdleTask::GetFlag() const
 //Callback function of IdleTask Class
 IMPL_LINK(IdleTask, FlipFlag, Timer*, , void)
 {
+    std::lock_guard aGuard(mFlagMutex);
     //setting the flag to make sure that low priority idle task has been dispatched
     flag = true;
+    mFlagCv.notify_all();
 }
 
 void IdleTask::waitUntilIdleDispatched()
 {
     //creating instance of IdleTask Class
     IdleTask idleTask;
-    while (!idleTask.GetFlag())
+
+    if (Application::IsMainThread())
     {
-        //dispatching all the events via VCL main-loop
         SolarMutexGuard aGuard;
-        Application::Yield();
+        while (!idleTask.GetFlag())
+            Application::Yield();
+    }
+    else
+    {
+        // We don’t want to wait with Yield because that can cause this thread to execute the idle
+        // task. If the main thread is processing an event and temporarily releases the solar mutex
+        // then that would cause this function to finish before the event processing in the main
+        // thread actually finishes.
+        std::unique_lock aLock(idleTask.mFlagMutex);
+        idleTask.mFlagCv.wait(aLock, [&idleTask] { return idleTask.GetFlag(); });
     }
 }
 
