@@ -1145,6 +1145,12 @@ void Window::Invalidate( InvalidateFlags nFlags )
     if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
         return;
 
+    if (!mpWindowImpl)
+    {
+        // ImplInvalidate() would dereference mpWindowImpl unconditionally.
+        return;
+    }
+
     ImplInvalidate( nullptr, nFlags );
     LogicInvalidate(nullptr);
 }
