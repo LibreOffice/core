@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf92714_TOC_pageBreak)
     SfxDispatcher& rDispatcher = *pView->GetViewFrame().GetDispatcher();
     rDispatcher.Execute(FN_REMOVE_CUR_TOX);
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
@@ -1124,7 +1124,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf121509)
     aNewAnch.SetAnchor(aCursor.Start());
     CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
 
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // The second part: check if the reloaded doc has flys inside a fly
     // FIXME: if we use 'saveAndReload' or 'loadFromURL' here, it fails with
@@ -1913,7 +1913,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167526)
     }
 
     // DOCX roundtrip:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // check layout
     {
@@ -2029,7 +2029,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167540)
     verify_me();
 
     // DOCX roundtrip:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     verify_me();
 }
@@ -2147,7 +2147,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168858)
         assertXPath(pXmlDoc, "//page['pass 1']/body/section/infos/bounds", "height", u"0");
     }
     {
-        saveAndReload(u"OpenDocument Text Flat XML"_ustr);
+        saveAndReload(TestFilter::FODT);
         Scheduler::ProcessEventsToIdle(); // Recalculate conditions
         auto xTextSections
             = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
@@ -2191,7 +2191,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168858)
         assertXPath(pXmlDoc, "//page['pass 3']/body/section/infos/bounds", "height", u"0");
     }
     {
-        saveAndReload(u"OpenDocument Text Flat XML"_ustr);
+        saveAndReload(TestFilter::FODT);
         Scheduler::ProcessEventsToIdle(); // Recalculate conditions
         auto xTextSections
             = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();

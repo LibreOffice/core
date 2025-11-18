@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_OpenBezier_noSwapWH)
     tools::Rectangle aExpectRect(pObj->GetSnapRect());
 
     // Save, reload and compare
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_Line_noSwapWH)
     tools::Rectangle aExpectRect(pObj->GetSnapRect());
 
     // Save, reload and compare
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137082_RTL_cell_anchored)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectB, pObj->GetSnapRect(), 1);
 
     // Save and reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document
     pDoc = getScDoc();
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137081_RTL_page_anchored)
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
 
     // Save and reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document
     pDoc = getScDoc();
@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf139583_Rotate180deg)
     pObj.clear();
 
     // Save and reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and object
     pDoc = getScDoc();
@@ -467,7 +467,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137033_FlipHori_Resize)
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
 
     // Save and reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and shape
     pDoc = getScDoc();
@@ -513,7 +513,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137033_RotShear_ResizeHide)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
 
     // Save and reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and shape
     pDoc = getScDoc();
@@ -547,7 +547,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137033_RotShear_Hide)
     pDoc->SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
 
     // Save and reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and shape
     pDoc = getScDoc();
@@ -595,7 +595,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137576_LogicRectInDefaultMeasureline)
     Point aOldPos = pObj->GetRelativePos();
 
     // Save and reload, get ScDocShell
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and object
     pDoc = getScDoc();
@@ -667,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testMeasurelineHideColSave)
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEndPoint, pObj->GetPoint(1), 1);
 
     // save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and shape
     pDoc = getScDoc();
@@ -765,7 +765,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf138138_MoveCellWithRotatedShape)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 
     // Save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and shape
     pDoc = getScDoc();
@@ -817,7 +817,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf117948_CollapseBeforeShape)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect1, aSnapRect1Collapse, 1);
 
     // Save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and objects
     pDoc = getScDoc();
@@ -915,7 +915,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf115655_HideDetail)
     CPPUNIT_ASSERT_MESSAGE("Collapse: Image should not be visible", !pObj->IsVisible());
 
     // Save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Get document and image
     pDoc = getScDoc();
@@ -1005,7 +1005,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testLargeAnchorOffset)
     // Just to check that it imports correctly
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(9504, 9089), aOldPos, 1);
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pDoc = getScDoc();
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
@@ -1211,7 +1211,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf154821_shape_in_group)
     pViewShell->GetViewData().SetCurY(1);
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Expand the lower group
     pViewShell = getViewShell();
@@ -1284,7 +1284,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
     tools::Rectangle aOrigRect = pObj->GetSnapRect();
 
     // Save document but do not reload. Saving alone had already caused the error.
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     // Get geometry of the group again
     ScDrawObjData* pAfterObjData = ScDrawLayer::GetObjData(pObj);
@@ -1307,7 +1307,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
     pDoc->SetColHidden(3, 3, 0, true);
     pDoc->SetDrawPageSize(0);
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Verify geometry is same as before save
     pDoc = getScDoc();
@@ -1379,7 +1379,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf167450_copySheet)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectSource, pObjTarget->GetLogicRect(), 1);
 
     // Compare positions after save and reload. Without fix the position was wrong after reload.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDocTarget = getScDoc();
     pObjTarget = lcl_getSdrObjectWithAssert(*pDocTarget, 0, 1);
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectSource, pObjTarget->GetLogicRect(), 1);
@@ -1412,7 +1412,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140866)
     CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pNote->GetText());
 
     // Save, reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     // Check that we still have the comment on A1 after save&reload
     pNote = pDoc->GetNote(ScAddress(0, 0, 0));

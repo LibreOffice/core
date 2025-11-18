@@ -89,11 +89,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testMiscRowHeights)
            have default row heights ( there was a problem where the optimal
            height was being calculated after import if no hard height )
         */
-        { u"ods/alldefaultheights.ods", OUString(), SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { u"ods/alldefaultheights.ods", TestFilter::NONE, SAL_N_ELEMENTS(DfltRowData),
+          DfltRowData },
         /* Checks the imported height of some multiline input, additionally checks
            that the optimal height flag is set ( or not )
         */
-        { u"ods/multilineoptimal.ods", OUString(), SAL_N_ELEMENTS(MultiLineOptData),
+        { u"ods/multilineoptimal.ods", TestFilter::NONE, SAL_N_ELEMENTS(MultiLineOptData),
           MultiLineOptData },
     };
     miscRowHeightsTest(aTestValues, SAL_N_ELEMENTS(aTestValues));

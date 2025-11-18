@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(SolverTest, testSingleModel)
 
     // Save and reload the file
     pSettings->SaveSolverSettings();
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pTable = pDoc->FetchTable(0);
     pSettings = pTable->GetSolverSettings();

@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf146742)
     createScDoc("tdf146742.ods");
 
     // Export to ODS and reload the file
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0,0,0)));
@@ -164,7 +164,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMacroButtonFormControlXlsxExport)
     createScDoc("macro-button-form-control.xlsm");
 
     // When exporting to XLSM:
-    save(u"Calc MS Excel 2007 VBA XML"_ustr);
+    save(TestFilter::XLSM);
 
     // Then make sure that the macro is associated with the control:
     xmlDocUniquePtr pSheetDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf104902)
     executeMacro(u"vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document"_ustr);
 
     // Export to ODS
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"string no newlines"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -231,7 +231,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf142033)
     executeMacro(u"vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document"_ustr);
 
     // Export to ODS
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"string no newlines"_ustr, pDoc->GetString(ScAddress(0,0,0)));
@@ -253,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf89920)
                  "location=document"_ustr);
 
     // Export to ODS
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pContentXml);
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
     CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
 
     // Now check that saving stores Unicode data correctly in image's string pool
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     {
         Any aRet = executeMacro(sMacroURL);
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
     CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
 
     // Now check that saving stores array bounds correctly
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     {
         Any aRet = executeMacro(sMacroURL);
@@ -469,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf71271)
         xProps->setPropertyValue(u"CodeName"_ustr, uno::Any(u"NewCodeName"_ustr));
     }
 
-    saveAndReload(u""_ustr);
+    saveAndReload(TestFilter::ODS);
 
     {
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -507,7 +507,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf75263)
         CPPUNIT_ASSERT_EQUAL(u"проба"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
     }
 
-    saveAndReload(u"Calc MS Excel 2007 VBA XML"_ustr);
+    saveAndReload(TestFilter::XLSM);
 
     {
         ScDocument* pDoc = getScDoc();

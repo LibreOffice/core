@@ -82,7 +82,7 @@ DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
 CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
 {
     createSwDoc("tdf106733.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
 
     // fo:hyphenation-keep="page" defined in direct paragraph formatting
     createSwDoc("tdf132599_page.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // This was 2 (not truncated hyphenated line)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
 
     // fo:hyphenation-keep="auto" defined in direct paragraph formatting
     createSwDoc("tdf132599_auto.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // not truncated hyphenated line
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread)
 
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
     createSwDoc("tdf132599_spread.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // shift last line of right page, resulting 3 pages
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread_left_page)
 
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
     createSwDoc("tdf132599_spread-left-page.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // do not shift last line of left page
     // This was 4 (shifted last line of left page, when it's hyphenated)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_column)
     // last line of the left column is shifted, according to
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="column"
     createSwDoc("tdf132599_column.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // shift last line of the first column, resulting 3 pages
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_not_last_column)
     // last line of the not last column is not shifted, according to
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="page"
     createSwDoc("tdf132599_page_in_not_last_column.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // do not shift last line of the first column, resulting 2 pages
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_last_column)
     // last line of the last column is shifted, according to
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="page"
     createSwDoc("tdf132599_page_in_last_column.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // shift last line of the first page, resulting 3 pages
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_always)
     // last full line of the paragraph column is not hyphenated
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="always"
     createSwDoc("tdf132599_always.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
     // last full line of the table is not hyphenated on page 1
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type=""
     createSwDoc("tdf132599_page_in_table.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // This was 2 (not handling hyphenation-keep in tables)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_default_paragraph_style)
 
     // fo:hyphenation-keep="page" defined in default paragraph style
     createSwDoc("tdf160518_page_in_default_paragraph_style.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_default_paragraph_style)
 
     // fo:hyphenation-keep="auto" defined in default paragraph style
     createSwDoc("tdf160518_auto_in_default_paragraph_style.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
@@ -264,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_text_body_style)
 
     // fo:hyphenation-keep="page" defined in text body style
     createSwDoc("tdf160518_page_in_text_body_style.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
@@ -276,7 +276,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_text_body_style)
 
     // fo:hyphenation-keep="auto" defined in text body style
     createSwDoc("tdf160518_auto_in_text_body_style.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165354_page)
 
     // fo:hyphenation-keep="page" defined in direct paragraph formatting
     createSwDoc("tdf165354_page.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // This was 3 in tdf132599, but now 2, shifting only the last hyphenated word,
     // not the full line, because of loext:hyphenation-keep-line=true
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -297,7 +297,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165354_page)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)
 {
     createSwDoc("tdf158885_compound-remain.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:text-properties[@loext:hyphenation-compound-remain-char-count='3']", 1);
@@ -340,7 +340,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 CPPUNIT_TEST_FIXTURE(Test, testRubyPosition)
 {
     createSwDoc("ruby-position.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -364,7 +364,7 @@ DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
 CPPUNIT_TEST_FIXTURE(Test, testSignatureLineProperties)
 {
     createSwDoc("signatureline-properties.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
 
@@ -538,7 +538,7 @@ DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
 CPPUNIT_TEST_FIXTURE(Test, tdf99631)
 {
     createSwDoc("tdf99631.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // check import of VisualArea settings of the embedded XLSX OLE objects
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/settings.xml"_ustr);
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", u"4516");
@@ -553,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf163575)
 {
     // crashes/assert at export time
     createSwDoc("tdf163575.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf159923, "tdf159923.fodt")
@@ -571,7 +571,7 @@ DECLARE_ODFEXPORT_TEST(testTdf159923_stretched, "tdf159923_stretched.fodt")
 CPPUNIT_TEST_FIXTURE(Test, tdf145871)
 {
     createSwDoc("tdf145871.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf145871)
 CPPUNIT_TEST_FIXTURE(Test, tdf128504)
 {
     createSwDoc("tdf128504.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     uno::Reference<text::XTextRange> xPara = getParagraph(6);
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
     OUString unVisitedStyleName = getProperty<OUString>(xRun, u"UnvisitedCharStyleName"_ustr);
@@ -728,7 +728,7 @@ DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
 CPPUNIT_TEST_FIXTURE(Test, tdf124470)
 {
     createSwDoc("tdf124470TableAndEmbeddedUsedFonts.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // Table styles were exported out of place, inside font-face-decls.
     // Without the fix in place, this will fail already in ODF validation:
     // "content.xml[2,2150]:  Error: tag name "style:style" is not allowed. Possible tag names are: <font-face>"

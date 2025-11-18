@@ -40,7 +40,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
 {
     createSwDoc("tdf165642_glossaryFootnote.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // round-trip'ing the settings.xml file as is, it contains footnote/endnote references
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/glossary/settings.xml"_ustr);
     assertXPath(pXmlSettings, "//w:endnotePr", 1);
@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePos)
     // Given a document with an image at the bottom-right placed there by simplePos
 
     createSwDoc("tdf166201_simplePos.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
                          getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePosCM)
     // Given a document with an image at the bottom-right placed there by simplePos - in cm
 
     createSwDoc("tdf166201_simplePosCM.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166975)
     CPPUNIT_ASSERT_EQUAL(u"ccc)"_ustr,
                          getProperty<OUString>(getParagraph(6), u"ListLabelString"_ustr));
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(u"a)"_ustr,
                          getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165492_exactWithBottomSpacing)
     // and table bottom border padding of 1.5cm...
 
     createSwDoc("tdf165492_exactWithBottomSpacing.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // When laying out that document:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165492_atLeastWithBottomSpacing)
     // and table bottom border padding of 1.5cm...
 
     createSwDoc("tdf165492_atLeastWithBottomSpacing.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // When laying out that document:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_consolidatedTopMargin)
     // which is preceded by a paragraph with a lot of lower spacing
     // and followed by a paragraph with even more upper spacing...
     createSwDoc("tdf165047_consolidatedTopMargin.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // the upper spacing is mostly "absorbed" by the preceding lower spacing, and is barely noticed
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_contextualSpacingTopMargin)
     // and followed by a paragraph with a lot of upper spacing,
     // but that paragraph says "don't add space between identical paragraph styles...
     createSwDoc("tdf165047_contextualSpacingTopMargin.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // the upper spacing is ignored since the paragraph styles are the same
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -264,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166553_paraStyleAfterBreak)
 {
     // Given a distinctively styled paragraph containing a (column) break in the middle of the para
     createSwDoc("tdf166553_paraStyleAfterBreak.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // Note: we emulate this by creating two real paragraphs.
     // The paragraph style/formatting after the break must be (almost) the same as before the break
@@ -337,7 +337,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
     //     <w:ind w:firstLineChars="0"/>
 
     createSwDoc("tdf167721_chUnits2.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // Test the parent style ######################################################################
     uno::Reference<beans::XPropertySet> xStyle(
@@ -466,7 +466,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits4, "tdf167721_chUnits4.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf167721_zeroCh)
 {
     createSwDoc("tdf167721_zeroCh.odt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
@@ -492,7 +492,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
     };
 
     fnVerify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     fnVerify();
 }
 
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83844Hanging)
     };
 
     fnVerify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     fnVerify();
 }
 
@@ -528,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
         CPPUNIT_ASSERT(!rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
     }
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     {
         SwDoc* pDoc = getSwDoc();
@@ -538,7 +538,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
         rIDSA.set(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, true);
     }
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     {
         SwDoc* pDoc = getSwDoc();
@@ -550,7 +550,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
 CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
 {
     createSwDoc("tdf165933.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the fix it fails with
@@ -565,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDocxExport)
     // Given a document with <del>A<format>B</format>C</del> style redlines:
     // When exporting that document:
     createSwDoc("del-then-format.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure delete "under" format uses the <w:delText> markup:
     // Without the accompanying fix in place, this test would have failed with:
@@ -607,7 +607,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139418, "tdf139418.docx")
 CPPUNIT_TEST_FIXTURE(Test, testAnnotationRef)
 {
     createSwDoc("comment-annotationref.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Check that the exported comment also has annotationRef
     xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
@@ -629,7 +629,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
                                   "com.sun.star.text.TextDocument", aFilterOptions);
 
     // When saving to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that the field result in the last row's last run is not empty:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
 CPPUNIT_TEST_FIXTURE(Test, testTdf166511)
 {
     createSwDoc("tdf166511.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // The reproducer for tdf#166511 depends on result having footer2 and footer3.xml
     // Original bugdoc only has footer1.xml, and the result only started having multiples
@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166511)
 CPPUNIT_TEST_FIXTURE(Test, testLineBreakInRef)
 {
     createSwDoc("line-break-in-ref.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Without the fix if fails with

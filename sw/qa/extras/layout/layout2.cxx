@@ -1392,7 +1392,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
     // inline the loading because currently properties can't be passed...
     OUString const url(createFileURL(u"table_cell_overlap.fodt"));
     loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs

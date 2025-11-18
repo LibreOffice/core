@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     insertStringToCell(u"D3"_ustr, u"FISHY");
 
     // Save the document
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     // Open a new document
     createScDoc();
@@ -305,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     insertStringToCell(u"B1"_ustr, u"2");
 
     // Save the document
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     // Open a new document
     createScDoc();
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     insertStringToCell(u"A1"_ustr, u"50");
 
     // Save the document
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     // Open a new document
     createScDoc();
@@ -789,7 +789,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
 
     dispatchCommand(mxComponent, u".uno:Strikeout"_ustr, {});
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
 
     vcl::Font aFont;
@@ -1024,7 +1024,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143896)
 
     CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, pDoc->GetString(ScAddress(0, 1999, 0)));
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
 
     // Without the fix in place, this test would have failed with
@@ -1083,7 +1083,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159046)
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     // Without the fix in place, this test would have crashed here
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pDoc = getScDoc();
     pDrawLayer = pDoc->GetDrawLayer();
@@ -1130,7 +1130,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
     CPPUNIT_ASSERT_EQUAL(u"x"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
 
     // Without the fix in place, this test would have crashed
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     pDoc = getScDoc();
 
@@ -1206,7 +1206,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
     pDoc = getScDoc();
 
     OUString aFormula = pDoc->GetFormula(3, 10, 0);
@@ -2503,7 +2503,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143940)
     // Without the fix in place, this test would have crashed
     // FIXME: Error: uncompleted content model. expecting: <covered-table-cell>,<table-cell>
     skipValidation();
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
 

@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169413_asciiTheme)
 {
     // the document failed to reload without errors after a round-trip
     createSwDoc("tdf169413_asciiTheme.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
     // Exporting to a Word format, a tab is prepended to the endnote text. When imported, the
     // NoGapAfterNoteNumber compatibility flag is enabled; and the exported tab is the only thing
     // that separates the number and the text. The tab must not be stripped away on import.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         CPPUNIT_ASSERT_EQUAL(u"\tEndnote text"_ustr, xEndnoteText->getString());
     }
     // Do a second round-trip. It must not duplicate the tab.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         xEndnoteText->setString(u"Endnote text"_ustr);
     }
     // Do a third round-trip. It must not introduce the tab, because of the compatibility flag.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     // - Actual  : Standard
 
     createSwDoc("tdf167082.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     OUString aStyleName = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
     // Given a document with two floating tables after each other:
     // When saving that document to DOCX:
     createSwDoc("floattable-anchorpos.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that the dummy anchor of the first floating table is not written to the export
     // result:
@@ -239,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
     };
 
     fnVerify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     fnVerify();
 }
 
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     fnVerify(true);
 
     // Check that the value is persisted across save-reload
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     fnVerify(true);
 
     // Unset the compat flag
@@ -270,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     }
 
     fnVerify(false);
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     fnVerify(false);
 }
 
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150822)
     };
 
     fnVerify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     fnVerify();
 }
 
@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
 {
     // Given a document that changes a lot between a few numbering styles and overrides:
     createSwDoc("mixednumberings.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that we export a reasonable number of "w:num" elements:
     xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
 CPPUNIT_TEST_FIXTURE(Test, testTdf169274)
 {
     createSwDoc("tdf169274.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     const OString sPath = "//w:body/w:tbl/w:tr/w:tc/w:p/w:sdt/"_ostr;

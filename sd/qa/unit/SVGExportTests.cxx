@@ -77,7 +77,7 @@ public:
     void testSVGExportTextDecorations()
     {
         loadFromFile(u"svg-export-text-decorations.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -100,7 +100,7 @@ public:
     void testSVGExportJavascriptURL()
     {
         loadFromFile(u"textbox-link-javascript.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -115,7 +115,7 @@ public:
     void testSVGExportSlideCustomBackground()
     {
         loadFromFile(u"slide-custom-background.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -126,7 +126,7 @@ public:
     void testSVGExportTextFieldsInMasterPage()
     {
         loadFromFile(u"text-fields.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -150,7 +150,7 @@ public:
     void testSVGExportEmbeddedVideo()
     {
         loadFromFile(u"slide-video-thumbnail.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -181,7 +181,7 @@ public:
     void testSVGExportSlideBitmapBackground()
     {
         loadFromFile(u"slide-bitmap-background.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -210,7 +210,7 @@ public:
     void testSVGExportSlideTileBitmapBackground()
     {
         loadFromFile(u"slide-tile-background.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -275,7 +275,7 @@ public:
         Application::SetSettings(aSettings);
 
         loadFromFile(u"text-fields.odp");
-        save(u"impress_svg_Export"_ustr);
+        save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);

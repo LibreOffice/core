@@ -32,7 +32,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineFormatCharStyleDirectExport)
     loadFromFile(u"format-charstyle-direct.docx");
 
     // When exporting the document to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the named style is not lost in the redline:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);

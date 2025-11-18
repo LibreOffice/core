@@ -74,7 +74,7 @@ public:
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 {
     loadFromFile(u"transparent-text.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 {
     loadFromFile(u"tdf131082.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     // was lost on import.
     verify(mxComponent);
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
     // was lost on export.
@@ -343,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     // rectangle of the shape. Error was, that the export uses a path size which included the
     // control points.
     loadFromFile(u"tdf142605_CurveSize.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     auto xPage = xDrawPagesSupplier->getDrawPages()->getByIndex(0);

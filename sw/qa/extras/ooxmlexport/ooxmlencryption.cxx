@@ -26,7 +26,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2007)
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
-    saveAndReload(u"Office Open XML Text"_ustr, sPass);
+    saveAndReload(TestFilter::DOCX, sPass);
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
 }
 
@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2010)
     createSwDoc("Encrypted_MSO2010_abc.docx", sPass);
     // Agile encryption format, AES 128, CBC, SHA1
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
-    saveAndReload(u"Office Open XML Text"_ustr, sPass);
+    saveAndReload(TestFilter::DOCX, sPass);
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
 }
 
@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2013)
     // Agile encryption format, AES 256, CBC, SHA512
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
-    saveAndReload(u"Office Open XML Text"_ustr, sPass);
+    saveAndReload(TestFilter::DOCX, sPass);
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
 }
 
@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasswordLOStandard)
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
-    saveAndReload(u"Office Open XML Text"_ustr, sPass);
+    saveAndReload(TestFilter::DOCX, sPass);
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
 }
 

@@ -1335,7 +1335,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
     CPPUNIT_ASSERT(!rA2Set.GetBox().GetRight());
 
     // Given this document model, when exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the covered cell has a style.
     xmlDocUniquePtr pXmlSettings = parseExport(u"content.xml"_ustr);

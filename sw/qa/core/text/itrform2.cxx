@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
     createSwDoc("content-control-header.docx");
 
     // When exporting to PDF:
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     // Then make sure all the expected text is there on page 2:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     pWrtShell->GotoContentControl(rFormatContentControl);
 
     // When exporting to PDF:
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     // Then make sure that a checked checkbox form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting that document to PDF:
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     // Then make sure that the widget in the PDF result has that custom font color:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -306,7 +306,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting that to PDF:
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     // Then make sure that the custom default is not lost:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();

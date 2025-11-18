@@ -1458,7 +1458,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFillColorList)
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf134221)
 {
     createSdImpressDoc("pptx/smartart-tdf134221.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShapeB = findChildShapeByText(xGroup, u"B"_ustr);
     CPPUNIT_ASSERT(xShapeB.is());

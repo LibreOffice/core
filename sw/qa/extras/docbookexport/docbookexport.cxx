@@ -22,7 +22,7 @@ public:
 CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
 {
     createSwDoc("simple.docx");
-    save(u"DocBook File"_ustr);
+    save(TestFilter::DOCBOOK);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
 CPPUNIT_TEST_FIXTURE(DocbookExportTest, testtdf91095)
 {
     createSwDoc("tdf91095.docx");
-    save(u"DocBook File"_ustr);
+    save(TestFilter::DOCBOOK);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 }

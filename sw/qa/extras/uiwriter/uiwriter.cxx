@@ -1453,7 +1453,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
     xDrawPage->add(xShape);
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // This was 1, we lost a shape on export.
     CPPUNIT_ASSERT_EQUAL(2, getShapes());

@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
     createSwDoc("tdf107727_FrameBorder.odt");
 
     // Export to RTF and reload
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     // Get frame without border and inspect it.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);

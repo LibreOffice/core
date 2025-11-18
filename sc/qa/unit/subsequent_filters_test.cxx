@@ -494,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 
     // Check if both named ranges are hidden after saving and reloading
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
@@ -523,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 
     // Save as ODS and test if the named ranges are still with the correct hidden flag
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
@@ -555,7 +555,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
 
     // Save and reload to test whether the named expressions retain the hidden  where applicable
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pNamedRanges = pDoc->GetRangeName();
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());

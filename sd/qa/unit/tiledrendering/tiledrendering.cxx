@@ -1263,7 +1263,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     Scheduler::ProcessEventsToIdle();
 
     // now save, reload, and assert that we did not lose the edit
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),

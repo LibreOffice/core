@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
 {
     // Given a view that has CA/cert/key data associated:
     loadFromURL("private:factory/swriter");
-    save("writer8");
+    save(TestFilter::ODT);
     DocumentSignatureManager aManager(getComponentContext(), DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage

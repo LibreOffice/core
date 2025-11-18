@@ -409,7 +409,7 @@ void SwMacrosTest::testFdo68983()
     loadFromFile(u"odt/fdo68983.odt");
     Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // check that password-protected library survived store and re-load
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
@@ -438,7 +438,7 @@ void SwMacrosTest::testFdo87530()
         xBasLibPwd->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     {
         // check that password-protected library survived store and re-load
@@ -461,7 +461,7 @@ void SwMacrosTest::testFdo87530()
         xBasLibPwd->changeLibraryPassword(u"FooLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // check that password-protected library survived store and re-load
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);

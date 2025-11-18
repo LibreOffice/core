@@ -767,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158023Import)
     createSwDoc("tdf158023_import.docx");
     verify();
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verifyReload();
 }
 

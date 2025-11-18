@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
                          getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     CPPUNIT_ASSERT_EQUAL(Color(0xdedce6), getProperty<Color>(getParagraph(2), u"FillColor"_ustr));
     // on round-trip, the paragraph style name was lost
@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
         "height", u"260");
 
     // save it to DOCX
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
@@ -2279,7 +2279,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     createSwDoc("tdf76817.fodt");
 
     // save it to DOCX
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
@@ -2583,7 +2583,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
     createSwDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
 
     // Save it and load it back.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
@@ -2700,7 +2700,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pDoc = getSwDoc();
     const auto& rFormats2 = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());
@@ -3229,7 +3229,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testConditionalHiddenSectionIssue)
     }
 
     // PDF export
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     auto pPdfDocument = parsePDFExport();
     auto pPdfPage = pPdfDocument->openPage(0);

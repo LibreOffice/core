@@ -31,7 +31,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
     // Given a document with a group shape and therein a polyline and a connector.
     loadFromFile(u"tdf141786_PolylineConnectorInGroup.odt");
     // When saving that to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure polyline and connector have the correct position.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -60,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     skipValidation();
 
     // When saving that to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the rotated child shape has the correct position.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlOdt)
     dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
     dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // validate(maTempFile.GetFileName(), test::OOXML); // Enable when unrelated errors are fixed.
 }
 
@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
         // when exporting to docx.
         dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
-        save(u"Office Open XML Text"_ustr);
+        save(TestFilter::DOCX);
         // validate(maTempFile.GetFileName(), test::OOXML); // Enable when unrelated errors are fixed.
     }
 
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
         dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
         // Loading should not show the "corrupted" dialog, which would assert.
-        saveAndReload(u"Office Open XML Text"_ustr);
+        saveAndReload(TestFilter::DOCX);
 
         // Now that we loaded it successfully, delete the controls,
         // still with change-tracking enabled, and save.
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
         dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
         // Loading should not show the "corrupted" dialog, which would assert.
-        saveAndReload(u"Office Open XML Text"_ustr);
+        saveAndReload(TestFilter::DOCX);
         // validate(maTempFile.GetFileName(), test::OOXML); // Enable when unrelated errors are fixed.
     }
 }
@@ -137,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     skipValidation();
 
     // When saving that to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that the group shape, the group shape's child size and the child shape's size
     // match:
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
     skipValidation();
 
     // When saving that to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then the shapes should retain their correct control values.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -344,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
     loadFromFile(u"camera-rotation-revolution-nonwps.pptx");
 
     // When saving that document:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Then make sure the revolution is exported without a problem:
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     loadFromFile(u"refer-to-theme.pptx");
 
     // When saving that document:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Then make sure the shape text color is a scheme color:
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
     loadFromFile(u"ReferenceShapeFill.fodp");
 
     // When saving that document:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Then make sure the shape fill color is a scheme color.
     // Note that this was already working from PPTX files via grab-bags,
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
     loadFromFile(u"endParaRPr-newline-textsize.pptx");
 
     // When saving that document:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Make sure the text size is exported correctly:
@@ -445,7 +445,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
     loadFromFile(u"tdf147978_endsubpath.odp");
 
     // When saving that document:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Then make sure the pathLst has two child elements,
@@ -462,7 +462,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
     loadFromFile(u"tdf147978_enhancedPath_commandA.odp");
 
     // When saving that document:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Then make sure the path has a child element arcTo. Prior to the fix that part of the curve was
@@ -483,7 +483,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
     loadFromFile(u"tdf147978_enhancedPath_commandT.odp");
 
     // Export to pptx had only exported the command M and has used a wrong path size
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -512,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
     loadFromFile(u"tdf147978_enhancedPath_commandXY.odp");
 
     // Export to pptx had dropped commands X and Y.
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -546,7 +546,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
     loadFromFile(u"tdf147978_enhancedPath_commandHIJK.odp");
 
     // Export to pptx had dropped commands X and Y.
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -568,7 +568,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
     loadFromFile(u"tdf147978_enhancedPath_subpath.pptx");
 
     // Export to pptx had dropped the subpaths.
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -588,7 +588,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
     // The document has a custom shape of type "non-primitive" to trigger the custGeom export
     loadFromFile(u"tdf100391_TextAreaRect.odp");
     // When saving to PPTX the textarea rect was set to default instead of using the actual area
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup. Without fix the values were l="l", t="t", r="r", b="b"
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -613,7 +613,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
     skipValidation();
 
     // Export to docx had not written a:fill or a:stroke attributes at all.
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -634,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     // instead of the normally used lnTo. If a lnTo is written, MS Office shows nothing of the shape.
     loadFromFile(u"FaultyPathStart.odp");
 
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -652,7 +652,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered. The
     // line at right and bottom edge were positioned inside as if the shape had a square size.
     loadFromFile(u"tdf148784_StretchXY.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -688,7 +688,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
     // That results in wrong arcs on the right or bottom side of the shape.
     loadFromFile(u"tdf148784_StretchCommandQ.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -727,7 +727,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
     // That results in circles instead of ellipses.
     loadFromFile(u"tdf148784_StretchCommandVW.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -761,7 +761,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
     // has paddings lIns="720000"=2cm, tIns="360000"=1cm, rIns="0" and bIns="0".
     // After load and save the paddings were rotated and a 90deg text rotation was added.
     loadFromFile(u"tdf149551_vert_and_padding.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup. The values must be the same as in the original file.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -783,7 +783,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
     // attribute but no 'rot' attribute. Without the fix the 'rot' attribute with values from
     // the emulation was written out.
     loadFromFile(u"tdf149538_upright.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup. The values must be the same as in the original file.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -794,7 +794,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
 CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
 {
     loadFromFile(u"tdf151008_eaVertAnchor.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // The order of the shapes in the file is by name "Right", "Center", "Left", "RightMiddle",
     // "CenterMiddle" and "LeftMiddle". I access the shapes here by index, because the XPath is
@@ -830,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
     skipValidation();
 
     // Saving that to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Make sure it is exported to VML and has no txbxContent but a textpath element. Without fix it
     // was exported as DML 'abc transform', but that is not able to use bitmap fill in Word.
@@ -861,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Make sure the style attribute of the textpath element has the needed items. Without fix only
     // font-family and font-size were written.
@@ -897,7 +897,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkSlantUp)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup. I could identify the following two problems to hinder Word from
     // accepting the markup. There might exist more problems.
@@ -924,7 +924,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkArchUp)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -946,7 +946,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -974,7 +974,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDirectColor)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1057,7 +1057,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1080,7 +1080,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1127,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1177,7 +1177,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1219,7 +1219,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1263,7 +1263,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1305,7 +1305,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
     skipValidation();
 
     // Save to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1351,7 +1351,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
     // Without fix the transparency was not written to file.
     loadFromFile(u"tdf139618_ThemeColorTransparency.pptx");
 
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // Make sure a:alpha is written for line color and for fill color.
@@ -1377,7 +1377,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeFontTypeface)
 
     loadFromFile(u"tdf155412_typeface.pptx");
 
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
 
     // Make sure typeface is written.
@@ -1392,7 +1392,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
     // the ellipse bounding box is defined by bottom-right vertex first and then top-left vertex.
     // When saving to PPTX this had resulted in negative radii for the ellipse.
     loadFromFile(u"tdf157289_circularArrow_export.fodp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Verify the markup. Both wR and hR must be positive.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -1406,7 +1406,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)
     // which is similar. If autoGrowWidth and autoGrowHeight are set in the document,
     // then they are exported to pptx as TextWordWrap = "none".
     loadFromFile(u"tdf134401_ExportAutoGrowToTextWordWrap.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // There are 2 shapes in the test file.
     // The 1. shape is without autoGrowWidth/Height.
@@ -1420,7 +1420,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)
 CPPUNIT_TEST_FIXTURE(Test, testTdf163803_ImageFill)
 {
     loadFromFile(u"tdf163803_image_with_fill.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Check that the fill color is saved:
@@ -1439,7 +1439,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPPTXExportOutlinerListStyle)
     loadFromFile(u"outliner-list-style.odp");
 
     // When saving to PPTX:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Then make sure that the list style of the outliner shape on the master page is written:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);

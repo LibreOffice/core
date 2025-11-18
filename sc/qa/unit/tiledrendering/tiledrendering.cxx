@@ -2533,7 +2533,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     loadFromFile(u"validity.xlsx");
 
     // .uno:Save modifies the original file, make a copy first
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -2980,7 +2980,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     loadFromFile(u"invalidate-on-save.ods");
 
     // .uno:Save modifies the original file, make a copy first
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -3139,7 +3139,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
 
     {
         uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
-        save(u"calc8"_ustr); // .ODS
+        save(TestFilter::ODS); // .ODS
     }
     xmlDocUniquePtr pSettingsXml = parseExport(u"settings.xml"_ustr);
     // Multi-user export: don't save every user's view into the exported file
@@ -3147,7 +3147,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     // Use view's logic (not technical) zoom level for export
     assertXPathContent(pSettingsXml, "//config:config-item[@config:name='ZoomValue'][1]", u"150");
 
-    save(u"Calc Office Open XML"_ustr); // .XLSX
+    save(TestFilter::XLSX); // .XLSX
     xmlDocUniquePtr pSheet1Xml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     // Use view's logic (not technical) zoom level for export
     assertXPath(pSheet1Xml, "//x:sheetViews/x:sheetView", "zoomScale", u"150");
@@ -3479,7 +3479,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
 
         // save and reopen
         // .uno:Save modifies the original file, make a copy first
-        saveAndReload(u"Calc MS Excel 2007 VBA XML"_ustr);
+        saveAndReload(TestFilter::XLSM);
 
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);

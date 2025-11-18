@@ -100,7 +100,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf104418)
 {
     createSwDoc("tdf104418.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // Problem was that <w:hideMark> cell property was ignored.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
@@ -219,7 +219,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf65955)
 {
     createSwDoc("tdf65955.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
@@ -243,7 +243,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf65955)
 CPPUNIT_TEST_FIXTURE(Test, testTdf65955_2)
 {
     createSwDoc("tdf65955_2.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf8255)
     };
     createSwDoc("tdf8255.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -659,14 +659,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99140)
     };
     createSwDoc("tdf99140.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
 {
     createSwDoc("table.fodt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // Writer, (new) Word: margin 0 means table border starts at 0
     // (old) Word: margin 0 means paragraph in table starts at 0
 
@@ -700,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119760_tableInTablePosition)
     };
     createSwDoc("tdf119760_tableInTablePosition.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -755,7 +755,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCellMargin, "table-cell-margin.docx")
 CPPUNIT_TEST_FIXTURE(Test, TestPuzzleExport)
 {
     createSwDoc("TestPuzzleExport.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // See tdf#148342 for details
     // Create a metafile
     auto pMeta = getSwDocShell()->GetPreviewMetaFile();
@@ -861,7 +861,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107359, "tdf107359-char-pitch.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf77236_MissingSolidFill)
 {
     createSwDoc("tdf77236_MissingSolidFill.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // tdf#77236: solidFill of VML shape was not exported if the colors of line and style were the same
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(
@@ -914,7 +914,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105875_VmlShapeRotationWithFlip)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133363)
 {
     createSwDoc("tdf133363.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // tdf#133363: remove extra auto space between first and second list elements
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing", "before",
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
 
     createSwDoc("tdf138093.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -987,7 +987,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
 CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
 {
     createSwDoc("tdf138093B.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sdt", 3);
@@ -1080,7 +1080,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131722)
 
     createSwDoc("tdf131722.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1113,7 +1113,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133560)
 CPPUNIT_TEST_FIXTURE(Test, testTdf150408_isLvl_RoundTrip)
 {
     createSwDoc("listWithLgl.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Second level's numbering should use Arabic numbers for first level reference
     auto xPara = getParagraph(1);
@@ -1148,7 +1148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156548)
 {
     // Given a document using two bookmarks with similar names longer than 40 characters
     createSwDoc("longBookmarkName.fodt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // After the export, the names must be no longer than 40 characters; they must be unique;
     // and the hyperlinks must use the same names, to still point to the correct targets:
@@ -1209,7 +1209,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
     }
 
     // Test the same after round-trip
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     {
         // 1st paragraph - becomes inline content control after roundtrip
@@ -1240,14 +1240,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2007)
     //Given a document with 1 image (with name, alt title and description field populated) in odt format
     createSwDoc("tdf148952.odt");
 
-    OUString rFilterName = u"MS Word 2007 XML"_ustr;
-
     //Export it to MS word 2007(.docx) format
-    saveAndReload(rFilterName);
+    saveAndReload(TestFilter::DOCX_2007);
 
     // Checks the number of images in the docx file
-    const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
 
@@ -1268,14 +1265,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2010)
     //Given a document with 1 image (with name, alt title and description field populated) in odt format
     createSwDoc("tdf148952.odt");
 
-    OUString rFilterName = u"Office Open XML Text"_ustr;
-
     //Export it to MS word 2010-365 (.docx) format
-    saveAndReload(rFilterName);
+    saveAndReload(TestFilter::DOCX);
 
     // Checks the number of images in the docx file
-    const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
 

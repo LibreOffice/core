@@ -53,7 +53,7 @@ struct TestParam
         bool bOptimal;
     };
     const std::u16string_view sTestDoc;
-    const OUString sExportType; // empty for import test, otherwise this is an export test
+    TestFilter  eExportType;
     int nRowData;
     RowData const * pData;
 };

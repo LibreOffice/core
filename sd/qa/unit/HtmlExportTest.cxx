@@ -23,7 +23,7 @@ public:
     void testHTMLExport()
     {
         loadFromFile(u"HtmlExportTestDocument.odp");
-        save(u"impress_html_Export"_ustr);
+        save(TestFilter::HTML_IMPRESS);
         htmlDocUniquePtr htmlDoc = parseHtml(maTempFile);
 
         assertXPath(htmlDoc, "/html", 1);
@@ -43,7 +43,7 @@ public:
     void testTdf154989()
     {
         loadFromFile(u"tdf154989.odg");
-        save(u"XHTML Draw File"_ustr);
+        save(TestFilter::XHTML_DRAW);
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
 
         assertXPath(pXmlDoc, "/xhtml:html", 1);

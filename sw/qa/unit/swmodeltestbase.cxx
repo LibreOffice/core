@@ -61,7 +61,7 @@ SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath)
 {
 }
 
-void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const OUString& filter)
+void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, TestFilter filter)
 {
     maTempFile.EnableKillingFile(false);
     header();
@@ -389,9 +389,9 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
     calcLayout();
 }
 
-void SwModelTestBase::saveAndReload(const OUString& rFilter, const char* pPassword)
+void SwModelTestBase::saveAndReload(TestFilter eFilter, const char* pPassword)
 {
-    save(rFilter, pPassword);
+    save(eFilter, pPassword);
 
     loadURL(maTempFile.GetURL(), pPassword);
 }

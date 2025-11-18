@@ -853,7 +853,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerODFExport)
     createSwDoc("paragraph-marker.docx");
 
     // When saving that as ODT + reload:
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Then make sure that it still has the correct color:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -871,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
     createSwDoc("paragraph-marker-formatted-run.docx");
 
     // When saving that as ODT + reload:
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Then make sure that the numbering portion is still non-bold, matching Word:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -989,7 +989,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testCollectFrameAtNodeWithLayout)
     calcLayout();
 
     // When saving to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the output is valid and hasa 1 <draw:frame>:
     // Without the accompanying fix in place, this test would have failed with:

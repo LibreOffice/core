@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148380_fldLocked)
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"1/23/4567 8:9:10 PM"_ustr, xField->getPresentation(false));
     CPPUNIT_ASSERT_EQUAL(u"DocInformation:Last printed (fixed)"_ustr, xField->getPresentation(true));
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     getParagraph(2, u"4/5/2022 4:29:00 PM"_ustr);
     getParagraph(4, u"1/23/4567 8:9:10 PM"_ustr);
@@ -210,7 +210,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139759_commentHighlightBackground, "tdf139759_co
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
     createSwDoc("tdf135906.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
 }
 
@@ -225,7 +225,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
 {
     createSwDoc("para-style-num-level.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 {
     // Given a document with a clearing break, when saving to DOCX:
     createSwDoc("clearing-break.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that the clearing break is not lost:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -300,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -349,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -433,7 +433,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -476,7 +476,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that the page edge -> border space is correct:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -492,7 +492,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 {
     createSwDoc("tdf148494.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -505,7 +505,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 CPPUNIT_TEST_FIXTURE(Test, testTdf137466)
 {
     createSwDoc("tdf137466.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 
     // When saving that document:
     createSwDoc("dont-add-new-styles.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that export doesn't have additional styles, Caption was one of them:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
@@ -601,7 +601,7 @@ DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf148720)
 {
     createSwDoc("tdf148720.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     const char* sShapeXPaths[] =
@@ -679,7 +679,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123642_BookmarkAtDocEnd)
 
     createSwDoc("tdf123642.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -877,7 +877,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148111)
 
     createSwDoc("tdf148111.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -914,7 +914,7 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf81507)
 {
     createSwDoc("tdf81507.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:text w:multiLine="1"/>
@@ -984,12 +984,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 #if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
-    auto const url{createFileURL(u"tdf146955.odt")};
-    std::cout << url << ":\n";
-    loadFromURL(url, nullptr);
-    save(u"Office Open XML Text"_ustr, nullptr);
-    std::cout << maTempFile.GetURL() << ":\n";
-    loadFromURL(maTempFile.GetURL(), nullptr);
+    createSwDoc("tdf146955.odt");
+    saveAndReload(TestFilter::DOCX);
     // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
     // when the code tried to access to a non-existent footnote
     uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
@@ -1000,7 +996,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 CPPUNIT_TEST_FIXTURE(Test, testTdf144668)
 {
     createSwDoc("tdf144668.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1, u"level1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"[0001]"_ustr, getProperty<OUString>(xPara1, u"ListLabelString"_ustr));
 
@@ -1017,7 +1013,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_1, "tdf148455_1.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf148455_2)
 {
     createSwDoc("tdf148455_2.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Find list id for restarted list
@@ -1035,7 +1031,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148455_2)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
     createSwDoc("tdf147978_enhancedPath_commandABVW.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // Make sure the new implemented export for commands A,B,V and W use the correct arc between
     // the given two points, here the short one.
     for (sal_Int16 i = 1 ; i <= 4; ++i)
@@ -1082,7 +1078,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
 {
     createSwDoc("tdf149200.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1155,7 +1151,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149089, "tdf149089.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf139128)
 {
     createSwDoc("tdf139128.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:

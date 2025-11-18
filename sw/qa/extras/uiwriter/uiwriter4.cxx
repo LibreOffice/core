@@ -603,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
         // Actually not needed, but the bug symptom of a missing bookmark
         // occurred because a broken bookmark was saved and loading silently
         // dropped the broken bookmark!
-        saveAndReload(u"writer8"_ustr);
+        saveAndReload(TestFilter::ODT);
         pDoc = getSwDoc();
 
         // Lookup "replacement" bookmark
@@ -648,7 +648,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
     createSwDoc("collapsed_bookmark.odt");
 
     // save original document
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -720,7 +720,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
     }
 
     // save document
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -819,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
     }
 
     // save document
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -883,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
     }
 
     // save original document
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1345,7 +1345,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf91292)
     xPropertySet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_NONE));
 
     // Save it and load it back.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     xPropertySet.set(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No background color", drawing::FillStyle_NONE,
@@ -2211,7 +2211,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aPropertyValues);
 
     // Save it as DOCX & load it again
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // get the annotation
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

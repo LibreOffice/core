@@ -351,7 +351,7 @@ void PivotChartTest::testRoundtrip()
         CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, xLabelDataSequence->getData()[0].get<OUString>());
     }
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     xChartDoc = getPivotChartDocFromSheet(1 );
     CPPUNIT_ASSERT(xChartDoc.is());

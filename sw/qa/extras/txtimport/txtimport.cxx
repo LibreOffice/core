@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
     OUString aResStr = s.makeStringAndClear();
     pWrtShell->Insert(aResStr);
 
-    saveAndReload(u"Text"_ustr); //Reloading the file again
+    saveAndReload(TestFilter::TEXT); //Reloading the file again
 
     // Without the fix, this test would have failed with:
     // - Expected: 1

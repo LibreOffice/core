@@ -409,7 +409,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTocLink)
     xToc->refresh();
 
     // Save as PDF.
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());

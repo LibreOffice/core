@@ -1186,7 +1186,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
     }
 
     // Save and reload
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     // Expected values of point 4 of the shape polygon
     const OString sTestCase[] = { "FlipH"_ostr, "FlipV"_ostr, "FlipHV"_ostr };

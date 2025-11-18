@@ -42,9 +42,9 @@
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, u"Office Open XML Text"_ustr)
-#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, u"writer8"_ustr)
-#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, u"MS Word 97"_ustr)
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, TestFilter::DOCX)
+#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, TestFilter::ODT)
+#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, TestFilter::DOC)
 
 class SwXTextDocument;
 namespace comphelper
@@ -87,7 +87,7 @@ protected:
      * (Loads the requested file, calls 'verify' function, save it to temp file, load the
      * temp file and then calls 'verify' function again)
      */
-    void executeLoadVerifyReloadVerify(const char* filename, const OUString& filter);
+    void executeLoadVerifyReloadVerify(const char* filename, TestFilter filter);
 
     /**
      * Function overridden by unit test. See DECLARE_SW_*_TEST macros
@@ -195,7 +195,7 @@ protected:
 
     void header();
 
-    void saveAndReload(const OUString& rFilter, const char* pPassword = nullptr);
+    void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
 
     /// Get page count.
     int getPages() const;

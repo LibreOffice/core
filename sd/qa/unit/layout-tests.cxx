@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
     }
 
     // 2. It must stay enabled after ODP round-trip
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     {
         CPPUNIT_ASSERT(
             getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
@@ -559,7 +559,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
     }
 
     // 4. It must stay disabled after ODP round-trip
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     {
         CPPUNIT_ASSERT(
             !getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
     }
 
     // 6. Check PPTX round-trip
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     {
         CPPUNIT_ASSERT(
             getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
@@ -602,7 +602,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
     skipValidation();
 
     // 7. It must round-trip to ODP
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     {
         CPPUNIT_ASSERT(
             getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));

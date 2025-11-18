@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
 
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When saving to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that no display text attribute is written:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
     xTextProps->setPropertyValue(u"CharFontCharSet"_ustr, uno::Any(awt::CharSet::SYMBOL));
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -233,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
     pWrtShell->EndAllAction();
 
     // When saving to docx:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure we write a floating table, not a textframe containing a table:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When saving to docx:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that layoutInCell is undoing the effect of the import-time tweak:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
 
     // When saving to docx:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the compat flag is serialized:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
     rIDSA.set(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK, true);
 
     // When saving to docx:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the compat flag is serialized:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
@@ -479,7 +479,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCXExport)
     pWrtShell->EndAllAction();
 
     // When saving to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure that the overlap=never markup is written:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEnd)
     pWrtShell->InsertFootnote(OUString(), /*bEndNote=*/true);
 
     // When saving to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure the endnote position is section end:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
@@ -628,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownEmptyItem)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When saving to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure we only emit 1 list item:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

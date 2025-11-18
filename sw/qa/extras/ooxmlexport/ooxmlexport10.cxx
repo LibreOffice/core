@@ -96,14 +96,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSmartart)
     };
     createSwDoc("smartart.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69548)
 {
     createSwDoc("fdo69548.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // The problem was that the last space in target URL was removed
     CPPUNIT_ASSERT_EQUAL(u"#this_is_a_bookmark"_ustr, getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
 }
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedDOCXExport)
     createSwDoc("floattable-nested.odt");
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure both floating table is exported:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXExport)
     createSwDoc("floattable-nested-cell-start.odt");
 
     // When exporting to DOCX:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // Then make sure both floating table is exported at the right position:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -275,7 +275,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162916_nastyTOC, "tdf162916_nastyTOC.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFontEsc)
 {
     createSwDoc("test_tdf120412.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc =parseExport(u"word/document.xml"_ustr);
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
@@ -430,7 +430,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
 {
     createSwDoc("fdo73389.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The second fix used variable width.
     // The recent fix uses fixed width again, according to the fixed width cells.
@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 {
     createSwDoc("fdo73389.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing", "after", u"0");
@@ -456,7 +456,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
 {
     createSwDoc("tdf134569_nestedTable.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // non-overridden w:after spacing in the table was pushing the document to the second page.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
@@ -464,7 +464,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
 CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
 {
     createSwDoc("tdf59274.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -621,7 +621,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSmartartStrict)
     };
     createSwDoc("strict-smartart.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -732,7 +732,7 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
 {
     createSwDoc("tdf116194.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // The problem was that the importer lost consecutive tables with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
 CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 {
     createSwDoc("tdf134606.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // The problem was that the importer lost the nested table structure with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl");

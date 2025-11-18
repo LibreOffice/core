@@ -33,7 +33,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 {
     createSwDoc("table_cross_reference.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
@@ -206,7 +206,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 {
     createSwDoc("table_cross_reference_custom_format.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
@@ -340,7 +340,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
 {
     createSwDoc("object_cross_reference.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(10, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
@@ -731,14 +731,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTd112202)
 
     createSwDoc("090716_Studentische_Arbeit_VWS.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
 {
     createSwDoc("tdf79435_legacyInputFields.doc");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     //using .doc input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField = getProperty<uno::Reference<text::XFormField>>(
         getRun(getParagraph(5), 3), u"Bookmark"_ustr);
@@ -888,7 +888,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 CPPUNIT_TEST_FIXTURE(Test, testVMLShapetypeId)
 {
     createSwDoc("controlshape.fodt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // must be _x0000_t<NR>
     assertXPath(pXmlDoc,
@@ -906,7 +906,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLShapetypeId)
 CPPUNIT_TEST_FIXTURE(Test, testTdf73547)
 {
     createSwDoc("tdf73547-dash.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
@@ -936,7 +936,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf105444)
 {
     createSwDoc("tdf105444.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     // there is no extra paragraph on Win32, only a single one.
     assertXPath(pXmlComm, "/w:comments/w:comment/w:p", 1);
@@ -961,7 +961,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf138780)
 {
     createSwDoc("tdf138780.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraphs were not part of a numbering anymore after roundtrip.
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
@@ -980,7 +980,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138780)
 CPPUNIT_TEST_FIXTURE(Test, testTdf134618)
 {
     createSwDoc("tdf134618.doc");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     //Without the fix it in place, it would have failed with
@@ -994,7 +994,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134618)
 CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
 {
     createSwDoc("tdf99631.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "//w:object", 2);
@@ -1010,7 +1010,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
 CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
 {
     createSwDoc("tdf138899.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     // This was 6, not removed empty temporary paragraph at the end of the section
     assertXPath(pXmlDocument, "/w:document/w:body/w:p", 5);
@@ -1022,7 +1022,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
 CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
 {
     createSwDoc("tdf122563.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
@@ -1034,7 +1034,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
 CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
 {
     createSwDoc("tdf94628.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -1113,7 +1113,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 CPPUNIT_TEST_FIXTURE(Test, testLanguageInGroupShape)
 {
     createSwDoc("tdf131922_LanguageInGroupShape.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // tdf#131922: Check if good language is used in shape group texts
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXml,
@@ -1172,7 +1172,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116883, "tdf116883.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf131420)
 {
     createSwDoc("tdf131420.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr/w:top");
 }
@@ -1245,7 +1245,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145720)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
     createSwDoc("tdf104797.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 0 (missing move*FromRange* elements)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]//w:moveFromRangeStart", 1);
@@ -1271,7 +1271,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150166)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
     createSwDoc("tdf150166.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
     // This was 2 (missing RangeStart elements, but bad unpaired RangeEnds)
@@ -1291,7 +1291,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
     createSwDoc("TC-table-DnD-move.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0 (missing tracked table row deletion/insertion)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
@@ -1302,7 +1302,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510_table_from_row)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
     createSwDoc("TC-table-Separate-Move.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0 (missing tracked table row deletion/insertion)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 1);
@@ -1315,7 +1315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table row move by DnD
     createSwDoc("TC-table-rowDND.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0 (missing tracked table row deletion/insertion)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 1);
@@ -1326,7 +1326,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table2)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table row move by DnD
     createSwDoc("TC-table-rowDND-front.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0 (missing tracked table row deletion/insertion)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
@@ -1337,7 +1337,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150824)
 {
     // check tracked table row insertion (stored in a single redline)
     createSwDoc("tdf150824.fodt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0 (missing tracked table row deletion/insertion)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
@@ -1349,7 +1349,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157011)
 {
     // check tracked table column insertions and deletions with empty cells
     createSwDoc("tdf157011_ins_del_empty_cols.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // This was 1 (missing tracked table cell insertions)
@@ -1413,7 +1413,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119188_list_margin_in_cell, "tdf119188_list_marg
 CPPUNIT_TEST_FIXTURE(Test, testChart_BorderLine_Style)
 {
     createSwDoc("Chart_BorderLine_Style.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     /* DOCX containing Chart with BorderLine Style as Dash Type should get preserved
      * inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
@@ -1432,7 +1432,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChart_BorderLine_Style)
 CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
 {
     createSwDoc("Chart_Plot_BorderLine_Style.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     /* DOCX containing Chart wall (plot area) and Chart Page with BorderLine Style as Dash Type
      * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
@@ -1445,7 +1445,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedEmptyParagraph)
 {
     createSwDoc("testTrackChangesDeletedEmptyParagraph.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del");
 }
@@ -1453,7 +1453,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedEmptyParagraph)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
 {
     createSwDoc("testTrackChangesEmptyParagraphsInADeletion.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     for (int i = 1; i < 12; ++i)
         assertXPath(pXmlDoc,
@@ -1463,7 +1463,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
 {
     createSwDoc("tdf149708.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // keep tracked insertion of a list item
     // This was 0 (missing tracked insertion of the paragraph mark)
@@ -1473,7 +1473,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149707)
 {
     createSwDoc("tdf149711.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveFrom");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:moveTo");
@@ -1485,7 +1485,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149707)
 CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
 {
     createSwDoc("tdf70234.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import field with tracked deletion
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar");
@@ -1500,7 +1500,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
 CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
 {
     createSwDoc("tdf115212.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export field with tracked deletion
     assertXPath(pXmlDoc, "//w:p[2]/w:del[1]/w:r[1]/w:fldChar");
@@ -1509,7 +1509,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
 CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
 {
     createSwDoc("tdf120338.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked paragraph style change
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val",
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
 CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
 {
     createSwDoc("tdf126245.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked numbering change
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId", "val",
@@ -1529,7 +1529,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
 CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
 {
     createSwDoc("tdf124491.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import format change of empty lines, FIXME: change w:r with w:pPr in export
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange");
@@ -1541,7 +1541,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
 CPPUNIT_TEST_FIXTURE(Test, testTdf143911)
 {
     createSwDoc("tdf126206.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export format change of text portions
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange");
@@ -1552,7 +1552,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143911)
 CPPUNIT_TEST_FIXTURE(Test, testTdf105485)
 {
     createSwDoc("tdf105485.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking of deleted comments
     assertXPath(pXmlDoc, "//w:del/w:r/w:commentReference");
@@ -1561,7 +1561,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105485)
 CPPUNIT_TEST_FIXTURE(Test, testTdf125894)
 {
     createSwDoc("tdf125894.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in frames
     assertXPath(pXmlDoc, "//w:del", 2);
@@ -1572,7 +1572,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149388)
 {
     // see also testTdf132371
     createSwDoc("tdf132271.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
     // (don't recognize tracked text moving during the import,
@@ -1587,7 +1587,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
 {
     // see also testTdf149388
     createSwDoc("tdf149388.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del", 2);
@@ -1600,7 +1600,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149388_fly)
 {
     // see also testTdf136667
     createSwDoc("tdf136667.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del", 2);
@@ -1613,7 +1613,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
 {
     // see also testTdf149388_fly
     createSwDoc("tdf149388_fly.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del", 2);
@@ -1625,7 +1625,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
 CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
 {
     createSwDoc("tdf136850.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del");
@@ -1634,7 +1634,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
 {
     createSwDoc("tdf128156.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // keep tracked insertion of a paragraph
     // This was 0 before 350972a8bffc1a74b531e0336954bf54b1356025,
@@ -1645,7 +1645,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
 CPPUNIT_TEST_FIXTURE(Test, testTdf165330)
 {
     createSwDoc("CT-with-frame.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // check that *both* tracked changes were round tripped
@@ -1656,7 +1656,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165330)
 CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
 {
     createSwDoc("tdf125546.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // compress redlines (it was 15)
     assertXPath(pXmlDoc, "//w:rPrChange", 3);
@@ -1665,7 +1665,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
 CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
 {
     createSwDoc("Hau_min_list2.fodt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // list is LABEL_WIDTH_AND_POSITION with SvxAdjust::Left
     // I) LTR
@@ -1769,7 +1769,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
 CPPUNIT_TEST_FIXTURE(Test, testTdf124604)
 {
     createSwDoc("tdf124604.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // If the numbering comes from a base style, indentation of the base style has also priority.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", u"0");
@@ -1778,7 +1778,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124604)
 CPPUNIT_TEST_FIXTURE(Test, testTdf95374)
 {
     createSwDoc("tdf95374.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Numbering disabled by non-existent numId=0, disabling also inheritance of indentation of parent styles
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", u"0");
@@ -1854,7 +1854,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
     };
     createSwDoc("tdf81100.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
@@ -1866,7 +1866,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
 CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
 {
     createSwDoc("tdf88496.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // Switch off repeating header, there is no place for it.
     // Now there are only 3 pages with complete table content
     // instead of a 51-page long table only with header.
@@ -1884,7 +1884,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
 CPPUNIT_TEST_FIXTURE(Test, testTdf77417)
 {
     createSwDoc("tdf77417.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
     // This was 3 pages with the first invisible blank page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -1893,7 +1893,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77417)
 CPPUNIT_TEST_FIXTURE(Test, testTdf130494)
 {
     createSwDoc("tdf130494.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val",
                 u"yellow");
@@ -1904,7 +1904,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130494)
 CPPUNIT_TEST_FIXTURE(Test, testTdf130690)
 {
     createSwDoc("tdf130690.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val",
                 u"yellow");
@@ -1916,7 +1916,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130690)
 CPPUNIT_TEST_FIXTURE(Test, testTdf105215)
 {
     createSwDoc("tdf105215.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:rPr/w:rFonts", "ascii",
                 u"Linux Libertine G");
@@ -1938,7 +1938,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105215)
 CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
 {
     createSwDoc("tdf135187.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 1);
@@ -1959,7 +1959,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
 CPPUNIT_TEST_FIXTURE(Test, testTdf136617)
 {
     createSwDoc("tdf136617.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // This was 2
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1972,7 +1972,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136617)
 CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
 {
     createSwDoc("tdf121597.odt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1988,7 +1988,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
 CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
 {
     createSwDoc("tdf141660.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -2001,7 +2001,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133643)
 {
     createSwDoc("tdf133643.doc");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -2054,7 +2054,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116084, "tdf116084.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf116084_anonymized)
 {
     createSwDoc("tdf116084.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", u"must");
@@ -2081,7 +2081,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf121176_anonymized)
 {
     createSwDoc("tdf121176.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", u"must");
@@ -2100,7 +2100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121176_anonymized)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
 {
     createSwDoc("tdf128913.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:ins and w:del are imported correctly, if they contain only inline images
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
@@ -2110,7 +2110,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
 CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
 {
     createSwDoc("tdf142700.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:ins and w:del are imported correctly, if they contain only images anchored to character
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic");
@@ -2120,7 +2120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
 CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
 {
     createSwDoc("tdf142387.docx");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly (only w:del was exported)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", u"inserts ");
@@ -2129,7 +2129,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147892)
 {
     createSwDoc("tdf147892.fodt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly
     // (both w:del and w:ins were exported for para marker)
@@ -2181,7 +2181,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD_DATABASE, "tdf67207.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
 {
     createSwDoc("tdf101122_noFillForCustomShape.odt");
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#101122 check whether the "F" (noFill) option has been exported to docx
@@ -2205,7 +2205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
 CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
 {
     createSwDoc("tdf124678_no_leading_paragraph.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
@@ -2222,7 +2222,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
 CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case2)
 {
     createSwDoc("tdf124678_with_leading_paragraph.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
@@ -2357,7 +2357,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119952_negativeMargins)
 
     createSwDoc("tdf119952_negativeMargins.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 

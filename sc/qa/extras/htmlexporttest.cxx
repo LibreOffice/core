@@ -22,7 +22,7 @@ public:
     void testHtmlSkipImage()
     {
         loadFromFile(u"BaseForHTMLExport.ods");
-        save(u"HTML (StarCalc)"_ustr);
+        save(TestFilter::HTML_CALC);
         htmlDocUniquePtr pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
 
@@ -30,7 +30,7 @@ public:
         assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
         setFilterOptions(u"SkipImages"_ustr);
-        save(u"HTML (StarCalc)"_ustr);
+        save(TestFilter::HTML_CALC);
 
         pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
@@ -41,7 +41,7 @@ public:
     void testTdf155244()
     {
         loadFromFile(u"default-styles.ods");
-        save(u"XHTML Calc File"_ustr);
+        save(TestFilter::XHTML_CALC);
 
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(pXmlDoc);

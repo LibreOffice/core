@@ -50,7 +50,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, tdf135942)
 {
     createSwDoc("nestedTableInFooter.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // All table autostyles should be collected, including nested, and must not crash.
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
     // Similar to tdf135942
 
     createSwDoc("table-in-frame-in-table-in-header-base.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // All table autostyles should be collected, including nested, and must not crash.
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
 
     createSwDoc("personalmetadata.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 1);
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
 
     createSwDoc("personalmetadata.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 0);
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
 {
     // 1. Check we have the original edit time info
     createSwDoc("personalmetadata.odt");
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration",
                        u"PT21M22S");
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
 
     // 2. Check edit time info is 0
     createSwDoc("personalmetadata.odt");
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", u"P0D");
 
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf151100)
     // Similar to tdf135942
 
     createSwDoc("tdf151100.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // All table autostyles should be collected, including nested, and must not crash.
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -273,7 +273,7 @@ DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.o
 CPPUNIT_TEST_FIXTURE(Test, testTdf137199)
 {
     createSwDoc("tdf137199.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(u">1<"_ustr,
                          getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165115)
 {
     // Test saving a template file with password protection
     createSwDoc();
-    saveAndReload("writer8_template", "test");
+    saveAndReload(TestFilter::OTT, "test");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
@@ -317,7 +317,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 
     // This was failing with a duplicate auto numbering style name of L1 instead of a unique name,
     // thus it was showing the same info as before the bullet modification.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xPara.set(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 
@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
 {
     createSwDoc("listformat.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
     CPPUNIT_ASSERT_EQUAL(u">1<"_ustr,
                          getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
 CPPUNIT_TEST_FIXTURE(Test, testShapeWithHyperlink)
 {
     createSwDoc("shape-with-hyperlink.odt");
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListFormatOdt)
 
     createSwDoc("listformat.odt");
     verify();
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -524,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
 CPPUNIT_TEST_FIXTURE(Test, tdf120972)
 {
     createSwDoc("table_number_format_3.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     OUString cDecimal(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
@@ -831,7 +831,7 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
 CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
 {
     createSwDoc("ParagraphMarkerMarkup.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // Test that the markup stays at save-and-reload
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     OUString autostyle = getXPath(pXmlDoc, "//office:body/office:text/text:p", "marker-style-name");
@@ -856,7 +856,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
 
     xComment->attach(getParagraph(1)->getEnd());
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     auto xFields(
         mxComponent.queryThrow<text::XTextFieldsSupplier>()->getTextFields()->createEnumeration());
@@ -882,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
 CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
 {
     createSwDoc("IsLegal.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Second level's numbering should use Arabic numbers for first level reference
     auto xPara = getParagraph(1);
@@ -926,7 +926,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width); // It was 720, i.e. 0.5 inch
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // 2. Make sure that exported document has NoGapAfterNoteNumber option set,
     // and has correct layout
     {
@@ -1006,7 +1006,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159438)
     // Given a text with bookmarks, where an end of one bookmark is the position of another,
     // and the start of a third
     createSwDoc("bookmark_order.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     auto xPara = getParagraph(1);
 
     // Check that the order of runs is correct (bookmarks don't overlap)
@@ -1095,7 +1095,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
 {
     // Given a document with an empty numbered paragraph, and a cross-reference to it
     createSwDoc("tdf160700.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Refresh fields and ensure cross-reference to numbered para is okay
     auto xTextFieldsSupplier(mxComponent.queryThrow<text::XTextFieldsSupplier>());
@@ -1128,7 +1128,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160253_ordinary_numbering)
     // Before the fix, this already failed with
     //   Error: "list2916587379" is referenced by an IDREF, but not defined.
     createSwDoc("tdf160253_ordinary_numbering.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Make sure that the fourth paragraph has correct number - it was "1." before the fix
     CPPUNIT_ASSERT_EQUAL(u"3."_ustr,
@@ -1149,7 +1149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160253_outline_numbering)
     // Before the fix, this already failed with
     //   Error: "list2916587379" is referenced by an IDREF, but not defined.
     createSwDoc("tdf160253_outline_numbering.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Make sure that the third paragraph has correct number - it was "1" before the fix
     CPPUNIT_ASSERT_EQUAL(u"2"_ustr,
@@ -1166,7 +1166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
     // Given a table in a frame anchored to a page:
     // it must not assert on export because of missing format for an exported table
     createSwDoc("table_in_frame_to_page.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     auto AutoStyleUsedIn = [this, &pXmlDoc](const OString& path, const char* attr) -> OString {
@@ -1192,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeletedTableAutostylesExport)
     // Given a document with deleted table:
     // it must not assert on export because of missing format for an exported table
     createSwDoc("deleted_table.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf160877, "tdf160877.odt")
@@ -1216,7 +1216,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
     // - Error: "2001-01-01" does not satisfy the "dateTime" type
     // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
     createSwDoc("midnight_redline.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathContent(pXmlDoc,
@@ -1230,7 +1230,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122452)
     // FIXME:  Error: element "text:insertion" was found where no element may occur
     skipValidation();
     createSwDoc("tdf122452.doc");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Without the fix in place this fails with:
@@ -1243,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122452)
 CPPUNIT_TEST_FIXTURE(Test, testTdf159027)
 {
     createSwDoc("tdf159027.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     SwDoc* pDoc = getSwDoc();
     pDoc->getIDocumentFieldsAccess().UpdateFields(true);
 
@@ -1273,7 +1273,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121119)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
 
-    saveAndReload(u"writerglobal8_writer"_ustr);
+    saveAndReload(TestFilter::ODM);
     pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(
@@ -1315,7 +1315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163703)
 {
     // Given a document with italics autostyle in a comment
     createSwDoc("italics-in-comment.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     auto xFields(
         mxComponent.queryThrow<text::XTextFieldsSupplier>()->getTextFields()->createEnumeration());
@@ -1364,7 +1364,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf36709)
 {
     // Verifies that loext:text-indent correctly round-trips
     createSwDoc("tdf36709.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1391,7 +1391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163913)
 {
     // Verifies that loext:left-margin and loext:right-margin correctly round-trip
     createSwDoc("tdf163913.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1470,7 +1470,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         CPPUNIT_ASSERT_EQUAL(u"false"_ustr, val);
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // 2. Make sure that exported document has MsWordUlTrailSpace option set
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
@@ -1511,7 +1511,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         CPPUNIT_ASSERT_EQUAL(u"false"_ustr, val);
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // 4. Make sure that exported document has MsWordUlTrailSpace option not set
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
@@ -1552,7 +1552,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf71583)
 {
     // Verifies that loext:text-indent correctly round-trips
     createSwDoc("tdf71583.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]", "page-count-range");
 }
@@ -1561,7 +1561,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166011)
 {
     // Verifies that style:script-type correctly round-trips
     createSwDoc("tdf166011.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1575,7 +1575,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166011ee)
 {
     // Verifies that style:script-type correctly round-trips with Edit Engine
     createSwDoc("tdf166011ee.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1590,7 +1590,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168817)
     // A ruby text with a hyperlink
     // Without the fix, it failed an assertion on save, and produced invalid XML that couldn't load
     createSwDoc("ruby+hyperlink.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Check that only one instance of respective elements are produced
     assertXPath(pXmlDoc, "//text:p", 1);
@@ -1610,7 +1610,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164677)
     // properties, and generated a single section autostyle, so all the sections got identical
     // properties after reload:
     createSwDoc("colored-sections-separators.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     auto xTextSections = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextSections->getElementNames().getLength());
 
@@ -1670,7 +1670,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168980)
     // - com.sun.star.io.IOException: {Message: "SfxBaseModel::impl_store
     // <file:///C:/lo/build/tmp/test_sw_odfexport4.dllizeba.tmp> failed: 0xc10(Error
     // Area:Io Class:Write Code:16)
-    saveAndReload(u"OpenDocument Text Flat XML"_ustr);
+    saveAndReload(TestFilter::FODT);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf37128ConvertStartEndOnResave)
@@ -1679,7 +1679,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf37128ConvertStartEndOnResave)
     // start/end, respectively. Make sure documents produced by older
     // versions of LO convert these values to left/right.
     createSwDoc("tdf37128-start-end-to-left-right.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
@@ -1706,7 +1706,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118350StartEndPreserved)
     // Check that fo:text-align start/end round-trip correctly for
     // documents made by newer versions of LO.
     createSwDoc("tdf118350-start-end-preserved.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
@@ -1731,7 +1731,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118350StartEndPreserved)
 CPPUNIT_TEST_FIXTURE(Test, testTdf162120StyleWritingModeAutomaticSerialization)
 {
     createSwDoc("tdf162120-style-writing-mode-automatic.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     auto pStylesDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 1);

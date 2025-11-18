@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
     dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -503,7 +503,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
     dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/workbook.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);

@@ -160,7 +160,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps[5].Value);
 
     // Save file and reload to check if solver settings are still there
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc2(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex2(xDoc2->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet2(xIndex2->getByIndex(0), uno::UNO_QUERY_THROW);

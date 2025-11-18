@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf134463)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf117188)
 {
     createSwDoc("tdf117188.docx");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     OUString sWidth = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "width");
     OUString sHeight = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height");
@@ -2124,7 +2124,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607_regression)
     // inline the loading because currently properties can't be passed...
     OUString const url(createFileURL(u"tdf122607_leerzeile.odt"));
     loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
@@ -2152,7 +2152,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf150616)
     // inline the loading because currently properties can't be passed...
     OUString const url(createFileURL(u"in_056132_mod.odt"));
     loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
@@ -2962,7 +2962,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
     // inline the loading because currently properties can't be passed...
     OUString const url(createFileURL(u"fdo56797-2-min.odt"));
     loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // both pages have a tab frame and one footnote

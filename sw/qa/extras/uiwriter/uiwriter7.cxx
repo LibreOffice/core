@@ -1352,7 +1352,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74230)
 {
     createSwDoc();
     //exporting the empty document to ODT via TempFile
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     CPPUNIT_ASSERT(maTempFile.IsValid());
     //loading an XML DOM of the "styles.xml" of the TempFile
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -2182,7 +2182,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
     xConnection->close();
 
     // Reload: should still have a component and a data source, too.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT(xDatabaseContext->hasByName(u"calc-data-source"_ustr));
 
     // Data source has a table named Sheet1 after saving to a different directory.
@@ -2897,7 +2897,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149184)
     // [CUT] sw_uiwriter7
     // Segmentation fault (core dumped)
     // [_RUN_____] testTdf149184::TestBody
-    save(u"MS Word 97"_ustr);
+    save(TestFilter::DOC);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)

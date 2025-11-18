@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     }
 
     // Save and reload, verify file format and reloaded sort descriptor
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//table:sort", "embedded-number-behavior", u"double");
     pDoc = getScDoc();
@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
 
     // Save and reload, verify file format and reloaded sort descriptor
     // "alpha-numeric" is default and thus not written.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pXmlDoc = parseExport("content.xml");
     assertXPathNoAttribute(pXmlDoc, "//table:sort", "embedded-number-behavior");
     pDoc = getScDoc();

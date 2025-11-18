@@ -152,7 +152,7 @@ void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 
     checkSparklines(*pModelObj->GetDocument());
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
@@ -165,7 +165,7 @@ void SparklineImportExportTest::testSparklinesExportODS()
     loadFromFile(u"xlsx/Sparklines.xlsx");
 
     // Save as ODS and check content.xml with XPath
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // We have 3 sparkline groups = 3 tables that contain sparklines
@@ -216,7 +216,7 @@ void SparklineImportExportTest::testSparklinesRoundtripODS()
     checkSparklines(*pModelObj->GetDocument());
 
     // Trigger export and import of sparklines
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
@@ -231,7 +231,7 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     // Load the document containing NO sparklines
     loadFromFile(u"xlsx/empty.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -279,7 +279,7 @@ void SparklineImportExportTest::testSparklinesRoundtripThemeColorsODS()
     CPPUNIT_ASSERT(pModelObj);
     checkSparklineThemeColors(*pModelObj->GetDocument());
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -289,7 +289,7 @@ void SparklineImportExportTest::testSparklinesRoundtripThemeColorsODS()
 void SparklineImportExportTest::testSparklinesRoundtripThemeColorsOOXML()
 {
     loadFromFile(u"fods/Sparklines.fods");
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);

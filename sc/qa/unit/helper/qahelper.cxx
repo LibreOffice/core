@@ -626,11 +626,11 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     for ( unsigned int index=0; index<numElems; ++index )
     {
         const std::u16string_view sFileName = aTestValues[ index ].sTestDoc;
-        const OUString sExportType =  aTestValues[ index ].sExportType;
+        TestFilter eExportType =  aTestValues[ index ].eExportType;
         loadFromFile(sFileName);
 
-        if ( !sExportType.isEmpty() )
-            saveAndReload(sExportType);
+        if ( eExportType != TestFilter::NONE )
+            saveAndReload(aTestValues[ index ].eExportType);
 
         ScDocument* pDoc = getScDoc();
 

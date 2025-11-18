@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSplitPanes)
 {
     createDoc("split-panes.ods");
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     xmlDocUniquePtr pSettings = parseExport(u"settings.xml"_ustr);
     CPPUNIT_ASSERT(pSettings);
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSplitPanesXLSX)
 {
     createDoc("split-panes.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
 
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);

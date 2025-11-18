@@ -1983,7 +1983,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)
     // Type something, getting into text editing mode (appending) automatically
     insertStringToObject(1, u"Foo Bar", /*bUseEscape*/ false);
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     xDrawPagesSupplier.set(mxComponent, uno::UNO_QUERY);
     xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -2033,7 +2033,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     dispatchCommand(mxComponent, u".uno:OutlineFont"_ustr, {});
 
     // Save it as PPTX and load it again.
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),

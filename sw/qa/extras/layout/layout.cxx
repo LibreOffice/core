@@ -3595,7 +3595,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
     createSwDoc("tdf109137.docx");
     // FIXME: Error: attribute "text:start-value" has a bad value
     skipValidation();
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 0, the blue rectangle moved from the 1st to the 2nd page.
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",

@@ -27,7 +27,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testImageEmbedding)
 {
     createSwDoc("image-mimetype.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf131812)
 {
     createSwDoc("tdf131812.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf146264)
 {
     createSwDoc("tdf146264.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf167910)
 {
     createSwDoc("tdf167910.fodt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf118637)
 {
     createSwDoc("tdf118637.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf145361)
 {
     createSwDoc("tdf145361.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     // Without the fix in place, this test would have failed with
     // - SfxBaseModel::impl_store <file:///tmp/lu66091ameq.tmp> failed: 0xc10(Error Area:Io Class:Write Code:16)
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf142483)
 {
     createSwDoc("tdf142483.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf107696)
 {
     createSwDoc("tdf107696.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf66305)
 {
     createSwDoc("tdf66305.odt");
     setFilterOptions(u"UTF8"_ustr);
-    save(u"XHTML Writer File"_ustr);
+    save(TestFilter::XHTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
