@@ -1069,6 +1069,10 @@ static auto
 WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> void
 {
     const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
+    if (!rIDSA.get(DocumentSettingId::ADD_EXT_LEADING))
+    {
+        rpFS->singleElementNS(XML_w, XML_noLeading);
+    }
     // tdf#88908 adjust CJK-context normal spaces to half of an ideographic space
     if (rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES))
     {
@@ -1080,10 +1084,6 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> voi
     if (rIDSA.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
     {
         rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
-    }
-    if (!rIDSA.get(DocumentSettingId::ADD_EXT_LEADING))
-    {
-        rpFS->singleElementNS(XML_w, XML_noLeading);
     }
     // tdf#146515 export "Use printer metrics for document formatting"
     if (!rIDSA.get(DocumentSettingId::USE_VIRTUAL_DEVICE))
