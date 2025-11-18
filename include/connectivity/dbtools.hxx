@@ -23,6 +23,7 @@
 
 #include <map>
 #include <string_view>
+#include <vector>
 
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
