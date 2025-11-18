@@ -1422,11 +1422,14 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
     OUString sDescr, sURL, sBookmark, sPPAction;
+    bool bVisible = true;
 
     if ( GetProperty( xShapeProps, u"Description"_ustr ) )
         mAny >>= sDescr;
     if ( GetProperty( xShapeProps, u"URL"_ustr ) )
         mAny >>= sURL;
+    if ( GetProperty( xShapeProps, u"Visible"_ustr ) )
+        mAny >>= bVisible;
     if (GetProperty(xShapeProps, u"Bookmark"_ustr))
         mAny >>= sBookmark;
     if (GetProperty(xShapeProps, u"OnClick"_ustr))
@@ -1435,7 +1438,8 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                          XML_id,     OString::number(GetNewShapeID(xShape)),
                          XML_name,   GetShapeName(xShape),
-                         XML_descr,  sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()));
+                         XML_descr,  sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()),
+                         XML_hidden, sax_fastparser::UseIf("1", !bVisible));
 
     if (eClickAction != presentation::ClickAction_NONE)
     {
