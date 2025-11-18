@@ -8,10 +8,10 @@
     <string name="readonly_file">Гэты файл даступны толькі для чытання.</string>
     <string name="about_license">Паказаць Ліцэнзію</string>
     <string name="about_notice">Паказаць Нататкі</string>
-    <string name="create_file">Стварыць Новы Файл</string>
-    <string name="new_textdocument">Новы Тэкставы Дакумент</string>
-    <string name="new_presentation">Новая Прэзентацыя</string>
-    <string name="new_spreadsheet">Новая Табліца</string>
+    <string name="create_file">Стварыць новы файл</string>
+    <string name="new_textdocument">Новы тэкставы дакумент</string>
+    <string name="new_presentation">Новая прэзентацыя</string>
+    <string name="new_spreadsheet">Новая табліца</string>
     <string name="new_drawing">Новы Малюнак</string>
     <string name="select_file_to_open">Выбар файла для адкрыцця</string>
     <string name="search_find_next">Шукаць Наступнае</string>
@@ -104,7 +104,7 @@
     <string name="action_rename_slide">Перайменаваць Слайд</string>
     <string name="automatic">Аўтаматычна</string>
     <string name="app_vendor">Гэты выпуск быў пастаўлены $VENDOR.</string>
-    <string name="about_privacy_policy">Палітыка Прыватнасці</string>
+    <string name="about_privacy_policy">Палітыка прыватнасці</string>
     <string name="title_browser">Усе файлы</string>
     <string name="pref_developer_mode_summary">Уключыце рэжым распрацоўшчыка, дзе вы можаце адпраўляць каманды UNO ў праграме. Выкарыстоўвайце на свой страх і рызыку.</string>
     <string name="pref_experimental_editing_summary">Уключыць рэжым эксперыментальнага рэдагавання. Выкарыстоўвайце на свой страх і рызыку.</string>
