@@ -157,7 +157,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
         jsdialog::SendQuickFindForView(nShellId);
 
-        // disable search options for online as still tunnled dialog
+        // disable search options for online as still tunneled dialog
         m_xSearchOptionsToolbar->set_visible(false);
     }
     m_nMinimumPanelWidth
