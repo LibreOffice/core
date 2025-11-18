@@ -866,6 +866,27 @@
                     "dest-filename": "@LIBEOT_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@AFDKO_TARBALL@",
+                    "sha256": "@AFDKO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@AFDKO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FAST_FLOAT_TARBALL@",
+                    "sha256": "@FAST_FLOAT_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FAST_FLOAT_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@MD4C_TARBALL@",
+                    "sha256": "@MD4C_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@MD4C_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/@OPENSYMBOL_TTF@",
                     "sha256": "@OPENSYMBOL_SHA256SUM@",
                     "type": "file",
