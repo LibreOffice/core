@@ -42,19 +42,20 @@ void SwNavigationShell::Execute(SfxRequest const& rReq)
     if (pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
 
-    if (pSdrView->IsTextEdit())
-        pSh->EndTextEdit();
-    if (pSh->GetView().IsDrawMode())
-        pSh->GetView().LeaveDrawCreate();
-    pSh->EnterStdMode();
-
     switch (nSlotId)
     {
         case FN_NAVIGATION_BACK:
-            aSwNavigationMgr.goBack();
+            if (pSh->IsCursorVisible())
+            {
+                pSh->EnterStdMode();
+                aSwNavigationMgr.goBack();
+            }
+            else
+                pSh->UpdateCursor(SwCursorShell::SCROLLWIN);
             break;
 
         case FN_NAVIGATION_FORWARD:
+            pSh->EnterStdMode();
             aSwNavigationMgr.goForward();
             break;
         default:

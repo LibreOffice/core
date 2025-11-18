@@ -624,9 +624,22 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             rSh.GotoNxtPrvTableFormula( bNext, true );
             break;
 
-        case NID_RECENCY :
-            rSh.EnterStdMode();
-            bNext ? rSh.GetNavigationMgr().goForward() : rSh.GetNavigationMgr().goBack();
+        case NID_RECENCY:
+            if (bNext)
+            {
+                rSh.EnterStdMode();
+                rSh.GetNavigationMgr().goForward();
+            }
+            else
+            {
+                if (rSh.IsCursorVisible())
+                {
+                    rSh.EnterStdMode();
+                    rSh.GetNavigationMgr().goBack();
+                }
+                else
+                    rSh.UpdateCursor(SwCursorShell::SCROLLWIN);
+            }
             break;
     }
     if (NID_POSTIT != s_nMoveType)
