@@ -1592,6 +1592,43 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextAlignLeft)
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr", "algn", u"l");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169496_hidden_graphic)
+{
+    createSdImpressDoc("pptx/tdf169496_hidden_graphic.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Graphic 5 is hidden and Graphic 4 is visible, but their order might change in the XML
+    // Without the fix the hidden attribute wasn't exported
+    OUString sName1
+        = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic[1]/p:nvPicPr/p:cNvPr", "name");
+    OUString sName2
+        = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic[2]/p:nvPicPr/p:cNvPr", "name");
+    if (sName1 == "Graphic 5" && sName2 == "Graphic 4")
+    {
+        OUString aHidden
+            = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic[1]/p:nvPicPr/p:cNvPr", "hidden");
+        bool bHidden = aHidden == u"true"_ustr || aHidden == u"1";
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphic 3 is supposed to be hidden", true, bHidden);
+
+        assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic[2]/p:nvPicPr/p:cNvPr",
+                               "hidden");
+    }
+    else if (sName1 == "Graphic 4" && sName2 == "Graphic 5")
+    {
+        assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic[1]/p:nvPicPr/p:cNvPr",
+                               "hidden");
+
+        OUString aHidden
+            = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic[2]/p:nvPicPr/p:cNvPr", "hidden");
+        bool bHidden = aHidden == u"true"_ustr || aHidden == u"1";
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphic 4 is supposed to be hidden", true, bHidden);
+    }
+    else
+        CPPUNIT_FAIL("Names of graphics is incorrect");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

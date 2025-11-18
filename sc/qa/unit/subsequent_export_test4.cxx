@@ -1023,6 +1023,45 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf139258_rotated_image)
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", u"25");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testtdf169496_hidden_graphic)
+{
+    createScDoc("xlsx/tdf169496_hidden_graphic.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+
+    // Graphic 4 is hidden and Graphic 3 is visible, but their order might change in the XML
+    // Without the fix the hidden attribute wasn't exported
+    OUString sName1 = getXPath(
+        pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:pic/xdr:nvPicPr/xdr:cNvPr", "name");
+    OUString sName2 = getXPath(
+        pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:pic/xdr:nvPicPr/xdr:cNvPr", "name");
+    if (sName1 == "Graphic 4" && sName2 == "Graphic 3")
+    {
+        OUString aHidden = getXPath(
+            pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:pic/xdr:nvPicPr/xdr:cNvPr", "hidden");
+        bool bHidden = aHidden == u"true"_ustr || aHidden == u"1";
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphic 3 is supposed to be hidden", true, bHidden);
+
+        assertXPathNoAttribute(
+            pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:pic/xdr:nvPicPr/xdr:cNvPr", "hidden");
+    }
+    else if (sName1 == "Graphic 3" && sName2 == "Graphic 4")
+    {
+        assertXPathNoAttribute(
+            pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:pic/xdr:nvPicPr/xdr:cNvPr", "hidden");
+
+        OUString aHidden = getXPath(
+            pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:pic/xdr:nvPicPr/xdr:cNvPr", "hidden");
+        bool bHidden = aHidden == u"true"_ustr || aHidden == u"1";
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphic 4 is supposed to be hidden", true, bHidden);
+    }
+    else
+        CPPUNIT_FAIL("Names of graphics is incorrect");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf144642_RowHeightRounding)
 {
     // MS Excel round down row heights to 0.75pt
