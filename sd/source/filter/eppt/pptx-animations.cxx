@@ -951,18 +951,28 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     if (!aChildNodes.empty())
     {
         bool bSubTnLst = false;
-        mpFS->startElementNS(XML_p, XML_childTnLst);
+        bool bWroteChildTnList = false;
         for (const NodeContextPtr& pChildContext : aChildNodes)
         {
             if (pChildContext->isValid())
             {
                 if (pChildContext->isOnSubTnLst())
                     bSubTnLst = true;
+                else if (pChildContext->getNode()->getType() == AnimationNodeType::ANIMATEPHYSICS)
+                    ; // ignore we don't support exporting this node type
                 else
+                {
+                    if (!bWroteChildTnList)
+                    {
+                        bWroteChildTnList = true;
+                        mpFS->startElementNS(XML_p, XML_childTnLst);
+                    }
                     WriteAnimationNode(pChildContext);
+                }
             }
         }
-        mpFS->endElementNS(XML_p, XML_childTnLst);
+        if (bWroteChildTnList)
+            mpFS->endElementNS(XML_p, XML_childTnLst);
 
         if (bSubTnLst)
         {
