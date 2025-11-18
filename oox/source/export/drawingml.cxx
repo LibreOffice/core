@@ -2308,12 +2308,15 @@ void DrawingML::WriteTransformation(const Reference< XShape >& xShape, const too
     sal_Int32 nChildLeft = nLeft;
     sal_Int32 nChildTop = nTop;
 
+    const sal_Int64 MAX_SIZE = std::numeric_limits<sal_Int32>::max();
+    sal_Int32 nCx = std::min(oox::drawingml::convertHmmToEmu(rRect.GetWidth()), MAX_SIZE);
+    sal_Int32 nCy = std::min(oox::drawingml::convertHmmToEmu(rRect.GetHeight()), MAX_SIZE);
+
     mpFS->singleElementNS(XML_a, XML_off,
         XML_x, OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
         XML_y, OString::number(oox::drawingml::convertHmmToEmu(nTop)));
-    mpFS->singleElementNS(XML_a, XML_ext,
-        XML_cx, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetWidth())),
-        XML_cy, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetHeight())));
+    mpFS->singleElementNS(XML_a, XML_ext, XML_cx, OString::number(nCx), XML_cy,
+                          OString::number(nCy));
 
     if (bIsGroupShape && (GetDocumentType() != DOCUMENT_DOCX || IsTopGroupObj(xShape)))
     {
