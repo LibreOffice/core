@@ -27,6 +27,10 @@
       constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
     <service name="com.sun.star.graphic.GraphicProvider"/>
   </implementation>
+  <implementation name="com.sun.star.cui.ColorPicker"
+    constructor="com_sun_star_cui_ColorPicker_get_implementation">
+    <service name="com.sun.star.ui.dialogs.ColorPicker"/>
+  </implementation>
   <implementation name="com.sun.star.datatransfer.clipboard.AquaClipboard"
       constructor="vcl_SystemClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>

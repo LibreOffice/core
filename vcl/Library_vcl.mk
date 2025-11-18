@@ -472,6 +472,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/watchdog \
     vcl/source/app/weldutils \
     vcl/source/app/winscheduler \
+    vcl/source/components/ColorPicker \
     vcl/source/components/dtranscomp \
     vcl/source/components/fontident \
     vcl/source/filter/bmp/BmpReader \
