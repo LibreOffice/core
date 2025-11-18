@@ -137,7 +137,6 @@ struct SAL_DLLPUBLIC_RTTI ScTableStyleParam
     bool mbLastColumn;
 
     SC_DLLPUBLIC ScTableStyleParam();
-    SC_DLLPUBLIC ScTableStyleParam(const ScTableStyleParam& rParam) = default;
 
     bool operator== (const ScTableStyleParam& rData) const;
 };
