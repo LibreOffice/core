@@ -7,8 +7,9 @@
 </head>
 <body>
     <h1 style="text-align: center;">Licensing and Legal information</h1>
-    <p>This product is made available subject to the terms of the Mozilla Public License, v. 2.0. A copy of the MPL
-    Version 2 license can be found below.</p>
+    <p>Copyright the Collabora Online contributors.</p>
+    <p>This product is made available subject to the terms of the Mozilla Public License, v. 2.0 – and other licenses
+    outlined below and included in the relevant source code. A copy of the MPL Version 2 license can be found below.</p>
     <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
     <p>Third Party Code Additional copyright notices and license terms applicable to portions of the Software can be
     found <a href="#thirdparty">below</a> in this document.</p>
@@ -16,8 +17,9 @@
     <p>Copyright © 2000–2026 LibreOffice contributors. All rights reserved.</p>
     <p>This product is based on OpenOffice.org. Portions of this software are copyright © 2000-2011, Oracle and/or its
     affiliates.</p>
-    <p>This product has been created by The Document Foundation, incorporating many modifications from different
+    <p>This product is based on LibreOffice, created by The Document Foundation, incorporating many modifications from different
     contributors, see <a href="http://www.libreoffice.org/">http://www.libreoffice.org/</a> for more details.</p>
+    <p>All rights are reserved to Collabora branding elements and Marks.</p>
     <p><strong>Note:</strong> Do not translate or localize this document. Only English version is legally binding.</p>
     <h2>Contents</h2>
     <p><a href="#a__Libraries">Libraries</a></p>
