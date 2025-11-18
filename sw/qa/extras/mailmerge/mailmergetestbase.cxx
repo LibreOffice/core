@@ -82,7 +82,6 @@ public:
                               char const* const filter, int selection, const char* column)
     {
         maMMtestFilename = filename;
-        header();
 
         utl::TempFileNamed aTempDir(nullptr, true);
         aTempDir.EnableKillingFile();

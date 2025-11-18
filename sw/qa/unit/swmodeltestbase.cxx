@@ -64,7 +64,6 @@ SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath)
 void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, TestFilter filter)
 {
     maTempFile.EnableKillingFile(false);
-    header();
     loadURL(createFileURL(OUString::createFromAscii(filename)));
     verify();
     saveAndReload(filter);
@@ -374,8 +373,6 @@ uno::Reference<drawing::XShape> SwModelTestBase::getTextFrameByName(const OUStri
     uno::Reference<drawing::XShape> xShape(xNameAccess->getByName(aName), uno::UNO_QUERY);
     return xShape;
 }
-
-void SwModelTestBase::header() {}
 
 void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
 {

@@ -193,8 +193,6 @@ protected:
     /// Get TextFrame by name
     css::uno::Reference<css::drawing::XShape> getTextFrameByName(const OUString& aName);
 
-    void header();
-
     void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
 
     /// Get page count.
