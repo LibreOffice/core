@@ -335,7 +335,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     void            UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2);
 
     std::unique_ptr<sdr::overlay::OverlayObject> DrawOverlay(const std::vector<tools::Rectangle>& rRects, const Color& rColor, bool bBorder, bool bContrastOutline, sdr::overlay::OverlayType eOverlayType);
-    std::unique_ptr<sdr::overlay::OverlayObjectList> DrawFillMarker(SCCOL nCol, SCROW nRow, std::optional<tools::Rectangle>& rRect);
+    std::unique_ptr<sdr::overlay::OverlayObjectList> DrawFillMarker(SCCOL nCol, SCROW nRow, std::optional<tools::Rectangle>& rRect, bool bIsTableArea);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;

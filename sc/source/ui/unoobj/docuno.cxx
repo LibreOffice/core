@@ -1128,6 +1128,7 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     // refresh our view's take on other view's cursors & selections
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
     pGridWindow->UpdateEditViewPos();
+    pGridWindow->UpdateDatabaseOverlay();
     pGridWindow->updateKitOtherCursors();
     pGridWindow->updateOtherKitSelections();
     pGridWindow->resetCachedViewGridOffsets();
