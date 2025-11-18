@@ -27,6 +27,7 @@ using namespace css::uno;
 UnoApiTest::UnoApiTest(OUString path)
     : mbSkipValidation(false)
     , m_aBaseString(std::move(path))
+    , meImportFilterName(TestFilter::NONE)
 {
     maTempFile.EnableKillingFile();
 }
@@ -96,11 +97,11 @@ void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)
         aFilterOptions.push_back(aValue);
     }
 
-    if (!maImportFilterName.isEmpty())
+    if (meImportFilterName != TestFilter::NONE)
     {
         beans::PropertyValue aValue;
         aValue.Name = "FilterName";
-        aValue.Value <<= maImportFilterName;
+        aValue.Value <<= TestFilterNames.at(meImportFilterName);
         aFilterOptions.push_back(aValue);
     }
 

@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testChartImportXLS)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testNumberFormatHTML)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/numberformat.html");
 
     ScDocument* pDoc = getScDoc();

@@ -1693,7 +1693,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf98657)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/tdf88821.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1704,7 +1704,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821_2)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/tdf88821-2.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1716,7 +1716,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821_2)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf103960)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/tdf103960.html");
     ScDocument* pDoc = getScDoc();
 

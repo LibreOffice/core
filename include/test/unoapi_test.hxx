@@ -37,6 +37,7 @@ enum class TestFilter
     FODS,
     FODT,
     HTML_CALC,
+    HTML_CALC_WEBQUERY,
     HTML_IMPRESS,
     HTML_WRITER,
     MD,
@@ -80,6 +81,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::FODS, u"OpenDocument Spreadsheet Flat XML"_ustr },
     { TestFilter::FODT, u"OpenDocument Text Flat XML"_ustr },
     { TestFilter::HTML_CALC, u"HTML (StarCalc)"_ustr },
+    { TestFilter::HTML_CALC_WEBQUERY, u"calc_HTML_WebQuery"_ustr },
     { TestFilter::HTML_IMPRESS, u"impress_html_Export"_ustr },
     { TestFilter::HTML_WRITER, u"HTML (StarWriter)"_ustr },
     { TestFilter::MD, u"Markdown"_ustr },
@@ -147,7 +149,7 @@ public:
         maImportFilterOptions = rFilterOptions;
     }
 
-    void setImportFilterName(const OUString& rFilterName) { maImportFilterName = rFilterName; }
+    void setImportFilterName(TestFilter eFilterName) { meImportFilterName = eFilterName; }
 
 protected:
     // reference to document component that we are testing
@@ -171,7 +173,7 @@ private:
     OUString maFilterOptions;
 
     OUString maImportFilterOptions;
-    OUString maImportFilterName;
+    TestFilter meImportFilterName;
 };
 
 inline void assertRectangleEqual(const tools::Rectangle& rExpected, const tools::Rectangle& rActual,

@@ -1112,7 +1112,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     // save and reload as odg and fodg
     for (TestFilter eFormat : formats)
     {
-        setImportFilterName(TestFilterNames.at(eFormat));
+        setImportFilterName(eFormat);
         saveAndReload(eFormat);
 
         // Check that the graphic in the second page of the document is the second page of the pdf

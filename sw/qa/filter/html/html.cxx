@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyParagraph)
 {
     // Given a document with 2 paragraphs, the second is empty:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("empty-paragraph.xhtml");
 
     // Then make sure that the resulting document has a 2nd empty paragraph:
@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
 {
     // Given a document with an OLE object, width set to 100%, height is not set:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("relative-keep-aspect.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
 {
     // Given a document with an image, width set to 100%, height is not set:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("relative-keep-aspect-image.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)
 {
     // Given an XHTML file with a centered (with inline CSS) table, when importing that document:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("centered-table.xhtml");
 
     // Then make sure that the table is centered:

@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo81276)
         CPPUNIT_ASSERT(abs(sal_Int32(500) - getProperty<sal_Int32>(xStyle, u"BottomMargin"_ustr))
                        < 10);
     };
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("fdo81276.html");
     verify();
     saveAndReload(TestFilter::HTML_WRITER);
@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
         CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), getProperty<Color>(xCell, u"BackColor"_ustr));
     };
 
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("fdo86857.html");
     verify();
     saveAndReload(TestFilter::HTML_WRITER);
@@ -414,7 +414,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTML)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfParagraph)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-p.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     save(TestFilter::HTML_WRITER);
@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
     };
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole-data.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
     };
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole-img.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-jpg-img.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     save(TestFilter::HTML_WRITER);
@@ -593,7 +593,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-table.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     save(TestFilter::HTML_WRITER);
@@ -674,7 +674,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTMLUseCSS)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfList)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-list.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     save(TestFilter::HTML_WRITER);
@@ -718,7 +718,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
     };
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole2.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
@@ -762,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2Odg)
         CPPUNIT_ASSERT(xObject->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));
     };
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole-odg.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);

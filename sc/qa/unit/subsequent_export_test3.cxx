@@ -1294,13 +1294,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testAbsNamedRangeHTML)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/numberformat.html");
     ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
 
     //reset import filter
-    setImportFilterName(u"calc8"_ustr);
+    setImportFilterName(TestFilter::ODS);
     saveAndReload(TestFilter::ODS);
     pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
@@ -2014,7 +2014,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137020_FlipVertical)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf82254_csv_bom)
 {
-    setImportFilterName(SC_TEXT_CSV_FILTER_NAME);
+    setImportFilterName(TestFilter::CSV);
     createScDoc("csv/testTdf82254-csv-bom.csv");
     saveAndReload(TestFilter::CSV);
     ScDocShell* pDocSh = getScDocShell();

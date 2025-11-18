@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
 
 CPPUNIT_TEST_FIXTURE(Test, testHeading)
 {
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("heading.md");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getParagraph(1)->getString());
@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHeading)
 
 CPPUNIT_TEST_FIXTURE(Test, testList)
 {
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("list.md");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SVX_NUM_ARABIC), getNumberingTypeOfParagraph(1));
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
 
 CPPUNIT_TEST_FIXTURE(Test, testTables)
 {
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("tables.md");
 
     uno::Reference<text::XTextContent> const xtable(getParagraphOrTable(1));
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdImport)
 {
     // Given a document with a "block quote" 2nd paragraph:
     // When importing that document:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("quote.md");
 
     // Then make sure that the paragraph style is set correctly:
@@ -538,7 +538,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdImport)
 {
     // Given a document with an image which has a link on it:
     // When importing that document:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("image-and-link.md");
 
     // Then make sure the link is not lost:
@@ -764,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTableMdExport)
 CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdImport)
 {
     // Given a document with 2 task list items:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
 
     // When importing that document from markdown:
     createSwDoc("task-list-items.md");
@@ -840,7 +840,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdImport)
 {
     // Given a document with an embedded image:
     // When importing that document:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("embedded-image.md");
 
     // Then make sure the embedded image gets imported, with the correct size:

@@ -981,7 +981,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
 
     // Test import
 
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
@@ -1010,7 +1010,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     // Test import
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
@@ -1075,7 +1075,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_NoPreserveSpaces)
 
     // Test import
 
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
 
     CPPUNIT_ASSERT_EQUAL(u"No special spaces"_ustr, getParagraph(1)->getString());
@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoPreserveSpaces)
     // Test import
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
 
     CPPUNIT_ASSERT_EQUAL(u"No special spaces"_ustr, getParagraph(1)->getString());
