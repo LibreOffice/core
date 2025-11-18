@@ -6616,7 +6616,7 @@ void ScGridWindow::updateOtherKitSelections() const
 namespace
 {
 
-void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle)
+void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle, bool bIsTableArea)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -6635,7 +6635,19 @@ void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle 
     }
 
     ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
+    if (bIsTableArea)
+    {
+        tools::JsonWriter writer;
+        writer.put("commandName", "TableAutoFillInfo");
+        {
+            const auto aState = writer.startNode("state");
+            writer.put("rectangle", sRectangleString);
+        }
+        OString info = writer.finishAndGetAsOString();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+    }
+    else
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
 } //end anonymous namespace
@@ -6972,6 +6984,11 @@ void ScGridWindow::DeleteDatabaseOverlay()
 {
     mpDBExpandRect.reset();
     mpOODatabase.reset();
+    if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
+    {
+        tools::Rectangle aEmptyRect;
+        updateLibreOfficeKitAutoFill(mrViewData, aEmptyRect, true);
+    }
 }
 
 void ScGridWindow::UpdateDatabaseOverlay()
@@ -7027,7 +7044,7 @@ void ScGridWindow::UpdateDatabaseOverlay()
                 true, true));
 
             xOverlayManager->add(*pOverlay);
-            std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect);
+            std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect, true);
             if (pOverlayList)
             {
                 mpOODatabase.swap(pOverlayList);
@@ -7071,7 +7088,7 @@ void ScGridWindow::DeleteAutoFillOverlay()
     mpAutoFillRect.reset();
 }
 
-std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SCCOL nX, SCROW nY, std::optional<tools::Rectangle>& rRect)
+std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SCCOL nX, SCROW nY, std::optional<tools::Rectangle>& rRect, bool bIsTableArea)
 {
     SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocument& rDoc = mrViewData.GetDocument();
@@ -7116,7 +7133,7 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
     if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
     {
-        updateLibreOfficeKitAutoFill(mrViewData, aFillRect);
+        updateLibreOfficeKitAutoFill(mrViewData, aFillRect, bIsTableArea);
     }
     else if (xOverlayManager.is())
     {
@@ -7198,7 +7215,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         return;
     }
 
-    mpOOAutoFill = DrawFillMarker(nX, nY, mpAutoFillRect);
+    mpOOAutoFill = DrawFillMarker(nX, nY, mpAutoFillRect, false);
 }
 
 void ScGridWindow::DeleteDragRectOverlay()
