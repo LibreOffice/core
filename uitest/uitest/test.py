@@ -233,6 +233,11 @@ class UITest(object):
                 yield component
             finally:
                 self.close_doc()
+                # If the document has been modified then close_doc will end up being run
+                # asynchronously. The Base code seems to have a few race conditions so to avoid that
+                # let’s wait to make sure the close completes before continuing
+                xToolkit = self._xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.waitUntilAllIdlesDispatched()
 
     def close_dialog_through_button(self, button, dialog=None):
         if dialog is None:
