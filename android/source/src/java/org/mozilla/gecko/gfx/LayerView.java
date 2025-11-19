@@ -47,11 +47,9 @@ public class LayerView extends FrameLayout {
     private final SurfaceView mSurfaceView;
 
     private Listener mListener;
-    private final LibreOfficeMainActivity mContext;
 
     public LayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = (LibreOfficeMainActivity) context;
 
         mSurfaceView = new SurfaceView(context);
         addView(mSurfaceView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
