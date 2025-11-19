@@ -179,10 +179,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
                 String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
                 toolbarTop.setTitle(displayName);
 
-            } else if (docUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mbReadOnlyDoc = true;
-                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + docUri.getPath());
-                toolbarTop.setTitle(docUri.getLastPathSegment());
             }
             // create a temporary local copy to work with
             boolean copyOK = copyFileToTemp(docUri) && mTempFile != null;
