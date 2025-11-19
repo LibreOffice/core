@@ -22,14 +22,14 @@ namespace model
 {
 enum class ColorType
 {
-    Unused,
-    RGB,
-    CRGB,
-    HSL,
-    Theme,
-    Palette,
-    System,
-    Placeholder
+    Unused, /// Color is not used, or undefined.
+    RGB, /// Absolute RGB (r/g/b: 0...255).
+    CRGB, /// Relative RGB (r/g/b: 0...100000)
+    HSL, /// HSL (hue: 0...21600000, sat/lum: 0...100000).
+    Theme, /// Color from scheme.
+    Palette, /// Color from application defined palette.
+    System, /// Color from system palette.
+    Placeholder, /// Placeholder color in theme style lists.
 };
 
 enum class SystemColorType
