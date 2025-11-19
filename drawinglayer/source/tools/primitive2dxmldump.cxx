@@ -10,6 +10,7 @@
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 
 #include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 
@@ -130,8 +131,8 @@ void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon
             basegfx::B2DPoint const& rPoint = rPolygon.getB2DPoint(i);
 
             rWriter.startElement("point");
-            rWriter.attribute("x", OUString::number(rPoint.getX()));
-            rWriter.attribute("y", OUString::number(rPoint.getY()));
+            rWriter.attributeDouble("x", rPoint.getX());
+            rWriter.attributeDouble("y", rPoint.getY());
             rWriter.endElement();
         }
         rWriter.endElement();
@@ -147,10 +148,10 @@ void writeStrokeAttribute(::tools::XmlWriter& rWriter,
     {
         rWriter.startElement("stroke");
 
-        OUString sDotDash;
+        OStringBuffer sDotDash;
         for (double fDotDash : rStrokeAttribute.getDotDashArray())
         {
-            sDotDash += OUString::number(lround(fDotDash)) + " ";
+            sDotDash.append(OString::number(lround(fDotDash)) + " ");
         }
         rWriter.attribute("dotDashArray", sDotDash);
         rWriter.attribute("fullDotDashLength", rStrokeAttribute.getFullDotDashLen());
@@ -252,10 +253,10 @@ void writeSdrLineAttribute(::tools::XmlWriter& rWriter,
 
     if (!rLineAttribute.getDotDashArray().empty())
     {
-        OUString sDotDash;
+        OStringBuffer sDotDash;
         for (double fDotDash : rLineAttribute.getDotDashArray())
         {
-            sDotDash += OUString::number(fDotDash) + " ";
+            sDotDash.append(OString::number(fDotDash) + " ");
         }
         rWriter.attribute("dotDashArray", sDotDash);
         rWriter.attribute("fullDotDashLength", rLineAttribute.getFullDotDashLen());
@@ -551,7 +552,6 @@ public:
             const auto* pBasePrimitive
                 = static_cast<const drawinglayer::primitive3d::BasePrimitive3D*>(xReference.get());
             sal_uInt32 nId = pBasePrimitive->getPrimitive3DID();
-            OUString sCurrentElementTag = drawinglayer::primitive3d::idToString(nId);
             switch (nId)
             {
                 case PRIMITIVE3D_ID_SDREXTRUDEPRIMITIVE3D:
@@ -617,7 +617,7 @@ public:
                 default:
                 {
                     rWriter.startElement("unhandled");
-                    rWriter.attribute("id", sCurrentElementTag);
+                    rWriter.attribute("id", drawinglayer::primitive3d::idToString(nId));
                     rWriter.attribute("idNumber", nId);
 
                     drawinglayer::geometry::ViewInformation3D aViewInformation3D;
@@ -713,12 +713,12 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 for (tools::Long y = 0; y < aSizePixel.getHeight(); y++)
                 {
                     rWriter.startElement("data");
-                    OUString aBitmapData = u""_ustr;
+                    OUStringBuffer aBitmapData;
                     for (tools::Long x = 0; x < aSizePixel.getWidth(); x++)
                     {
                         if (x != 0)
-                            aBitmapData = aBitmapData + ",";
-                        aBitmapData = aBitmapData + aBitmap.GetPixelColor(x, y).AsRGBHexString();
+                            aBitmapData.append(",");
+                        aBitmapData.append(aBitmap.GetPixelColor(x, y).AsRGBHexString());
                     }
                     rWriter.attribute("row", aBitmapData);
                     rWriter.endElement();
@@ -778,8 +778,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                      iter != aPositions.end(); ++iter)
                 {
                     rWriter.startElement("point");
-                    rWriter.attribute("x", OUString::number(iter->getX()));
-                    rWriter.attribute("y", OUString::number(iter->getY()));
+                    rWriter.attributeDouble("x", iter->getX());
+                    rWriter.attributeDouble("y", iter->getY());
                     rWriter.endElement();
                 }
 
@@ -940,12 +940,12 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 if (aFontAttribute.getRTL())
                 {
-                    rWriter.attribute("rtl", std::u16string_view{ u"true" });
+                    rWriter.attribute("rtl", "true");
                 }
 
                 if (aFontAttribute.getBiDiStrong())
                 {
-                    rWriter.attribute("bidi", std::u16string_view{ u"true" });
+                    rWriter.attribute("bidi", "true");
                 }
 
                 const std::vector<double> aDx = rTextSimplePortionPrimitive2D.getDXArray();
@@ -954,7 +954,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     for (size_t iDx = 0; iDx < aDx.size(); ++iDx)
                     {
                         OString sName = "dx" + OString::number(iDx);
-                        rWriter.attribute(sName.getStr(), OString::number(aDx[iDx]));
+                        rWriter.attributeDouble(sName.getStr(), aDx[iDx]);
                     }
                 }
                 rWriter.endElement();
@@ -1032,8 +1032,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 basegfx::B2DPoint aStartPoint = rSvgRadialGradientPrimitive2D.getStart();
                 rWriter.attribute("startx", aStartPoint.getX());
                 rWriter.attribute("starty", aStartPoint.getY());
-                rWriter.attribute("radius",
-                                  OString::number(rSvgRadialGradientPrimitive2D.getRadius()));
+                rWriter.attributeDouble("radius", rSvgRadialGradientPrimitive2D.getRadius());
                 writeSpreadMethod(rWriter, rSvgRadialGradientPrimitive2D.getSpreadMethod());
                 rWriter.attributeDouble(
                     "opacity",
@@ -1181,7 +1180,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const auto& rSoftEdgePrimitive2D
                     = static_cast<const SoftEdgePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("softedge");
-                rWriter.attribute("radius", OUString::number(rSoftEdgePrimitive2D.getRadius()));
+                rWriter.attributeDouble("radius", rSoftEdgePrimitive2D.getRadius());
 
                 decomposeAndWrite(rSoftEdgePrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
