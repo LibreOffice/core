@@ -1356,6 +1356,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDeduplicateMasters)
     CPPUNIT_ASSERT_EQUAL(Color(0x000000), nColor);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidAttributeValuesInSrcRect)
+{
+    createSdImpressDoc("odp/invalidAttributeValuesInSrcRect.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 24
+    // - validation error in OOXML export: Errors: 24
+    saveAndReload(TestFilter::PPTX);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConvertWithMasterDeduplication)
 {
     createSdImpressDoc("odp/dupmastermultlayouts.odp");
