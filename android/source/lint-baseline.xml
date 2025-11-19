@@ -2,17 +2,6 @@
 <issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="false" name="AGP (8.13.1)" variant="all" version="8.13.1">
 
     <issue
-        id="ScopedStorage"
-        message="WRITE_EXTERNAL_STORAGE is deprecated (and is not granted) when targeting Android 13+. If you need to write to shared storage, use the `MediaStore.createWriteRequest` intent."
-        errorLine1="    &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/>"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="AndroidManifest.xml"
-            line="9"
-            column="36"/>
-    </issue>
-
-    <issue
         id="ScrollViewSize"
         message="This LinearLayout should use `android:layout_height=&quot;wrap_content&quot;`"
         errorLine1="                                android:layout_height=&quot;match_parent&quot;"
@@ -140,7 +129,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="AndroidManifest.xml"
-            line="108"
+            line="104"
             column="13"/>
     </issue>
 
@@ -162,7 +151,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~">
         <location
             file="src/java/org/mozilla/gecko/gfx/LayerView.java"
-            line="190"
+            line="188"
             column="36"/>
     </issue>
 
@@ -184,7 +173,7 @@
         errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/mozilla/gecko/gfx/LayerView.java"
-            line="256"
+            line="253"
             column="42"/>
     </issue>
 
@@ -1359,7 +1348,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/libreoffice/ui/LibreOfficeUIActivity.java"
-            line="415"
+            line="397"
             column="13"/>
     </issue>
 
@@ -1381,7 +1370,7 @@
         errorLine2="                   ~~~~~~~~~~~~">
         <location
             file="src/java/org/mozilla/gecko/gfx/LayerView.java"
-            line="100"
+            line="98"
             column="20"/>
     </issue>
 
