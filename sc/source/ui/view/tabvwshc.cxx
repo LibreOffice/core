@@ -257,10 +257,6 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
             // when called for an existing range, then mark
             GetDBData( true, SC_DB_OLD );
-            const ScMarkData& rMark = GetViewData().GetMarkData();
-            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                MarkDataArea( false );
-
             xResult = std::make_shared<ScDbNameDlg>(pB, pCW, pParent, GetViewData());
             break;
         }
