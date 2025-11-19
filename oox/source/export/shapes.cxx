@@ -228,8 +228,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
         { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
         { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
         { {SO3_SIMPRESS_CLASSID_60}, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },
-        // FIXME: Draw does not appear to have a MSO format export filter?
-//            { {SO3_SDRAW_CLASSID}, "", "", "", "" },
+        { {SO3_SDRAW_CLASSID}, "draw8", "application/vnd.oasis.opendocument.graphics", "CollaboraOffice.DrawDocument.1", "odg" },
         { {SO3_SCH_CLASSID_60}, "unused", "", "", "" },
         { {SO3_SM_CLASSID_60}, "unused", "", "", "" },
     };
