@@ -1559,7 +1559,7 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     sal_uInt16 nCanvasPageNum = CreatePage(pLastStandardPage, PageKind::Standard,
                                            u"Canvas Page"_ustr, u"Canvas notes page"_ustr,
                                            AutoLayout::AUTOLAYOUT_NONE, AutoLayout::AUTOLAYOUT_NONE,
-                                           false, true, pLastStandardPage->GetPageNum() + 2);
+                                           false, false, pLastStandardPage->GetPageNum() + 2);
 
     SdPage* pCanvasPage = GetSdPage(nCanvasPageNum, PageKind::Standard);
     if (!pCanvasPage)
@@ -1573,6 +1573,12 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 
     SdPage* pMasterCanvas = static_cast<SdPage*>(&pCanvasPage->TRG_GetMasterPage());
     pMasterCanvas->SetCanvasMasterPage();
+
+    // Remove all objects inherited from previous page's master page
+    while (pMasterCanvas->GetObjCount() > 0)
+    {
+        pMasterCanvas->NbcRemoveObject(0);
+    }
 
     populatePagePreviewsGrid();
 
