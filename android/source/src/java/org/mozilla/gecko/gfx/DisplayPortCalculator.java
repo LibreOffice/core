@@ -21,11 +21,9 @@ final class DisplayPortCalculator {
     private static final int TILE_SIZE = 256;
 
     private DisplayPortStrategy sStrategy;
-    private final LibreOfficeMainActivity mMainActivity;
 
     DisplayPortCalculator(LibreOfficeMainActivity context) {
-        this.mMainActivity = context;
-        sStrategy = new VelocityBiasStrategy(mMainActivity);
+        sStrategy = new VelocityBiasStrategy(context);
     }
 
     DisplayPortMetrics calculate(ImmutableViewportMetrics metrics, PointF velocity) {
