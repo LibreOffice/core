@@ -76,6 +76,8 @@ public:
 
 };
 
+/// SwTextAttr subclass that tracks the location of the wrapped SwFormatField, when the format
+/// field's field is an SwInputField.
 class SwTextInputField final
     : public SwTextAttrNesting
     , public SwTextField
