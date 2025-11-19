@@ -20,8 +20,8 @@
 
 using namespace css;
 
-UnoApiXmlTest::UnoApiXmlTest(OUString path)
-    : UnoApiTest(std::move(path))
+UnoApiXmlTest::UnoApiXmlTest(OUString path, bool bSkipValidation)
+    : UnoApiTest(std::move(path), bSkipValidation)
 {
 }
 

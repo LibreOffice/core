@@ -34,14 +34,14 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
 };
 
 class DocmTest : public SwModelTestBase
 {
 public:
     DocmTest()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
     {
     }
 };

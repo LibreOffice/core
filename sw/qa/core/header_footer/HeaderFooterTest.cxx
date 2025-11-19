@@ -43,7 +43,7 @@ public:
     void checkShapeInFirstPageHeader();
 
     HeaderFooterTest()
-        : SwModelTestBase(u"/sw/qa/core/header_footer/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/core/header_footer/data/"_ustr, /*bSkipValidation*/ true)
     {
     }
 };

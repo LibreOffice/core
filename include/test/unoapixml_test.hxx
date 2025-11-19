@@ -20,7 +20,7 @@
 class OOO_DLLPUBLIC_TEST UnoApiXmlTest : public UnoApiTest, public XmlTestTools
 {
 public:
-    UnoApiXmlTest(OUString path);
+    UnoApiXmlTest(OUString path, bool bSkipValidation = false);
 
     xmlDocUniquePtr parseExport(OUString const& rStreamName);
 

@@ -42,7 +42,7 @@ class SwUiWriterTest5 : public SwModelTestBase
 {
 public:
     SwUiWriterTest5()
-        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr, /*bSkipValidation*/ true)
     {
     }
 

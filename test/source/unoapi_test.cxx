@@ -24,8 +24,8 @@
 using namespace css;
 using namespace css::uno;
 
-UnoApiTest::UnoApiTest(OUString path)
-    : mbSkipValidation(false)
+UnoApiTest::UnoApiTest(OUString path, bool bSkipValidation)
+    : mbSkipValidation(bSkipValidation)
     , m_aBaseString(std::move(path))
     , meImportFilterName(TestFilter::NONE)
 {
@@ -180,14 +180,7 @@ void UnoApiTest::save(TestFilter eFilter, const char* pPassword)
     saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
 
     if (!mbSkipValidation)
-    {
-        if (eFilter == TestFilter::DOCX)
-        {
-            // do nothing: too many validation errors right now
-        }
-        else
-            validate(maTempFile.GetFileName(), aFilter);
-    }
+        validate(maTempFile.GetFileName(), aFilter);
 }
 
 void UnoApiTest::saveWithParams(const uno::Sequence<beans::PropertyValue>& rParams)

@@ -21,7 +21,7 @@ using beans::XPropertySet;
 class Chart2ExportTest3 : public ChartTest
 {
 public:
-    Chart2ExportTest3() : ChartTest(u"/chart2/qa/extras/data/"_ustr) {}
+    Chart2ExportTest3() : ChartTest(u"/chart2/qa/extras/data/"_ustr, /*bSkipValidation*/ true) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf108107)

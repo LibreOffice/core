@@ -79,7 +79,7 @@ protected:
     void paste(std::u16string_view aFilename, const OUString& aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
-    SwModelTestBase(const OUString& pTestDocumentPath = OUString());
+    SwModelTestBase(const OUString& pTestDocumentPath = OUString(), bool bSkipValidation = false);
 
 protected:
     /**
