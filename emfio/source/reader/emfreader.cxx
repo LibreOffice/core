@@ -451,7 +451,7 @@ namespace emfio
                         break;
 
                     sal_Unicode cUniChar = static_cast<sal_Unicode>(cChar);
-                    aDesc = aDesc + OUStringChar(cUniChar);
+                    aDesc += OUStringChar(cUniChar);
                 }
 
                 SAL_INFO("emfio", "\t\tDescription: " << aDesc);
@@ -2193,7 +2193,7 @@ namespace emfio
                                 mpInputStream->ReadUChar(cChar);
                                 if (cChar == 0)
                                     break;
-                                aDesc = aDesc + OUStringChar(static_cast<sal_Unicode>(cChar));
+                                aDesc += OUStringChar(static_cast<sal_Unicode>(cChar));
                             }
                             // if it's the standard color space name, no need to do anything
                             if (aDesc != "COSP")

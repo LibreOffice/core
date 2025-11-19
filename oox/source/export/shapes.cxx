@@ -1934,7 +1934,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
                 lcl_Rotate(nAngle, center, aEndPoint);
                 nAngle *= 60000;
             }
-            sGeometry = sGeometry + OUString::number(aAdjustValueList.size() + 2);
+            sGeometry += OUString::number(aAdjustValueList.size() + 2);
         }
     }
 

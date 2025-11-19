@@ -587,7 +587,7 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
             if (pFormatter->GetPreviewString(sPrefix, 0, sConverted, &pColor, LANGUAGE_USER_HUNGARIAN_ROVAS))
             {
                 if ( bHasBracket )
-                    sConverted = sConverted + "]";
+                    sConverted += "]";
                 bRet = true;
             }
         }

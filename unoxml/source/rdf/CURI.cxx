@@ -740,7 +740,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
                 u"CURI::initialize: argument must be string"_ustr, *this, 1);
         }
         // just append the parameters and then split them again; seems simplest
-        arg0 = arg0 + arg1;
+        arg0 += arg1;
         arg1.clear();
     }
 
