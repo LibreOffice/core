@@ -2684,6 +2684,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 if (pThemeColorHandler->mnIndex >= 0)
                 {
+                    auto aBuf = OUString::number(pThemeColorHandler->mnColor, 16);
+                    m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"val"_ustr, OUString(RepeatedUChar('0', 6 - aBuf.length) + aBuf));
                     m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"themeColor"_ustr, aThemeColorName.get<OUString>());
                     if (pThemeColorHandler->mnTint > 0)
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"themeTint"_ustr, aThemeColorTint.get<OUString>());
