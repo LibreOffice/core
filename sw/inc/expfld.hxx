@@ -284,6 +284,10 @@ public:
     SwDoc* GetDoc() const { return mpDoc; }
 };
 
+/// SwField subclass for input fields, which are editable in-place. Typically owned by an
+/// SwFormatField, which is then further owned by SwTextInputField to track its location.
+///
+/// Insert -> Field -> More Fields -> Functions -> Input field on the UI.
 class SW_DLLPUBLIC SwInputField final : public SwField
 {
     mutable OUString maContent;
