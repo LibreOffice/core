@@ -244,6 +244,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121260)
     assertXPathContent(pChart1,
                        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:val/c:numRef/c:f",
                        u"Sheet1!$B$1:$B$2");
+
+    // tdf#168892: the default row height is automatic
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    assertXPath(pSheet, "//x:sheetFormatPr", "customHeight", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf120168)
