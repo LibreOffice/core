@@ -53,14 +53,10 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     // there may be illegal characters in the box
     // sanitization
     OUString sTmp = m_xEditBox->get_text();
-    OUString sMsg;
     const sal_Int32 nLen = sTmp.getLength();
     for (sal_Int32 i = 0; i < BookmarkTable::aForbiddenChars.getLength(); i++)
     {
-        const sal_Int32 nTmpLen = sTmp.getLength();
         sTmp = sTmp.replaceAll(OUStringChar(BookmarkTable::aForbiddenChars.getStr()[i]), "");
-        if (sTmp.getLength() != nTmpLen)
-            sMsg += OUStringChar(BookmarkTable::aForbiddenChars.getStr()[i]);
     }
     const bool bHasForbiddenChars = sTmp.getLength() != nLen;
     m_xForbiddenChars->set_visible(bHasForbiddenChars);
