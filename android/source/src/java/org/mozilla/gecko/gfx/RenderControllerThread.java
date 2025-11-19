@@ -60,11 +60,6 @@ public class RenderControllerThread extends Thread implements LayerView.Listener
     }
 
     @Override
-    public void compositorCreated() {
-
-    }
-
-    @Override
     public void renderRequested() {
         synchronized (this) {
             if (!renderQueued) {
