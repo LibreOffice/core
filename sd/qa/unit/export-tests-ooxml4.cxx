@@ -1647,6 +1647,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169496_hidden_graphic)
         CPPUNIT_FAIL("Names of graphics is incorrect");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testFooterIdxConsistency)
+{
+    createSdImpressDoc("pptx/multiplelayoutfooter.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    // slide1 points to slideLayout2
+    xmlDocUniquePtr pRelsDoc = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    assertXPath(pRelsDoc,
+                "/rels:Relationships/rels:Relationship[@Type='http://"
+                "schemas.openxmlformats.org/officeDocument/2006/"
+                "relationships/slideLayout']",
+                "Target", u"../slideLayouts/slideLayout2.xml");
+
+    // And they agree on the idx of the footer:
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    OUString aFtrIdx = getXPath(pSlide, "//p:sp/p:nvSpPr/p:nvPr/p:ph", "idx");
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout2.xml"_ustr);
+    assertXPath(pLayout, "//p:sp/p:nvSpPr/p:nvPr/p:ph", "idx", aFtrIdx);
+    // Without the fix it fails with:
+    // - Expected: 1
+    // - Actual  : 2
+    // - In <>, attribute 'idx' of '//p:sp/p:nvSpPr/p:nvPr/p:ph' incorrect value.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3039,17 +3039,6 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
         {
             pPage = &SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage();
         }
-        for (sal_uInt32 i = 0; i < mnMasterPages; i++)
-        {
-            if (i == mnCanvasMasterIndex)
-                continue;
-            if (maMastersLayouts[i].first == pPage)
-            {
-                if (maEquivalentMasters[i] < mnMasterPages - static_cast<int>(mbHasCanvasPage))
-                    pPage = maMastersLayouts[maEquivalentMasters[i]].first;
-                break;
-            }
-        }
         SdPage* pMasterPage = dynamic_cast<SdPage*>(pPage);
         if (SdrObject* pMasterFooter
             = (pMasterPage ? pMasterPage->GetPresObj(ePresObjKind) : nullptr))
