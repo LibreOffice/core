@@ -59,7 +59,13 @@ struct DOCMODEL_DLLPUBLIC Transformation
 {
     TransformationType meType = TransformationType::Undefined;
 
-    sal_Int16 mnValue = 0; /// percentage value -10000 to +10000
+    sal_Int32 mnValue = 0; /// percentage value -10000 to +10000
+
+    Transformation(TransformationType eType, sal_Int32 nVal)
+        : meType(eType)
+        , mnValue(nVal)
+    {
+    }
 
     bool operator==(const Transformation& rTransformation) const
     {

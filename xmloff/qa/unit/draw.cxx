@@ -250,10 +250,10 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans2.mnValue);
     }
     {
         uno::Reference<util::XComplexColor> xComplexColor;
@@ -264,10 +264,10 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans2.mnValue);
     }
 }
 
@@ -360,10 +360,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTrans2.mnValue);
     }
     {
         uno::Reference<drawing::XShape> xShape(getShape(1));
@@ -377,10 +377,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans2.mnValue);
     }
     {
         uno::Reference<drawing::XShape> xShape(getShape(2));
@@ -394,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5000), rTrans1.mnValue);
     }
 
     // Char color theme
@@ -414,10 +414,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransforms.size());
         auto const& rTrans1 = rTransforms[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), rTrans1.mnValue);
         auto const& rTrans2 = rTransforms[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTrans2.mnValue);
     }
     // Shape 5
     {
@@ -435,10 +435,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransforms.size());
         auto const& rTrans1 = rTransforms[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans1.mnValue);
         auto const& rTrans2 = rTransforms[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans2.mnValue);
     }
     // Shape 6
     {
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5000), rTrans1.mnValue);
     }
 }
 
@@ -476,7 +476,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                          aComplexColor.getTransformations()[0].meType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(7500), aComplexColor.getTransformations()[0].mnValue);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7500),
+                         aComplexColor.getTransformations()[0].mnValue);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
