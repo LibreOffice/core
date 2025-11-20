@@ -26,35 +26,28 @@
 
 namespace o3tl
 {
+    template<typename N> struct RefCountingPolicy_t
+    {
+        typedef N ref_count_t;
+        static void incrementCount(ref_count_t& rCount) { ++rCount; }
+        static bool decrementCount(ref_count_t& rCount) { return --rCount != 0; }
+        static std::size_t getCount(const ref_count_t& rCount) { return rCount; }
+    };
+
     /** Thread-unsafe refcounting
 
         This is the default locking policy for cow_wrapper. No
         locking/guarding against concurrent access is performed
         whatsoever.
      */
-    struct UnsafeRefCountingPolicy
-    {
-        typedef std::size_t ref_count_t;
-        static void incrementCount( ref_count_t& rCount ) { ++rCount; }
-        static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
-        static std::size_t getCount( ref_count_t rCount) { return rCount; }
-    };
+    using UnsafeRefCountingPolicy = RefCountingPolicy_t<std::size_t>;
 
     /** Thread-safe refcounting
 
         Use this to have the cow_wrapper refcounting mechanisms employ
         the thread-safe oslInterlockedCount .
      */
-    struct ThreadSafeRefCountingPolicy
-    {
-        typedef std::atomic<int> ref_count_t;
-        static void incrementCount( ref_count_t& rCount ) { rCount++; }
-        static bool decrementCount( ref_count_t& rCount )
-        {
-            return (--rCount) != 0;
-        }
-        static std::size_t getCount( const ref_count_t& rCount) { return rCount; }
-    };
+    using ThreadSafeRefCountingPolicy = RefCountingPolicy_t<std::atomic<std::size_t>>;
 
     /** Copy-on-write wrapper.
 
