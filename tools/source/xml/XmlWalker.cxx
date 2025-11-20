@@ -47,6 +47,8 @@ XmlWalker::~XmlWalker()
 bool XmlWalker::open(SvStream* pStream)
 {
     std::size_t nSize = pStream->remainingSize();
+    if (nSize == 0)
+        return false;
     std::vector<sal_uInt8> aBuffer(nSize + 1);
     pStream->ReadBytes(aBuffer.data(), nSize);
     aBuffer[nSize] = 0;
