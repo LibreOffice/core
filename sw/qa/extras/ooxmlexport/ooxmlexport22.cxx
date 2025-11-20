@@ -32,7 +32,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -565,6 +565,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDocxExport)
     // Given a document with <del>A<format>B</format>C</del> style redlines:
     // When exporting that document:
     createSwDoc("del-then-format.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
 
     // Then make sure delete "under" format uses the <w:delText> markup:
