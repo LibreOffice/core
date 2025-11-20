@@ -53,6 +53,8 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/numdef.hxx>
+#include <editeng/yrs.hxx>
+#include <editeng/yrstransactionsupplier.hxx>
 #include <svl/itemiter.hxx>
 #endif
 
@@ -737,9 +739,6 @@ void EditSelection::Adjust( const EditDoc& rNodes )
 }
 
 #if ENABLE_YRS
-#include <editeng/yrstransactionsupplier.hxx>
-#include <editeng/yrs.hxx>
-
 namespace {
 
 struct YrsReplayGuard
