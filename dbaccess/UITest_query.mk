@@ -17,4 +17,6 @@ $(eval $(call gb_UITest_set_defs,query, \
     TDOC="$(SRCDIR)/dbaccess/qa/uitest/data" \
 ))
 
+$(eval $(call gb_UITest_avoid_oneprocess,query))
+
 # vim: set noet sw=4 ts=4:
