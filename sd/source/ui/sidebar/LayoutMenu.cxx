@@ -159,7 +159,6 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     Link<::sdtools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink);
 
-    mxLayoutIconView->set_help_id(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     mxLayoutIconView->set_accessible_name(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link<const OUString&,void> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
