@@ -743,6 +743,8 @@ public:
     void SetMoveProtect(bool bProt);
     bool IsMoveProtect() const { return m_bMovProt;}
     void SetResizeProtect(bool bProt);
+    bool IsDeleteProtect() const { return m_bDelProt; }
+    void SetDeleteProtect(bool bProt);
     bool IsResizeProtect() const { return m_bSizProt;}
     virtual void SetPrintable(bool isPrintable);
     virtual bool IsPrintable() const;
@@ -892,6 +894,7 @@ protected:
     // the following flags will be streamed
     bool                        m_bMovProt : 1;   // if true, the position is protected
     bool                        m_bSizProt : 1;   // if true, the size is protected
+    bool                        m_bDelProt : 1;   // if true, object cannot be deleted
     // If bEmptyPresObj is true, it is a presentation object that has no content yet.
     // The flag's default value is false.
     // The management is done by the application.
