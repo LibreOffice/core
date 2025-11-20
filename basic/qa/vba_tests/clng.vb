@@ -22,10 +22,11 @@ Sub verify_testCLng()
     TestUtil.AssertEqual(CLng(-1.9), -2, "CLng(-1.9)")
     TestUtil.AssertEqual(CLng(0.2),   0, "CLng(0.2)")
 
-REM    TestUtil.AssertEqual(CLng(0.5), 0, "CLng(0.5)")
-
-REM    If the fraction is less than or equal to .5, the result will round down.
-REM    If the fraction is greater than .5, the result will round up.
+    ' tdf#162711 - VBASupport requires banker’s rounding for integer conversions
+    TestUtil.AssertEqual(CLng(0.5), 0, "CLng(0.5)")
+    TestUtil.AssertEqual(CLng(1.5), 2, "CLng(1.5)")
+    TestUtil.AssertEqual(CLng(2.5), 2, "CLng(2.5)")
+    TestUtil.AssertEqual(CLng(3.5), 4, "CLng(3.5)")
 
     TestUtil.AssertEqual(CLng(10.51),       11, "CLng(10.51)")
     TestUtil.AssertEqual(CLng("&H75FF"), 30207, "CLng(""&H75FF"")")
