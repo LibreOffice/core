@@ -103,6 +103,7 @@ bool VerticalTabControl::EventNotify(NotifyEvent& rNEvt)
         if (nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN)
         {
             m_xChooser->DoKeyInput(*(rNEvt.GetKeyEvent()));
+            m_xChooser->GrabFocus();
             return true;
         }
     }
