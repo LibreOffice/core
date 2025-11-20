@@ -1721,7 +1721,12 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
             {
                 if (!IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand(),
                                                            *xImp->pFrame->GetViewShell()))
+                {
+                    SAL_WARN("sfx.control", "SfxDispatcher::FindServer_: rejecting command '"
+                                                << pSlot->GetCommand()
+                                                << "', not allowed in LOK read-only view mode");
                     return false;
+                }
             }
         }
 
