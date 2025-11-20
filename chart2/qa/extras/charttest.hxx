@@ -62,8 +62,8 @@ using namespace css::uno;
 class ChartTest : public UnoApiXmlTest
 {
 public:
-    ChartTest(const OUString& path, bool bSkipValidation = false)
-        : UnoApiXmlTest(path, bSkipValidation)
+    ChartTest(const OUString& path)
+        : UnoApiXmlTest(path)
     {
     }
 

@@ -21,7 +21,7 @@ using beans::XPropertySet;
 class Chart2ExportTest3 : public ChartTest
 {
 public:
-    Chart2ExportTest3() : ChartTest(u"/chart2/qa/extras/data/"_ustr, /*bSkipValidation*/ true) {}
+    Chart2ExportTest3() : ChartTest(u"/chart2/qa/extras/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf108107)
@@ -694,6 +694,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testBarChartSecondaryAxisXLSX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testEmptyCharts)
 {
     loadFromFile(u"odt/testEmptyCharts.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
 
     // Make sure each chart exists in the respective XML
