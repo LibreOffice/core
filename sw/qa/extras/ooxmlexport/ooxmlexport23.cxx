@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -136,6 +136,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128245)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -270,6 +273,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 {
     createSwDoc("tdf77796.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
@@ -326,6 +333,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133605, "tdf133605.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
@@ -355,6 +365,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605, "tdf133605.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // About the same document as tdf133605.docx, but number definition has level definitions in random order
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     {
@@ -386,6 +399,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 {
     createSwDoc("tdf123757.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
@@ -797,6 +814,10 @@ CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 {
     createSwDoc("tdf131539.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
