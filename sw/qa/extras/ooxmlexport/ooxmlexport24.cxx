@@ -40,7 +40,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -261,6 +261,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
     };
     createSwDoc("tdf55427_footnote2endnote.odt");
     verify();
+
+    // FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -284,6 +288,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104150, "tdf104150.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103976, "tdf103976.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -471,6 +478,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107684)
 CPPUNIT_TEST_FIXTURE(Test, testTdf107618)
 {
     createSwDoc("tdf107618.doc");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     // This was false, header was lost on export.
     uno::Reference<beans::XPropertySet> xPageStyle(
