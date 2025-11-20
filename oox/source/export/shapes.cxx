@@ -2569,7 +2569,13 @@ void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const Border
             case ::table::BorderLineStyle::DASH_DOT_DOT:
                 sBorderStyle = "sysDashDotDot";
                 break;
+            default:
+                // There is no equivalent so pick something else, since we cannot have empty.
+                // There are very few default styles for pptx.
+                sBorderStyle = "solid";
+                break;
         }
+        assert(!sBorderStyle.isEmpty() && "empty is not a valid value for PPTX");
         mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, sBorderStyle);
         mpFS->endElementNS(XML_a, xml_line_element);
     }
