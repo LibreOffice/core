@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:generator>LibreOffice/6.1.0.3$Windows_X86_64 LibreOffice_project/efb621ed25068d70781dc026f7e9c5187a4decd1</meta:generator><dc:title/><dc:description/><dc:subject/><meta:initial-creator>V Stuart Foote</meta:initial-creator><dc:creator>V Stuart Foote</dc:creator><meta:creation-date>2018-08-13T01:04:00Z</meta:creation-date><dc:date>2018-08-13T01:04:00Z</dc:date><meta:editing-cycles>2</meta:editing-cycles><meta:editing-duration>PT0S</meta:editing-duration><meta:document-statistic meta:page-count="1" meta:paragraph-count="1" meta:word-count="2" meta:character-count="13"/><meta:user-defined meta:name="Created" meta:value-type="date">2018-03-20T10:00:00Z</meta:user-defined><meta:user-defined meta:name="LastSaved" meta:value-type="date">2018-06-18T10:00:00Z</meta:user-defined><meta:template xlink:type="simple" xlink:actuate="onRequest" xlink:title="" xlink:href="tdf119234_broken-shapes.odt/Normal.dotm"/></office:meta>
+ <office:settings>
+  <config:config-item-set config:name="ooo:view-settings">
+   <config:config-item config:name="ViewAreaTop" config:type="long">0</config:config-item>
+   <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
+   <config:config-item config:name="ViewAreaWidth" config:type="long">23259</config:config-item>
+   <config:config-item config:name="ViewAreaHeight" config:type="long">22756</config:config-item>
+   <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="InBrowseMode" config:type="boolean">false</config:config-item>
+   <config:config-item-map-indexed config:name="Views">
+    <config:config-item-map-entry>
+     <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
+     <config:config-item config:name="ViewLeft" config:type="long">2651</config:config-item>
+     <config:config-item config:name="ViewTop" config:type="long">4207</config:config-item>
+     <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
+     <config:config-item config:name="VisibleTop" config:type="long">0</config:config-item>
+     <config:config-item config:name="VisibleRight" config:type="long">23257</config:config-item>
+     <config:config-item config:name="VisibleBottom" config:type="long">22754</config:config-item>
+     <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
+     <config:config-item config:name="ViewLayoutColumns" config:type="short">0</config:config-item>
+     <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="ZoomFactor" config:type="short">100</config:config-item>
+     <config:config-item config:name="IsSelectedFrame" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">true</config:config-item>
+    </config:config-item-map-entry>
+   </config:config-item-map-indexed>
+  </config:config-item-set>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="ProtectForm" config:type="boolean">false</config:config-item>
+   <config:config-item-map-indexed config:name="ForbiddenCharacters">
+    <config:config-item-map-entry>
+     <config:config-item config:name="Language" config:type="string">en</config:config-item>
+     <config:config-item config:name="Country" config:type="string">US</config:config-item>
+     <config:config-item config:name="Variant" config:type="string"/>
+     <config:config-item config:name="BeginLine" config:type="string"/>
+     <config:config-item config:name="EndLine" config:type="string"/>
+    </config:config-item-map-entry>
+   </config:config-item-map-indexed>
+   <config:config-item config:name="PrinterName" config:type="string"/>
+   <config:config-item config:name="EmbeddedDatabaseName" config:type="string"/>
+   <config:config-item config:name="CurrentDatabaseDataSource" config:type="string"/>
+   <config:config-item config:name="LinkUpdateMode" config:type="short">1</config:config-item>
+   <config:config-item config:name="AddParaTableSpacingAtStart" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="FloattableNomargins" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UnbreakableNumberings" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="FieldAutoUpdate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AddVerticalFrameOffsets" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="BackgroundParaOverDrawings" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddParaTableSpacing" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ChartAutoUpdate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommand" config:type="string"/>
+   <config:config-item config:name="AlignTabStopPosition" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary"/>
+   <config:config-item config:name="PrinterPaperFromSetup" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IsKernAsianPunctuation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
+   <config:config-item config:name="ApplyUserData" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="SaveGlobalDocumentLinks" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SmallCapsPercentage66" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
+   <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintSingleJobs" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrinterIndependentLayout" config:type="string">high-resolution</config:config-item>
+   <config:config-item config:name="EmbedSystemFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DoNotCaptureDrawObjsOnPage" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UseFormerObjectPositioning" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IsLabelDocument" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddFrameOffsets" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddExternalLeading" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="UseOldNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="OutlineLevelYieldsNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DoNotResetParaAttrsForNumFont" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IgnoreFirstLineIndentInNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AllowPrintJobCancel" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="UseFormerLineSpacing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddParaSpacingToTableCells" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="UseFormerTextWrapping" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="RedlineProtectionKey" config:type="base64Binary"/>
+   <config:config-item config:name="ConsiderTextWrapOnObjPos" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DoNotJustifyLinesWithManualBreak" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TableRowKeep" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabsRelativeToIndent" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="IgnoreTabsAndBlanksForLineCalculation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="RsidRoot" config:type="int">1073229</config:config-item>
+   <config:config-item config:name="LoadReadonly" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ClipAsCharacterAnchoredWriterFlyFrames" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UnxForceZeroExtLeading" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UseOldPrinterMetrics" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabAtLeftIndentForParagraphsInList" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="Rsid" config:type="int">1073229</config:config-item>
+   <config:config-item config:name="MsWordCompTrailingBlanks" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="MathBaselineAlignment" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="InvertBorderSpacing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CollapseEmptyCellPara" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="TabOverflow" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="StylesNoDefault" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ClippedPictures" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabOverMargin" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TreatSingleColumnBreakAsPageBreak" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SurroundTextWrapSmall" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ApplyParagraphMarkFormatToNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PropLineSpacingShrinksFirstLine" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="SubtractFlysAnchoredAtFlys" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DisableOffPagePositioning" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmptyDbFieldHidesPara" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintAnnotationMode" config:type="short">0</config:config-item>
+   <config:config-item config:name="PrintGraphics" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintBlackFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintProspect" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintLeftPages" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintControls" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintPageBackground" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintTextPlaceholder" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintDrawings" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintHiddenText" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintTables" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintProspectRTL" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintReversed" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintRightPages" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintFaxName" config:type="string"/>
+   <config:config-item config:name="PrintPaperFromSetup" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintEmptyPages" config:type="boolean">false</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:scripts>
+  <office:script script:language="ooo:Basic">
+   <ooo:libraries xmlns:ooo="http://openoffice.org/2004/office" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </office:script>
+ </office:scripts>
+ <office:font-face-decls>
+  <style:font-face style:name="MS Mincho" svg:font-family="&apos;MS Mincho&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
+  <style:font-face style:name="Times New Roman" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Calibri" svg:font-family="Calibri" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="MS Gothic" svg:font-family="&apos;MS Gothic&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.028in" svg:stroke-color="#385d8a" svg:stroke-linecap="butt" draw:fill-color="#4f81bd" fo:wrap-option="wrap" draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in" draw:start-line-spacing-horizontal="0.1114in" draw:start-line-spacing-vertical="0.1114in" draw:end-line-spacing-horizontal="0.1114in" draw:end-line-spacing-vertical="0.1114in" style:flow-with-text="false"/>
+   <style:paragraph-properties fo:line-height="100%" fo:text-align="start" style:text-autospace="none" style:line-break="strict" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="11pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="false" style:font-name-asian="Calibri" style:font-size-asian="11pt" style:language-asian="en" style:country-asian="US" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="11pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:text-align="start" style:justify-single-word="false" fo:keep-together="auto" fo:orphans="0" fo:widows="0" fo:hyphenation-ladder-count="no-limit" fo:break-before="auto" fo:break-after="auto" fo:background-color="transparent" fo:padding="0in" fo:border="none" style:shadow="none" fo:keep-with-next="auto" text:number-lines="true" text:line-number="0" style:text-autospace="none" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="0.5in" style:snap-to-layout-grid="true" style:writing-mode="lr-tb">
+    <style:background-image/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="11pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="false" fo:background-color="transparent" style:font-name-asian="Calibri" style:font-size-asian="11pt" style:language-asian="en" style:country-asian="US" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="11pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-combine="none" style:text-scale="100%" style:font-relief="none" fo:hyphenate="true"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" loext:contextual-spacing="false" fo:keep-with-next="always"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" style:font-name-asian="MS Gothic" style:font-family-asian="&apos;MS Gothic&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="14pt" style:font-name-complex="Tahoma" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="14pt"/>
+  </style:style>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0972in" loext:contextual-spacing="false" fo:line-height="115%"/>
+  </style:style>
+  <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="1" style:class="text">
+   <style:paragraph-properties fo:margin-left="0.0902in" fo:margin-right="0in" fo:margin-top="0.0008in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="18pt" fo:font-weight="bold" style:font-size-asian="18pt" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-weight-complex="bold" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="2" style:class="text">
+   <style:paragraph-properties fo:margin-left="0.389in" fo:margin-right="0in" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="15pt" fo:font-weight="bold" style:font-size-asian="15pt" style:font-weight-asian="bold" style:font-size-complex="15pt" style:font-weight-complex="bold" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="3" style:class="text">
+   <style:paragraph-properties fo:margin-left="0.2709in" fo:margin-right="0in" fo:margin-top="0.0339in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_4" style:display-name="Heading 4" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="4" style:class="text">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit"/>
+   <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_5" style:display-name="Heading 5" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="5" style:class="text">
+   <style:paragraph-properties fo:margin-left="3.9811in" fo:margin-right="1.4598in" fo:margin-top="0.1382in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="-0.3075in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="13.5pt" fo:font-weight="bold" style:font-size-asian="13.5pt" style:font-weight-asian="bold" style:font-size-complex="13.5pt" style:font-weight-complex="bold" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_6" style:display-name="Heading 6" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="6" style:class="text">
+   <style:paragraph-properties fo:margin-left="0in" fo:margin-right="-0.0118in" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="13pt" fo:font-weight="bold" style:font-name-asian="Times New Roman" style:font-family-asian="&apos;Times New Roman&apos;" style:font-family-generic-asian="roman" style:font-pitch-asian="variable" style:font-size-asian="13pt" style:font-weight-asian="bold" style:font-name-complex="Times New Roman" style:font-family-complex="&apos;Times New Roman&apos;" style:font-family-generic-complex="roman" style:font-pitch-complex="variable" style:font-size-complex="13pt" style:font-weight-complex="bold" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_7" style:display-name="Heading 7" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="7" style:class="text">
+   <style:paragraph-properties fo:margin-left="1.6811in" fo:margin-right="0in" fo:margin-top="0.0354in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Times New Roman" fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="12pt" fo:font-weight="bold" style:font-name-asian="Times New Roman" style:font-family-asian="&apos;Times New Roman&apos;" style:font-family-generic-asian="roman" style:font-pitch-asian="variable" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-name-complex="Times New Roman" style:font-family-complex="&apos;Times New Roman&apos;" style:font-family-generic-complex="roman" style:font-pitch-complex="variable" style:font-size-complex="12pt" style:font-weight-complex="bold" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_8" style:display-name="Heading 8" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="8" style:class="text">
+   <style:paragraph-properties fo:margin-left="0.4339in" fo:margin-right="0in" fo:margin-top="0.0327in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Heading_20_9" style:display-name="Heading 9" style:family="paragraph" style:parent-style-name="Normal" style:default-outline-level="9" style:class="text">
+   <style:paragraph-properties fo:margin-left="1.1055in" fo:margin-right="0in" fo:margin-top="0.0244in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:line-height="0.1547in" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="12pt" fo:font-style="italic" style:font-size-asian="12pt" style:font-style-asian="italic" style:font-size-complex="12pt" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Normal" style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit"/>
+   <style:text-properties style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" style:font-name-asian="Arial" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-name-complex="Arial" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="TOC_20_1" style:display-name="TOC 1" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:margin-left="0.6646in" fo:margin-right="0in" fo:margin-top="0.139in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Body_20_Text" style:display-name="Body Text" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit"/>
+   <style:text-properties fo:font-size="8.5pt" style:font-size-asian="8.5pt" style:font-size-complex="8.5pt" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="List_20_Paragraph" style:display-name="List Paragraph" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:margin-left="1.0189in" fo:margin-right="0in" fo:hyphenation-ladder-count="no-limit" fo:text-indent="-0.1575in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Table_20_Paragraph" style:display-name="Table Paragraph" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit"/>
+   <style:text-properties fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Normal_20__28_Web_29_" style:display-name="Normal (Web)" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:margin-top="0.0693in" fo:margin-bottom="0.0693in" loext:contextual-spacing="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="12pt" style:font-name-asian="MS Mincho" style:font-family-asian="&apos;MS Mincho&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-size-asian="12pt" style:language-asian="ja" style:country-asian="JP" style:font-name-complex="Times New Roman" style:font-family-complex="&apos;Times New Roman&apos;" style:font-family-generic-complex="roman" style:font-pitch-complex="variable" style:font-size-complex="12pt" fo:hyphenate="false"/>
+  </style:style>
+  <style:style style:name="Default_20_Paragraph_20_Font" style:display-name="Default Paragraph Font" style:family="text"/>
+  <style:style style:name="Graphics" style:family="graphic"/>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
+  <style:default-page-layout>
+   <style:page-layout-properties fo:border="none" fo:padding="0in" style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+  </style:default-page-layout>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:margin-left="1.378in" fo:margin-right="0in" fo:margin-top="0.048in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops>
+     <style:tab-stop style:position="1.322in"/>
+     <style:tab-stop style:position="2.5819in"/>
+     <style:tab-stop style:position="3.8563in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:margin-top="0.0508in" fo:margin-bottom="0.0409in" loext:contextual-spacing="false">
+    <style:tab-stops>
+     <style:tab-stop style:position="2.7in"/>
+     <style:tab-stop style:position="3.9598in"/>
+     <style:tab-stop style:position="5.2339in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="9pt" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold"/>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Body_20_Text" style:master-page-name="MP0">
+   <style:paragraph-properties fo:margin-top="0.0008in" fo:margin-bottom="0in" loext:contextual-spacing="false" style:page-number="auto"/>
+   <style:text-properties fo:font-size="5pt" style:font-size-asian="5pt"/>
+  </style:style>
+  <style:style style:name="P4" style:family="paragraph">
+   <loext:graphic-properties draw:fill="solid" draw:fill-color="#a2b5bd" draw:opacity="100%"/>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph">
+   <style:paragraph-properties fo:margin-left="0.0783in" fo:margin-right="0.0098in" fo:margin-top="0.0516in" fo:margin-bottom="0in" fo:line-height="120%" fo:text-indent="0in">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph">
+   <loext:graphic-properties draw:fill="none"/>
+   <style:paragraph-properties style:writing-mode="lr-tb" style:font-independent-line-spacing="false"/>
+  </style:style>
+  <style:style style:name="P7" style:family="paragraph">
+   <loext:graphic-properties draw:fill="solid" draw:fill-color="#c0cdd5" draw:opacity="100%"/>
+  </style:style>
+  <style:style style:name="P8" style:family="paragraph">
+   <style:paragraph-properties fo:margin-left="0.0783in" fo:margin-right="0.1028in" fo:margin-top="0.0516in" fo:margin-bottom="0in" fo:line-height="120%" fo:text-indent="0in">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="P9" style:family="paragraph">
+   <style:paragraph-properties fo:margin-left="0.0783in" fo:margin-right="0.0063in" fo:margin-top="0.0516in" fo:margin-bottom="0in" fo:line-height="120%" fo:text-indent="0in">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:color="#738995" fo:font-size="9pt" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:font-size="9pt" style:font-size-asian="9pt"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties fo:color="#211f1f" fo:font-size="9pt" style:font-size-asian="9pt"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties style:run-through="background" style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="page" draw:wrap-influence-on-position="once-concurrent" style:flow-with-text="false"/>
+  </style:style>
+  <style:style style:name="gr2" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#a2b5bd" draw:opacity="100%" fo:min-height="0in" fo:min-width="0in" style:run-through="background"/>
+  </style:style>
+  <style:style style:name="gr3" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false" draw:auto-grow-width="false" fo:padding-top="0in" fo:padding-bottom="0in" fo:padding-left="0in" fo:padding-right="0in" fo:wrap-option="wrap" style:run-through="background"/>
+  </style:style>
+  <style:style style:name="gr4" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#c0cdd5" draw:opacity="100%" fo:min-height="0in" fo:min-width="0in" style:run-through="background"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.7874in" fo:margin-bottom="0.7874in" fo:margin-left="0.7874in" fo:margin-right="0.7874in" style:writing-mode="lr-tb" style:footnote-max-height="0in">
+    <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="7.7083in" fo:page-height="12.3126in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1.4583in" fo:margin-bottom="0.3752in" fo:margin-left="0.3193in" fo:margin-right="0in" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.278in" style:layout-grid-ruby-height="0.139in" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.278in" style:layout-grid-snap-to="true" style:footnote-max-height="0in">
+    <style:footnote-sep style:width="0.0071in" style:line-style="solid" style:adjustment="left" style:rel-width="33%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+  <style:master-page style:name="MP0" style:page-layout-name="pm2"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="P3"/>
+   <text:p text:style-name="P1"><draw:g text:anchor-type="paragraph" draw:z-index="0" draw:name="Group 11" draw:style-name="gr1"><draw:custom-shape draw:name="AutoShape 12" draw:style-name="gr2" draw:text-style-name="P4" svg:width="1.1898in" svg:height="1.1012in" svg:x="1.6138in" svg:y="0.2319in">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 1713 1585" draw:text-areas="?f69 ?f71 ?f70 ?f72" draw:glue-points="?f45 ?f46 ?f47 ?f46 ?f48 ?f49 ?f45 ?f46 ?f50 ?f51 ?f52 ?f51 ?f53 ?f54 ?f55 ?f56 ?f57 ?f58 ?f59 ?f60 ?f59 ?f61 ?f57 ?f62 ?f55 ?f63 ?f53 ?f64 ?f52 ?f46 ?f50 ?f46 ?f65 ?f64 ?f66 ?f63 ?f67 ?f62 ?f68 ?f61 ?f68 ?f60 ?f67 ?f58 ?f66 ?f56 ?f65 ?f54 ?f50 ?f51" draw:type="non-primitive" draw:enhanced-path="M 1050 1349 L 834 1349 1089 1584 1050 1349 Z M 1486 0 L 227 0 96 3 29 28 4 96 0 227 0 1122 4 1253 29 1320 96 1345 227 1349 1486 1349 1618 1345 1685 1320 1710 1253 1713 1122 1713 227 1710 96 1685 28 1618 3 1486 0 Z N">
+       <draw:equation draw:name="f0" draw:formula="left"/>
+       <draw:equation draw:name="f1" draw:formula="right"/>
+       <draw:equation draw:name="f2" draw:formula="top"/>
+       <draw:equation draw:name="f3" draw:formula="bottom"/>
+       <draw:equation draw:name="f4" draw:formula="?f3 - ?f2"/>
+       <draw:equation draw:name="f5" draw:formula="?f1 - ?f0"/>
+       <draw:equation draw:name="f6" draw:formula="?f5 / 1713"/>
+       <draw:equation draw:name="f7" draw:formula="?f4 / 1585"/>
+       <draw:equation draw:name="f8" draw:formula="0 + 3374 - 2324"/>
+       <draw:equation draw:name="f9" draw:formula="?f8 * ?f5 / 1713"/>
+       <draw:equation draw:name="f10" draw:formula="1684 * ?f4 / 1585"/>
+       <draw:equation draw:name="f11" draw:formula="0 + 3158 - 2324"/>
+       <draw:equation draw:name="f12" draw:formula="?f11 * ?f5 / 1713"/>
+       <draw:equation draw:name="f13" draw:formula="0 + 3413 - 2324"/>
+       <draw:equation draw:name="f14" draw:formula="?f13 * ?f5 / 1713"/>
+       <draw:equation draw:name="f15" draw:formula="1919 * ?f4 / 1585"/>
+       <draw:equation draw:name="f16" draw:formula="0 + 3810 - 2324"/>
+       <draw:equation draw:name="f17" draw:formula="?f16 * ?f5 / 1713"/>
+       <draw:equation draw:name="f18" draw:formula="335 * ?f4 / 1585"/>
+       <draw:equation draw:name="f19" draw:formula="0 + 2551 - 2324"/>
+       <draw:equation draw:name="f20" draw:formula="?f19 * ?f5 / 1713"/>
+       <draw:equation draw:name="f21" draw:formula="0 + 2420 - 2324"/>
+       <draw:equation draw:name="f22" draw:formula="?f21 * ?f5 / 1713"/>
+       <draw:equation draw:name="f23" draw:formula="338 * ?f4 / 1585"/>
+       <draw:equation draw:name="f24" draw:formula="0 + 2353 - 2324"/>
+       <draw:equation draw:name="f25" draw:formula="?f24 * ?f5 / 1713"/>
+       <draw:equation draw:name="f26" draw:formula="363 * ?f4 / 1585"/>
+       <draw:equation draw:name="f27" draw:formula="0 + 2328 - 2324"/>
+       <draw:equation draw:name="f28" draw:formula="?f27 * ?f5 / 1713"/>
+       <draw:equation draw:name="f29" draw:formula="431 * ?f4 / 1585"/>
+       <draw:equation draw:name="f30" draw:formula="0 + 2324 - 2324"/>
+       <draw:equation draw:name="f31" draw:formula="?f30 * ?f5 / 1713"/>
+       <draw:equation draw:name="f32" draw:formula="562 * ?f4 / 1585"/>
+       <draw:equation draw:name="f33" draw:formula="1457 * ?f4 / 1585"/>
+       <draw:equation draw:name="f34" draw:formula="1588 * ?f4 / 1585"/>
+       <draw:equation draw:name="f35" draw:formula="1655 * ?f4 / 1585"/>
+       <draw:equation draw:name="f36" draw:formula="1680 * ?f4 / 1585"/>
+       <draw:equation draw:name="f37" draw:formula="0 + 3942 - 2324"/>
+       <draw:equation draw:name="f38" draw:formula="?f37 * ?f5 / 1713"/>
+       <draw:equation draw:name="f39" draw:formula="0 + 4009 - 2324"/>
+       <draw:equation draw:name="f40" draw:formula="?f39 * ?f5 / 1713"/>
+       <draw:equation draw:name="f41" draw:formula="0 + 4034 - 2324"/>
+       <draw:equation draw:name="f42" draw:formula="?f41 * ?f5 / 1713"/>
+       <draw:equation draw:name="f43" draw:formula="0 + 4037 - 2324"/>
+       <draw:equation draw:name="f44" draw:formula="?f43 * ?f5 / 1713"/>
+       <draw:equation draw:name="f45" draw:formula="?f9 / ?f6"/>
+       <draw:equation draw:name="f46" draw:formula="?f10 / ?f7"/>
+       <draw:equation draw:name="f47" draw:formula="?f12 / ?f6"/>
+       <draw:equation draw:name="f48" draw:formula="?f14 / ?f6"/>
+       <draw:equation draw:name="f49" draw:formula="?f15 / ?f7"/>
+       <draw:equation draw:name="f50" draw:formula="?f17 / ?f6"/>
+       <draw:equation draw:name="f51" draw:formula="?f18 / ?f7"/>
+       <draw:equation draw:name="f52" draw:formula="?f20 / ?f6"/>
+       <draw:equation draw:name="f53" draw:formula="?f22 / ?f6"/>
+       <draw:equation draw:name="f54" draw:formula="?f23 / ?f7"/>
+       <draw:equation draw:name="f55" draw:formula="?f25 / ?f6"/>
+       <draw:equation draw:name="f56" draw:formula="?f26 / ?f7"/>
+       <draw:equation draw:name="f57" draw:formula="?f28 / ?f6"/>
+       <draw:equation draw:name="f58" draw:formula="?f29 / ?f7"/>
+       <draw:equation draw:name="f59" draw:formula="?f31 / ?f6"/>
+       <draw:equation draw:name="f60" draw:formula="?f32 / ?f7"/>
+       <draw:equation draw:name="f61" draw:formula="?f33 / ?f7"/>
+       <draw:equation draw:name="f62" draw:formula="?f34 / ?f7"/>
+       <draw:equation draw:name="f63" draw:formula="?f35 / ?f7"/>
+       <draw:equation draw:name="f64" draw:formula="?f36 / ?f7"/>
+       <draw:equation draw:name="f65" draw:formula="?f38 / ?f6"/>
+       <draw:equation draw:name="f66" draw:formula="?f40 / ?f6"/>
+       <draw:equation draw:name="f67" draw:formula="?f42 / ?f6"/>
+       <draw:equation draw:name="f68" draw:formula="?f44 / ?f6"/>
+       <draw:equation draw:name="f69" draw:formula="0 / ?f6"/>
+       <draw:equation draw:name="f70" draw:formula="?f1 / ?f6"/>
+       <draw:equation draw:name="f71" draw:formula="0 / ?f7"/>
+       <draw:equation draw:name="f72" draw:formula="?f3 / ?f7"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape><draw:frame draw:name="Text Box 13" draw:style-name="gr3" draw:text-style-name="P6" svg:width="1.1898in" svg:height="1.1012in" svg:x="1.6138in" svg:y="0.2319in">
+      <draw:text-box>
+       <text:p text:style-name="P5"><text:span text:style-name="T2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod…</text:span></text:p>
+      </draw:text-box>
+     </draw:frame>
+    </draw:g><draw:g text:anchor-type="paragraph" draw:z-index="1" draw:name="Group 8" draw:style-name="gr1"><draw:custom-shape draw:name="AutoShape 9" draw:style-name="gr4" draw:text-style-name="P7" svg:width="1.1898in" svg:height="1.1012in" svg:x="2.9244in" svg:y="0.2319in">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 1713 1585" draw:text-areas="?f69 ?f71 ?f70 ?f72" draw:glue-points="?f45 ?f46 ?f47 ?f46 ?f48 ?f49 ?f45 ?f46 ?f50 ?f51 ?f52 ?f51 ?f53 ?f54 ?f55 ?f56 ?f57 ?f58 ?f59 ?f60 ?f59 ?f61 ?f57 ?f62 ?f55 ?f63 ?f53 ?f64 ?f52 ?f46 ?f50 ?f46 ?f65 ?f64 ?f66 ?f63 ?f67 ?f62 ?f68 ?f61 ?f68 ?f60 ?f67 ?f58 ?f66 ?f56 ?f65 ?f54 ?f50 ?f51" draw:type="non-primitive" draw:enhanced-path="M 1050 1349 L 833 1349 1088 1584 1050 1349 Z M 1486 0 L 227 0 95 3 28 28 3 96 0 227 0 1122 3 1253 28 1320 95 1345 227 1349 1486 1349 1617 1345 1684 1320 1709 1253 1713 1122 1713 227 1709 96 1684 28 1617 3 1486 0 Z N">
+       <draw:equation draw:name="f0" draw:formula="left"/>
+       <draw:equation draw:name="f1" draw:formula="right"/>
+       <draw:equation draw:name="f2" draw:formula="top"/>
+       <draw:equation draw:name="f3" draw:formula="bottom"/>
+       <draw:equation draw:name="f4" draw:formula="?f3 - ?f2"/>
+       <draw:equation draw:name="f5" draw:formula="?f1 - ?f0"/>
+       <draw:equation draw:name="f6" draw:formula="?f5 / 1713"/>
+       <draw:equation draw:name="f7" draw:formula="?f4 / 1585"/>
+       <draw:equation draw:name="f8" draw:formula="0 + 5262 - 4212"/>
+       <draw:equation draw:name="f9" draw:formula="?f8 * ?f5 / 1713"/>
+       <draw:equation draw:name="f10" draw:formula="1684 * ?f4 / 1585"/>
+       <draw:equation draw:name="f11" draw:formula="0 + 5045 - 4212"/>
+       <draw:equation draw:name="f12" draw:formula="?f11 * ?f5 / 1713"/>
+       <draw:equation draw:name="f13" draw:formula="0 + 5300 - 4212"/>
+       <draw:equation draw:name="f14" draw:formula="?f13 * ?f5 / 1713"/>
+       <draw:equation draw:name="f15" draw:formula="1919 * ?f4 / 1585"/>
+       <draw:equation draw:name="f16" draw:formula="0 + 5698 - 4212"/>
+       <draw:equation draw:name="f17" draw:formula="?f16 * ?f5 / 1713"/>
+       <draw:equation draw:name="f18" draw:formula="335 * ?f4 / 1585"/>
+       <draw:equation draw:name="f19" draw:formula="0 + 4439 - 4212"/>
+       <draw:equation draw:name="f20" draw:formula="?f19 * ?f5 / 1713"/>
+       <draw:equation draw:name="f21" draw:formula="0 + 4307 - 4212"/>
+       <draw:equation draw:name="f22" draw:formula="?f21 * ?f5 / 1713"/>
+       <draw:equation draw:name="f23" draw:formula="338 * ?f4 / 1585"/>
+       <draw:equation draw:name="f24" draw:formula="0 + 4240 - 4212"/>
+       <draw:equation draw:name="f25" draw:formula="?f24 * ?f5 / 1713"/>
+       <draw:equation draw:name="f26" draw:formula="363 * ?f4 / 1585"/>
+       <draw:equation draw:name="f27" draw:formula="0 + 4215 - 4212"/>
+       <draw:equation draw:name="f28" draw:formula="?f27 * ?f5 / 1713"/>
+       <draw:equation draw:name="f29" draw:formula="431 * ?f4 / 1585"/>
+       <draw:equation draw:name="f30" draw:formula="0 + 4212 - 4212"/>
+       <draw:equation draw:name="f31" draw:formula="?f30 * ?f5 / 1713"/>
+       <draw:equation draw:name="f32" draw:formula="562 * ?f4 / 1585"/>
+       <draw:equation draw:name="f33" draw:formula="1457 * ?f4 / 1585"/>
+       <draw:equation draw:name="f34" draw:formula="1588 * ?f4 / 1585"/>
+       <draw:equation draw:name="f35" draw:formula="1655 * ?f4 / 1585"/>
+       <draw:equation draw:name="f36" draw:formula="1680 * ?f4 / 1585"/>
+       <draw:equation draw:name="f37" draw:formula="0 + 5829 - 4212"/>
+       <draw:equation draw:name="f38" draw:formula="?f37 * ?f5 / 1713"/>
+       <draw:equation draw:name="f39" draw:formula="0 + 5896 - 4212"/>
+       <draw:equation draw:name="f40" draw:formula="?f39 * ?f5 / 1713"/>
+       <draw:equation draw:name="f41" draw:formula="0 + 5921 - 4212"/>
+       <draw:equation draw:name="f42" draw:formula="?f41 * ?f5 / 1713"/>
+       <draw:equation draw:name="f43" draw:formula="0 + 5925 - 4212"/>
+       <draw:equation draw:name="f44" draw:formula="?f43 * ?f5 / 1713"/>
+       <draw:equation draw:name="f45" draw:formula="?f9 / ?f6"/>
+       <draw:equation draw:name="f46" draw:formula="?f10 / ?f7"/>
+       <draw:equation draw:name="f47" draw:formula="?f12 / ?f6"/>
+       <draw:equation draw:name="f48" draw:formula="?f14 / ?f6"/>
+       <draw:equation draw:name="f49" draw:formula="?f15 / ?f7"/>
+       <draw:equation draw:name="f50" draw:formula="?f17 / ?f6"/>
+       <draw:equation draw:name="f51" draw:formula="?f18 / ?f7"/>
+       <draw:equation draw:name="f52" draw:formula="?f20 / ?f6"/>
+       <draw:equation draw:name="f53" draw:formula="?f22 / ?f6"/>
+       <draw:equation draw:name="f54" draw:formula="?f23 / ?f7"/>
+       <draw:equation draw:name="f55" draw:formula="?f25 / ?f6"/>
+       <draw:equation draw:name="f56" draw:formula="?f26 / ?f7"/>
+       <draw:equation draw:name="f57" draw:formula="?f28 / ?f6"/>
+       <draw:equation draw:name="f58" draw:formula="?f29 / ?f7"/>
+       <draw:equation draw:name="f59" draw:formula="?f31 / ?f6"/>
+       <draw:equation draw:name="f60" draw:formula="?f32 / ?f7"/>
+       <draw:equation draw:name="f61" draw:formula="?f33 / ?f7"/>
+       <draw:equation draw:name="f62" draw:formula="?f34 / ?f7"/>
+       <draw:equation draw:name="f63" draw:formula="?f35 / ?f7"/>
+       <draw:equation draw:name="f64" draw:formula="?f36 / ?f7"/>
+       <draw:equation draw:name="f65" draw:formula="?f38 / ?f6"/>
+       <draw:equation draw:name="f66" draw:formula="?f40 / ?f6"/>
+       <draw:equation draw:name="f67" draw:formula="?f42 / ?f6"/>
+       <draw:equation draw:name="f68" draw:formula="?f44 / ?f6"/>
+       <draw:equation draw:name="f69" draw:formula="0 / ?f6"/>
+       <draw:equation draw:name="f70" draw:formula="?f1 / ?f6"/>
+       <draw:equation draw:name="f71" draw:formula="0 / ?f7"/>
+       <draw:equation draw:name="f72" draw:formula="?f3 / ?f7"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape><draw:frame draw:name="Text Box 10" draw:style-name="gr3" draw:text-style-name="P6" svg:width="1.1898in" svg:height="1.1012in" svg:x="2.9244in" svg:y="0.2319in">
+      <draw:text-box>
+       <text:p text:style-name="P8"><text:span text:style-name="T3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod…</text:span></text:p>
+      </draw:text-box>
+     </draw:frame>
+    </draw:g><draw:g text:anchor-type="paragraph" draw:z-index="2" draw:name="Group 5" draw:style-name="gr1"><draw:custom-shape draw:name="AutoShape 6" draw:style-name="gr2" draw:text-style-name="P4" svg:width="1.1898in" svg:height="1.1012in" svg:x="4.2354in" svg:y="0.2319in">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 1713 1585" draw:text-areas="?f69 ?f71 ?f70 ?f72" draw:glue-points="?f45 ?f46 ?f47 ?f46 ?f48 ?f49 ?f45 ?f46 ?f50 ?f51 ?f52 ?f51 ?f53 ?f54 ?f55 ?f56 ?f57 ?f58 ?f59 ?f60 ?f59 ?f61 ?f57 ?f62 ?f55 ?f63 ?f53 ?f64 ?f52 ?f46 ?f50 ?f46 ?f65 ?f64 ?f66 ?f63 ?f67 ?f62 ?f68 ?f61 ?f68 ?f60 ?f67 ?f58 ?f66 ?f56 ?f65 ?f54 ?f50 ?f51" draw:type="non-primitive" draw:enhanced-path="M 1050 1349 L 834 1349 1089 1584 1050 1349 Z M 1486 0 L 227 0 96 3 29 28 4 96 0 227 0 1122 4 1253 29 1320 96 1345 227 1349 1486 1349 1617 1345 1685 1320 1709 1253 1713 1122 1713 227 1709 96 1685 28 1617 3 1486 0 Z N">
+       <draw:equation draw:name="f0" draw:formula="left"/>
+       <draw:equation draw:name="f1" draw:formula="right"/>
+       <draw:equation draw:name="f2" draw:formula="top"/>
+       <draw:equation draw:name="f3" draw:formula="bottom"/>
+       <draw:equation draw:name="f4" draw:formula="?f3 - ?f2"/>
+       <draw:equation draw:name="f5" draw:formula="?f1 - ?f0"/>
+       <draw:equation draw:name="f6" draw:formula="?f5 / 1713"/>
+       <draw:equation draw:name="f7" draw:formula="?f4 / 1585"/>
+       <draw:equation draw:name="f8" draw:formula="0 + 7149 - 6099"/>
+       <draw:equation draw:name="f9" draw:formula="?f8 * ?f5 / 1713"/>
+       <draw:equation draw:name="f10" draw:formula="1684 * ?f4 / 1585"/>
+       <draw:equation draw:name="f11" draw:formula="0 + 6933 - 6099"/>
+       <draw:equation draw:name="f12" draw:formula="?f11 * ?f5 / 1713"/>
+       <draw:equation draw:name="f13" draw:formula="0 + 7188 - 6099"/>
+       <draw:equation draw:name="f14" draw:formula="?f13 * ?f5 / 1713"/>
+       <draw:equation draw:name="f15" draw:formula="1919 * ?f4 / 1585"/>
+       <draw:equation draw:name="f16" draw:formula="0 + 7585 - 6099"/>
+       <draw:equation draw:name="f17" draw:formula="?f16 * ?f5 / 1713"/>
+       <draw:equation draw:name="f18" draw:formula="335 * ?f4 / 1585"/>
+       <draw:equation draw:name="f19" draw:formula="0 + 6326 - 6099"/>
+       <draw:equation draw:name="f20" draw:formula="?f19 * ?f5 / 1713"/>
+       <draw:equation draw:name="f21" draw:formula="0 + 6195 - 6099"/>
+       <draw:equation draw:name="f22" draw:formula="?f21 * ?f5 / 1713"/>
+       <draw:equation draw:name="f23" draw:formula="338 * ?f4 / 1585"/>
+       <draw:equation draw:name="f24" draw:formula="0 + 6128 - 6099"/>
+       <draw:equation draw:name="f25" draw:formula="?f24 * ?f5 / 1713"/>
+       <draw:equation draw:name="f26" draw:formula="363 * ?f4 / 1585"/>
+       <draw:equation draw:name="f27" draw:formula="0 + 6103 - 6099"/>
+       <draw:equation draw:name="f28" draw:formula="?f27 * ?f5 / 1713"/>
+       <draw:equation draw:name="f29" draw:formula="431 * ?f4 / 1585"/>
+       <draw:equation draw:name="f30" draw:formula="0 + 6099 - 6099"/>
+       <draw:equation draw:name="f31" draw:formula="?f30 * ?f5 / 1713"/>
+       <draw:equation draw:name="f32" draw:formula="562 * ?f4 / 1585"/>
+       <draw:equation draw:name="f33" draw:formula="1457 * ?f4 / 1585"/>
+       <draw:equation draw:name="f34" draw:formula="1588 * ?f4 / 1585"/>
+       <draw:equation draw:name="f35" draw:formula="1655 * ?f4 / 1585"/>
+       <draw:equation draw:name="f36" draw:formula="1680 * ?f4 / 1585"/>
+       <draw:equation draw:name="f37" draw:formula="0 + 7716 - 6099"/>
+       <draw:equation draw:name="f38" draw:formula="?f37 * ?f5 / 1713"/>
+       <draw:equation draw:name="f39" draw:formula="0 + 7784 - 6099"/>
+       <draw:equation draw:name="f40" draw:formula="?f39 * ?f5 / 1713"/>
+       <draw:equation draw:name="f41" draw:formula="0 + 7808 - 6099"/>
+       <draw:equation draw:name="f42" draw:formula="?f41 * ?f5 / 1713"/>
+       <draw:equation draw:name="f43" draw:formula="0 + 7812 - 6099"/>
+       <draw:equation draw:name="f44" draw:formula="?f43 * ?f5 / 1713"/>
+       <draw:equation draw:name="f45" draw:formula="?f9 / ?f6"/>
+       <draw:equation draw:name="f46" draw:formula="?f10 / ?f7"/>
+       <draw:equation draw:name="f47" draw:formula="?f12 / ?f6"/>
+       <draw:equation draw:name="f48" draw:formula="?f14 / ?f6"/>
+       <draw:equation draw:name="f49" draw:formula="?f15 / ?f7"/>
+       <draw:equation draw:name="f50" draw:formula="?f17 / ?f6"/>
+       <draw:equation draw:name="f51" draw:formula="?f18 / ?f7"/>
+       <draw:equation draw:name="f52" draw:formula="?f20 / ?f6"/>
+       <draw:equation draw:name="f53" draw:formula="?f22 / ?f6"/>
+       <draw:equation draw:name="f54" draw:formula="?f23 / ?f7"/>
+       <draw:equation draw:name="f55" draw:formula="?f25 / ?f6"/>
+       <draw:equation draw:name="f56" draw:formula="?f26 / ?f7"/>
+       <draw:equation draw:name="f57" draw:formula="?f28 / ?f6"/>
+       <draw:equation draw:name="f58" draw:formula="?f29 / ?f7"/>
+       <draw:equation draw:name="f59" draw:formula="?f31 / ?f6"/>
+       <draw:equation draw:name="f60" draw:formula="?f32 / ?f7"/>
+       <draw:equation draw:name="f61" draw:formula="?f33 / ?f7"/>
+       <draw:equation draw:name="f62" draw:formula="?f34 / ?f7"/>
+       <draw:equation draw:name="f63" draw:formula="?f35 / ?f7"/>
+       <draw:equation draw:name="f64" draw:formula="?f36 / ?f7"/>
+       <draw:equation draw:name="f65" draw:formula="?f38 / ?f6"/>
+       <draw:equation draw:name="f66" draw:formula="?f40 / ?f6"/>
+       <draw:equation draw:name="f67" draw:formula="?f42 / ?f6"/>
+       <draw:equation draw:name="f68" draw:formula="?f44 / ?f6"/>
+       <draw:equation draw:name="f69" draw:formula="0 / ?f6"/>
+       <draw:equation draw:name="f70" draw:formula="?f1 / ?f6"/>
+       <draw:equation draw:name="f71" draw:formula="0 / ?f7"/>
+       <draw:equation draw:name="f72" draw:formula="?f3 / ?f7"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape><draw:frame draw:name="Text Box 7" draw:style-name="gr3" draw:text-style-name="P6" svg:width="1.1898in" svg:height="1.1012in" svg:x="4.2354in" svg:y="0.2319in">
+      <draw:text-box>
+       <text:p text:style-name="P5"><text:span text:style-name="T3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod…</text:span></text:p>
+      </draw:text-box>
+     </draw:frame>
+    </draw:g><draw:g text:anchor-type="paragraph" draw:z-index="3" draw:name="Group 2" draw:style-name="gr1"><draw:custom-shape draw:name="AutoShape 3" draw:style-name="gr4" draw:text-style-name="P7" svg:width="1.1898in" svg:height="1.1012in" svg:x="5.5457in" svg:y="0.2319in">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 1713 1585" draw:text-areas="?f69 ?f71 ?f70 ?f72" draw:glue-points="?f45 ?f46 ?f47 ?f46 ?f48 ?f49 ?f45 ?f46 ?f50 ?f51 ?f52 ?f51 ?f53 ?f54 ?f55 ?f56 ?f57 ?f58 ?f59 ?f60 ?f59 ?f61 ?f57 ?f62 ?f55 ?f63 ?f53 ?f64 ?f52 ?f46 ?f50 ?f46 ?f65 ?f64 ?f66 ?f63 ?f67 ?f62 ?f68 ?f61 ?f68 ?f60 ?f67 ?f58 ?f66 ?f56 ?f65 ?f54 ?f50 ?f51" draw:type="non-primitive" draw:enhanced-path="M 1050 1349 L 833 1349 1088 1584 1050 1349 Z M 1486 0 L 226 0 95 3 28 28 3 96 0 227 0 1122 3 1253 28 1320 95 1345 226 1349 1486 1349 1617 1345 1684 1320 1709 1253 1712 1122 1712 227 1709 96 1684 28 1617 3 1486 0 Z N">
+       <draw:equation draw:name="f0" draw:formula="left"/>
+       <draw:equation draw:name="f1" draw:formula="right"/>
+       <draw:equation draw:name="f2" draw:formula="top"/>
+       <draw:equation draw:name="f3" draw:formula="bottom"/>
+       <draw:equation draw:name="f4" draw:formula="?f3 - ?f2"/>
+       <draw:equation draw:name="f5" draw:formula="?f1 - ?f0"/>
+       <draw:equation draw:name="f6" draw:formula="?f5 / 1713"/>
+       <draw:equation draw:name="f7" draw:formula="?f4 / 1585"/>
+       <draw:equation draw:name="f8" draw:formula="0 + 9037 - 7987"/>
+       <draw:equation draw:name="f9" draw:formula="?f8 * ?f5 / 1713"/>
+       <draw:equation draw:name="f10" draw:formula="1684 * ?f4 / 1585"/>
+       <draw:equation draw:name="f11" draw:formula="0 + 8820 - 7987"/>
+       <draw:equation draw:name="f12" draw:formula="?f11 * ?f5 / 1713"/>
+       <draw:equation draw:name="f13" draw:formula="0 + 9075 - 7987"/>
+       <draw:equation draw:name="f14" draw:formula="?f13 * ?f5 / 1713"/>
+       <draw:equation draw:name="f15" draw:formula="1919 * ?f4 / 1585"/>
+       <draw:equation draw:name="f16" draw:formula="0 + 9473 - 7987"/>
+       <draw:equation draw:name="f17" draw:formula="?f16 * ?f5 / 1713"/>
+       <draw:equation draw:name="f18" draw:formula="335 * ?f4 / 1585"/>
+       <draw:equation draw:name="f19" draw:formula="0 + 8213 - 7987"/>
+       <draw:equation draw:name="f20" draw:formula="?f19 * ?f5 / 1713"/>
+       <draw:equation draw:name="f21" draw:formula="0 + 8082 - 7987"/>
+       <draw:equation draw:name="f22" draw:formula="?f21 * ?f5 / 1713"/>
+       <draw:equation draw:name="f23" draw:formula="338 * ?f4 / 1585"/>
+       <draw:equation draw:name="f24" draw:formula="0 + 8015 - 7987"/>
+       <draw:equation draw:name="f25" draw:formula="?f24 * ?f5 / 1713"/>
+       <draw:equation draw:name="f26" draw:formula="363 * ?f4 / 1585"/>
+       <draw:equation draw:name="f27" draw:formula="0 + 7990 - 7987"/>
+       <draw:equation draw:name="f28" draw:formula="?f27 * ?f5 / 1713"/>
+       <draw:equation draw:name="f29" draw:formula="431 * ?f4 / 1585"/>
+       <draw:equation draw:name="f30" draw:formula="0 + 7987 - 7987"/>
+       <draw:equation draw:name="f31" draw:formula="?f30 * ?f5 / 1713"/>
+       <draw:equation draw:name="f32" draw:formula="562 * ?f4 / 1585"/>
+       <draw:equation draw:name="f33" draw:formula="1457 * ?f4 / 1585"/>
+       <draw:equation draw:name="f34" draw:formula="1588 * ?f4 / 1585"/>
+       <draw:equation draw:name="f35" draw:formula="1655 * ?f4 / 1585"/>
+       <draw:equation draw:name="f36" draw:formula="1680 * ?f4 / 1585"/>
+       <draw:equation draw:name="f37" draw:formula="0 + 9604 - 7987"/>
+       <draw:equation draw:name="f38" draw:formula="?f37 * ?f5 / 1713"/>
+       <draw:equation draw:name="f39" draw:formula="0 + 9671 - 7987"/>
+       <draw:equation draw:name="f40" draw:formula="?f39 * ?f5 / 1713"/>
+       <draw:equation draw:name="f41" draw:formula="0 + 9696 - 7987"/>
+       <draw:equation draw:name="f42" draw:formula="?f41 * ?f5 / 1713"/>
+       <draw:equation draw:name="f43" draw:formula="0 + 9699 - 7987"/>
+       <draw:equation draw:name="f44" draw:formula="?f43 * ?f5 / 1713"/>
+       <draw:equation draw:name="f45" draw:formula="?f9 / ?f6"/>
+       <draw:equation draw:name="f46" draw:formula="?f10 / ?f7"/>
+       <draw:equation draw:name="f47" draw:formula="?f12 / ?f6"/>
+       <draw:equation draw:name="f48" draw:formula="?f14 / ?f6"/>
+       <draw:equation draw:name="f49" draw:formula="?f15 / ?f7"/>
+       <draw:equation draw:name="f50" draw:formula="?f17 / ?f6"/>
+       <draw:equation draw:name="f51" draw:formula="?f18 / ?f7"/>
+       <draw:equation draw:name="f52" draw:formula="?f20 / ?f6"/>
+       <draw:equation draw:name="f53" draw:formula="?f22 / ?f6"/>
+       <draw:equation draw:name="f54" draw:formula="?f23 / ?f7"/>
+       <draw:equation draw:name="f55" draw:formula="?f25 / ?f6"/>
+       <draw:equation draw:name="f56" draw:formula="?f26 / ?f7"/>
+       <draw:equation draw:name="f57" draw:formula="?f28 / ?f6"/>
+       <draw:equation draw:name="f58" draw:formula="?f29 / ?f7"/>
+       <draw:equation draw:name="f59" draw:formula="?f31 / ?f6"/>
+       <draw:equation draw:name="f60" draw:formula="?f32 / ?f7"/>
+       <draw:equation draw:name="f61" draw:formula="?f33 / ?f7"/>
+       <draw:equation draw:name="f62" draw:formula="?f34 / ?f7"/>
+       <draw:equation draw:name="f63" draw:formula="?f35 / ?f7"/>
+       <draw:equation draw:name="f64" draw:formula="?f36 / ?f7"/>
+       <draw:equation draw:name="f65" draw:formula="?f38 / ?f6"/>
+       <draw:equation draw:name="f66" draw:formula="?f40 / ?f6"/>
+       <draw:equation draw:name="f67" draw:formula="?f42 / ?f6"/>
+       <draw:equation draw:name="f68" draw:formula="?f44 / ?f6"/>
+       <draw:equation draw:name="f69" draw:formula="0 / ?f6"/>
+       <draw:equation draw:name="f70" draw:formula="?f1 / ?f6"/>
+       <draw:equation draw:name="f71" draw:formula="0 / ?f7"/>
+       <draw:equation draw:name="f72" draw:formula="?f3 / ?f7"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape><draw:frame draw:name="Text Box 4" draw:style-name="gr3" draw:text-style-name="P6" svg:width="1.1898in" svg:height="1.1012in" svg:x="5.5457in" svg:y="0.2319in">
+      <draw:text-box>
+       <text:p text:style-name="P9"><text:span text:style-name="T3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, …</text:span></text:p>
+      </draw:text-box>
+     </draw:frame>
+    </draw:g><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T1">a<text:tab/>b<text:tab/>c<text:tab/>d</text:span></text:span></text:p>
+   <text:p text:style-name="P2"/>
+  </office:text>
+ </office:body>
+</office:document>
