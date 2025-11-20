@@ -33,7 +33,7 @@ using namespace com::sun::star;
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(Tdf130907, "tdf130907.docx")
@@ -84,6 +84,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
 CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
 {
     createSwDoc("tdf135595_HFtableWrap.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nRowHeight = getXPath(pXmlDoc, "//page[1]/header/tab/row/infos/bounds", "height").toInt32();
@@ -106,6 +110,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
 DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
                          "tdf135943_shapeWithText_LayoutInCell0_compat15.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // With compat15, layoutinCell ought to be ignored/forced to true.
     // HOWEVER, currently only the shape is correctly placed, while its text is un-synced separately.
     // So to prevent this ugly mess, just leave everything together in the historical (wrong) spot.
@@ -128,6 +135,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c12.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 10
+    skipValidation();
+
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // tdf#104596: ignore wrap exception apparently does not apply if it is not "layout in table cell".
     // Should be only one page. Row height should be two lines at 722, not wrapped to three lines at 998.
@@ -194,6 +204,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123873)
 CPPUNIT_TEST_FIXTURE(Test, Tdf133065)
 {
     createSwDoc("tdf133065.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 14
+    skipValidation();
+
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
@@ -584,6 +598,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92472)
 CPPUNIT_TEST_FIXTURE(Test, Tdf133035)
 {
     createSwDoc("tdf133035.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     auto pxml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pxml);
@@ -673,6 +691,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130167_spilloverHeaderShape, "testTdf130167_spilloverHeader.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xNameAccess(
         xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
