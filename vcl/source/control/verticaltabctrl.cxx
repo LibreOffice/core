@@ -100,7 +100,8 @@ bool VerticalTabControl::EventNotify(NotifyEvent& rNEvt)
     if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
     {
         sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-        if (nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN)
+        if (nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN
+            || (nCode == KEY_TAB && rNEvt.GetKeyEvent()->GetKeyCode().IsMod1()))
         {
             m_xChooser->DoKeyInput(*(rNEvt.GetKeyEvent()));
             m_xChooser->GrabFocus();
