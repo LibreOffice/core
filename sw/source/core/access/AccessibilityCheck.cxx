@@ -2621,8 +2621,8 @@ public:
             OUString sError = rFootnote.IsEndNote() ? SwResId(STR_AVOID_ENDNOTES)
                                                     : SwResId(STR_AVOID_FOOTNOTES);
             sfx::AccessibilityIssueID eIssueID = rFootnote.IsEndNote()
-                                                     ? sfx::AccessibilityIssueID::AVOID_FOOTNOTES
-                                                     : sfx::AccessibilityIssueID::AVOID_ENDNOTES;
+                                                     ? sfx::AccessibilityIssueID::AVOID_ENDNOTES
+                                                     : sfx::AccessibilityIssueID::AVOID_FOOTNOTES;
             auto pIssue = lclAddIssue(m_rIssueCollection, sError, eIssueID,
                                       sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setDoc(*pDoc);
