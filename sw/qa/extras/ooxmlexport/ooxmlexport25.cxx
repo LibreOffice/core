@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -128,6 +128,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169413_asciiTheme)
 {
     // the document failed to reload without errors after a round-trip
     createSwDoc("tdf169413_asciiTheme.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
 }
 
@@ -194,7 +198,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     // - Actual  : Standard
 
     createSwDoc("tdf167082.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
     saveAndReload(TestFilter::DOCX);
+
     OUString aStyleName = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
