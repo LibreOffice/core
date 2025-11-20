@@ -2778,8 +2778,9 @@ public:
     bool  SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab);
     bool  SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab);
 
-    SC_DLLPUBLIC ScTableStyles& GetTableStyles();
-    SC_DLLPUBLIC const ScTableStyles& GetTableStyles() const;
+    SC_DLLPUBLIC ScTableStyles* GetTableStyles();
+    SC_DLLPUBLIC const ScTableStyles* GetTableStyles() const;
+    SC_DLLPUBLIC bool HasTableStyles() const;
 
 private:
 

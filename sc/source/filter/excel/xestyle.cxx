@@ -3381,11 +3381,14 @@ XclExpXmlTableStyles::XclExpXmlTableStyles( const XclExpRoot& rRoot):
 
     const ScDBCollection* pDBCollection = GetDoc().GetDBCollection();
     const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
-    const ScTableStyles& rTableStyles = GetDoc().GetTableStyles();
+    const ScTableStyles* pTableStyles = GetDoc().GetTableStyles();
+    if (!pTableStyles)
+        return;
+
     for (auto itr = rDBs.begin(); itr != rDBs.end(); ++itr)
     {
         const ScTableStyleParam* pParam = itr->get()->GetTableStyleInfo();
-        if (pParam && rTableStyles.GetTableStyle(pParam->maStyleID))
+        if (pParam && pTableStyles->GetTableStyle(pParam->maStyleID))
         {
             aTableStyleNames.insert(pParam->maStyleID);
         }
@@ -3393,7 +3396,7 @@ XclExpXmlTableStyles::XclExpXmlTableStyles( const XclExpRoot& rRoot):
 
     for (const OUString& aTableStyleName : aTableStyleNames)
     {
-        const ScTableStyle* pTableStyle = rTableStyles.GetTableStyle(aTableStyleName);
+        const ScTableStyle* pTableStyle = pTableStyles->GetTableStyle(aTableStyleName);
         maTableStyles.push_back(std::make_unique<XclExpXmlTableStyle>(rRoot, pTableStyle));
     }
 }

@@ -126,6 +126,7 @@ public:
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
     void DeleteTableStyle(const OUString& rName);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
+    bool HasTableStyle() const { return maTableStyles.size() > 0; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
