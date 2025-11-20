@@ -1276,9 +1276,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     aExtraInfo.append(", \"ObjectRectangles\": "_ostr + objectRectangles);
                 }
 
-                aExtraInfo.append(handleArrayStr
-                    + "}");
-                sSelectionText += ", " + aExtraInfo;
+                sSelectionText += ", " + aExtraInfo + handleArrayStr + "}";
             }
         }
 
