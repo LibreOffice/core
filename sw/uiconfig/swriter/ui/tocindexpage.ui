@@ -160,6 +160,9 @@
                         <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|readonly">Prevents the contents of the index from being changed.</property>
                       </object>
                     </child>
+                    <accessibility>
+                      <relation type="label-for" target="title"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -173,11 +176,9 @@
                     <property name="hexpand">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="title-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|title">Enter a title for the selected index.</property>
-                      </object>
-                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="usetitle"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
