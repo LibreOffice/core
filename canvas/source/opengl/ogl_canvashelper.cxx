@@ -385,8 +385,7 @@ namespace oglcanvas
     {
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
 
@@ -413,8 +412,7 @@ namespace oglcanvas
         if( !mpDevice )
             return;
 
-        mpRecordedActions->push_back( Action() );
-        Action& rAct=mpRecordedActions->back();
+        Action& rAct=mpRecordedActions->emplace_back();
 
         setupGraphicsState( rAct, viewState, renderState );
 
@@ -444,8 +442,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -470,8 +467,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -529,8 +525,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -555,8 +550,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -761,8 +755,7 @@ namespace oglcanvas
                 // set font
                 pVDev->SetFont(aFont);
 
-                mpRecordedActions->push_back( Action() );
-                Action& rAct=mpRecordedActions->back();
+                Action& rAct=mpRecordedActions->emplace_back();
 
                 setupGraphicsState( rAct, viewState, renderState );
 
@@ -824,8 +817,7 @@ namespace oglcanvas
                 // insert as transformed copy of bitmap action vector -
                 // during rendering, this gets rendered into a temporary
                 // buffer, and then composited to the front
-                mpRecordedActions->push_back( Action() );
-                Action& rAct=mpRecordedActions->back();
+                Action& rAct=mpRecordedActions->emplace_back();
 
                 setupGraphicsState( rAct, viewState, renderState );
 
@@ -862,8 +854,7 @@ namespace oglcanvas
                             aPixelData,
                             canvastools::getStdColorSpace()));
 
-                    mpRecordedActions->push_back( Action() );
-                    Action& rAct=mpRecordedActions->back();
+                    Action& rAct=mpRecordedActions->emplace_back();
 
                     setupGraphicsState( rAct, viewState, renderState );
 
