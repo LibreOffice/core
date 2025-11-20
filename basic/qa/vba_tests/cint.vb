@@ -23,13 +23,11 @@ Sub verify_testCInt()
     TestUtil.AssertEqual(CInt(-1.9), -2, "CInt(-1.9)")
     TestUtil.AssertEqual(CInt(0.2),   0, "CInt(0.2)")
 
-REM In excel:
-REM    If the fraction is less than or equal to .5, the result will round down.
-REM    If the fraction is greater than .5, the result will round up.
-
-REM    TestUtil.AssertEqual(CInt(0.5), 0, "CInt(0.5)")
-REM    TestUtil.AssertEqual(CInt(1.5), 2, "CInt(1.5)")
-REM    TestUtil.AssertEqual(CInt(2.5), 2, "CInt(2.5)")
+    ' tdf#162711 - VBASupport requires banker’s rounding for integer conversions
+    TestUtil.AssertEqual(CInt(0.5), 0, "CInt(0.5)")
+    TestUtil.AssertEqual(CInt(1.5), 2, "CInt(1.5)")
+    TestUtil.AssertEqual(CInt(2.5), 2, "CInt(2.5)")
+    TestUtil.AssertEqual(CInt(3.5), 4, "CInt(3.5)")
 
     TestUtil.AssertEqual(CInt(10.51),       11, "CInt(10.51)")
     TestUtil.AssertEqual(CInt("&H75FF"), 30207, "CInt(""&H75FF"")")

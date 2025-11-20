@@ -24,6 +24,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
+#include <runtime.hxx>
 
 #include <o3tl/float_int_conversion.hxx>
 #include <o3tl/safeint.hxx>
@@ -34,7 +35,10 @@ class SbxArray;
 
 template <std::integral I> I ConvertWithOverflowTo(double f)
 {
-    f = rtl::math::round(f);
+    // tdf#162711 - VBASupport mode requires banker’s rounding for integer conversions
+    f = rtl_math_round(f, 0,
+                       SbiRuntime::isVBAEnabled() ? rtl_math_RoundingMode_HalfEven
+                                                  : rtl_math_RoundingMode_Corrected);
     if (!o3tl::convertsToAtMost(f, std::numeric_limits<I>::max()))
     {
         SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
