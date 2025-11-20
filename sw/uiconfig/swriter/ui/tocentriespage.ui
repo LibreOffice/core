@@ -91,6 +91,9 @@
                     <property name="headers-clickable">False</property>
                     <property name="search-column">0</property>
                     <property name="show-expanders">False</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="levelft"/>
+                    </accessibility>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection1"/>
                     </child>
@@ -122,6 +125,14 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="levelft-atkobject">
+                        <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
+                    <accessibility>
+                      <relation type="label-for" target="level"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -138,6 +149,11 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="typeft-atkobject">
+                        <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
