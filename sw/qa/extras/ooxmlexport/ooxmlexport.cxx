@@ -37,12 +37,16 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo81381)
 {
     createSwDoc("fdo81381.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", u"Icon");
@@ -438,6 +442,9 @@ DECLARE_OOXMLEXPORT_TEST(testWpsCharColor, "wps-char-color.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableStyleCellBackColor, "table-style-cell-back-color.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // The problem was that cell background was white, not green.
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -449,6 +456,9 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleCellBackColor, "table-style-cell-back-col
 
 DECLARE_OOXMLEXPORT_TEST(testTableStyleBorder, "table-style-border.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -464,6 +474,9 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleBorder, "table-style-border.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableStyleBorderExport, "table-style-border-export.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -569,6 +582,9 @@ DECLARE_OOXMLEXPORT_TEST(testAfterlines, "afterlines.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // The problem was that we didn't handle the situation when an empty paragraph's marker had both a char style and some direct formatting.
 
     // This was 11.
@@ -591,7 +607,6 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkNonempty)
 {
     createSwDoc("paragraph-mark-nonempty.odt");
     save(TestFilter::DOCX);
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.
@@ -808,6 +823,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 39
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
