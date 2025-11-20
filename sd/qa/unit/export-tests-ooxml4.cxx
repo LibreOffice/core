@@ -1609,7 +1609,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOLEObjectAnimationTarget)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169496_hidden_graphic)
 {
     createSdImpressDoc("pptx/tdf169496_hidden_graphic.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 

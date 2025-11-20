@@ -939,7 +939,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testtdf169496_hidden_graphic)
 {
     createScDoc("xlsx/tdf169496_hidden_graphic.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
 
     xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDrawing);
