@@ -3163,21 +3163,34 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
     else if (bSDot)
         sPrefixSuffix = "Period";
 
+    // For some of these, there is no corresponding valid value, so we use val+"Period"
     switch( nNumberingType )
     {
         case SVX_NUM_CHARS_UPPER_LETTER_N :
         case SVX_NUM_CHARS_UPPER_LETTER :
-            return "alphaUc" + sPrefixSuffix;
+            if (sPrefixSuffix.isEmpty())
+                return u"alphaUcPeriod"_ustr;
+            else
+                return "alphaUc" + sPrefixSuffix;
 
         case SVX_NUM_CHARS_LOWER_LETTER_N :
         case SVX_NUM_CHARS_LOWER_LETTER :
-            return "alphaLc" + sPrefixSuffix;
+            if (sPrefixSuffix.isEmpty())
+                return u"alphaLcPeriod"_ustr;
+            else
+                return "alphaLc" + sPrefixSuffix;
 
         case SVX_NUM_ROMAN_UPPER :
-            return "romanUc" + sPrefixSuffix;
+            if (sPrefixSuffix.isEmpty())
+                return u"romanUcPeriod"_ustr;
+            else
+                return "romanUc" + sPrefixSuffix;
 
         case SVX_NUM_ROMAN_LOWER :
-            return "romanLc" + sPrefixSuffix;
+            if (sPrefixSuffix.isEmpty())
+                return u"romanLcPeriod"_ustr;
+            else
+                return "romanLc" + sPrefixSuffix;
 
         case SVX_NUM_ARABIC :
         {
