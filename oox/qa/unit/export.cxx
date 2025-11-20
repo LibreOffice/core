@@ -81,7 +81,6 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlOdt)
     dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
     save(TestFilter::DOCX);
-    // validate(maTempFile.GetFileName(), test::OOXML); // Enable when unrelated errors are fixed.
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
@@ -94,7 +93,6 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
         dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
         save(TestFilter::DOCX);
-        // validate(maTempFile.GetFileName(), test::OOXML); // Enable when unrelated errors are fixed.
     }
 
     {
@@ -124,7 +122,6 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
 
         // Loading should not show the "corrupted" dialog, which would assert.
         saveAndReload(TestFilter::DOCX);
-        // validate(maTempFile.GetFileName(), test::OOXML); // Enable when unrelated errors are fixed.
     }
 }
 
