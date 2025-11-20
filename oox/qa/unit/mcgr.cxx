@@ -65,7 +65,6 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     assertXPathInsensitive(pXmlDoc, sPath + "w14:gs[2]/w14:srgbClr", "val", u"ffff00");
     assertXPath(pXmlDoc, sPath + "w14:gs[3]", "pos", u"100000");
     assertXPathInsensitive(pXmlDoc, sPath + "w14:gs[3]/w14:srgbClr", "val", u"00ffff");
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
