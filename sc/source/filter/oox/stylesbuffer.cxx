@@ -2668,7 +2668,6 @@ void TableStyle::setTableStyleElement(ScTableStyleElement eElement, sal_Int32 nD
 void TableStyle::finalizeImport(const DxfVector& rDxfs)
 {
     ::ScDocument& rDoc = getScDocument();
-    ScTableStyles& rStyles = rDoc.GetTableStyles();
     std::unique_ptr<ScTableStyle> pTableStyle = std::make_unique<ScTableStyle>(maName, maUIName);
     pTableStyle->SetOOXMLDefault(mbDefaultOOXMLStyle);
     for (const auto& aTableStyleElementInfo : maTableStyleElements)
@@ -2705,7 +2704,8 @@ void TableStyle::finalizeImport(const DxfVector& rDxfs)
                 SAL_WARN("sc", "the stripe count should only be set for row and column stripe elements");
         }
     }
-    rStyles.AddTableStyle(std::move(pTableStyle));
+    if (ScTableStyles* pStyles = rDoc.GetTableStyles())
+        pStyles->AddTableStyle(std::move(pTableStyle));
 }
 
 namespace {
