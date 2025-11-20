@@ -42,7 +42,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledNumbering.docx")
@@ -216,6 +216,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 7
+    skipValidation();
+
     // There is a group shape with text box inside having an embedded VML formula,
     // check if something missing.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Where is the formula?", 2, getShapes());
@@ -431,6 +434,9 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xContentControlProps->setPropertyValue(u"Lock"_ustr, uno::Any(u"sdtLocked"_ustr));
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
 
     // When exporting to DOCX:
     save(TestFilter::DOCX);
@@ -757,6 +763,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     // There are a WPG shape and a picture
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -802,6 +811,9 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146851_1, "tdf146851_1.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<beans::XPropertySet> xPara;
 
     xPara.set(getParagraph(1, u"qwerty"_ustr), uno::UNO_QUERY);
@@ -985,6 +997,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
     createSwDoc("tdf146955.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 9
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
     // when the code tried to access to a non-existent footnote
@@ -1043,6 +1059,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     {
         uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
         auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
@@ -1072,6 +1091,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 16
+    skipValidation();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing pages!", 7, getPages());
 }
 
