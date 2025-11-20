@@ -443,6 +443,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             pSdrObj->SetMarkProtect(false);
             pSdrObj->SetResizeProtect(false);
             pSdrObj->SetMoveProtect(false);
+            pSdrObj->SetDeleteProtect(true);
         }
         break;
 

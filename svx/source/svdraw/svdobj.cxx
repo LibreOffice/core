@@ -353,6 +353,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     m_bSnapRectDirty   =true;
     m_bMovProt         =false;
     m_bSizProt         =false;
+    m_bDelProt         =false;
     m_bNoPrint         =false;
     m_bEmptyPresObj    =false;
     m_bNotVisibleAsMaster=false;
@@ -388,6 +389,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
     m_bMovProt         =false;
+    m_bDelProt         =false;
     m_bSizProt         =false;
     m_bNoPrint         =false;
     m_bEmptyPresObj    =false;
@@ -2749,6 +2751,16 @@ void SdrObject::SetResizeProtect(bool bProt)
     {
         // #i77187# secured and simplified
         m_bSizProt = bProt;
+        SetChanged();
+        BroadcastObjectChange();
+    }
+}
+
+void SdrObject::SetDeleteProtect(bool bProt)
+{
+    if (IsDeleteProtect() != bProt)
+    {
+        m_bDelProt = bProt;
         SetChanged();
         BroadcastObjectChange();
     }
