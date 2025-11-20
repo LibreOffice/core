@@ -25,7 +25,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo47669, "fdo47669.docx")
@@ -440,6 +440,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78654 )
 CPPUNIT_TEST_FIXTURE(Test, testfdo78599)
 {
     createSwDoc("fdo78599.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     //docx file after RT is getting corrupted.
@@ -728,6 +732,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo81946)
 CPPUNIT_TEST_FIXTURE(Test, testfdo82492)
 {
     createSwDoc("fdo82492.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
