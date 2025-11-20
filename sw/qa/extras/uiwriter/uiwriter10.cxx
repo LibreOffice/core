@@ -42,7 +42,7 @@ class SwUiWriterTest5 : public SwModelTestBase
 {
 public:
     SwUiWriterTest5()
-        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
     {
     }
 
@@ -1103,6 +1103,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab");
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
 
     // Save it to a DOCX and load it back.
     // Exporting change tracking of the cell wasn't supported.
