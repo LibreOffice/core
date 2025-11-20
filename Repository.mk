@@ -1214,6 +1214,7 @@ $(eval $(call gb_Helper_register_mos,\
 	sca \
 	scc \
 	sd \
+	sdext \
 	sfx \
 	shell \
 	sm \
