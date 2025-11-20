@@ -285,7 +285,7 @@ bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const st
 ScDBData::ScDBData( const OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    bool bByR, bool bHasH, bool bTotals, const OUString& rTableType) :
+                    bool bByR, bool bHasH, bool bTotals, const OUString& rTableType, const OUString& rTableStyleID) :
     // Listeners are to be setup by the "parent" container.
     mpSortParam(new ScSortParam),
     mpQueryParam(new ScQueryParam),
@@ -315,6 +315,11 @@ ScDBData::ScDBData( const OUString& rName,
     nFilteredRowCount(SCSIZE_MAX)
 {
     aUpper = ScGlobal::getCharClass().uppercase(aUpper);
+    if (!rTableStyleID.isEmpty())
+    {
+        mpTableStyles.reset(new ScTableStyleParam());
+        mpTableStyles->maStyleID = rTableStyleID;
+    }
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
@@ -1569,6 +1574,11 @@ void ScDBData::SetTableStyleInfo(const ScTableStyleParam& rParam)
 const ScTableStyleParam* ScDBData::GetTableStyleInfo() const
 {
     return mpTableStyles.get();
+}
+
+void ScDBData::RemoveTableStyleInfo()
+{
+    mpTableStyles.reset();
 }
 
 ScSubTotalFunc ScDBData::GetSubTotalFuncFromString(std::u16string_view sFunction)

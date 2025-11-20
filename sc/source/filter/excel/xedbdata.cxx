@@ -321,10 +321,16 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     if (const ScTableStyleParam* pParam = rData.GetTableStyleInfo())
     {
         const OUString& rStyleName = pParam->maStyleID;
-        const ScTableStyle* pTableStyle = rStrm.GetRoot().GetDoc().GetTableStyles().GetTableStyle(rStyleName);
-        if (pTableStyle)
+        if (const ScTableStyles* pTableStyles = rStrm.GetRoot().GetDoc().GetTableStyles())
         {
-            pTableStrm->singleElement( XML_tableStyleInfo, XML_name, rStyleName.toUtf8(), XML_showFirstColumn, ToPsz10(pParam->mbFirstColumn), XML_showLastColumn, ToPsz10(pParam->mbLastColumn), XML_showRowStripes, ToPsz10(pParam->mbRowStripes), XML_showColumnStripes, ToPsz10(pParam->mbColumnStripes));
+            if (const ScTableStyle* pTableStyle = pTableStyles->GetTableStyle(rStyleName))
+            {
+                pTableStrm->singleElement(XML_tableStyleInfo, XML_name, rStyleName.toUtf8(),
+                                          XML_showFirstColumn, ToPsz10(pParam->mbFirstColumn),
+                                          XML_showLastColumn, ToPsz10(pParam->mbLastColumn),
+                                          XML_showRowStripes, ToPsz10(pParam->mbRowStripes),
+                                          XML_showColumnStripes, ToPsz10(pParam->mbColumnStripes));
+            }
         }
     }
 

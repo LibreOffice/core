@@ -1543,14 +1543,19 @@ sc::IconSetBitmapMap& ScDocument::GetIconSetBitmapMap()
     return *m_pIconSetBitmapMap;
 }
 
-ScTableStyles& ScDocument::GetTableStyles()
+ScTableStyles* ScDocument::GetTableStyles()
 {
-    return *mpTableStyles;
+    return mpTableStyles.get();
 }
 
-const ScTableStyles& ScDocument::GetTableStyles() const
+const ScTableStyles* ScDocument::GetTableStyles() const
 {
-    return *mpTableStyles;
+    return mpTableStyles.get();
+}
+
+bool ScDocument::HasTableStyles() const
+{
+    return mpTableStyles->HasTableStyle();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -194,8 +194,9 @@ public:
 
     SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
-             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-             bool bByR = true, bool bHasH = true, bool bTotals = false, const OUString& rTableType = "worksheet");
+             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bByR = true, bool bHasH = true, bool bTotals = false,
+                          const OUString& rTableType = u"worksheet"_ustr,
+                          const OUString& rTableStyleID = u""_ustr);
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     SC_DLLPUBLIC virtual ~ScDBData() override;
@@ -325,6 +326,7 @@ public:
 
     SC_DLLPUBLIC void SetTableStyleInfo(const ScTableStyleParam& rParams);
     SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
+    void RemoveTableStyleInfo();
 
     static ScSubTotalFunc GetSubTotalFuncFromString(std::u16string_view sFunction);
     static OUString GetStringFromSubTotalFunc(ScSubTotalFunc eFunc);
