@@ -38,14 +38,13 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 {
     createSwDoc("page-graphic-background.odt");
     saveAndReload(TestFilter::DOCX);
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
@@ -167,7 +166,6 @@ CPPUNIT_TEST_FIXTURE(Test, testZoom)
     verify();
 
     // Validation test: order of elements were wrong.
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
@@ -184,7 +182,6 @@ CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
 {
     createSwDoc("empty.odt");
     saveAndReload(TestFilter::DOCX);
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
@@ -256,14 +253,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo38244)
     verify();
     saveAndReload(TestFilter::DOCX);
     verify();
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 {
     createSwDoc("comments-nested.odt");
     saveAndReload(TestFilter::DOCX);
-    validate(maTempFile.GetFileName(), u"Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), u"TextField"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Outer"_ustr, getProperty<OUString>(xOuter, u"Content"_ustr));
@@ -283,6 +278,10 @@ CPPUNIT_TEST_FIXTURE(Test, testMathEscape)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158023Export)
 {
     createSwDoc("tdf158023_export.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(u"left [ right ] left ( right ) left lbrace  right rbrace"_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
@@ -527,6 +526,10 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFdo51550)
 {
     createSwDoc("fdo51550.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -611,6 +614,9 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -735,6 +741,9 @@ DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65265, "fdo65265.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // Redline (tracked changes) of text formatting were not exported
     uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);
     uno::Reference<text::XTextRange> xParagraph2 = getParagraph(2);
