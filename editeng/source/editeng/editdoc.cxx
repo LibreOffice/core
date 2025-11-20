@@ -2129,7 +2129,7 @@ void YrsImplInsertAttr(SfxItemSet & rSet, ::std::vector<sal_uInt16> *const pRemo
         case EE_PARA_AUTOWRITINGDIR:
         {
             yvalidate(rValue.tag == Y_JSON_BOOL);
-            SvxAutoFrameDirectionitem const item{ rValue.value.flag == Y_TRUE, nWhich };
+            SvxAutoFrameDirectionItem const item{ rValue.value.flag == Y_TRUE, nWhich };
             rSet.Put(item);
             break;
         }
