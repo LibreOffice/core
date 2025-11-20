@@ -55,7 +55,7 @@ cat <<EOF >"${1?}${3?}".appdata.xml
    <caption>Sample Writer document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
+   <image>https://hub.libreoffice.org/screenshots/calc-01.png</image>
    <caption>Sample Calc document</caption>
   </screenshot>
   <screenshot>
@@ -63,12 +63,16 @@ cat <<EOF >"${1?}${3?}".appdata.xml
    <caption>Sample Impress document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
+   <image>https://hub.libreoffice.org/screenshots/draw-01.png</image>
    <caption>Sample Draw document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/base-02.png</image>
+   <image>https://hub.libreoffice.org/screenshots/base-01.png</image>
    <caption>Sample Base document</caption>
+  </screenshot>
+  <screenshot>
+   <image>https://hub.libreoffice.org/screenshots/math-01.png</image>
+   <caption>Sample Math document</caption>
   </screenshot>
  </screenshots>
  <developer_name>The Document Foundation</developer_name>
