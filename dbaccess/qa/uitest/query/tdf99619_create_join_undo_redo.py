@@ -93,4 +93,6 @@ class tdf99619(UITestCase):
                 print(f"Join missing from query: {query}", file=sys.stderr)
             self.assertTrue("NATURAL INNER JOIN" in query)
 
+            self.execute_for_provider(xQueryFrame, ".uno:CloseWin")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
