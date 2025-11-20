@@ -43,6 +43,7 @@ class SwUndoAttr final : public SwUndo, private SwUndRng
     SwNodeOffset m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
     UIName m_aChrFormatName;
+    UIName m_aPageDescName;
 
     void RemoveIdx( SwDoc& rDoc );
     void redoAttribute(SwPaM& rPam, const sw::UndoRedoContext& rContext);

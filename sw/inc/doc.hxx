@@ -922,8 +922,8 @@ public:
     // For Reader
     SW_DLLPUBLIC void ChgPageDesc( const UIName & rName, const SwPageDesc& );
     SW_DLLPUBLIC void ChgPageDesc( size_t i, const SwPageDesc& );
-    void DelPageDesc( const UIName & rName, bool bBroadcast = false);
-    void DelPageDesc( size_t i, bool bBroadcast = false );
+    SW_DLLPUBLIC void DelPageDesc( const UIName & rName, bool bBroadcast = false );
+    SW_DLLPUBLIC void DelPageDesc( size_t i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc const * pDel);
     SW_DLLPUBLIC SwPageDesc* MakePageDesc(const UIName &rName, const SwPageDesc* pCpy = nullptr,
                              bool bRegardLanguage = true);

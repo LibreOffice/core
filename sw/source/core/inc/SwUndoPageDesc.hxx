@@ -52,6 +52,7 @@ class SwUndoPageDescCreate final : public SwUndo
     const SwPageDesc * m_pDesc;
     SwPageDescExt m_aNew;
     SwDoc& m_rDoc;
+    std::vector<SwNodeOffset> m_aAppliedNodes;
 
     void DoImpl();
 
@@ -70,6 +71,8 @@ class SwUndoPageDescDelete final : public SwUndo
 {
     SwPageDescExt m_aOld;
     SwDoc& m_rDoc;
+    std::vector<SwNodeOffset> m_aAppliedNodes;
+    std::vector<UIName> m_aPageDescsThisFollowed;
 
     void DoImpl();
 

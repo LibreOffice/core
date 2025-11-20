@@ -58,6 +58,7 @@
 #include <calbck.hxx>
 #include <frameformats.hxx>
 #include <editsh.hxx>
+#include <fmtpdsc.hxx>
 
 #if ENABLE_YRS
 #include <docufld.hxx>
@@ -767,6 +768,14 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
         if (aValue >>= sTmp)
             m_aChrFormatName = UIName(sTmp);
     }
+
+    // Save page desc as a style name, not as a reference
+    const SfxPoolItem* pPgDescItem = m_AttrSet.GetItem(RES_PAGEDESC);
+    if (pPgDescItem)
+    {
+        if (const SwPageDesc *pPgDesc = pPgDescItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc(); pPgDesc != nullptr)
+            m_aPageDescName = pPgDesc->GetName();
+    }
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, SfxItemSet aSet,
@@ -786,6 +795,14 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, SfxItemSet aSet,
         OUString sTmp;
         if (aValue >>= sTmp)
             m_aChrFormatName = UIName(sTmp);
+    }
+
+    // Save page desc as a style name, not as a reference
+    const SfxPoolItem* pPgDescItem = m_AttrSet.GetItem(RES_PAGEDESC);
+    if (pPgDescItem)
+    {
+        if (const SwPageDesc *pPgDesc = pPgDescItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc(); pPgDesc != nullptr)
+            m_aPageDescName = pPgDesc->GetName();
     }
 }
 
@@ -902,6 +919,17 @@ void SwUndoAttr::redoAttribute(SwPaM& rPam, const sw::UndoRedoContext & rContext
         if (pCharFormat)
         {
             SwFormatCharFormat aFormat(pCharFormat);
+            m_AttrSet.Put(aFormat);
+        }
+    }
+
+    // Restore pointer to page desc from name
+    if (!m_aPageDescName.isEmpty())
+    {
+        SwPageDesc* pPageDesc = rDoc.FindPageDesc(m_aPageDescName);
+        if (pPageDesc)
+        {
+            SwFormatPageDesc aFormat(pPageDesc);
             m_AttrSet.Put(aFormat);
         }
     }
