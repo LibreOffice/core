@@ -1716,7 +1716,7 @@ void SdDrawDocument::updatePagePreviewsGrid(SdPage* pPage)
         }
     }
     for (SdrObject* pObject : aToRemove)
-        pObjList->RemoveObject(pObject->GetOrdNum());
+        pObjList->NbcRemoveObject(pObject->GetOrdNum());
 
     // page inserted
     if (nTotalPreviews < nPageCnt)
