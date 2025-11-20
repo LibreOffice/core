@@ -1166,7 +1166,7 @@ static OString decomposeLegacyUnicodeLigature(UChar32 cUnicode)
                 OStringBuffer aBuffer;
                 for (int32_t i = 0, nLen = sDecomposed.length(); i < nLen; ++i)
                     appendFourByteHex(aBuffer, sDecomposed[i]);
-                return aBuffer.toString();
+                return aBuffer.makeStringAndClear();
             }
         }
     }

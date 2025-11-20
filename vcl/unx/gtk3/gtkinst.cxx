@@ -9786,7 +9786,7 @@ OUString vcl_font_to_css(const vcl::Font& rFont)
         default:
             break;
     }
-    return sCSS.toString();
+    return sCSS.makeStringAndClear();
 }
 
 void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)

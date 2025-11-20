@@ -578,7 +578,7 @@ public:
                 addLineFeed = true;
             }
         }
-        return aResult.toString();
+        return aResult.makeStringAndClear();
     }
 };
 

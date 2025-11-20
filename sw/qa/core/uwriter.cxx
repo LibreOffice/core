@@ -2021,7 +2021,7 @@ void SwDocTest::testFillRubyList()
             aTemp.append(rRuby->GetText() + u"["_ustr + rRuby->GetRubyAttr().GetText() + u"]"_ustr);
         }
 
-        return aTemp.toString();
+        return aTemp.makeStringAndClear();
     };
 
     // Single word without existing rubies
@@ -2226,7 +2226,7 @@ void SwDocTest::testSetRubyList()
             }
         }
 
-        return aTemp.toString();
+        return aTemp.makeStringAndClear();
     };
 
     // Trivial characteristic test

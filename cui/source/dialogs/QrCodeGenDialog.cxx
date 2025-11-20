@@ -106,7 +106,7 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
         }
     }
     sb.append("\"/>\n</svg>");
-    return sb.toString();
+    return sb.makeStringAndClear();
 }
 #endif
 

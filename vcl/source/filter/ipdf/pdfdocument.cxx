@@ -1483,10 +1483,10 @@ OString PDFDocument::ReadKeyword(SvStream& rStream)
         aBuf.append(ch);
         rStream.ReadChar(ch);
         if (rStream.eof())
-            return aBuf.toString();
+            return aBuf.makeStringAndClear();
     }
     rStream.SeekRel(-1);
-    return aBuf.toString();
+    return aBuf.makeStringAndClear();
 }
 
 size_t PDFDocument::FindStartXRef(SvStream& rStream)
