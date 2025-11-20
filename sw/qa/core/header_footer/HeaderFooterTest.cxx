@@ -43,7 +43,7 @@ public:
     void checkShapeInFirstPageHeader();
 
     HeaderFooterTest()
-        : SwModelTestBase(u"/sw/qa/core/header_footer/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/core/header_footer/data/"_ustr)
     {
     }
 };
@@ -415,6 +415,9 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInFooter)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -657,6 +660,10 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageFooterEnabled)
     };
     createSwDoc("TestFirstFooterDisabled.docx");
     verify();
+
+    // FIXME: validation error in OOXML export: Errors: 7
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify();
 }
