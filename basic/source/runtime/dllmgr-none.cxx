@@ -19,11 +19,6 @@
 
 #include <sal/config.h>
 
-#if defined(_WIN32)
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 #include <basic/sberrors.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
