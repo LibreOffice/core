@@ -32,7 +32,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 // TODO: the re-import doesn't work just yet, but that isn't a regression...
@@ -57,6 +57,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125778_lostPageBreakTOX, "tdf125778_lostPageBrea
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
 }
 
@@ -110,6 +113,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155690, "tdf155690.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
     createSwDoc("tdf121374_sectionHF.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"FooterText"_ustr);
@@ -168,6 +175,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     OUString listId;
     OUString listStyle;
     {
@@ -480,6 +490,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
@@ -513,6 +526,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=1 (no goofy exception)
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
@@ -688,6 +704,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameSizeExport)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // Visibility of shapes wasn't imported/exported, for now base printable property on that, too
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_MESSAGE("First shape should be visible.", getProperty<bool>(xShape, u"Visible"_ustr));
@@ -828,6 +847,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 
     createSwDoc("tdf123460.docx");
     verify();
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -835,6 +858,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 {
     createSwDoc("tdf123460.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1089,6 +1116,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121663)
 
 DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
 
     uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(1), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
@@ -1348,6 +1377,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
 {
     createSwDoc("tdf128304.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
