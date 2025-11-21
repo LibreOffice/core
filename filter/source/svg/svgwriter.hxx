@@ -314,6 +314,9 @@ private:
     bool                                        mbIsPlaceholderShape;
     const MetaBitmapActionMap*                  mpEmbeddedBitmapsMap;
     bool                                        mbIsPreview;
+    /// Map of the bitmap we have exported via elements with embedded "data:" URIs.
+    /// So that we can re-use them.
+    std::unordered_map<BitmapChecksum, tools::Rectangle> maBitmapElements;
 
 
     tools::Long                    ImplMap( sal_Int32 nVal ) const;
