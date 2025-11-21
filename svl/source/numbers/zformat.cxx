@@ -5692,7 +5692,7 @@ OUString SvNumberformat::ImpGetNatNumString(const SvNumberNatNum& rNum,
                 sal_Unicode aBuf[2];
                 aBuf[0] = '0';
                 aBuf[1] = '0' + nVal;
-                aStr = OUString(aBuf, SAL_N_ELEMENTS(aBuf));
+                aStr = OUString(aBuf, std::size(aBuf));
             }
             else
             {

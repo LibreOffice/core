@@ -119,7 +119,7 @@ static const std::u16string_view& GermanColorName(size_t i)
                                                           u"GRÜN",    u"CYAN",    u"ROT",
                                                           u"MAGENTA", u"BRAUN",   u"GRAU",
                                                           u"GELB",    u"WEISS" };
-    assert(i < SAL_N_ELEMENTS(sGermanColorNames));
+    assert(i < std::size(sGermanColorNames));
     return sGermanColorNames[i];
 }
 
