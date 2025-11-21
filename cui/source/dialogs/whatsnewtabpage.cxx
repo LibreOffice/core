@@ -45,7 +45,7 @@ BrandGraphic::BrandGraphic()
     : m_bIsFirstStart(false)
 {
     Bitmap aBackgroundBitmap;
-    SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, 250);
+    SfxApplication::loadBrandSvg(u"shell/about", aBackgroundBitmap, 250);
     m_aGraphic = aBackgroundBitmap;
     m_aGraphicSize = m_aGraphic.GetSizePixel();
 }

@@ -101,8 +101,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
                                            .GetStyleSettings()
                                            .GetDialogColor()
                                            .IsDark()
-                                       ? "shell/logo_inverted"
-                                       : "shell/logo",
+                                       ? u"shell/logo_inverted"
+                                       : u"shell/logo",
                                    aBackgroundBitmap, nWidth * 0.8)) {
     // Eliminate white background when Skia is disabled by not drawing the
     // background bitmap to a VirtualDevice. On most platforms, non-Skia
@@ -111,7 +111,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     Graphic aGraphic(aBackgroundBitmap);
     m_pBrandImage->set_image(aGraphic.GetXGraphic());
   }
-  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
+  if (SfxApplication::loadBrandSvg(u"shell/about", aBackgroundBitmap, nWidth * 0.9)) {
     // Eliminate white background when Skia is disabled by not drawing the
     // background bitmap to a VirtualDevice. On most platforms, non-Skia
     // VirtualDevices will be filled with a solid color when drawing

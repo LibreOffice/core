@@ -218,7 +218,7 @@ public:
     static void                 SetModule(SfxToolsModule nSharedLib, std::unique_ptr<SfxModule> pModule);
     static SfxModule*           GetModule(SfxToolsModule nSharedLib);
 
-    static bool loadBrandSvg(const char *pName, Bitmap& rBitmap, int nWidth);
+    static bool loadBrandSvg(std::u16string_view sName, Bitmap& rBitmap, int nWidth);
 
     /** loads the application logo as used in the impress slideshow pause screen */
     static Bitmap GetApplicationLogo(tools::Long nWidth);
