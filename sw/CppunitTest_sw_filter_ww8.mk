@@ -73,4 +73,8 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_filter_ww8, \
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_filter_ww8))
 
+$(eval $(call gb_CppunitTest_add_arguments,sw_filter_ww8, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:
