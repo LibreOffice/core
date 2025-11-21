@@ -30,6 +30,13 @@
 #include "NetChartTypeTemplate.hxx"
 #include "BubbleChartTypeTemplate.hxx"
 #include "FunnelChartTypeTemplate.hxx"
+#include "BoxWhiskerChartTypeTemplate.hxx"
+#include "ClusteredColumnChartTypeTemplate.hxx"
+#include "ParetoLineChartTypeTemplate.hxx"
+#include "RegionMapChartTypeTemplate.hxx"
+#include "SunburstChartTypeTemplate.hxx"
+#include "TreemapChartTypeTemplate.hxx"
+#include "WaterfallChartTypeTemplate.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -118,6 +125,13 @@ enum TemplateId
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
     TEMPLATE_BUBBLE,
     TEMPLATE_FUNNEL,
+    TEMPLATE_BOXWHISKER,
+    TEMPLATE_CLUSTEREDCOLUMN,
+    TEMPLATE_PARETOLINE,
+    TEMPLATE_REGIONMAP,
+    TEMPLATE_SUNBURST,
+    TEMPLATE_TREEMAP,
+    TEMPLATE_WATERFALL,
 //    TEMPLATE_SURFACE,
 //     TEMPLATE_ADDIN,
     TEMPLATE_NOT_FOUND = 0xffff
@@ -196,6 +210,13 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         {"com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE},
         {"com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE},
         {"com.sun.star.chart2.template.Funnel",                         TEMPLATE_FUNNEL},
+        {"com.sun.star.chart2.template.BoxWhisker",                     TEMPLATE_BOXWHISKER},
+        {"com.sun.star.chart2.template.ClusteredColumn",                TEMPLATE_CLUSTEREDCOLUMN},
+        {"com.sun.star.chart2.template.ParetoLine",                     TEMPLATE_PARETOLINE},
+        {"com.sun.star.chart2.template.RegionMap",                      TEMPLATE_REGIONMAP},
+        {"com.sun.star.chart2.template.Sunburst",                       TEMPLATE_SUNBURST},
+        {"com.sun.star.chart2.template.Treemap",                        TEMPLATE_TREEMAP},
+        {"com.sun.star.chart2.template.Waterfall",                      TEMPLATE_WATERFALL},
 //      {"com.sun.star.chart2.template.Surface",                        TEMPLATE_SURFACE},
 //      {"com.sun.star.chart2.template.Addin",                          TEMPLATE_ADDIN},
         };
@@ -530,6 +551,34 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
         // Funnel chart
         case TEMPLATE_FUNNEL:
             xTemplate.set( new FunnelChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_BOXWHISKER:
+            xTemplate.set( new BoxWhiskerChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_CLUSTEREDCOLUMN:
+            xTemplate.set( new ClusteredColumnChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_PARETOLINE:
+            xTemplate.set( new ParetoLineChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_REGIONMAP:
+            xTemplate.set( new RegionMapChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_SUNBURST:
+            xTemplate.set( new SunburstChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_TREEMAP:
+            xTemplate.set( new TreemapChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
+        case TEMPLATE_WATERFALL:
+            xTemplate.set( new WaterfallChartTypeTemplate( m_xContext,
                         aServiceSpecifier));
             break;
         case TEMPLATE_NOT_FOUND:

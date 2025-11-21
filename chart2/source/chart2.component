@@ -116,6 +116,11 @@
     <service name="com.sun.star.chart2.BarChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart.BoxWhiskerChartType"
+    constructor="com_sun_star_comp_chart_BoxWhiskerChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.BoxWhiskerChartType"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart.BubbleChartType"
     constructor="com_sun_star_comp_chart_BubbleChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
@@ -131,6 +136,11 @@
   <implementation name="com.sun.star.comp.chart.ChartTypeManager"
     constructor="com_sun_star_comp_chart_ChartTypeManager_get_implementation">
     <service name="com.sun.star.chart2.ChartTypeManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.ClusteredColumnChartType"
+    constructor="com_sun_star_comp_chart_ClusteredColumnChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.ClusteredColumnChartType"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart.ColumnChartType"
     constructor="com_sun_star_comp_chart_ColumnChartType_get_implementation">
@@ -172,17 +182,42 @@
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.NetChartType"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart.ParetoLineChartType"
+    constructor="com_sun_star_comp_chart_ParetoLineChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.ParetoLineChartType"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart.PieChartType"
     constructor="com_sun_star_comp_chart_PieChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.PieChartType"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart.RegionMapChartType"
+    constructor="com_sun_star_comp_chart_RegionMapChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.RegionMapChartType"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart.ScatterChartType"
     constructor="com_sun_star_comp_chart_ScatterChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.ScatterChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.SunburstChartType"
+    constructor="com_sun_star_comp_chart_SunburstChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.SunburstChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.TreemapChartType"
+    constructor="com_sun_star_comp_chart_TreemapChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.TreemapChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.WaterfallChartType"
+    constructor="com_sun_star_comp_chart_WaterfallChartType_get_implementation">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.WaterfallChartType"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.Axis"
     constructor="com_sun_star_comp_chart2_Axis_get_implementation">

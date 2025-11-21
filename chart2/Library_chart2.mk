@@ -308,6 +308,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/model/template/AreaChartTypeTemplate \
     chart2/source/model/template/BarChartType \
     chart2/source/model/template/BarChartTypeTemplate \
+    chart2/source/model/template/BoxWhiskerChartType \
+    chart2/source/model/template/BoxWhiskerChartTypeTemplate \
     chart2/source/model/template/BubbleChartType \
     chart2/source/model/template/BubbleChartTypeTemplate \
     chart2/source/model/template/BubbleDataInterpreter \
@@ -315,6 +317,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/model/template/ChartType \
     chart2/source/model/template/ChartTypeManager \
     chart2/source/model/template/ChartTypeTemplate \
+    chart2/source/model/template/ClusteredColumnChartType \
+    chart2/source/model/template/ClusteredColumnChartTypeTemplate \
     chart2/source/model/template/ColumnChartType \
     chart2/source/model/template/ColumnLineChartTypeTemplate \
     chart2/source/model/template/ColumnLineDataInterpreter \
@@ -326,12 +330,22 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/model/template/LineChartTypeTemplate \
     chart2/source/model/template/NetChartType \
     chart2/source/model/template/NetChartTypeTemplate \
+    chart2/source/model/template/ParetoLineChartType \
+    chart2/source/model/template/ParetoLineChartTypeTemplate \
     chart2/source/model/template/PieChartType \
     chart2/source/model/template/PieChartTypeTemplate \
+    chart2/source/model/template/RegionMapChartType \
+    chart2/source/model/template/RegionMapChartTypeTemplate \
     chart2/source/model/template/ScatterChartType \
     chart2/source/model/template/ScatterChartTypeTemplate \
+    chart2/source/model/template/SunburstChartType \
+    chart2/source/model/template/SunburstChartTypeTemplate \
     chart2/source/model/template/StockChartTypeTemplate \
     chart2/source/model/template/StockDataInterpreter \
+    chart2/source/model/template/TreemapChartType \
+    chart2/source/model/template/TreemapChartTypeTemplate \
+    chart2/source/model/template/WaterfallChartType \
+    chart2/source/model/template/WaterfallChartTypeTemplate \
     chart2/source/model/template/XYDataInterpreter \
 ))
 
