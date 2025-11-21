@@ -44,7 +44,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
@@ -414,6 +414,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf66496, "tdf66496.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     /*
      * OLE object shape: default vertical position is top in MSO, not bottom
      */
@@ -721,6 +724,10 @@ CPPUNIT_TEST_FIXTURE(Test, testN779642)
     };
     createSwDoc("n779642.docx");
     verify();
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify();
 }
@@ -865,6 +872,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59273, "fdo59273.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testConditionalstylesTablelook, "conditionalstyles-tbllook.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -1031,12 +1041,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151548_activeContentDemo, "tdf151548_activeConte
 
 DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 180
+    skipValidation();
+
     // Previously import just crashed (due to infinite recursion).
     getParagraph(1, u"XXX"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf123705, "tdf123705.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 29
+    skipValidation();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableAutoColumnFixedSize, "table-auto-column-fixed-size.docx")
