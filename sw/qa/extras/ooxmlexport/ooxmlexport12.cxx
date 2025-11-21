@@ -23,7 +23,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -729,6 +729,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTd112202)
 
     createSwDoc("090716_Studentische_Arbeit_VWS.docx");
     verify();
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -992,6 +996,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134618)
 CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
 {
     createSwDoc("tdf99631.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1020,6 +1028,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
 CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
 {
     createSwDoc("tdf122563.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1052,6 +1064,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // test import/export of ActiveTable (visible sheet) of embedded XLSX OLE objects
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent,
                                                                                 uno::UNO_QUERY);
@@ -1206,6 +1221,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // check moveFrom and moveTo
     CPPUNIT_ASSERT_EQUAL(u"Will this sentence be duplicated?"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, getRun(getParagraph(1), 1)->getString());
@@ -1243,6 +1261,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145720)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
     createSwDoc("tdf104797.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 0 (missing move*FromRange* elements)
@@ -1269,6 +1291,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150166)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
     createSwDoc("tdf150166.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 14
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
@@ -1347,6 +1373,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157011)
 {
     // check tracked table column insertions and deletions with empty cells
     createSwDoc("tdf157011_ins_del_empty_cols.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 11
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1461,6 +1491,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
 {
     createSwDoc("tdf149708.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 14
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // keep tracked insertion of a list item
@@ -1507,6 +1541,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
 CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
 {
     createSwDoc("tdf120338.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked paragraph style change
