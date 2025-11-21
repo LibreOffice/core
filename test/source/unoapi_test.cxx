@@ -24,8 +24,8 @@
 using namespace css;
 using namespace css::uno;
 
-UnoApiTest::UnoApiTest(OUString path, bool bSkipValidation)
-    : mbSkipValidation(bSkipValidation)
+UnoApiTest::UnoApiTest(OUString path)
+    : mbSkipValidation(false)
     , m_aBaseString(std::move(path))
     , meImportFilterName(TestFilter::NONE)
 {

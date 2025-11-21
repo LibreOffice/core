@@ -31,7 +31,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 
 protected:
     void verifyComboBoxExport(bool aComboBoxAsDropDown);
@@ -105,6 +105,10 @@ DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 {
     createSwDoc("testTrackChangesDeletedParagraphMark.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
@@ -113,6 +117,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedParagraphMark)
 {
     createSwDoc("testTrackChangesInsertedParagraphMark.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:ins");
@@ -137,6 +145,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableRow)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 {
     createSwDoc("testTrackChangesDeletedTableCell.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellDel");
@@ -145,6 +157,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableCell)
 {
     createSwDoc("testTrackChangesInsertedTableCell.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellIns");
@@ -168,6 +184,10 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFDO73034)
 {
     createSwDoc("FDO73034.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:u", "val").match("single"));
@@ -184,6 +204,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO71834)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesParagraphProperties)
 {
     createSwDoc("testTrackChangesParagraphProperties.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
@@ -270,6 +294,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73556)
 CPPUNIT_TEST_FIXTURE(Test, testSegFaultWhileSave)
 {
     createSwDoc("test_segfault_while_save.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 171
+    skipValidation();
+
     save(TestFilter::DOCX);
     // fdo#74499
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -345,6 +373,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO74106)
 CPPUNIT_TEST_FIXTURE(Test, testFDO74215)
 {
     createSwDoc("FDO74215.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     // tdf#106849 NumPicBullet xShape should not be resized.
@@ -515,6 +547,10 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedXlsx)
 
     createSwDoc("embedded-xlsx.docx");
     verify();
+
+    //FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify();
 
@@ -575,6 +611,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreak)
 CPPUNIT_TEST_FIXTURE(Test, testOleObject)
 {
     createSwDoc("test_ole_object.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -650,6 +690,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77718)
 CPPUNIT_TEST_FIXTURE(Test, testTableCurruption)
 {
     createSwDoc("tableCurrupt.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc) ;
@@ -691,6 +735,10 @@ CPPUNIT_TEST_FIXTURE(Test, test_Tdf115030)
 CPPUNIT_TEST_FIXTURE(Test, test_OpeningBrace)
 {
     createSwDoc("2120112713_OpenBrace.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for OpeningBrace tag
@@ -779,6 +827,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf38778)
 CPPUNIT_TEST_FIXTURE(Test, testFDO76312)
 {
     createSwDoc("FDO76312.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -907,6 +959,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104707_urlComment)
 CPPUNIT_TEST_FIXTURE(Test, testOLEObjectinHeader)
 {
     createSwDoc("2129393649.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 22
+    skipValidation();
+
     save(TestFilter::DOCX);
     // fdo#76015 : Document contains oleobject in header xml.
     // Problem was relationship entry for oleobject from header was
@@ -940,6 +996,10 @@ CPPUNIT_TEST_FIXTURE(Test, testOLEObjectinHeader)
 CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
 {
     createSwDoc("2120112713.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for ClosingBrace tag
@@ -1001,6 +1061,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFileWithInvalidImageLink)
 CPPUNIT_TEST_FIXTURE(Test, testContentTypeDOCX)
 {
     createSwDoc("fdo80410.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1025,6 +1089,10 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeDOCX)
 CPPUNIT_TEST_FIXTURE(Test, testContentTypeXLSM)
 {
     createSwDoc("fdo76098.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1068,6 +1136,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTCTagMisMatch)
 CPPUNIT_TEST_FIXTURE(Test, testFDO78292)
 {
     createSwDoc("FDO78292.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 9
+    skipValidation();
+
     save(TestFilter::DOCX);
     //text node is a leaf node, it should not have any children
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1091,6 +1163,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)
 {
     createSwDoc("EmbeddedExcelChart.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1149,6 +1225,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 16
+    skipValidation();
+
     // the problem was: file is truncated: the first page is missing.
     // More precisely, the table in the first page was clipped.
     {

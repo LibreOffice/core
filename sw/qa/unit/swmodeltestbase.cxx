@@ -55,8 +55,8 @@ void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInst
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 
-SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, bool bSkipValidation)
-    : UnoApiXmlTest(pTestDocumentPath, bSkipValidation)
+SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath)
+    : UnoApiXmlTest(pTestDocumentPath)
     , mpXmlBuffer(nullptr)
 {
 }

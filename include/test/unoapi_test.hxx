@@ -118,7 +118,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
 class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
-    UnoApiTest(OUString path, bool bSkipValidation = false);
+    UnoApiTest(OUString path);
 
     virtual void setUp() override;
     virtual void tearDown() override;
