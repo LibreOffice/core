@@ -27,7 +27,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
@@ -243,6 +243,10 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
 CPPUNIT_TEST_FIXTURE(Test, testCalendar1)
 {
     createSwDoc("calendar1.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     // Document has a non-trivial table style, test the roundtrip of it.
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
@@ -291,6 +295,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCalendar2)
 
     createSwDoc("calendar2.docx");
     verify();
+
+    //FIXME: validation error in OOXML export: Errors: 7
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify();
 
@@ -312,6 +320,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCalendar2)
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     // TableStyle:firstRow (for header rows 1 and 2) color and size overrides document rPrDefault
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
@@ -331,6 +342,9 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     // TableStyle:fontsize - overrides DocDefaults, but not Style.
     // In this case the style does not define anything (but does copy-inherit the DocDefaults size 36)
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -340,6 +354,9 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar5, "calendar5.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     // check text portions with and without direct formatting
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
@@ -358,6 +375,10 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar5, "calendar5.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTcBorders)
 {
     createSwDoc("testTcBorders.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 9
+    skipValidation();
+
     save(TestFilter::DOCX);
     //fdo#76635 : Table borders are not getting preserved.
 
@@ -407,6 +428,10 @@ CPPUNIT_TEST_FIXTURE(Test, testQuicktables)
 CPPUNIT_TEST_FIXTURE(Test, testFdo71302)
 {
     createSwDoc("fdo71302.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
@@ -596,6 +621,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPgMargin)
 
 DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     css::text::GraphicCrop aGraphicCropStruct;
@@ -1034,12 +1062,19 @@ CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
 
 DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     // crashtest
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCrashWhileSave)
 {
     createSwDoc("testCrashWhileSave.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/footer1.xml"_ustr);
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
@@ -1158,6 +1193,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingLevels)
 CPPUNIT_TEST_FIXTURE(Test, testVerticalBorders)
 {
     createSwDoc("calendar3.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     save(TestFilter::DOCX);
     // tdf#130799: Inside vertical borders of a table should not be missing.
 
@@ -1249,6 +1288,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromInsideOutsideMargin)
 CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
 {
     createSwDoc("tdf123610_handle_upright.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     // tdf#123610: Check grab-bag attribute upright to keep text upright regardless of shape rotation.
 
