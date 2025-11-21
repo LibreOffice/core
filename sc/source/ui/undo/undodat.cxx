@@ -750,7 +750,6 @@ bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
                                      const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                                      ScDocumentUniquePtr pNewUndoDoc,
-                                     std::unique_ptr<ScRangeName> pNewUndoRange,
                                      std::unique_ptr<ScDBCollection> pNewUndoDB,
                                      std::unique_ptr<ScDBCollection> pNewRedoDB)
     : ScDBFuncUndo(rNewDocShell, ScRange(rNewParam.nCol1, rNewParam.nRow1, nNewTab,
@@ -759,7 +758,6 @@ ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
     , aParam(rNewParam)
     , nNewEndRow(nNewEndY)
     , xUndoDoc(std::move(pNewUndoDoc))
-    , xUndoRange(std::move(pNewUndoRange))
     , xUndoDB(std::move(pNewUndoDB))
     , xRedoDB(std::move(pNewRedoDB))
 {
@@ -792,8 +790,6 @@ void ScUndoTableTotals::Undo()
     xUndoDoc->UndoToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, aParam.nRow2, nTab,
                                                             InsertDeleteFlags::ALL, false, rDoc);
 
-    if (xUndoRange)
-        rDoc.SetRangeName(std::unique_ptr<ScRangeName>(new ScRangeName(*xUndoRange)));
     if (xUndoDB)
         rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
 
@@ -1106,12 +1102,13 @@ bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 // change database sections (dialog)
-ScUndoDBData::ScUndoDBData( ScDocShell& rNewDocShell, const OUString& aName,
-                            std::unique_ptr<ScDBCollection> pNewUndoColl,
+ScUndoDBData::ScUndoDBData( ScDocShell& rNewDocShell, const OUString& rNewUndoName,
+                            std::unique_ptr<ScDBCollection> pNewUndoColl, const OUString& rNewRedoName,
                             std::unique_ptr<ScDBCollection> pNewRedoColl ) :
     ScSimpleUndo( rNewDocShell ),
-    aDBName( aName ),
+    aUndoName( rNewUndoName ),
     pUndoColl( std::move(pNewUndoColl) ),
+    aRedoName( rNewRedoName ),
     pRedoColl( std::move(pNewRedoColl) )
 {
 }
@@ -1128,82 +1125,16 @@ OUString ScUndoDBData::GetComment() const
 void ScUndoDBData::Undo()
 {
     BeginUndo();
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    bool bOldAutoCalc = rDoc.GetAutoCalc();
-    rDoc.SetAutoCalc( false );         // Avoid unnecessary calculations
-    rDoc.PreprocessDBDataUpdate();
-    rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pUndoColl)), true );
-    rDoc.CompileHybridFormula();
-    rDoc.SetAutoCalc( bOldAutoCalc );
-
-    if (const ScDBData* pDBData
-        = pUndoColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(aDBName)))
-    {
-        const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
-        if (pTableStyleInfo)
-        {
-            ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-            if (pViewShell)
-            {
-                ScRange aRange;
-                pDBData->GetArea(aRange);
-                SCTAB nTab = aRange.aStart.Tab();
-                SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
-                if (nVisTab != nTab)
-                    pViewShell->SetTabNo(nTab);
-
-                rDocShell.PostPaint(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
-                                    PaintPartFlags::Grid | PaintPartFlags::Left
-                                        | PaintPartFlags::Top | PaintPartFlags::Size);
-            }
-        }
-    }
-
+    DoChange(true);
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
-
     EndUndo();
 }
 
 void ScUndoDBData::Redo()
 {
     BeginRedo();
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    bool bOldAutoCalc = rDoc.GetAutoCalc();
-    rDoc.SetAutoCalc( false );         // Avoid unnecessary calculations
-    rDoc.PreprocessDBDataUpdate();
-    rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pRedoColl)), true );
-    rDoc.CompileHybridFormula();
-    rDoc.SetAutoCalc( bOldAutoCalc );
-
-    if (const ScDBData* pDBData
-        = pRedoColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(aDBName)))
-    {
-        const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
-        if (pTableStyleInfo)
-        {
-            ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-            if (pViewShell)
-            {
-                ScRange aRange;
-                pDBData->GetArea(aRange);
-                SCTAB nTab = aRange.aStart.Tab();
-                SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
-                if (nVisTab != nTab)
-                    pViewShell->SetTabNo(nTab);
-
-                rDocShell.PostPaint(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
-                                    PaintPartFlags::Grid | PaintPartFlags::Left
-                                        | PaintPartFlags::Top | PaintPartFlags::Size);
-            }
-        }
-    }
-
+    DoChange(false);
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
-
     EndRedo();
 }
 
@@ -1214,6 +1145,81 @@ void ScUndoDBData::Repeat(SfxRepeatTarget& /* rTarget */)
 bool ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;    // is not possible
+}
+
+void ScUndoDBData::DoChange( const bool bUndo )
+{
+    ScDBCollection* pWorkRefData = bUndo ? pUndoColl.get() : pRedoColl.get();
+    ScDBCollection* pOldRefData = bUndo ? pRedoColl.get() : pUndoColl.get();
+
+    ScDocument& rDoc = rDocShell.GetDocument();
+    bool bOldAutoCalc = rDoc.GetAutoCalc();
+    rDoc.SetAutoCalc(false); // Avoid unnecessary calculations
+    rDoc.PreprocessDBDataUpdate();
+    rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*pWorkRefData)), true);
+    rDoc.CompileHybridFormula();
+    rDoc.SetAutoCalc(bOldAutoCalc);
+
+    const OUString& rWorkName = bUndo ? aUndoName : aRedoName;
+    const OUString& rOldName = bUndo ? aRedoName : aUndoName;
+
+    if (const ScDBData* pDBData = pWorkRefData->getNamedDBs().findByUpperName(
+            ScGlobal::getCharClass().uppercase(rWorkName)))
+    {
+        ScRange aOldRange;
+        if (const ScDBData* pOldDBData = pOldRefData->getNamedDBs().findByUpperName(
+                ScGlobal::getCharClass().uppercase(rOldName)))
+        {
+            ScRange aNewRange;
+            pOldDBData->GetArea(aOldRange);
+            pDBData->GetArea(aNewRange);
+            bool bAreaChanged = (aOldRange != aNewRange);
+            bool bOldAutoFilter = pOldDBData->HasAutoFilter();
+            bool bNewAutoFilter = pDBData->HasAutoFilter();
+
+            if (bAreaChanged || bOldAutoFilter != bNewAutoFilter)
+            {
+                if (bAreaChanged)
+                    rDoc.CompileDBFormula();
+                if (bOldAutoFilter && !bNewAutoFilter)
+                {
+                    rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(),
+                                        aOldRange.aEnd.Col(), aOldRange.aEnd.Row(),
+                                        aOldRange.aStart.Tab(), ScMF::Auto);
+                }
+                else if (bOldAutoFilter && bNewAutoFilter)
+                {
+                    rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(),
+                                        aOldRange.aEnd.Col(), aOldRange.aEnd.Row(),
+                                        aOldRange.aStart.Tab(), ScMF::Auto);
+                    rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
+                                       aNewRange.aEnd.Col(), aNewRange.aStart.Row(),
+                                       aNewRange.aStart.Tab(), ScMF::Auto);
+                }
+                else if (!bOldAutoFilter && bNewAutoFilter)
+                {
+                    rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
+                                       aNewRange.aEnd.Col(), aNewRange.aStart.Row(),
+                                       aNewRange.aStart.Tab(), ScMF::Auto);
+                }
+            }
+        }
+
+        if (const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo())
+        {
+            ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+            if (pViewShell && aOldRange.IsValid())
+            {
+                SCTAB nTab = aOldRange.aStart.Tab();
+                SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
+                if (nVisTab != nTab)
+                    pViewShell->SetTabNo(nTab);
+
+                rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
+                                     PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
+            }
+        }
+    }
 }
 
 ScUndoImportData::ScUndoImportData( ScDocShell& rNewDocShell, SCTAB nNewTab,

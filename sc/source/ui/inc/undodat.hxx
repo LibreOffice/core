@@ -211,7 +211,6 @@ public:
     ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
                       const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                       ScDocumentUniquePtr pNewUndoDoc,
-                      std::unique_ptr<ScRangeName> pNewUndoRange,
                       std::unique_ptr<ScDBCollection> pNewUndoDB,
                       std::unique_ptr<ScDBCollection> pNewRedoDB);
 
@@ -227,7 +226,6 @@ private:
     ScSubTotalParam aParam;                         // The original passed parameter
     SCROW           nNewEndRow;                     // Size of result
     ScDocumentUniquePtr xUndoDoc;
-    std::unique_ptr<ScRangeName> xUndoRange;
     std::unique_ptr<ScDBCollection> xUndoDB;
     std::unique_ptr<ScDBCollection> xRedoDB;
 };
@@ -285,8 +283,8 @@ public:
 class ScUndoDBData: public ScSimpleUndo
 {
 public:
-                    ScUndoDBData( ScDocShell& rNewDocShell, const OUString& rName,
-                            std::unique_ptr<ScDBCollection> pNewUndoColl,
+                    ScUndoDBData( ScDocShell& rNewDocShell, const OUString& rNewUndoName,
+                            std::unique_ptr<ScDBCollection> pNewUndoColl, const OUString& rNewRedoName,
                             std::unique_ptr<ScDBCollection> pNewRedoColl );
     virtual         ~ScUndoDBData() override;
 
@@ -298,9 +296,12 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString aDBName;
+    OUString aUndoName;
     std::unique_ptr<ScDBCollection> pUndoColl;
+    OUString aRedoName;
     std::unique_ptr<ScDBCollection> pRedoColl;
+
+    void           DoChange(const bool bUndo);
 };
 
 class ScUndoImportData: public ScSimpleUndo

@@ -638,7 +638,6 @@ void ScDBFunc::DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam
     ScSubTotalParam aNewParam;
     rNewData.GetSubTotalParam(aNewParam); // change end of range
     ScDocumentUniquePtr pUndoDoc;
-    std::unique_ptr<ScRangeName> pUndoRange;
     std::unique_ptr<ScDBCollection> pUndoDB;
 
     if (bRecord) // record old data
@@ -656,10 +655,7 @@ void ScDBFunc::DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam
         rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount - 1,
                             InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
-        // database and other ranges
-        ScRangeName* pDocRange = rDoc.GetRangeName();
-        if (!pDocRange->empty())
-            pUndoRange.reset(new ScRangeName(*pDocRange));
+        // database ranges
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
             pUndoDB.reset(new ScDBCollection(*pDocDB));
@@ -682,7 +678,7 @@ void ScDBFunc::DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam
     {
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         pDocSh->GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTableTotals>(
-            *pDocSh, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc), std::move(pUndoRange),
+            *pDocSh, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc),
             std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB)));
     }
 

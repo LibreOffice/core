@@ -114,7 +114,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
     {
         rDocShell.GetUndoManager()->AddUndoAction(
                         std::make_unique<ScUndoDBData>( rDocShell, rName, std::move(pUndoColl),
-                            std::make_unique<ScDBCollection>( *pDocColl ) ) );
+                            rName, std::make_unique<ScDBCollection>( *pDocColl ) ) );
     }
 
     aModificator.SetDocumentModified();
@@ -150,7 +150,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                             std::make_unique<ScUndoDBData>( rDocShell, rName, std::move(pUndoColl),
-                                std::make_unique<ScDBCollection>( *pDocColl ) ) );
+                                rName, std::make_unique<ScDBCollection>( *pDocColl ) ) );
         }
 
         aModificator.SetDocumentModified();
@@ -193,8 +193,8 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             if (bUndo)
             {
                 rDocShell.GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoDBData>( rDocShell, rNew, std::move(pUndoColl),
-                                    std::make_unique<ScDBCollection>( *pDocColl ) ) );
+                                std::make_unique<ScUndoDBData>( rDocShell, rOld, std::move(pUndoColl),
+                                    rNew, std::make_unique<ScDBCollection>( *pDocColl ) ) );
             }
             else
                 pUndoColl.reset();
@@ -237,8 +237,12 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     bool bNewAutoFilter = rNewData.HasAutoFilter();
 
     std::unique_ptr<ScDBCollection> pUndoColl;
+    OUString sOldName;
     if (bUndo)
+    {
         pUndoColl.reset( new ScDBCollection( *pDocColl ) );
+        sOldName = pData->GetName();
+    }
 
     *pData = rNewData;
     if (bAreaChanged || bOldAutoFilter != bNewAutoFilter) {
@@ -259,14 +263,14 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         }
     }
 
-    rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
-        | PaintPartFlags::Size);
+    rDocShell.PostPaint(ScRange(0, 0, aOldRange.aStart.Tab(), rDoc.MaxCol(), rDoc.MaxRow(), aOldRange.aEnd.Tab()),
+        PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
 
     if (bUndo)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoDBData>( rDocShell, rNewData.GetName(), std::move(pUndoColl),
-                            std::make_unique<ScDBCollection>( *pDocColl ) ) );
+                        std::make_unique<ScUndoDBData>( rDocShell, sOldName, std::move(pUndoColl),
+                            rNewData.GetName(), std::make_unique<ScDBCollection>( *pDocColl ) ) );
     }
 
     aModificator.SetDocumentModified();
@@ -305,8 +309,8 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     if (bRecord)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoDBData>(rDocShell, OUString(), std::move(pUndoColl),
-                std::make_unique<ScDBCollection>(rNewColl)));
+            std::make_unique<ScUndoDBData>(rDocShell, u""_ustr, std::move(pUndoColl),
+                 u""_ustr, std::make_unique<ScDBCollection>(rNewColl)));
     }
 }
 
@@ -1280,7 +1284,6 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     ScSubTotalParam aNewParam;
     rNewData.GetSubTotalParam(aNewParam); // end of range is being changed
     ScDocumentUniquePtr pUndoDoc;
-    std::unique_ptr<ScRangeName> pUndoRange;
     std::unique_ptr<ScDBCollection> pUndoDB;
 
     if (bRecord) // secure old data
@@ -1299,10 +1302,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount - 1,
                             InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
-        //  ranges of DB and other
-        ScRangeName* pDocRange = rDoc.GetRangeName();
-        if (!pDocRange->empty())
-            pUndoRange.reset(new ScRangeName(*pDocRange));
+        //  ranges of DB
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
             pUndoDB.reset(new ScDBCollection(*pDocDB));
@@ -1326,7 +1326,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     {
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTableTotals>(
-            rDocShell, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc), std::move(pUndoRange),
+            rDocShell, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc),
             std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB)));
     }
 
