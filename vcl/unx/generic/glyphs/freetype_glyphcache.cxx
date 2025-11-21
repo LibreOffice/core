@@ -184,8 +184,25 @@ namespace
 #if !HAVE_DLAPI
         FT_Done_MM_Var(library, amaster);
 #else
+#ifdef _WIN32
+        // Unlike on Unixes, we can't pass a NULL module parameter to
+        // osl_getAsciiFunctionSymbol(), i.e. GetProcAddress(), and
+        // have it look through all modules loaded, like dlsym() does.
+        // Instead, we "know" that FT_Done_MM_Var will wither be in
+        // mergedlo.dll or vcllo.dll.
+        void(*func)(FT_Library, FT_MM_Var*) = nullptr;
+        oslModule module;
+        if (osl_getModuleHandle((u"mergedlo.dll"_ustr).pData, &module) ||
+            osl_getModuleHandle((u"vcllo.dll"_ustr).pData, &module))
+            func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(
+                osl_getAsciiFunctionSymbol(module, "FT_Done_MM_Var"));
+        // If FT_Done_MM_Var is not found, we will crash or something,
+        // at least in a build with the debugging C runtime, as
+        // calling free() below is very wrong, I think.
+#else
         static auto func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(
             osl_getAsciiFunctionSymbol(nullptr, "FT_Done_MM_Var"));
+#endif
         if (func)
             func(library, amaster);
         else
