@@ -23,12 +23,16 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76248)
 {
     createSwDoc("FDO76248.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // In two cases the a:graphicData elements had no children, which is invalid.
@@ -204,6 +208,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76586)
 CPPUNIT_TEST_FIXTURE(Test, testFDO76587 )
 {
     createSwDoc("fdo76587.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "line", u"240");
@@ -226,6 +234,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77890 )
 CPPUNIT_TEST_FIXTURE(Test, testNumberedList)
 {
     createSwDoc("NumberedList.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -241,6 +253,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberedList)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
 {
     createSwDoc("NumberedList.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     save(TestFilter::DOCX);
     // keep width of fixed size cells in the nested table
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -252,6 +268,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131959)
 {
     createSwDoc("NumberedList.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     save(TestFilter::DOCX);
     // import tblInd from table style
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -290,6 +310,9 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeTIF)
 
 DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This checks textbox textrun size of font which is in group shape.
@@ -340,6 +363,10 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeleft)
 CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeTableInTable)
 {
     createSwDoc("ooo96040-2.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     save(TestFilter::DOCX);
     parseExport(u"word/document.xml"_ustr);
 
@@ -467,6 +494,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77812)
 CPPUNIT_TEST_FIXTURE(Test, testContentTypeOLE)
 {
     createSwDoc("fdo77759.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -492,6 +523,10 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeOLE)
 CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
 {
     createSwDoc("fdo78420.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 10
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlHeader = parseExport(u"word/header2.xml"_ustr);
 
@@ -620,6 +655,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79540)
 CPPUNIT_TEST_FIXTURE(Test, testFDO79062)
 {
     createSwDoc("fdo79062.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlFootNotes = parseExport(u"word/footnotes.xml"_ustr);
     assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", u"w14 wp14 w15");
@@ -667,6 +706,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFo
 CPPUNIT_TEST_FIXTURE(Test, testfdo79668)
 {
     createSwDoc("fdo79668.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 12
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     // fdo#79668: Document was Crashing on DebugUtil build while Saving
     // because of repeated attribute value in same element.
@@ -730,6 +773,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79817)
 CPPUNIT_TEST_FIXTURE(Test, testfdo79968_sldx)
 {
     createSwDoc("fdo79968.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     // This UT for DOCX embedded with powerpoint slide
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
