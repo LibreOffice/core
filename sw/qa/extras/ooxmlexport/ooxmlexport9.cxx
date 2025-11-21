@@ -41,7 +41,7 @@ class DocmTest : public SwModelTestBase
 {
 public:
     DocmTest()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
