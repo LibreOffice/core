@@ -936,10 +936,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawSparklines(*pContentDev);
 
-    // Show Note Mark
-    if ( rOpts.GetOption( VOPT_NOTES ) )
-        aOutputData.DrawNoteMarks(*pContentDev);
-
     if ( rOpts.GetOption( VOPT_FORMULAS_MARKS ) )
         aOutputData.DrawFormulaMarks(*pContentDev);
 
@@ -969,6 +965,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     // Autofilter- and Pivot-Buttons
     DrawButtons(nX1, nX2, rTableInfo, pContentDev, pLokRTLCtxt.get());          // Pixel
+
+    // Show Note Mark
+    if ( rOpts.GetOption( VOPT_NOTES ) )
+        aOutputData.DrawNoteMarks(*pContentDev);
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
