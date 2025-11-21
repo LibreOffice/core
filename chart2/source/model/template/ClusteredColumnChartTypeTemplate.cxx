@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "FunnelChartTypeTemplate.hxx"
-#include "FunnelChartType.hxx"
+#include "ClusteredColumnChartTypeTemplate.hxx"
+#include "ClusteredColumnChartType.hxx"
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
@@ -31,21 +31,21 @@ namespace
 {
 enum
 {
-    PROP_FUNNEL_TEMPLATE_DIMENSION,
-    PROP_FUNNEL_TEMPLATE_GEOMETRY3D
+    PROP_CLUSTEREDCOLUMN_TEMPLATE_DIMENSION,
+    PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D
 };
 
 void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 {
     rOutProperties.emplace_back(
-        "Dimension", PROP_FUNNEL_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
+        "Dimension", PROP_CLUSTEREDCOLUMN_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
     rOutProperties.emplace_back(
-        "Geometry3D", PROP_FUNNEL_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
+        "Geometry3D", PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 }
 
-::cppu::OPropertyArrayHelper& StaticFunnelChartTypeTemplateInfoHelper()
+::cppu::OPropertyArrayHelper& StaticClusteredColumnChartTypeTemplateInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper aPropHelper = []() {
         std::vector<css::beans::Property> aProperties;
@@ -62,21 +62,21 @@ void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 
 namespace chart
 {
-FunnelChartTypeTemplate::FunnelChartTypeTemplate(Reference<uno::XComponentContext> const& xContext,
-                                                 const OUString& rServiceName,
-                                                 sal_Int32 nDim /* = 2 */)
+ClusteredColumnChartTypeTemplate::ClusteredColumnChartTypeTemplate(
+    Reference<uno::XComponentContext> const& xContext, const OUString& rServiceName,
+    sal_Int32 nDim /* = 2 */)
     : ChartTypeTemplate(xContext, rServiceName)
     , m_nDim(nDim)
 {
 }
 
-FunnelChartTypeTemplate::~FunnelChartTypeTemplate() {}
+ClusteredColumnChartTypeTemplate::~ClusteredColumnChartTypeTemplate() {}
 
-sal_Int32 FunnelChartTypeTemplate::getDimension() const { return m_nDim; }
+sal_Int32 ClusteredColumnChartTypeTemplate::getDimension() const { return m_nDim; }
 
 // ____ ChartTypeTemplate ____
-bool FunnelChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Diagram>& xDiagram,
-                                               bool bAdaptProperties)
+bool ClusteredColumnChartTypeTemplate::matchesTemplate2(
+    const rtl::Reference<::chart::Diagram>& xDiagram, bool bAdaptProperties)
 {
     bool bResult = ChartTypeTemplate::matchesTemplate2(xDiagram, bAdaptProperties);
 
@@ -88,7 +88,7 @@ bool FunnelChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Dia
 
         if (!bGeomAmbiguous)
         {
-            setFastPropertyValue_NoBroadcast(PROP_FUNNEL_TEMPLATE_GEOMETRY3D,
+            setFastPropertyValue_NoBroadcast(PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D,
                                              uno::Any(aCommonGeom));
         }
     }
@@ -97,12 +97,12 @@ bool FunnelChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Dia
 }
 
 rtl::Reference<ChartType>
-    FunnelChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+    ClusteredColumnChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
 {
-    return new FunnelChartType();
+    return new ClusteredColumnChartType();
 }
 
-rtl::Reference<ChartType> FunnelChartTypeTemplate::getChartTypeForNewSeries2(
+rtl::Reference<ChartType> ClusteredColumnChartTypeTemplate::getChartTypeForNewSeries2(
     const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
 {
     rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
@@ -111,14 +111,14 @@ rtl::Reference<ChartType> FunnelChartTypeTemplate::getChartTypeForNewSeries2(
 }
 
 // ____ OPropertySet ____
-void FunnelChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void ClusteredColumnChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
         ::chart::PropertyHelper::setPropertyValueDefault<sal_Int32>(
-            aTmp, PROP_FUNNEL_TEMPLATE_DIMENSION, 2);
-        ::chart::PropertyHelper::setPropertyValueDefault(aTmp, PROP_FUNNEL_TEMPLATE_GEOMETRY3D,
-                                                         ::chart2::DataPointGeometry3D::CUBOID);
+            aTmp, PROP_CLUSTEREDCOLUMN_TEMPLATE_DIMENSION, 2);
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D, ::chart2::DataPointGeometry3D::CUBOID);
         return aTmp;
     }();
     tPropertyValueMap::const_iterator aFound(aStaticDefaults.find(nHandle));
@@ -128,23 +128,24 @@ void FunnelChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny)
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL FunnelChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& SAL_CALL ClusteredColumnChartTypeTemplate::getInfoHelper()
 {
-    return StaticFunnelChartTypeTemplateInfoHelper();
+    return StaticClusteredColumnChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL FunnelChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> SAL_CALL ClusteredColumnChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(
-            StaticFunnelChartTypeTemplateInfoHelper()));
+            StaticClusteredColumnChartTypeTemplateInfoHelper()));
     return xPropertySetInfo;
 }
 
-void FunnelChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSeries,
-                                          ::sal_Int32 nChartTypeIndex, ::sal_Int32 nSeriesIndex,
-                                          ::sal_Int32 nSeriesCount)
+void ClusteredColumnChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSeries,
+                                                   ::sal_Int32 nChartTypeIndex,
+                                                   ::sal_Int32 nSeriesIndex,
+                                                   ::sal_Int32 nSeriesCount)
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
     xSeries->setPropertyAlsoToAllAttributedDataPoints("BorderStyle",
@@ -156,7 +157,7 @@ void FunnelChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSer
     {
         //apply Geometry3D
         uno::Any aAGeometry3D;
-        getFastPropertyValue(aAGeometry3D, PROP_FUNNEL_TEMPLATE_GEOMETRY3D);
+        getFastPropertyValue(aAGeometry3D, PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D);
         xSeries->setPropertyAlsoToAllAttributedDataPoints("Geometry3D", aAGeometry3D);
     }
     catch (const uno::Exception&)
@@ -165,7 +166,8 @@ void FunnelChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSer
     }
 }
 
-void FunnelChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diagram>& xDiagram)
+void ClusteredColumnChartTypeTemplate::resetStyles2(
+    const rtl::Reference<::chart::Diagram>& xDiagram)
 {
     ChartTypeTemplate::resetStyles2(xDiagram);
     std::vector<rtl::Reference<DataSeries>> aSeriesVec(xDiagram->getDataSeries());
@@ -183,8 +185,8 @@ void FunnelChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diagram
     xDiagram->setVertical(false);
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2(FunnelChartTypeTemplate, ChartTypeTemplate, OPropertySet)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(FunnelChartTypeTemplate, ChartTypeTemplate, OPropertySet)
+IMPLEMENT_FORWARD_XINTERFACE2(ClusteredColumnChartTypeTemplate, ChartTypeTemplate, OPropertySet)
+IMPLEMENT_FORWARD_XTYPEPROVIDER2(ClusteredColumnChartTypeTemplate, ChartTypeTemplate, OPropertySet)
 
 } //  namespace chart
 

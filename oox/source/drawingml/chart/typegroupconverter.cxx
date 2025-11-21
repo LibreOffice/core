@@ -74,6 +74,13 @@ const char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
 const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
 const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 const char SERVICE_CHART2_FUNNEL[]    = "com.sun.star.chart2.FunnelChartType";
+const char SERVICE_CHART2_CLUSTEREDCOLUMN[]= "com.sun.star.chart2.ClusteredColumnChartType";
+const char SERVICE_CHART2_BOXWHISKER[]= "com.sun.star.chart2.BoxWhiskerChartType";
+const char SERVICE_CHART2_PARETOLINE[]= "com.sun.star.chart2.ParetoLineChartType";
+const char SERVICE_CHART2_REGIONMAP[] = "com.sun.star.chart2.RegionMapChartType";
+const char SERVICE_CHART2_SUNBURST[]  = "com.sun.star.chart2.SunburstChartType";
+const char SERVICE_CHART2_TREEMAP[]   = "com.sun.star.chart2.TreemapChartType";
+const char SERVICE_CHART2_WATERFALL[] = "com.sun.star.chart2.WaterfallChartType";
 
 namespace csscd = css::chart::DataLabelPlacement;
 
@@ -93,7 +100,14 @@ const TypeGroupInfo spTypeInfos[] =
     { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, false, false, false, false },
     { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         false, true,  false, false, false, false, false },
     { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, false, false },
-    { TYPEID_FUNNEL,    TYPECATEGORY_FUNNEL,  SERVICE_CHART2_FUNNEL,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, false, false }
+    { TYPEID_FUNNEL,    TYPECATEGORY_FUNNEL,  SERVICE_CHART2_FUNNEL,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, false, false },
+    { TYPEID_BOXWHISKER,TYPECATEGORY_BOXWHISKER,  SERVICE_CHART2_BOXWHISKER, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false },
+    { TYPEID_CLUSTEREDCOLUMN,TYPECATEGORY_CLUSTEREDCOLUMN, SERVICE_CHART2_CLUSTEREDCOLUMN, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false },
+    { TYPEID_PARETOLINE,TYPECATEGORY_PARETOLINE,  SERVICE_CHART2_PARETOLINE, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false },
+    { TYPEID_REGIONMAP, TYPECATEGORY_REGIONMAP,   SERVICE_CHART2_REGIONMAP,  VARPOINTMODE_NONE, csscd::OUTSIDE,    false, true,  false, true,  false, false, false },
+    { TYPEID_SUNBURST,  TYPECATEGORY_SUNBURST,    SERVICE_CHART2_SUNBURST,   VARPOINTMODE_MULTI, csscd::OUTSIDE,   false, true,  false, true,  false, false, false },
+    { TYPEID_TREEMAP,   TYPECATEGORY_TREEMAP,     SERVICE_CHART2_TREEMAP,    VARPOINTMODE_MULTI, csscd::OUTSIDE,   false, true,  false, true,  false, false, false },
+    { TYPEID_WATERFALL, TYPECATEGORY_WATERFALL,   SERVICE_CHART2_WATERFALL,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false }
 };
 
 const TypeGroupInfo saUnknownTypeInfo =
@@ -161,7 +175,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( barChart ):       ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
         case CX_TOKEN( boxWhisker ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BOXWHISKER;mb3dChart = false;  break;
         case C_TOKEN( bubbleChart ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BUBBLE;    mb3dChart = false;  break;
-        case CX_TOKEN( clusteredColumn ): ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;     mb3dChart = false;  break;
+        case CX_TOKEN( clusteredColumn ): ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_CLUSTEREDCOLUMN;     mb3dChart = false;  break;
         case C_TOKEN( doughnutChart ):  ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_DOUGHNUT;  mb3dChart = false;  break;
         case CX_TOKEN( funnel ):        ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_FUNNEL;    mb3dChart = false;  break;
         case C_TOKEN( line3DChart ):    ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_LINE;      mb3dChart = true;   break;
@@ -178,7 +192,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( surface3DChart ): ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;
         case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    // 3D bar chart from all surface charts
         case CX_TOKEN( treemap ):       ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_TREEMAP;   mb3dChart = false;  break;
-        case CX_TOKEN( waterfall ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
+        case CX_TOKEN( waterfall ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_WATERFALL; mb3dChart = false;  break;
         default:    OSL_FAIL( "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
 #undef ENSURE_AXESCOUNT
     }
@@ -635,7 +649,7 @@ PieChartSubType TypeGroupConverter::convertOfPieType(sal_Int32 nOoxOfPieType ) c
 
 void TypeGroupConverter::moveDataToSeries(DataSourceCxModel::DataMap& raDataMap)
 {
-    // For chartex, move data from rDataMap to the appropriate series. In
+    // For chartex, move data from raDataMap to the appropriate series. In
     // chartex the data is given outside the series, in a child element of
     // <cx:chartSpace>. Pre-2016 charts have the data inside the series, and
     // SeriesModel and subsequent handling reflects this. So here we get the
@@ -643,9 +657,14 @@ void TypeGroupConverter::moveDataToSeries(DataSourceCxModel::DataMap& raDataMap)
     if (!raDataMap.empty()) {
         // should only happen for chartex
         for (auto const& elem : mrModel.maSeries) {
-            // This ID must be present in the map
-            assert(raDataMap.contains(elem->mnDataId));
-            elem->maSources = *(raDataMap[elem->mnDataId]);
+            // paretoLine (and maybe other chart types) can have multiple
+            // series, where the later series have no dataId. I'm not sure
+            // exactly how that's to be handled, but work around it here.
+            if (elem->mnDataId >= 0) {
+                // This ID must be present in the map
+                assert(raDataMap.contains(elem->mnDataId));
+                elem->maSources = *(raDataMap[elem->mnDataId]);
+            }
         }
     }
 }
