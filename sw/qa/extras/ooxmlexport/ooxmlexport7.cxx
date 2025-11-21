@@ -28,7 +28,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 
 protected:
     // We import OOXML's EMUs into integral mm100 internal representation, then export back into
@@ -167,6 +167,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104539)
 CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
 {
     createSwDoc("shape-effect-preservation.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 7
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -303,6 +307,10 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
 CPPUNIT_TEST_FIXTURE(Test, testShape3DEffectPreservation)
 {
     createSwDoc("shape-3d-effect-preservation.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -662,6 +670,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // axial gradient is purple foreground/lime background in the middle (top-left to bottom-right)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
@@ -677,6 +688,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle2, "tdf126533_axialAngle2.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // axial gradient is purple foreground/lime background in the middle (top-right to bottom-left)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
@@ -739,6 +753,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtAndShapeOverlapping)
 CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
 {
     createSwDoc("fdo78658.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 40
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for lockedCanvas tag
@@ -786,6 +804,10 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
 CPPUNIT_TEST_FIXTURE(Test, testRubyHyperlink)
 {
     createSwDoc("rubyhyperlink.fodt");
+
+    //FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     // test that export doesn't assert with overlapping ruby / hyperlink attr
 }
@@ -922,6 +944,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
 
 DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<drawing::XShape> xShape = getShape(1);
     comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
 
@@ -975,6 +1000,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80894)
 CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
 {
     createSwDoc("fdo80895.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     // DML shapes in header and footer were not getting rendered in LO and the same were not preserved after RT.
     // In actual there was a shape but because of fetching wrong theme for header.xml or footer.xml
@@ -993,6 +1022,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
 CPPUNIT_TEST_FIXTURE(Test, testTdf118242)
 {
     createSwDoc("tdf118242.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
