@@ -1012,7 +1012,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
             compareOldAndNewConfig(sName, oldItem.m_xPopupMenu, pFound->m_xPopupMenu, sResourceURL);
         } else if (pFound == vNewItems.end()) {
             MigrationItem aMigrationItem(sParent, sSibling, oldItem.m_sCommandURL, oldItem.m_xPopupMenu);
-            if (m_aOldVersionItemsHashMap.find(sResourceURL)==m_aOldVersionItemsHashMap.end()) {
+            if (!m_aOldVersionItemsHashMap.contains(sResourceURL)) {
                 std::vector< MigrationItem > vMigrationItems;
                 m_aOldVersionItemsHashMap.emplace(sResourceURL, vMigrationItems);
                 m_aOldVersionItemsHashMap[sResourceURL].push_back(aMigrationItem);
