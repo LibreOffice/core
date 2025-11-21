@@ -33,55 +33,45 @@ class tdf99619(UITestCase):
 
             xDbFrame = self.ui_test.get_desktop().getCurrentFrame()
 
-            self.xUITest.executeCommand(".uno:DBQueryEdit")
+            with self.ui_test.open_subcomponent_through_command(".uno:DBQueryEdit") as xQueryFrame:
+                xQueryController = xQueryFrame.getController()
 
-            while True:
-                xQueryFrame = self.ui_test.get_desktop().getCurrentFrame()
+                # Add a relation via the dialog
+                with self.ui_test.execute_blocking_action(
+                        self.xUITest.executeCommandForProvider,
+                        args=(".uno:DBAddRelation", xQueryController)) as xDialog:
 
-                if xQueryFrame != xDbFrame:
-                    break
-                time.sleep(DEFAULT_SLEEP)
+                    # Choose the two tables
+                    select_by_text(xDialog.getChild("table1"), "object")
+                    select_by_text(xDialog.getChild("table2"), "person")
 
-            xQueryController = xQueryFrame.getController()
+                    # Set the join type
+                    select_by_text(xDialog.getChild("type"), "Inner join")
 
-            # Add a relation via the dialog
-            with self.ui_test.execute_blocking_action(
-                    self.xUITest.executeCommandForProvider,
-                    args=(".uno:DBAddRelation", xQueryController)) as xDialog:
+                    # Use a natural join because it’s too difficult to manipulate the grid to select
+                    # fields
+                    xDialog.getChild("natural").executeAction("CLICK", tuple())
 
-                # Choose the two tables
-                select_by_text(xDialog.getChild("table1"), "object")
-                select_by_text(xDialog.getChild("table2"), "person")
+                # Undo the join
+                self.xUITest.executeCommandForProvider(".uno:Undo", xQueryFrame)
+                # Redo the join. This is where it crashes without any fixes to the bug
+                self.xUITest.executeCommandForProvider(".uno:Redo", xQueryFrame)
 
-                # Set the join type
-                select_by_text(xDialog.getChild("type"), "Inner join")
+                # Save the query. This only saves the query in memory
+                # and doesn’t change the database file on disk
+                self.xUITest.executeCommandForProvider(".uno:Save", xQueryFrame)
 
-                # Use a natural join because it’s too difficult to manipulate the grid to select
-                # fields
-                xDialog.getChild("natural").executeAction("CLICK", tuple())
+                # Switch to SQL mode
+                self.xUITest.executeCommandForProvider(".uno:DBChangeDesignMode",
+                                                       xQueryController)
 
-            # Undo the join
-            self.xUITest.executeCommandForProvider(".uno:Undo", xQueryFrame)
-            # Redo the join. This is where it crashes without any fixes to the bug
-            self.xUITest.executeCommandForProvider(".uno:Redo", xQueryFrame)
+                # Get the SQL source for the query
+                xSql = self.xUITest.getTopFocusWindow().getChild("sql")
+                query = get_state_as_dict(xSql)["Text"]
 
-            # Save the query. This only saves the query in memory and doesn’t change the database
-            # file on disk
-            self.xUITest.executeCommandForProvider(".uno:Save", xQueryFrame)
-
-            # Switch to SQL mode
-            self.xUITest.executeCommandForProvider(".uno:DBChangeDesignMode",
-                                                   xQueryController)
-
-            # Get the SQL source for the query
-            xSql = self.xUITest.getTopFocusWindow().getChild("sql")
-            query = get_state_as_dict(xSql)["Text"]
-
-            # Make sure that the join is in the query
-            if "NATURAL INNER JOIN" not in query:
-                print(f"Join missing from query: {query}", file=sys.stderr)
-            self.assertTrue("NATURAL INNER JOIN" in query)
-
-            self.xUITest.executeCommandForProvider(".uno:CloseWin", xQueryFrame)
+                # Make sure that the join is in the query
+                if "NATURAL INNER JOIN" not in query:
+                    print(f"Join missing from query: {query}", file=sys.stderr)
+                self.assertTrue("NATURAL INNER JOIN" in query)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

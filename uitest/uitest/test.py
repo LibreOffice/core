@@ -168,6 +168,38 @@ class UITest(object):
             ui_object.executeAction(action, parameters)
             yield from self.wait_and_yield_dialog(event, xDialogParent, close_button)
 
+    # Executes a command and waits for a subcomponent event to be emitted. The frame from the event
+    # will be yielded. If close_win is True then .uno:CloseWin will be called at exit. This can be
+    # used for commands that open a new window for the same document.
+    @contextmanager
+    def open_subcomponent_through_command(self, command, printNames=False, close_win=True):
+        with EventListener(self._xContext, "OnSubComponentOpened", printNames=printNames) as event:
+            self._xUITest.executeCommand(command)
+            while not event.executed:
+                time.sleep(DEFAULT_SLEEP)
+            frame = event.supplements[0]
+
+        try:
+            yield frame
+        finally:
+            if close_win:
+                try:
+                    modified = frame.getController().isModified()
+                except AttributeError:
+                    modified = False
+                if modified:
+                    # Close the window and answer no when it asks if we want to save
+                    with self.execute_blocking_action(self._xUITest.executeCommandForProvider,
+                                                      args=(".uno:CloseWin", frame),
+                                                      close_button="no"):
+                        pass
+                else:
+                    self._xUITest.executeCommandForProvider(".uno:CloseWin", frame)
+                # Closing the window will happen asynchronously on the main thread so let’s wait
+                # until the close actually completes.
+                xToolkit = self._xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.waitUntilAllIdlesDispatched()
+
     # Calls UITest.close_doc at exit
     @contextmanager
     def create_doc_in_start_center(self, app):
