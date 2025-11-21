@@ -303,7 +303,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
             }
 
             if (i < aTotalValues.size() && aTotalValues[i].maTotalsFunction.has_value()
-                && aTotalValues[i].maTotalsFunction.value() == u"custom")
+                && aTotalValues[i].maTotalsFunction.value() == u"custom"_ustr)
             {
                 // write custom functions
                 pTableStrm->startElement(XML_totalsRowFormula);
