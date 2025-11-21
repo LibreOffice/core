@@ -569,10 +569,8 @@ namespace oglcanvas
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)
-                    const ::canvas::ParametricPolyPolygon::Values aValues(
-                        pGradient->getValues() );
 
-                    rAct.maFunction = [aValues = aValues, aTexture = textures[0]]
+                    rAct.maFunction = [aValues = pGradient->getValues(), aTexture = textures[0]]
                         (const CanvasHelper& rHelper,
                          const basegfx::B2DHomMatrix& rTransform,
                          GLenum eSrcBlend,
