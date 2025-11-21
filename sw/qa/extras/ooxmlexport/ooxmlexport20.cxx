@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -36,6 +36,10 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsb)
 {
     createSwDoc("fdo79969_xlsb.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     // This UT for DOCX embedded with binary excel work sheet.
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
@@ -174,6 +178,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133455)
 CPPUNIT_TEST_FIXTURE(Test, testTdf138612)
 {
     createSwDoc("tdf138612.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
@@ -341,6 +349,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129402, "fdo77129.docx")
 CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsm)
 {
     createSwDoc("fdo79969_xlsm.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     // This UT for DOCX embedded with excel work sheet.
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
@@ -364,6 +376,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsm)
 CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
 {
     createSwDoc("fdo80522.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -386,6 +402,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
 CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
 {
     createSwDoc("fdo80523_pptm.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -408,6 +428,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
 CPPUNIT_TEST_FIXTURE(Test, testfdo80523_sldm)
 {
     createSwDoc("fdo80523_sldm.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -430,6 +454,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80523_sldm)
 CPPUNIT_TEST_FIXTURE(Test, testfdo80898)
 {
     createSwDoc("fdo80898.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     // This UT for DOCX embedded with binary excel work sheet.
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
@@ -452,6 +480,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80898)
 CPPUNIT_TEST_FIXTURE(Test, testOleIconDrawAspect)
 {
     createSwDoc("tdf131537.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/o:OLEObject", "DrawAspect",
@@ -557,6 +589,10 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf148035)
 {
     createSwDoc("tdf148035.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -576,6 +612,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148035)
 CPPUNIT_TEST_FIXTURE(Test, testfdo83048)
 {
     createSwDoc("fdo83048.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     // Issue was wrong SDT properties were getting exported for Date SDT
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/footer2.xml"_ustr);
@@ -816,6 +856,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionHeader)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146491)
 {
     createSwDoc("tdf146491.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 93
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 12 - a page style was unnecessarily created for every section.
@@ -894,6 +938,10 @@ CPPUNIT_TEST_FIXTURE(Test, testOO72950)
 CPPUNIT_TEST_FIXTURE(Test, fdo60957)
 {
     createSwDoc("fdo60957-2.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:tbl", 2);
