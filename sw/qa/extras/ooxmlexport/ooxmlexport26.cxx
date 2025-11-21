@@ -17,7 +17,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -25,6 +25,10 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
 {
     createSwDoc("tdf126245.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked numbering change
@@ -35,6 +39,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
 CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
 {
     createSwDoc("tdf124491.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import format change of empty lines, FIXME: change w:r with w:pPr in export
@@ -131,6 +139,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
 CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
 {
     createSwDoc("tdf136850.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
@@ -162,6 +174,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165330)
 CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
 {
     createSwDoc("tdf125546.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // compress redlines (it was 15)
@@ -360,6 +376,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
     };
     createSwDoc("tdf81100.docx");
     verify();
+
+    //FIXME: validation error in OOXML export: Errors: 6
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 
@@ -494,6 +514,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
 CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
 {
     createSwDoc("tdf141660.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -645,6 +669,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147892)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 64
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL(u"No Spacing"_ustr,
                          getProperty<OUString>(getParagraph(20), u"ParaStyleName"_ustr));
 }
