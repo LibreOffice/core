@@ -4332,6 +4332,11 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     const Point aPointHMM = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
     SdrView* pDrawView = pViewShell->GetDrawView();
     SdrPageView* pPageView = pDrawView->GetSdrPageView();
+    if (!pPageView)
+    {
+        return;
+    }
+
     SdrPage* pPage = pPageView->GetPage();
     ::sd::Window* pActiveWin = pViewShell->GetActiveWindow();
     if (!pActiveWin)
