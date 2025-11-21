@@ -420,7 +420,7 @@ inline SkPaint SkiaSalGraphicsImpl::makeGradientPaint() const { return makePaint
 inline SkPaint SkiaSalGraphicsImpl::makeTextPaint(std::optional<Color> color) const
 {
     assert(color.has_value());
-    SkPaint paint = makePaintInternal();
+    SkPaint paint = makePaintInternal(/*bSrcATop*/ true);
     paint.setColor(SkiaHelper::toSkColor(*color));
     return paint;
 }
