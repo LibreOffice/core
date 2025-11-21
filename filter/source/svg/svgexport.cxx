@@ -2094,186 +2094,181 @@ bool SVGFilter::implExportShapes( const Reference< css::drawing::XShapes >& rxSh
 bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShape, bool bMaster )
 {
     Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
-    bool bRet = false;
+    if( !xShapePropSet.is() )
+        return false;
 
-    if( xShapePropSet.is() )
+    const OUString aShapeType( rxShape->getShapeType() );
+    bool bHideObj = false;
+
+    if( mbPresentation )
     {
-        const OUString   aShapeType( rxShape->getShapeType() );
-        bool                    bHideObj = false;
+        xShapePropSet->getPropertyValue( u"IsEmptyPresentationObject"_ustr )  >>= bHideObj;
+    }
 
-        if( mbPresentation )
-        {
-            xShapePropSet->getPropertyValue( u"IsEmptyPresentationObject"_ustr )  >>= bHideObj;
-        }
+    OUString aShapeClass = implGetClassFromShape( rxShape );
+    if( bMaster )
+    {
+        if( aShapeClass == "TitleText" || aShapeClass == "Outline" )
+            bHideObj = true;
+    }
 
-        OUString aShapeClass = implGetClassFromShape( rxShape );
-        if( bMaster )
-        {
-            if( aShapeClass == "TitleText" || aShapeClass == "Outline" )
-                bHideObj = true;
-        }
+    if( bHideObj )
+        return false;
 
-        if( !bHideObj )
+    if( aShapeType.lastIndexOf( "drawing.GroupShape" ) != -1 )
+    {
+        Reference< css::drawing::XShapes > xShapes( rxShape, UNO_QUERY );
+
+        if( xShapes.is() )
         {
-            if( aShapeType.lastIndexOf( "drawing.GroupShape" ) != -1 )
+            mpSVGExport->AddAttribute(u"class"_ustr, u"Group"_ustr);
+            const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
+            if( !rShapeId.isEmpty() )
             {
-                Reference< css::drawing::XShapes > xShapes( rxShape, UNO_QUERY );
-
-                if( xShapes.is() )
-                {
-                    mpSVGExport->AddAttribute(u"class"_ustr, u"Group"_ustr);
-                    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
-                    if( !rShapeId.isEmpty() )
-                    {
-                        mpSVGExport->AddAttribute(u"id"_ustr, rShapeId);
-                    }
-                    SvXMLElementExport aExp(*mpSVGExport, u"g"_ustr, true, true);
-
-                    bRet = implExportShapes( xShapes, bMaster );
-                }
+                mpSVGExport->AddAttribute(u"id"_ustr, rShapeId);
             }
+            SvXMLElementExport aExp(*mpSVGExport, u"g"_ustr, true, true);
 
-            if( !bRet && mpObjects->contains( rxShape ) )
-            {
-                css::awt::Rectangle    aBoundRect;
-                const GDIMetaFile&     rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
-
-                xShapePropSet->getPropertyValue( u"BoundRect"_ustr ) >>= aBoundRect;
-
-                const Point aTopLeft( aBoundRect.X, aBoundRect.Y );
-                const Size  aSize( aBoundRect.Width, aBoundRect.Height );
-
-                if( rMtf.GetActionSize() )
-                {   // for text field shapes we set up text-adjust attributes
-                    // and set visibility to hidden
-                    OUString aElementId;
-
-                    if( mbPresentation )
-                    {
-                        bool bIsPageNumber  = ( aShapeClass == "PageNumber" );
-                        bool bIsFooter      = ( aShapeClass == "Footer" );
-                        bool bIsDateTime    = ( aShapeClass == "DateTime" );
-                        bool bTextField = bIsPageNumber || bIsFooter || bIsDateTime;
-                        if( bTextField )
-                        {
-                            // to notify to the SVGActionWriter::ImplWriteActions method
-                            // that we are dealing with a placeholder shape
-                            aElementId = sPlaceholderTag;
-
-                            mpSVGExport->AddAttribute(u"visibility"_ustr, u"hidden"_ustr);
-                        }
-
-                        if( bTextField || ( aShapeClass == "TextShape" ) )
-                        {
-                            sal_uInt16 nTextAdjust = sal_uInt16(ParagraphAdjust_LEFT);
-                            OUString sTextAdjust;
-                            xShapePropSet->getPropertyValue( u"ParaAdjust"_ustr ) >>= nTextAdjust;
-
-                            switch( static_cast<ParagraphAdjust>(nTextAdjust) )
-                            {
-                                case ParagraphAdjust_LEFT:
-                                        sTextAdjust = "left";
-                                        break;
-                                case ParagraphAdjust_CENTER:
-                                        sTextAdjust = "center";
-                                        break;
-                                case ParagraphAdjust_RIGHT:
-                                        sTextAdjust = "right";
-                                        break;
-                                default:
-                                    break;
-                            }
-                            mpSVGExport->AddAttribute(NSPREFIX "text-adjust"_ustr, sTextAdjust);
-                        }
-                    }
-                    mpSVGExport->AddAttribute(u"class"_ustr, aShapeClass);
-                    SvXMLElementExport aExp(*mpSVGExport, u"g"_ustr, true, true);
-
-                    Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
-
-                    OUString aTitle;
-                    xShapePropSet->getPropertyValue( u"Title"_ustr ) >>= aTitle;
-                    if( !aTitle.isEmpty() )
-                    {
-                        SvXMLElementExport aExp2(*mpSVGExport, u"title"_ustr, true, true);
-                        xExtDocHandler->characters( aTitle );
-                    }
-
-                    OUString aDescription;
-                    xShapePropSet->getPropertyValue( u"Description"_ustr ) >>= aDescription;
-                    if( !aDescription.isEmpty() )
-                    {
-                        SvXMLElementExport aExp2(*mpSVGExport, u"desc"_ustr, true, true);
-                        xExtDocHandler->characters( aDescription );
-                    }
-
-
-                    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
-                    if( !rShapeId.isEmpty() )
-                    {
-                        mpSVGExport->AddAttribute(u"id"_ustr, rShapeId);
-                    }
-
-                    const GDIMetaFile* pEmbeddedBitmapsMtf = nullptr;
-                    if( mEmbeddedBitmapActionMap.contains( rxShape ) )
-                    {
-                        pEmbeddedBitmapsMtf = &( mEmbeddedBitmapActionMap[ rxShape ].GetRepresentation() );
-                    }
-
-                    {
-                        OUString aBookmark;
-                        Reference<XPropertySetInfo> xShapePropSetInfo = xShapePropSet->getPropertySetInfo();
-                        if(xShapePropSetInfo->hasPropertyByName(u"Bookmark"_ustr))
-                        {
-                            xShapePropSet->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
-                        }
-
-                        SvXMLElementExport aExp2(*mpSVGExport, u"g"_ustr, true, true);
-
-                        // export the shape bounding box
-                        {
-                            mpSVGExport->AddAttribute( u"class"_ustr, u"BoundingBox"_ustr );
-                            mpSVGExport->AddAttribute( u"stroke"_ustr, u"none"_ustr );
-                            mpSVGExport->AddAttribute( u"fill"_ustr, u"none"_ustr );
-                            mpSVGExport->AddAttribute( u"x"_ustr, OUString::number( aBoundRect.X ) );
-                            mpSVGExport->AddAttribute( u"y"_ustr, OUString::number( aBoundRect.Y ) );
-                            mpSVGExport->AddAttribute( u"width"_ustr, OUString::number( aBoundRect.Width ) );
-                            mpSVGExport->AddAttribute( u"height"_ustr, OUString::number( aBoundRect.Height ) );
-                            SvXMLElementExport aBB(*mpSVGExport, u"rect"_ustr, true, true);
-                        }
-
-                        if( !aBookmark.isEmpty() )
-                        {
-                            INetURLObject aINetURLObject(aBookmark);
-                            if (!aINetURLObject.HasError()
-                                && aINetURLObject.GetProtocol() != INetProtocol::Javascript)
-                            {
-                                mpSVGExport->AddAttribute(u"xlink:href"_ustr, aBookmark);
-                                SvXMLElementExport alinkA(*mpSVGExport, u"a"_ustr, true, true);
-                                mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
-                                                            0xffffffff,
-                                                            aElementId,
-                                                            &rxShape,
-                                                            pEmbeddedBitmapsMtf );
-                            }
-                        }
-                        else
-                        {
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
-                                                        0xffffffff,
-                                                        aElementId,
-                                                        &rxShape,
-                                                        pEmbeddedBitmapsMtf );
-                        }
-                    }
-                }
-
-                bRet = true;
-            }
+            if (implExportShapes( xShapes, bMaster ))
+                return true;
         }
     }
 
-    return bRet;
+    if( !mpObjects->contains( rxShape ) )
+        return false;
+
+    css::awt::Rectangle    aBoundRect;
+    const GDIMetaFile&     rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
+
+    xShapePropSet->getPropertyValue( u"BoundRect"_ustr ) >>= aBoundRect;
+
+    const Point aTopLeft( aBoundRect.X, aBoundRect.Y );
+    const Size  aSize( aBoundRect.Width, aBoundRect.Height );
+
+    if( rMtf.GetActionSize() == 0 )
+        return true;
+
+    // for text field shapes we set up text-adjust attributes
+    // and set visibility to hidden
+    OUString aElementId;
+
+    if( mbPresentation )
+    {
+        bool bIsPageNumber  = ( aShapeClass == "PageNumber" );
+        bool bIsFooter      = ( aShapeClass == "Footer" );
+        bool bIsDateTime    = ( aShapeClass == "DateTime" );
+        bool bTextField = bIsPageNumber || bIsFooter || bIsDateTime;
+        if( bTextField )
+        {
+            // to notify to the SVGActionWriter::ImplWriteActions method
+            // that we are dealing with a placeholder shape
+            aElementId = sPlaceholderTag;
+
+            mpSVGExport->AddAttribute(u"visibility"_ustr, u"hidden"_ustr);
+        }
+
+        if( bTextField || ( aShapeClass == "TextShape" ) )
+        {
+            sal_uInt16 nTextAdjust = sal_uInt16(ParagraphAdjust_LEFT);
+            OUString sTextAdjust;
+            xShapePropSet->getPropertyValue( u"ParaAdjust"_ustr ) >>= nTextAdjust;
+
+            switch( static_cast<ParagraphAdjust>(nTextAdjust) )
+            {
+                case ParagraphAdjust_LEFT:
+                        sTextAdjust = "left";
+                        break;
+                case ParagraphAdjust_CENTER:
+                        sTextAdjust = "center";
+                        break;
+                case ParagraphAdjust_RIGHT:
+                        sTextAdjust = "right";
+                        break;
+                default:
+                    break;
+            }
+            mpSVGExport->AddAttribute(NSPREFIX "text-adjust"_ustr, sTextAdjust);
+        }
+    }
+    mpSVGExport->AddAttribute(u"class"_ustr, aShapeClass);
+    SvXMLElementExport aExp(*mpSVGExport, u"g"_ustr, true, true);
+
+    Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
+
+    OUString aTitle;
+    xShapePropSet->getPropertyValue( u"Title"_ustr ) >>= aTitle;
+    if( !aTitle.isEmpty() )
+    {
+        SvXMLElementExport aExp2(*mpSVGExport, u"title"_ustr, true, true);
+        xExtDocHandler->characters( aTitle );
+    }
+
+    OUString aDescription;
+    xShapePropSet->getPropertyValue( u"Description"_ustr ) >>= aDescription;
+    if( !aDescription.isEmpty() )
+    {
+        SvXMLElementExport aExp2(*mpSVGExport, u"desc"_ustr, true, true);
+        xExtDocHandler->characters( aDescription );
+    }
+
+    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
+    if( !rShapeId.isEmpty() )
+    {
+        mpSVGExport->AddAttribute(u"id"_ustr, rShapeId);
+    }
+
+    const GDIMetaFile* pEmbeddedBitmapsMtf = nullptr;
+    if( mEmbeddedBitmapActionMap.contains( rxShape ) )
+    {
+        pEmbeddedBitmapsMtf = &( mEmbeddedBitmapActionMap[ rxShape ].GetRepresentation() );
+    }
+
+    OUString aBookmark;
+    Reference<XPropertySetInfo> xShapePropSetInfo = xShapePropSet->getPropertySetInfo();
+    if(xShapePropSetInfo->hasPropertyByName(u"Bookmark"_ustr))
+    {
+        xShapePropSet->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
+    }
+
+    SvXMLElementExport aExp2(*mpSVGExport, u"g"_ustr, true, true);
+
+    // export the shape bounding box
+    {
+        mpSVGExport->AddAttribute( u"class"_ustr, u"BoundingBox"_ustr );
+        mpSVGExport->AddAttribute( u"stroke"_ustr, u"none"_ustr );
+        mpSVGExport->AddAttribute( u"fill"_ustr, u"none"_ustr );
+        mpSVGExport->AddAttribute( u"x"_ustr, OUString::number( aBoundRect.X ) );
+        mpSVGExport->AddAttribute( u"y"_ustr, OUString::number( aBoundRect.Y ) );
+        mpSVGExport->AddAttribute( u"width"_ustr, OUString::number( aBoundRect.Width ) );
+        mpSVGExport->AddAttribute( u"height"_ustr, OUString::number( aBoundRect.Height ) );
+        SvXMLElementExport aBB(*mpSVGExport, u"rect"_ustr, true, true);
+    }
+
+    if( !aBookmark.isEmpty() )
+    {
+        INetURLObject aINetURLObject(aBookmark);
+        if (!aINetURLObject.HasError()
+            && aINetURLObject.GetProtocol() != INetProtocol::Javascript)
+        {
+            mpSVGExport->AddAttribute(u"xlink:href"_ustr, aBookmark);
+            SvXMLElementExport alinkA(*mpSVGExport, u"a"_ustr, true, true);
+            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
+                                        0xffffffff,
+                                        aElementId,
+                                        &rxShape,
+                                        pEmbeddedBitmapsMtf );
+        }
+    }
+    else
+    {
+        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
+                                    0xffffffff,
+                                    aElementId,
+                                    &rxShape,
+                                    pEmbeddedBitmapsMtf );
+    }
+
+    return true;
 }
 
 
