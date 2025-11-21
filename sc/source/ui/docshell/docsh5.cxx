@@ -318,8 +318,8 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             {
                 m_pDocument->CompileHybridFormula();
 
-                GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDBData>( *this, OUString(),
-                        std::move(pUndoColl),
+                GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDBData>( *this, u""_ustr,
+                        std::move(pUndoColl), pNoNameData ? pNoNameData->GetName() : u""_ustr,
                         std::make_unique<ScDBCollection>( *pColl ) ) );
             }
 
