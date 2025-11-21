@@ -25,9 +25,6 @@
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IntroWindow : public WorkWindow
 {
-private:
-    SAL_DLLPRIVATE void ImplInitIntroWindowData();
-
 public:
     IntroWindow();
     virtual ~IntroWindow() override;
