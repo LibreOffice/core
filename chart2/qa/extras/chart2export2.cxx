@@ -152,9 +152,32 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenODS)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
 {
+    xmlDocUniquePtr pXmlDoc;
+
+    // ====
+    loadFromFile(u"xlsx/boxWhisker.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 3, 0,
+                "layoutId", u"boxWhisker");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"BoxWhisker");
+    // ====
+    loadFromFile(u"xlsx/clusteredColumn.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"clusteredColumn");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Clustered Column");
+    // ====
     loadFromFile(u"xlsx/funnel1.xlsx");
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
@@ -166,6 +189,66 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
         "val", u"c55a11");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Funnel chart!");
+
+    // ====
+    loadFromFile(u"xlsx/paretoLine.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+#if 0
+    // This is what it really should be, based on MSO output
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+            2, 0, "layoutId", u"clusteredColumn");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+            2, 1, "layoutId", u"paretoLine");
+#else
+    // This is what LO currently produces
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 0,
+                "layoutId", u"paretoLine");
+#endif
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"ParetoLine");
+    // ====
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"regionMap");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"RegionMap");
+    // ====
+    loadFromFile(u"xlsx/sunburst.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"sunburst");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Sunburst");
+    // ====
+    loadFromFile(u"xlsx/treemap.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"treemap");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Treemap");
+    // ====
+    loadFromFile(u"xlsx/waterfall.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"waterfall");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Waterfall");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)

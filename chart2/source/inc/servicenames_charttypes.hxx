@@ -40,7 +40,21 @@ inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK
     = u"com.sun.star.chart2.CandleStickChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE
     = u"com.sun.star.chart2.BubbleChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER
+    = u"com.sun.star.chart2.BoxWhiskerChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_CLUSTEREDCOLUMN
+    = u"com.sun.star.chart2.ClusteredColumnChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL
     = u"com.sun.star.chart2.FunnelChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE
+    = u"com.sun.star.chart2.ParetoLineChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP
+    = u"com.sun.star.chart2.RegionMapChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST
+    = u"com.sun.star.chart2.SunburstChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP
+    = u"com.sun.star.chart2.TreemapChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_WATERFALL
+    = u"com.sun.star.chart2.WaterfallChartType"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

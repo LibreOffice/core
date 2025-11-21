@@ -207,7 +207,11 @@ private:
     void exportBarChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportBubbleChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportDoughnutChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    void exportFunnelChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    // Output a chartex chart, other than RegionMap
+    void exportChartex( const css::uno::Reference< css::chart2::XChartType >& xChartType,
+            const char *sTypeName );
+    // Output a RegionMap chartex chart
+    void exportRegionMapChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportLineChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportOfPieChart( const css::uno::Reference< css::chart2::XChartType >&
             xChartType, const char* s_subtype, double nSplitPos );
@@ -280,9 +284,19 @@ private:
     void createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes);
     void exportView3D();
     bool isDeep3dChart();
+
+    // Namespace abbreviations used in chartex charts
+    enum class NamespaceAbbrev
+    {
+        NONE,   // not chartex
+        CX1,    // cx1 = "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+        CX2,    // cx2 = "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex"
+        CX4     // cx4 = "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex"
+    };
+
     // Determine if (at least one) chart exported is from the 2014 chartex
     // schema. If not, all are from the 2006 chart schema.
-    bool isChartexNotChartNS() const;
+    bool isChartexNotChartNS(NamespaceAbbrev *peNS) const;
 
     void exportMissingValueTreatment(const css::uno::Reference<css::beans::XPropertySet>& xPropSet);
 
