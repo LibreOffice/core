@@ -16,6 +16,9 @@ interface XUITest
     boolean executeCommandWithParameters([in] string command,
         [in] com::sun::star::beans::PropertyValues propValues);
 
+    boolean executeCommandForProvider([in] string command,
+        [in] ::com::sun::star::frame::XDispatchProvider xProvider);
+
     boolean executeDialog([in] string command);
 
     XUIObject getTopFocusWindow();

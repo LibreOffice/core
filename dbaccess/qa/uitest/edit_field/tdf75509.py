@@ -11,21 +11,9 @@ from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-from com.sun.star.util import URL
-
 #Bug 75509 - Incorrect display of digits in default Numeric formatting
 #            of a field when language isn't English
 class tdf75509(UITestCase):
-    def execute_for_frame(self, xFrame, command):
-        url = URL()
-        url.Complete = command
-        xUrlTransformer = self.xContext.ServiceManager.createInstanceWithContext(
-            "com.sun.star.util.URLTransformer", self.xContext)
-        _, url = xUrlTransformer.parseStrict(url)
-
-        xDispatch = xFrame.queryDispatch(url, "", 0)
-        xDispatch.dispatch(url, [])
-
     def test_tdf75509(self):
         # The sample file is an HSQLDB database with a single table. Aside from the primary key, the
         # table has two numeric type fields each with 2 decimal places. One of them is called
@@ -74,7 +62,9 @@ class tdf75509(UITestCase):
             self.assertEqual(get_state_as_dict(xFormatText)["Text"], "2.72")
 
             # Save the table (ie, just the table, not the actual database file to disk)
-            self.execute_for_frame(self.ui_test.get_desktop().getCurrentFrame(), ".uno:Save")
+            self.xUITest.executeCommandForProvider(
+                ".uno:Save",
+                self.ui_test.get_desktop().getCurrentFrame())
 
             self.xUITest.executeCommand(".uno:DBTableOpen")
 
@@ -99,8 +89,9 @@ class tdf75509(UITestCase):
             # Modify the field so that the we can save the record
             xEdit.executeAction("SET", mkPropertyValues({"TEXT": "2.71"}))
 
-            self.execute_for_frame(self.ui_test.get_desktop().getCurrentFrame(),
-                                   ".uno:RecSave")
+            self.xUITest.executeCommandForProvider(
+                ".uno:RecSave",
+                self.ui_test.get_desktop().getCurrentFrame())
 
             # Check that the default values actually entered the database
             xDbController = self.ui_test.get_desktop().getActiveFrame().getController()

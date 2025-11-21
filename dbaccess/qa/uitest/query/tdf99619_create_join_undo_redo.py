@@ -10,23 +10,11 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict, select_by_text
 from uitest.test import DEFAULT_SLEEP
 
-from com.sun.star.util import URL
-
 import sys
 import time
 
 #Bug 99619 - query design segfault on redoing an undone table join creation
 class tdf99619(UITestCase):
-    def execute_for_provider(self, xProvider, command):
-        url = URL()
-        url.Complete = command
-        xUrlTransformer = self.xContext.ServiceManager.createInstanceWithContext(
-            "com.sun.star.util.URLTransformer", self.xContext)
-        _, url = xUrlTransformer.parseStrict(url)
-
-        xDispatch = xProvider.queryDispatch(url, "", 0)
-        xDispatch.dispatch(url, [])
-
     def test_tdf99619(self):
         # The sample file is an HSQLDB database with the two tables “person” and “object”. They both
         # have a text field and a primary key. The object table additionally has an person_id field
@@ -58,8 +46,8 @@ class tdf99619(UITestCase):
 
             # Add a relation via the dialog
             with self.ui_test.execute_blocking_action(
-                    self.execute_for_provider,
-                    args=(xQueryController, ".uno:DBAddRelation")) as xDialog:
+                    self.xUITest.executeCommandForProvider,
+                    args=(".uno:DBAddRelation", xQueryController)) as xDialog:
 
                 # Choose the two tables
                 select_by_text(xDialog.getChild("table1"), "object")
@@ -73,16 +61,17 @@ class tdf99619(UITestCase):
                 xDialog.getChild("natural").executeAction("CLICK", tuple())
 
             # Undo the join
-            self.execute_for_provider(xQueryFrame, ".uno:Undo")
+            self.xUITest.executeCommandForProvider(".uno:Undo", xQueryFrame)
             # Redo the join. This is where it crashes without any fixes to the bug
-            self.execute_for_provider(xQueryFrame, ".uno:Redo")
+            self.xUITest.executeCommandForProvider(".uno:Redo", xQueryFrame)
 
             # Save the query. This only saves the query in memory and doesn’t change the database
             # file on disk
-            self.execute_for_provider(xQueryFrame, ".uno:Save")
+            self.xUITest.executeCommandForProvider(".uno:Save", xQueryFrame)
 
             # Switch to SQL mode
-            self.execute_for_provider(xQueryController, ".uno:DBChangeDesignMode")
+            self.xUITest.executeCommandForProvider(".uno:DBChangeDesignMode",
+                                                   xQueryController)
 
             # Get the SQL source for the query
             xSql = self.xUITest.getTopFocusWindow().getChild("sql")
@@ -93,6 +82,6 @@ class tdf99619(UITestCase):
                 print(f"Join missing from query: {query}", file=sys.stderr)
             self.assertTrue("NATURAL INNER JOIN" in query)
 
-            self.execute_for_provider(xQueryFrame, ".uno:CloseWin")
+            self.xUITest.executeCommandForProvider(".uno:CloseWin", xQueryFrame)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

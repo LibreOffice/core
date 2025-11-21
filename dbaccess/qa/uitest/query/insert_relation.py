@@ -9,23 +9,12 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, select_by_text
 from uitest.test import DEFAULT_SLEEP
-from com.sun.star.util import URL
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.uno.eventlistener import EventListener
 
 import time
 
 class InsertRelation(UITestCase):
-    def execute_for_provider(self, xProvider, command):
-        url = URL()
-        url.Complete = command
-        xUrlTransformer = self.xContext.ServiceManager.createInstanceWithContext(
-            "com.sun.star.util.URLTransformer", self.xContext)
-        _, url = xUrlTransformer.parseStrict(url)
-
-        xDispatch = xProvider.queryDispatch(url, "", 0)
-        xDispatch.dispatch(url, [])
-
     # Previously the Insert Relation dialog wouldn’t let you select a table in one box if the other
     # box already has it selected. This test checks the new behaviour where you can select any of
     # the three tables and the other table changes itself so that it’s not the same.
@@ -49,8 +38,8 @@ class InsertRelation(UITestCase):
 
                 # Close the window. This will open a dialog asking if we want to save
                 with self.ui_test.execute_blocking_action(
-                        self.execute_for_provider,
-                        args=(xTableFrame, ".uno:CloseWin"),
+                        self.xUITest.executeCommandForProvider,
+                        args=(".uno:CloseWin", xTableFrame),
                         close_button=None) as xSaveDialog:
                     # Choose yes. This will open another dialog asking us to name the table
                     with self.ui_test.execute_blocking_action(
@@ -83,8 +72,8 @@ class InsertRelation(UITestCase):
 
             try:
                 with self.ui_test.execute_blocking_action(
-                        self.execute_for_provider,
-                        args=(xQueryController, ".uno:DBAddRelation"),
+                        self.xUITest.executeCommandForProvider,
+                        args=(".uno:DBAddRelation", xQueryController),
                         close_button="cancel") as xDialog:
                     xTable1 = xDialog.getChild("table1")
                     xTable2 = xDialog.getChild("table2")
@@ -106,8 +95,8 @@ class InsertRelation(UITestCase):
             finally:
                 # Close the query window and answer no when it asks if we want to save
                 with self.ui_test.execute_blocking_action(
-                        self.execute_for_provider,
-                        args=(xQueryFrame, ".uno:CloseWin"),
+                        self.xUITest.executeCommandForProvider,
+                        args=(".uno:CloseWin", xQueryFrame),
                         close_button="no"):
                     pass
 
