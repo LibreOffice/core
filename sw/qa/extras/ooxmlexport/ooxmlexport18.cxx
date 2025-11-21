@@ -40,7 +40,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, /*bSkipValidation*/ true) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
@@ -123,6 +123,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // an exception was prematurely ending finishParagraph, losing numbering and CRs
     // so before the patch, this was 6.
     CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
@@ -166,6 +169,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStriket
 CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 {
     createSwDoc("tdf154478.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
@@ -192,6 +199,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     // This was only one page b/c the textbox was missing.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -301,6 +311,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 
     createSwDoc("tdf154703_framePr2.rtf");
     verify();
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 
@@ -762,6 +776,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
 CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 {
     createSwDoc("embedded_chart.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
@@ -844,6 +862,10 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 {
     // This must not fail assertions
     createSwDoc("UnknownStyleInRedline.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     saveAndReload(TestFilter::DOCX);
     // Check that the original unknown style name "UnknownStyle" is roundtripped
     // (maybe this is wrong, because Word does not do this).
