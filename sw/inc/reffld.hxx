@@ -108,6 +108,11 @@ private:
                                         const SwTextNode* pReference, std::u16string_view styleName);
 };
 
+/// A cross-reference field: refers to a property (page number, relative location, etc) of a
+/// bookmark or reference mark. When referring to headings, the bookmark is created implicitly by
+/// the UI.
+///
+/// Insert -> Field -> Cross-references on the UI.
 class SAL_DLLPUBLIC_RTTI SwGetRefField final : public SwField
 {
 private:
