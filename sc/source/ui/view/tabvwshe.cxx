@@ -173,7 +173,7 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     bool bSelectFirst = false;
     bool bIsEditMode = pScMod->IsEditMode();
     int nSelInd = 1;
-    OUString sSeltext(GetSelectionText());
+    bool bHasText = !GetSelectionText().isEmpty();
 
     if ( !bIsEditMode )
     {
@@ -195,9 +195,10 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     // Check if user selected a whole cell by single click, and cell has content.
     // tdf#80043 - if true, replace the entire content of the selected cell instead of
     // inserting a duplicate, or appending the url.
-    if (!bIsEditMode && !bSelectFirst && pTableView && !sSeltext.isEmpty())
+    if (!bIsEditMode && !bSelectFirst && pTableView && bHasText)
     {
-        nSelInd = sSeltext.getLength();
+        // Using GetSelectionText() length is not safe here in case of cell content has trailing spaces
+        nSelInd = EE_TEXTPOS_MAX;
         bSelectFirst = true;
     }
 
