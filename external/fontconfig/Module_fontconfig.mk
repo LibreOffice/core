@@ -17,6 +17,7 @@ ifeq ($(COM),MSC)
 
 $(eval $(call gb_Module_add_targets,fontconfig,\
 	StaticLibrary_fontconfig \
+	ExternalPackage_fontconfig_data \
 ))
 
 else

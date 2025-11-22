@@ -11,13 +11,19 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fontconfig_data,fontconfig))
 
 $(eval $(call gb_ExternalPackage_use_external_project,fontconfig_data,fontconfig))
 
-$(eval $(call gb_ExternalPackage_add_files,fontconfig_data,$(LIBO_SHARE_FOLDER)/fontconfig,\
+ifeq ($(COM),MSC)
+FONTCONFIG_DATA_FOLDER=$(LIBO_BIN_FOLDER)/fonts
+else
+FONTCONFIG_DATA_FOLDER=$(LIBO_SHARE_FOLDER)/fontconfig
+endif
+
+$(eval $(call gb_ExternalPackage_add_files,fontconfig_data,$(FONTCONFIG_DATA_FOLDER),\
     fonts.conf \
 ))
 
 # The list below is created with
 # find workdir/UnpackedTarball/fontconfig/conf.d/ -name "*.conf" | LC_COLLATE=C sort | sed -e 's/^/    /' -e 's/$/ \\/' -e 's/workdir\/UnpackedTarball\/fontconfig\///'
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig_data,$(LIBO_SHARE_FOLDER)/fontconfig/conf.d,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig_data,$(FONTCONFIG_DATA_FOLDER)/conf.d,\
     conf.d/05-reset-dirs-sample.conf \
     conf.d/09-autohint-if-no-hinting.conf \
     conf.d/10-autohint.conf \
