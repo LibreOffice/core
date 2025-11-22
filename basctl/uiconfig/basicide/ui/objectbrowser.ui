@@ -4,19 +4,39 @@
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkTreeStore" id="LeftTreeStore">
     <columns>
+      <!-- column-name gdkpixbuf -->
       <column type="GdkPixbuf"/>
+      <!-- column-name gchararray -->
       <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray3 -->
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkImage" id="NextImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_nextrecord.png</property>
+  </object>
+  <object class="GtkImage" id="PreviousImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_prevrecord.png</property>
+  </object>
   <object class="GtkTreeStore" id="RightMembersStore">
     <columns>
+      <!-- column-name gdkpixbuf -->
       <column type="GdkPixbuf"/>
+      <!-- column-name gchararray -->
       <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray3 -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -125,12 +145,13 @@
         </child>
         <child>
           <object class="GtkButton" id="BackButton">
-            <property name="label" context="objectbrowser|BackButton">◀</property>
             <property name="name">BackButton</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes" context="objectbrowser|BackButtonTip">Back in Navigation History</property>
+            <property name="image">PreviousImage</property>
+            <property name="always-show-image">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="BackButton-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="objectbrowser|extended_tip|BackButton">Go to the previous entry in navigation history.</property>
@@ -145,12 +166,12 @@
         </child>
         <child>
           <object class="GtkButton" id="ForwardButton">
-            <property name="label" context="objectbrowser|ForwardButton">▶</property>
             <property name="name">ForwardButton</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes" context="objectbrowser|ForwardButtonTip">Forward in Navigation History</property>
+            <property name="image">NextImage</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="ForwardButton-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="objectbrowser|extended_tip|ForwardButton">Go to the next entry in navigation history.</property>
@@ -231,8 +252,8 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="LeftTreeColumn">
-                            <property name="title" translatable="yes" context="ObjectBrowserPanel">Objects</property>
                             <property name="spacing">6</property>
+                            <property name="title" translatable="yes" context="ObjectBrowserPanel">Objects</property>
                             <child>
                               <object class="GtkCellRendererPixbuf"/>
                               <attributes>
@@ -309,8 +330,8 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="RightTreeColumn">
-                            <property name="title" translatable="yes" context="ObjectBrowserMembers">Members</property>
                             <property name="spacing">6</property>
+                            <property name="title" translatable="yes" context="ObjectBrowserMembers">Members</property>
                             <child>
                               <object class="GtkCellRendererPixbuf"/>
                               <attributes>
