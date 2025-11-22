@@ -33,7 +33,7 @@ public:
         mod->SetInputOptions(aInputOptions);
         return bRet;
     }
-    virtual ~SortTypeSetter() COVERITY_NOEXCEPT_FALSE
+    virtual ~SortTypeSetter()
     {
         changeTo(mbSortRefUpdate);
     }

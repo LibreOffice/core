@@ -31,7 +31,7 @@ public:
     typedef std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>> ScColumnVector;
 
     ScColContainer( ScSheetLimits const &, const size_t nSize );
-    ~ScColContainer() COVERITY_NOEXCEPT_FALSE;
+    ~ScColContainer();
 
     const ScColumn& operator[] ( const size_t nIndex ) const
     {
