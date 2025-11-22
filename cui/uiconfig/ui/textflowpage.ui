@@ -767,9 +767,6 @@
                 <property name="use-underline">True</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
-                <accessibility>
-                  <relation type="label-for" target="spinOrphan"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="checkOrphan-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkOrphan">Specifies the minimum number of lines in a paragraph before a page break. Select this check box, and then enter a number in the Lines box.</property>
@@ -792,9 +789,6 @@
                 <property name="use-underline">True</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
-                <accessibility>
-                  <relation type="label-for" target="spinWidow"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="checkWidow-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkWidow">Specifies the minimum number of lines in a paragraph in the first page after the break. Select this check box, and then enter a number in the Lines box.</property>
@@ -813,11 +807,9 @@
                 <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment5</property>
-                <accessibility>
-                  <relation type="labelled-by" target="checkOrphan"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinOrphan-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="textflowpage|spinOrphan-atkobject">No split at beginning of paragraph, lines</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinOrphan">Specifies the minimum number of lines in a paragraph before a page break. Select this check box, and then enter a number in the Lines box.</property>
                   </object>
                 </child>
@@ -835,11 +827,9 @@
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment6</property>
                 <property name="numeric">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="checkWidow"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinWidow-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="textflowpage|spinWidow-atkobject">No split at end of paragraph, lines</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinWidow">Specifies the minimum number of lines in a paragraph in the first page after the break. Select this check box, and then enter a number in the Lines box.</property>
                   </object>
                 </child>
