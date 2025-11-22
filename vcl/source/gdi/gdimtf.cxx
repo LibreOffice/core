@@ -91,18 +91,6 @@ struct ImplBmpMonoParam
 
 struct ImplColReplaceParam
 {
-    std::unique_ptr<sal_uInt8[]>     pMinR;
-    std::unique_ptr<sal_uInt8[]>     pMaxR;
-    std::unique_ptr<sal_uInt8[]>     pMinG;
-    std::unique_ptr<sal_uInt8[]>     pMaxG;
-    std::unique_ptr<sal_uInt8[]>     pMinB;
-    std::unique_ptr<sal_uInt8[]>     pMaxB;
-    const Color *                  pDstCols;
-    sal_uInt32                     nCount;
-};
-
-struct ImplBmpReplaceParam
-{
     const Color*        pSrcCols;
     const Color*        pDstCols;
     sal_uInt32          nCount;
@@ -1780,27 +1768,16 @@ Bitmap GDIMetaFile::ImplBmpMonoFnc( const Bitmap& rBmp, const void* pBmpParam )
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
 {
-    const sal_uInt8 nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
-
-    for( sal_uInt32 i = 0; i < static_cast<const ImplColReplaceParam*>(pColParam)->nCount; i++ )
-    {
-        if( ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinR[ i ] <= nR ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxR[ i ] >= nR ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinG[ i ] <= nG ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxG[ i ] >= nG ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinB[ i ] <= nB ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxB[ i ] >= nB ) )
-        {
-            return static_cast<const ImplColReplaceParam*>(pColParam)->pDstCols[ i ];
-        }
-    }
-
+    auto& rColReplaceParam = *static_cast<const ImplColReplaceParam*>(pColParam);
+    auto begin = rColReplaceParam.pSrcCols, end = begin + rColReplaceParam.nCount;
+    if (auto it = std::find(begin, end, rColor.GetRGBColor()); it != end)
+        return rColReplaceParam.pDstCols[std::distance(begin, it)];
     return rColor;
 }
 
 Bitmap GDIMetaFile::ImplBmpReplaceFnc( const Bitmap& rBmp, const void* pBmpParam )
 {
-    const ImplBmpReplaceParam*  p = static_cast<const ImplBmpReplaceParam*>(pBmpParam);
+    const ImplColReplaceParam* p = static_cast<const ImplColReplaceParam*>(pBmpParam);
     Bitmap                      aRet( rBmp );
 
     aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, nullptr );
@@ -2156,41 +2133,14 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
 
 void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uInt32 nColorCount )
 {
-    ImplColReplaceParam aColParam;
-    ImplBmpReplaceParam aBmpParam;
+    assert(std::none_of(pSearchColors, pSearchColors + nColorCount,
+                        [](Color c) { return c.IsTransparent(); }));
 
-    aColParam.pMinR.reset(new sal_uInt8[ nColorCount ]);
-    aColParam.pMaxR.reset(new sal_uInt8[ nColorCount ]);
-    aColParam.pMinG.reset(new sal_uInt8[ nColorCount ]);
-    aColParam.pMaxG.reset(new sal_uInt8[ nColorCount ]);
-    aColParam.pMinB.reset(new sal_uInt8[ nColorCount ]);
-    aColParam.pMaxB.reset(new sal_uInt8[ nColorCount ]);
+    ImplColReplaceParam aColParam{ .pSrcCols = pSearchColors,
+                                   .pDstCols = pReplaceColors,
+                                   .nCount = nColorCount };
 
-    for( sal_uInt32 i = 0; i < nColorCount; i++ )
-    {
-        sal_uInt8           nVal;
-
-        nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = std::max( nVal, sal_uInt8(0) );
-        aColParam.pMaxR[ i ] = std::min( nVal, sal_uInt8(255) );
-
-        nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = std::max( nVal, sal_uInt8(0) );
-        aColParam.pMaxG[ i ] = std::min( nVal, sal_uInt8(255) );
-
-        nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = std::max( nVal, sal_uInt8(0) );
-        aColParam.pMaxB[ i ] = std::min( nVal, sal_uInt8(255) );
-    }
-
-    aColParam.pDstCols = pReplaceColors;
-    aColParam.nCount = nColorCount;
-
-    aBmpParam.pSrcCols = pSearchColors;
-    aBmpParam.pDstCols = pReplaceColors;
-    aBmpParam.nCount = nColorCount;
-
-    ImplExchangeColors( ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aBmpParam );
+    ImplExchangeColors(ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aColParam);
 };
 
 GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
