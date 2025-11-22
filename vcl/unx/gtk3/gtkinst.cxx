@@ -20356,9 +20356,9 @@ public:
         return nActive != -1 ? get_id(nActive) : OUString();
     }
 
-    virtual void set_active_id(const OUString& rStr) override
+    virtual void do_set_active_id(const OUString& rStr) override
     {
-        set_active(find_id(rStr));
+        do_set_active(find_id(rStr));
         m_bChangedByMenu = false;
     }
 
@@ -20399,7 +20399,7 @@ public:
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
-    virtual void set_active(int pos) override
+    virtual void do_set_active(int pos) override
     {
         set_active_including_mru(include_mru(pos), false);
     }
@@ -22257,9 +22257,9 @@ public:
         return nActive != -1 ? get_id(nActive) : OUString();
     }
 
-    virtual void set_active_id(const OUString& rStr) override
+    virtual void do_set_active_id(const OUString& rStr) override
     {
-        set_active(find_id(rStr));
+        do_set_active(find_id(rStr));
         m_bChangedByMenu = false;
     }
 
@@ -22300,7 +22300,7 @@ public:
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
-    virtual void set_active(int pos) override
+    virtual void do_set_active(int pos) override
     {
         set_active_including_mru(include_mru(pos), false);
     }

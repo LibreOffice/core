@@ -1260,9 +1260,9 @@ void JSListBox::remove(int pos)
     sendUpdate();
 }
 
-void JSListBox::set_active(int pos)
+void JSListBox::do_set_active(int pos)
 {
-    SalInstanceComboBoxWithoutEdit::set_active(pos);
+    SalInstanceComboBoxWithoutEdit::do_set_active(pos);
     sendUpdate();
 }
 
@@ -1301,12 +1301,12 @@ void JSComboBox::set_entry_text(const OUString& rText)
     sendAction(std::move(pMap));
 }
 
-void JSComboBox::set_active(int pos)
+void JSComboBox::do_set_active(int pos)
 {
     if (pos == get_active())
         return;
 
-    SalInstanceComboBoxWithEdit::set_active(pos);
+    SalInstanceComboBoxWithEdit::do_set_active(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     (*pMap)[ACTION_TYPE ""_ostr] = "select";
@@ -1314,10 +1314,10 @@ void JSComboBox::set_active(int pos)
     sendAction(std::move(pMap));
 }
 
-void JSComboBox::set_active_id(const OUString& rStr)
+void JSComboBox::do_set_active_id(const OUString& rStr)
 {
     sal_uInt16 nPos = find_id(rStr);
-    set_active(nPos);
+    do_set_active(nPos);
 }
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }

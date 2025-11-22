@@ -818,7 +818,12 @@ protected:
 
     friend class ::LOKTrigger;
 
-    void signal_changed() { m_aChangeHdl.Call(*this); }
+    void signal_changed()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aChangeHdl.Call(*this);
+    }
 
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
@@ -831,6 +836,9 @@ protected:
 
     Link<vcl::RenderContext&, Size> m_aGetSizeHdl;
     Size signal_custom_get_size(vcl::RenderContext& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
+
+    virtual void do_set_active(int pos) = 0;
+    virtual void do_set_active_id(const OUString& rStr) = 0;
 
 public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
@@ -874,7 +882,12 @@ public:
 
     //by index, returns -1 if nothing is selected
     virtual int get_active() const = 0;
-    virtual void set_active(int pos) = 0;
+    void set_active(int pos)
+    {
+        disable_notify_events();
+        do_set_active(pos);
+        enable_notify_events();
+    }
     virtual void remove(int pos) = 0;
 
     //by text
@@ -886,7 +899,12 @@ public:
 
     //by id
     virtual OUString get_active_id() const = 0;
-    virtual void set_active_id(const OUString& rStr) = 0;
+    void set_active_id(const OUString& rStr)
+    {
+        disable_notify_events();
+        do_set_active_id(rStr);
+        enable_notify_events();
+    }
     virtual OUString get_id(int pos) const = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
     virtual int find_id(const OUString& rId) const = 0;
@@ -2433,7 +2451,7 @@ public:
 
     //by index
     virtual int get_active() const override { return m_xTreeView->get_selected_index(); }
-    virtual void set_active(int pos) override
+    virtual void do_set_active(int pos) override
     {
         m_xTreeView->set_cursor(pos);
         m_xTreeView->select(pos);
@@ -2451,7 +2469,7 @@ public:
 
     //by id
     virtual OUString get_active_id() const override { return m_xTreeView->get_selected_id(); }
-    virtual void set_active_id(const OUString& rStr) override
+    virtual void do_set_active_id(const OUString& rStr) override
     {
         m_xTreeView->select_id(rStr);
         m_xEntry->set_text(m_xTreeView->get_selected_text());

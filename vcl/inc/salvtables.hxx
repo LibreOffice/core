@@ -760,7 +760,7 @@ public:
         return *pRet;
     }
 
-    virtual void set_active_id(const OUString& rStr) override
+    virtual void do_set_active_id(const OUString& rStr) override
     {
         for (int i = 0; i < get_count(); ++i)
         {
@@ -772,7 +772,7 @@ public:
         }
     }
 
-    virtual void set_active(int pos) override
+    virtual void do_set_active(int pos) override
     {
         assert(m_xComboBox->IsUpdateMode()
                && "don't set_active when frozen, set_active after thaw. Note selection doesn't "
