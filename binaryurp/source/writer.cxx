@@ -425,9 +425,9 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     }
     css::uno::Sequence<sal_Int8> s(header.size() + k);
     assert(!header.empty());
-    std::memcpy(s.getArray(), header.data(), header.size());
+    std::copy_n(header.data(), header.size(), s.getArray());
     for (;;) {
-        std::memcpy(s.getArray() + s.getLength() - k, p, k);
+        std::copy(p, p + k, s.getArray() + header.size());
         try {
             bridge_->getConnection()->write(s);
         } catch (const css::io::IOException & e) {

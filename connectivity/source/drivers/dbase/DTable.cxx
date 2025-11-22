@@ -1933,7 +1933,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     OString aStr = RepeatedChar('0', nLen - aBlock.length) + aBlock;
 
                     // Copy characters:
-                    memcpy(pData, aStr.getStr(), nLen);
+                    std::copy_n(aStr.getStr(), nLen, pData);
                 }   break;
                 default:
                 {
