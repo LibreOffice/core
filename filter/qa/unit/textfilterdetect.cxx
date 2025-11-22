@@ -50,7 +50,7 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428_ignore_xml_declaration)
 {
     uno::Reference<document::XExtendedFilterDetection> xDetect(
         getMultiServiceFactory()->createInstance(
