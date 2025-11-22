@@ -9,19 +9,20 @@ well.
 
 --- src/fcint.h
 +++ src/fcint.h
-@@ -69,9 +69,7 @@
+@@ -69,10 +69,6 @@
  
  #ifdef _WIN32
  #  include "fcwindows.h"
 -typedef UINT (WINAPI *pfnGetSystemWindowsDirectory) (LPSTR, UINT);
- typedef HRESULT (WINAPI *pfnSHGetFolderPathA) (HWND, int, HANDLE, DWORD, LPSTR);
+-typedef HRESULT (WINAPI *pfnSHGetFolderPathA) (HWND, int, HANDLE, DWORD, LPSTR);
 -extern pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory;
- extern pfnSHGetFolderPathA          pSHGetFolderPathA;
+-extern pfnSHGetFolderPathA          pSHGetFolderPathA;
  #  define FC_SEARCH_PATH_SEPARATOR ';'
  #  define FC_DIR_SEPARATOR         '\\'
+ #  define FC_DIR_SEPARATOR_S       "\\"
 --- src/fcxml.c
 +++ src/fcxml.c
-@@ -58,8 +58,9 @@
+@@ -58,11 +58,9 @@
  
  #ifdef _WIN32
  #  include <mbstring.h>
@@ -29,10 +30,20 @@ well.
 +#  include <Shlobj.h>
  extern FcChar8               fontconfig_instprefix[];
 -pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory = NULL;
- pfnSHGetFolderPathA          pSHGetFolderPathA = NULL;
- static void
- _ensureWin32GettersReady ();
-@@ -1386,17 +1387,23 @@
+-pfnSHGetFolderPathA          pSHGetFolderPathA = NULL;
+-static void
+-_ensureWin32GettersReady ();
+ #endif
+ 
+ static FcChar8 *__fc_userdir = NULL;
+@@ -1330,23 +1330,29 @@
+ 	strcat ((char *)path, "\\..\\share\\fonts");
+     } else if (strcmp ((const char *)path, "WINDOWSUSERFONTDIR") == 0) {
+ 	path = buffer;
+-	if (!(pSHGetFolderPathA && SUCCEEDED (pSHGetFolderPathA (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, (char *)buffer)))) {
++	if (!SUCCEEDED (SHGetFolderPathA (NULL, CSIDL_LOCAL_APPDATA, NULL, 0, (char *)buffer))) {
+ 	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPathA failed");
+ 	    return NULL;
  	}
  	strcat ((char *)path, "\\Microsoft\\Windows\\Fonts");
      } else if (strcmp ((const char *)path, "WINDOWSFONTDIR") == 0) {
@@ -65,15 +76,46 @@ well.
      } else {
  	if (!prefix) {
  	    if (!FcStrIsAbsoluteFilename (path) && path[0] != '~')
-@@ -3488,11 +3488,6 @@
- static void
- _ensureWin32GettersReady ()
- {
+@@ -2288,7 +2288,7 @@
+ 	char   szFPath[MAX_PATH + 1];
+ 	size_t len;
+ 
+-	if (!(pSHGetFolderPathA && SUCCEEDED (pSHGetFolderPathA (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, szFPath)))) {
++	if (!SUCCEEDED (SHGetFolderPathA (NULL, CSIDL_LOCAL_APPDATA, NULL, 0, szFPath))) {
+ 	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPathA failed");
+ 	    goto bail;
+ 	}
+@@ -3363,9 +3363,6 @@
+     FcStrBuf reason;
+ 
+     FcStrBufInit (&reason, NULL, 0);
+-#ifdef _WIN32
+-    _ensureWin32GettersReady();
+-#endif
+ 
+     filename = FcConfigGetFilename (config, name);
+     if (!filename) {
+@@ -3488,23 +3488,6 @@
+     return FcConfigParseAndLoadFromMemoryInternal (config, (const FcChar8 *)"memory", buffer, complain, FcTrue);
+ }
+ 
+-#ifdef _WIN32
+-static void
+-_ensureWin32GettersReady ()
+-{
 -    if (!pGetSystemWindowsDirectory) {
 -	HMODULE hk32 = GetModuleHandleA ("kernel32.dll");
 -	if (!(pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetProcAddress (hk32, "GetSystemWindowsDirectoryA")))
 -	    pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetWindowsDirectory;
 -    }
-     if (!pSHGetFolderPathA) {
- 	HMODULE hSh = LoadLibraryA ("shfolder.dll");
- 	/* the check is done later, because there is no provided fallback */
+-    if (!pSHGetFolderPathA) {
+-	HMODULE hSh = LoadLibraryA ("shfolder.dll");
+-	/* the check is done later, because there is no provided fallback */
+-	if (hSh)
+-	    pSHGetFolderPathA = (pfnSHGetFolderPathA)GetProcAddress (hSh, "SHGetFolderPathA");
+-    }
+-}
+-#endif  // _WIN32
+
+ #define __fcxml__
+ #include "fcaliastail.h"
