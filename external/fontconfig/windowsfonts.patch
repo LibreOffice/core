@@ -7,17 +7,31 @@ But probaly fontconfig asumes system codepage for pathnames it uses on
 Windows all over the place anyway, so things are really messed up. Oh
 well.
 
+--- src/fcint.h
++++ src/fcint.h
+@@ -69,9 +69,7 @@
+ 
+ #ifdef _WIN32
+ #  include "fcwindows.h"
+-typedef UINT (WINAPI *pfnGetSystemWindowsDirectory) (LPSTR, UINT);
+ typedef HRESULT (WINAPI *pfnSHGetFolderPathA) (HWND, int, HANDLE, DWORD, LPSTR);
+-extern pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory;
+ extern pfnSHGetFolderPathA          pSHGetFolderPathA;
+ #  define FC_SEARCH_PATH_SEPARATOR ';'
+ #  define FC_DIR_SEPARATOR         '\\'
 --- src/fcxml.c
 +++ src/fcxml.c
-@@ -58,6 +58,8 @@
+@@ -58,8 +58,9 @@
  
  #ifdef _WIN32
  #  include <mbstring.h>
 +#  include <wchar.h>
 +#  include <Shlobj.h>
  extern FcChar8               fontconfig_instprefix[];
- pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory = NULL;
+-pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory = NULL;
  pfnSHGetFolderPathA          pSHGetFolderPathA = NULL;
+ static void
+ _ensureWin32GettersReady ();
 @@ -1386,17 +1387,23 @@
  	}
  	strcat ((char *)path, "\\Microsoft\\Windows\\Fonts");
@@ -51,3 +65,15 @@ well.
      } else {
  	if (!prefix) {
  	    if (!FcStrIsAbsoluteFilename (path) && path[0] != '~')
+@@ -3488,11 +3488,6 @@
+ static void
+ _ensureWin32GettersReady ()
+ {
+-    if (!pGetSystemWindowsDirectory) {
+-	HMODULE hk32 = GetModuleHandleA ("kernel32.dll");
+-	if (!(pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetProcAddress (hk32, "GetSystemWindowsDirectoryA")))
+-	    pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetWindowsDirectory;
+-    }
+     if (!pSHGetFolderPathA) {
+ 	HMODULE hSh = LoadLibraryA ("shfolder.dll");
+ 	/* the check is done later, because there is no provided fallback */
