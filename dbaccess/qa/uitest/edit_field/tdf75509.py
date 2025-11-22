@@ -23,6 +23,10 @@ class tdf75509(UITestCase):
             xDbWindow = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:DBViewTables")
+            # The above command is run asynchronously via an event on the main thread so we need to
+            # wait until it is dispatched before executing the next command
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.waitUntilAllIdlesDispatched()
 
             # We just want to select the single table in the list of tables but it seems difficult
             # to get access to the treeview window for it because there are multiple treeviews in a
