@@ -85,6 +85,17 @@ well.
  	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPathA failed");
  	    goto bail;
  	}
+@@ -3169,7 +3169,9 @@
+ 	                     name);
+ 	ret = FcFalse;
+ 	goto bail0;
+-    }
++    } else
++        fprintf (stderr, "Fontconfig: Successfully opened directory %s\n", dir);
++
+     /* freed below */
+     file = (FcChar8 *)malloc (strlen ((char *)dir) + 1 + FC_MAX_FILE_LEN + 1);
+     if (!file) {
 @@ -3363,9 +3363,6 @@
      FcStrBuf reason;
  
@@ -95,6 +106,16 @@ well.
  
      filename = FcConfigGetFilename (config, name);
      if (!filename) {
+@@ -3407,7 +3407,8 @@
+ 	FcStrBufString (&reason, (FcChar8 *)"Unable to open ");
+ 	FcStrBufString (&reason, realfilename);
+ 	goto bail1;
+-    }
++    } else
++        fprintf (stderr, "Fontconfig: Successfully opened file %s\n", realfilename);
+ 
+     do {
+ 	len = read (fd, buf, BUFSIZ);
 @@ -3488,23 +3488,6 @@
      return FcConfigParseAndLoadFromMemoryInternal (config, (const FcChar8 *)"memory", buffer, complain, FcTrue);
  }
