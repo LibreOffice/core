@@ -1709,106 +1709,107 @@ bool ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 
 bool ScTextWnd::Command( const CommandEvent& rCEvt )
 {
+    if (!m_xEditView)
+        return false;
+
     bool bConsumed = false;
 
     bInputMode = true;
     CommandEventId nCommand = rCEvt.GetCommand();
-    if (m_xEditView)
+
+    ScModule* pScMod = ScModule::get();
+    ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
+
+    // don't modify the font defaults here - the right defaults are
+    // already set in StartEditEngine when the EditEngine is created
+
+    // Prevent that the EditView is lost when switching between Views
+    pScMod->SetInEditCommand( true );
+    m_xEditView->Command( rCEvt );
+    pScMod->SetInEditCommand( false );
+
+    //  CommandEventId::StartDrag does not mean by far that the content was actually changed,
+    //  so don't trigger an InputChanged.
+    //! Detect if dragged with Move or forbid Drag&Move somehow
+
+    if ( nCommand == CommandEventId::StartDrag )
     {
-        ScModule* pScMod = ScModule::get();
-        ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
-
-        // don't modify the font defaults here - the right defaults are
-        // already set in StartEditEngine when the EditEngine is created
-
-        // Prevent that the EditView is lost when switching between Views
-        pScMod->SetInEditCommand( true );
-        m_xEditView->Command( rCEvt );
-        pScMod->SetInEditCommand( false );
-
-        //  CommandEventId::StartDrag does not mean by far that the content was actually changed,
-        //  so don't trigger an InputChanged.
-        //! Detect if dragged with Move or forbid Drag&Move somehow
-
-        if ( nCommand == CommandEventId::StartDrag )
+        // Is dragged onto another View?
+        ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
+        if ( pEndViewSh != pStartViewSh && pStartViewSh != nullptr )
         {
-            // Is dragged onto another View?
-            ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
-            if ( pEndViewSh != pStartViewSh && pStartViewSh != nullptr )
+            ScViewData& rViewData = pStartViewSh->GetViewData();
+            ScInputHandler* pHdl = pScMod->GetInputHdl( pStartViewSh );
+            if ( pHdl && rViewData.HasEditView( rViewData.GetActivePart() ) )
             {
-                ScViewData& rViewData = pStartViewSh->GetViewData();
-                ScInputHandler* pHdl = pScMod->GetInputHdl( pStartViewSh );
-                if ( pHdl && rViewData.HasEditView( rViewData.GetActivePart() ) )
-                {
-                    pHdl->CancelHandler();
-                    rViewData.GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
-                }
+                pHdl->CancelHandler();
+                rViewData.GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
             }
         }
-        else if ( nCommand == CommandEventId::EndExtTextInput )
-        {
-            if (bFormulaMode)
-            {
-                ScInputHandler* pHdl = pScMod->GetInputHdl();
-                if (pHdl)
-                    pHdl->InputCommand(rCEvt);
-            }
-            pScMod->InputChanged(m_xEditView.get());
-        }
-        else if ( nCommand == CommandEventId::CursorPos )
-        {
-            //  don't call InputChanged for CommandEventId::CursorPos
-        }
-        else if ( nCommand == CommandEventId::InputLanguageChange )
-        {
-            // #i55929# Font and font size state depends on input language if nothing is selected,
-            // so the slots have to be invalidated when the input language is changed.
-
-            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-            if (pViewFrm)
-            {
-                SfxBindings& rBindings = pViewFrm->GetBindings();
-                rBindings.Invalidate( SID_ATTR_CHAR_FONT );
-                rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
-            }
-        }
-        else if ( nCommand == CommandEventId::ContextMenu )
-        {
-            bConsumed = true;
-            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-            if (pViewFrm)
-            {
-                Point aPos = rCEvt.GetMousePosPixel();
-                if (!rCEvt.IsMouseEvent())
-                {
-                    Size aSize = GetOutputSizePixel();
-                    aPos = Point(aSize.Width() / 2, aSize.Height() / 2);
-                }
-                if (IsMouseCaptured())
-                    ReleaseMouse();
-                UpdateFocus();
-                pViewFrm->GetDispatcher()->ExecutePopup(u"formulabar"_ustr, &mrGroupBar.GetVclParent(), &aPos);
-            }
-        }
-        else if ( nCommand == CommandEventId::Wheel )
-        {
-            //don't call InputChanged for CommandEventId::Wheel
-        }
-        else if ( nCommand == CommandEventId::GestureSwipe )
-        {
-            //don't call InputChanged for CommandEventId::GestureSwipe
-        }
-        else if ( nCommand == CommandEventId::GestureLongPress )
-        {
-            //don't call InputChanged for CommandEventId::GestureLongPress
-        }
-        else if ( nCommand == CommandEventId::ModKeyChange )
-        {
-            //pass alt press/release to parent impl
-        }
-        else
-            pScMod->InputChanged(m_xEditView.get());
     }
+    else if ( nCommand == CommandEventId::EndExtTextInput )
+    {
+        if (bFormulaMode)
+        {
+            ScInputHandler* pHdl = pScMod->GetInputHdl();
+            if (pHdl)
+                pHdl->InputCommand(rCEvt);
+        }
+        pScMod->InputChanged(m_xEditView.get());
+    }
+    else if ( nCommand == CommandEventId::CursorPos )
+    {
+        //  don't call InputChanged for CommandEventId::CursorPos
+    }
+    else if ( nCommand == CommandEventId::InputLanguageChange )
+    {
+        // #i55929# Font and font size state depends on input language if nothing is selected,
+        // so the slots have to be invalidated when the input language is changed.
+
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if (pViewFrm)
+        {
+            SfxBindings& rBindings = pViewFrm->GetBindings();
+            rBindings.Invalidate( SID_ATTR_CHAR_FONT );
+            rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+        }
+    }
+    else if ( nCommand == CommandEventId::ContextMenu )
+    {
+        bConsumed = true;
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if (pViewFrm)
+        {
+            Point aPos = rCEvt.GetMousePosPixel();
+            if (!rCEvt.IsMouseEvent())
+            {
+                Size aSize = GetOutputSizePixel();
+                aPos = Point(aSize.Width() / 2, aSize.Height() / 2);
+            }
+            if (IsMouseCaptured())
+                ReleaseMouse();
+            UpdateFocus();
+            pViewFrm->GetDispatcher()->ExecutePopup(u"formulabar"_ustr, &mrGroupBar.GetVclParent(), &aPos);
+        }
+    }
+    else if ( nCommand == CommandEventId::Wheel )
+    {
+        //don't call InputChanged for CommandEventId::Wheel
+    }
+    else if ( nCommand == CommandEventId::GestureSwipe )
+    {
+        //don't call InputChanged for CommandEventId::GestureSwipe
+    }
+    else if ( nCommand == CommandEventId::GestureLongPress )
+    {
+        //don't call InputChanged for CommandEventId::GestureLongPress
+    }
+    else if ( nCommand == CommandEventId::ModKeyChange )
+    {
+        //pass alt press/release to parent impl
+    }
+    else
+        pScMod->InputChanged(m_xEditView.get());
 
     if ( comphelper::LibreOfficeKit::isActive() && nCommand == CommandEventId::CursorPos )
     {
@@ -1817,9 +1818,6 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
 
         StartEditEngine();
         TextGrabFocus();
-
-        if (!m_xEditView)
-            return true;
 
         ScModule* mod = ScModule::get();
 
