@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="">
+   <para>Docbook: Borked?</para>
+   <para>Most indeedly<footnote>
+         <para>Yep, that's not a word.</para>
+      </footnote>, good sire</para>
+   <sect1>
+      <title>A Heading</title>
+      <para>This is a normal paragraph under a heading 1.</para>
+      <sect2>
+         <title>A 2nd-level Heading</title>
+         <para>This is a normal paragraph under a heading 2.</para>
+         <itemizedlist mark="disc">
+            <listitem>
+               <para>Bullet lists?</para>
+            </listitem>
+            <listitem>
+               <para>Bullet lists!</para>
+            </listitem>
+         </itemizedlist>
+      </sect2>
+      <sect2>
+         <title>Another 2nd-level Heading</title>
+         <para>This is yet another normal paragraph under a heading 3.</para>
+         <orderedlist>
+            <listitem>
+               <para>Numbered lists?</para>
+            </listitem>
+            <listitem>
+               <para>NUMBERED LISTS! WOO!</para>
+            </listitem>
+         </orderedlist>
+      </sect2>
+   </sect1>
+</article>
