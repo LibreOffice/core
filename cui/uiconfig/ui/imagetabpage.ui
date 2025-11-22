@@ -468,30 +468,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="tileoffbox">
+              <object class="GtkFrame" id="tileoffbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">3</property>
-                <child>
-                  <object class="GtkLabel" id="label15">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="imagetabpage|label15">Tiling Offset:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">tileofflb</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
                   <object class="GtkBox" id="box13">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkComboBoxText" id="tileofflb">
@@ -503,6 +490,11 @@
                           <item translatable="yes" context="imagetabpage|tileofflb">Row</item>
                           <item translatable="yes" context="imagetabpage|tileofflb">Column</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tileofflb-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="imagetabpage|tileofflb">Tiling Offset Type</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -517,6 +509,11 @@
                         <property name="hexpand">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tileoffmtr-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="imagetabpage|tileoffmtr">Tiling Offset Value</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -525,11 +522,13 @@
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label15">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="imagetabpage|label15">Tiling Offset:</property>
+                  </object>
                 </child>
               </object>
               <packing>
