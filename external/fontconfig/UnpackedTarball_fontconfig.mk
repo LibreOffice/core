@@ -35,6 +35,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,fontconfig,\
 ))
 
 
+$(eval $(call gb_UnpackedTarball_add_file,fontconfig,fonts.conf,external/fontconfig/configs/wnt_fonts.conf))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,config.h,external/fontconfig/configs/wnt_fontconfig_config.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-case/fccase.h,external/fontconfig/configs/wnt_fontconfig_fccase.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-lang/fclang.h,external/fontconfig/configs/wnt_fontconfig_fclang.h))
