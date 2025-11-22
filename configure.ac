@@ -2191,6 +2191,11 @@ AC_ARG_ENABLE(opencl,
         [Disable OpenCL support.]),
 ,enable_opencl=yes)
 
+AC_ARG_ENABLE(opengl,
+    AS_HELP_STRING([--disable-opengl],
+        [Disable OpenGL support.]),
+,enable_opengl=yes)
+
 libo_FUZZ_ARG_ENABLE(librelogo,
     AS_HELP_STRING([--disable-librelogo],
         [Do not build LibreLogo.]),
@@ -12755,9 +12760,13 @@ AC_SUBST(GSTREAMER_1_0_CFLAGS)
 AC_SUBST(GSTREAMER_1_0_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_1_0)
 
+dnl =================================================
+dnl Check whether to build with OpenGL support.
+dnl =================================================
+
 ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
-if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE"; then
+if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE" -o "$enable_opengl" != "yes"; then
    : # disable
 elif test "$_os" = "Darwin"; then
     # We use frameworks on macOS, no need for detail checks
