@@ -38,6 +38,15 @@ CPPUNIT_TEST_FIXTURE(DocbookExportTest, testtdf91095)
     CPPUNIT_ASSERT(pDoc);
 }
 
+CPPUNIT_TEST_FIXTURE(DocbookExportTest, testtdf169122_resave_docbook)
+{
+    // Without fix, resave of a docbook was not possible due to duplicate attributes.
+    createSwDoc("tdf169122_Docbook_Example.xml");
+    save(TestFilter::DOCBOOK);
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
