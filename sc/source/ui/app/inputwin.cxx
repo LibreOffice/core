@@ -1747,14 +1747,13 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         }
         else if ( nCommand == CommandEventId::EndExtTextInput )
         {
-            ScModule* mod = ScModule::get();
             if (bFormulaMode)
             {
-                ScInputHandler* pHdl = mod->GetInputHdl();
+                ScInputHandler* pHdl = pScMod->GetInputHdl();
                 if (pHdl)
                     pHdl->InputCommand(rCEvt);
             }
-            mod->InputChanged(m_xEditView.get());
+            pScMod->InputChanged(m_xEditView.get());
         }
         else if ( nCommand == CommandEventId::CursorPos )
         {
@@ -1808,7 +1807,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
             //pass alt press/release to parent impl
         }
         else
-            ScModule::get()->InputChanged(m_xEditView.get());
+            pScMod->InputChanged(m_xEditView.get());
     }
 
     if ( comphelper::LibreOfficeKit::isActive() && nCommand == CommandEventId::CursorPos )
