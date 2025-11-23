@@ -203,6 +203,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="hatchpage|angleft">A_ngle:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic-widget">anglemtr</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
