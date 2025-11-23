@@ -83,3 +83,5 @@ svx/uiconfig/ui/sidebarshadow.ui://GtkSpinButton[@id='FIELD_TRANSPARENCY'] no-la
 svx/uiconfig/ui/sidebarshadow.ui://GtkScale[@id='transparency_slider'] no-labelled-by
 svx/uiconfig/ui/sidebarline.ui://GtkMenuToolButton[@id='SelectWidth'] button-no-label
 svx/uiconfig/ui/textcharacterspacingcontrol.ui://GtkSpinButton[@id='kerning'] no-labelled-by
+svx/uiconfig/ui/paralinespacingcontrol.ui://GtkSpinButton[@id='percent_box'] missing-label-for
+svx/uiconfig/ui/paralinespacingcontrol.ui://GtkSpinButton[@id='metric_box'] missing-label-for
