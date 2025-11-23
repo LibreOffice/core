@@ -211,6 +211,8 @@ class SW_DLLPUBLIC SwTextNode final
     void DelFrames_TextNodePart();
     void HandleNonLegacyHint(const SfxHint&);
 
+    SAL_DLLPRIVATE void ImplDestroy();
+
 public:
     bool IsWordCountDirty() const;
     sw::WrongState GetWrongDirty() const;

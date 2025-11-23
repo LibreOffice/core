@@ -530,6 +530,8 @@ public:
 private:
     SwContentNode( const SwContentNode & rNode ) = delete;
     SwContentNode & operator= ( const SwContentNode & rNode ) = delete;
+
+    void ImplDestroy();
 };
 
 // SwTableNode
@@ -538,6 +540,8 @@ class SW_DLLPUBLIC SwTableNode final : public SwStartNode, public sw::Broadcasti
 {
     friend class SwNodes;
     std::unique_ptr<SwTable> m_pTable;
+
+    void ImplDestroy();
 
     virtual ~SwTableNode() override;
 

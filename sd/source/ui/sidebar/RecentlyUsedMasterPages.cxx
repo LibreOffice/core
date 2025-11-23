@@ -83,13 +83,18 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages()
 {
 }
 
-RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
+void RecentlyUsedMasterPages::ImplDestroy()
 {
     Link<MasterPageContainerChangeEvent&,void> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->RemoveChangeListener(aLink);
 
     MasterPageObserver::Instance().RemoveEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
+}
+
+RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void RecentlyUsedMasterPages::LateInit()

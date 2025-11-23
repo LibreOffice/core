@@ -2455,13 +2455,18 @@ SwTableNode::SwTableNode( const SwNode& rWhere )
     m_pTable.reset(new SwTable);
 }
 
-SwTableNode::~SwTableNode()
+void SwTableNode::ImplDestroy()
 {
     // Notify UNO wrappers
     GetTable().GetFrameFormat()->GetNotifier().Broadcast(SfxHint(SfxHintId::Dying));
     DelFrames();
     m_pTable->SetTableNode(this); // set this so that ~SwDDETable can read it!
     m_pTable.reset();
+}
+
+SwTableNode::~SwTableNode()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 SwTabFrame *SwTableNode::MakeFrame( SwFrame* pSib )

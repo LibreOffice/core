@@ -33,7 +33,7 @@ class SmTmpDevice
 
 public:
     SmTmpDevice(OutputDevice& rTheDev, bool bUseMap100th_mm);
-    ~SmTmpDevice() COVERITY_NOEXCEPT_FALSE { rOutDev.Pop(); }
+    ~SmTmpDevice() { suppress_fun_call_w_exception(rOutDev.Pop()); }
 
     void SetFont(const vcl::Font& rNewFont);
 

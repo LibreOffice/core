@@ -30,10 +30,12 @@ class SwPauseThreadStarting
 {
 public:
     SwPauseThreadStarting();
-    ~SwPauseThreadStarting() COVERITY_NOEXCEPT_FALSE;
+    ~SwPauseThreadStarting();
 
 private:
     bool mbPausedThreadStarting;
+
+    void ImplDestroy();
 };
 #endif
 

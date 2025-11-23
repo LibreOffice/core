@@ -119,6 +119,8 @@ private:
     void SavePersistentValues();
 
     void ResolveList();
+
+    void ImplDestroy();
 };
 
 } // end of namespace sd::sidebar
