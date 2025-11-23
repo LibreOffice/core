@@ -593,6 +593,20 @@
           <value>recordtrackedchanges</value>
         </prop>
       </node>
+      <node oor:name="c47" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DataTableMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>datatablemenu</value>
+        </prop>
+      </node>
       <node oor:name="WindowListMenu" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:WindowList</value>

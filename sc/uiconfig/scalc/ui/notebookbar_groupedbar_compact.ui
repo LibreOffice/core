@@ -2842,6 +2842,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuData-DataTableMenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DataTableMenu</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator411">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuData-FormatSparklineMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -4907,6 +4920,7 @@
                       <class name="context-Pivot"/>
                       <class name="context-Sparkline"/>
                       <class name="context-Trendline"/>
+                      <class name="context-Table"/>
                     </style>
                   </object>
                   <packing>

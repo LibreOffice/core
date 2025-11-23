@@ -109,7 +109,7 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                             aSubTotalParam.bRemoveOnly = true;
                             aSubTotalParam.bReplace = true;
                             aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,
-                                                   true, true);
+                                                   true, false);
                         }
                         else
                         {
@@ -117,7 +117,7 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                             aSubTotalParam.bRemoveOnly = false;
                             aSubTotalParam.bReplace = false;
                             aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,
-                                                   true, true);
+                                                   true, false);
                         }
                     }
                     else
@@ -126,8 +126,13 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                     }
                 }
             }
-            break;
         }
+        break;
+        case SID_REMOVE_CALCTABLE:
+        {
+            m_pViewShell->DeleteCalcTable();
+        }
+        break;
     }
 
     rBindings.Invalidate(SID_DATABASE_SETTINGS);
@@ -142,6 +147,7 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
         switch (nWhich)
         {
             case SCITEM_DATABASE_SETTING:
+            {
                 const ScDBData* pDBData = GetDBDataAtCursor();
                 if (pDBData)
                 {
@@ -160,6 +166,9 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                                                        pDBData->HasAutoFilter(), u""_ustr));
                     }
                 }
+            }
+            break;
+            case SID_REMOVE_CALCTABLE:
                 break;
         }
         nWhich = aIter.NextWhich();

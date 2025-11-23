@@ -1881,6 +1881,11 @@ auto ScDBCollection::NamedDBs::findByUpperName2(const OUString& rName) -> iterat
         m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));
 }
 
+auto ScDBCollection::NamedDBs::findByPointer( const ScDBData* p ) -> iterator
+{
+    return find_if(m_DBs.begin(), m_DBs.end(), FindByPointer(p));
+}
+
 ScDBData* ScDBCollection::NamedDBs::findByName(const OUString& rName)
 {
     DBsType::iterator itr = find_if(m_DBs.begin(), m_DBs.end(), FindByName(rName));

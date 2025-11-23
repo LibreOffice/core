@@ -323,7 +323,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         const OUString& rStyleName = pParam->maStyleID;
         if (const ScTableStyles* pTableStyles = rStrm.GetRoot().GetDoc().GetTableStyles())
         {
-            if (const ScTableStyle* pTableStyle = pTableStyles->GetTableStyle(rStyleName))
+            if (pTableStyles->GetTableStyle(rStyleName))
             {
                 pTableStrm->singleElement(XML_tableStyleInfo, XML_name, rStyleName.toUtf8(),
                                           XML_showFirstColumn, ToPsz10(pParam->mbFirstColumn),

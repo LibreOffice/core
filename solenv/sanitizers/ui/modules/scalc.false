@@ -14,6 +14,7 @@ sc/uiconfig/scalc/ui/covariancedialog.ui://GtkButton[@id='input-range-button'] b
 sc/uiconfig/scalc/ui/covariancedialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkButton[@id='assignrb'] button-no-label
 sc/uiconfig/scalc/ui/definename.ui://GtkButton[@id='refbutton'] button-no-label
+sc/uiconfig/scalc/ui/definetablerangedialog.ui://GtkButton[@id='assgnrb'] button-no-label
 sc/uiconfig/scalc/ui/descriptivestatisticsdialog.ui://GtkButton[@id='input-range-button'] button-no-label
 sc/uiconfig/scalc/ui/descriptivestatisticsdialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/exponentialsmoothingdialog.ui://GtkButton[@id='input-range-button'] button-no-label

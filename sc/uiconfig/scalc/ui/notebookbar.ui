@@ -147,6 +147,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator411">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuData-DataTableMenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DataTableMenu</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuData-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
