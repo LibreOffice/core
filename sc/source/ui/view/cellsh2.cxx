@@ -763,6 +763,16 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
 
+        case SID_INSERT_CALCTABLE:
+            {
+                sal_uInt16 nId = ScTableLayoutWrapper::GetChildWindowId();
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow(nId);
+
+                pScMod->SetRefDialog(nId, pWnd == nullptr);
+            }
+            break;
+
         case SID_SELECT_DB:
             {
                 if ( pReqArgs )
@@ -1380,6 +1390,62 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                 }
                 break;
+
+            case SID_INSERT_CALCTABLE:
+                {
+                    bool bDisable = false;
+                    if (!rDoc.HasTableStyles() || pDocSh->IsDocShared())
+                        bDisable = true;
+                    else
+                    {
+                        SCCOL nStartCol, nEndCol;
+                        SCROW nStartRow, nEndRow;
+                        SCTAB nStartTab, nEndTab;
+
+                        bool bSelected
+                            = (GetViewData().GetSimpleArea(nStartCol, nStartRow, nStartTab, nEndCol,
+                                nEndRow, nEndTab) == SC_MARK_SIMPLE);
+
+                        if (bSelected)
+                        {
+                            if (nStartCol == nEndCol && nStartRow == nEndRow)
+                                bSelected = false;
+                        }
+                        else
+                        {
+                            nStartCol = GetViewData().GetCurX();
+                            nStartRow = GetViewData().GetCurY();
+                            nStartTab = GetViewData().CurrentTabForData();
+                        }
+
+                        if (!bSelected)
+                        {
+                            const ScDBData* pDBData = rDoc.GetDBAtCursor(
+                                nStartCol, nStartRow, nStartTab, ScDBDataPortion::AREA);
+                            if (pDBData && pDBData->GetTableStyleInfo())
+                                bDisable = true;
+                        }
+                        else
+                        {
+                            std::vector<const ScDBData*> aDBData = rDoc.GetAllDBsInArea(
+                                nStartCol, nStartRow, nEndCol, nEndRow, nStartTab);
+                            for (const ScDBData* pDBData : aDBData)
+                            {
+                                if (const ScTableStyleParam* pTableStyleInfo
+                                    = pDBData->GetTableStyleInfo())
+                                {
+                                    bDisable = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (bDisable)
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
             case SID_DATA_PROVIDER:
             break;
             case SID_DATA_PROVIDER_REFRESH:

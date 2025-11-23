@@ -205,6 +205,30 @@ private:
     std::unique_ptr<ScDBCollection> xUndoDB;
 };
 
+class ScUndoDBTable : public ScSimpleUndo
+{
+public:
+    ScUndoDBTable(ScDocShell& rNewDocShell, const OUString& rNewTable, bool bIns,
+                  std::unique_ptr<ScDBCollection> pNewUndoColl,
+                  std::unique_ptr<ScDBCollection> pNewRedoColl);
+    virtual ~ScUndoDBTable() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual void Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    OUString aTableName;
+    bool bInsert;
+    std::unique_ptr<ScDBCollection> pUndoColl;
+    std::unique_ptr<ScDBCollection> pRedoColl;
+
+    void DoChange(const bool bUndo);
+};
+
 class ScUndoTableTotals: public ScDBFuncUndo
 {
 public:

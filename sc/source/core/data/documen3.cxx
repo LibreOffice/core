@@ -357,6 +357,15 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
         return nullptr;
 }
 
+std::vector<const ScDBData*> ScDocument::GetAllDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+                                                         SCROW nRow2, SCTAB nTab) const
+{
+    if (pDBCollection)
+        return pDBCollection->GetAllDBsInArea(nCol1, nRow1, nCol2, nRow2, nTab);
+    else
+        return std::vector<const ScDBData*>();
+}
+
 void ScDocument::RefreshDirtyTableColumnNames()
 {
     if (pDBCollection)

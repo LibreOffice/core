@@ -1351,6 +1351,8 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"IncrementIndent", { PayloadType::EnabledPayload, true } },
         { u"DecrementIndent", { PayloadType::EnabledPayload, true } },
         { u"EditHeaderAndFooter", { PayloadType::EnabledPayload, true } },
+        { u"InsertCalcTable", { PayloadType::EnabledPayload, true } },
+        { u"RemoveCalcTable", { PayloadType::EnabledPayload, true } },
         { u"InsertSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparklineGroup", { PayloadType::EnabledPayload, true } },

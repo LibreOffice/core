@@ -747,6 +747,94 @@ bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;     // is not possible due to column numbers
 }
 
+ScUndoDBTable::ScUndoDBTable(ScDocShell& rNewDocShell, const OUString& rNewTable, bool bIns,
+                             std::unique_ptr<ScDBCollection> pNewUndoColl,
+                             std::unique_ptr<ScDBCollection> pNewRedoColl ) :
+    ScSimpleUndo( rNewDocShell ),
+    aTableName( rNewTable ),
+    bInsert( bIns ),
+    pUndoColl( std::move(pNewUndoColl) ),
+    pRedoColl( std::move(pNewRedoColl) )
+{
+}
+
+ScUndoDBTable::~ScUndoDBTable()
+{
+}
+
+OUString ScUndoDBTable::GetComment() const
+{   // "Insert/Delete tables";
+    return bInsert ? ScResId(STR_UNDO_DBADDTABLE) : ScResId(STR_UNDO_DBREMTABLE);
+}
+
+void ScUndoDBTable::Undo()
+{
+    BeginUndo();
+    DoChange(true);
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
+    EndUndo();
+}
+
+void ScUndoDBTable::Redo()
+{
+    BeginRedo();
+    DoChange(false);
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
+    EndRedo();
+}
+
+void ScUndoDBTable::Repeat(SfxRepeatTarget& /* rTarget */)
+{
+}
+
+bool ScUndoDBTable::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+{
+    return false;    // is not possible
+}
+
+void ScUndoDBTable::DoChange(const bool bUndo)
+{
+    ScDBCollection* pWorkRefData = bUndo ? pUndoColl.get() : pRedoColl.get();
+
+    ScDocument& rDoc = rDocShell.GetDocument();
+    bool bOldAutoCalc = rDoc.GetAutoCalc();
+    rDoc.SetAutoCalc(false); // Avoid unnecessary calculations
+    rDoc.PreprocessDBDataUpdate();
+    rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*pWorkRefData)), true);
+    rDoc.CompileHybridFormula();
+    rDoc.SetAutoCalc(bOldAutoCalc);
+
+    pWorkRefData = !bInsert ? pUndoColl.get() : pRedoColl.get();
+    if (const ScDBData* pDBData = pWorkRefData->getNamedDBs().findByUpperName(
+            ScGlobal::getCharClass().uppercase(aTableName)))
+    {
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        if (!aRange.IsValid())
+            return;
+
+        if (pDBData->HasAutoFilter())
+        {
+            const bool bApply = (bInsert != bUndo);
+            auto func = bApply ? &ScDocument::ApplyFlagsTab : &ScDocument::RemoveFlagsTab;
+            (rDoc.*func)(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(),
+                         aRange.aStart.Row(), aRange.aStart.Tab(), ScMF::Auto);
+        }
+
+        if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
+        {
+            SCTAB nTab = aRange.aStart.Tab();
+            SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
+            if (nVisTab != nTab)
+                pViewShell->SetTabNo(nTab);
+
+            rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
+                                 PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
+                                     | PaintPartFlags::Size);
+        }
+    }
+}
+
 ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
                                      const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                                      ScDocumentUniquePtr pNewUndoDoc,

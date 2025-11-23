@@ -6476,6 +6476,42 @@ ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS
 ]
 
 
+SfxVoidItem InsertCalcTable SID_INSERT_CALCTABLE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+
+SfxVoidItem RemoveCalcTable SID_REMOVE_CALCTABLE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+
 SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
 ()
 [

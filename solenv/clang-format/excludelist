@@ -8483,6 +8483,7 @@ sc/source/ui/dbgui/csvtablebox.cxx
 sc/source/ui/dbgui/dapidata.cxx
 sc/source/ui/dbgui/dapitype.cxx
 sc/source/ui/dbgui/dbnamdlg.cxx
+sc/source/ui/dbgui/dbtabladlg.cxx
 sc/source/ui/dbgui/dpgroupdlg.cxx
 sc/source/ui/dbgui/filtdlg.cxx
 sc/source/ui/dbgui/foptmgr.cxx
@@ -8626,6 +8627,7 @@ sc/source/ui/inc/datatransformation.hxx
 sc/source/ui/inc/dbdocfun.hxx
 sc/source/ui/inc/dbfunc.hxx
 sc/source/ui/inc/dbnamdlg.hxx
+sc/source/ui/inc/dbtabledlg.hxx
 sc/source/ui/inc/docfunc.hxx
 sc/source/ui/inc/docfuncutil.hxx
 sc/source/ui/inc/docsh.hxx

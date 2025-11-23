@@ -371,6 +371,7 @@ public:
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
         iterator findByUpperName2(const OUString& rName);
+        iterator findByPointer(const ScDBData* p);
         ScDBData* findByName(const OUString& rName);
 
         /** Takes ownership of p and attempts to insert it into the collection.

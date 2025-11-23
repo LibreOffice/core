@@ -59,6 +59,8 @@ public:
     void            DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                       bool bRecord = true );
 
+    void            DeleteCalcTable();
+
     void            ToggleAutoFilter();
     void            HideAutoFilter();
     void            ClearAutoFilter();

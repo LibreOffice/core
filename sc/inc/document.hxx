@@ -899,6 +899,7 @@ public:
     ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    std::vector<const ScDBData*> GetAllDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const;
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 
