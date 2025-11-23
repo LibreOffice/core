@@ -167,6 +167,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/smath/ui/spacingdialog.ui"_ustr,
         u"modules/spropctrlr/ui/taborder.ui"_ustr,
         u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr,
+        u"modules/swriter/ui/bibliographyentry.ui"_ustr,
         u"modules/swriter/ui/captiondialog.ui"_ustr,
         u"modules/swriter/ui/captionoptions.ui"_ustr,
         u"modules/swriter/ui/columndialog.ui"_ustr,
