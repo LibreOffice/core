@@ -1816,7 +1816,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            // I suspect this path doesn't get call anymore or its called
+            // I suspect this path doesn't get call anymore or it's called
             // and shouldn't be
             SAL_WARN("sc.core", "Likely we lost input bar formatting");
             pScMod->InputChanged(m_xEditView.get());
