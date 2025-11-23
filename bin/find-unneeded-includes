@@ -445,7 +445,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors, removefwdd):
+def run_tool(task_queue, failed_files, noexclude, checknamespaces, finderrors, removefwdd):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
@@ -462,8 +462,6 @@ def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, fin
                     print("ERROR: The following command found unused includes:\n" + invocation)
                 else:
                     print("ERROR: The following command found unused forward declarations:\n" + invocation)
-                if not dontstop:
-                    failed_files.append(invocation)
         task_queue.task_done()
     if checknamespaces:
         # Workaround: sometimes running git grep makes the letters typed into the terminal disappear after the script is finished
@@ -502,7 +500,7 @@ def isNonLinuxFile(path):
     if path in NonLinuxFiles:
         return True
 
-def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
+def tidy(compileCommands, paths, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
     return_code = 0
 
     try:
@@ -510,7 +508,7 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors, removefwdd))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, noexclude, checknamespaces, finderrors, removefwdd))
             t.daemon = True
             t.start()
 
@@ -592,8 +590,6 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Check source files for unneeded includes.')
-    parser.add_argument('--continue', action='store_true',
-                    help='Don\'t stop on errors. Useful for periodic re-check of large amount of files')
     parser.add_argument('Files' , nargs='*',
                     help='The files to be checked')
     parser.add_argument('--recursive', metavar='DIR', nargs=1, type=str,
@@ -715,7 +711,7 @@ def main(argv):
                         print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d, headersfwd=args.headersfwd)
+    tidy(compileCommands, paths=list_of_files, noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d, headersfwd=args.headersfwd)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
