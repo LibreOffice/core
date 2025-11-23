@@ -2524,7 +2524,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 // add/replace total row
                 aSubTotalParam.bRemoveOnly = false;
                 aSubTotalParam.bReplace = true;
-                aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, true);
+                aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
             }
             else
             {

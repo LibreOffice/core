@@ -702,6 +702,22 @@ void ScDBFunc::DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam
     SelectionChanged();
 }
 
+void ScDBFunc::DeleteCalcTable()
+{
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDBData* pDBObj = rDoc.GetDBAtCursor(GetViewData().GetCurX(), GetViewData().GetCurY(),
+                                          GetViewData().CurrentTabForData(), ScDBDataPortion::AREA);
+    if (pDBObj && pDBObj->GetTableStyleInfo())
+    {
+        ScDBDocFunc aFunc(*pDocSh);
+        aFunc.DeleteDBTable(pDBObj, true, false);
+        CursorPosChanged(); // shells may be switched
+    }
+    else
+        ErrorMessage(STR_TABLE_NOTFOUND);
+}
+
 // consolidate
 
 void ScDBFunc::Consolidate( const ScConsolidateParam& rParam )

@@ -210,6 +210,7 @@
       <menu:menuitem menu:id=".uno:InsertObjectChart"/>
       <menu:menuitem menu:id=".uno:InsertSparkline"/>
       <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
+      <menu:menuitem menu:id=".uno:InsertCalcTable"/>
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Gallery"/>
@@ -619,6 +620,7 @@
           <menu:menuitem menu:id=".uno:DeletePivotTable"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:DataTableMenu"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:CellContentsMenu">
         <menu:menupopup>

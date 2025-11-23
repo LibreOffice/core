@@ -69,6 +69,117 @@ bool ScDBDocFunc::CheckSheetViewProtection(sc::Operation eOperation)
     return aSheetViewTester.check(eOperation);
 }
 
+bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader,
+                             bool bRecord, bool bApi, const OUString& rStyleName)
+{
+    ScDocShellModificator aModificator(rDocShell);
+
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    if (bRecord && !rDoc.IsUndoEnabled())
+        bRecord = false;
+
+    if (rStyleName.isEmpty())
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_TABLE_ERR_ADD);
+        return false;
+    }
+
+    std::unique_ptr<ScDBCollection> pUndoColl;
+    if (bRecord)
+        pUndoColl.reset(new ScDBCollection(*pDocColl));
+
+    std::unique_ptr<ScDBData> pNew(new ScDBData(rName, rRange.aStart.Tab(), rRange.aStart.Col(),
+                                                rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(),
+                                                true, bHeader, false, u""_ustr, rStyleName));
+    if (pNew)
+    {
+        pNew->SetAutoFilter(true);
+        rDoc.ApplyFlagsTab(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(),
+                           rRange.aStart.Row(), rRange.aStart.Tab(), ScMF::Auto);
+    }
+
+    bool bCompile = !rDoc.IsImportingXML();
+    if (bCompile)
+        rDoc.PreprocessDBDataUpdate();
+
+    bool bOk = pDocColl->getNamedDBs().insert(std::move(pNew));
+    if (bCompile)
+        rDoc.CompileHybridFormula();
+
+    if (!bOk && !bApi)
+    {
+        rDocShell.ErrorMessage(STR_TABLE_ERR_ADD);
+        return false;
+    }
+
+    rDocShell.PostPaint(rRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
+
+    if (bRecord)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoDBTable>(rDocShell, rName, true/*bInsert*/, std::move(pUndoColl),
+                                           std::make_unique<ScDBCollection>(*pDocColl)));
+    }
+
+    aModificator.SetDocumentModified();
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+    return true;
+}
+
+bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
+{
+    bool bDone = false;
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    if (bRecord && !rDoc.IsUndoEnabled())
+        bRecord = false;
+
+    ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+    auto const iter = rDBs.findByPointer(pDBObj);
+    if (iter != rDBs.end())
+    {
+        ScDocShellModificator aModificator(rDocShell);
+        std::unique_ptr<ScDBCollection> pUndoColl;
+        if (bRecord)
+            pUndoColl.reset(new ScDBCollection(*pDocColl));
+
+        OUString aTableName = iter->get()->GetName();
+        ScRange aRange;
+        iter->get()->GetArea(aRange);
+
+        rDoc.PreprocessDBDataUpdate();
+        rDBs.erase(iter);
+        rDoc.CompileHybridFormula();
+
+        if (aRange.IsValid())
+        {
+            rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(),
+                                aRange.aStart.Row(), aRange.aStart.Tab(), ScMF::Auto);
+            rDocShell.PostPaint(aRange, PaintPartFlags::Grid | PaintPartFlags::Left
+                                            | PaintPartFlags::Top | PaintPartFlags::Size);
+        }
+
+        if (bRecord)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoDBTable>(rDocShell, aTableName, false/*bInsert*/, std::move(pUndoColl),
+                                                std::make_unique<ScDBCollection>(*pDocColl)));
+        }
+
+        aModificator.SetDocumentModified();
+        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+        bDone = true;
+    }
+    else if (!bApi)
+    {
+        rDocShell.ErrorMessage(STR_TABLE_ERR_DEL);
+    }
+
+    return bDone;
+}
+
 bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
 {
 

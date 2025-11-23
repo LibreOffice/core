@@ -77,6 +77,10 @@ public:
     void            DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                       bool bRecord, bool bApi );
 
+    bool AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader, bool bRecord,
+                    bool bApi, const OUString& rStyleName = u""_ustr);
+    bool DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi );
+
     SC_DLLPUBLIC bool AddDBRange( const OUString& rName, const ScRange& rRange );
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const OUString& rOld, const OUString& rNew );
