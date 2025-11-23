@@ -1503,6 +1503,12 @@ void ScTable::Apply(const ScMarkData& rMark, SCCOL nCol, ApplyDataFunc apply)
         while (aMultiIter.Next(nTop, nBottom))
             apply(rCol, nTop, nBottom);
     }
+    else if (rMark.IsMarked())
+    {
+        const ScRange& aRange = rMark.GetMarkArea();
+        if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
+            apply(GetColumnData(nCol), aRange.aStart.Row(), aRange.aEnd.Row());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

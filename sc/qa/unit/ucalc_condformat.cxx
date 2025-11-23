@@ -1523,6 +1523,47 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testConditionStyleInMergedCell)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCondformat, testTdf168943)
+{
+    m_pDoc->InsertTab(0, u"test"_ustr);
+
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        // Initial state: no conditional format, so attribute must be default
+        CPPUNIT_ASSERT(IsDefaultItem(m_pDoc->GetAttr(0, nRow, 0, ATTR_CONDITIONAL)));
+    }
+
+    auto pEntry = new ScCondFormatEntry(ScConditionMode::Direct, u"=42"_ustr, {}, *m_pDoc,
+                                        ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
+
+    auto pFormat = std::make_unique<ScConditionalFormat>(0, *m_pDoc);
+    pFormat->AddEntry(pEntry);
+    ScRange aRange(0, 0, 0, 0, 5, 0);
+    pFormat->SetRange(aRange);
+    auto key = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    m_pDoc->AddCondFormatData(aRange, 0, key);
+
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        // The attribute must be set
+        CPPUNIT_ASSERT(!IsDefaultItem(m_pDoc->GetAttr(0, nRow, 0, ATTR_CONDITIONAL)));
+    }
+
+    ScConditionalFormatList* pNewList = new ScConditionalFormatList();
+    m_xDocShell->GetDocFunc().SetConditionalFormatList(pNewList, 0);
+
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        // Check if respective attribute has been correctly cleared.
+        // Before the fix, this failed, because ScConditionalFormatList::RemoveFromDocument, called
+        // from SetConditionalFormatList, got a non-multimarked single-contiguous-range mark, and
+        // ScTable::Apply was not prepared for such marks, so did nothing.
+        CPPUNIT_ASSERT(IsDefaultItem(m_pDoc->GetAttr(0, nRow, 0, ATTR_CONDITIONAL)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
