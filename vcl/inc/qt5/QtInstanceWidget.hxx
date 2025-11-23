@@ -80,11 +80,11 @@ public:
 
     virtual OUString get_help_id() const override;
 
-    virtual void set_hexpand(bool) override;
+    virtual void set_hexpand(bool bExpand) override;
 
     virtual bool get_hexpand() const override;
 
-    virtual void set_vexpand(bool) override;
+    virtual void set_vexpand(bool bExpand) override;
 
     virtual bool get_vexpand() const override;
 

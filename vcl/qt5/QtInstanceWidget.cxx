@@ -380,20 +380,48 @@ OUString QtInstanceWidget::get_help_id() const
     return toOUString(aHelpIdVariant.toString());
 }
 
-void QtInstanceWidget::set_hexpand(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_hexpand(bool bExpand)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QSizePolicy aSizePolicy = m_pWidget->sizePolicy();
+        aSizePolicy.setHorizontalPolicy(bExpand ? QSizePolicy::Expanding : QSizePolicy::Preferred);
+        m_pWidget->setSizePolicy(aSizePolicy);
+    });
+}
 
 bool QtInstanceWidget::get_hexpand() const
 {
-    assert(false && "Not implemented yet");
-    return true;
+    SolarMutexGuard g;
+
+    bool bExpand = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bExpand = m_pWidget->sizePolicy().horizontalPolicy() == QSizePolicy::Expanding; });
+
+    return bExpand;
 }
 
-void QtInstanceWidget::set_vexpand(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_vexpand(bool bExpand)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QSizePolicy aSizePolicy = m_pWidget->sizePolicy();
+        aSizePolicy.setVerticalPolicy(bExpand ? QSizePolicy::Expanding : QSizePolicy::Preferred);
+        m_pWidget->setSizePolicy(aSizePolicy);
+    });
+}
 
 bool QtInstanceWidget::get_vexpand() const
 {
-    assert(false && "Not implemented yet");
-    return true;
+    SolarMutexGuard g;
+
+    bool bExpand = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bExpand = m_pWidget->sizePolicy().verticalPolicy() == QSizePolicy::Expanding; });
+
+    return bExpand;
 }
 
 void QtInstanceWidget::set_margin_top(int nMargin)
