@@ -1035,9 +1035,8 @@ namespace
 void checkValidationFormula(const ScAddress& rPos, const ScDocument& rDoc,
                             const OUString& rExpectedFormula)
 {
-    const SfxUInt32Item* pItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
-    CPPUNIT_ASSERT(pItem);
-    sal_uInt32 nKey = pItem->GetValue();
+    const SfxUInt32Item& rItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
+    sal_uInt32 nKey = rItem.GetValue();
     const ScValidationData* pData = rDoc.GetValidationEntry(nKey);
     CPPUNIT_ASSERT(pData);
 

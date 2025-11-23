@@ -893,8 +893,8 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
     if (bApi)
         NotifyInputHandler( rPos );
 
-    const SfxUInt32Item* pItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
-    const ScValidationData* pData = rDoc.GetValidationEntry(pItem->GetValue());
+    const SfxUInt32Item& rItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
+    const ScValidationData* pData = rDoc.GetValidationEntry(rItem.GetValue());
     if (pData)
     {
         ScRefCellValue aCell(rDoc, rPos);

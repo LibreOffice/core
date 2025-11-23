@@ -894,7 +894,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                     if ( rDoc.HasValueData( nSelCol, nSelRow, nSelTab ) )
                     {
                         sal_uLong nIndex = rDoc.GetAttr(
-                                        nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT)->GetValue();
+                                        nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT).GetValue();
                         SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nIndex);
                         if ( nType == SvNumFormatType::DATE || nType == SvNumFormatType::TIME || nType == SvNumFormatType::DATETIME )
                         {

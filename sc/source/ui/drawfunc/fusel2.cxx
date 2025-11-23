@@ -134,8 +134,8 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
                 {
                     const ScAddress& rNotePos = pCaptData->maStart;
                     // skip caption objects of notes in protected cells
-                    const ScProtectionAttr* pProtAttr =  rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION );
-                    bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell();
+                    const ScProtectionAttr& rProtAttr =  rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION );
+                    bool bProtectAttr = rProtAttr.GetProtection() || rProtAttr.GetHideCell();
                     if( !bProtectAttr || !bProtectDoc )
                         return true;
                 }

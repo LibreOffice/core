@@ -783,13 +783,13 @@ static void lcl_SetBorderLine( ScDocument& rDoc, const ScRange& rRange, SCTAB nS
     SCCOL nFromScCol = (nLine == SvxBoxItemLine::RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
     SCROW nFromScRow = (nLine == SvxBoxItemLine::BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
 
-    const SvxBoxItem* pFromItem =
+    const SvxBoxItem& rFromItem =
         rDoc.GetAttr( nFromScCol, nFromScRow, nScTab, ATTR_BORDER );
-    const SvxBoxItem* pToItem =
+    const SvxBoxItem& rToItem =
         rDoc.GetAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, ATTR_BORDER );
 
-    SvxBoxItem aNewItem( *pToItem );
-    aNewItem.SetLine( pFromItem->GetLine( nLine ), nLine );
+    SvxBoxItem aNewItem(rToItem);
+    aNewItem.SetLine(rFromItem.GetLine(nLine), nLine);
     rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
 }
 

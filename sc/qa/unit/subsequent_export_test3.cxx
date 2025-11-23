@@ -1040,7 +1040,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
 
     // tdf#161453: ensure E1's wrap text attribute was round-tripped
     ScDocument* pDoc = getScDoc();
-    CPPUNIT_ASSERT(pDoc->GetAttr(4, 0, 0, ATTR_LINEBREAK)->GetValue());
+    CPPUNIT_ASSERT(pDoc->GetAttr(4, 0, 0, ATTR_LINEBREAK).GetValue());
 }
 
 #ifdef _WIN32
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespace2XLSX)
     // tdf#158460: ensure B1 is NOT set to wrap text, so Excel keeps displaying as single line
     SCTAB nTab = 0;
     SCROW nRow = 0;
-    CPPUNIT_ASSERT(!getScDoc()->GetAttr(1, nRow, nTab, ATTR_LINEBREAK)->GetValue());
+    CPPUNIT_ASSERT(!getScDoc()->GetAttr(1, nRow, nTab, ATTR_LINEBREAK).GetValue());
     // Without the fix, this wrapped to two lines high (841). It should be 1 line high (529).
     int nHeight = convertTwipToMm100(getScDoc()->GetRowHeight(nRow, nTab, false));
     CPPUNIT_ASSERT_LESS(600, nHeight);

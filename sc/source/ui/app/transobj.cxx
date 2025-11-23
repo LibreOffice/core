@@ -903,7 +903,7 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
             ScAddress aPos(nCol, nRow, nDestTab);
             if (nErrCode != FormulaError::NONE)
             {
-                if ( rDestDoc.GetAttr( nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY)->GetValue() ==
+                if ( rDestDoc.GetAttr( nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY).GetValue() ==
                         SvxCellHorJustify::Standard )
                     rDestDoc.ApplyAttr( nCol,nRow,nDestTab,
                             SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY) );

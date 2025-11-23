@@ -2701,15 +2701,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableCompactLayoutXLSX)
         {
             auto& rCase = aCases[nCaseNum];
             CPPUNIT_ASSERT_EQUAL(rCase.aContent, rDoc.GetString(rCase.aAddr));
-            const ScIndentItem* pIndent = rDoc.GetAttr(rCase.aAddr, ATTR_INDENT);
+            const ScIndentItem& rIndent = rDoc.GetAttr(rCase.aAddr, ATTR_INDENT);
             if (rCase.bIndented)
             {
-                CPPUNIT_ASSERT(pIndent);
-                CPPUNIT_ASSERT(pIndent->GetValue() > 0);
+                CPPUNIT_ASSERT_GREATER(sal_uInt16(0), rIndent.GetValue());
             }
             else
             {
-                CPPUNIT_ASSERT(!pIndent || pIndent->GetValue() == 0);
+                CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), rIndent.GetValue());
             }
         }
 

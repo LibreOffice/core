@@ -891,7 +891,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCTAB nTab = GetViewData().CurrentTabForData();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
                     sal_uInt32 nIndex = rDoc.GetAttr(
-                                nCurX, nCurY, nTab, ATTR_VALIDDATA )->GetValue();
+                                nCurX, nCurY, nTab, ATTR_VALIDDATA ).GetValue();
                     if ( nIndex )
                     {
                         const ScValidationData* pOldData = rDoc.GetValidationEntry( nIndex );

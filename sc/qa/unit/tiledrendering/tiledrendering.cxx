@@ -2084,8 +2084,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
 
     // Set Wrap text in A3
     pDoc->ApplyAttr(0, 2, 0, ScLineBreakCell(true));
-    const ScLineBreakCell* pItem = pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK);
-    CPPUNIT_ASSERT(pItem->GetValue());
+    const ScLineBreakCell& rItem = pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK);
+    CPPUNIT_ASSERT(rItem.GetValue());
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);

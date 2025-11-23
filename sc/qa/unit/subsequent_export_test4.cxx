@@ -1939,7 +1939,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf152980)
     // tdf#161453: ensure A8 was set to wrap text, so Excel doesn't display as single line
     SCTAB nTab = 0;
     SCROW nRow = 7;
-    CPPUNIT_ASSERT(pDoc->GetAttr(0, nRow, nTab, ATTR_LINEBREAK)->GetValue());
+    CPPUNIT_ASSERT(pDoc->GetAttr(0, nRow, nTab, ATTR_LINEBREAK).GetValue());
     // Without the fix, this was a single line high (446). It should be 3 lines high (1236).
     int nHeight = convertTwipToMm100(pDoc->GetRowHeight(nRow, nTab, false));
     CPPUNIT_ASSERT_GREATER(1000, nHeight);

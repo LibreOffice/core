@@ -887,13 +887,13 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         {
             // tdf#154803 - check if range is entirely merged
             ScDocument& rDoc = rDocSh.GetDocument();
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(aRange.aStart, ATTR_MERGE);
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(aRange.aStart, ATTR_MERGE);
             SCCOL nColSpan = 1;
             SCROW nRowSpan = 1;
-            if (pMergeAttr && pMergeAttr->IsMerged())
+            if (rMergeAttr.IsMerged())
             {
-                nColSpan = pMergeAttr->GetColMerge();
-                nRowSpan = pMergeAttr->GetRowMerge();
+                nColSpan = rMergeAttr.GetColMerge();
+                nRowSpan = rMergeAttr.GetRowMerge();
             }
             // tdf#147122 - return cell object when a simple selection is entirely merged
             if (aRange.aStart == aRange.aEnd

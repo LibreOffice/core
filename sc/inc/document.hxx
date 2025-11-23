@@ -1878,22 +1878,22 @@ public:
                                               const ScAddress& rCursor, const ScMarkData& rMark,
                                               double& rResult );
 
-    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
-    template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
+    SC_DLLPUBLIC const SfxPoolItem&         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
+    template<class T> const T&              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
     {
-        return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich)));
+        return static_cast<const T&>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich)));
     }
-    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich,
+    SC_DLLPUBLIC const SfxPoolItem&         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich,
                                                      SCROW& nStartRow, SCROW& nEndRow ) const;
-    template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich,
+    template<class T> const T&              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich,
                                                      SCROW& nStartRow, SCROW& nEndRow ) const
     {
-        return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich), nStartRow, nEndRow));
+        return static_cast<const T&>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich), nStartRow, nEndRow));
     }
-    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
-    template<class T> const T*              GetAttr( const ScAddress& rPos, TypedWhichId<T> nWhich ) const
+    SC_DLLPUBLIC const SfxPoolItem&         GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
+    template<class T> const T&              GetAttr( const ScAddress& rPos, TypedWhichId<T> nWhich ) const
     {
-        return static_cast<const T*>(GetAttr(rPos, sal_uInt16(nWhich)));
+        return static_cast<const T&>(GetAttr(rPos, sal_uInt16(nWhich)));
     }
     SC_DLLPUBLIC const ScPatternAttr*       GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC const ScPatternAttr*       GetPattern( const ScAddress& rPos ) const;

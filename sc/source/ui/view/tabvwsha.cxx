@@ -683,7 +683,7 @@ bool ScTabViewShell::IsRefInputMode() const
                 const ScViewData& rViewData = GetViewData();
                 ScDocument& rDoc = rViewData.GetDocument();
                 const ScAddress aPos( rViewData.GetCurPos() );
-                const sal_uInt32 nIndex = rDoc.GetAttr(aPos, ATTR_VALUE_FORMAT )->GetValue();
+                const sal_uInt32 nIndex = rDoc.GetAttr(aPos, ATTR_VALUE_FORMAT ).GetValue();
                 const SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nIndex);
                 if (nType == SvNumFormatType::TEXT)
                 {
@@ -756,10 +756,10 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         if (rDoc.IsTabProtected(nTab))
         {
-            const ScProtectionAttr* pProt = rDoc.GetAttr( nPosX,nPosY,nTab,
+            const ScProtectionAttr& rProt = rDoc.GetAttr( nPosX,nPosY,nTab,
                                                            ATTR_PROTECTION);
-            bHideFormula = pProt->GetHideFormula();
-            bHideAll     = pProt->GetHideCell();
+            bHideFormula = rProt.GetHideFormula();
+            bHideAll     = rProt.GetHideCell();
         }
 
         if (!bHideAll)

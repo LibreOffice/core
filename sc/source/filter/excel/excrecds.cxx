@@ -998,7 +998,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
             {
                 SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
                 XclExpAutofilter* pFilter = GetByCol( nCol - aRange.aStart.Col() );
-                auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+                auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
                 bool bIsButtonHidden = !( nFlag & ScMF::Auto );
                 pFilter->SetButtonHidden( bIsButtonHidden );
 
@@ -1017,7 +1017,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
         sal_uInt16 nColId = 0;
         for ( auto nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); nCol++, nColId++ )
         {
-            auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+            auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
             bool bIsButtonHidden = !( nFlag & ScMF::Auto );
             if ( bIsButtonHidden )
             {

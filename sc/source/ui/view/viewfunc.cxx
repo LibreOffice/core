@@ -559,7 +559,7 @@ void finalizeFormulaProcessing(const std::shared_ptr<FormulaProcessingContext>& 
         i = rTab;
         context->aPos->SetTab( i );
         const sal_uInt32 nIndex = context->GetDoc().GetAttr(
-                    context->nCol, context->nRow, i, ATTR_VALUE_FORMAT )->GetValue();
+                    context->nCol, context->nRow, i, ATTR_VALUE_FORMAT ).GetValue();
         const SvNumFormatType nType = pFormatter->GetType( nIndex);
         if (nType == SvNumFormatType::TEXT ||
                 ((context->aString[0] == '+' || context->aString[0] == '-') && nError != FormulaError::NONE && context->aString == context->aFormula))

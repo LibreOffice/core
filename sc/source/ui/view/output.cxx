@@ -498,11 +498,11 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                 else
                                     bHOver = mpDoc->GetAttr(
                                                 nVisX,pThisRowInfo->nRowNo,mnTab,ATTR_MERGE_FLAG)
-                                                ->IsHorOverlapped();
+                                                .IsHorOverlapped();
                                 if (bHOver)
                                     bHOver = mpDoc->GetAttr(
                                                 nX + 1,pThisRowInfo->nRowNo,mnTab,ATTR_MERGE_FLAG)
-                                                ->IsHorOverlapped();
+                                                .IsHorOverlapped();
                             }
                         }
 
@@ -605,10 +605,10 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                             {
                                 bVOver = mpDoc->GetAttr(
                                             i,nYplus1,mnTab,ATTR_MERGE_FLAG)
-                                            ->IsVerOverlapped()
+                                            .IsVerOverlapped()
                                     &&   mpDoc->GetAttr(
                                             i,nVisY,mnTab,ATTR_MERGE_FLAG)
-                                            ->IsVerOverlapped();
+                                            .IsVerOverlapped();
                                     //! nVisY from Array ??
                             }
 
@@ -1925,8 +1925,8 @@ void ScOutputData::FindChanged()
                 nRow1 = std::min(rPos.Row(), nRow1);
                 nRow2 = std::max(rPos.Row(), nRow2);
 
-                const SfxUInt32Item* pItem = mpDoc->GetAttr(rPos, ATTR_VALIDDATA);
-                const ScValidationData* pData = mpDoc->GetValidationEntry(pItem->GetValue());
+                const SfxUInt32Item& rItem = mpDoc->GetAttr(rPos, ATTR_VALIDDATA);
+                const ScValidationData* pData = mpDoc->GetValidationEntry(rItem.GetValue());
                 if (pData)
                 {
                     ScRefCellValue aCell(*mpDoc, rPos);
@@ -2404,7 +2404,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                 if (pInfo->bHOverlapped || pInfo->bVOverlapped)
                 {
                     while (nOverX > 0 && (mpDoc->GetAttr(
-                           nOverX, nOverY, mnTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Hor))
+                           nOverX, nOverY, mnTab, ATTR_MERGE_FLAG).GetValue() & ScMF::Hor))
                     {
                         --nOverX;
                         nStartPosX -= nLayoutSign
@@ -2413,7 +2413,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                     }
 
                     while (nOverY > 0 && (mpDoc->GetAttr(
-                           nOverX, nOverY, mnTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Ver))
+                           nOverX, nOverY, mnTab, ATTR_MERGE_FLAG).GetValue() & ScMF::Ver))
                     {
                         --nOverY;
                         nStartPosY -= nLayoutSign
@@ -2433,13 +2433,13 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 
                     if (bIsMerged || pInfo->bMerged)
                     {
-                        const ScMergeAttr* pMerge = mpDoc->GetAttr(nOverX, nOverY, mnTab, ATTR_MERGE);
-                        SCROW nCountX = pMerge->GetColMerge();
+                        const ScMergeAttr& rMerge = mpDoc->GetAttr(nOverX, nOverY, mnTab, ATTR_MERGE);
+                        SCROW nCountX = rMerge.GetColMerge();
                         if (nCountX > 0)
                         {
                             sal_Int32 nIndex = 1;
                             while (nCountX > nIndex && (mpDoc->GetAttr(
-                                   nOverX + nIndex, nOverY, mnTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Hor))
+                                   nOverX + nIndex, nOverY, mnTab, ATTR_MERGE_FLAG).GetValue() & ScMF::Hor))
                             {
                                 nWidth += nLayoutSign
                                           * static_cast<tools::Long>(
@@ -2448,12 +2448,12 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                             }
                         }
 
-                        SCROW nCountY = pMerge->GetRowMerge();
+                        SCROW nCountY = rMerge.GetRowMerge();
                         if (nCountY > 0)
                         {
                             sal_Int32 nIndex = 1;
                             while (nCountY > nIndex && (mpDoc->GetAttr(
-                                   nOverX, nOverY + nIndex, mnTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Ver))
+                                   nOverX, nOverY + nIndex, mnTab, ATTR_MERGE_FLAG).GetValue() & ScMF::Ver))
                             {
                                 nHeight += nLayoutSign
                                            * static_cast<tools::Long>(
@@ -2606,7 +2606,7 @@ void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
                             if (mpRowInfo[nNextY + 1].nRowNo == (mpRowInfo[nNextY].nRowNo + 1)) {
                                 bVOver = mpRowInfo[nNextY].cellInfo(nX).bVOverlapped;
                             } else {
-                                bVOver = mpDoc->GetAttr(nX,nNextY,mnTab,ATTR_MERGE_FLAG)->IsVerOverlapped();
+                                bVOver = mpDoc->GetAttr(nX,nNextY,mnTab,ATTR_MERGE_FLAG).IsVerOverlapped();
                             }
                             if (!bVOver) break;
                             nMarkY += mpRowInfo[nNextY].nHeight;
@@ -2769,14 +2769,14 @@ void ScOutputData::DrawClipMarks()
                         tools::Long nStartPosY = nPosY;
 
                         while ( nOverX > 0 && ( mpDoc->GetAttr(
-                                nOverX, nOverY, mnTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Hor ) )
+                                nOverX, nOverY, mnTab, ATTR_MERGE_FLAG ).GetValue() & ScMF::Hor ) )
                         {
                             --nOverX;
                             nStartPosX -= nLayoutSign * static_cast<tools::Long>( mpDoc->GetColWidth(nOverX,mnTab) * mnPPTX );
                         }
 
                         while ( nOverY > 0 && ( mpDoc->GetAttr(
-                                nOverX, nOverY, mnTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Ver ) )
+                                nOverX, nOverY, mnTab, ATTR_MERGE_FLAG ).GetValue() & ScMF::Ver ) )
                         {
                             --nOverY;
                             nStartPosY -= nLayoutSign * static_cast<tools::Long>( mpDoc->GetRowHeight(nOverY,mnTab) * mnPPTY );
@@ -2785,11 +2785,11 @@ void ScOutputData::DrawClipMarks()
                         tools::Long nOutWidth = static_cast<tools::Long>( mpDoc->GetColWidth(nOverX,mnTab) * mnPPTX );
                         tools::Long nOutHeight = static_cast<tools::Long>( mpDoc->GetRowHeight(nOverY,mnTab) * mnPPTY );
 
-                        const ScMergeAttr* pMerge = mpDoc->GetAttr( nOverX, nOverY, mnTab, ATTR_MERGE );
-                        SCCOL nCountX = pMerge->GetColMerge();
+                        const ScMergeAttr& rMerge = mpDoc->GetAttr( nOverX, nOverY, mnTab, ATTR_MERGE );
+                        SCCOL nCountX = rMerge.GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
                             nOutWidth += mpDoc->GetColWidth(nOverX+i,mnTab) * mnPPTX;
-                        SCROW nCountY = pMerge->GetRowMerge();
+                        SCROW nCountY = rMerge.GetRowMerge();
                         nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, mnTab, mnPPTY);
 
                         if ( mbLayoutRTL )

@@ -968,7 +968,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     }
     else
     {
-        ScMF nOverlap2 = mpDoc->GetAttr(nX, nY, mnTab, ATTR_MERGE_FLAG)->GetValue();
+        ScMF nOverlap2 = mpDoc->GetAttr(nX, nY, mnTab, ATTR_MERGE_FLAG).GetValue();
         bHOver = bool(nOverlap2 & ScMF::Hor);
         bVOver = bool(nOverlap2 & ScMF::Ver);
     }
@@ -997,7 +997,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = mpDoc->GetAttr(rOverX, rOverY, mnTab, ATTR_MERGE_FLAG)->GetValue();
+            ScMF nOverlap = mpDoc->GetAttr(rOverX, rOverY, mnTab, ATTR_MERGE_FLAG).GetValue();
             bHOver = bool(nOverlap & ScMF::Hor);
             bVOver = bool(nOverlap & ScMF::Ver);
         }
@@ -1022,7 +1022,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = mpDoc->GetAttr( rOverX, rOverY, mnTab, ATTR_MERGE_FLAG )->GetValue();
+            ScMF nOverlap = mpDoc->GetAttr( rOverX, rOverY, mnTab, ATTR_MERGE_FLAG ).GetValue();
             bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
@@ -4538,8 +4538,8 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                     bool bDoCell = false;
 
                     // if merged cell contains hidden row or column or both
-                    const ScMergeFlagAttr* pMergeFlag = mpDoc->GetAttr(nX, nY, mnTab, ATTR_MERGE_FLAG);
-                    bool bOverlapped = (pMergeFlag->IsHorOverlapped() || pMergeFlag->IsVerOverlapped());
+                    const ScMergeFlagAttr& rMergeFlag = mpDoc->GetAttr(nX, nY, mnTab, ATTR_MERGE_FLAG);
+                    bool bOverlapped = (rMergeFlag.IsHorOverlapped() || rMergeFlag.IsVerOverlapped());
 
                     tools::Long nPosY = nRowPosY;
                     if (bOverlapped)

@@ -132,25 +132,25 @@ void ScHTMLImport::WriteToDocument(
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
             SCTAB nTab = maRange.aStart.Tab();
-            const ScMergeAttr* pItem = mrDoc.GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
-            if( pItem->IsMerged() )
+            const ScMergeAttr& rItem = mrDoc.GetAttr(pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE);
+            if (rItem.IsMerged())
             {
-                SCCOL nColMerge = pItem->GetColMerge();
-                SCROW nRowMerge = pItem->GetRowMerge();
+                SCCOL nColMerge = rItem.GetColMerge();
+                SCROW nRowMerge = rItem.GetRowMerge();
 
-                const SvxBoxItem* pToItem = mrDoc.GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
-                SvxBoxItem aNewItem( *pToItem );
+                const SvxBoxItem& rToItem = mrDoc.GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
+                SvxBoxItem aNewItem(rToItem);
                 if( nColMerge > 1 )
                 {
-                    const SvxBoxItem* pFromItem =
+                    const SvxBoxItem& rFromItem =
                         mrDoc.GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
-                    aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::RIGHT );
+                    aNewItem.SetLine( rFromItem.GetLine( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::RIGHT );
                 }
                 if( nRowMerge > 1 )
                 {
-                    const SvxBoxItem* pFromItem =
+                    const SvxBoxItem& rFromItem =
                         mrDoc.GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
-                    aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::BOTTOM );
+                    aNewItem.SetLine( rFromItem.GetLine( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::BOTTOM );
                 }
                 mrDoc.ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
             }

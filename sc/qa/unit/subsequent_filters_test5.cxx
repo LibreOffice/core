@@ -70,9 +70,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf151505)
     CPPUNIT_ASSERT(pAnonDBData->HasAutoFilter());
 
     // also check for the correct handling of the autofilter buttons
-    auto nFlag = pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG)->GetValue();
+    auto nFlag = pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue();
     CPPUNIT_ASSERT(nFlag & ScMF::Auto);
-    nFlag = pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG)->GetValue();
+    nFlag = pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue();
     CPPUNIT_ASSERT(nFlag & ScMF::Auto);
 }
 

@@ -2778,15 +2778,15 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, tools::Long& rSizeYPix ) const
 {
     SCTAB nCurrentTab = CurrentTabForData();
-    const ScMergeAttr* pMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
-    if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
+    const ScMergeAttr& rMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
+    if ( rMerge.GetColMerge() > 1 || rMerge.GetRowMerge() > 1 )
     {
         tools::Long nOutWidth = 0;
         tools::Long nOutHeight = 0;
-        SCCOL nCountX = pMerge->GetColMerge();
+        SCCOL nCountX = rMerge.GetColMerge();
         for (SCCOL i=0; i<nCountX; i++)
             nOutWidth += ToPixel(mrDoc.GetColWidth(nX + i, nCurrentTab), nPPTX);
-        SCROW nCountY = pMerge->GetRowMerge();
+        SCROW nCountY = rMerge.GetRowMerge();
 
         for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
         {
@@ -2816,13 +2816,13 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, 
 bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, tools::Long& rSizeXTwips, tools::Long& rSizeYTwips) const
 {
     SCTAB nCurrentTab = CurrentTabForData();
-    const ScMergeAttr* pMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
-    SCCOL nCountX = pMerge->GetColMerge();
+    const ScMergeAttr& rMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
+    SCCOL nCountX = rMerge.GetColMerge();
     if (!nCountX)
         nCountX = 1;
     rSizeXTwips = mrDoc.GetColWidth(nX, nX + nCountX - 1, nCurrentTab);
 
-    SCROW nCountY = pMerge->GetRowMerge();
+    SCROW nCountY = rMerge.GetRowMerge();
     if (!nCountY)
         nCountY = 1;
     rSizeYTwips = mrDoc.GetRowHeight(nY, nY + nCountY - 1, nCurrentTab);
@@ -2929,9 +2929,9 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
     if ( !(bRepair && ( bHOver || bVOver )) )
         return;
 
-    const ScMergeAttr* pMerge = mrDoc.GetAttr(rPosX, rPosY, nCurrentTab, ATTR_MERGE);
-    if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
-         ( bVOver && pMerge->GetRowMerge() <= 1 ) )
+    const ScMergeAttr& rMerge = mrDoc.GetAttr(rPosX, rPosY, nCurrentTab, ATTR_MERGE);
+    if ( ( bHOver && rMerge.GetColMerge() <= 1 ) ||
+         ( bVOver && rMerge.GetRowMerge() <= 1 ) )
     {
         OSL_FAIL("merge error found");
 

@@ -2165,9 +2165,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     aCellBtn.setText(aStr);
                 }
 
-                sal_uInt16 nIndent = 0;
-                if (const ScIndentItem* pIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT))
-                    nIndent = pIndentItem->GetValue();
+                const ScIndentItem& rIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT);
+                sal_uInt16 nIndent = rIndentItem.GetValue();
                 aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                 aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                 aCellBtn.setDrawBaseButton(pInfo->bPivotButton);
@@ -2219,9 +2218,9 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
 
     //  left edge of next cell if there is a non-hidden next column
     SCCOL nNextCol = nCol + 1;
-    const ScMergeAttr* pMerge = rDoc.GetAttr( nCol,nRow,nTab, ATTR_MERGE );
-    if ( pMerge->GetColMerge() > 1 )
-        nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
+    const ScMergeAttr& rMerge = rDoc.GetAttr( nCol,nRow,nTab, ATTR_MERGE );
+    if (rMerge.GetColMerge() > 1)
+        nNextCol = nCol + rMerge.GetColMerge();    // next cell after the merged area
     while ( nNextCol <= rDoc.MaxCol() && rDoc.ColHidden(nNextCol, nTab) )
         ++nNextCol;
     bool bNextCell = ( nNextCol <= rDoc.MaxCol() );
@@ -2458,7 +2457,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
             if (nX2 < nX1)                      // the rest of the merge
             {
                 SCCOL nStartX = nX1;
-                while ( rDoc.GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG)->IsHorOverlapped() )
+                while (rDoc.GetAttr(nStartX, nY, nTab, ATTR_MERGE_FLAG).IsHorOverlapped())
                     --nStartX;
                 if (nStartX <= nX2)
                     nLoopEndX = nX1;

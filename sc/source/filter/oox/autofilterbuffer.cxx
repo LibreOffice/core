@@ -764,7 +764,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 
         if (rxFilterColumn->isButtonHidden())
         {
-            auto nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG)->GetValue();
+            auto nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG).GetValue();
             rDoc.ApplyAttr(nCol, nRow, nTab, ScMergeFlagAttr(nFlag & ~ScMF::Auto));
         }
         nCol++;

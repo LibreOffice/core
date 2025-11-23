@@ -821,13 +821,13 @@ void ScTabView::TestHintWindow()
     ScAddress aListValPos;
 
     ScDocument& rDoc = aViewData.GetDocument();
-    const SfxUInt32Item* pItem = rDoc.GetAttr( aViewData.GetCurX(),
+    const SfxUInt32Item& rItem = rDoc.GetAttr( aViewData.GetCurX(),
                                                aViewData.GetCurY(),
                                                aViewData.CurrentTabForData(),
                                                ATTR_VALIDDATA );
-    if ( pItem->GetValue() )
+    if ( rItem.GetValue() )
     {
-        const ScValidationData* pData = rDoc.GetValidationEntry( pItem->GetValue() );
+        const ScValidationData* pData = rDoc.GetValidationEntry( rItem.GetValue() );
         OSL_ENSURE(pData,"ValidationData not found");
         OUString aTitle, aMessage;
 

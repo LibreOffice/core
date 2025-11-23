@@ -226,10 +226,10 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
 
         if (nMovX < 0 && rNewX > 0)
         {
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
-            if (pMergeAttr && pMergeAttr->IsMerged() &&
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
+            if (rMergeAttr.IsMerged() &&
                 nOldX >= rNewX &&
-                nOldX <= rNewX + pMergeAttr->GetRowMerge() - 1)
+                nOldX <= rNewX + rMergeAttr.GetRowMerge() - 1)
                 rNewX = rNewX - 1;
         }
     }
@@ -248,10 +248,10 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
 
         if (nMovY < 0 && rNewY > 0)
         {
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
-            if (pMergeAttr && pMergeAttr->IsMerged() &&
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
+            if (rMergeAttr.IsMerged() &&
                 nOldY >= rNewY &&
-                nOldY <= rNewY + pMergeAttr->GetRowMerge() - 1)
+                nOldY <= rNewY + rMergeAttr.GetRowMerge() - 1)
                 rNewY = rNewY - 1;
         }
     }
@@ -1147,11 +1147,11 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         if (!IsBlockMode())
         {
             InitBlockMode(nOrigX, nOrigY, nTab, true);
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE);
-            if (pMergeAttr && pMergeAttr->IsMerged())
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE);
+            if (rMergeAttr.IsMerged())
             {
-                nBlockEndX = nOrigX + pMergeAttr->GetColMerge() - 1;
-                nBlockEndY = nOrigY + pMergeAttr->GetRowMerge() - 1;
+                nBlockEndX = nOrigX + rMergeAttr.GetColMerge() - 1;
+                nBlockEndY = nOrigY + rMergeAttr.GetRowMerge() - 1;
             }
         }
 

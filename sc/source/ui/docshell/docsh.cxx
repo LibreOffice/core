@@ -2200,11 +2200,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         ScAddress aPos(nCol, nRow, nTab);
         if ( bTabProtect )
         {
-            const ScProtectionAttr* pProtAttr =
+            const ScProtectionAttr& rProtAttr =
                 m_pDocument->GetAttr( nCol, nRow, nTab, ATTR_PROTECTION );
-            if ( pProtAttr->GetHideCell() ||
+            if ( rProtAttr.GetHideCell() ||
                     ( eType == CELLTYPE_FORMULA && bShowFormulas &&
-                      pProtAttr->GetHideFormula() ) )
+                      rProtAttr.GetHideFormula() ) )
                 eType = CELLTYPE_NONE;  // hide
         }
         bool bForceQuotes = false;
@@ -2302,7 +2302,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         if ( bFixedWidth )
         {
             SvxCellHorJustify eHorJust =
-                m_pDocument->GetAttr( nCol, nRow, nTab, ATTR_HOR_JUSTIFY )->GetValue();
+                m_pDocument->GetAttr( nCol, nRow, nTab, ATTR_HOR_JUSTIFY ).GetValue();
             lcl_ScDocShell_GetFixedWidthString( aString, *m_pDocument, nTab, nCol,
                     !bString, eHorJust );
             rStream.WriteUnicodeOrByteText( aString );

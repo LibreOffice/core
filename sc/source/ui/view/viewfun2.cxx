@@ -948,18 +948,15 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
             false, INS_NONE, InsertDeleteFlags::ATTRIB ) )
         return;
 
-    const SfxUInt32Item* pItem = pInsDoc->GetAttr(
-        nCol, nRow, nTab, ATTR_VALUE_FORMAT );
-    if ( pItem )
-    {   // set number format if incompatible
-        // MarkData was already MarkToSimple'ed in PasteFromClip
-        const ScRange& aRange = rMark.GetMarkArea();
-        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-        aPattern.ItemSetPut(*pItem);
-        SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
-        rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
-            aPattern, nNewType );
-    }
+    const SfxUInt32Item& rItem = pInsDoc->GetAttr(nCol, nRow, nTab, ATTR_VALUE_FORMAT);
+    // set number format if incompatible
+    // MarkData was already MarkToSimple'ed in PasteFromClip
+    const ScRange& aRange = rMark.GetMarkArea();
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
+    aPattern.ItemSetPut(rItem);
+    SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType(rItem.GetValue());
+    rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
+        aPattern, nNewType );
 }
 
 //  manual page break

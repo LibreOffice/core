@@ -699,7 +699,7 @@ Color ScTable::GetCellBackgroundColor(ScAddress aPos) const
         }
     }
     return bHasConditionalBackgroundColor ? backgroundColor
-                                          : GetDoc().GetAttr(aPos, ATTR_BACKGROUND)->GetColor();
+                                          : GetDoc().GetAttr(aPos, ATTR_BACKGROUND).GetColor();
 }
 
 Color ScTable::GetCellTextColor(ScAddress aPos) const
@@ -727,8 +727,7 @@ Color ScTable::GetCellTextColor(ScAddress aPos) const
         }
     }
 
-    const SvxColorItem* pColor = GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
-    return pColor->GetValue();
+    return GetDoc().GetAttr(aPos, ATTR_FONT_COLOR).GetValue();
 }
 
 bool ScTable::IsManualRowHeight(SCROW nRow) const

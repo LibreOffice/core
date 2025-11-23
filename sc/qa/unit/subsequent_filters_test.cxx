@@ -1322,8 +1322,8 @@ void checkCellValidity(const ScAddress& rValBaseAddr, const ScRange& rRange, con
     SCROW nBRow(rValBaseAddr.Row());
     SCTAB nTab(static_cast<sal_Int32>(rValBaseAddr.Tab()));
     //get from the document the data validation entry we are checking against
-    const SfxUInt32Item* pItem = rDoc.GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA);
-    const ScValidationData* pValData = rDoc.GetValidationEntry(pItem->GetValue());
+    const SfxUInt32Item& rItem = rDoc.GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA);
+    const ScValidationData* pValData = rDoc.GetValidationEntry(rItem.GetValue());
     CPPUNIT_ASSERT(pValData);
 
     //check that each cell in the expected range is associated with the data validation entry
@@ -1331,8 +1331,8 @@ void checkCellValidity(const ScAddress& rValBaseAddr, const ScRange& rRange, con
     {
         for (SCROW j = rRange.aStart.Row(); j <= rRange.aEnd.Row(); ++j)
         {
-            const SfxUInt32Item* pItemTest = rDoc.GetAttr(i, j, nTab, ATTR_VALIDDATA);
-            const ScValidationData* pValDataTest = rDoc.GetValidationEntry(pItemTest->GetValue());
+            const SfxUInt32Item& rItemTest = rDoc.GetAttr(i, j, nTab, ATTR_VALIDDATA);
+            const ScValidationData* pValDataTest = rDoc.GetValidationEntry(rItemTest.GetValue());
             //prevent string operations for occurring unnecessarily
             if (!(pValDataTest && pValData->GetKey() == pValDataTest->GetKey()))
             {

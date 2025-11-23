@@ -496,7 +496,7 @@ void XclImpAutoFilterData::SetCellAttribs()
     ScDocument& rDoc = pExcRoot->pIR->GetDoc();
     for ( SCCOL nCol = StartCol(); nCol <= EndCol(); nCol++ )
     {
-        ScMF nFlag = rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG )->GetValue();
+        ScMF nFlag = rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ).GetValue();
         rDoc.ApplyAttr( nCol, StartRow(), Tab(), ScMergeFlagAttr( nFlag | ScMF::Auto) );
     }
 }

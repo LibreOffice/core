@@ -1670,7 +1670,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf140027)
 
     // check we have no any unnecessary flags
     ScDocument* pDoc = getScDoc();
-    auto nFlag = pDoc->GetAttr(0, 0, 1, ATTR_MERGE_FLAG)->GetValue();
+    auto nFlag = pDoc->GetAttr(0, 0, 1, ATTR_MERGE_FLAG).GetValue();
     CPPUNIT_ASSERT_EQUAL(ScMF::NONE, nFlag);
 
     const ScPatternAttr* pPattern = pDoc->GetPattern(1, 0, 1);

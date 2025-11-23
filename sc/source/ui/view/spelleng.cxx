@@ -215,8 +215,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 }
 
                 // language changed?
-                const SfxPoolItem* pItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
-                if( const SvxLanguageItem* pLangItem = dynamic_cast<const SvxLanguageItem*>( pItem )  )
+                const SfxPoolItem& rItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
+                if (const SvxLanguageItem* pLangItem = dynamic_cast<const SvxLanguageItem*>(&rItem))
                 {
                     LanguageType eLang = pLangItem->GetValue();
                     if( eLang == LANGUAGE_SYSTEM )

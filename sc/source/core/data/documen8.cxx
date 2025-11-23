@@ -1304,7 +1304,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                         sal_uInt16 nWhich = ( nScript == SvtScriptType::ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                                         ( ( nScript == SvtScriptType::COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );
-                        nLanguage = static_cast<const SvxLanguageItem*>(GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
+                        nLanguage = static_cast<const SvxLanguageItem&>(GetAttr( nCol, nRow, nTab, nWhich )).GetValue();
                     }
 
                     uno::Sequence<sal_Int32> aOffsets;

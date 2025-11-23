@@ -1731,13 +1731,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCellTextRotation)
     Degree100 nExpectedAngle = 3267_deg100; // RotateAngle has data type long, meaning Degree100
 
     Degree100 nActualAngle = 0_deg100;
-    nActualAngle = pDoc->GetAttr(0, 0, 0, ATTR_ROTATE_VALUE)->GetValue(); // col, row, tab, whichId
+    nActualAngle = pDoc->GetAttr(0, 0, 0, ATTR_ROTATE_VALUE).GetValue(); // col, row, tab, whichId
     CPPUNIT_ASSERT_EQUAL_MESSAGE("without unit", nExpectedAngle.get(), nActualAngle.get());
-    nActualAngle = pDoc->GetAttr(1, 0, 0, ATTR_ROTATE_VALUE)->GetValue();
+    nActualAngle = pDoc->GetAttr(1, 0, 0, ATTR_ROTATE_VALUE).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("degrees", nExpectedAngle.get(), nActualAngle.get());
-    nActualAngle = pDoc->GetAttr(2, 0, 0, ATTR_ROTATE_VALUE)->GetValue();
+    nActualAngle = pDoc->GetAttr(2, 0, 0, ATTR_ROTATE_VALUE).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("radians", nExpectedAngle.get(), nActualAngle.get());
-    nActualAngle = pDoc->GetAttr(3, 0, 0, ATTR_ROTATE_VALUE)->GetValue();
+    nActualAngle = pDoc->GetAttr(3, 0, 0, ATTR_ROTATE_VALUE).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("grad", nExpectedAngle.get(), nActualAngle.get());
 }
 

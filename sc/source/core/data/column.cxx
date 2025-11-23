@@ -1087,7 +1087,7 @@ namespace {
 
 bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, InsertDeleteFlags nFlags)
 {
-    sal_uInt32 nNumIndex = rDoc.GetAttr(rPos, ATTR_VALUE_FORMAT)->GetValue();
+    sal_uInt32 nNumIndex = rDoc.GetAttr(rPos, ATTR_VALUE_FORMAT).GetValue();
     SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nNumIndex);
     if ((nType == SvNumFormatType::DATE) || (nType == SvNumFormatType::TIME) || (nType == SvNumFormatType::DATETIME))
         return ((nFlags & InsertDeleteFlags::DATETIME) != InsertDeleteFlags::NONE);

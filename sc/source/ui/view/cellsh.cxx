@@ -1314,14 +1314,14 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_OPENDLG_CURRENTCONDFRMT:
             case SID_OPENDLG_CURRENTCONDFRMT_MANAGER:
                 {
-                    const SfxPoolItem* pItem = rDoc.GetAttr( nPosX, nPosY, nTab, ATTR_CONDITIONAL );
-                    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+                    const SfxPoolItem& rItem = rDoc.GetAttr( nPosX, nPosY, nTab, ATTR_CONDITIONAL );
+                    const ScCondFormatItem& rCondFormatItem = static_cast<const ScCondFormatItem&>(rItem);
 
-                    if ( pCondFormatItem->GetCondFormatData().empty() )
+                    if ( rCondFormatItem.GetCondFormatData().empty() )
                         rSet.DisableItem( nWhich );
-                    else if ( pCondFormatItem->GetCondFormatData().size() == 1 )
+                    else if ( rCondFormatItem.GetCondFormatData().size() == 1 )
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT_MANAGER );
-                    else if ( pCondFormatItem->GetCondFormatData().size() > 1 )
+                    else if ( rCondFormatItem.GetCondFormatData().size() > 1 )
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT );
                 }
                 break;

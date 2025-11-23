@@ -268,11 +268,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testWrapAndShrinkXLSXML)
 
     for (const auto& rC : aChecks)
     {
-        const ScLineBreakCell* pLB = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_LINEBREAK);
-        CPPUNIT_ASSERT_EQUAL(pLB->GetValue(), rC.bWrapText);
+        const ScLineBreakCell& rLB = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_LINEBREAK);
+        CPPUNIT_ASSERT_EQUAL(rLB.GetValue(), rC.bWrapText);
 
-        const ScShrinkToFitCell* pSTF = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_SHRINKTOFIT);
-        CPPUNIT_ASSERT_EQUAL(pSTF->GetValue(), rC.bShrinkToFit);
+        const ScShrinkToFitCell& rSTF = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_SHRINKTOFIT);
+        CPPUNIT_ASSERT_EQUAL(rSTF.GetValue(), rC.bShrinkToFit);
     }
 }
 

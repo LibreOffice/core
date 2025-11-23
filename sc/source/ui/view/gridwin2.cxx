@@ -258,9 +258,8 @@ void ScGridWindow::DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& 
     mrViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
     Size aScrSize(nSizeX - 1, nSizeY - 1);
 
-    sal_uInt16 nIndent = 0;
-    if (const ScIndentItem* pIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT))
-        nIndent = pIndentItem->GetValue();
+    const ScIndentItem& rIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT);
+    sal_uInt16 nIndent = rIndentItem.GetValue();
 
     // Check if the mouse cursor is clicking on the toggle +/- box.
     ScDPFieldButton aBtn(GetOutDev(), GetSettings().GetStyleSettings(), GetMapMode().GetScaleY(), mrViewData.GetDocument());

@@ -306,8 +306,8 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
     SdrObject* pObj = pNote ? pNote->GetCaption() : nullptr;
     if( pObj && pObj->GetLogicRect().Contains( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
     {
-        const ScProtectionAttr* pProtAttr = rDoc.GetAttr( aCellPos, ATTR_PROTECTION );
-        bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
+        const ScProtectionAttr& rProtAttr = rDoc.GetAttr( aCellPos, ATTR_PROTECTION );
+        bool bProtectAttr = rProtAttr.GetProtection() || rProtAttr.GetHideCell() ;
         bool bProtectDoc =  rDoc.IsTabProtected( aCellPos.Tab() ) || rViewData.GetSfxDocShell().IsReadOnly() ;
         // unlock internal layer (if not protected), will be relocked in ScDrawView::MarkListHasChanged()
         pView->LockInternalLayer( bProtectDoc && bProtectAttr );
@@ -1551,7 +1551,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
 
     // SetSize later
 
-    const sal_uInt32 nIndex = rDoc.GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA)->GetValue();
+    const sal_uInt32 nIndex = rDoc.GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA).GetValue();
     const ScValidationData* pData = nIndex ? rDoc.GetValidationEntry(nIndex) : nullptr;
 
     bool bEmpty = false;
@@ -2100,17 +2100,17 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
 
         // show in the merged cells the filter of the first cell (nPosX instead of nRealPosX)
-        const ScMergeFlagAttr* pRealPosAttr = rDoc.GetAttr(nPosX, nRealPosY, nTab, ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rRealPosAttr = rDoc.GetAttr(nPosX, nRealPosY, nTab, ATTR_MERGE_FLAG);
 
-        if (!bAutoFilterDisable && pRealPosAttr->HasAutoFilter())
+        if (!bAutoFilterDisable && rRealPosAttr.HasAutoFilter())
         {
             pScMod->InputEnterHandler();
             if (DoAutoFilterButton(nPosX, nRealPosY, rMEvt))
                 return;
         }
 
-        const ScMergeFlagAttr* pAttr = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_MERGE_FLAG);
-        if (!bAutoFilterDisable && pAttr->HasAutoFilter())
+        const ScMergeFlagAttr& rAttr = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_MERGE_FLAG);
+        if (!bAutoFilterDisable && rAttr.HasAutoFilter())
         {
             if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
             {
@@ -2119,16 +2119,16 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             }
         }
 
-        if (!bPivotDisable && (pAttr->HasPivotButton() || pAttr->HasPivotPopupButton() ||
-            pAttr->HasPivotMultiFieldPopupButton()))
+        if (!bPivotDisable && (rAttr.HasPivotButton() || rAttr.HasPivotPopupButton() ||
+            rAttr.HasPivotMultiFieldPopupButton()))
         {
-            DoPushPivotButton(nPosX, nPosY, rMEvt, pAttr->HasPivotButton(),
-                pAttr->HasPivotPopupButton(), pAttr->HasPivotMultiFieldPopupButton());
+            DoPushPivotButton(nPosX, nPosY, rMEvt, rAttr.HasPivotButton(),
+                rAttr.HasPivotPopupButton(), rAttr.HasPivotMultiFieldPopupButton());
             rState.mbActivatePart = false;
             return;
         }
 
-        if (!bPivotDisable && pAttr->HasPivotToggle())
+        if (!bPivotDisable && rAttr.HasPivotToggle())
         {
             DoPushPivotToggle(nPosX, nPosY, rMEvt);
             rState.mbActivatePart = false;
@@ -7013,11 +7013,11 @@ void ScGridWindow::UpdateAutoFillOverlay()
     // Consider the case of merged cells to determine where to place the AutoFill handle
     SCCOL nX2 = mrViewData.GetCurX();
     SCCOL nY2 = mrViewData.GetCurY();
-    const ScMergeAttr* pMerge = rDoc.GetAttr(nX2, nY2, nTab, ATTR_MERGE);
-    if (pMerge->GetColMerge() >= 1 || pMerge->GetRowMerge() >= 1)
+    const ScMergeAttr& rMerge = rDoc.GetAttr(nX2, nY2, nTab, ATTR_MERGE);
+    if (rMerge.GetColMerge() >= 1 || rMerge.GetRowMerge() >= 1)
     {
-        nX2 += pMerge->GetColMerge() - 1;
-        nY2 += pMerge->GetRowMerge() - 1;
+        nX2 += rMerge.GetColMerge() - 1;
+        nY2 += rMerge.GetRowMerge() - 1;
     }
 
     if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
