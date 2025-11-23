@@ -35,7 +35,7 @@ Primitive2DReference TextEffectPrimitive2D::create2DDecomposition(
     // have good results on rotated objects, too
     const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation()
                                        * basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
-    const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / 1.44));
+    const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / M_SQRT2));
 
     Primitive2DContainer aContainer;
     switch (getTextEffectStyle2D())
