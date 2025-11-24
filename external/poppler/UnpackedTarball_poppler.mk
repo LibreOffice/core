@@ -15,7 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,poppler,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/disable-freetype.patch.1 \
-	external/poppler/clang-std-ranges.patch.1 \
 	external/poppler/poppler-config.patch.1 \
 ))
 
