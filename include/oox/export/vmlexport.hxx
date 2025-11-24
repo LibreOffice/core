@@ -91,6 +91,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Remember the shape type.
     sal_uInt32 m_nShapeType;
 
+    /// Remember the value of the path attribute for the shape xml element.
+    OString m_ShapePath;
+
     /// Remember the shape flags.
     ShapeFlag m_nShapeFlags;
 
