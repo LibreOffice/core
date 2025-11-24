@@ -261,21 +261,12 @@ public:
                                         sal_uInt8 nMemberId ) override;
 };
 
-// MSVC hack:
-class SwDrawModeGrf_Base: public SfxEnumItem<GraphicDrawMode> {
-protected:
-    SwDrawModeGrf_Base(GraphicDrawMode nMode):
-        SfxEnumItem(RES_GRFATR_DRAWMODE, nMode) {}
-
-    virtual SfxItemType ItemType() const override = 0;
-};
-
-class SW_DLLPUBLIC SwDrawModeGrf final : public SwDrawModeGrf_Base
+class SW_DLLPUBLIC SwDrawModeGrf final : public SfxEnumItem<GraphicDrawMode>
 {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SwDrawModeGrf)
     SwDrawModeGrf( GraphicDrawMode nMode = GraphicDrawMode::Standard )
-        : SwDrawModeGrf_Base( nMode )
+        : SfxEnumItem(RES_GRFATR_DRAWMODE, nMode)
     {}
 
     // pure virtual methods of SfxPoolItem
