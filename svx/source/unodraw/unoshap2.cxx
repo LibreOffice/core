@@ -153,18 +153,27 @@ void SAL_CALL SvxShapeGroup::setSize( const awt::Size& rSize )
 
 // drawing::XShapeGroup
 
-
-void SAL_CALL SvxShapeGroup::enterGroup(  )
+void SAL_CALL SvxShapeGroup::enterGroup()
 {
-    // Todo
-//  pDrView->EnterMarkedGroup();
+    SdrObject* pSdrShape = GetSdrObject();
+    if (!pSdrShape)
+        return;
+
+    SdrViewIter::ForAllViews(pSdrShape, [&pSdrShape](SdrView* pView) {
+        if (pView->GetMarkedObjectList().FindObject(pSdrShape) != SAL_MAX_SIZE)
+        {
+            pView->EnterMarkedGroup();
+        }
+    });
 }
 
-
-void SAL_CALL SvxShapeGroup::leaveGroup(  )
+void SAL_CALL SvxShapeGroup::leaveGroup()
 {
-    // Todo
-//  pDrView->LeaveOneGroup();
+    SdrObject* pSdrShape = GetSdrObject();
+    if (!pSdrShape)
+        return;
+
+    SdrViewIter::ForAllViews(pSdrShape, [](SdrView* pView) { pView->LeaveOneGroup(); });
 }
 
 void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, size_t nPos )
