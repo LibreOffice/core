@@ -109,9 +109,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCombinedChartSecondaryAxisODS)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenXLSX)
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Original files were created with MS Office
     {
         loadFromFile(u"xlsx/tdf127777.xlsx");
@@ -229,9 +226,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitlePositionDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisCrossBetweenDOCX)
 {
     loadFromFile(u"odt/axis-position.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -405,9 +399,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel)
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     loadFromFile(u"xlsx/testCustomPosDataLabels.xlsx");
     {
         save(TestFilter::XLSX);
@@ -480,9 +471,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161571PiechartCustomPosDataLabels)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     loadFromFile(u"xlsx/tdf161607PieChartLeaderLinesColorWidth.xlsx");
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -571,9 +559,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabelMultipleSeries)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines)
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     loadFromFile(u"xlsx/testTdf90749.xlsx");
     {
         save(TestFilter::XLSX);
@@ -603,9 +588,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161607PieChartLeaderLinesColorWidth)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     loadFromFile(u"xlsx/tdf161607PieChartLeaderLinesColorWidth.xlsx");
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -878,9 +860,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf122031)
     //Checks pie chart data label format.
     loadFromFile(u"xlsx/tdf122031.xlsx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -912,9 +891,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134118)
 {
     loadFromFile(u"xlsx/tdf134118.xlsx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -928,9 +904,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf123206_customLabelText)
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -959,9 +932,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomLabelText)
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -1168,9 +1138,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131979)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076)
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     {
         loadFromFile(u"ods/tdf132076.ods");
         save(TestFilter::XLSX);
@@ -1215,9 +1182,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf133190)
 {
     loadFromFile(u"xlsx/tdf133190_tdf133191.xlsx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1236,9 +1200,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf133190)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf133191)
 {
     loadFromFile(u"xlsx/tdf133190_tdf133191.xlsx");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1275,9 +1236,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134255)
     CPPUNIT_ASSERT((xPropSet->getPropertyValue(u"TextWordWrap"_ustr) >>= bWrap));
     CPPUNIT_ASSERT(bWrap);
 
-    // FIXME: validation error in OOXML export: Errors: 11
-    skipValidation();
-
     // export test
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -1305,9 +1263,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134977)
     aFields[0]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(9), nFontSize);
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     //export test
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1331,9 +1286,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf123647)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf136267)
 {
     loadFromFile(u"xlsx/tdf136267.xlsx");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1363,9 +1315,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataLabelPlacementPieChart)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf137917)
 {
     loadFromFile(u"xlsx/tdf137917.xlsx");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1434,9 +1383,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138204)
         CPPUNIT_ASSERT_EQUAL(aTestEntry.aCellRange, aFields[0]->getCellRange());
         CPPUNIT_ASSERT_EQUAL(aTestEntry.aString, aFields[0]->getString());
     }
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1627,9 +1573,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf143942)
         CPPUNIT_ASSERT_EQUAL(aLabels[i], aFields[0]->getString());
     }
 
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1666,9 +1609,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf143942)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDateCategoriesPPTX)
 {
     loadFromFile(u"pptx/bnc889755.pptx");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
@@ -1758,8 +1698,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataTableImportExport)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf166249)
 {
     loadFromFile(u"xlsx/tdf166249.xlsx");
-    // FIXME: validation error in OOXML export
-    skipValidation();
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
