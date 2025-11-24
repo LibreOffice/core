@@ -2675,34 +2675,20 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableCompactLayoutXLSX)
         CPPUNIT_ASSERT_EQUAL(u"Row Labels"_ustr, rDoc.GetString(ScAddress(10, 1, 0)));
 
         // Check some row fields
-        struct RowFieldLabel
-        {
-            OUString aContent;
-            ScAddress aAddr;
-            bool bIndented;
-        };
-
-        constexpr int nCases = 6;
-        const RowFieldLabel aCases[nCases] = {
+        const std::tuple<OUString, ScAddress, bool> aCases[] = {
             { u"aaa"_ustr, ScAddress(10, 2, 0), true },
-
             { u"bbb"_ustr, ScAddress(10, 3, 0), true },
-
             { u"ccc"_ustr, ScAddress(10, 4, 0), true },
-
             { u"aax"_ustr, ScAddress(10, 10, 0), true },
-
             { u"bbx"_ustr, ScAddress(10, 14, 0), true },
-
             { u"ccc"_ustr, ScAddress(10, 15, 0), true },
         };
 
-        for (int nCaseNum = 0; nCaseNum < nCases; ++nCaseNum)
+        for (const auto & [ aContent, aAddr, bIndented ] : aCases)
         {
-            auto& rCase = aCases[nCaseNum];
-            CPPUNIT_ASSERT_EQUAL(rCase.aContent, rDoc.GetString(rCase.aAddr));
-            const ScIndentItem& rIndent = rDoc.GetAttr(rCase.aAddr, ATTR_INDENT);
-            if (rCase.bIndented)
+            CPPUNIT_ASSERT_EQUAL(aContent, rDoc.GetString(aAddr));
+            const ScIndentItem& rIndent = rDoc.GetAttr(aAddr, ATTR_INDENT);
+            if (bIndented)
             {
                 CPPUNIT_ASSERT_GREATER(sal_uInt16(0), rIndent.GetValue());
             }
