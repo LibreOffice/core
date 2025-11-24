@@ -463,8 +463,10 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
 
 void ChartController::executeDispatch_InsertTrendline()
 {
+    rtl::Reference<ChartModel> xChartModel = getChartModel();
+
     rtl::Reference< DataSeries > xRegressionCurveContainer =
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel());
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), xChartModel);
 
     if( !xRegressionCurveContainer.is() )
         return;
@@ -485,7 +487,7 @@ void ChartController::executeDispatch_InsertTrendline()
     auto aItemConverter = std::make_shared<wrapper::RegressionCurveItemConverter>(
         xCurve, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
         m_pDrawModelWrapper->getSdrModel(),
-        getChartModel() );
+        xChartModel );
 
     // open dialog
     SfxItemSet aItemSet = aItemConverter->CreateEmptyItemSet();
@@ -494,22 +496,23 @@ void ChartController::executeDispatch_InsertTrendline()
         ObjectIdentifier::createDataCurveCID(
             ObjectIdentifier::getSeriesParticleFromCID( m_aSelection.getSelectedCID()),
             RegressionCurveHelper::getRegressionCurveIndex( xRegressionCurveContainer, xCurve ), false ));
-    aDialogParameter.init( getChartModel() );
+    aDialogParameter.init( xChartModel );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
     auto aDialog = std::make_shared<SchAttribTabDlg>(GetChartFrame(), &aItemSet, aDialogParameter,
-                                                     &aViewElementListProvider, getChartModel());
+                                                     &aViewElementListProvider, xChartModel);
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    SfxTabDialogController::runAsync(aDialog, [this, aDialog, aItemConverter = std::move(aItemConverter),
-                                               xUndoGuard=std::move(xUndoGuard)](int nResult) {
+    SfxTabDialogController::runAsync(aDialog, [aDialog, aItemConverter = std::move(aItemConverter),
+                                               xUndoGuard=std::move(xUndoGuard),
+                                               xChartModel=std::move(xChartModel)](int nResult) {
         if ( nResult == RET_OK || aDialog->DialogWasClosedWithOK() )
         {
             const SfxItemSet* pOutItemSet = aDialog->GetOutputItemSet();
             if( pOutItemSet )
             {
-                ControllerLockGuardUNO aCLGuard( getChartModel() );
+                ControllerLockGuardUNO aCLGuard( xChartModel );
                 aItemConverter->ApplyItemSet( *pOutItemSet );
             }
             xUndoGuard->commit();
