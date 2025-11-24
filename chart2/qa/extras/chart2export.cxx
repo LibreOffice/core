@@ -495,9 +495,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
 {
     loadFromFile(u"docx/testAreaChartLoad.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -600,9 +597,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallBitmapFill)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartWallLineStyle)
 {
     loadFromFile(u"odt/testPieChartWallLineStyle.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -834,9 +828,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
     // Chart 2 has all its data labels with identical borders.
     verify(xChartDoc, 1);
 
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
 
     xChartDoc.set(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -851,9 +842,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabel3DChartDOCX)
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -888,9 +876,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelClusteredBarChartDOCX)
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    // FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -922,9 +907,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDoughnutChartDOCX)
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -940,9 +922,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelAreaChartDOCX)
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
@@ -979,9 +958,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDefaultLineChartDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testIndividualDataLabelProps)
 {
     loadFromFile(u"xlsx/tdf122915.xlsx");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1028,9 +1004,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartDataLabels)
 {
     loadFromFile(u"docx/PieChartDataLabels.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 19
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
