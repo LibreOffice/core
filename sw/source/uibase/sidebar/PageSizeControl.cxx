@@ -19,10 +19,10 @@
 
 #include <memory>
 #include "PageSizeControl.hxx"
+#include "ValueSetWithTextControl.hxx"
 
 #include <cmdid.h>
 #include <svx/pageitem.hxx>
-#include <svx/sidebar/ValueSetWithTextControl.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 #include <rtl/character.hxx>
@@ -71,7 +71,7 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/swriter/ui/pagesizecontrol.ui"_ustr, u"PageSizeControl"_ustr)
     , mxMoreButton(m_xBuilder->weld_button(u"moreoptions"_ustr))
     , mxWidthHeightField(m_xBuilder->weld_metric_spin_button(u"metric"_ustr, FieldUnit::CM))
-    , mxSizeValueSet(new svx::sidebar::ValueSetWithTextControl)
+    , mxSizeValueSet(new ValueSetWithTextControl)
     , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, u"pagesizevalueset"_ustr, *mxSizeValueSet))
     , mxControl(pControl)
 {

@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESIZECONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESIZECONTROL_HXX
 
+#include "ValueSetWithTextControl.hxx"
+
 #include <i18nutil/paper.hxx>
 
 #include <svtools/toolbarmenu.hxx>
@@ -26,10 +28,6 @@
 
 #include <vector>
 
-namespace svx::sidebar
-{
-class ValueSetWithTextControl;
-}
 class PageSizePopup;
 class ValueSet;
 
@@ -46,7 +44,7 @@ private:
     std::unique_ptr<weld::Button> mxMoreButton;
     // hidden metric field
     std::unique_ptr<weld::MetricSpinButton> mxWidthHeightField;
-    std::unique_ptr<svx::sidebar::ValueSetWithTextControl> mxSizeValueSet;
+    std::unique_ptr<ValueSetWithTextControl> mxSizeValueSet;
     std::unique_ptr<weld::CustomWeld> mxSizeValueSetWin;
     rtl::Reference<PageSizePopup> mxControl;
 

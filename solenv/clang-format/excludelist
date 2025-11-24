@@ -11472,7 +11472,6 @@ svx/source/sidebar/text/TextCharacterSpacingControl.hxx
 svx/source/sidebar/text/TextPropertyPanel.cxx
 svx/source/sidebar/text/TextPropertyPanel.hxx
 svx/source/sidebar/text/TextUnderlineControl.cxx
-svx/source/sidebar/tools/ValueSetWithTextControl.cxx
 svx/source/smarttags/SmartTagMgr.cxx
 svx/source/stbctrls/insctrl.cxx
 svx/source/stbctrls/modctrl.cxx
@@ -13136,6 +13135,7 @@ sw/source/uibase/sidebar/StylePresetsPanel.hxx
 sw/source/uibase/sidebar/SwPanelFactory.cxx
 sw/source/uibase/sidebar/ThemePanel.cxx
 sw/source/uibase/sidebar/ThemePanel.hxx
+sw/source/uibase/sidebar/ValueSetWithTextControl.cxx
 sw/source/uibase/sidebar/WrapPropertyPanel.cxx
 sw/source/uibase/sidebar/WrapPropertyPanel.hxx
 sw/source/uibase/table/chartins.cxx

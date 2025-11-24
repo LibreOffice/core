@@ -16,15 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svx/sidebar/ValueSetWithTextControl.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include "ValueSetWithTextControl.hxx"
 
+#include <sfx2/sidebar/Theme.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-namespace svx::sidebar {
+namespace sw::sidebar {
 
 ValueSetWithTextControl::ValueSetWithTextControl()
     : ValueSet(nullptr)
@@ -114,6 +114,6 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     Invalidate( aRect );
 }
 
-} // end of namespace svx::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
