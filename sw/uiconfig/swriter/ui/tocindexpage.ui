@@ -554,9 +554,6 @@
                             <property name="receives-default">True</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="addstylescb"/>
-                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="styles-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|styles">Opens the Assign Styles dialog, where you can select the paragraph styles to include in the index by choosing the outline level for where the style should be placed.</property>
