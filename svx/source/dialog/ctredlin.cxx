@@ -299,13 +299,13 @@ void SvxTPage::ActivatePage()
 
 SvxTPView::SvxTPView(weld::Container* pParent)
     : SvxTPage(pParent, u"svx/ui/redlineviewpage.ui"_ustr, u"RedlineViewPage"_ustr)
-    , bEnableAccept(true)
-    , bEnableAcceptAll(true)
-    , bEnableReject(true)
-    , bEnableRejectAll(true)
-    , bEnableUndo(true)
-    , bEnableClearFormat(false)
-    , bEnableClearFormatAll(false)
+    , m_bEnableAccept(true)
+    , m_bEnableAcceptAll(true)
+    , m_bEnableReject(true)
+    , m_bEnableRejectAll(true)
+    , m_bEnableUndo(true)
+    , m_bEnableClearFormat(false)
+    , m_bEnableClearFormatAll(false)
     , m_xAccept(m_xBuilder->weld_button(u"accept"_ustr))
     , m_xReject(m_xBuilder->weld_button(u"reject"_ustr))
     , m_xAcceptAll(m_xBuilder->weld_button(u"acceptall"_ustr))
@@ -329,11 +329,11 @@ SvxTPView::SvxTPView(weld::Container* pParent)
 
 void SvxTPView::ActivatePage()
 {
-    m_xAccept->set_sensitive(bEnableAccept);
-    m_xReject->set_sensitive(bEnableReject);
-    m_xAcceptAll->set_sensitive(bEnableAcceptAll);
-    m_xRejectAll->set_sensitive(bEnableRejectAll);
-    m_xUndo->set_sensitive(bEnableUndo);
+    m_xAccept->set_sensitive(m_bEnableAccept);
+    m_xReject->set_sensitive(m_bEnableReject);
+    m_xAcceptAll->set_sensitive(m_bEnableAcceptAll);
+    m_xRejectAll->set_sensitive(m_bEnableRejectAll);
+    m_xUndo->set_sensitive(m_bEnableUndo);
 }
 
 void SvxTPView::DeactivatePage()
@@ -392,40 +392,40 @@ void SvxRedlinTable::SetCalcView()
 
 void SvxTPView::EnableAccept(bool bFlag)
 {
-    bEnableAccept = bFlag;
+    m_bEnableAccept = bFlag;
     m_xAccept->set_sensitive(bFlag);
 }
 
 void SvxTPView::EnableAcceptAll(bool bFlag)
 {
-    bEnableAcceptAll = bFlag;
+    m_bEnableAcceptAll = bFlag;
     m_xAcceptAll->set_sensitive(bFlag);
 }
 
 void SvxTPView::EnableReject(bool bFlag)
 {
-    bEnableReject = bFlag;
+    m_bEnableReject = bFlag;
     m_xReject->set_sensitive(bFlag);
 }
 
 void SvxTPView::EnableRejectAll(bool bFlag)
 {
-    bEnableRejectAll = bFlag;
+    m_bEnableRejectAll = bFlag;
     m_xRejectAll->set_sensitive(bFlag);
 }
 
 void SvxTPView::EnableClearFormat(bool bFlag)
 {
-    if (bEnableClearFormat == bFlag)
+    if (m_bEnableClearFormat == bFlag)
         return;
-    bEnableClearFormat = bFlag;
+    m_bEnableClearFormat = bFlag;
 }
 
 void SvxTPView::EnableClearFormatAll(bool bFlag)
 {
-    if (bEnableClearFormatAll == bFlag)
+    if (m_bEnableClearFormatAll == bFlag)
         return;
-    bEnableClearFormatAll = bFlag;
+    m_bEnableClearFormatAll = bFlag;
 }
 
 void SvxTPView::ShowUndo()
@@ -435,37 +435,37 @@ void SvxTPView::ShowUndo()
 
 void SvxTPView::EnableUndo(bool bFlag)
 {
-    bEnableUndo = bFlag;
+    m_bEnableUndo = bFlag;
     m_xUndo->set_sensitive(bFlag);
 }
 
 IMPL_LINK_NOARG(SvxTPView, SortByComboBoxChangedHdl, weld::ComboBox&, void)
 {
-    if (SortByComboBoxChangedLk.IsSet())
-        SortByComboBoxChangedLk.Call(this);
+    if (m_SortByComboBoxChangedLk.IsSet())
+        m_SortByComboBoxChangedLk.Call(this);
 }
 
 IMPL_LINK( SvxTPView, PbClickHdl, weld::Button&, rPushB, void)
 {
     if (&rPushB == m_xAccept.get())
     {
-        AcceptClickLk.Call(this);
+        m_AcceptClickLk.Call(this);
     }
     else if (&rPushB == m_xAcceptAll.get())
     {
-        AcceptAllClickLk.Call(this);
+        m_AcceptAllClickLk.Call(this);
     }
     else if (&rPushB == m_xReject.get())
     {
-        RejectClickLk.Call(this);
+        m_RejectClickLk.Call(this);
     }
     else if (&rPushB == m_xRejectAll.get())
     {
-        RejectAllClickLk.Call(this);
+        m_RejectAllClickLk.Call(this);
     }
     else if (&rPushB == m_xUndo.get())
     {
-        UndoClickLk.Call(this);
+        m_UndoClickLk.Call(this);
     }
 }
 

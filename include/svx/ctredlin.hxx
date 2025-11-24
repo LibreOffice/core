@@ -259,22 +259,22 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView final : public SvxTPage
 {
 private:
-    Link<SvxTPView*,void>          AcceptClickLk;
-    Link<SvxTPView*,void>          AcceptAllClickLk;
-    Link<SvxTPView*,void>          RejectClickLk;
-    Link<SvxTPView*,void>          RejectAllClickLk;
-    Link<SvxTPView*,void>          UndoClickLk;
+    Link<SvxTPView*,void>          m_AcceptClickLk;
+    Link<SvxTPView*,void>          m_AcceptAllClickLk;
+    Link<SvxTPView*,void>          m_RejectClickLk;
+    Link<SvxTPView*,void>          m_RejectAllClickLk;
+    Link<SvxTPView*,void>          m_UndoClickLk;
 
-    Link<SvxTPView*,void> SortByComboBoxChangedLk;
+    Link<SvxTPView*,void> m_SortByComboBoxChangedLk;
 
-    bool bEnableAccept;
-    bool bEnableAcceptAll;
-    bool bEnableReject;
-    bool bEnableRejectAll;
-    bool bEnableUndo;
+    bool m_bEnableAccept;
+    bool m_bEnableAcceptAll;
+    bool m_bEnableReject;
+    bool m_bEnableRejectAll;
+    bool m_bEnableUndo;
 
-    bool bEnableClearFormat;
-    bool bEnableClearFormatAll;
+    bool m_bEnableClearFormat;
+    bool m_bEnableClearFormatAll;
 
     std::unique_ptr<weld::Button> m_xAccept;
     std::unique_ptr<weld::Button> m_xReject;
@@ -305,19 +305,19 @@ public:
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo();
 
-    void            SetAcceptClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptClickLk = rLink; }
+    void            SetAcceptClickHdl( const Link<SvxTPView*,void>& rLink ) { m_AcceptClickLk = rLink; }
 
-    void            SetAcceptAllClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptAllClickLk = rLink; }
+    void            SetAcceptAllClickHdl( const Link<SvxTPView*,void>& rLink ) { m_AcceptAllClickLk = rLink; }
 
-    void            SetRejectClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectClickLk = rLink; }
+    void            SetRejectClickHdl( const Link<SvxTPView*,void>& rLink ) { m_RejectClickLk = rLink; }
 
-    void            SetRejectAllClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectAllClickLk = rLink; }
+    void            SetRejectAllClickHdl( const Link<SvxTPView*,void>& rLink ) { m_RejectAllClickLk = rLink; }
 
-    void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { UndoClickLk = rLink; }
+    void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { m_UndoClickLk = rLink; }
 
     void SetSortByComboBoxChangedHdl(const Link<SvxTPView*, void>& rLink)
     {
-        SortByComboBoxChangedLk = rLink;
+        m_SortByComboBoxChangedLk = rLink;
     }
 
     virtual void    ActivatePage() override;
