@@ -28,7 +28,7 @@ OUString convertToAbsolutePath(const OUString& path)
     osl::FileBase::RC rc = resolver.fetchFileStatus(path);
     if (rc != osl::FileBase::E_None)
     {
-        SAL_WARN("vcl.app", "Could not resolve path '" << path << "' to search for icon themes.");
+        SAL_INFO("vcl.app", "Could not resolve path '" << path << "' to search for icon themes.");
         if (rc == osl::FileBase::E_MULTIHOP)
         {
             throw std::runtime_error("Provided a recursive symlink to an icon theme directory that "
@@ -48,13 +48,17 @@ bool readFileStatus(osl::FileStatus& status, const OUString& file)
     osl::FileBase::RC retvalGet = osl::DirectoryItem::get(file, dirItem);
     if (retvalGet != osl::FileBase::E_None)
     {
-        SAL_WARN("vcl.app", "Could not determine status for file '" << file << "'.");
+        if (retvalGet == osl::FileBase::E_NOENT)
+            SAL_INFO("vcl.app", "Directory doesn't exist '" << file << "'.");
+        else
+            SAL_INFO("vcl.app", "Could not determine status for file '"
+                                    << file << "' Return code: '" << retvalGet << "'.");
         return false;
     }
     osl::FileBase::RC retvalStatus = dirItem.getFileStatus(status);
     if (retvalStatus != osl::FileBase::E_None)
     {
-        SAL_WARN("vcl.app", "Could not determine status for file '" << file << "'.");
+        SAL_INFO("vcl.app", "Could not determine status for file '" << file << "'.");
         return false;
     }
     return true;
@@ -95,7 +99,7 @@ void UserResourceScanner::addPaths(std::u16string_view aPathString)
 
         if (aResourcePaths.empty())
         {
-            SAL_WARN("vcl.app",
+            SAL_INFO("vcl.app",
                      "Could not find any file in the provided directory ('" << path << "'.");
             continue;
         }
