@@ -202,49 +202,6 @@ namespace sw
 {
     namespace util
     {
-        /** Provide a dynamic_cast style cast for SfxPoolItems
-
-            A SfxPoolItem generally need to be cast back to its original type
-            to be useful, which is both tedious and error prone. So item_cast is
-            a helper template to aid the process and test if the cast is
-            correct.
-
-            @param rItem
-            The SfxPoolItem which is to be casted
-
-            @tplparam T
-            A SfxPoolItem derived class to cast rItem to
-
-            @return A rItem upcasted back to a T
-
-            @exception std::bad_cast Thrown if the rItem was not a T
-        */
-        template<class T> const T & item_cast(const SfxPoolItem &rItem)
-        {
-            assert(dynamic_cast<const T *>(&rItem) && "bad type cast");
-            return static_cast<const T &>(rItem);
-        }
-
-        /** Provide a dynamic_cast style cast for SfxPoolItems
-
-            A SfxPoolItem generally need to be cast back to its original type
-            to be useful, which is both tedious and error prone. So item_cast is
-            a helper template to aid the process and test if the cast is
-            correct.
-
-            @param pItem
-            The SfxPoolItem which is to be casted
-
-            @tplparam T
-            A SfxPoolItem derived class to cast pItem to
-
-            @return A pItem upcasted back to a T or 0 if pItem was not a T
-        */
-        template<class T> const T * item_cast(const SfxPoolItem *pItem)
-        {
-            return dynamic_cast<const T *>(pItem);
-        }
-
         /** Get the Paragraph Styles of a SwDoc
 
             Writer's styles are in one of those dreaded macro based pre-STL

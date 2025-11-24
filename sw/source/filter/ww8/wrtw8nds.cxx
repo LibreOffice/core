@@ -455,7 +455,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
                         if( SfxItemState::SET == aIter.GetItemState( false, &pItem ))
                         {
                             if (nWhichId == nFontId)
-                                pFont = &(item_cast<SvxFontItem>(*pItem));
+                                pFont = &pItem->StaticWhichCast(nFontId);
                             else if (nWhichId == RES_CHRATR_GRABBAG)
                                 pGrabBag = pItem;
                             else

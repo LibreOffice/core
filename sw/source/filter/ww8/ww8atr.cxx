@@ -262,7 +262,7 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
              if (bWriteCombChars &&
                  nWhich == RES_CHRATR_FONTSIZE)
              {
-                SvxFontHeightItem fontHeight(item_cast<SvxFontHeightItem>( *pItem ));
+                SvxFontHeightItem fontHeight(pItem->StaticWhichCast(RES_CHRATR_FONTSIZE));
                 fontHeight.SetHeight( fontHeight.GetHeight() / 2 );
 
                 AttrOutput().OutputItem( fontHeight );
