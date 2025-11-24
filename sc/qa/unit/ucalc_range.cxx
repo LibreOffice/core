@@ -41,6 +41,14 @@ CPPUNIT_TEST_FIXTURE(ScRangeTest, testOverlap)
     CPPUNIT_ASSERT(!aRange1.Intersects( aRange3 ));
 }
 
+CPPUNIT_TEST_FIXTURE(ScRangeTest, testExtendTo)
+{
+    ScRange aRange({2, 5, 1}, {9, 5, 1});
+    aRange.ExtendTo(ScRange({2, 7, 1}, {9, 7, 1}));
+    CPPUNIT_ASSERT_EQUAL(ScAddress(2, 5, 1), aRange.aStart);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(9, 7, 1), aRange.aEnd);
+}
+
 CPPUNIT_TEST_FIXTURE(ScRangeTest, testRangeParsing)
 {
     ScRange aRange;
