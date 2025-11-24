@@ -24,8 +24,6 @@
 
 /** is implemented by Shapes that contain other
     Shapes.
-
-    @deprecated
  */
 published interface XShapeGroup: com::sun::star::drawing::XShape
 {
