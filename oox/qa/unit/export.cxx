@@ -56,9 +56,6 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     // Given a document with a group shape and therein a rotated custom shape.
     loadFromFile(u"tdf141786_RotatedShapeInGroup.odt");
 
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     // When saving that to DOCX:
     save(TestFilter::DOCX);
 
@@ -130,9 +127,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     // Given a document with a group shape, containing a single polygon child shape:
     loadFromFile(u"dml-groupshape-polygon.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
-
     // When saving that to DOCX:
     save(TestFilter::DOCX);
 
@@ -150,9 +144,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
 {
     // Given a document with a few different kinds of arrow shapes in it:
     loadFromFile(u"tdf142602_CustomShapeArrows.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 11
-    skipValidation();
 
     // When saving that to DOCX:
     save(TestFilter::DOCX);
@@ -606,9 +597,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
     // but shading is generated in ctor of EnhancedCustomShape2d from the Type value.
     loadFromFile(u"tdf109169_OctagonBevel.odt");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Export to docx had not written a:fill or a:stroke attributes at all.
     save(TestFilter::DOCX);
 
@@ -821,10 +809,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
 {
     // The document has a Fontwork shape with bitmap fill.
     loadFromFile(u"tdf128568_FontworkBitmapFill.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    // Attribute ID is not allowed in element v:shape
-    skipValidation();
 
     // Saving that to DOCX:
     save(TestFilter::DOCX);
