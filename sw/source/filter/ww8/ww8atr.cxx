@@ -5825,10 +5825,10 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharScriptHint(rHt.StaticWhichCast(RES_CHRATR_SCRIPT_HINT));
             break;
         case RES_TXTATR_INETFMT:
-            TextINetFormat( static_cast< const SwFormatINetFormat& >( rHt ) );
+            TextINetFormat(rHt.StaticWhichCast(RES_TXTATR_INETFMT));
             break;
         case RES_TXTATR_CHARFMT:
-            TextCharFormat( static_cast< const SwFormatCharFormat& >( rHt ) );
+            TextCharFormat(rHt.StaticWhichCast(RES_TXTATR_CHARFMT));
             break;
 
         case RES_TXTATR_FIELD:
@@ -5838,10 +5838,10 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         case RES_TXTATR_FLYCNT:
-            TextFlyContent( static_cast< const SwFormatFlyCnt& >( rHt ) );
+            TextFlyContent(rHt.StaticWhichCast(RES_TXTATR_FLYCNT));
             break;
         case RES_TXTATR_FTN:
-            TextFootnote( static_cast< const SwFormatFootnote& >( rHt ) );
+            TextFootnote(rHt.StaticWhichCast(RES_TXTATR_FTN));
             break;
 
         case RES_PARATR_LINESPACING:
@@ -5866,13 +5866,13 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             ParaNumRule(rHt.StaticWhichCast(RES_PARATR_NUMRULE));
             break;
         case RES_PARATR_SCRIPTSPACE:
-            ParaScriptSpace( static_cast< const SfxBoolItem& >( rHt ) );
+            ParaScriptSpace(rHt.StaticWhichCast(RES_PARATR_SCRIPTSPACE));
             break;
         case RES_PARATR_HANGINGPUNCTUATION:
-            ParaHangingPunctuation( static_cast< const SfxBoolItem& >( rHt ) );
+            ParaHangingPunctuation(rHt.StaticWhichCast(RES_PARATR_HANGINGPUNCTUATION));
             break;
         case RES_PARATR_FORBIDDEN_RULES:
-            ParaForbiddenRules( static_cast< const SfxBoolItem& >( rHt ) );
+            ParaForbiddenRules(rHt.StaticWhichCast(RES_PARATR_FORBIDDEN_RULES));
             break;
         case RES_PARATR_VERTALIGN:
             ParaVerticalAlign(rHt.StaticWhichCast(RES_PARATR_VERTALIGN));
@@ -5882,7 +5882,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         case RES_FRM_SIZE:
-            FormatFrameSize( static_cast< const SwFormatFrameSize& >( rHt ) );
+            FormatFrameSize(rHt.StaticWhichCast(RES_FRM_SIZE));
             break;
         case RES_PAPER_BIN:
             FormatPaperBin(rHt.StaticWhichCast(RES_PAPER_BIN));
@@ -5903,37 +5903,37 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             FormatULSpace(rHt.StaticWhichCast(RES_UL_SPACE));
             break;
         case RES_PAGEDESC:
-            FormatPageDescription( static_cast< const SwFormatPageDesc& >( rHt ) );
+            FormatPageDescription(rHt.StaticWhichCast(RES_PAGEDESC));
             break;
         case RES_BREAK:
             FormatBreak(rHt.StaticWhichCast(RES_BREAK));
             break;
         case RES_SURROUND:
-            FormatSurround( static_cast< const SwFormatSurround& >( rHt ) );
+            FormatSurround(rHt.StaticWhichCast(RES_SURROUND));
             break;
         case RES_VERT_ORIENT:
-            FormatVertOrientation( static_cast< const SwFormatVertOrient& >( rHt ) );
+            FormatVertOrientation(rHt.StaticWhichCast(RES_VERT_ORIENT));
             break;
         case RES_HORI_ORIENT:
-            FormatHorizOrientation( static_cast< const SwFormatHoriOrient& >( rHt ) );
+            FormatHorizOrientation(rHt.StaticWhichCast(RES_HORI_ORIENT));
             break;
         case RES_ANCHOR:
-            FormatAnchor( static_cast< const SwFormatAnchor& >( rHt ) );
+            FormatAnchor(rHt.StaticWhichCast(RES_ANCHOR));
             break;
         case RES_BACKGROUND:
             FormatBackground(rHt.StaticWhichCast(RES_BACKGROUND));
             break;
         case XATTR_FILLSTYLE:
-            FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
+            FormatFillStyle(rHt.StaticWhichCast(XATTR_FILLSTYLE));
             break;
         case XATTR_FILLGRADIENT:
-            FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
+            FormatFillGradient(rHt.StaticWhichCast(XATTR_FILLGRADIENT));
             break;
         case RES_BOX:
             FormatBox(rHt.StaticWhichCast(RES_BOX));
             break;
         case RES_COL:
-            FormatColumns( static_cast< const SwFormatCol& >( rHt ) );
+            FormatColumns(rHt.StaticWhichCast(RES_COL));
             break;
         case RES_KEEP:
             FormatKeep(rHt.StaticWhichCast(RES_KEEP));
@@ -5942,7 +5942,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             FormatTextGrid(rHt.StaticWhichCast(RES_TEXTGRID));
             break;
         case RES_LINENUMBER:
-            FormatLineNumberingBase(static_cast<const SwFormatLineNumber&>(rHt));
+            FormatLineNumberingBase(rHt.StaticWhichCast(RES_LINENUMBER));
             break;
         case RES_FRAMEDIR:
             FormatFrameDirection(rHt.StaticWhichCast(RES_FRAMEDIR));
@@ -5960,7 +5960,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             SectionRtlGutter(rHt.StaticWhichCast(RES_RTL_GUTTER));
             break;
         case RES_TXTATR_LINEBREAK:
-            TextLineBreak(static_cast<const SwFormatLineBreak&>(rHt));
+            TextLineBreak(rHt.StaticWhichCast(RES_TXTATR_LINEBREAK));
             break;
 
         default:
