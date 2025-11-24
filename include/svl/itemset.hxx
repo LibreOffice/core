@@ -201,16 +201,13 @@ public:
     const T *                   GetItemIfSet(   TypedWhichId<T> nWhich,
                                                 bool bSrchInParent = true ) const
     {
-        const T * pItem = nullptr;
-        if (SfxItemState::SET == GetItemState(nWhich, bSrchInParent, &pItem))
-            return pItem;
+        const SfxPoolItem* pItem = nullptr;
+        if (SfxItemState::SET == GetItemState(sal_uInt16(nWhich), bSrchInParent, &pItem))
+            return &pItem->StaticWhichCast(nWhich);
         return nullptr;
     }
 
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = nullptr) const;
-    template<class T>
-    bool                        HasItem(TypedWhichId<T> nWhich, const T** ppItem = nullptr) const
-    { return HasItem(sal_uInt16(nWhich), reinterpret_cast<const SfxPoolItem**>(ppItem)); }
     void                        CollectHasItems(std::vector<sal_uInt16>& rItemWhichs) const;
 
     void DisableItem(sal_uInt16 nWhich)

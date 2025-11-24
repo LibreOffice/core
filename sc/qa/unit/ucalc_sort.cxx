@@ -548,16 +548,14 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
                 return false;
             }
 
-            const SfxPoolItem* pItem = nullptr;
-            if (!pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem))
+            const SvxWeightItem* pItem = pPat->GetItemSet().GetItemIfSet(ATTR_FONT_WEIGHT);
+            if (!pItem)
             {
                 std::cerr << "Pattern does not have a font weight item, but it should." << std::endl;
                 return false;
             }
 
-            CPPUNIT_ASSERT(pItem);
-
-            if (pItem->StaticWhichCast(ATTR_FONT_WEIGHT).GetWeight() != WEIGHT_BOLD)
+            if (pItem->GetWeight() != WEIGHT_BOLD)
             {
                 std::cerr << "Font weight should be bold." << std::endl;
                 return false;
@@ -574,16 +572,14 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
                 return false;
             }
 
-            const SfxPoolItem* pItem = nullptr;
-            if (!pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE, &pItem))
+            const SvxPostureItem* pItem = pPat->GetItemSet().GetItemIfSet(ATTR_FONT_POSTURE);
+            if (!pItem)
             {
                 std::cerr << "Pattern does not have a font posture item, but it should." << std::endl;
                 return false;
             }
 
-            CPPUNIT_ASSERT(pItem);
-
-            if (pItem->StaticWhichCast(ATTR_FONT_POSTURE).GetPosture() != ITALIC_NORMAL)
+            if (pItem->GetPosture() != ITALIC_NORMAL)
             {
                 std::cerr << "Italic should be applied.." << std::endl;
                 return false;
@@ -600,21 +596,20 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
                 return false;
             }
 
-            const SfxPoolItem* pItem = nullptr;
-            if (pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem))
+            if (const SvxWeightItem* pItem = pPat->GetItemSet().GetItemIfSet(ATTR_FONT_WEIGHT))
             {
                 // Check if the font weight is applied.
-                if (pItem->StaticWhichCast(ATTR_FONT_WEIGHT).GetWeight() == WEIGHT_BOLD)
+                if (pItem->GetWeight() == WEIGHT_BOLD)
                 {
                     std::cerr << "This cell is bold, but shouldn't." << std::endl;
                     return false;
                 }
             }
 
-            if (pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE, &pItem))
+            if (const SvxPostureItem* pItem = pPat->GetItemSet().GetItemIfSet(ATTR_FONT_POSTURE))
             {
                 // Check if the italics is applied.
-                if (pItem->StaticWhichCast(ATTR_FONT_POSTURE).GetPosture() == ITALIC_NORMAL)
+                if (pItem->GetPosture() == ITALIC_NORMAL)
                 {
                     std::cerr << "This cell is italic, but shouldn't." << std::endl;
                     return false;
