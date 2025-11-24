@@ -126,9 +126,6 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
         }
 
         const LocaleDataWrapper& localeDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-        OUString aWidthStr;
-        OUString aHeightStr;
-        OUString aItemText2;
         for ( std::vector< Paper >::size_type nPaperIdx = 0;
               nPaperIdx < maPaperList.size();
               ++nPaperIdx )
@@ -140,20 +137,20 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
             }
 
             mxWidthHeightField->set_value( mxWidthHeightField->normalize( aPaperSize.Width() ), FieldUnit::TWIP );
-            aWidthStr = localeDataWrapper.getNum(
+            const OUString aWidthStr = localeDataWrapper.getNum(
                 mxWidthHeightField->get_value(FieldUnit::NONE),
                 mxWidthHeightField->get_digits(),
                 true,
                 true );
 
             mxWidthHeightField->set_value( mxWidthHeightField->normalize( aPaperSize.Height() ), FieldUnit::TWIP);
-            aHeightStr = localeDataWrapper.getNum(
+            const OUString aHeightStr = localeDataWrapper.getNum(
                 mxWidthHeightField->get_value(FieldUnit::NONE),
                 mxWidthHeightField->get_digits(),
                 true,
                 true );
 
-            aItemText2 = aWidthStr + " x " + aHeightStr + " " + aMetricStr;
+            const OUString aItemText2 = aWidthStr + " x " + aHeightStr + " " + aMetricStr;
 
             mxSizeValueSet->AddItem(
                 SvxPaperInfo::GetName( maPaperList[ nPaperIdx ] ),
