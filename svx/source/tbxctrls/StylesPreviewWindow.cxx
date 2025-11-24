@@ -322,8 +322,8 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
         return;
 
     pStyle = pPool->First(m_eStyleFamily);
-    while (pStyle && pStyle->GetName() != m_aStyleName.first
-           && pStyle->GetName() != m_aStyleName.second)
+    while (pStyle && pStyle->GetName() != m_aStyleName.commonName
+           && pStyle->GetName() != m_aStyleName.translatedName)
         pStyle = pPool->Next();
 
     if (!pStyle)
@@ -410,7 +410,7 @@ void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderConte
 void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack)
 {
     tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second);
+    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.translatedName);
 
     Size aSize = aTextRect.GetSize();
     aSize.AdjustHeight(aSize.getHeight());
@@ -429,17 +429,18 @@ void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Colo
 
 void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 {
-    const SalLayoutGlyphs* layoutGlyphs
-        = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rRenderContext, m_aStyleName.second);
+    const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+        &rRenderContext, m_aStyleName.translatedName);
     tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second, 0, 0, -1, 0, {}, {},
+    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.translatedName, 0, 0, -1, 0, {}, {},
                                     layoutGlyphs);
 
     Point aPos(0, 0);
     aPos.AdjustX(LEFT_MARGIN);
     aPos.AdjustY((rRenderContext.GetOutputHeightPixel() - aTextRect.Bottom()) / 2);
 
-    rRenderContext.DrawText(aPos, m_aStyleName.second, 0, -1, nullptr, nullptr, layoutGlyphs);
+    rRenderContext.DrawText(aPos, m_aStyleName.translatedName, 0, -1, nullptr, nullptr,
+                            layoutGlyphs);
 }
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
@@ -532,7 +533,8 @@ void StylesPreviewWindow_Base::UpdateSelection()
 
     for (StylePreviewList::size_type i = 0; i < m_aAllStyles.size(); ++i)
     {
-        if (m_aAllStyles[i].first == m_sSelectedStyle || m_aAllStyles[i].second == m_sSelectedStyle)
+        if (m_aAllStyles[i].commonName == m_sSelectedStyle
+            || m_aAllStyles[i].translatedName == m_sSelectedStyle)
         {
             m_xStylesView->select(i);
             break;
@@ -575,7 +577,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     const weld::TreeIter& rIter = std::get<1>(rQuery);
     OUString sStyleId(m_xStylesView->get_id(rIter));
     OUString sStyleName(m_xStylesView->get_text(rIter));
-    OString sBase64Png(GetCachedPreviewJson(StylePreviewDescriptor(sStyleId, sStyleName)));
+    OString sBase64Png(GetCachedPreviewJson({ sStyleId, sStyleName }));
     if (sBase64Png.isEmpty())
         return false;
 
@@ -588,9 +590,9 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
 VclPtr<VirtualDevice>
 StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 {
-    auto aFound = StylePreviewCache::Get().find(rStyle.second);
+    auto aFound = StylePreviewCache::Get().find(rStyle.translatedName);
     if (aFound != StylePreviewCache::Get().end())
-        return StylePreviewCache::Get()[rStyle.second];
+        return StylePreviewCache::Get()[rStyle.translatedName];
     else
     {
         VclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
@@ -599,7 +601,7 @@ StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 
         StyleItemController aStyleController(rStyle);
         aStyleController.Paint(*pImg);
-        StylePreviewCache::Get()[rStyle.second] = pImg;
+        StylePreviewCache::Get()[rStyle.translatedName] = pImg;
 
         return pImg;
     }
@@ -607,14 +609,14 @@ StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 
 OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle)
 {
-    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.second);
+    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.translatedName);
     if (aJsonFound != StylePreviewCache::GetJson().end())
-        return StylePreviewCache::GetJson()[rStyle.second];
+        return StylePreviewCache::GetJson()[rStyle.translatedName];
 
     VclPtr<VirtualDevice> xDev = GetCachedPreview(rStyle);
     BitmapEx aBitmap(xDev->GetBitmapEx(Point(0, 0), xDev->GetOutputSize()));
     OString sResult = extractPngString(aBitmap);
-    StylePreviewCache::GetJson()[rStyle.second] = sResult;
+    StylePreviewCache::GetJson()[rStyle.translatedName] = sResult;
     return sResult;
 }
 
@@ -637,11 +639,11 @@ inline void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBase
         // do not duplicate
         const auto aFound = std::find_if(
             rAllStyles.begin(), rAllStyles.end(), [sName](const StylePreviewDescriptor& element) {
-                return element.first == sName || element.second == sName;
+                return element.commonName == sName || element.translatedName == sName;
             });
 
         if (aFound == rAllStyles.end())
-            rAllStyles.push_back(StylePreviewDescriptor(sName, sName));
+            rAllStyles.emplace_back<StylePreviewDescriptor>({ sName, sName });
 
         pStyle = xIter->Next();
     }
@@ -674,7 +676,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     for (const auto& rStyle : m_aAllStyles)
     {
         VclPtr<VirtualDevice> pImg = bNeedInsertPreview ? GetCachedPreview(rStyle) : nullptr;
-        m_xStylesView->append(rStyle.first, rStyle.second, pImg);
+        m_xStylesView->append(rStyle.commonName, rStyle.translatedName, pImg);
     }
     m_xStylesView->thaw();
 }
