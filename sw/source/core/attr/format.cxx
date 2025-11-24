@@ -49,6 +49,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const UIName& rFormatNm,
     m_bAutoUpdateOnDirectFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
     m_bFormatInDTOR = m_bHidden = false;
+    m_bIsFavourite = true;
 
     if( pDrvdFrame )
     {
@@ -69,6 +70,7 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
     m_bFormatInDTOR = false; // LAYER_IMPL
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
+    m_bIsFavourite = rFormat.m_bIsFavourite;
     m_bAutoUpdateOnDirectFormat = rFormat.m_bAutoUpdateOnDirectFormat;
 
     if( auto pDerived = rFormat.DerivedFrom() )
@@ -117,6 +119,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
 
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
+    m_bIsFavourite = rFormat.m_bIsFavourite;
     m_bAutoUpdateOnDirectFormat = rFormat.m_bAutoUpdateOnDirectFormat;
     return *this;
 }
@@ -727,6 +730,29 @@ void SwFormat::SetGrabBagItem(const uno::Any& rVal)
         m_pGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     m_pGrabBagItem->PutValue(rVal, 0);
+
+    ParseFavourites();
+}
+
+void SwFormat::ParseFavourites()
+{
+    const auto& rItems = m_pGrabBagItem->GetGrabBag();
+    const auto aIt = rItems.find(u"qFormat"_ustr);
+    if (aIt != rItems.end())
+    {
+        sal_Int32 nVal = 0;
+        if (aIt->second >>= nVal)
+        {
+            if (nVal == 0)
+                SetFavourite(false);
+            else
+                SetFavourite(true);
+        }
+    }
+    else
+    {
+        SetFavourite(false);
+    }
 }
 
 std::unique_ptr<SvxBrushItem> SwFormat::makeBackgroundBrushItem(bool bInP) const
@@ -754,25 +780,6 @@ void SwFormat::RemoveAllUnos()
 {
     sw::RemoveUnoObjectHint aMsgHint(this);
     SwClientNotify(*this, aMsgHint);
-}
-
-bool SwFormat::IsFavourite() const
-{
-    if (!m_pGrabBagItem) return false;
-
-    const auto& rItems = m_pGrabBagItem->GetGrabBag();
-    const auto aIt = rItems.find(u"qFormat"_ustr);
-    if (aIt != rItems.end())
-    {
-        sal_Int32 nVal = 0;
-        if (aIt->second >>= nVal)
-        {
-            if (nVal == 1)
-                return true;
-        }
-    }
-
-    return false;
 }
 
 bool SwFormat::IsUsed() const
