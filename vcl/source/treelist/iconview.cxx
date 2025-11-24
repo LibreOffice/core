@@ -343,11 +343,28 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
     }
 }
 
+namespace
+{
+std::string_view selectionModeToString(SelectionMode eMode)
+{
+    switch (eMode)
+    {
+        case SelectionMode::Single:
+            return "single";
+        case SelectionMode::Multiple:
+            return "multiple";
+        default:
+            return "single";
+    }
+}
+}
+
 void IconView::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SvTreeListBox::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("type", "iconview");
     rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
+    rJsonWriter.put("selectionmode", selectionModeToString(GetSelectionMode()));
     rJsonWriter.put("textWithIconEnabled", IsTextColumnEnabled());
     auto aNode = rJsonWriter.startArray("entries");
     DumpEntryAndSiblings(rJsonWriter, First());
