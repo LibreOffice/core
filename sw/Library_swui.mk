@@ -95,6 +95,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/config/optcomp \
     sw/source/ui/config/optload \
     sw/source/ui/config/optpage \
+    sw/source/ui/config/SwGridTabPage \
     sw/source/ui/dialog/abstract \
     sw/source/ui/dialog/addrdlg \
     sw/source/ui/dialog/ascfldlg \

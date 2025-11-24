@@ -1129,6 +1129,7 @@ void SwPagePreview::Init()
     aOpt.SetTable( true );
     aOpt.SetSnap( false );
     aOpt.SetGridVisible( false );
+    aOpt.SetBaselineGridVisible( false );
     aOpt.SetOnlineSpell( false );
     aOpt.SetHideWhitespaceMode( false );
 

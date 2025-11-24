@@ -71,7 +71,7 @@ const std::pair<TranslateId, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
     { NC_("SID_SW_EDITOPTIONS_RES", "General"),     RID_SW_TP_OPTLOAD_PAGE    },
     { NC_("SID_SW_EDITOPTIONS_RES", "View"),       RID_SW_TP_CONTENT_OPT   },
     { NC_("SID_SW_EDITOPTIONS_RES", "Formatting Aids"),        RID_SW_TP_OPTSHDWCRSR     },
-    { NC_("SID_SW_EDITOPTIONS_RES", "Grid"),        RID_SVXPAGE_GRID         },
+    { NC_("SID_SW_EDITOPTIONS_RES", "Grids"),        RID_SVXPAGE_GRID         },
     { NC_("SID_SW_EDITOPTIONS_RES", "Basic Fonts (Western)"),RID_SW_TP_STD_FONT        },
     { NC_("SID_SW_EDITOPTIONS_RES", "Basic Fonts (Asian)"),RID_SW_TP_STD_FONT_CJK        },
     { NC_("SID_SW_EDITOPTIONS_RES", "Basic Fonts (CTL)"),      RID_SW_TP_STD_FONT_CTL        },

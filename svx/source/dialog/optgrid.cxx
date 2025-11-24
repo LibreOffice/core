@@ -137,6 +137,9 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button(u"mtrfldangle"_ustr, FieldUnit::DEGREE))
     , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button(u"mtrfldbezangle"_ustr, FieldUnit::DEGREE))
     , m_xMtrFldBezAngleImg(m_xBuilder->weld_widget(u"lockmtrfldbezangle"_ustr))
+    , m_xBaselineGrid(m_xBuilder->weld_widget(u"baselinegridframe"_ustr))
+    , m_xCbxBaselineGridVisible(m_xBuilder->weld_check_button(u"baselinegridvisible"_ustr))
+    , m_xCbxBaselineGridVisibleImg(m_xBuilder->weld_widget(u"lockbaselinegridvisible"_ustr))
 {
     // This page requires exchange Support
     SetExchangeSupport();
@@ -205,7 +208,7 @@ OUString SvxGridTabPage::GetAllStrings()
     OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr,    u"label2"_ustr, u"flddrawx"_ustr,  u"flddrawy"_ustr, u"label6"_ustr, u"label7"_ustr, u"label3"_ustr,
-            u"divisionx"_ustr, u"label4"_ustr, u"divisiony"_ustr, u"label5"_ustr,   u"label8"_ustr, u"label9"_ustr };
+            u"divisionx"_ustr, u"label4"_ustr, u"divisiony"_ustr, u"label5"_ustr,   u"label8"_ustr, u"label9"_ustr, u"label10"_ustr };
 
     for (const auto& label : labels)
     {
@@ -215,7 +218,8 @@ OUString SvxGridTabPage::GetAllStrings()
 
     OUString checkButton[]
         = { u"usegridsnap"_ustr, u"gridvisible"_ustr, u"synchronize"_ustr, u"snaphelplines"_ustr, u"snapborder"_ustr,
-            u"snapframe"_ustr,   u"snappoints"_ustr,  u"ortho"_ustr,       u"bigortho"_ustr,      u"rotate"_ustr };
+            u"snapframe"_ustr,   u"snappoints"_ustr,  u"ortho"_ustr,       u"bigortho"_ustr,      u"rotate"_ustr,
+            u"baselinegridvisible"_ustr };
 
     for (const auto& check : checkButton)
     {

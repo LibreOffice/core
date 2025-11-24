@@ -38,6 +38,7 @@ class SwAnchoredObject;
 namespace sw {
     class VirtPageNumHint;
 }
+class SwTextFormatColl;
 
 enum class SwPageFrameInvFlags : sal_uInt8
 {
@@ -173,6 +174,9 @@ public:
     // Sends a Prepare() to all ContentFrames caused by a changed register template
     void PrepareRegisterChg();
 
+    void ComputeRegister(const SwTextFormatColl* pFormat, sal_uInt16& rRegHeight,
+                         sal_uInt16& rRegAscent) const;
+
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrames>
     // - return value not needed any more
@@ -189,6 +193,8 @@ public:
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) const;
     bool HasGrid() const { return m_bHasGrid; }
+
+    void PaintBaselineGrid( OutputDevice& rOututDevice ) const;
 
     void PaintDecorators( ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;

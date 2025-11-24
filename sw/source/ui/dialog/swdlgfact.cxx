@@ -94,6 +94,7 @@
 #include <formatlinebreak.hxx>
 #include <translatelangselect.hxx>
 #include <copyfielddlg.hxx>
+#include <SwGridTabPage.hxx>
 
 using namespace css::frame;
 using namespace css::uno;
@@ -1289,6 +1290,9 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         break;
         case RID_SW_TP_COMPARISON_OPT :
             pRet = SwCompareOptionsTabPage::Create;
+        break;
+        case RID_SVXPAGE_GRID :
+            pRet = SwGridTabPage::Create;
         break;
     }
 

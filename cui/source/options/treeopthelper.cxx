@@ -80,7 +80,7 @@ static PageIdToFileNameMap_Impl FileMap_Impl[] = {
     { RID_SW_TP_OPTLOAD_PAGE, u""_ustr }, // General
     { RID_SW_TP_CONTENT_OPT, u""_ustr }, // View
     { RID_SW_TP_OPTSHDWCRSR, u""_ustr }, // FormattingAids
-    { RID_SVXPAGE_GRID, u""_ustr }, // Grid
+    { RID_SVXPAGE_GRID, u""_ustr }, // Grids
     { RID_SW_TP_STD_FONT, u""_ustr }, // BasicFontsWestern
     { RID_SW_TP_STD_FONT_CJK, u""_ustr }, // BasicFontsAsian
     { RID_SW_TP_STD_FONT_CTL, u""_ustr }, // BasicFontsCTL
