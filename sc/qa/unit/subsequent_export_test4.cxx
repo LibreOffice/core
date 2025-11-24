@@ -2135,6 +2135,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf164417)
         1, getXPathPosition(pSheet1, "//x:autoFilter/x:filterColumn/x:filters", "dateGroupItem"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testOrderOfCNumFmtElements)
+{
+    createScDoc("xlsx/orderOfCNumFmtElements.xlsx");
+
+    // Without the fix in place, this test would have failed wiht
+    // - Expected: 0
+    // - Actual  : 10
+    // - validation error in OOXML export: Errors: 10
+    saveAndReload(TestFilter::XLSX);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165503)
 {
     createScDoc("xlsx/tdf165503.xlsx");
