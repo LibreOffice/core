@@ -110,15 +110,12 @@ protected:
 
 static ScMF lcl_getMergeFlagOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    const SfxPoolItem& rPoolItem = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE_FLAG);
-    const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
-    return rMergeFlag.GetValue();
+    return rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE_FLAG).GetValue();
 }
 
 static ScAddress lcl_getMergeSizeOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    const SfxPoolItem& rPoolItem = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE);
-    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(rPoolItem);
+    const ScMergeAttr& rMerge = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE);
     return ScAddress(rMerge.GetColMerge(), rMerge.GetRowMerge(), nTab);
 }
 
