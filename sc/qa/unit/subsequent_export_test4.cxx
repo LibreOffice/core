@@ -2150,8 +2150,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165503)
 {
     createScDoc("xlsx/tdf165503.xlsx");
 
-    // FIXME: Invalid content was found starting with element 'c:noMultiLvlLbl'
-    skipValidation();
     save(TestFilter::XLSX);
 
     xmlDocUniquePtr pChart1 = parseExport(u"xl/charts/chart1.xml"_ustr);
