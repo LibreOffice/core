@@ -145,6 +145,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_layoutwriter3 \
     CppunitTest_sw_layoutwriter4 \
     CppunitTest_sw_layoutwriter5 \
+    CppunitTest_sw_layoutwriter6 \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_mailmerge2 \
     CppunitTest_sw_globalfilter \
