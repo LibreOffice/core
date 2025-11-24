@@ -91,7 +91,6 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     maPaperList.push_back( PAPER_LEGAL );
 
     mxSizeValueSet->SetStyle( mxSizeValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_FLATVALUESET );
-    mxSizeValueSet->SetColor( Application::GetSettings().GetStyleSettings().GetMenuColor() );
 
     sal_uInt16 nSelectedItem = 0;
     {

@@ -84,7 +84,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         }
         else
         {
-            pDev->SetFillColor( COL_TRANSPARENT );
+            pDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetMenuBarColor());
             pDev->DrawRect(aRect);
         }
 
