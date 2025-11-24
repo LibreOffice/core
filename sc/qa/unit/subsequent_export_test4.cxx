@@ -284,6 +284,27 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf120502)
     assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf158921_exportPivotTable)
+{
+    createScDoc("ods/tdf158921.ods");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    // - validation error in OOXML export: Errors: 1
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocument* pDoc = getScDoc();
+
+    // There should be a pivot table
+    CPPUNIT_ASSERT(pDoc->HasPivotTable());
+
+    // DP collection is not lost after export and has one entry
+    ScDPCollection* pDPColl = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT(pDPColl);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf131372)
 {
     createScDoc("ods/tdf131372.ods");
