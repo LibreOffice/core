@@ -102,10 +102,10 @@ bool changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
         SvxBoxItem rNewItem(*pBoxItem);
         bool bLineChanged = false;
 
-        bLineChanged = changeBorderLine(rNewItem.GetBottom(), rColorSet) || bChanged;
-        bLineChanged = changeBorderLine(rNewItem.GetTop(), rColorSet) || bChanged;
-        bLineChanged = changeBorderLine(rNewItem.GetLeft(), rColorSet) || bChanged;
-        bLineChanged = changeBorderLine(rNewItem.GetRight(), rColorSet) || bChanged;
+        bLineChanged = changeBorderLine(rNewItem.GetBottom(), rColorSet) || bLineChanged;
+        bLineChanged = changeBorderLine(rNewItem.GetTop(), rColorSet) || bLineChanged;
+        bLineChanged = changeBorderLine(rNewItem.GetLeft(), rColorSet) || bLineChanged;
+        bLineChanged = changeBorderLine(rNewItem.GetRight(), rColorSet) || bLineChanged;
 
         if (bLineChanged)
         {
@@ -351,6 +351,8 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
     }
 
     m_rDocShell.SetDrawModified();
+    m_rDocShell.PostPaint(0, 0, 0, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB,
+                          PaintPartFlags::All);
     aModificator.SetDocumentModified();
 }
 
