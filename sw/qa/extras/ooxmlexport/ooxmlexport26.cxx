@@ -36,6 +36,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
                 u"1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testwDateValueFormat)
+{
+    createSwDoc("wDateValueFormat.docx");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 44
+    // - validation error in OOXML export: Errors: 44
+    saveAndReload(TestFilter::DOCX);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
 {
     createSwDoc("tdf124491.docx");
