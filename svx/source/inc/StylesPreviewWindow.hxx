@@ -27,7 +27,11 @@
 #include <sfx2/sfxstatuslistener.hxx>
 
 // pair of id and name, name can be translated to other language
-typedef std::pair<OUString, OUString> StylePreviewDescriptor;
+struct StylePreviewDescriptor
+{
+    OUString commonName; // English: Heading 1
+    OUString translatedName; //  German: Überschrift 1
+};
 typedef std::vector<StylePreviewDescriptor> StylePreviewList;
 
 class StylesPreviewWindow_Base;

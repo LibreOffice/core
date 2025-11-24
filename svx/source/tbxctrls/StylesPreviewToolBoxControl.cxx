@@ -73,10 +73,11 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                 {
                     css::uno::Reference<css::beans::XPropertySet> xStyle;
                     xParaStyles->getByName(rStyle) >>= xStyle;
-                    OUString sName;
-                    xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
-                    if (!sName.isEmpty())
-                        m_aDefaultStyles.push_back(StylePreviewDescriptor(rStyle, sName));
+                    OUString sTranslatedName;
+                    xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sTranslatedName;
+                    if (!sTranslatedName.isEmpty())
+                        m_aDefaultStyles.emplace_back<StylePreviewDescriptor>(
+                            { rStyle, sTranslatedName });
                 }
                 catch (const css::container::NoSuchElementException&)
                 {
@@ -104,12 +105,12 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                             xCellStyles->getByName(sStyleName), css::uno::UNO_QUERY);
                         if (xStyle)
                         {
-                            OUString sName;
-                            xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
-                            if (!sName.isEmpty())
+                            OUString sTranslatedName;
+                            xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sTranslatedName;
+                            if (!sTranslatedName.isEmpty())
                             {
-                                m_aDefaultStyles.push_back(
-                                    StylePreviewDescriptor(sStyleName, sName));
+                                m_aDefaultStyles.emplace_back<StylePreviewDescriptor>(
+                                    { sStyleName, sTranslatedName });
                             }
                         }
                     }
