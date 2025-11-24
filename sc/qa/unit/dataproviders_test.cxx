@@ -30,6 +30,7 @@ public:
     void testHTMLImport();
     void testXMLImport();
     void testBaseImport();
+    void testTdf169541_TwoDataMapping();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
@@ -37,6 +38,7 @@ public:
     CPPUNIT_TEST(testHTMLImport);
     CPPUNIT_TEST(testXMLImport);
     CPPUNIT_TEST(testBaseImport);
+    CPPUNIT_TEST(testTdf169541_TwoDataMapping);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -211,6 +213,17 @@ void ScDataProvidersTest::testBaseImport()
 
     CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), pDoc->GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), pDoc->GetString(0, 1, 0));
+}
+
+void ScDataProvidersTest::testTdf169541_TwoDataMapping()
+{
+    // tdf#169541 Crash in: Data Provider: import 2x + save = crash on open file
+    // Without fix, loading had crashed after initial creating and saving
+    createScDoc("tdf169541_two_data_mapping.ods");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    // Because this test is only about the crash, the pathes in the test document are
+    // not adapted to the test environment and thus no further tests about the content here.
 }
 
 ScDataProvidersTest::ScDataProvidersTest()
