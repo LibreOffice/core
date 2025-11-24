@@ -613,8 +613,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)
     loadFromFile(u"tdf155549_MCGR_AxialGradientCompatible.odt");
 
     //Round-trip through OOXML.
-    // FixMe tdf#153183. Here "Attribute 'ID' is not allowed to appear in element 'v:rect'".
-    skipValidation();
     saveAndReload(TestFilter::DOCX);
     saveAndReload(TestFilter::ODT);
 
@@ -645,8 +643,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialTransparencyCompatible)
     loadFromFile(u"tdf155549_MCGR_AxialTransparencyCompatible.odt");
 
     //Round-trip through OOXML.
-    // FixMe tdf#153183, and error in charSpace and in CharacterSet
-    //skipValidation();
     saveAndReload(TestFilter::DOCX);
     saveAndReload(TestFilter::ODT);
 
