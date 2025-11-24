@@ -319,10 +319,10 @@ namespace sw
         const SfxPoolItem *SearchPoolItems(const ww8::PoolItems &rItems,
             sal_uInt16 eType);
 
-        template<class T> const T* HasItem(const ww8::PoolItems &rItems,
-            sal_uInt16 eType)
+        template<class T> const T* HasItem(const ww8::PoolItems &rItems, TypedWhichId<T> eType)
         {
-            return item_cast<T>(SearchPoolItems(rItems, eType));
+            const SfxPoolItem* pItem = SearchPoolItems(rItems, eType);
+            return pItem ? &pItem->StaticWhichCast(eType) : nullptr;
         }
 
         /** Remove properties from an SfxItemSet which a SwFormatCharFormat overrides
