@@ -28,9 +28,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf108107)
 {
     loadFromFile(u"xlsx/tdf108107.xlsx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -174,9 +171,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testFdo83058dlblPos)
 {
     loadFromFile(u"docx/fdo83058_dlblPos.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -238,9 +232,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testAxisNumberFormatXLSX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataPointLabelNumberFormatXLSX)
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     loadFromFile(u"ods/tdf123774.ods");
     {
         save(TestFilter::XLSX);
@@ -601,9 +592,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf96161)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTableOnPage3)
 {
     loadFromFile(u"docx/TableOnPage3.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
 
