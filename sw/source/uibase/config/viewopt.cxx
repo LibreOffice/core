@@ -727,6 +727,10 @@ void ViewOptFlags1::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(bGridVisible).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bBaselineGridVisible"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(bBaselineGridVisible).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bOnlineSpell"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(bOnlineSpell).getStr()));

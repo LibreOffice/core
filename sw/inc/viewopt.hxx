@@ -61,6 +61,7 @@ struct ViewOptFlags1
     bool bSnap : 1;
     bool bSynchronize : 1;
     bool bGridVisible : 1;
+    bool bBaselineGridVisible : 1;
     bool bOnlineSpell : 1;
     bool bTreatSubOutlineLevelsAsContent : 1;
     bool bShowInlineTooltips : 1; //tooltips on tracked changes
@@ -104,6 +105,7 @@ struct ViewOptFlags1
         , bSnap(false)
         , bSynchronize(false)
         , bGridVisible(false)
+        , bBaselineGridVisible(false)
         , bOnlineSpell(false)
         , bTreatSubOutlineLevelsAsContent(false)
         , bShowInlineTooltips(false)
@@ -146,6 +148,7 @@ struct ViewOptFlags1
             && bSnap == rOther.bSnap
             && bSynchronize == rOther.bSynchronize
             && bGridVisible == rOther.bGridVisible
+            && bBaselineGridVisible == rOther.bBaselineGridVisible
             && bOnlineSpell == rOther.bOnlineSpell
             && bTreatSubOutlineLevelsAsContent == rOther.bTreatSubOutlineLevelsAsContent
             && bShowInlineTooltips == rOther.bShowInlineTooltips
@@ -568,6 +571,15 @@ public:
     { return !m_bReadonly && m_nCoreOptions.bGridVisible; }
     void SetGridVisible( bool b )
     { m_nCoreOptions.bGridVisible = b; }
+
+    bool IsBaselineGridVisible() const
+    {
+        return m_nCoreOptions.bBaselineGridVisible;
+    }
+    void SetBaselineGridVisible( bool bVisible )
+    {
+        m_nCoreOptions.bBaselineGridVisible = bVisible;
+    }
 
     bool IsOnlineSpell() const
     {

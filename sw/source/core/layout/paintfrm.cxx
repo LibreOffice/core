@@ -81,6 +81,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 
 #include <ndole.hxx>
 #include <PostItMgr.hxx>
@@ -129,6 +130,7 @@
 #include <ndtxt.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/hatch.hxx>
+#include <poolfmt.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -3487,6 +3489,8 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), pSh->GetViewOptions()->GetTextGridColor() );
                 }
 
+                pPage->PaintBaselineGrid( *pSh->GetOut() );
+
                 // #i68597#
                 // moved paint post-process for DrawingLayer overlay here, see above
                 {
@@ -6183,6 +6187,92 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
             bGrid = !bGrid;
         }
     }
+}
+
+void SwPageFrame::PaintBaselineGrid(OutputDevice& rOututDevice) const
+{
+    // Not displayed when printing.
+    if (rOututDevice.GetOutDevType() == OUTDEV_PRINTER)
+    {
+        return;
+    }
+
+    const SwRootFrame* pRootFrame = getRootFrame();
+    if (!pRootFrame)
+    {
+        return;
+    }
+
+    const SwViewShell* pViewShell = pRootFrame->GetCurrShell();
+    if (!pViewShell)
+    {
+        return;
+    }
+
+    const SwViewOption* pViewOption = pViewShell->GetViewOptions();
+    if (!pViewOption)
+    {
+        return;
+    }
+
+    // Draw only if the baseline grid is set to be visible.
+    if (!pViewOption->IsBaselineGridVisible())
+    {
+        return;
+    }
+
+    const SwPageDesc* pPageDesc = GetPageDesc();
+    if (!pPageDesc)
+    {
+        return;
+    }
+
+    sal_uInt16 nLineHeight = 0;
+    sal_uInt16 nLineOffset = 0;
+    // If page line-spacing is enabled, use the selected paragraph style to compute height/ascent values.
+    const SwTextFormatColl* pRegisterFormat = pPageDesc->GetRegisterFormatColl();
+    if (pRegisterFormat)
+    {
+        ComputeRegister(pRegisterFormat, nLineHeight, nLineOffset);
+    }
+    else
+    {
+        // If page line spacing is disabled, use the standard paragraph style ("Body text")
+        // to compute height/ascent values.
+        SwDoc* pDoc = pViewShell->GetDoc();
+        if (!pDoc)
+        {
+            return;
+        }
+        const SwTextFormatColl* pDefaultFormat
+            = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+        if (!pDefaultFormat)
+        {
+            return;
+        }
+        ComputeRegister(pDefaultFormat, nLineHeight, nLineOffset);
+    }
+
+    const SwLayoutFrame* pBody = FindBodyCont();
+    if (!pBody)
+    {
+        return;
+    }
+
+    SwRect aGridArea(pBody->getFramePrintArea());
+    aGridArea += pBody->getFrameArea().Pos();
+    // Grid area starts at the first baseline position of the page.
+    aGridArea.AddTop(nLineOffset);
+
+    const Color aGridColor(COL_BLACK);
+    const Color aOriginalLineColor(rOututDevice.GetLineColor());
+    rOututDevice.SetLineColor(aGridColor);
+
+    const tools::Long nLineWidth = aGridArea.Right() - aGridArea.Left();
+    rOututDevice.DrawGrid(aGridArea.SVRect(), Size(nLineWidth, nLineHeight),
+                          DrawGridFlags::HorzLines);
+
+    rOututDevice.SetLineColor(aOriginalLineColor);
 }
 
 /**

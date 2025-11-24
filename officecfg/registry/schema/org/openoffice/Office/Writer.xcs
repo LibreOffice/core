@@ -1505,7 +1505,7 @@
           <desc>Contains options for the grid.</desc>
         </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Options -->
           <info>
             <desc>Moves frames, drawing elements, and form functions only between the grid points.</desc>
             <label>Snap to grid</label>
@@ -1513,7 +1513,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Options -->
           <info>
             <desc>Displays the grid.</desc>
             <label>Visible grid</label>
@@ -1521,7 +1521,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Options -->
           <info>
             <desc>Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
             <label>Synchronize axes</label>
@@ -1534,7 +1534,7 @@
           <desc>Contains settings for specifying the grid resolution.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Grid -->
           <info>
             <desc>Defines the grid points distance in the X-axis [UNIT=1/100 mm].</desc>
             <label>X Axis Resolution</label>
@@ -1542,7 +1542,7 @@
           <value>1000</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Grid -->
           <info>
             <desc>Defines the grid points distance in the Y-axis [UNIT=1/100 mm].</desc>
             <label>Y Axis Resolution</label>
@@ -1555,7 +1555,7 @@
           <desc>Contains settings for specifying the subdivision of the grid.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Grid -->
           <info>
             <desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
             <label>X Axis Subdivision</label>
@@ -1563,7 +1563,7 @@
           <value>3</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Grid -->
           <info>
             <desc>Defines the distance between the grid points on the Y-axis.</desc>
             <label>Y Axis Subdivision</label>
@@ -1571,6 +1571,19 @@
           <value>3</value>
         </prop>
       </group>
+    </group>
+    <group oor:name="BaselineGrid">
+      <info>
+        <desc>Contains various options for the baseline grid.</desc>
+      </info>
+      <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - LibreOffice Writer - Grids - [Section] Baseline Grid -->
+        <info>
+          <desc>Displays the baseline grid for page line-spacing.</desc>
+          <label>Visible grid</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="DefaultFont">
       <info>

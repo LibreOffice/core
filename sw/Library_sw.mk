@@ -633,6 +633,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/config/fontcfg \
     sw/source/uibase/config/modcfg \
     sw/source/uibase/config/prtopt \
+    sw/source/uibase/config/SwBaselineGridConfig \
     sw/source/uibase/config/uinums \
     sw/source/uibase/config/usrpref \
     sw/source/uibase/config/viewopt \

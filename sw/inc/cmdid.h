@@ -879,6 +879,7 @@ class SwUINumRuleItem;
 #define FN_TEXT_BOX                     (FN_PARAM2+28) /* TextBox Property*/
 #define FN_BOOKMARK_HIDDEN              (FN_PARAM2+29) /* Hidden Property of bookmarks*/
 #define FN_BOOKMARK_CONDITION           (FN_PARAM2+30) /* Condition Property of bookmarks*/
+#define FN_PARAM_BASELINE_GRID_VISIBLE  TypedWhichId<SfxBoolItem>(FN_PARAM2+31) /* Baseline grid visibility */
 
 // Status: not more than 19!
 #define FN_STAT_PAGE                TypedWhichId<SfxStringListItem>(FN_STAT + 1)

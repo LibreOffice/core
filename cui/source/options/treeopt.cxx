@@ -325,7 +325,7 @@ constexpr OptionsMapping_Impl OptionsMap_Impl[]
     { u"Writer"_ustr,             u"General"_ustr,              RID_SW_TP_OPTLOAD_PAGE },
     { u"Writer"_ustr,             u"View"_ustr,                 RID_SW_TP_CONTENT_OPT },
     { u"Writer"_ustr,             u"FormattingAids"_ustr,       RID_SW_TP_OPTSHDWCRSR },
-    { u"Writer"_ustr,             u"Grid"_ustr,                 RID_SVXPAGE_GRID },
+    { u"Writer"_ustr,             u"Grids"_ustr,                RID_SVXPAGE_GRID },
     { u"Writer"_ustr,             u"BasicFontsWestern"_ustr,    RID_SW_TP_STD_FONT },
     { u"Writer"_ustr,             u"BasicFontsAsian"_ustr,      RID_SW_TP_STD_FONT_CJK },
     { u"Writer"_ustr,             u"BasicFontsCTL"_ustr,        RID_SW_TP_STD_FONT_CTL },

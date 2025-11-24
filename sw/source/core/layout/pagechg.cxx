@@ -46,6 +46,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <dcontact.hxx>
 #include <hints.hxx>
 #include <FrameControlsManager.hxx>
@@ -66,6 +67,8 @@
 #include <calbck.hxx>
 #include <txtfly.hxx>
 #include <frmatr.hxx>
+#include <swfntcch.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1054,21 +1057,135 @@ void SwPageFrame::PrepareRegisterChg()
         if( !IsAnLower( pFrame ) )
             break;
     }
-    if( !GetSortedObjs() )
-        return;
 
-    for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
+    if( GetSortedObjs() )
     {
-        // #i28701#
-        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
+        for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
         {
-            pFrame = pFly->ContainsContent();
-            while ( pFrame )
+            // #i28701#
+            if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
             {
-                ::lcl_PrepFlyInCntRegister( pFrame );
-                pFrame = pFrame->GetNextContentFrame();
+                pFrame = pFly->ContainsContent();
+                while ( pFrame )
+                {
+                    ::lcl_PrepFlyInCntRegister( pFrame );
+                    pFrame = pFrame->GetNextContentFrame();
+                }
             }
         }
+    }
+
+    // If the baseline grid is visible, a repaint of the page must be triggered.
+    const SwRootFrame* pRootFrame = getRootFrame();
+    if (!pRootFrame)
+    {
+        return;
+    }
+
+    const SwViewShell* pViewShell = pRootFrame->GetCurrShell();
+    if (!pViewShell)
+    {
+        return;
+    }
+
+    const SwViewOption* pViewOption = pViewShell->GetViewOptions();
+    if (!pViewOption)
+    {
+        return;
+    }
+
+    if (pViewOption->IsBaselineGridVisible())
+    {
+        InvalidatePage(this);
+        SetCompletePaint();
+    }
+}
+
+void SwPageFrame::ComputeRegister(const SwTextFormatColl* pFormat, sal_uInt16& rRegHeight,
+                                  sal_uInt16& rRegAscent) const
+{
+    rRegHeight = 0;
+    rRegAscent = 0;
+
+    if (!pFormat)
+    {
+        return;
+    }
+
+    const SvxLineSpacingItem &rSpace = pFormat->GetLineSpacing();
+    if( SvxLineSpaceRule::Fix == rSpace.GetLineSpaceRule() )
+    {
+        rRegHeight = rSpace.GetLineHeight();
+        rRegAscent = ( 4 * rRegHeight ) / 5;
+    }
+    else
+    {
+        SwViewShell *pSh = getRootFrame()->GetCurrShell();
+        SwFontAccess aFontAccess( pFormat, pSh );
+        SwFont aFnt( aFontAccess.Get()->GetFont() );
+
+        OutputDevice *pOut = nullptr;
+        if(pSh)
+        {
+            if( !pSh->GetViewOptions()->getBrowseMode() ||
+                pSh->GetViewOptions()->IsPrtFormat() )
+                pOut = pSh->GetDoc()->getIDocumentDeviceAccess().getReferenceDevice( true );
+
+            if(!pOut )
+                pOut = pSh->GetWin()->GetOutDev();
+        }
+        else
+        {
+            pOut = Application::GetDefaultDevice();
+        }
+
+        MapMode aOldMap( pOut->GetMapMode() );
+        pOut->SetMapMode( MapMode( MapUnit::MapTwip ) );
+
+        aFnt.ChgFnt( pSh, *pOut );
+        rRegHeight = aFnt.GetHeight( pSh, *pOut );
+        sal_uInt16 nNetHeight = rRegHeight;
+
+        switch( rSpace.GetLineSpaceRule() )
+        {
+            case SvxLineSpaceRule::Auto:
+            break;
+            case SvxLineSpaceRule::Min:
+            {
+                if( rRegHeight < rSpace.GetLineHeight() )
+                    rRegHeight = rSpace.GetLineHeight();
+                break;
+            }
+            default:
+                OSL_FAIL( ": unknown LineSpaceRule" );
+        }
+        switch( rSpace.GetInterLineSpaceRule() )
+        {
+            case SvxInterLineSpaceRule::Off:
+            break;
+            case SvxInterLineSpaceRule::Prop:
+            {
+                tools::Long nTmp = rSpace.GetPropLineSpace();
+                if( nTmp < 50 )
+                    nTmp = nTmp ? 50 : 100;
+                nTmp *= rRegHeight;
+                nTmp /= 100;
+                if( !nTmp )
+                    ++nTmp;
+                rRegHeight = o3tl::narrowing<sal_uInt16>(nTmp);
+                nNetHeight = rRegHeight;
+                break;
+            }
+            case SvxInterLineSpaceRule::Fix:
+            {
+                rRegHeight = rRegHeight + rSpace.GetInterLineSpace();
+                nNetHeight = rRegHeight;
+                break;
+            }
+            default: OSL_FAIL( ": unknown InterLineSpaceRule" );
+        }
+        rRegAscent = rRegHeight - nNetHeight + aFnt.GetAscent( pSh, *pOut );
+        pOut->SetMapMode( aOldMap );
     }
 }
 

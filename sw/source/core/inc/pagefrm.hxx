@@ -38,6 +38,7 @@ class SwAnchoredObject;
 namespace sw {
     class VirtPageNumHint;
 }
+class SwTextFormatColl;
 
 enum class SwPageFrameInvFlags : sal_uInt8
 {
@@ -173,6 +174,14 @@ public:
     // Sends a Prepare() to all ContentFrames caused by a changed register template
     void PrepareRegisterChg();
 
+    /** Computes height / ascent values used for register-true formatting.
+        @param[in]  pFormat     The paragraph format from which to derive the register-true parameters.
+        @param[out] rRegHeight  The computed text height for register-true formatting.
+        @param[out] rRegAscent  The computed text ascent for register-true formatting.
+    */
+    void ComputeRegister(const SwTextFormatColl* pFormat, sal_uInt16& rRegHeight,
+                         sal_uInt16& rRegAscent) const;
+
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrames>
     // - return value not needed any more
@@ -189,6 +198,9 @@ public:
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) const;
     bool HasGrid() const { return m_bHasGrid; }
+
+    /// Paints the baseline grid based on the reference style defined by the page line-spacing.
+    void PaintBaselineGrid( OutputDevice& rOututDevice ) const;
 
     void PaintDecorators( ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;

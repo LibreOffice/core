@@ -554,7 +554,8 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )
         {
-            SwPageDesc* pDesc = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(pFrame))->FindPageDesc();
+            const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pFrame);
+            SwPageDesc* pDesc = const_cast<SwPageFrame*>(pPage)->FindPageDesc();
             if( pDesc )
             {
                 rRegDiff = pDesc->GetRegHeight();
@@ -563,80 +564,12 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                     const SwTextFormatColl *pFormat = pDesc->GetRegisterFormatColl();
                     if( pFormat )
                     {
-                        const SvxLineSpacingItem &rSpace = pFormat->GetLineSpacing();
-                        if( SvxLineSpaceRule::Fix == rSpace.GetLineSpaceRule() )
-                        {
-                            rRegDiff = rSpace.GetLineHeight();
-                            pDesc->SetRegHeight( rRegDiff );
-                            pDesc->SetRegAscent( ( 4 * rRegDiff ) / 5 );
-                        }
-                        else
-                        {
-                            SwViewShell *pSh = getRootFrame()->GetCurrShell();
-                            SwFontAccess aFontAccess( pFormat, pSh );
-                            SwFont aFnt( aFontAccess.Get()->GetFont() );
-
-                            OutputDevice *pOut = nullptr;
-                            if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
-                                pSh->GetViewOptions()->IsPrtFormat() )
-                                pOut = GetDoc().getIDocumentDeviceAccess().getReferenceDevice( true );
-
-                            if( pSh && !pOut )
-                                pOut = pSh->GetWin()->GetOutDev();
-
-                            if( !pOut )
-                                pOut = Application::GetDefaultDevice();
-
-                            MapMode aOldMap( pOut->GetMapMode() );
-                            pOut->SetMapMode( MapMode( MapUnit::MapTwip ) );
-
-                            aFnt.ChgFnt( pSh, *pOut );
-                            rRegDiff = aFnt.GetHeight( pSh, *pOut );
-                            sal_uInt16 nNetHeight = rRegDiff;
-
-                            switch( rSpace.GetLineSpaceRule() )
-                            {
-                                case SvxLineSpaceRule::Auto:
-                                break;
-                                case SvxLineSpaceRule::Min:
-                                {
-                                    if( rRegDiff < rSpace.GetLineHeight() )
-                                        rRegDiff = rSpace.GetLineHeight();
-                                    break;
-                                }
-                                default:
-                                    OSL_FAIL( ": unknown LineSpaceRule" );
-                            }
-                            switch( rSpace.GetInterLineSpaceRule() )
-                            {
-                                case SvxInterLineSpaceRule::Off:
-                                break;
-                                case SvxInterLineSpaceRule::Prop:
-                                {
-                                    tools::Long nTmp = rSpace.GetPropLineSpace();
-                                    if( nTmp < 50 )
-                                        nTmp = nTmp ? 50 : 100;
-                                    nTmp *= rRegDiff;
-                                    nTmp /= 100;
-                                    if( !nTmp )
-                                        ++nTmp;
-                                    rRegDiff = o3tl::narrowing<sal_uInt16>(nTmp);
-                                    nNetHeight = rRegDiff;
-                                    break;
-                                }
-                                case SvxInterLineSpaceRule::Fix:
-                                {
-                                    rRegDiff = rRegDiff + rSpace.GetInterLineSpace();
-                                    nNetHeight = rRegDiff;
-                                    break;
-                                }
-                                default: OSL_FAIL( ": unknown InterLineSpaceRule" );
-                            }
-                            pDesc->SetRegHeight( rRegDiff );
-                            pDesc->SetRegAscent( rRegDiff - nNetHeight +
-                                                 aFnt.GetAscent( pSh, *pOut ) );
-                            pOut->SetMapMode( aOldMap );
-                        }
+                        sal_uInt16 nRegHeight = 0;
+                        sal_uInt16 nRegAscent = 0;
+                        pPage->ComputeRegister(pFormat, nRegHeight, nRegAscent);
+                        pDesc->SetRegHeight( nRegHeight );
+                        pDesc->SetRegAscent( nRegAscent );
+                        rRegDiff = pDesc->GetRegHeight();
                     }
                 }
                 const tools::Long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;

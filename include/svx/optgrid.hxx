@@ -144,6 +144,11 @@ protected:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldBezAngle;
     std::unique_ptr<weld::Widget> m_xMtrFldBezAngleImg;
 
+    // Writer-only baseline grid related items.
+    std::unique_ptr<weld::Widget> m_xBaselineGrid;
+    std::unique_ptr<weld::CheckButton> m_xCbxBaselineGridVisible;
+    std::unique_ptr<weld::Widget> m_xCbxBaselineGridVisibleImg;
+
     bool IsDrawMode() const { return m_Emode == DRAW_MODE; }
 
     DECL_LINK(ClickRotateHdl_Impl, weld::Toggleable&, void);
