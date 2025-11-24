@@ -750,7 +750,7 @@ public:
     std::unique_ptr<SfxPoolItem> CloneSetWhich( sal_uInt16 nNewWhich ) const;
     template<class T> std::unique_ptr<T> CloneSetWhich( TypedWhichId<T> nId ) const
     {
-        return std::unique_ptr<T>(static_cast<T*>(CloneSetWhich(sal_uInt16(nId)).release()));
+        return std::unique_ptr<T>(&CloneSetWhich(sal_uInt16(nId)).release()->StaticWhichCast(nId));
     }
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
