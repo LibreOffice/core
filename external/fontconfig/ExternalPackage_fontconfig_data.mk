@@ -26,7 +26,7 @@ $(eval $(call gb_ExternalPackage_add_files,fontconfig_data,$(FONTCONFIG_DATA_FOL
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig_data,$(FONTCONFIG_DATA_FOLDER)/conf.d,\
     conf.d/10-hinting-slight.conf \
     conf.d/10-scale-bitmap-fonts.conf \
-    conf.d/10-sub-pixel-rgb.conf \
+    conf.d/10-sub-pixel-none.conf \
     conf.d/10-yes-antialias.conf \
     conf.d/11-lcdfilter-default.conf \
     conf.d/20-unhint-small-vera.conf \
