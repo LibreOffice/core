@@ -61,9 +61,8 @@ PaletteManager::PaletteManager() :
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if(pDocSh)
     {
-        const SfxPoolItem* pItem = nullptr;
-        if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
-            mpColorList = pItem->StaticWhichCast(SID_COLOR_TABLE).GetColorList();
+        if (const SvxColorListItem* pItem = pDocSh->GetItem(SID_COLOR_TABLE))
+            mpColorList = pItem->GetColorList();
     }
     if(!mpColorList.is())
         mpColorList = XColorList::CreateStdColorList();
@@ -324,9 +323,8 @@ OUString PaletteManager::GetPaletteName()
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         if(pDocSh)
         {
-            const SfxPoolItem* pItem = nullptr;
-            if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
-                mpColorList = pItem->StaticWhichCast(SID_COLOR_TABLE).GetColorList();
+            if (const SvxColorListItem* pItem = pDocSh->GetItem(SID_COLOR_TABLE))
+                mpColorList = pItem->GetColorList();
         }
     }
     return aNames[mnCurrentPalette];
