@@ -1519,7 +1519,7 @@ bool SdDrawDocument::ValidateCanvasPage(const SdPage* pPage) const
         else
             aPreviewPageSet.insert(pPreviewPage);
     }
-    if (aPreviewPageSet.size() != GetSdPageCount(PageKind::Standard) - 1)
+    if (aPreviewPageSet.size() != o3tl::make_unsigned(GetSdPageCount(PageKind::Standard) - 1))
         return false;
     return true;
 }
