@@ -99,16 +99,9 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     {
         sal_Unicode c = aText[i];
         if ( rtl::isAsciiAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
-        {
             aMetricStr = OUStringChar(c) + aMetricStr;
-        }
-        else
-        {
-            if (!aMetricStr.isEmpty())
-            {
-                break;
-            }
-        }
+        else if (!aMetricStr.isEmpty())
+            break;
     }
 
     bool bLandscape = false;
