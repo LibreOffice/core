@@ -1314,8 +1314,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_OPENDLG_CURRENTCONDFRMT:
             case SID_OPENDLG_CURRENTCONDFRMT_MANAGER:
                 {
-                    const SfxPoolItem& rItem = rDoc.GetAttr( nPosX, nPosY, nTab, ATTR_CONDITIONAL );
-                    const ScCondFormatItem& rCondFormatItem = static_cast<const ScCondFormatItem&>(rItem);
+                    const ScCondFormatItem& rCondFormatItem = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_CONDITIONAL);
 
                     if ( rCondFormatItem.GetCondFormatData().empty() )
                         rSet.DisableItem( nWhich );
