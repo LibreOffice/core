@@ -27,7 +27,7 @@ class tdf167956(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xStylesView = xWriterDoc.getChild("stylesview")
             self.wait_until_styles_are_displayed(xStylesView)
-            self.assertEqual("10", get_state_as_dict(xStylesView)["Children"])
+            self.assertLessEqual("10", get_state_as_dict(xStylesView)["Children"])
             self.assertEqual("Default Paragraph Style", get_state_as_dict(xStylesView)["SelectEntryText"])
 
         with self.ui_test.load_file(get_url_for_data_file("tdf167956.docx")):

@@ -63,6 +63,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     bool   m_bAutoUpdateOnDirectFormat : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool m_bHidden : 1;
+    bool m_bIsFavourite : 1;        ///< Show in the basic UI
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
     virtual void InvalidateInSwFntCache(sal_uInt16) {};
     virtual void InvalidateInSwFntCache() {};
@@ -73,6 +74,7 @@ protected:
     SwFormat( const SwFormat& rFormat );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     void Destr();
+    void ParseFavourites();
 
 public:
 
@@ -179,7 +181,8 @@ public:
     bool IsAuto() const                 { return m_bAutoFormat; }
     void SetAuto( bool bNew )           { m_bAutoFormat = bNew; }
 
-    bool IsFavourite() const;
+    bool IsFavourite() const            { return m_bIsFavourite; }
+    void SetFavourite(bool bValue)      { m_bIsFavourite = bValue; }
 
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }
