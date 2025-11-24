@@ -5221,13 +5221,13 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = !rHt.StaticWhichCast(RES_PARATR_NUMRULE).GetValue().isEmpty();
             break;
         case RES_PARATR_SCRIPTSPACE:
-            bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
+            bMustWrite = !rHt.StaticWhichCast(RES_PARATR_SCRIPTSPACE).GetValue();
             break;
         case RES_PARATR_HANGINGPUNCTUATION:
-            bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
+            bMustWrite = !rHt.StaticWhichCast(RES_PARATR_HANGINGPUNCTUATION).GetValue();
             break;
         case RES_PARATR_FORBIDDEN_RULES:
-            bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
+            bMustWrite = !rHt.StaticWhichCast(RES_PARATR_FORBIDDEN_RULES).GetValue();
             break;
         case RES_PARATR_VERTALIGN:
             bMustWrite = rHt.StaticWhichCast(RES_PARATR_VERTALIGN).GetValue() != SvxParaVertAlignItem::Align::Automatic;
