@@ -94,21 +94,19 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
 
     sal_uInt16 nSelectedItem = 0;
     OUString aMetricStr;
+    const OUString aText = mxWidthHeightField->get_text();
+    for (short i = aText.getLength() - 1; i >= 0; i--)
     {
-        const OUString aText = mxWidthHeightField->get_text();
-        for (short i = aText.getLength() - 1; i >= 0; i--)
+        sal_Unicode c = aText[i];
+        if ( rtl::isAsciiAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
         {
-            sal_Unicode c = aText[i];
-            if ( rtl::isAsciiAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
+            aMetricStr = OUStringChar(c) + aMetricStr;
+        }
+        else
+        {
+            if (!aMetricStr.isEmpty())
             {
-                aMetricStr = OUStringChar(c) + aMetricStr;
-            }
-            else
-            {
-                if (!aMetricStr.isEmpty())
-                {
-                    break;
-                }
+                break;
             }
         }
     }
