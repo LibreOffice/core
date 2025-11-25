@@ -46,19 +46,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         clipboardManager = (ClipboardManager)mContext.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
-    private void enableMenuItem(final int menuItemId, final boolean enabled) {
-        LOKitShell.getMainHandler().post(new Runnable() {
-            public void run() {
-                MenuItem menuItem = mMainMenu.findItem(menuItemId);
-                if (menuItem != null) {
-                    menuItem.setEnabled(enabled);
-                } else {
-                    Log.e(LOGTAG, "MenuItem not found.");
-                }
-            }
-        });
-    }
-
     public void setEditModeOn(boolean enabled) {
         isEditModeOn = enabled;
     }
@@ -240,7 +227,7 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     void setupToolbars() {
         if (LibreOfficeMainActivity.isExperimentalMode()) {
             boolean enableSaveEntry = !LibreOfficeMainActivity.isReadOnlyMode() && mContext.hasLocationForSave();
-            enableMenuItem(R.id.action_save, enableSaveEntry);
+            setItemVisible(R.id.action_save, enableSaveEntry);
             if (LibreOfficeMainActivity.isReadOnlyMode()) {
                 // show message in case experimental mode is enabled (i.e. editing is supported in general),
                 // but current document is readonly
@@ -252,15 +239,16 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         setItemVisible(R.id.action_parts, mContext.isDrawerEnabled());
 
         final boolean enablePrint = mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PRINTING);
-        enableMenuItem(R.id.action_print, enablePrint);
         setItemVisible(R.id.action_print, enablePrint);
     }
 
-    public void setItemVisible(final int item, boolean visible){
+    public void setItemVisible(final int item, boolean visible) {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                mMainMenu.findItem(item).setVisible(visible);
+                final MenuItem menuItem = mMainMenu.findItem(item);
+                menuItem.setEnabled(visible);
+                menuItem.setVisible(visible);
             }
         });
     }
