@@ -1,5 +1,5 @@
 # For the Flatpak build (which cannot execute `make fetch` from its---sandboxed---build
-# environment), there is a solenv/flatpak-manifest.in that references these variables.
+# environment), there is a solenv/flatpak-external-tarballs.json.in that references these variables.
 # There is a script solenv/bin/generate-flatpak-manifest.sh to substitute the variables,
 # so upgrading to a new version only requires changes in download.lst.
 
