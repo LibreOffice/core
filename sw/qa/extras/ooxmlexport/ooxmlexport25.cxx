@@ -360,6 +360,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169274)
     assertXPath(pXmlDoc, sPath + "w:sdtContent/w:sdt", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testQFormatPreservation)
+{
+    createSwDoc("nospacing_hidden.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
+    // not used currently and had qFormat = 0 on import
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='No spacing']/w:qFormat", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
