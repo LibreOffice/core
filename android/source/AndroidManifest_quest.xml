@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- set a default activity size of 1024x640,
+             see https://developers.meta.com/horizon/documentation/android-apps/panel-sizing -->
+        <activity
+            android:name=".LibreOfficeMainActivity">
+            <layout
+                android:defaultHeight="640dp"
+                android:defaultWidth="1024dp" />
+        </activity>
+        <activity android:name="org.libreoffice.ui.LibreOfficeUIActivity">
+            <layout
+                android:defaultHeight="640dp"
+                android:defaultWidth="1024dp" />
+        </activity>
+    </application>
+</manifest>
