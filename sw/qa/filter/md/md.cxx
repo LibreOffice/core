@@ -71,9 +71,9 @@ CPPUNIT_TEST_FIXTURE(Test, testExportFormula)
     save(TestFilter::MD);
 
     std::string aActual = TempFileToString();
-    std::string aExpected("![]()" SAL_NEWLINE_STRING);
 
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT(aActual.starts_with("![]("));
+    CPPUNIT_ASSERT(aActual.ends_with(")" SAL_NEWLINE_STRING));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExportTableFrame)
@@ -977,6 +977,16 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxTemplateMdImport)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, pXFillStyleItem->GetValue());
     auto pXFillColorItem = pStyle->GetAttrSet().GetItem<XFillColorItem>(XATTR_FILLCOLOR);
     CPPUNIT_ASSERT_EQUAL(Color(0x156082), pXFillColorItem->GetColorValue());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOLEWithoutGraphicMdExport)
+{
+    // Given a document with an OLE object that has no graphic:
+    createSwDoc("ole-without-graphic.odt");
+
+    // When exporting it as markdown:
+    // Then make sure this doesn't crash:
+    save(TestFilter::MD);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
