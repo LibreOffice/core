@@ -48,7 +48,7 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -56,6 +56,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -68,7 +69,7 @@ namespace
 {
 
 void lcl_setRoleAtLabeledSequence(
-    const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq,
+    const uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq,
     const OUString &rRole )
 {
     // set role of sequence
@@ -278,10 +279,11 @@ void setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, O
                         {
                             if (bHasDataPilotSource)
                             {
-                                Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xProvider, uno::UNO_QUERY);
-                                xPivotTableDataProvider->setPivotTableName(sDataPilotSource);
+                                chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+                                    dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xProvider.get());
+                                pPivotTableDataProvider->setPivotTableName(sDataPilotSource);
                                 xDataReceiver->attachDataProvider(xProvider);
-                                bHasOwnData = !xPivotTableDataProvider->hasPivotTable();
+                                bHasOwnData = !pPivotTableDataProvider->hasPivotTable();
                             }
                             else
                             {

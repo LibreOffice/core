@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,chart2_pivot_chart_test, \
 
 $(eval $(call gb_CppunitTest_use_libraries,chart2_pivot_chart_test, \
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \

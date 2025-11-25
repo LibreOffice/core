@@ -37,7 +37,6 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -47,6 +46,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
@@ -494,10 +494,11 @@ void CreateCategories(
                                     }
 
                                     Reference<chart2::data::XDataSequence> xSequence;
-                                    Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xDataProvider, uno::UNO_QUERY);
-                                    if (xPivotTableDataProvider.is())
+                                    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+                                        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xDataProvider.get());
+                                    if (pPivotTableDataProvider)
                                     {
-                                        xSequence.set(xPivotTableDataProvider->createDataSequenceOfCategories());
+                                        xSequence.set(pPivotTableDataProvider->createDataSequenceOfCategories());
                                     }
                                     else
                                     {

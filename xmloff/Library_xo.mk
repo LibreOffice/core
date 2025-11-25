@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_sdk_api,xo))
 
 $(eval $(call gb_Library_use_libraries,xo,\
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \

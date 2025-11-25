@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc$(1),\
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc$(1), \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \

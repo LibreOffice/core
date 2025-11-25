@@ -67,6 +67,7 @@ endif
 $(eval $(call gb_Library_use_libraries,sc,\
     avmedia \
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \

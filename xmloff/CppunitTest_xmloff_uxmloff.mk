@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_externals,xmloff_uxmloff,\
 
 $(eval $(call gb_CppunitTest_use_libraries,xmloff_uxmloff, \
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \

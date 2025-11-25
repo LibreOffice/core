@@ -48,7 +48,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -683,11 +683,12 @@ void SAL_CALL ChartModel::removeModifyListener(
 // util::XModifyListener
 void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
 {
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(rEvenObject.Source, uno::UNO_QUERY);
-    if (xPivotTableDataProvider.is())
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(rEvenObject.Source.get());
+    if (pPivotTableDataProvider)
     {
         lockControllers();
-        uno::Reference<chart2::data::XDataProvider> xDataProvider(xPivotTableDataProvider, uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataProvider> xDataProvider(rEvenObject.Source, uno::UNO_QUERY);
         try
         {
             uno::Sequence<beans::PropertyValue> aArguments =

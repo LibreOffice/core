@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_custom_headers,chart2,\
 
 $(eval $(call gb_Library_use_libraries,chart2,\
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \

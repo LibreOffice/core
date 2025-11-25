@@ -14,6 +14,7 @@ $(eval $(call gb_Module_Module,chart2))
 
 $(eval $(call gb_Module_add_targets,chart2,\
     Library_chart2 \
+    Library_chart2api \
 	UIConfig_chart2 \
 ))
 

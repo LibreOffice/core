@@ -44,7 +44,7 @@
 #include <comphelper/dumpxmltostring.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1387,8 +1387,9 @@ bool ChartModel::isDataFromSpreadsheet()
 
 bool ChartModel::isDataFromPivotTable() const
 {
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(m_xDataProvider, uno::UNO_QUERY);
-    return xPivotTableDataProvider.is();
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(m_xDataProvider.get());
+    return pPivotTableDataProvider != nullptr;
 }
 
 rtl::Reference< BaseCoordinateSystem > ChartModel::getFirstCoordinateSystem()

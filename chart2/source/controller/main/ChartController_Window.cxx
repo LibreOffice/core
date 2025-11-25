@@ -56,7 +56,6 @@
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -64,6 +63,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -1998,12 +1998,12 @@ void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangl
     if (!pChartModel)
         return;
 
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
-    xPivotTableDataProvider.set(pChartModel->getDataProvider(), uno::UNO_QUERY);
-    if (!xPivotTableDataProvider.is())
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(pChartModel->getDataProvider().get());
+    if (!pPivotTableDataProvider)
         return;
 
-    OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
+    OUString sPivotTableName = pPivotTableDataProvider->getPivotTableName();
 
     css::uno::Reference<css::awt::XRequestCallback> xPopupRequest = pChartModel->getPopupRequest();
     PopupRequest* pPopupRequest = dynamic_cast<PopupRequest*>(xPopupRequest.get());

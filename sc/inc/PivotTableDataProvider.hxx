@@ -10,12 +10,12 @@
 #pragma once
 
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <svl/lstner.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
@@ -37,13 +37,14 @@ struct ValueAndFormat;
 class PivotTableDataSequence;
 
 typedef cppu::WeakImplHelper<css::chart2::data::XDataProvider,
-                             css::chart2::data::XPivotTableDataProvider,
                              css::beans::XPropertySet,
                              css::lang::XServiceInfo,
                              css::util::XModifyBroadcaster>
             PivotTableDataProvider_Base;
 
-class PivotTableDataProvider final : public PivotTableDataProvider_Base, public SfxListener
+class PivotTableDataProvider final : public PivotTableDataProvider_Base,
+                                     public chart2api::AbstractPivotTableDataProvider,
+                                     public SfxListener
 {
 public:
 
@@ -73,30 +74,30 @@ public:
 
     virtual css::uno::Reference<css::sheet::XRangeSelection> SAL_CALL getRangeSelection() override;
 
-    // XPivotTableDataProvider
-    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
-        getColumnFields() override;
-    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
-        getRowFields() override;
-    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
-        getPageFields() override;
-    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
-        getDataFields() override;
+    // AbstractPivotTableDataProvider
+    virtual const std::vector<css::chart2::data::PivotTableFieldEntry>&
+        getColumnFields() const override;
+    virtual const std::vector<css::chart2::data::PivotTableFieldEntry>&
+        getRowFields() const override;
+    virtual const std::vector<css::chart2::data::PivotTableFieldEntry>&
+        getPageFields() const override;
+    virtual const std::vector<css::chart2::data::PivotTableFieldEntry>&
+        getDataFields() const override;
 
-    virtual OUString SAL_CALL getPivotTableName() override;
+    virtual const OUString & getPivotTableName() const override;
 
-    virtual void SAL_CALL setPivotTableName(const OUString& sPivotTableName) override;
+    virtual void setPivotTableName(const OUString& sPivotTableName) override;
 
-    virtual sal_Bool SAL_CALL hasPivotTable() override;
+    virtual bool hasPivotTable() const override;
 
-    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceOfValuesByIndex(sal_Int32 nIndex) override;
-    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceOfLabelsByIndex(sal_Int32 nIndex) override;
-    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceOfCategories() override;
 
-    virtual OUString SAL_CALL getFieldOutputDescription(sal_Int32 nPageFieldIndex) override;
+    virtual OUString getFieldOutputDescription(sal_Int32 nPageFieldIndex) const override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;

@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <svx/svdoole2.hxx>
 #include <svtools/embedhlp.hxx>
 #include <utility>
@@ -92,11 +92,12 @@ OUString SAL_CALL TablePivotChart::getPivotTableName()
     if (!xChartDoc.is())
         return OUString();
 
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
-    if (!xPivotTableDataProvider.is())
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xChartDoc->getDataProvider().get());
+    if (!pPivotTableDataProvider)
         return OUString();
 
-    return xPivotTableDataProvider->getPivotTableName();
+    return pPivotTableDataProvider->getPivotTableName();
 }
 
 } // end sc namespace
