@@ -18,6 +18,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 # ofz50805.patch https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/350
 # ofz46165.patch upstreamed as https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/351
 # san.patch upstreamed as https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/352
+#
+# external/cairo/cairo/0001-Fix-out-of-memory-when-using-linear-gradient.patch.1 is a backport
+# of: https://gitlab.freedesktop.org/cairo/cairo/-/commit/d517773ff145d06c5b9efb21841fbc95caf5f540
 
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo.buildfix.patch \
@@ -31,6 +34,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-fd-hack.patch.0 \
 	external/cairo/cairo/cairo.ofz57493-Timeout.patch.1 \
 	external/cairo/cairo/Wincompatible-pointer-types.patch.0 \
+	external/cairo/cairo/0001-Fix-out-of-memory-when-using-linear-gradient.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)

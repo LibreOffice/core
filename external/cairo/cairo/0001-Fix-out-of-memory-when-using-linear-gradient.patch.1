@@ -1,0 +1,29 @@
+From d517773ff145d06c5b9efb21841fbc95caf5f540 Mon Sep 17 00:00:00 2001
+From: Koichi Akabe <vbkaisetsu@gmail.com>
+Date: Tue, 6 Feb 2024 22:18:06 +0900
+Subject: [PATCH] Fix "out of memory" when using linear gradient
+
+---
+ src/cairo-pattern.c         |  6 +++++
+ test/gradient-scale-crash.c | 49 +++++++++++++++++++++++++++++++++++++
+ test/meson.build            |  1 +
+ 3 files changed, 56 insertions(+)
+ create mode 100644 test/gradient-scale-crash.c
+
+diff --git a/src/cairo-pattern.c b/src/cairo-pattern.c
+index fcaaf46b8..742c51b2e 100644
+--- a/src/cairo-pattern.c
++++ b/src/cairo-pattern.c
+@@ -2801,6 +2801,12 @@ _cairo_gradient_pattern_fit_to_range (const cairo_gradient_pattern_t *gradient,
+ 	dim = MAX (dim, fabs (radial->cd1.center.y - radial->cd2.center.y));
+ 	dim = MAX (dim, fabs (radial->cd1.radius   - radial->cd2.radius));
+     }
++    dim = MAX (dim, fabs (gradient->base.matrix.xx));
++    dim = MAX (dim, fabs (gradient->base.matrix.xy));
++    dim = MAX (dim, fabs (gradient->base.matrix.x0));
++    dim = MAX (dim, fabs (gradient->base.matrix.yx));
++    dim = MAX (dim, fabs (gradient->base.matrix.yy));
++    dim = MAX (dim, fabs (gradient->base.matrix.y0));
+ 
+     if (unlikely (dim > max_value)) {
+ 	cairo_matrix_t scale;
