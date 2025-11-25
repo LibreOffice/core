@@ -2160,7 +2160,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testOrderOfCNumFmtElements)
 {
     createScDoc("xlsx/orderOfCNumFmtElements.xlsx");
 
-    // Without the fix in place, this test would have failed wiht
+    // Without the fix in place, this test would have failed with
     // - Expected: 0
     // - Actual  : 10
     // - validation error in OOXML export: Errors: 10
