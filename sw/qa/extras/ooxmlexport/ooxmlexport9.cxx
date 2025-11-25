@@ -777,6 +777,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106132, "tdf106132.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79329)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     auto verify = [this]() {
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);

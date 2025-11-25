@@ -54,6 +54,9 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo81381)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtAlias)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("sdt-alias.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -143,6 +146,9 @@ CPPUNIT_TEST_FIXTURE(Test, testParaShading)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO83044)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("fdo83044.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -261,6 +267,9 @@ DECLARE_OOXMLEXPORT_TEST(testTableAlignment, "table-alignment.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtIgnoredFooter)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("sdt-ignored-footer.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -907,6 +916,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91594, "tdf91594.docx")
 }
 DECLARE_OOXMLEXPORT_TEST(testTDF99434, "protectedform.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);

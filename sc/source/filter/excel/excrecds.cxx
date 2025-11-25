@@ -267,14 +267,11 @@ sal_uInt16 Exc1904::GetNum() const
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
-    bool bISOIEC = ( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 );
-
-    if( bISOIEC )
+    if( rStrm.getVersion() == oox::core::ECMA_376_1ST_EDITION ) // Word 2007 Compat
     {
         rStrm.WriteAttributes(XML_dateCompatibility, ToPsz(bDateCompatibility));
     }
-
-    if( !bISOIEC || bDateCompatibility )
+    else
     {
         rStrm.WriteAttributes(XML_date1904, ToPsz(bVal));
     }

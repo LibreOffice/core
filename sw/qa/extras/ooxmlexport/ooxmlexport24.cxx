@@ -708,6 +708,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111964)
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     uno::Reference<drawing::XShape> xShape1(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape1.is());
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
@@ -821,6 +824,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103090)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107111)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("tdf107111.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

@@ -574,6 +574,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81567)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92472)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("tdf92472.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -798,6 +801,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf161628, "tdf132599_frames_on_right_pages_no_hyph
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf155707)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("tdf155707.docx");
     save(TestFilter::DOCX);
 

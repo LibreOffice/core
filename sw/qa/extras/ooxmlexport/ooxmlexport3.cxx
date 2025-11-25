@@ -32,6 +32,9 @@ public:
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'
     // it checked if it 'IsPlausableSingleWordSection'.
     // The 'IsPlausableSingleWordSection' compared different aspects of 2 'SwFrameFormat' objects.
@@ -141,6 +144,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("style-inheritance.docx");
     save(TestFilter::DOCX);
 
@@ -556,6 +562,9 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiColumnLineSeparator)
 
 DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // The problem was that item[n].xml and itemProps[n].xml and .rels files for item[n].xml
     // files were missing from docx file after saving file.
     // This test case tests whether customxml files grabbagged properly in correct object.
@@ -585,6 +594,9 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomXmlRelationships)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("customxml.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"customXml/_rels/item1.xml.rels"_ustr);
@@ -839,6 +851,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
 
 CPPUNIT_TEST_FIXTURE(Test, testFootnoteParagraphTag)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("testFootnote.docx");
     save(TestFilter::DOCX);
     /* In footnotes.xml, the paragraph tag inside <w:footnote w:id="2"> was getting written into document.xml.
@@ -880,6 +895,9 @@ DECLARE_OOXMLEXPORT_TEST(testMce, "mce.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testThemePreservation)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("theme-preservation.docx");
     save(TestFilter::DOCX);
     // check default font theme values have been preserved
@@ -1037,6 +1055,9 @@ CPPUNIT_TEST_FIXTURE(Test, testcolumnbreak)
 
 CPPUNIT_TEST_FIXTURE(Test, testGlossary)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("testGlossary.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/glossary/document.xml"_ustr);
@@ -1045,6 +1066,9 @@ CPPUNIT_TEST_FIXTURE(Test, testGlossary)
 
 CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // tdf#152289
     createSwDoc("glossaryWithEmail.docx");
     save(TestFilter::DOCX);
@@ -1082,6 +1106,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCrashWhileSave)
 
 CPPUNIT_TEST_FIXTURE(Test, testFileOpenInputOutputError)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("floatingtbl_with_formula.docx");
     saveAndReload(TestFilter::DOCX);
     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice

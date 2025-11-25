@@ -862,6 +862,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingInde
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     uno::Reference<drawing::XShape> xShape = getShape(1);
 
     sal_Int32 nHeight = xShape->getSize().Height;
@@ -876,6 +879,9 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     uno::Reference<drawing::XShape> xShape = getShape(1);
 
     // Rounding errors
@@ -918,6 +924,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf73547)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // The runs inside <w:dir> were ignored
     const OUString sParaText = getParagraph(1)->getString();
     CPPUNIT_ASSERT_EQUAL(

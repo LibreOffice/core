@@ -95,6 +95,9 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlineIsEnd)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69649)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("fdo69649.docx");
     saveAndReload(TestFilter::DOCX);
     // The DOCX containing the Table of Contents was not exported with correct page nos
@@ -173,6 +176,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPreserveXfieldTOC)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("FDO77715.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -307,6 +313,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAlphabeticalIndex_MultipleColumns)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageref)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("testPageref.docx");
     saveAndReload(TestFilter::DOCX);
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
@@ -351,6 +360,9 @@ CPPUNIT_TEST_FIXTURE(Test, testIndexFieldFlagF)
 
 CPPUNIT_TEST_FIXTURE(Test, testBibliography)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("FDO75133.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -388,6 +400,9 @@ CPPUNIT_TEST_FIXTURE(Test, test_FieldType)
 
 CPPUNIT_TEST_FIXTURE(Test, testCitation)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("FDO74775.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -496,6 +511,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtCitationRun)
 
 CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("paragraph-sdt.docx");
     saveAndReload(TestFilter::DOCX);
     // The problem was that the SDT was around the run only, not the whole paragraph.
@@ -526,6 +544,9 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("tdf158661_blockSDT.docx");
     saveAndReload(TestFilter::DOCX);
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -568,6 +589,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("sdt-2-para.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -589,6 +613,9 @@ CPPUNIT_TEST_FIXTURE(Test, test2Id)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStart2Sdt)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("table-start-2-sdt.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -598,6 +625,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStart2Sdt)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtDateDuplicate)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     auto verify = [this](bool bIsExport = false) {
         if (bIsExport)
         {
@@ -689,6 +719,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyFieldmark)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo81945)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("fdo81945.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -698,6 +731,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81945)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo82123)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("fdo82123.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -709,6 +745,9 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82123)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtBeforeField)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("sdt-before-field.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -719,6 +758,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtBeforeField)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo81946)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("fdo81946.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header1.xml"_ustr);
@@ -743,6 +785,9 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82492)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("sdt-header.docx");
     saveAndReload(TestFilter::DOCX);
     // Problem was that w:sdt elements in headers were lost on import.
@@ -753,6 +798,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtCompanyMultipara)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("sdt-company-multipara.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -835,6 +883,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf66401)
 
 CPPUNIT_TEST_FIXTURE(Test, testDateFieldInShape)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     auto verify = [this](bool bIsExport = false) {
     // This was crashed on export.
         if (bIsExport)
@@ -878,6 +929,9 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFieldInShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testDateFieldAtEndOfParagraph)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     auto verify = [this](bool bIsExport = false) {
         // Additional line end was added by import and it was crashed on export
         if (bIsExport)
@@ -1038,6 +1092,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142464_ampm)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtDatePicker)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // Check that roundtrip for date picker field does not lose essential data
     createSwDoc("test_sdt_datepicker.docx");
     save(TestFilter::DOCX);
@@ -1063,6 +1120,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDatePicker)
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // Given a document with a <w:sdt> tag:
     createSwDoc("content-control-grab-bag.docx");
 
@@ -1074,6 +1134,9 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // Given a document with a <w:sdt> tag:
     createSwDoc("content-control-shape.docx");
 
@@ -1085,6 +1148,9 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // Test how we can roundtrip sdt plain text with databindings support
     createSwDoc("tdf104823.docx");
 

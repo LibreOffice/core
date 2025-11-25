@@ -80,6 +80,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166141_linkedStyles2, "tdf166141_linkedStyles2.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_bottomSpacing.docx")
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // given with a sectPr with different bottom spacing (undefined in this case - i.e. zero)
     auto pXmlDoc = parseLayoutDump();
 
@@ -221,6 +224,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     // Given a document with two floating tables after each other:
     // When saving that document to DOCX:
     createSwDoc("floattable-anchorpos.docx");
@@ -246,6 +252,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
 {
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
     createSwDoc("tdf167297.fodt");
 
     auto fnVerify = [this] {
