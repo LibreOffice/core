@@ -292,6 +292,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
 
+        final MenuItem settingsItem = menu.findItem(R.id.action_settings);
+        final boolean enableSettingsItem = SettingsActivity.hasSettings();
+        settingsItem.setVisible(enableSettingsItem);
+        settingsItem.setEnabled(enableSettingsItem);
+
         return true;
     }
 
