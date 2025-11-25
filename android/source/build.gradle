@@ -56,6 +56,7 @@ android {
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
         main.assets.srcDirs 'assets_strippedUI'
+        quest.manifest.srcFile 'AndroidManifest_quest.xml'
     }
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle
@@ -84,6 +85,13 @@ android {
             dimension "default"
             buildConfigField 'boolean', 'ALLOW_EDITING', 'true'
         }
+
+        // product flavor for Meta Quest devices (Horizon OS)
+        quest {
+            dimension "default"
+            buildConfigField 'boolean', 'ALLOW_EDITING', 'false'
+        }
+
     }
     lint {
         warningsAsErrors = true
