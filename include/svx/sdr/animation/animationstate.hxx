@@ -47,6 +47,8 @@ namespace sdr::animation
             // destructor
             virtual ~PrimitiveAnimation() override;
 
+            void SetPrimitives(drawinglayer::primitive2d::Primitive2DContainer&&);
+
             // execute event, from base class Event
             virtual void Trigger(sal_uInt32 nTime) override;
         };
