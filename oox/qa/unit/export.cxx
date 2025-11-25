@@ -837,10 +837,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
     // They differ in font properties e.g. font weight and character spacing.
     loadFromFile(u"tdf128568_FontworkFontProperties.odt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-
     // Save to DOCX:
     save(TestFilter::DOCX);
 
@@ -873,10 +869,6 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkSlantUp)
     // and such is not understand by LibreOffice.
     loadFromFile(u"tdf153296_VML_export_SlantUp.odt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-
     // Save to DOCX:
     save(TestFilter::DOCX);
 
@@ -900,10 +892,6 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkArchUp)
     // was not exported as VML Fontwork but as a rectangle.
     loadFromFile(u"tdf153296_VML_export_ArchUpCurve.odt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-
     // Save to DOCX:
     save(TestFilter::DOCX);
 
@@ -921,10 +909,6 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
     // The document has a Fontwork shape type 'textCirclePour' (150). When exporting to docx, the
     // adjustment values were not exported at all.
     loadFromFile(u"tdf153246_VML_export_Fontwork_Adjustment.odt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);
@@ -949,10 +933,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDirectColor)
     // #ff7f50 with 20% transparency. When exporting to docx, line color was not exported at all
     // and fill color was replaced with character color.
     loadFromFile(u"tdf51195_Fontwork_DirectColor.odt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);
@@ -984,10 +964,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
     // shape with theme color 'dk2' and 40% lighter. When exporting to docx, fill color was not
     // exported as theme color at all, and it was replaced with character color.
     loadFromFile(u"tdf51195_Fontwork_ThemeColor.fodt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);
@@ -1033,10 +1009,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
     // them. Make sure we force them to zero on export to docx, otherwise Word might wrap the text.
     loadFromFile(u"tdf51195_Fontwork_Distance.odt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-
     // Save to DOCX:
     save(TestFilter::DOCX);
 
@@ -1055,10 +1027,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
     // Start 25% and solid transparency 30%.
     // Without fix the gradient was not exported at all.
     loadFromFile(u"tdf51195_Fontwork_linearGradient.fodt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);
@@ -1102,10 +1070,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
     // Start value 5%, End value 90%
     // Without fix the gradient was not exported at all.
     loadFromFile(u"tdf51195_Fontwork_axialGradient.fodt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);
@@ -1153,10 +1117,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
     // Without fix the gradient was not exported at all.
     loadFromFile(u"tdf51195_Fontwork_radialGradient.fodt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-
     // Save to DOCX:
     save(TestFilter::DOCX);
 
@@ -1194,10 +1154,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
     // Start 70%, End 0%.
     // Without fix the gradient was not exported at all.
     loadFromFile(u"tdf51195_Fontwork_ellipticalGradient.fodt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);
@@ -1239,10 +1195,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
     // Without fix the gradient was not exported at all.
     loadFromFile(u"tdf51195_Fontwork_squareGradient.fodt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-
     // Save to DOCX:
     save(TestFilter::DOCX);
 
@@ -1280,10 +1232,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
     // Start value 70%, End value 5%.
     // Without fix the gradient was not exported at all.
     loadFromFile(u"tdf51195_Fontwork_rectGradient.fodt");
-
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
 
     // Save to DOCX:
     save(TestFilter::DOCX);

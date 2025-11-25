@@ -1074,7 +1074,6 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     // note that XML_ID is different from XML_id (although it looks like a LO
                     // implementation distinction without valid justification to me).
-                    // FIXME: XML_ID produces invalid file, see tdf#153183
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }
                 break;
