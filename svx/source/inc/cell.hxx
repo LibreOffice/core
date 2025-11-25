@@ -186,7 +186,7 @@ private:
 
     /// @throws css::uno::RuntimeException
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj );
-    SVX_DLLPRIVATE virtual ~Cell() COVERITY_NOEXCEPT_FALSE override;
+    SVX_DLLPRIVATE virtual ~Cell() override;
 
     Cell(Cell const &) = delete;
     void operator =(Cell const &) = delete;

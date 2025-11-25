@@ -189,7 +189,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
         bAll = true;
 }
 
-ScImportExport::~ScImportExport() COVERITY_NOEXCEPT_FALSE
+ScImportExport::~ScImportExport()
 {
     pUndoDoc.reset();
     pExtOptions.reset();

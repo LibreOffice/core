@@ -373,7 +373,7 @@ Cell::Cell(
     }
 }
 
-Cell::~Cell() COVERITY_NOEXCEPT_FALSE
+Cell::~Cell()
 {
     dispose();
 }
