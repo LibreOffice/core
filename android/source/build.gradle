@@ -55,8 +55,7 @@ android {
         main.res.srcDirs = ['res', 'res_generated']
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
-        strippedUI.assets.srcDirs 'assets_strippedUI'
-        strippedUIEditing.assets.srcDirs 'assets_strippedUI'
+        main.assets.srcDirs 'assets_strippedUI'
     }
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle
