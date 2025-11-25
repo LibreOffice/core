@@ -294,7 +294,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
     // object, because we might be inside a call from the Scheduler, in which case we will be deleting an object
     // on the call stack.
     // Yes, this does still leave a possible situation where the user could turn animations off while we are
-    // animating and we could crash. I dont have a better solution right now.
+    // animating and we could crash. I don't have a better solution right now.
     //
     drawinglayer::primitive2d::Primitive2DContainer aNewAnimatedPrimitives;
     if(!mxPrimitive2DSequence.empty())
