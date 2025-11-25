@@ -240,6 +240,8 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
 
         final boolean enablePrint = mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PRINTING);
         setItemVisible(R.id.action_print, enablePrint);
+
+        setItemVisible(R.id.action_settings, SettingsActivity.hasSettings());
     }
 
     public void setItemVisible(final int item, boolean visible) {
