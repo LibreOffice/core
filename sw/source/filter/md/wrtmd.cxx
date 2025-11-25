@@ -175,9 +175,20 @@ void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
     else if (eNodeType == SwNodeType::Ole)
     {
         SwOLENode* pOLENode = rWrt.m_pDoc->GetNodes()[nStart]->GetOLENode();
-        assert(pOLENode->GetGraphic());
+        if (!pOLENode->GetGraphic())
+        {
+            return;
+        }
+
+        // Assume that the graphic of OLE objects is never linked.
         aGraphic = *pOLENode->GetGraphic();
-        // TODO fill aGraphicURL with the right info
+        OUString aGraphicInBase64;
+        if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64))
+        {
+            return;
+        }
+
+        aGraphicURL = "data:" + aGraphicInBase64;
     }
 
     const OUString& rBaseURL = rWrt.GetBaseURL();
