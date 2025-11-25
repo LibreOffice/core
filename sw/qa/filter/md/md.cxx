@@ -912,6 +912,16 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedAnchoredImageMdExport)
     CPPUNIT_ASSERT(aActual.ends_with(") B" SAL_NEWLINE_STRING));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testOLEWithoutGraphicMdExport)
+{
+    // Given a document with an OLE object that has no graphic:
+    createSwDoc("ole-without-graphic.odt");
+
+    // When exporting it as markdown:
+    // Then make sure this doesn't crash:
+    save(mpFilter);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
