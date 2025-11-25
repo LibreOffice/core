@@ -3972,7 +3972,7 @@ OString SdXImpressDocument::getViewRenderState(SfxViewShell* pViewShell)
     if (pView)
     {
         const SdViewOptions& pVOpt = pView->GetViewOptions();
-        if (mpDoc->GetOnlineSpell())
+        if (mpDoc && mpDoc->GetOnlineSpell())
             aState.append('S');
         if (pVOpt.mnDocBackgroundColor == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
             aState.append('D');
