@@ -6905,7 +6905,10 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nLink, sal_uInt16 nWwId, sal_uInt16 nSlot, bool bAutoUpdate )
 {
-    bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
+    bool bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
+    bool bQFormat = false; // DEPRECATED: from grab-bag
+    bool bRealQFormat = true; // from SwFormat
+
     OUString aRsid, aUiPriority;
     rtl::Reference<FastAttributeList> pStyleAttributeList = FastSerializerHelper::createAttrList();
     uno::Any aAny;
@@ -6913,6 +6916,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     {
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nSlot);
         pFormat->GetGrabBagItem(aAny);
+        bRealQFormat = pFormat->IsFavourite();
     }
     else
     {
@@ -6990,8 +6994,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed);
-
-    if (bQFormat || lcl_guessQFormat(rName, nWwId))
+    // by default we use old quess, if user marks style as non-favourite -> do not export qFormat
+    if (bRealQFormat && (bQFormat || lcl_guessQFormat(rName, nWwId)))
         m_pSerializer->singleElementNS(XML_w, XML_qFormat);
     if (bLocked)
         m_pSerializer->singleElementNS(XML_w, XML_locked);
