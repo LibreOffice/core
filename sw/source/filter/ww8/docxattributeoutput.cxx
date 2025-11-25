@@ -3349,6 +3349,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     m_pEastAsianLayoutAttrList = nullptr;
     m_pCharLangAttrList = nullptr;
     m_oFontSize.reset();
+    m_bCharPostureWritten = false;
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -8174,6 +8175,10 @@ void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 
 void DocxAttributeOutput::CharPosture( const SvxPostureItem& rPosture )
 {
+    if (m_bCharPostureWritten) // avoid writing this twice
+        return;
+    m_bCharPostureWritten = true;
+
     if ( rPosture.GetPosture() != ITALIC_NONE )
         m_pSerializer->singleElementNS(XML_w, XML_i);
     else
@@ -8295,6 +8300,10 @@ void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 
 void DocxAttributeOutput::CharPostureCJK( const SvxPostureItem& rPosture )
 {
+    if (m_bCharPostureWritten) // avoid writing this twice
+        return;
+    m_bCharPostureWritten = true;
+
     if ( rPosture.GetPosture() != ITALIC_NONE )
         m_pSerializer->singleElementNS(XML_w, XML_i);
     else
