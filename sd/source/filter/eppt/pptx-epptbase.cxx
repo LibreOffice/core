@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/servicehelper.hxx>
+#include <drawdoc.hxx>
 #include "epptbase.hxx"
 #include "epptdef.hxx"
 #include "../ppt/pptanimations.hxx"
+#include <unomodel.hxx>
 
 #include <o3tl/any.hxx>
 #include <vcl/outdev.hxx>
@@ -238,6 +241,13 @@ bool PPTWriterBase::InitSOIface()
         if ( !GetPageByIndex( 0, NORMAL ) )
             break;
 
+        SdXImpressDocument* pModel = comphelper::getFromUnoTunnel<SdXImpressDocument>(mXModel);
+        if (pModel)
+        {
+            SdDrawDocument* pDoc = pModel->GetDoc();
+            if (pDoc && pDoc->HasCanvasPage())
+                mnPages--;
+        }
         return true;
     }
     return false;
