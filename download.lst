@@ -534,8 +534,8 @@ ODFVALIDATOR_JAR := odfvalidator-0.9.0-RC2-SNAPSHOT-jar-with-dependencies-2726ab
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OFFICEOTRON_SHA256SUM := f2443f27561af52324eee03a1892d9f569adc8db9e7bca55614898bc2a13a770
-OFFICEOTRON_JAR := 8249374c274932a21846fa7629c2aa9b-officeotron-0.7.4-master.jar
+OFFICEOTRON_SHA256SUM := 567b9579510969e34085ed30995d87b27a11584f03711d7fc9b7ec2e1cea36c5
+OFFICEOTRON_JAR := officeotron-0.8.4.jar
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
