@@ -29,14 +29,14 @@ public:
     void testDataLargerThanDB();
     void testHTMLImport();
     void testXMLImport();
-    // void testBaseImport();
+    void testBaseImport();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
     CPPUNIT_TEST(testDataLargerThanDB);
     CPPUNIT_TEST(testHTMLImport);
     CPPUNIT_TEST(testXMLImport);
-    // CPPUNIT_TEST(testBaseImport);
+    CPPUNIT_TEST(testBaseImport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -188,20 +188,19 @@ void ScDataProvidersTest::testXMLImport()
     CPPUNIT_ASSERT_EQUAL(u"test4"_ustr, pDoc->GetString(1, 4, 0));
 }
 
-/*
 void ScDataProvidersTest::testBaseImport()
 {
     createScDoc();
 
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
     ScDocument* pDoc = getScDoc();
-    bool bInserted = pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    bool bInserted
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", pDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setID("biblio@Bibliography");
-
 
     pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
     auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
@@ -211,9 +210,8 @@ void ScDataProvidersTest::testBaseImport()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), pDoc->GetString(0, 1, 0));
 }
-*/
 
 ScDataProvidersTest::ScDataProvidersTest()
     : ScModelTestBase(u"sc/qa/unit/data/dataprovider"_ustr)
