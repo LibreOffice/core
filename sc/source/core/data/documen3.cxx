@@ -1832,7 +1832,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     while (!bEnd)
     {
         nAdd = pTable->GetColWidth(nX1, bHiddenAsZero);
-        if (nSize+nAdd <= nTwips+1 && nX1<MaxCol())
+        if (nSize + nAdd < nTwips+1 && nX1 < MaxCol())
         {
             nSize += nAdd;
             ++nX1;
@@ -1864,15 +1864,13 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     nTwips = aPosRect.Top();
 
     SCROW nY1 = 0;
-    // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
-    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MaxRow(), pTable, bHiddenAsZero) && nY1 < MaxRow())
+    if (lcl_AddTwipsWhile(nSize, nTwips+1, nY1, MaxRow(), pTable, bHiddenAsZero) && nY1 < MaxRow())
         ++nY1;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
 
     SCROW nY2 = nY1;
     if (!aPosRect.IsEmpty())
     {
         nTwips = aPosRect.Bottom();
-        // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
         if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MaxRow(), pTable, bHiddenAsZero) && nY2 < MaxRow())
             ++nY2;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
     }

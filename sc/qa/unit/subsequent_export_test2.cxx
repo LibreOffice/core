@@ -96,6 +96,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
+
+    // test implementation of GetRange
+    tools::Rectangle aB2(rRTDoc.GetMMRect(1, 1, 1, 1, 0)); // B2 from sheet 0 in mm100
+    // ask which cell contains the bottom right point: found using TWIP precision
+    ScRange aFoundCell = rRTDoc.GetRange(0, tools::Rectangle(aB2.Right(), aB2.Bottom()));
+    // BottomRight of cell B2 is approximately the same as the TopLeft of cell C3
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), aFoundCell.aStart.Col()); // found cell C3
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), aFoundCell.aStart.Row());
+    tools::Long n1Twip = o3tl::convert(1, o3tl::Length::twip, o3tl::Length::mm100); // 2 mm100
+    // reducing by 1 twip must return cell B2
+    aFoundCell = rRTDoc.GetRange(0, tools::Rectangle(aB2.Right() - n1Twip, aB2.Bottom() - n1Twip));
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aFoundCell.aStart.Col()); // found cell B2
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), aFoundCell.aStart.Row());
 };
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)

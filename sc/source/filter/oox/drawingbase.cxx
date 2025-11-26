@@ -275,10 +275,9 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
     // It is easily possible that the provided Offset is invalid (too large).
     // Excel seems to limit the offsets to the bottom/left edge of the cell.
     // Because most calculations are rounded down to TWIPs, reduce cell's right edge by a full twip.
-    // Reduce by another twip because of the way GetRange calculates which cell this point is in...
-    sal_Int64 n2TwipInEmu = std::ceil(rUnitConv.scaleValue(2, Unit::Twip, Unit::Emu));
+    sal_Int64 n1TwipInEmu = rUnitConv.scaleValue(1, Unit::Twip, Unit::Emu); // 635 emu
     EmuPoint aEmuMaxOffset(
-        lclHmmToEmu(aNextCell.X) - n2TwipInEmu, lclHmmToEmu(aNextCell.Y) - n2TwipInEmu);
+        lclHmmToEmu(aNextCell.X) - n1TwipInEmu, lclHmmToEmu(aNextCell.Y) - n1TwipInEmu);
 
     // add the offset inside the cell
     switch( meCellAnchorType )
