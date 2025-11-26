@@ -388,7 +388,7 @@ bool TemplateDlgLocalView::KeyInput(const KeyEvent& rKEvt)
             }
         }
 
-        if (IsReallyVisible() && IsUpdateMode())
+        if (IsReallyVisible())
             Invalidate();
         return true;
     }

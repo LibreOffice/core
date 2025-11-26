@@ -221,7 +221,7 @@ bool ThumbnailView::MouseMove(const MouseEvent& rMEvt)
     {
         ThumbnailViewItem *pItem = mFilteredItemList[i];
         ::tools::Rectangle aToInvalidate(pItem->updateHighlight(pItem->mbVisible && !rMEvt.IsLeaveWindow(), aPoint));
-        if (!aToInvalidate.IsEmpty() && IsReallyVisible() && IsUpdateMode())
+        if (!aToInvalidate.IsEmpty() && IsReallyVisible())
             Invalidate(aToInvalidate);
     }
 
@@ -618,7 +618,7 @@ bool ThumbnailView::ImplHasAccessibleListeners() const
 IMPL_LINK_NOARG(ThumbnailView, ImplScrollHdl, weld::ScrolledWindow&, void)
 {
     CalculateItemPositions(true);
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1027,7 +1027,7 @@ void ThumbnailView::Resize()
     CustomWidgetController::Resize();
     CalculateItemPositions();
 
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1070,7 +1070,7 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
 
     CalculateItemPositions();
 
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1083,7 +1083,7 @@ void ThumbnailView::Clear()
 
     CalculateItemPositions();
 
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1150,10 +1150,10 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     pItem->setSelection(true);
     maItemStateHdl.Call(pItem);
 
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 
-    bool bNewOut = IsReallyVisible() && IsUpdateMode();
+    bool bNewOut = IsReallyVisible();
 
     // if necessary scroll to the visible area
     if (mbScroll && nItemId && mnCols)
@@ -1171,7 +1171,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
 
     if ( bNewOut )
     {
-        if ( IsReallyVisible() && IsUpdateMode() )
+        if (IsReallyVisible())
             Invalidate();
     }
 
@@ -1215,7 +1215,7 @@ void ThumbnailView::deselectItems()
         }
     }
 
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 

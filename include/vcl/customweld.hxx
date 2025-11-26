@@ -52,7 +52,6 @@ public:
             return;
         m_pDrawingArea->queue_draw();
     }
-    static bool IsUpdateMode() { return true; }
     void Invalidate(const tools::Rectangle& rRect)
     {
         if (!m_pDrawingArea)

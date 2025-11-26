@@ -285,7 +285,7 @@ void ValueSet::LoseFocus()
 void ValueSet::Resize()
 {
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
     CustomWidgetController::Resize();
 }
@@ -526,7 +526,7 @@ void ValueSet::QueueReformat()
     queue_resize();
     RecalcScrollBar();
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -600,7 +600,7 @@ void ValueSet::Clear()
     RecalcScrollBar();
 
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -739,7 +739,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     mnSelItemId = nItemId;
     mbNoSelection = false;
 
-    bool bNewOut = !mbFormat && IsReallyVisible() && IsUpdateMode();
+    bool bNewOut = !mbFormat && IsReallyVisible();
     bool bNewLine = false;
 
     if (weld::DrawingArea* pNeedsFormatToScroll = !mnCols ? GetDrawingArea() : nullptr)
@@ -836,7 +836,7 @@ void ValueSet::SetNoSelection()
     mbNoSelection   = true;
     mbHighlight     = false;
 
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1561,7 +1561,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     pItem->meType  = VALUESETITEM_IMAGE;
     pItem->maImage = rImage;
 
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    if (!mbFormat && IsReallyVisible())
     {
         const tools::Rectangle aRect = ImplGetItemRect(nPos);
         Invalidate(aRect);
@@ -1581,7 +1581,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
     pItem->meType  = VALUESETITEM_COLOR;
     pItem->maColor = rColor;
 
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    if (!mbFormat && IsReallyVisible())
     {
         const tools::Rectangle aRect = ImplGetItemRect(nPos);
         Invalidate( aRect );
@@ -1746,7 +1746,7 @@ void ValueSet::SetEdgeBlending(bool bNew)
         mbEdgeBlending = bNew;
         mbFormat = true;
 
-        if (GetDrawingArea() && IsReallyVisible() && IsUpdateMode())
+        if (GetDrawingArea() && IsReallyVisible())
         {
             Invalidate();
         }
@@ -1869,7 +1869,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
 
     if ( pItem->meType == VALUESETITEM_USERDRAW )
     {
-        if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+        if (!mbFormat && IsReallyVisible())
         {
             const tools::Rectangle aRect = ImplGetItemRect(nPos);
             Invalidate(aRect);
@@ -1908,7 +1908,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
     pItem->maText = rText;
 
-    if (!mbFormat && IsReallyVisible() && IsUpdateMode())
+    if (!mbFormat && IsReallyVisible())
     {
         sal_uInt16 nTempId = mnSelItemId;
 
@@ -1981,7 +1981,7 @@ void ValueSet::SetColor(const Color& rColor)
 {
     maColor  = rColor;
     mbFormat = true;
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 
