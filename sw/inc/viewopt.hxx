@@ -262,6 +262,14 @@ struct SwViewColors
     ViewOptFlags m_nAppearanceFlags;
 };
 
+/// View option to determine if some of the redlines should be omitted during rendering or not.
+enum class SwRedlineRenderMode
+{
+    Standard,
+    OmitInserts,
+    OmitDeletes,
+};
+
 class SwViewOption
 {
     SwViewColors m_aColorConfig;
@@ -282,6 +290,7 @@ class SwViewOption
     sal_uInt8         m_nPagePreviewRow;            // Page Preview Row/Columns.
     sal_uInt8         m_nPagePreviewCol;            // Page Preview Row/Columns.
     SwFillMode        m_nShadowCursorFillMode;      // FillMode for ShadowCursor.
+    SwRedlineRenderMode m_eRedlineRenderMode;
     bool              m_bReadonly : 1;              // Readonly-Doc.
     bool              m_bStarOneSetting : 1;        // Prevent from UI automatics (no scrollbars in readonly documents).
     bool              m_bIsPagePreview : 1;         // The preview mustn't print field/footnote/... shadings.
@@ -863,6 +872,9 @@ public:
 
     SwFillMode      GetShdwCursorFillMode() const { return m_nShadowCursorFillMode; }
     void            SetShdwCursorFillMode( SwFillMode nMode ) { m_nShadowCursorFillMode = nMode; };
+
+    SwRedlineRenderMode GetRedlineRenderMode() const { return m_eRedlineRenderMode; }
+    void SetRedlineRenderMode(SwRedlineRenderMode eMode) { m_eRedlineRenderMode = eMode; };
 
     bool        IsShowPlaceHolderFields() const { return m_bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(bool bSet) { m_bShowPlaceHolderFields = bSet; }

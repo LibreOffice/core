@@ -146,6 +146,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && m_bShowPlaceHolderFields == rOpt.m_bShowPlaceHolderFields
             && m_bIdle == rOpt.m_bIdle
             && m_nDefaultAnchor == rOpt.m_nDefaultAnchor
+            && m_eRedlineRenderMode == rOpt.m_eRedlineRenderMode
 #ifdef DBG_UTIL
             // correspond to the statements in ui/config/cfgvw.src
             && m_bTest1 == rOpt.IsTest1()
@@ -230,6 +231,7 @@ SwViewOption::SwViewOption() :
     m_nPagePreviewRow( 1 ),
     m_nPagePreviewCol( 2 ),
     m_nShadowCursorFillMode( SwFillMode::Tab ),
+    m_eRedlineRenderMode(SwRedlineRenderMode::Standard),
     m_bReadonly(false),
     m_bStarOneSetting(false),
     m_bIsPagePreview(false),
@@ -311,6 +313,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
+    m_eRedlineRenderMode = rVOpt.m_eRedlineRenderMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
@@ -358,6 +361,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
+    m_eRedlineRenderMode = rVOpt.m_eRedlineRenderMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
@@ -622,6 +626,11 @@ void SwViewOption::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwViewOption"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     m_nCoreOptions.dumpAsXml(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("redline-render-mode"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::number(static_cast<int>(m_eRedlineRenderMode)).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 

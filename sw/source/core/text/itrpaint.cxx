@@ -42,6 +42,8 @@
 #include "pormulti.hxx"
 #include <doc.hxx>
 #include <fmturl.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 
 // Returns, if we have an underline breaking situation
 // Adding some more conditions here means you also have to change them
@@ -302,6 +304,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // Reference portion for the paragraph end portion
     SwLinePortion* pEndTempl = m_pCurr->GetFirstPortion();
 
+    const SwDoc& rDoc = GetInfo().GetTextFrame()->GetDoc();
+    const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
+    const SwRedlineTable& rRedlineTable = rIDRA.GetRedlineTable();
     while( pPor )
     {
         bool bSeeked = true;
@@ -419,6 +424,32 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             roTaggedLabel.emplace(nullptr, nullptr, &aPorInfo, *pOut);
         }
 
+        // See if the redline render mode requires to omit the paint of the text portion.
+        SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
+        SwRedlineRenderMode eRedlineRenderMode = SwRedlineRenderMode::Standard;
+        if (GetRedln() && GetRedln()->IsOn())
+        {
+            nRedline = GetRedln()->GetAct();
+            eRedlineRenderMode = GetInfo().GetOpt().GetRedlineRenderMode();
+        }
+        bool bOmitPaint = false;
+        if (nRedline != SwRedlineTable::npos)
+        {
+            const SwRangeRedline* pRedline = rRedlineTable[nRedline];
+            RedlineType eType = pRedline->GetType();
+            if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts
+                && eType == RedlineType::Insert)
+            {
+                bOmitPaint = true;
+            }
+            else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes
+                     && eType == RedlineType::Delete)
+            {
+                bOmitPaint = true;
+            }
+        }
+
+        if (!bOmitPaint)
         {
             // #i16816# tagged pdf support
             Por_Info aPorInfo(*pPor, *this, 0);

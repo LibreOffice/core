@@ -4501,34 +4501,37 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
         const OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
 
-        if (!isText)
+        // Check if just switching to another view is enough, that has less side-effects.
+        // Render state is sometimes empty, don't risk it.
+        if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
         {
-            // Check if just switching to another view is enough, that has less side-effects.
-            // Render state is sometimes empty, don't risk it.
-            if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
-            {
-                nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPart, nMode);
+            nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPart, nMode);
 
-                if (nViewId == -1)
-                    nViewId = nOrigViewId; // Couldn't find an alternative view.
-                // else -> We found an alternative view and already switched to that.
-            }
+            if (nViewId == -1)
+                nViewId = nOrigViewId; // Couldn't find an alternative view.
+            // else -> We found an alternative view and already switched to that.
+        }
 
-            // Disable callbacks while we are painting - after setting the view
-            if (nViewId != nOrigViewId)
-                disableViewCallbacks(pDocument, nViewId);
-            else
+        // Disable callbacks while we are painting - after setting the view
+        if (nViewId != nOrigViewId)
+            disableViewCallbacks(pDocument, nViewId);
+        else
+        {
+            // If we are here, we couldn't find an alternative view. We need to check the part and mode.
+            if (!isText)
             {
-                // If we are here, we couldn't find an alternative view. We need to check the part and mode.
                 nOrigPart = doc_getPart(pThis);
                 if (nPart != nOrigPart)
                     doc_setPartImpl(pThis, nPart, false);
-
-                nOrigEditMode = pDoc->getEditMode();
-                if (nOrigEditMode != nMode)
-                    SfxLokHelper::setEditMode(nMode, pDoc);
             }
 
+            nOrigEditMode = pDoc->getEditMode();
+            if (nOrigEditMode != nMode)
+                SfxLokHelper::setEditMode(nMode, pDoc);
+        }
+
+        if (!isText)
+        {
             bPaintTextEdit = (nPart == nOrigPart && nMode == nOrigEditMode);
             pDoc->setPaintTextEdit(bPaintTextEdit);
         }
@@ -4538,22 +4541,25 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         if (!isText)
         {
             pDoc->setPaintTextEdit(true);
+        }
 
-            if (nViewId == nOrigViewId)
+        if (nViewId == nOrigViewId)
+        {
+            // We didn't find an alternative view, set the part and mode back to their initial values if needed.
+            if (nMode != nOrigEditMode)
+                SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
+
+            if (!isText)
             {
-                // We didn't find an alternative view, set the part and mode back to their initial values if needed.
-                if (nMode != nOrigEditMode)
-                    SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
-
                 if (nPart != nOrigPart)
                     doc_setPartImpl(pThis, nOrigPart, false);
             }
-            else
-            {
-                // We found an alternative view and used it. Enable its callbacks again and turn back to our original view.
-                enableViewCallbacks(pDocument, nViewId);
-                doc_setView(pThis, nOrigViewId);
-            }
+        }
+        else
+        {
+            // We found an alternative view and used it. Enable its callbacks again and turn back to our original view.
+            enableViewCallbacks(pDocument, nViewId);
+            doc_setView(pThis, nOrigViewId);
         }
     }
     catch (const std::exception&)

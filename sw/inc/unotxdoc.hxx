@@ -510,6 +510,11 @@ public:
     /// @see vcl::ITiledRenderable::supportsCommand().
     bool supportsCommand(std::u16string_view rCommand) override;
 
+    /// @see vcl::ITiledRenderable::getEditMode().
+    int getEditMode() override;
+    /// @see vcl::ITiledRenderable::setEditMode().
+    void setEditMode(int nEditMode) override;
+
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
