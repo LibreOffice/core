@@ -774,6 +774,7 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
         {
             sal_Int32 nCol = -1;
             sal_Int32 nRow = -1;
+            bool bResizeWithCell = pClientData->mbSizeWithCells;
 
             if ( pClientData->mnCol >= 0 && pClientData->mnRow >= 0 )
             {
@@ -788,6 +789,8 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
                 // skip LeftOffset
                 o3tl::getToken(pClientData->maAnchor, 0, ',', nIndex);
                 nRow = o3tl::toInt32(o3tl::getToken(pClientData->maAnchor, 0, ',', nIndex));
+
+                bResizeWithCell = true;
             }
 
             if ( nCol >= 0 && nRow >= 0 )
@@ -797,7 +800,7 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
                 {
                     Reference< XPropertySet > aPropertySet( rxShape, UNO_QUERY_THROW );
                     aPropertySet->setPropertyValue( "Anchor", Any( xCell ) );
-                    if (pClientData->mbSizeWithCells)
+                    if (bResizeWithCell)
                         aPropertySet->setPropertyValue( "ResizeWithCell", Any( true ) );
                 }
             }
