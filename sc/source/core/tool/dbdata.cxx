@@ -32,19 +32,24 @@
 #include <document.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
+#include <mid.h>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <subtotalparam.hxx>
 #include <sortparam.hxx>
 #include <dociter.hxx>
 #include <brdcst.hxx>
+#include <osl/diagnose.h>
 
 #include <comphelper/stl_types.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <memory>
 #include <utility>
 
 using namespace com::sun::star;
+
+constexpr int DBSETTING_PARAMS = 8;
 
 ScDatabaseSettingItem::ScDatabaseSettingItem():
     SfxPoolItem(SCITEM_DATABASE_SETTING),
@@ -93,80 +98,168 @@ ScDatabaseSettingItem::~ScDatabaseSettingItem()
 
 bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
+    nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
     {
         case 0:
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aSeq{
+                comphelper::makePropertyValue(u"ContainsHeader"_ustr, mbHeaderRow),
+                comphelper::makePropertyValue(u"TotalsRow"_ustr, mbTotalRow),
+                comphelper::makePropertyValue(u"UseFirstColumnFormatting"_ustr, mbFirstCol),
+                comphelper::makePropertyValue(u"UseLastColumnFormatting"_ustr, mbLastCol),
+                comphelper::makePropertyValue(u"UseRowStripes"_ustr, mbStripedRows),
+                comphelper::makePropertyValue(u"UseColStripes"_ustr, mbStripedCols),
+                comphelper::makePropertyValue(u"AutoFilter"_ustr, mbShowFilters),
+                comphelper::makePropertyValue(u"TableStyleName"_ustr, maStyleID)
+            };
+            assert(aSeq.getLength() == DBSETTING_PARAMS);
+            rVal <<= aSeq;
+            break;
+        }
+        case MID_1:
             rVal <<= mbHeaderRow;
             break;
-        case 1:
+        case MID_2:
             rVal <<= mbTotalRow;
             break;
-        case 2:
+        case MID_3:
             rVal <<= mbFirstCol;
             break;
-        case 3:
+        case MID_4:
             rVal <<= mbLastCol;
             break;
-        case 4:
+        case MID_5:
             rVal <<= mbStripedRows;
             break;
-        case 5:
+        case MID_6:
             rVal <<= mbStripedCols;
             break;
-        case 6:
+        case MID_7:
             rVal <<= mbShowFilters;
             break;
-        case 7:
+        case MID_8:
             rVal <<= maStyleID;
             break;
         default:
+            OSL_FAIL("Wrong MemberID!");
             return false;
     }
 
     return true;
 }
 
-bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId )
+bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
     bool bVal = false;
     bool bRet = false;
 
-    OUString aStyleID;
-    if (nMemberId == 7)
-        bRet = (rVal >>= aStyleID);
-    else
-        bRet = (rVal >>= bVal);
-
-    if(!bRet)
-        return false;
-
+    nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
     {
         case 0:
-            mbHeaderRow = bVal;
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aSeq;
+            if ((rVal >>= aSeq) && (aSeq.getLength() == DBSETTING_PARAMS))
+            {
+                OUString sTmpID;
+                bool bTmpHRow(false);
+                bool bTmpTRow(false);
+                bool bTmpFCol(false);
+                bool bTmpLCol(false);
+                bool bTmpSRows(false);
+                bool bTmpSCols(false);
+                bool bTmpFilt(false);
+
+                bool bAllConverted(true);
+                sal_Int16 nConvertedCount(0);
+                for (const auto& rProp : aSeq)
+                {
+                    if (rProp.Name == u"ContainsHeader")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpHRow);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"TotalsRow")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpTRow);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"UseFirstColumnFormatting")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpFCol);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"UseLastColumnFormatting")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpLCol);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"UseRowStripes")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpSRows);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"UseColStripes")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpSCols);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"AutoFilter")
+                    {
+                        bAllConverted &= (rProp.Value >>= bTmpFilt);
+                        ++nConvertedCount;
+                    }
+                    else if (rProp.Name == u"TableStyleName")
+                    {
+                        bAllConverted &= (rProp.Value >>= sTmpID);
+                        ++nConvertedCount;
+                    }
+                }
+
+                if (bAllConverted && nConvertedCount == DBSETTING_PARAMS)
+                {
+                    mbHeaderRow = bTmpHRow;
+                    mbTotalRow = bTmpTRow;
+                    mbFirstCol = bTmpFCol;
+                    mbLastCol = bTmpLCol;
+                    mbStripedRows = bTmpSRows;
+                    mbStripedCols = bTmpSCols;
+                    mbShowFilters = bTmpFilt;
+                    maStyleID = sTmpID;
+                    return true;
+                }
+            }
+            return false;
+        }
+        case MID_1:
+            bRet = (rVal >>= bVal); if (bRet) mbHeaderRow=bVal; break;
             break;
-        case 1:
-            mbTotalRow = bVal;
+        case MID_2:
+            bRet = (rVal >>= bVal); if (bRet) mbTotalRow=bVal; break;
             break;
-        case 2:
-            mbFirstCol = bVal;
+        case MID_3:
+            bRet = (rVal >>= bVal); if (bRet) mbFirstCol=bVal; break;
             break;
-        case 3:
-            mbLastCol = bVal;
+        case MID_4:
+            bRet = (rVal >>= bVal); if (bRet) mbLastCol=bVal; break;
             break;
-        case 4:
-            mbStripedRows = bVal;
+        case MID_5:
+            bRet = (rVal >>= bVal); if (bRet) mbStripedRows=bVal; break;
             break;
-        case 5:
-            mbStripedCols = bVal;
+        case MID_6:
+            bRet = (rVal >>= bVal); if (bRet) mbStripedCols=bVal; break;
             break;
-        case 6:
-            mbShowFilters = bVal;
+        case MID_7:
+            bRet = (rVal >>= bVal); if (bRet) mbShowFilters=bVal; break;
             break;
-        case 7:
-            maStyleID = std::move(aStyleID);
-            break;
+        case MID_8:
+        {
+            OUString aVal;
+            bRet = (rVal >>= aVal); if (bRet) maStyleID = std::move(aVal); break;
+        }
         default:
+            OSL_FAIL("Wrong MemberID!");
             return false;
     }
 
