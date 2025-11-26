@@ -1135,6 +1135,35 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }
 
+int SwXTextDocument::getEditMode()
+{
+    SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+    {
+        return 0;
+    }
+
+    SfxViewShell* pView = pViewShell->GetSfxViewShell();
+    return pView->getEditMode();
+}
+
+void SwXTextDocument::setEditMode(int nEditMode)
+{
+    auto eMode = static_cast<SwRedlineRenderMode>(nEditMode);
+    SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+    {
+        return;
+    }
+
+    SwViewOption aOpt(*pViewShell->GetViewOptions());
+    if (eMode != aOpt.GetRedlineRenderMode())
+    {
+        aOpt.SetRedlineRenderMode(eMode);
+        pViewShell->ApplyViewOptions(aOpt);
+    }
+}
+
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     using namespace std::string_view_literals;

@@ -2055,6 +2055,17 @@ std::optional<OString> SwView::getLOKPayload(int nType, int nViewId) const
         return std::nullopt;
 }
 
+int SwView::getEditMode() const
+{
+    SwWrtShell* pWrtShell = GetWrtShellPtr();
+    if (!pWrtShell)
+    {
+        return 0;
+    }
+
+    return static_cast<int>(pWrtShell->GetViewOptions()->GetRedlineRenderMode());
+}
+
 OUString SwView::GetDataSourceName() const
 {
     uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);
