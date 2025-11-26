@@ -27,15 +27,17 @@
 #include <editeng/justifyitem.hxx>
 #include <clipcontext.hxx>
 #include <clipparam.hxx>
+#include <rangeutl.hxx>
 #include <refundo.hxx>
 #include <sal/log.hxx>
 #include <svl/gridprinter.hxx>
 #include <sfx2/docfile.hxx>
-#include <undoblk.hxx>
 #include <scdll.hxx>
 #include <scitems.hxx>
 #include <stringutil.hxx>
+#include <tabvwsh.hxx>
 #include <tokenarray.hxx>
+#include <undoblk.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 #include <o3tl/safeint.hxx>
@@ -352,6 +354,33 @@ void ScModelTestBase::executeAutoSum()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
+}
+
+void ScModelTestBase::selectObjectByName(std::u16string_view rObjName)
+{
+    ScTabViewShell* pViewShell = getViewShell();
+    bool bFound = pViewShell->SelectObject(rObjName);
+    CPPUNIT_ASSERT_MESSAGE(
+        OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
+        bFound);
+
+    CPPUNIT_ASSERT(pViewShell->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount()
+                   != 0);
+}
+
+void ScModelTestBase::checkCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr)
+{
+    ScAddress aAddr;
+    sal_Int32 nOffset = 0;
+    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, rDocSh.GetDocument(),
+                                                 formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScTabViewShell* pViewShell = rDocSh.GetBestViewShell(false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString(OUString::Concat("Incorrect Column in position ") + rStr).toUtf8().getStr(),
+        aAddr.Col(), pViewShell->GetViewData().GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString(OUString::Concat("Incorrect Row in position ") + rStr).toUtf8().getStr(),
+        aAddr.Row(), pViewShell->GetViewData().GetCurY());
 }
 
 const SdrOle2Obj* ScModelTestBase::getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)

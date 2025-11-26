@@ -79,17 +79,6 @@ static SdrObject* lcl_getSdrObjectbyName(ScDocument& rDoc, std::u16string_view r
     return pObj;
 }
 
-static void lcl_SelectObjectByName(ScTabViewShell& rViewShell, std::u16string_view rObjName)
-{
-    bool bFound = rViewShell.SelectObject(rObjName);
-    CPPUNIT_ASSERT_MESSAGE(
-        OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
-        bFound);
-
-    CPPUNIT_ASSERT(rViewShell.GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount()
-                   != 0);
-}
-
 CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_OpenBezier_noSwapWH)
 {
     // Shapes, which have rotation incorporated in their points, got erroneously width-height
@@ -1399,7 +1388,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140866)
     CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pNote->GetText());
 
     goToCell(u"$Sheet2.$B$11"_ustr);
-    lcl_SelectObjectByName(*getViewShell(), u"Shape 1");
+    selectObjectByName(u"Shape 1");
 
     // Copy and paste
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});

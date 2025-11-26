@@ -190,6 +190,8 @@ public:
     void insertArrayToCell(const OUString& rCell, std::u16string_view rStr);
     void insertNewSheet(ScDocument& rDoc);
     void executeAutoSum();
+    void selectObjectByName(std::u16string_view rObjName);
+    void checkCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr);
 
 private:
     // Why is this here and not in osl, and using the already existing file
