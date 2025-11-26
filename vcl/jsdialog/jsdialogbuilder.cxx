@@ -1562,10 +1562,8 @@ JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
 
 void JSCheckButton::do_set_state(TriState eState)
 {
-    TriState eOldState = get_state();
     SalInstanceCheckButton::do_set_state(eState);
-    if (eOldState != eState)
-        sendUpdate();
+    sendUpdate();
 }
 
 JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,

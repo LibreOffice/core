@@ -496,6 +496,7 @@ constexpr auto NotebookbarList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"modules/scalc/ui/numberbox.ui" },
         { u"modules/scalc/ui/sheetviewbox.ui" },
+        { u"modules/scalc/ui/tablestylesbox.ui" },
         { u"svx/ui/fontnamebox.ui" },
         { u"svx/ui/fontsizebox.ui" },
         { u"svx/ui/stylespreview.ui" },
