@@ -2256,7 +2256,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                 sal_uInt16 nGluePointCnt=pGPL==nullptr ? 0 : pGPL->GetCount();
                 sal_uInt16 nGesAnz=nGluePointCnt+9;
                 bool bUserFnd = false;
-                sal_uIntPtr nBestDist=0xFFFFFFFF;
+                sal_uInt64 nBestDist=0xFFFFFFFF;
                 for (sal_uInt16 i=0; i<nGesAnz; i++)
                 {
                     bool bUser=i<nGluePointCnt;
@@ -2294,7 +2294,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     if (bOk && aMouseRect.Contains(aConPos)) {
                         if (bUser) bUserFnd = true;
                         bFnd = true;
-                        sal_uIntPtr nDist=static_cast<sal_uIntPtr>(std::abs(aConPos.X()-rPt.X()))+static_cast<sal_uIntPtr>(std::abs(aConPos.Y()-rPt.Y()));
+                        sal_uInt64 nDist=static_cast<sal_uInt64>(std::abs(aConPos.X()-rPt.X()))+static_cast<sal_uInt64>(std::abs(aConPos.Y()-rPt.Y()));
                         if (nDist<nBestDist) {
                             nBestDist=nDist;
                             aTestCon.m_pSdrObj=pObj;
