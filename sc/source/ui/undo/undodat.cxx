@@ -1293,7 +1293,7 @@ void ScUndoDBData::DoChange( const bool bUndo )
             }
         }
 
-        if (const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo())
+        if (pDBData->GetTableStyleInfo())
         {
             ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
             if (pViewShell && aOldRange.IsValid())
