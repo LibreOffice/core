@@ -2272,6 +2272,64 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf163019)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167386_copy_paste_textbox)
+{
+    createScDoc();
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xPage->getCount());
+
+    // Insert a textbox
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+    dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
+
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(1),
+        getViewShell()->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount());
+
+    // Type something into the textbox
+    typeString(u"TextBox");
+
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(1),
+        getViewShell()->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount());
+
+    // Press escape to leave edit mode
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(1),
+        getViewShell()->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount());
+
+    // Press escape again to deselect the textbox
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Nothing is selected
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(0),
+        getViewShell()->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount());
+
+    selectObjectByName(u"Text Frame 1");
+
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158551)
 {
     createScDoc();
