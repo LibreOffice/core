@@ -512,6 +512,9 @@ bool ScTable::SetOptimalHeight(
 
     if (bChanged)
     {
+        // reposition (cell) anchored items with setDrawPageSize ScObjectHandling::RecalcPosMode
+        SetDrawPageSize(/*ResetStreamValid=*/true, /*UpdateNoteCaptionPos=*/false);
+
         if (ScViewData* pViewData = ScDocShell::GetViewData())
         {
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
