@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     // Without the fixes, this was X[9040] Y[10257] W[2823] H[742]
     tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
     CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(3462), aRect.Top()); // really should be 1058 (bottom of row 2)
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(560), aRect.GetHeight());
 
@@ -93,9 +93,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
 
     aRect = pPage->GetObj(0)->GetSnapRect();
     CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(3466), aRect.Top());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(556), aRect.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
 };
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)
