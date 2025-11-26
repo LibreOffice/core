@@ -322,7 +322,7 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
         {
             eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
         }
-        catch (css::frame::UnknownModuleException& e)
+        catch (css::uno::Exception& e)
         {
             SAL_WARN("sfx.appl", "SfxNotebookBar::IsActive(): " + e.Message);
             return false;
