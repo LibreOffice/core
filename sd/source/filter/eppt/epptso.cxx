@@ -322,13 +322,15 @@ sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
 
 sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
 {
-    sal_uInt32 i, nSize = 28 * mnMasterPages + 8;
+    sal_uInt32 i, nSize = 28 * (mnMasterPages - static_cast<int>(mbHasCanvasPage)) + 8;
     if ( pStrm )
     {
         pStrm->WriteUInt32( 0x1f | ( EPP_SlideListWithText << 16 ) ).WriteUInt32( nSize - 8 );
 
         for ( i = 0; i < mnMasterPages; i++ )
         {
+            if (i == mnCanvasMasterIndex)
+                continue;
             pStrm->WriteUInt32( EPP_SlidePersistAtom << 16 ).WriteUInt32( 20 );
             mpPptEscherEx->InsertPersistOffset( EPP_MAINMASTER_PERSIST_KEY | i, pStrm->Tell() );
             pStrm->WriteUInt32( 0 )                 // psrReference - logical reference to the slide persist object ( EPP_MAINMASTER_PERSIST_KEY )
