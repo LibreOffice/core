@@ -191,7 +191,7 @@ public:
         return GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, bSrchInParent, ppItem);
     }
 
-    template <class T> SfxItemState GetItemState(TypedWhichId<T> nWhich, bool bSrchInParent = true, const T **ppItem = nullptr ) const
+    template <class T> SfxItemState GetItemState(TypedWhichId<T> nWhich, bool bSrchInParent, const T **ppItem) const
     {
         return GetItemState(sal_uInt16(nWhich), bSrchInParent, reinterpret_cast<SfxPoolItem const**>(ppItem));
     }
