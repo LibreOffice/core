@@ -169,9 +169,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106690, "tdf106690.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // This was 0, numbering rules with automatic spacing meant 0
     // before/autospacing for all text nodes, even for ones at the start/end of
     // a numbered text node block.
@@ -557,9 +554,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf97648_relativeWidth)
     createSwDoc("tdf97648_relativeWidth.docx");
     verify();
 
-    // FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -581,9 +575,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144362, "tdf144362.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 7
-    skipValidation();
-
     CPPUNIT_ASSERT_MESSAGE("There should be two or three pages", getPages() <= 3 );
 
     //tdf#95114 - follow style is Text Body - DOCX test
