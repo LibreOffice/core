@@ -145,6 +145,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf168755_anim_on_SmartArt)
                                  aSpTgtId);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169675_3d_object_anim)
+{
+    createSdImpressDoc("odp/tdf169675_3d_object_anim.odp");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    OUString aSpTgtId
+        = getXPath(pXmlDoc,
+                   "//p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
+                   "p:par[1]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
+                   "p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt",
+                   "spid");
+    // Before the fix spid would be -1, because animations for not exported targets (3D objects)
+    // would be written, now those are omitted
+    CPPUNIT_ASSERT_MESSAGE("Shape id in animation target can't be -1", aSpTgtId != "-1");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346)
 {
     // There are two themes in the test document, make sure we use the right theme
