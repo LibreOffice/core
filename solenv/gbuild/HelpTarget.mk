@@ -111,11 +111,6 @@ $(dir $(call gb_HelpTranslateTarget_get_target,%)).dir :
 $(dir $(call gb_HelpTranslateTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_HelpTranslateTarget_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),XHP,2)
-	$(call gb_Trace_MakeMark,$*,XHP)
-	touch $@
-
 $(call gb_HelpTranslateTarget__get_any_translated_target,%) :
 	touch $@
 
@@ -827,5 +822,11 @@ define gb_HelpTarget_use_linked_modules
 $(foreach module,$(2),$(call gb_HelpTarget_use_linked_module,$(1),$(module)))
 
 endef
+
+.SECONDEXPANSION:
+$(call gb_HelpTranslateTarget_get_target,%) :| $$(dir $(call gb_HelpTranslateTarget_get_target,%)).dir
+	$(call gb_Output_announce,$*,$(true),XHP,2)
+	$(call gb_Trace_MakeMark,$*,XHP)
+	touch $@
 
 # vim: set noet sw=4 ts=4:
