@@ -1507,6 +1507,8 @@ void SdDrawDocument::ImportCanvasPage()
     pPage->SetCanvasPage();
     pPage->SetExcluded(true);
     mpCanvasPage = pPage;
+    SdPage* pMPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+    pMPage->SetCanvasMasterPage();
     // re-populate the previews grid if not valid
     if (!bIsCanvasPageValid)
     {
