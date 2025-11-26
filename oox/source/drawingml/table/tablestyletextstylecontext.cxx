@@ -81,14 +81,14 @@ TableStyleTextStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
             {
                 ShapeStyleRef& rFontStyle = mrTableStylePart.getStyleRefs()[ XML_fontRef ];
                 rFontStyle.mnThemedIdx = rAttribs.getToken( XML_idx, XML_none );
-                return new ColorContext( *this, rFontStyle.maPhClr );
+                return new ColorContext(*this, &rFontStyle.maPhClr);
             }
 
         case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
             break;
     }
 
-    return new ColorValueContext( *this, mrTableStylePart.getTextColor() );
+    return new ColorValueContext(*this, &mrTableStylePart.getTextColor());
 }
 
 }

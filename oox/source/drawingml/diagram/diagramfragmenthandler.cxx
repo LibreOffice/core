@@ -111,7 +111,7 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
 {
     o_rStyle.mnThemedIdx = (nElement == A_TOKEN(fontRef)) ?
         rAttribs.getToken( XML_idx, XML_none ) : rAttribs.getInteger( XML_idx, 0 );
-    return new ColorContext( *this, o_rStyle.maPhClr );
+    return new ColorContext(*this, &o_rStyle.maPhClr);
 }
 
 ::oox::core::ContextHandlerRef DiagramQStylesFragmentHandler::onCreateContext( sal_Int32 nElement,

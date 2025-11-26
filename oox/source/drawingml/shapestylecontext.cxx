@@ -57,7 +57,7 @@ ContextHandlerRef ShapeStyleContext::onCreateContext( sal_Int32 aElementToken, c
             // tx1 in such cases
             if( nToken == XML_fontRef && !rStyleRef.maPhClr.isUsed() )
                 rStyleRef.maPhClr.setSchemeClr(XML_tx1);
-            return new ColorContext( *this, rStyleRef.maPhClr );
+            return new ColorContext(*this, &rStyleRef.maPhClr);
         }
     }
     return nullptr;

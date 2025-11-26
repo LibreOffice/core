@@ -31,10 +31,10 @@ class Color;
 
 /** Context handler for the different color value elements (a:scrgbClr,
     a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
-class ColorValueContext final : public ::oox::core::ContextHandler2
+class ColorValueContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit ColorValueContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor = nullptr);
+    explicit ColorValueContext(::oox::core::ContextHandler2Helper const & rParent, Color* rColor, ::model::ComplexColor* pComplexColor = nullptr);
 
     virtual void onStartElement(const ::oox::AttributeList& rAttribs) override;
 
@@ -42,8 +42,8 @@ public:
         sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
 
 private:
-    Color& mrColor;
-    model::ComplexColor* mpComplexColor;
+    Color* mpColor;
+    ::model::ComplexColor* mpComplexColor;
 };
 
 
@@ -52,16 +52,16 @@ private:
 class ColorContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit ColorContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor = nullptr);
+    explicit ColorContext(::oox::core::ContextHandler2Helper const & rParent, Color* pColor, ::model::ComplexColor* pComplexColor = nullptr);
 
     virtual ::oox::core::ContextHandlerRef onCreateContext(
         sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
 
 private:
-    Color& mrColor;
+    Color* mpColor;
 
 protected:
-    model::ComplexColor* mpComplexColor;
+    ::model::ComplexColor* mpComplexColor;
 };
 
 /// Same as ColorContext, but handles multiple colors.

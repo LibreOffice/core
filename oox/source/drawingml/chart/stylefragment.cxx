@@ -121,7 +121,7 @@ ContextHandlerRef StyleReferenceContext::onCreateContext(sal_Int32 nElement,
             case A_TOKEN(sysClr):
             case A_TOKEN(schemeClr):
             case A_TOKEN(prstClr):
-                return new ColorValueContext(*this, mrModel.maColor, &mrModel.maComplexColor);
+                return new ColorValueContext(*this, nullptr, &mrModel.maComplexColor);
         }
     return nullptr;
 }
@@ -153,7 +153,7 @@ ContextHandlerRef FontReferenceContext::onCreateContext(sal_Int32 nElement,
             case A_TOKEN(sysClr):
             case A_TOKEN(schemeClr):
             case A_TOKEN(prstClr):
-                return new ColorValueContext(*this, mrModel.maColor, &mrModel.maComplexColor);
+                return new ColorValueContext(*this, nullptr, &mrModel.maComplexColor);
         }
     return nullptr;
 }

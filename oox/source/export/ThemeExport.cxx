@@ -322,6 +322,9 @@ void ThemeExport::writeComplexColor(model::ComplexColor const& rComplexColor)
         case model::ColorType::Placeholder:
             writeColorPlaceholder(rComplexColor);
             break;
+        case model::ColorType::Finalized:
+            assert(false);
+            break;
     }
 }
 

@@ -79,7 +79,7 @@ TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
                 {
                     ShapeStyleRef& rLineStyleRef = mrTableStylePart.getStyleRefs()[ mnLineType ];
                     rLineStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
-                    return new ColorContext( *this, rLineStyleRef.maPhClr );
+                    return new ColorContext(*this, &rLineStyleRef.maPhClr);
                 }
             }
             break;
@@ -95,7 +95,7 @@ TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
             {
                 ShapeStyleRef& rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
                 rStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
-                return new ColorContext( *this, rStyleRef.maPhClr );
+                return new ColorContext(*this, &rStyleRef.maPhClr);
             }
         case A_TOKEN( cell3D ):     // CT_Cell3D
             break;

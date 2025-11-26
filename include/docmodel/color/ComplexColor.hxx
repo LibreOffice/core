@@ -30,6 +30,7 @@ enum class ColorType
     Palette, /// Color from application defined palette.
     System, /// Color from system palette.
     Placeholder, /// Placeholder color in theme style lists.
+    Finalized /// Finalized RGB color.
 };
 
 enum class SystemColorType
@@ -104,6 +105,18 @@ public:
     bool isValidThemeType() const
     {
         return meType == model::ColorType::Theme && meThemeColorType != ThemeColorType::Unknown;
+    }
+
+    bool isUsed() const
+    {
+        return !(meType == ColorType::Unused
+                 || (meType == ColorType::System && meSystemColorType == SystemColorType::Unused));
+    }
+
+    void assignIfUsed(const ComplexColor& rColor)
+    {
+        if (rColor.isUsed())
+            *this = rColor;
     }
 
     ThemeColorUsage getThemeColorUsage() const { return meThemeColorUsage; }
@@ -185,6 +198,30 @@ public:
         maLastColor = ::Color(ColorTransparency, nRGB);
         meSystemColorType = eSystemColorType;
         meType = ColorType::System;
+    }
+
+    bool isOpaque() const
+    {
+        for (const Transformation& t : maTransformations)
+        {
+            if (t.meType == model::TransformationType::Alpha && t.mnValue != 10000)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool isTransparent() const
+    {
+        for (const Transformation& t : maTransformations)
+        {
+            if (t.meType == model::TransformationType::Alpha && t.mnValue == 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void setThemePlaceholder() { meType = ColorType::Placeholder; }

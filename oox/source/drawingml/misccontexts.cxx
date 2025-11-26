@@ -32,6 +32,7 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
+#include <docmodel/color/ComplexColor.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -41,7 +42,7 @@ using ::oox::core::ContextHandlerRef;
 namespace oox::drawingml {
 
 SolidFillContext::SolidFillContext(ContextHandler2Helper const & rParent, FillProperties& rFillProps, model::SolidFill* pSolidFill)
-    : ColorContext(rParent, rFillProps.maFillColor, pSolidFill ? &pSolidFill->maColor : nullptr)
+    : ColorContext(rParent, &rFillProps.maFillColor, pSolidFill ? &pSolidFill->maColor : nullptr)
 {
 }
 
@@ -83,7 +84,7 @@ ContextHandlerRef GradientFillContext::onCreateContext(
                     pComplexColor = &rStop.maColor;
                 }
 
-                return new ColorContext(*this, aElement->second, pComplexColor);
+                return new ColorContext(*this, &aElement->second, pComplexColor);
             }
         break;
 
@@ -236,11 +237,11 @@ ContextHandlerRef PatternFillContext::onCreateContext(
         case A_TOKEN( bgClr ):
             if (mpPatternFill)
                 pComplexColor = &mpPatternFill->maBackgroundColor;
-            return new ColorContext(*this, mrPatternProps.maPattBgColor, pComplexColor);
+            return new ColorContext(*this, &mrPatternProps.maPattBgColor, pComplexColor);
         case A_TOKEN( fgClr ):
             if (mpPatternFill)
                 pComplexColor = &mpPatternFill->maForegroundColor;
-            return new ColorContext(*this, mrPatternProps.maPattFgColor, pComplexColor);
+            return new ColorContext(*this, &mrPatternProps.maPattFgColor, pComplexColor);
     }
     return nullptr;
 }
@@ -280,14 +281,14 @@ ContextHandlerRef ColorChangeContext::onCreateContext(
                 auto& rEffect = mpBlipFill->maBlipEffects.back();
                 pComplexColor = &rEffect.getColorFrom();
             }
-            return new ColorContext(*this, mrBlipProps.maColorChangeFrom, pComplexColor);
+            return new ColorContext(*this, &mrBlipProps.maColorChangeFrom, pComplexColor);
         case A_TOKEN(clrTo):
             if (mpBlipFill)
             {
                 auto& rEffect = mpBlipFill->maBlipEffects.back();
                 pComplexColor = &rEffect.getColorTo();
             }
-            return new ColorContext(*this, mrBlipProps.maColorChangeTo, pComplexColor);
+            return new ColorContext(*this, &mrBlipProps.maColorChangeTo, pComplexColor);
     }
     return nullptr;
 }
@@ -418,7 +419,7 @@ DuotoneContext::~DuotoneContext()
         sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
 {
     if( mnColorIndex < 2 )
-        return new ColorValueContext(*this, mrBlipProps.maDuotoneColors[mnColorIndex++], nullptr);
+        return new ColorValueContext(*this, &mrBlipProps.maDuotoneColors[mnColorIndex++], nullptr);
     return nullptr;
 }
 
@@ -587,15 +588,18 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
     return nullptr;
 }
 
-SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler2Helper const & rParent, Color& rColor ) :
-    FillPropertiesContext( rParent, *this ),
-    mrColor( rColor )
+SimpleFillPropertiesContext::SimpleFillPropertiesContext(ContextHandler2Helper const & rParent, model::ComplexColor& rColor, Color *pOOXColor)
+    : FillPropertiesContext(rParent, *this)
+    , mrColor(rColor)
+    , mpOOXColor(pOOXColor)
 {
 }
 
 SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
 {
-    mrColor = getBestSolidColor();
+    mrColor = getBestSolidColor().createComplexColor(getFilter().getGraphicHelper(), -1);
+    if (mpOOXColor)
+        *mpOOXColor = getBestSolidColor();
 }
 
 BlipExtensionContext::BlipExtensionContext(ContextHandler2Helper const & rParent, BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)

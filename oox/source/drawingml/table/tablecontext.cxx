@@ -60,7 +60,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
         }
         break;
     case A_TOKEN(solidFill):
-        return new ColorContext(*this, mrTableProperties.getBgColor());
+        return new ColorContext(*this, &mrTableProperties.getBgColor());
     case A_TOKEN( tableStyle ):         // CT_TableStyle
         {
             std::shared_ptr< TableStyle >& rTableStyle = mrTableProperties.getTableStyle();

@@ -22,6 +22,7 @@
 
 #include <vector>
 
+#include <unordered_map>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/helper/helper.hxx>
@@ -31,14 +32,15 @@
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/color/Transformation.hxx>
 
 namespace oox { class GraphicHelper; }
 
 namespace oox::drawingml
 {
 
-model::ThemeColorType schemeTokenToThemeColorType(sal_uInt32 nToken);
-model::ThemeColorType schemeNameToThemeColorType(OUString const& rSchemeName);
+::model::ThemeColorType schemeTokenToThemeColorType(sal_uInt32 nToken);
+::model::ThemeColorType schemeNameToThemeColorType(OUString const& rSchemeName);
 
 class OOX_DLLPUBLIC Color
 {
@@ -89,9 +91,9 @@ public:
     void                assignIfUsed( const Color& rColor ) { if( rColor.isUsed() ) *this = rColor; }
 
     /** Returns true, if the color is initialized. */
-    bool                isUsed() const { return meMode != ColorMode::Unused; }
+    bool                isUsed() const { return meMode != ::model::ColorType::Unused; }
     /** Returns true, if the color is a placeholder color in theme style lists. */
-    bool                isPlaceHolder() const { return meMode == ColorMode::PlaceHolder; }
+    bool                isPlaceHolder() const { return meMode == ::model::ColorType::Placeholder; }
     /** Returns the final RGB color value.
         @param nPhClr  Actual color for the phClr placeholder color used in theme style lists. */
     ::Color             getColor( const GraphicHelper& rGraphicHelper, ::Color nPhClr = API_RGB_TRANSPARENT ) const;
@@ -108,12 +110,12 @@ public:
     sal_Int16           getLumMod() const;
     sal_Int16           getLumOff() const;
 
-    model::ThemeColorType getThemeColorType() const
+    ::model::ThemeColorType getThemeColorType() const
     {
         return meThemeColorType;
     }
 
-    model::ComplexColor createComplexColor(const GraphicHelper& rGraphicHelper, sal_Int16 nPhClrTheme) const;
+    ::model::ComplexColor createComplexColor(const GraphicHelper& rGraphicHelper, sal_Int16 nPhClrTheme) const;
 
     /** Returns the unaltered list of transformations for interoperability purposes */
     const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
@@ -124,11 +126,13 @@ public:
     static sal_Int32    getColorTransformationToken( std::u16string_view sName );
     /** Translates between ColorMap token names and the corresponding token */
     static sal_Int32    getColorMapToken(std::u16string_view sName);
+    // Translate from color transformation token to docmodel enumeration value
+    static ::model::TransformationType getTransformationType(sal_Int32 nElement);
 
     /// Compares this color with rOther.
     bool equals(const Color& rOther, const GraphicHelper& rGraphicHelper, ::Color nPhClr) const;
 
-    model::ComplexColor getComplexColor() const;
+    ::model::ComplexColor getComplexColor() const;
 
     bool operator==(const Color&) const;
 
@@ -144,38 +148,15 @@ private:
     void                toHsl() const;
 
 private:
-    enum class ColorMode
-    {
-        Unused,              /// Color is not used, or undefined.
-        AbsoluteRgb,         /// Absolute RGB (r/g/b: 0...255).
-        RelativeRgb,         /// Relative RGB (r/g/b: 0...100000).
-        Hsl,                 /// HSL (hue: 0...21600000, sat/lum: 0...100000).
-        Scheme,              /// Color from scheme.
-        ApplicationPalette,  /// Color from application defined palette.
-        SystemPalette,       /// Color from system palette.
-        PlaceHolder,         /// Placeholder color in theme style lists.
-        Finalized            /// Finalized RGB color.
-    };
 
-    struct Transformation
-    {
-        sal_Int32           mnToken;
-        sal_Int32           mnValue;
-
-        explicit            Transformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
-
-        bool operator==(const Transformation&) const noexcept = default;
-    };
-
-    mutable ColorMode   meMode;         /// Current color mode.
-    mutable std::vector< Transformation >
-                        maTransforms;  /// Color transformations.
+    mutable ::model::ColorType meMode; /// Current color mode.
+    mutable std::vector<::model::Transformation> maTransforms;  /// Color transformations.
     mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, palette index, system token, or final RGB.
     mutable sal_Int32   mnC2;           /// Green, green%, saturation, or system default RGB.
     mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).
     OUString            msSchemeName;   /// Scheme name from the a:schemeClr element for interoperability purposes
-    model::ThemeColorType meThemeColorType;
+    ::model::ThemeColorType meThemeColorType;
     css::uno::Sequence< css::beans::PropertyValue >
                         maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };

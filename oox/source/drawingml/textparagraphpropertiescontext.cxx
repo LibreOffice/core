@@ -265,7 +265,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             mrBulletList.mbBulletColorFollowText <<= true;
             break;
         case A_TOKEN( buClr ):          // CT_Color
-            return new ColorContext( *this, *mrBulletList.maBulletColorPtr );
+            return new ColorContext(*this, mrBulletList.maBulletColorPtr.get());
         // EG_TextBulletSize
         case A_TOKEN( buSzTx ):         // CT_TextBulletSizeFollowText
             mrBulletList.mbBulletSizeFollowText <<= true;

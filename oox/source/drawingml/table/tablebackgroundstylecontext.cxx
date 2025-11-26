@@ -56,7 +56,7 @@ TableBackgroundStyleContext::onCreateContext( ::sal_Int32 aElementToken, const A
             {
                 ShapeStyleRef& rStyleRef = mrTableStyle.getBackgroundFillStyleRef();
                 rStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
-                return new ColorContext( *this, rStyleRef.maPhClr );
+                return new ColorContext(*this, &rStyleRef.maPhClr);
             }
         // EG_ThemeableEffectStyle (choice)
         case A_TOKEN( effect ):     // CT_EffectProperties

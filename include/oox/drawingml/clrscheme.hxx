@@ -80,7 +80,7 @@ public:
     const OUString& GetName() const { return maName; }
 
     void ToAny(css::uno::Any& rVal) const;
-    void fill(model::ColorSet& rColorSet) const;
+    void fill(::model::ColorSet& rColorSet) const;
 
 };
 

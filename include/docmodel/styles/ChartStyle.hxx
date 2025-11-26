@@ -91,7 +91,6 @@ struct FontOrStyleRef
 
     // A child element of cs:CT_FontReference or cs:CT_StyleReference is
     // a:EG_ColorChoice. The latter is handled by ColorValueContext.
-    oox::drawingml::Color maColor; // needed for ColorValueContext
     model::ComplexColor maComplexColor; // needed for ColorValueContext
     // There's also an a:EG_ColorTransform member and a 'mods' member for
     // FontOrStyleRef. Ignore those for now. TODO

@@ -182,7 +182,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
                 ? std::make_shared<FillProperties>( *pFillProperties )
                 : std::make_shared<FillProperties>();
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
-            ContextHandlerRef ret = new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() );
+            ContextHandlerRef ret = new ColorContext(*this, &mpSlidePersistPtr->getBackgroundColor());
             return ret;
         }
         break;
