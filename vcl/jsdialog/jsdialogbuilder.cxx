@@ -1560,10 +1560,8 @@ JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
 
 void JSCheckButton::set_active(bool active)
 {
-    bool bWasActive = get_active();
     SalInstanceCheckButton::set_active(active);
-    if (bWasActive != active)
-        sendUpdate();
+    sendUpdate();
 }
 
 JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
