@@ -134,8 +134,6 @@ bool QtInstanceWidget::has_focus() const
     return getQWidget()->hasFocus();
 }
 
-bool QtInstanceWidget::is_active() const { return has_focus(); }
-
 bool QtInstanceWidget::has_child_focus() const
 {
     SolarMutexGuard g;

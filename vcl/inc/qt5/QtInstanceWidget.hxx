@@ -50,8 +50,6 @@ public:
 
     virtual bool has_focus() const override;
 
-    virtual bool is_active() const override;
-
     virtual bool has_child_focus() const override;
 
     virtual void show() override;

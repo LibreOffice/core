@@ -396,8 +396,6 @@ void SalInstanceWidget::grab_focus()
 
 bool SalInstanceWidget::has_focus() const { return m_xWidget->HasFocus(); }
 
-bool SalInstanceWidget::is_active() const { return m_xWidget->IsActive(); }
-
 bool SalInstanceWidget::has_child_focus() const { return m_xWidget->HasChildPathFocus(true); }
 
 void SalInstanceWidget::show() { m_xWidget->Show(); }

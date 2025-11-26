@@ -165,10 +165,6 @@ public:
     // shown
     virtual bool has_child_focus() const = 0;
 
-    // return if this widget has the keyboard focus within the active window
-    // TODO: review if this has any practical difference from has_focus()
-    virtual bool is_active() const = 0;
-
     /* size */
     virtual void set_size_request(int nWidth, int nHeight) = 0;
     virtual Size get_size_request() const = 0;

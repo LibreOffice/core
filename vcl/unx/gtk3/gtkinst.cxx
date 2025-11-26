@@ -3470,12 +3470,6 @@ public:
         return gtk_widget_has_focus(m_pWidget);
     }
 
-    virtual bool is_active() const override
-    {
-        GtkWindow* pTopLevel = GTK_WINDOW(widget_get_toplevel(m_pWidget));
-        return pTopLevel && gtk_window_is_active(pTopLevel) && has_focus();
-    }
-
     // is the focus in a child of this widget, where a transient popup attached
     // to a widget is considered a child of that widget
     virtual bool has_child_focus() const override
