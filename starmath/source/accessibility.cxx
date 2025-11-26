@@ -201,8 +201,6 @@ sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
         nStateSet |= AccessibleStateType::FOCUSABLE;
         if (pWin->HasFocus())
             nStateSet |= AccessibleStateType::FOCUSED;
-        if (pWin->IsActive())
-            nStateSet |= AccessibleStateType::ACTIVE;
         if (pWin->IsVisible())
             nStateSet |= AccessibleStateType::SHOWING;
         if (pWin->IsReallyVisible())
