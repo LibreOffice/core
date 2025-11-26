@@ -8,6 +8,7 @@
  */
 
 #include "pptx-animations-nodectx.hxx"
+#include <oox/export/shapes.hxx>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -43,7 +44,7 @@ bool isValidTarget(const Any& rTarget)
 {
     Reference<XShape> xShape;
 
-    if ((rTarget >>= xShape) && xShape.is())
+    if ((rTarget >>= xShape) && drawingml::ShapeExport::IsShapeTypeKnown(xShape))
         return true;
 
     ParagraphTarget aParagraphTarget;
