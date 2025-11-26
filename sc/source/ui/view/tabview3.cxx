@@ -580,6 +580,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
 
     rBindings.Invalidate( SID_CURRENTCELL );    // -> Navigator
     rBindings.Invalidate( SID_AUTO_FILTER );    // -> Menu
+    rBindings.Invalidate( SID_INSERT_CALCTABLE );
     rBindings.Invalidate( FID_NOTE_VISIBLE );
     rBindings.Invalidate( FID_SHOW_NOTE );
     rBindings.Invalidate( FID_HIDE_NOTE );

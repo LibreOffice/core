@@ -266,6 +266,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/subtotaloptionspage \
 	sc/uiconfig/scalc/ui/subtotalgrppage \
 	sc/uiconfig/scalc/ui/statisticsinfopage \
+	sc/uiconfig/scalc/ui/tablestylesbox \
 	sc/uiconfig/scalc/ui/tabcolordialog \
 	sc/uiconfig/scalc/ui/textimportoptions \
 	sc/uiconfig/scalc/ui/textimportcsv \
