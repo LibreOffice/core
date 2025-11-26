@@ -754,9 +754,9 @@ short SwIndexMarkPane::ShowWarning4Modifications()
 {
     short nresult = RET_NO;
     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    auto pDlg = pFact->CreateQueryDialog(
-        m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE),
-        SwResId(STR_QUERY_CLOSE_TEXT), SwResId(STR_QUERY_CLOSE_QUESTION), false);
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateQueryDialog(
+        m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE), SwResId(STR_QUERY_CLOSE_TEXT),
+        SwResId(STR_QUERY_CLOSE_QUESTION), false));
     nresult = pDlg->Execute();
 
     return nresult;
