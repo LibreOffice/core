@@ -346,6 +346,7 @@ protected:
 
     sal_uInt32          mnPages;            ///< number of Slides ( w/o master pages & notes & handout )
     sal_uInt32          mnMasterPages;
+    sal_uInt32          mnCanvasMasterIndex;
 
     Fraction           maFraction;
     MapMode            maMapModeSrc;

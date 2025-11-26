@@ -1310,6 +1310,8 @@ void PPTWriter::ImplWriteAtomEnding()
     // write MasterPages persists
     for ( i = 0; i < mnMasterPages; i++ )
     {
+        if (i == mnCanvasMasterIndex)
+            continue;
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_MainMaster | i );
         if ( nOfs )
         {

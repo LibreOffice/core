@@ -1924,6 +1924,8 @@ void PowerPointExport::FindEquivalentMasterPages()
     maEquivalentMasters.resize(mnMasterPages, SAL_MAX_UINT32);
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
+        if (i == mnCanvasMasterIndex)
+            continue;
         css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
         uno::Any aAny(xDrawPages->getByIndex(i));
         aAny >>= xDrawPage;
@@ -1944,11 +1946,13 @@ void PowerPointExport::FindEquivalentMasterPages()
 
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
-        if (!maMastersLayouts[i].first || maEquivalentMasters[i] != SAL_MAX_UINT32)
+        if (!maMastersLayouts[i].first || maEquivalentMasters[i] != SAL_MAX_UINT32
+            || i == mnCanvasMasterIndex)
             continue;
         for (sal_uInt32 j = i + 1; j < mnMasterPages; j++)
         {
-            if (!maMastersLayouts[j].first || maEquivalentMasters[j] != SAL_MAX_UINT32)
+            if (!maMastersLayouts[j].first || maEquivalentMasters[j] != SAL_MAX_UINT32
+                || j == mnCanvasMasterIndex)
                 continue;
 
             if (lcl_ComparePageProperties(maMastersLayouts[i].first, maMastersLayouts[j].first)
@@ -1974,6 +1978,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 {
     SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
 
+    assert(mnCanvasMasterIndex != nPageNum);
+
     if (nPageNum != GetEquivalentMasterPage(nPageNum)
         && GetEquivalentMasterPage(nPageNum) != SAL_MAX_UINT32)
     {
@@ -1994,12 +2000,16 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         // Close the list tag if it was the last one
         if (nPageNum == mnMasterPages - 1)
             mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
+        if (mnCanvasMasterIndex == mnMasterPages - 1 && nPageNum == mnMasterPages - 2)
+            mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
         return;
     }
 
     // slides list
     if (nPageNum == 0)
+        mPresentationFS->startElementNS(XML_p, XML_sldMasterIdLst);
+    if (mnCanvasMasterIndex == 0 && nPageNum == 1)
         mPresentationFS->startElementNS(XML_p, XML_sldMasterIdLst);
 
     OUString sRelId = addRelation(mPresentationFS->getOutputStream(),
@@ -2010,6 +2020,12 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                                      XML_id, OString::number(GetNewSlideMasterId()),
                                      FSNS(XML_r, XML_id), sRelId);
 
+    // if canvas master page is the last one, close the list tag before that
+    if (mnCanvasMasterIndex == mnMasterPages - 1)
+    {
+        if (nPageNum == mnMasterPages - 2)
+            mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
+    }
     if (nPageNum == mnMasterPages - 1)
         mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
@@ -2175,6 +2191,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // Add layouts of other Impress masters that came from a single pptx master with multiple layouts
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
+        if (i == mnCanvasMasterIndex)
+            continue;
         if (i != nPageNum && maEquivalentMasters[i] == nPageNum)
         {
             aLayouts = getLayoutsUsedForMaster(maMastersLayouts[i].first);
@@ -2763,12 +2781,12 @@ void PowerPointExport::WriteNotesMaster()
         auto pTheme = std::make_shared<model::Theme>("Office Theme");
         pTheme->setColorSet(std::make_shared<model::ColorSet>(*pDefaultColorSet));
 
-        WriteTheme(mnMasterPages, pTheme.get());
+        WriteTheme(mnMasterPages - static_cast<int>(mbHasCanvasPage), pTheme.get());
 
         // add implicit relation to the presentation theme
         addRelation(pFS->getOutputStream(),
                     oox::getRelationship(Relationship::THEME),
-                    Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
+                    Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1 - static_cast<int>(mbHasCanvasPage)) + ".xml"));
     }
 
     pFS->startElementNS(XML_p, XML_notesMaster, presentationNamespaces(*this));
@@ -3020,9 +3038,11 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
         }
         for (sal_uInt32 i = 0; i < mnMasterPages; i++)
         {
+            if (i == mnCanvasMasterIndex)
+                continue;
             if (maMastersLayouts[i].first == pPage)
             {
-                if (maEquivalentMasters[i] < mnMasterPages)
+                if (maEquivalentMasters[i] < mnMasterPages - static_cast<int>(mbHasCanvasPage))
                     pPage = maMastersLayouts[maEquivalentMasters[i]].first;
                 break;
             }
