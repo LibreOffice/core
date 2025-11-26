@@ -96,8 +96,8 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     if ( pDisableItem && pDisableItem->GetValue() )
         DisableFontSelection();
 
-    const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pSet, SID_ATTR_CHAR_FONT, false);
-    const SfxStringItem* pFontNameItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FONT_NAME, false);
+    const SvxFontItem* pFontItem = SfxItemSet::GetItem(pSet, SID_ATTR_CHAR_FONT, false);
+    const SfxStringItem* pFontNameItem = SfxItemSet::GetItem(pSet, SID_FONT_NAME, false);
     if ( pFontItem )
     {
         vcl::Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetFontSize() );

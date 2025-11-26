@@ -1813,7 +1813,7 @@ bool SfxObjectShell::SaveTo_Impl
         bool const bPasswdProvided(aEncryptionData.getLength() != 0);
         pFilter = rMedium.GetFilter();
 
-        const SfxStringItem *pVersionItem = !rMedium.IsInCheckIn()? SfxItemSet::GetItem<SfxStringItem>(pSet, SID_DOCINFO_COMMENTS, false): nullptr;
+        const SfxStringItem *pVersionItem = !rMedium.IsInCheckIn()? SfxItemSet::GetItem(pSet, SID_DOCINFO_COMMENTS, false): nullptr;
         OUString aTmpVersionURL;
 
         if ( bOk )
@@ -1893,7 +1893,7 @@ bool SfxObjectShell::SaveTo_Impl
             if ( bOk && pVersionItem && !rMedium.IsInCheckIn() )
             {
                 // store a version also
-                const SfxStringItem *pAuthorItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_DOCINFO_AUTHOR, false);
+                const SfxStringItem *pAuthorItem = SfxItemSet::GetItem(pSet, SID_DOCINFO_AUTHOR, false);
 
                 // version comment
                 util::RevisionTag aInfo;
