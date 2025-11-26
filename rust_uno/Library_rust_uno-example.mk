@@ -34,7 +34,7 @@ $(call gb_Library_get_target,rust_uno-example): $(call gb_CustomTarget_get_targe
 ifneq ($(filter WNT,$(OS_FOR_BUILD)),)
     # Windows-specific flags
     $(eval $(call gb_Library_add_libs,rust_uno-example,\
-        $(SRCDIR)/rust_uno/target/release/rust_uno.lib \
+        $(SRCDIR)/rust_uno/target/release/rust_uno.dll.lib \
     ))
 else
     # Unix/Linux with RPATH
