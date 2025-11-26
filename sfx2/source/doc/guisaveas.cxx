@@ -1124,11 +1124,11 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
-    const SfxBoolItem* pRecommendReadOnly = SfxItemSet::GetItem<SfxBoolItem>(&*pDialogParams, SID_RECOMMENDREADONLY, false);
+    const SfxBoolItem* pRecommendReadOnly = pDialogParams->GetItem(SID_RECOMMENDREADONLY, false);
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
-    const SfxBoolItem* pSignWithDefaultKey = SfxItemSet::GetItem<SfxBoolItem>(&*pDialogParams, SID_GPGSIGN, false);
+    const SfxBoolItem* pSignWithDefaultKey = pDialogParams->GetItem(SID_GPGSIGN, false);
     m_bSignWithDefaultSignature = (pSignWithDefaultKey && pSignWithDefaultKey->GetValue());
     pDialogParams->ClearItem( SID_GPGSIGN );
 

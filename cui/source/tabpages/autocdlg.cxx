@@ -68,11 +68,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
 
     if ( _pSet )
     {
-        const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(_pSet, SID_AUTO_CORRECT_DLG, false);
+        const SfxBoolItem* pItem = _pSet->GetItem<SfxBoolItem>(SID_AUTO_CORRECT_DLG, false);
         if ( pItem && pItem->GetValue() )
             bShowSWOptions = true;
 
-        const SfxBoolItem* pItem2 = SfxItemSet::GetItem<SfxBoolItem>(_pSet, SID_OPEN_SMARTTAGOPTIONS, false);
+        const SfxBoolItem* pItem2 = _pSet->GetItem<SfxBoolItem>(SID_OPEN_SMARTTAGOPTIONS, false);
         if ( pItem2 && pItem2->GetValue() )
             bOpenSmartTagOptions = true;
     }

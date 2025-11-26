@@ -742,7 +742,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // If a salvaged file is present, do not enclose the OrigURL
                 // again, since the Template is invalid after reload.
-                const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(&*pNewSet, SID_DOC_SALVAGE, false);
+                const SfxStringItem* pSalvageItem = pNewSet->GetItem(SID_DOC_SALVAGE, false);
                 if( pSalvageItem )
                 {
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
@@ -765,9 +765,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pSilentItem && pSilentItem->GetValue() )
                     pNewSet->Put( SfxBoolItem( SID_SILENT, true ) );
 
-                const SfxUnoAnyItem* pInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(&*pNewSet, SID_INTERACTIONHANDLER, false);
-                const SfxUInt16Item* pMacroExecItem = SfxItemSet::GetItem<SfxUInt16Item>(&*pNewSet, SID_MACROEXECMODE, false);
-                const SfxUInt16Item* pDocTemplateItem = SfxItemSet::GetItem<SfxUInt16Item>(&*pNewSet, SID_UPDATEDOCMODE, false);
+                const SfxUnoAnyItem* pInteractionItem = pNewSet->GetItem(SID_INTERACTIONHANDLER, false);
+                const SfxUInt16Item* pMacroExecItem = pNewSet->GetItem(SID_MACROEXECMODE, false);
+                const SfxUInt16Item* pDocTemplateItem = pNewSet->GetItem(SID_UPDATEDOCMODE, false);
 
                 if (!pInteractionItem)
                 {

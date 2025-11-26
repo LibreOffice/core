@@ -775,7 +775,7 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     m_xTypeEd->save_value();
     m_xCommentEd->save_value();
 
-    const SfxBoolItem* pROItem = SfxItemSet::GetItem<SfxBoolItem>(rSet, SID_DOC_READONLY, false);
+    const SfxBoolItem* pROItem = rSet->GetItem(SID_DOC_READONLY, false);
     if (pROItem && pROItem->GetValue())
     {
         m_xTitleEd->set_editable(false);
