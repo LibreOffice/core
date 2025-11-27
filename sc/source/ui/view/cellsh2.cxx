@@ -1431,8 +1431,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                                 nStartCol, nStartRow, nEndCol, nEndRow, nStartTab);
                             for (const ScDBData* pDBData : aDBData)
                             {
-                                if (const ScTableStyleParam* pTableStyleInfo
-                                    = pDBData->GetTableStyleInfo())
+                                if (pDBData->GetTableStyleInfo())
                                 {
                                     bDisable = true;
                                     break;

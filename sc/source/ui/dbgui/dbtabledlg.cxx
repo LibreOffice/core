@@ -142,7 +142,7 @@ IMPL_LINK_NOARG(ScDbTableDlg, OkBtnHdl, weld::Button&, void)
 
         for (const ScDBData* pDBData : aDBData)
         {
-            if (const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo())
+            if (pDBData->GetTableStyleInfo())
             {
                 bInvalid = true;
                 theCurArea = ScRange();
