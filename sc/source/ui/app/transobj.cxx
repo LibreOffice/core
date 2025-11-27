@@ -100,9 +100,6 @@ void ScTransferObj::GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab
 void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPrintFactor,
                                 const ScRange& rBlock )
 {
-    if (!rDoc.GetDocumentShell())
-        return;
-
     tools::Rectangle aBound( Point(), pDev->GetOutputSize() );      //! use size from clip area?
 
     ScViewData aViewData(rDoc);

@@ -1036,10 +1036,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     ScInputHandler* pHdl = pScMod->GetInputHdl( mrViewData.GetViewShell() );
     if (pHdl)
     {
-        ScDocShell& rDocSh = mrViewData.GetDocShell();
+        ScDocShell* pDocSh = mrViewData.GetDocShell();
         ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
         if ( pRangeFinder && !pRangeFinder->IsHidden() &&
-                pRangeFinder->GetDocName() == rDocSh.GetTitle() )
+                pRangeFinder->GetDocName() == pDocSh->GetTitle() )
         {
             sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFinder->Count());
             for (sal_uInt16 i=0; i<nCount; i++)
@@ -2549,7 +2549,7 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         return;
 
     if ( rDCEvt.GetType() == DataChangedEventType::FONTS && eWhich == mrViewData.GetActivePart() )
-        mrViewData.GetDocShell().UpdateFontList();
+        mrViewData.GetDocShell()->UpdateFontList();
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
@@ -2602,7 +2602,7 @@ IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
         // Do not attempt to calculate a page size here if it is empty if
         // that involves counting pages.
         // An earlier implementation did
-        //   ScPrintFunc(pDocSh, rDocSh.GetPrinter(), nCurrentTab);
+        //   ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nCurrentTab);
         //   rDoc.SetPageSize(nCurrentTab, rDoc.GetPageSize(nCurrentTab));
         // which resulted in tremendous waiting times after having loaded
         // larger documents i.e. imported from CSV, in which UI is entirely
@@ -2615,14 +2615,14 @@ IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
         // disable things.
         if (!aPageSize.IsEmpty())
         {
-            ScDocShell& rDocSh = mrViewData.GetDocShell();
-            const bool bModified = rDocSh.IsModified();
+            ScDocShell* pDocSh = mrViewData.GetDocShell();
+            const bool bModified = pDocSh->IsModified();
             // Even setting the same size sets page size valid, so
             // UpdatePageBreaks() actually does something.
             rDoc.SetPageSize( nCurrentTab, aPageSize);
             rDoc.UpdatePageBreaks(nCurrentTab);
-            rDocSh.PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
-            rDocSh.SetModified(bModified);
+            pDocSh->PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
+            pDocSh->SetModified(bModified);
         }
     }
 }

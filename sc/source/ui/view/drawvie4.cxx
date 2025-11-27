@@ -85,14 +85,14 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     //  Update with the data (including NumberFormatter) from the live document would
     //  also store the NumberFormatter in the clipboard chart (#88749#)
 
-    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
-    rDocSh.FillTransferableObjectDescriptor( aObjDesc );
-    aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), rDocSh, std::move(aObjDesc) );
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), *pDocSh, std::move(aObjDesc) );
 
     pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
     pTransferObj->SetDragSource( this );               // copies selection
@@ -354,14 +354,14 @@ void ScDrawView::DoCopy()
     //  Update with the data (including NumberFormatter) from the live document would
     //  also store the NumberFormatter in the clipboard chart (#88749#)
 
-    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
-    rDocSh.FillTransferableObjectDescriptor( aObjDesc );
-    aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj(new ScDrawTransferObj( std::move(pModel), rDocSh, std::move(aObjDesc) ));
+    rtl::Reference<ScDrawTransferObj> pTransferObj(new ScDrawTransferObj( std::move(pModel), *pDocSh, std::move(aObjDesc) ));
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
@@ -388,14 +388,14 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     //  also store the NumberFormatter in the clipboard chart (#88749#)
     // lcl_RefreshChartData( pModel, rViewData.GetDocument() );
 
-    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
-    rDocSh.FillTransferableObjectDescriptor( aObjDesc );
-    aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), rDocSh, std::move(aObjDesc) );
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), *pDocSh, std::move(aObjDesc) );
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
@@ -412,7 +412,7 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
 
-    nPPTX /= rViewData.GetDocShell().GetOutputFactor();
+    nPPTX /= rViewData.GetDocShell()->GetOutputFactor();
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
@@ -504,9 +504,9 @@ void ScDrawView::SetMarkedOriginalSize()
     if (nDone)
     {
         pUndoGroup->SetComment(ScResId( STR_UNDO_ORIGINALSIZE ));
-        ScDocShell& rDocSh = rViewData.GetDocShell();
-        rDocSh.GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
-        rDocSh.SetDrawModified();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
+        pDocSh->SetDrawModified();
     }
 }
 
@@ -562,8 +562,8 @@ void ScDrawView::FitToCellSize()
         pObj->SetSnapRect(aCellRect);
 
     pUndoGroup->SetComment(ScResId( STR_UNDO_FITCELLSIZE ));
-    ScDocShell& rDocSh = rViewData.GetDocShell();
-    rDocSh.GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
 
 }
 

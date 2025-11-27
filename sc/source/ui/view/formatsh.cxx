@@ -124,7 +124,7 @@ ScFormatShell::ScFormatShell(ScViewData& rData) :
     ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
 
     SetPool( &pTabViewShell->GetPool() );
-    SfxUndoManager* pMgr = rViewData.GetSfxDocShell().GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if (pMgr && !rViewData.GetDocument().IsUndoEnabled())
     {
@@ -142,9 +142,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const sal_uInt16  nSlotId = rReq.GetSlot();
 
-    ScDocShell&         rDocSh      = GetViewData().GetDocShell();
+    ScDocShell*         pDocSh      = GetViewData().GetDocShell();
     ScTabViewShell*     pTabViewShell= GetViewData().GetViewShell();
-    ScDocument&         rDoc        = rDocSh.GetDocument();
+    ScDocument&         rDoc        = pDocSh->GetDocument();
     SfxStyleSheetBasePool*  pStylePool  = rDoc.GetStyleSheetPool();
 
     if (nSlotId == SID_STYLE_PREVIEW)
@@ -215,7 +215,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         if (pArgs && pArgs->GetItemState(nSlotId, false, &pItem) == SfxItemState::SET)
         {
             const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-            SfxClassificationHelper aHelper(rDocSh.getDocProperties());
+            SfxClassificationHelper aHelper(pDocSh->getDocProperties());
             auto eType = SfxClassificationPolicyType::IntellectualProperty;
             if (const SfxStringItem* pNameItem = pArgs->GetItemIfSet(SID_TYPE_NAME, false))
             {

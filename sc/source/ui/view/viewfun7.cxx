@@ -177,8 +177,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 pDragEditView->DeleteMarked();
 
             ScDocument& rDocument = GetViewData().GetDocument();
-            ScDocShell& rDocShell = GetViewData().GetDocShell();
-            ScModelObj* pModelObj = rDocShell.GetModel();
+            ScDocShell* pDocShell = GetViewData().GetDocShell();
+            ScModelObj* pModelObj = ( pDocShell ? pDocShell->GetModel() : nullptr );
             if ( pDestPage && pModelObj && pDrawTrans )
             {
                 const ScRangeListVector& rProtectedChartRangesVector( pDrawTrans->GetProtectedChartRangesVector() );
@@ -251,8 +251,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         GetViewData().GetDocument().EnsureGraphicNames();
 
         ScDocument& rDocument = GetViewData().GetDocument();
-        ScDocShell& rDocShell = GetViewData().GetDocShell();
-        ScModelObj* pModelObj = rDocShell.GetModel();
+        ScDocShell* pDocShell = GetViewData().GetDocShell();
+        ScModelObj* pModelObj = ( pDocShell ? pDocShell->GetModel() : nullptr );
         const ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
         if ( pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
         {

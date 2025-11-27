@@ -227,7 +227,7 @@ IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, weld::Entry&, rEdit, void)
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 {
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
-    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     bool bHasData = std::any_of(m_aEntries.begin(), m_aEntries.end(),
         [](const std::unique_ptr<ScDataFormFragment>& rElem) { return (rElem != nullptr) && (!rElem->m_xEdit->get_text().isEmpty()); });
@@ -245,8 +245,8 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
     }
     SetButtonState();
     FillCtrls();
-    rDocSh.SetDocumentModified();
-    rDocSh.PostPaintGridAll();
+    pDocSh->SetDocumentModified();
+    pDocSh->PostPaintGridAll();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, weld::Button&, void)
@@ -275,18 +275,18 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, weld::Button&, void)
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, weld::Button&, void)
 {
     ScViewData& rViewData = m_rTabViewShell.GetViewData();
-    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     ScRange aRange(m_nStartCol, m_nCurrentRow, m_nTab, m_nEndCol, m_nCurrentRow, m_nTab);
     m_rDoc.DeleteRow(aRange);
     m_nEndRow--;
 
     SetButtonState();
-    rDocSh.GetUndoManager()->Clear();
+    pDocSh->GetUndoManager()->Clear();
 
     FillCtrls();
-    rDocSh.SetDocumentModified();
-    rDocSh.PostPaintGridAll();
+    pDocSh->SetDocumentModified();
+    pDocSh->PostPaintGridAll();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl, weld::Button&, void)

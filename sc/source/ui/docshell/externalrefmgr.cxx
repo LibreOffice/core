@@ -1476,8 +1476,8 @@ void ScExternalRefLink::Closed()
         if (!pViewData)
             return ERROR_GENERAL;
 
-        ScDocShell& rDocShell = pViewData->GetDocShell();
-        ScDocShellModificator aMod(rDocShell);
+        ScDocShell* pDocShell = pViewData->GetDocShell();
+        ScDocShellModificator aMod(*pDocShell);
         pMgr->switchSrcFile(mnFileId, aFile, aFilter);
         aMod.SetDocumentModified();
     }

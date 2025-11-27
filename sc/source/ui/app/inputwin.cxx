@@ -1533,7 +1533,7 @@ void ScTextWnd::InitEditEngine()
     ScDocShell* pDocSh = nullptr;
     if ( mpViewShell )
     {
-        pDocSh = &mpViewShell->GetViewData().GetDocShell();
+        pDocSh = mpViewShell->GetViewData().GetDocShell();
         ScDocument& rDoc = mpViewShell->GetViewData().GetDocument();
         pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool());
     }
@@ -2607,8 +2607,8 @@ void ScPosWnd::DoEnter()
             if ( pViewSh )
             {
                 ScViewData& rViewData = pViewSh->GetViewData();
-                ScDocShell& rDocShell = rViewData.GetDocShell();
-                ScDocument& rDoc = rDocShell.GetDocument();
+                ScDocShell* pDocShell = rViewData.GetDocShell();
+                ScDocument& rDoc = pDocShell->GetDocument();
 
                 ScNameInputType eType = lcl_GetInputType( aText );
                 if ( eType == SC_NAME_INPUT_BAD_NAME || eType == SC_NAME_INPUT_BAD_SELECTION )
@@ -2629,7 +2629,7 @@ void ScPosWnd::DoEnter()
                         ScRangeData* pNew = new ScRangeData( rDoc, aText, aContent, aCursor );
                         if ( aNewRanges.insert(pNew) )
                         {
-                            rDocShell.GetDocFunc().ModifyRangeNames( aNewRanges );
+                            pDocShell->GetDocFunc().ModifyRangeNames( aNewRanges );
                             pViewSh->UpdateInputHandler(true);
                         }
                     }

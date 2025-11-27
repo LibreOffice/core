@@ -83,8 +83,8 @@ namespace
 void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewData* pViewData,
                    const OUString& rRangeParam, bool bRangeIsPivotTable)
 {
-    ScDocShell& rDocShell = pViewData->GetDocShell();
-    ScDocument& rScDoc = rDocShell.GetDocument();
+    ScDocShell* pDocShell = pViewData->GetDocShell();
+    ScDocument& rScDoc = pDocShell->GetDocument();
 
     OUString aRangeString(rRangeParam);
 
@@ -142,7 +142,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 
     xReceiver->attachDataProvider(xDataProvider);
 
-    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getXWeak(rDocShell.GetModel()), uno::UNO_QUERY );
+    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getXWeak(pDocShell->GetModel()), uno::UNO_QUERY );
     xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
     // Same behavior as with old chart: Always assume data series in columns
@@ -524,8 +524,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     }
 
     ScViewData& rData = rViewSh.GetViewData();
-    ScDocShell& rScDocSh = rData.GetDocShell();
-    ScDocument& rScDoc   = rScDocSh.GetDocument();
+    ScDocShell* pScDocSh = rData.GetDocShell();
+    ScDocument& rScDoc   = pScDocSh->GetDocument();
     bool bUndo (rScDoc.IsUndoEnabled());
 
     if( pReqArgs )
@@ -566,14 +566,14 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             {
                 if (bUndo)
                 {
-                    rScDocSh.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoInsertTab>( rScDocSh, nNewTab,
+                    pScDocSh->GetUndoManager()->AddUndoAction(
+                        std::make_unique<ScUndoInsertTab>( *pScDocSh, nNewTab,
                                              true/*bAppend*/, aTabName ) );
                 }
 
-                rScDocSh.Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
+                pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
                 rViewSh.SetTabNo( nNewTab, true );
-                rScDocSh.PostPaintExtras();            //! done afterwards ???
+                pScDocSh->PostPaintExtras();            //! done afterwards ???
             }
             else
             {

@@ -177,7 +177,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
 void ScSpecialFilterDlg::Close()
 {
-    rViewData.GetDocShell().CancelAutoDBRange();
+    rViewData.GetDocShell()->CancelAutoDBRange();
 
     DoClose( ScSpecialFilterDlgWrapper::GetChildWindowId() );
 }

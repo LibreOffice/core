@@ -333,8 +333,8 @@ ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell& rDocShell)
 void ScSamplingDialog::PerformSampling()
 {
     OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
-    ScDocShell& rDocShell = mViewData.GetDocShell();
-    SfxUndoManager* pUndoManager = rDocShell.GetUndoManager();
+    ScDocShell* pDocShell = mViewData.GetDocShell();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
 
     ScRange aModifiedRange;
 
@@ -343,17 +343,17 @@ void ScSamplingDialog::PerformSampling()
     if (mxRandomMethodRadio->get_active())
     {
         if (mxKeepOrder->get_sensitive() && mxKeepOrder->get_active())
-            aModifiedRange = PerformRandomSamplingKeepOrder(rDocShell);
+            aModifiedRange = PerformRandomSamplingKeepOrder(*pDocShell);
         else
-            aModifiedRange = PerformRandomSampling(rDocShell);
+            aModifiedRange = PerformRandomSampling(*pDocShell);
     }
     else if (mxPeriodicMethodRadio->get_active())
     {
-        aModifiedRange = PerformPeriodicSampling(rDocShell);
+        aModifiedRange = PerformPeriodicSampling(*pDocShell);
     }
 
     pUndoManager->LeaveListAction();
-    rDocShell.PostPaint(aModifiedRange, PaintPartFlags::Grid);
+    pDocShell->PostPaint(aModifiedRange, PaintPartFlags::Grid);
 }
 
 sal_Int64 ScSamplingDialog::GetPopulationSize() const

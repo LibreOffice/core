@@ -160,7 +160,7 @@ void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId
 {
     ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
     assert(pTabViewShell);
-    const ScDocument& rDoc = rViewData.GetDocShell().GetDocument();
+    const ScDocument& rDoc = rViewData.GetDocShell()->GetDocument();
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
@@ -1191,7 +1191,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 std::shared_ptr<sc::SparklineGroup> pSparklineGroup;
                 if (GetViewData().GetDocument().GetSparklineGroupInRange(aMarkRange, pSparklineGroup) && pSparklineGroup)
                 {
-                    GetViewData().GetDocShell().GetDocFunc().DeleteSparklineGroup(pSparklineGroup, GetViewData().CurrentTabForData());
+                    GetViewData().GetDocShell()->GetDocFunc().DeleteSparklineGroup(pSparklineGroup, GetViewData().CurrentTabForData());
                 }
             }
             rReq.Done();
@@ -1208,7 +1208,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (pSparkline)
                 {
                     auto const& rpSparklineGroup = pSparkline->getSparklineGroup();
-                    GetViewData().GetDocShell().GetDocFunc().GroupSparklines(aRange, rpSparklineGroup);
+                    GetViewData().GetDocShell()->GetDocFunc().GroupSparklines(aRange, rpSparklineGroup);
                 }
             }
             rReq.Done();
@@ -1220,7 +1220,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             ScRange aRange;
             if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
             {
-                GetViewData().GetDocShell().GetDocFunc().UngroupSparklines(aRange);
+                GetViewData().GetDocShell()->GetDocFunc().UngroupSparklines(aRange);
             }
             rReq.Done();
         }
@@ -2500,7 +2500,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
 
                     // use the new conditional formatting
-                    GetViewData().GetDocShell().GetDocFunc().ReplaceConditionalFormat(nIndex, std::move(pFormat), aPos.Tab(), aRangeList);
+                    GetViewData().GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nIndex, std::move(pFormat), aPos.Tab(), aRangeList);
 
                     break;
                 }
@@ -2627,7 +2627,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pTabViewShell->GetFrameWeld(), &GetViewData().GetDocShell()));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pTabViewShell->GetFrameWeld(), GetViewData().GetDocShell()));
                 switch( pDlg->Execute() )
                 {
                     case BTN_PASTE_LIST:
@@ -2742,7 +2742,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAddress aPos( rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData() );
                     if( rDoc.GetNote(aPos) )
                     {
-                        rData.GetDocShell().GetDocFunc().ShowNote( aPos, bShowNote );
+                        rData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
                     }
                 }
                 else
@@ -2754,7 +2754,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const ScRangeList aRanges = *aRangesRef;
 
                     OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
-                    rData.GetDocShell().GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
+                    rData.GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                     for (auto const& rTab : rMark.GetSelectedTabs())
                     {
@@ -2774,13 +2774,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             const SCTAB nRangeTab = rRange->aStart.Tab();
                             if (rDoc.IsBlockEditable( nRangeTab, rAdr.Col(), rAdr.Row(), rAdr.Col(), rAdr.Row() ))
                             {
-                                rData.GetDocShell().GetDocFunc().ShowNote( rAdr, bShowNote );
+                                rData.GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                                 bDone = true;
                             }
                         }
                     }
 
-                    rData.GetDocShell().GetUndoManager()->LeaveListAction();
+                    rData.GetDocShell()->GetUndoManager()->LeaveListAction();
 
                     if ( bDone )
                     {
@@ -2804,7 +2804,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  std::vector<sc::NoteEntry> aNotes;
 
                  OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
-                 rData.GetDocShell().GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
+                 rData.GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                  for (auto const& rTab : rMark.GetSelectedTabs())
                  {
@@ -2814,10 +2814,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  for (const sc::NoteEntry& rNote : aNotes)
                  {
                      const ScAddress& rAdr = rNote.maPos;
-                     rData.GetDocShell().GetDocFunc().ShowNote( rAdr, bShowNote );
+                     rData.GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                  }
 
-                 rData.GetDocShell().GetUndoManager()->LeaveListAction();
+                 rData.GetDocShell()->GetUndoManager()->LeaveListAction();
             }
             break;
 
@@ -2837,15 +2837,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  bool bShowNote = (eState == ALLHIDDEN || eState == MIXED);
 
                  OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
-                 rData.GetDocShell().GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
+                 rData.GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                  for(const auto& rNote : aNotes)
                  {
                      const ScAddress& rAdr = rNote.maPos;
-                     rData.GetDocShell().GetDocFunc().ShowNote( rAdr, bShowNote );
+                     rData.GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                  }
 
-                 rData.GetDocShell().GetUndoManager()->LeaveListAction();
+                 rData.GetDocShell()->GetUndoManager()->LeaveListAction();
 
                  if (!pReqArgs)
                      rReq.AppendItem( SfxBoolItem( SID_TOGGLE_NOTES, bShowNote ) );
@@ -2887,7 +2887,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 aNewMark.MarkFromRangeList( aRangeList, true );
-                rData.GetDocShell().GetDocFunc().DeleteContents(aNewMark, InsertDeleteFlags::NOTE, true, false );
+                rData.GetDocShell()->GetDocFunc().DeleteContents(aNewMark, InsertDeleteFlags::NOTE, true, false );
             }
             break;
 
@@ -3026,7 +3026,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             = pDlg->GetConditionalFormatList();
                         if (nRet == RET_OK && pDlg->CondFormatsChanged())
                         {
-                            rData.GetDocShell().GetDocFunc().SetConditionalFormatList(
+                            rData.GetDocShell()->GetDocFunc().SetConditionalFormatList(
                                 pCondFormatList.release(), aPos.Tab());
                         }
                         else if (nRet == DLG_RET_ADD)
@@ -3798,7 +3798,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         rReq.Done( *pOutSet );
     }
     else
-        GetViewData().GetDocShell().CancelAutoDBRange();
+        GetViewData().GetDocShell()->CancelAutoDBRange();
 }
 
 void ScCellShell::ExecuteFillSingleEdit()
