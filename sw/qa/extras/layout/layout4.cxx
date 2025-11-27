@@ -1943,6 +1943,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf163285)
     CPPUNIT_ASSERT(topText3.startsWith("pg_3"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf169399)
+{
+    createSwDoc("tdf169399.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, this failed, because there were two pages:
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf152839_firstRows)
 {
     createSwDoc("tdf152839_firstrows.rtf");

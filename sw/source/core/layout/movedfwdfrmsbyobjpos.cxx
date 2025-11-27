@@ -87,4 +87,19 @@ bool SwMovedFwdFramesByObjPos::DoesRowContainMovedFwdFrame( const SwRowFrame& _r
     return bDoesRowContainMovedFwdFrame;
 }
 
+void SwMovedFwdFramesByObjPos::InvalidateAll()
+{
+    for (const auto& rEntry : maMovedFwdFrames)
+    {
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aFrameIter(
+            *rEntry.first);
+        for (SwTextFrame* pTextFrame = aFrameIter.First(); pTextFrame;
+             pTextFrame = aFrameIter.Next())
+        {
+            pTextFrame->InvalidatePos();
+            pTextFrame->InvalidatePage();
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

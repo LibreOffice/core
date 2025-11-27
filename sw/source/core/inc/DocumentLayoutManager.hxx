@@ -54,6 +54,8 @@ public:
 
     //Non Interface methods
     void ClearSwLayouterEntries();
+    size_t GetMovedFwdFramesCount() const;
+    void ClearSwLayouterEntriesWithInvalidation();
 
     virtual ~DocumentLayoutManager() override;
 
