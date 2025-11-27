@@ -1144,6 +1144,10 @@ int SwXTextDocument::getEditMode()
     }
 
     SfxViewShell* pView = pViewShell->GetSfxViewShell();
+    if (!pView)
+    {
+        return 0;
+    }
     return pView->getEditMode();
 }
 
