@@ -2501,8 +2501,8 @@ void ScInputHandler::RemoveRangeFinder()
     DeleteRangeFinder(); // Deletes the list and the labels on the table
 }
 
-bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
-        ScEditEngineDefaulter* pTopEngine )
+bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
+        ScEditEngineDefaulter* pTopEngine, const ErrorHdl& errorHdl)
 {
     bool bNewTable = false;
 
@@ -2554,8 +2554,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                     if ( bFromCommand )
                         bCommandErrorShown = true;
 
-                    pActiveViewSh->GetActiveWin()->GrabFocus();
-                    pActiveViewSh->ErrorMessage(aTester.GetMessageId());
+                    errorHdl(pActiveViewSh, aTester.GetMessageId());
                 }
                 bStartInputMode = false;
             }
@@ -2758,6 +2757,13 @@ IMPL_LINK_NOARG(ScInputHandler, ModifyHdl, LinkParamNone*, void)
     }
 }
 
+//static
+void ScInputHandler::ErrorMessage(ScTabViewShell* pActiveViewShell, TranslateId messageId)
+{
+    pActiveViewShell->GetActiveWin()->GrabFocus();
+    pActiveViewShell->ErrorMessage(messageId);
+}
+
 /**
  * @return true means new view created
  */
@@ -2768,7 +2774,7 @@ bool ScInputHandler::DataChanging( sal_Unicode cTyped, bool bFromCommand )
     bInOwnChange = true; // disable ModifyHdl (reset in DataChanged)
 
     if ( eMode == SC_INPUT_NONE )
-        return StartTable( cTyped, bFromCommand, false, nullptr );
+        return StartTable(cTyped, bFromCommand, false, nullptr, ScInputHandler::ErrorMessage);
     else
         return false;
 }
@@ -3017,7 +3023,8 @@ void ScInputHandler::InvalidateAttribs()
 
 // --------------- public methods --------------------------------------------
 
-void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, ScEditEngineDefaulter* pTopEngine )
+void ScInputHandler::SetMode(ScInputMode eNewMode, const OUString* pInitText, ScEditEngineDefaulter* pTopEngine,
+                             const ErrorHdl& errorHdl)
 {
     if ( eMode == eNewMode )
         return;
@@ -3050,7 +3057,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
     {
         if (eOldMode == SC_INPUT_NONE) // not if switching between modes
         {
-            if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine))
+            if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine, errorHdl))
             {
                 pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
             }
