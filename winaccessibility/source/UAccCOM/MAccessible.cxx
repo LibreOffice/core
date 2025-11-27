@@ -2416,15 +2416,31 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
                 assert(hr == S_OK);
                 if(hr == S_OK)
                 {
+                    // does it matter which IID was used to query before it is
+                    // put into the map?  probably not, and currently
+                    // QueryInterface is called after lookup anyway...
                     m_containedObjects.emplace(*rEntry.piid, static_cast<IUnknown*>(*ppvObject));
+                    // very nonobvious: this QI only succeeds on an IID_IUnknown
+                    // pointer because that one points directly to the
+                    // CComAggObject whereas the other-IID ones point into
+                    // CAcc* objects and end up forward back here to SmartQI
+                    // which firstly doesn't know IID_IUNOXWrapper and secondly
+                    // it would be useless to return a new instance for it, it
+                    // *must* be the same CAcc* instance that was just created.
+                    // Also, it's not possible to get the CAccTable out of the
+                    // CComAggObject because it is private.
+                    // However for the aggregated objects this here is also the
+                    // *only* place where this interface is called; every other
+                    // call is on a non-aggregated object - so it's sufficient
+                    // if it works once right after construction.
                     IUNOXWrapper* wrapper = nullptr;
                     static_cast<IUnknown*>(*ppvObject)->QueryInterface(IID_IUNOXWrapper, reinterpret_cast<void**>(&wrapper));
-                    if(wrapper)
-                    {
-                        wrapper->put_XInterface(
-                                reinterpret_cast<hyper>(m_xAccessible.get()));
-                        wrapper->Release();
-                    }
+                    assert(wrapper); // every map entry implements it currently
+                    wrapper->put_XInterface(
+                            reinterpret_cast<hyper>(m_xAccessible.get()));
+                    wrapper->Release();
+                    // ppvObject is IID_IUnknown - Query for requested target!
+                    static_cast<IUnknown*>(*ppvObject)->QueryInterface(iid, ppvObject);
                     return S_OK;
                 }
             }
