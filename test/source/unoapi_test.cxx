@@ -27,6 +27,7 @@ using namespace css::uno;
 UnoApiTest::UnoApiTest(OUString path)
     : mbSkipValidation(false)
     , m_aBaseString(std::move(path))
+    , meImportFilterName(TestFilter::NONE)
 {
     maTempFile.EnableKillingFile();
 }
@@ -104,6 +105,13 @@ void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)
         aValue.Value <<= maImportFilterName;
         aFilterOptions.push_back(aValue);
     }
+    else if (meImportFilterName != TestFilter::NONE)
+    {
+        beans::PropertyValue aValue;
+        aValue.Name = "FilterName";
+        aValue.Value <<= TestFilterNames.at(meImportFilterName);
+        aFilterOptions.push_back(aValue);
+    }
 
     loadWithParams(rURL, comphelper::containerToSequence(aFilterOptions));
 
@@ -146,6 +154,11 @@ uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
 
     return aRet;
+}
+
+void UnoApiTest::save(TestFilter eFilter, const char* pPassword)
+{
+    save(TestFilterNames.at(eFilter), pPassword);
 }
 
 void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
@@ -199,6 +212,11 @@ void UnoApiTest::saveAndReload(const OUString& rFilter, const char* pPassword)
 {
     save(rFilter, pPassword);
     loadFromURL(maTempFile.GetURL(), pPassword);
+}
+
+void UnoApiTest::saveAndReload(TestFilter eFilter, const char* pPassword)
+{
+    saveAndReload(TestFilterNames.at(eFilter), pPassword);
 }
 
 std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OString& rPassword)
