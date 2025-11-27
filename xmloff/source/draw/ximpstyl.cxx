@@ -27,6 +27,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
 #include <xmlsdtypes.hxx>
+#include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -359,6 +360,12 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
+    // Set size to useful default value, same as in SdDrawDocument::CreateFirstPages
+    // except we cannot call SvxPaperInfo::GetDefaultPaperSize from here.
+    if (mnWidth == 0)
+        mnWidth = 21000;
+    if (mnHeight == 0)
+        mnHeight = 29700;
 }
 
 SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
