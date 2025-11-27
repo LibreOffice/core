@@ -106,12 +106,6 @@ private:
 };
 }
 
-bool SbiRuntime::isVBAEnabled()
-{
-    SbiInstance* pInst = GetSbData()->pInst;
-    return pInst && pInst->pRun && pInst->pRun->bVBAEnabled;
-}
-
 void StarBASIC::SetVBAEnabled( bool bEnabled )
 {
     if ( bDocBasic )
@@ -371,6 +365,12 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 }
 
 #endif
+
+bool SbiRuntime::isVBAEnabled()
+{
+    SbiInstance* pInst = GetSbData()->pInst;
+    return pInst && pInst->pRun && pInst->pRun->bVBAEnabled;
+}
 
 // #39629 create NumberFormatter with the help of a static method now
 std::shared_ptr<SvNumberFormatter> const & SbiInstance::GetNumberFormatter()
