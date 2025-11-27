@@ -187,7 +187,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_NEWDOCDIRECT :
         {
-            const SfxStringItem* pFactoryItem = rReq.GetArg<SfxStringItem>(SID_NEWDOCDIRECT);
+            const SfxStringItem* pFactoryItem = rReq.GetArg(SID_NEWDOCDIRECT);
             OUString aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();

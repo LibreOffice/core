@@ -131,7 +131,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
             const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_APPLY_STYLE);
-            const SfxStringItem* pFamilyItem = rReq.GetArg<SfxStringItem>(SID_STYLE_FAMILYNAME);
+            const SfxStringItem* pFamilyItem = rReq.GetArg(SID_STYLE_FAMILYNAME);
             if ( pFamilyItem && pNameItem )
             {
                 try

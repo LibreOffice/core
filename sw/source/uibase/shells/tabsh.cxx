@@ -1200,7 +1200,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         }
         case SID_ATTR_TABLE_ROW_HEIGHT:
         {
-            const SfxUInt32Item* pItem2 = rReq.GetArg<SfxUInt32Item>(SID_ATTR_TABLE_ROW_HEIGHT);
+            const SfxUInt32Item* pItem2 = rReq.GetArg(SID_ATTR_TABLE_ROW_HEIGHT);
             if (pItem2)
             {
                 tools::Long nNewHeight = pItem2->GetValue();
@@ -1217,7 +1217,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         }
         case SID_ATTR_TABLE_COLUMN_WIDTH:
         {
-            const SfxUInt32Item* pItem2 = rReq.GetArg<SfxUInt32Item>(SID_ATTR_TABLE_COLUMN_WIDTH);
+            const SfxUInt32Item* pItem2 = rReq.GetArg(SID_ATTR_TABLE_COLUMN_WIDTH);
             if (pItem2)
             {
                 tools::Long nNewWidth = pItem2->GetValue();

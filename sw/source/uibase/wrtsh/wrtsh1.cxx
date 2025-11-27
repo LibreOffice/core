@@ -2345,7 +2345,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
     bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == SwFieldIds::Postit);
     if (bNew || GetView().GetPostItMgr()->IsAnswer() || comphelper::LibreOfficeKit::isActive())
     {
-        const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg<SvxPostItAuthorItem>(SID_ATTR_POSTIT_AUTHOR);
+        const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg(SID_ATTR_POSTIT_AUTHOR);
         OUString sAuthor;
         if ( pAuthorItem )
             sAuthor = pAuthorItem->GetValue();
@@ -2356,13 +2356,13 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             sAuthor = mod->GetRedlineAuthor(nAuthor);
         }
 
-        const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+        const SvxPostItTextItem* pTextItem = rReq.GetArg(SID_ATTR_POSTIT_TEXT);
         OUString sText;
         if ( pTextItem )
             sText = pTextItem->GetValue();
 
         std::optional<OutlinerParaObject> oTextPara;
-        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg(SID_ATTR_POSTIT_HTML))
         {
             SwDocShell* pDocSh = GetView().GetDocShell();
             Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
@@ -2400,9 +2400,9 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         SwInsertField_Data aData(SwFieldTypesEnum::Postit, 0, sAuthor, sText, 0);
 
         {
-            SvxPostItIdItem const*const pParentParaIdItem{rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_PARENTPARAID)};
-            SvxPostItIdItem const*const pParentPostItIdItem{rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_PARENTPOSTITID)};
-            SfxStringItem const*const pParentNameItem{rReq.GetArg<SfxStringItem>(SID_ATTR_POSTIT_PARENTNAME)};
+            SvxPostItIdItem const*const pParentParaIdItem{rReq.GetArg(SID_ATTR_POSTIT_PARENTPARAID)};
+            SvxPostItIdItem const*const pParentPostItIdItem{rReq.GetArg(SID_ATTR_POSTIT_PARENTPOSTITID)};
+            SfxStringItem const*const pParentNameItem{rReq.GetArg(SID_ATTR_POSTIT_PARENTNAME)};
             if (pParentParaIdItem && pParentPostItIdItem && pParentNameItem)
             {
                 aData.m_oParentId.emplace(pParentParaIdItem->GetValue().toUInt32(),

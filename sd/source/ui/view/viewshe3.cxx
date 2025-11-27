@@ -212,7 +212,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     else if (pArgs->Count() == 1 || pArgs->Count() == 2)
     {
         pDocument->StopWorkStartupDelay();
-        const SfxUInt32Item* pLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
+        const SfxUInt32Item* pLayout = rRequest.GetArg(ID_VAL_WHATLAYOUT);
         if( pLayout )
         {
             if (ePageKind == PageKind::Notes)
@@ -230,8 +230,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         // AutoLayouts must be ready
         pDocument->StopWorkStartupDelay();
 
-        const SfxStringItem* pPageName = rRequest.GetArg<SfxStringItem>(ID_VAL_PAGENAME);
-        const SfxUInt32Item* pLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
+        const SfxStringItem* pPageName = rRequest.GetArg(ID_VAL_PAGENAME);
+        const SfxUInt32Item* pLayout = rRequest.GetArg(ID_VAL_WHATLAYOUT);
         const SfxBoolItem* pIsPageBack = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEBACK);
         const SfxBoolItem* pIsPageObj = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEOBJ);
         assert(pPageName && pLayout && pIsPageBack && pIsPageObj && "must be present");

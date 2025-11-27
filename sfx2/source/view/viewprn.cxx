@@ -661,7 +661,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
         // Should it be visible on the user interface,
         // should it launch popup dialogue ?
-        const SfxBoolItem* pSilentItem = rReq.GetArg<SfxBoolItem>(SID_SILENT);
+        const SfxBoolItem* pSilentItem = rReq.GetArg(SID_SILENT);
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
 
@@ -690,7 +690,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             pDoc->QueryHiddenInformation(HiddenWarningFact::WhenPrinting);
 
             // should we print only the selection or the whole document
-            const SfxBoolItem* pSelectItem = rReq.GetArg<SfxBoolItem>(SID_SELECTION);
+            const SfxBoolItem* pSelectItem = rReq.GetArg(SID_SELECTION);
             bool bSelection = ( pSelectItem != nullptr && pSelectItem->GetValue() );
             // detect non api call from writer ( that adds SID_SELECTION ) and reset bIsAPI
             if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
@@ -775,7 +775,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         {
             // get printer and printer settings from the document
             SfxPrinter* pDocPrinter = GetPrinter(true);
-            const SfxStringItem* pPrinterItem = rReq.GetArg<SfxStringItem>(SID_PRINTER_NAME);
+            const SfxStringItem* pPrinterItem = rReq.GetArg(SID_PRINTER_NAME);
             if (!pPrinterItem)
             {
                 rReq.Ignore();
@@ -801,7 +801,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             SfxPrinter *pDocPrinter = GetPrinter(true);
 
             // look for printer in parameters
-            const SfxStringItem* pPrinterItem = rReq.GetArg<SfxStringItem>(SID_PRINTER_NAME);
+            const SfxStringItem* pPrinterItem = rReq.GetArg(SID_PRINTER_NAME);
             if ( pPrinterItem )
             {
                 // use PrinterName parameter to create a printer

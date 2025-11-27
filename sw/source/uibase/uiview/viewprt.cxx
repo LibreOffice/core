@@ -206,7 +206,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         case SID_PRINTDOCDIRECT:
         {
             SwWrtShell* pSh = &GetWrtShell();
-            const SfxBoolItem* pSilentItem = rReq.GetArg<SfxBoolItem>(SID_SILENT);
+            const SfxBoolItem* pSilentItem = rReq.GetArg(SID_SILENT);
             bool bSilent = pSilentItem && pSilentItem->GetValue();
             const SfxBoolItem* pPrintFromMergeItem = rReq.GetArg<SfxBoolItem>(FN_QRY_MERGE);
             if(pPrintFromMergeItem)

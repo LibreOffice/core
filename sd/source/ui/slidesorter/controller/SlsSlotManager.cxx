@@ -147,7 +147,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PAGES_PER_ROW:
             if (rRequest.GetArgs() != nullptr)
             {
-                const SfxUInt16Item* pPagesPerRow = rRequest.GetArg<SfxUInt16Item>(SID_PAGES_PER_ROW);
+                const SfxUInt16Item* pPagesPerRow = rRequest.GetArg(SID_PAGES_PER_ROW);
                 if (pPagesPerRow != nullptr)
                 {
                     sal_Int32 nColumnCount = pPagesPerRow->GetValue();

@@ -185,9 +185,9 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         DrawViewShell* pShell = this;
         ::sd::View* pView = mpView;
 
-        const SfxUInt16Item* pCols = rReq.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_COLUMN);
-        const SfxUInt16Item* pRows = rReq.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_ROW);
-        const SfxStringItem* pStyle = rReq.GetArg<SfxStringItem>(SID_TABLE_STYLE);
+        const SfxUInt16Item* pCols = rReq.GetArg(SID_ATTR_TABLE_COLUMN);
+        const SfxUInt16Item* pRows = rReq.GetArg(SID_ATTR_TABLE_ROW);
+        const SfxStringItem* pStyle = rReq.GetArg(SID_TABLE_STYLE);
 
         if( pCols )
             nColumns = pCols->GetValue();

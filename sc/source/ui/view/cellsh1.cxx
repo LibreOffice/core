@@ -3071,7 +3071,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_EXTERNAL_SOURCE:
             {
-                const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+                const SfxStringItem* pFile = rReq.GetArg(SID_FILE_NAME);
                 const SfxStringItem* pSource = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
                 if ( pFile && pSource )
                 {
@@ -3083,10 +3083,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     aFile = pFile->GetValue();
                     aSource = pSource->GetValue();
-                    const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(SID_FILTER_NAME);
+                    const SfxStringItem* pFilter = rReq.GetArg(SID_FILTER_NAME);
                     if ( pFilter )
                         aFilter = pFilter->GetValue();
-                    const SfxStringItem* pOptions = rReq.GetArg<SfxStringItem>(SID_FILE_FILTEROPTIONS);
+                    const SfxStringItem* pOptions = rReq.GetArg(SID_FILE_FILTEROPTIONS);
                     if ( pOptions )
                         aOptions = pOptions->GetValue();
                     const SfxUInt32Item* pRefresh = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);

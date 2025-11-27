@@ -2134,7 +2134,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aRecipient = aRecipient.copy( aMailToStr.getLength() );
                 aModel.AddToAddress( aRecipient );
             }
-            const SfxStringItem* pMailDocType = rReq.GetArg<SfxStringItem>(SID_TYPE_NAME);
+            const SfxStringItem* pMailDocType = rReq.GetArg(SID_TYPE_NAME);
             if ( pMailDocType )
                 aDocType = pMailDocType->GetValue();
 

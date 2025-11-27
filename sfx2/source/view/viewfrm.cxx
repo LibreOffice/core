@@ -428,7 +428,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( rReq.IsAPI() )
             {
                 // Control through API if r/w or r/o
-                const SfxBoolItem* pEditItem = rReq.GetArg<SfxBoolItem>(SID_EDITDOC);
+                const SfxBoolItem* pEditItem = rReq.GetArg(SID_EDITDOC);
                 if ( pEditItem )
                     nOpenMode = pEditItem->GetValue() ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
             }
@@ -633,7 +633,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( !pSh || !pSh->CanReload_Impl() )
                 break;
             SfxApplication* pApp = SfxGetpApp();
-            const SfxBoolItem* pForceReloadItem = rReq.GetArg<SfxBoolItem>(SID_FORCERELOAD);
+            const SfxBoolItem* pForceReloadItem = rReq.GetArg(SID_FORCERELOAD);
             if(  pForceReloadItem && !pForceReloadItem->GetValue() &&
                 !pSh->GetMedium()->IsExpired() )
                 return;
@@ -641,21 +641,21 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 return;
 
             // AutoLoad is prohibited if possible
-            const SfxBoolItem* pAutoLoadItem = rReq.GetArg<SfxBoolItem>(SID_AUTOLOAD);
+            const SfxBoolItem* pAutoLoadItem = rReq.GetArg(SID_AUTOLOAD);
             if ( pAutoLoadItem && pAutoLoadItem->GetValue() &&
                  GetFrame().IsAutoLoadLocked_Impl() )
                 return;
 
             SfxObjectShellLock xOldObj( pSh );
             m_pImpl->bReloading = true;
-            const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+            const SfxStringItem* pURLItem = rReq.GetArg(SID_FILE_NAME);
             // Open as editable?
             if (!oForEdit.has_value())
                 oForEdit = !pSh->IsReadOnly();
 
             // If possible ask the User
             bool bDo = GetViewShell()->PrepareClose();
-            const SfxBoolItem* pSilentItem = rReq.GetArg<SfxBoolItem>(SID_SILENT);
+            const SfxBoolItem* pSilentItem = rReq.GetArg(SID_SILENT);
             if (getenv("SAL_NO_QUERYSAVE"))
                 bDo = true;
             else if (bDo && GetFrame().DocIsModified_Impl() && !rReq.IsAPI()
@@ -710,7 +710,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     // Filter Detection
                     OUString referer;
-                    const SfxStringItem* refererItem = rReq.GetArg<SfxStringItem>(SID_REFERER);
+                    const SfxStringItem* refererItem = rReq.GetArg(SID_REFERER);
                     if (refererItem != nullptr) {
                         referer = refererItem->GetValue();
                     }
@@ -890,7 +890,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         aViewFrames.clear();
                     }
 
-                    const SfxInt32Item* pPageNumber = rReq.GetArg<SfxInt32Item>(SID_PAGE_NUMBER);
+                    const SfxInt32Item* pPageNumber = rReq.GetArg(SID_PAGE_NUMBER);
                     if (pPageNumber && pPageNumber->GetValue() >= 0)
                     {
                         // Restore current page after reload.
@@ -2514,8 +2514,8 @@ SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc
 
 SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell const & i_rDoc, const SfxRequest& i_rCreateDocRequest )
 {
-    const SfxUnoFrameItem* pFrameItem = i_rCreateDocRequest.GetArg<SfxUnoFrameItem>(SID_FILLFRAME);
-    const SfxBoolItem* pHiddenItem = i_rCreateDocRequest.GetArg<SfxBoolItem>(SID_HIDDEN);
+    const SfxUnoFrameItem* pFrameItem = i_rCreateDocRequest.GetArg(SID_FILLFRAME);
+    const SfxBoolItem* pHiddenItem = i_rCreateDocRequest.GetArg(SID_HIDDEN);
 
     return LoadViewIntoFrame_Impl_NoThrow(
         i_rDoc,
@@ -2792,12 +2792,12 @@ void SfxViewFrame::ExecView_Impl
             pMed->GetItemSet().ClearItem( SID_HIDDEN );
 
             // the view ID (optional arg. TODO: this is currently not supported in the slot definition ...)
-            const SfxUInt16Item* pViewIdItem = rReq.GetArg<SfxUInt16Item>(SID_VIEW_ID);
+            const SfxUInt16Item* pViewIdItem = rReq.GetArg(SID_VIEW_ID);
             const SfxInterfaceId nViewId = pViewIdItem ? SfxInterfaceId(pViewIdItem->GetValue()) : GetCurViewId();
 
             Reference < XFrame > xFrame;
             // the frame (optional arg. TODO: this is currently not supported in the slot definition ...)
-            const SfxUnoFrameItem* pFrameItem = rReq.GetArg<SfxUnoFrameItem>(SID_FILLFRAME);
+            const SfxUnoFrameItem* pFrameItem = rReq.GetArg(SID_FILLFRAME);
             if ( pFrameItem )
                 xFrame = pFrameItem->GetFrame();
 
@@ -2809,7 +2809,7 @@ void SfxViewFrame::ExecView_Impl
 
         case SID_OBJECT:
         {
-            const SfxInt16Item* pItem = rReq.GetArg<SfxInt16Item>(SID_OBJECT);
+            const SfxInt16Item* pItem = rReq.GetArg(SID_OBJECT);
 
             if (pItem)
             {
@@ -3285,7 +3285,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 xRecorder = xSupplier->getDispatchRecorder();
 
             bool bIsRecording = xRecorder.is();
-            const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(SID_RECORDMACRO);
+            const SfxBoolItem* pItem = rReq.GetArg(SID_RECORDMACRO);
             if ( pItem && pItem->GetValue() == bIsRecording )
                 return;
 
@@ -3535,14 +3535,14 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
     if (nSID == SID_SIDEBAR_DECK)
     {
-        const SfxStringItem* pDeckIdItem = rReq.GetArg<SfxStringItem>(SID_SIDEBAR_DECK);
+        const SfxStringItem* pDeckIdItem = rReq.GetArg(SID_SIDEBAR_DECK);
         if (pDeckIdItem)
         {
             const OUString aDeckId(pDeckIdItem->GetValue());
             // Compatibility with old LOK "toggle always"
             // TODO: check LOK with tdf#142978 Show a11y sidebar when finding issues on PDF export, hash: 53fc5fa
             const bool isLOK = comphelper::LibreOfficeKit::isActive();
-            const SfxBoolItem* pToggleItem = rReq.GetArg<SfxBoolItem>(SID_SIDEBAR_DECK_TOGGLE);
+            const SfxBoolItem* pToggleItem = rReq.GetArg(SID_SIDEBAR_DECK_TOGGLE);
             bool bToggle = isLOK || (pToggleItem && pToggleItem->GetValue());
             ::sfx2::sidebar::Sidebar::ShowDeck(aDeckId, this, bToggle);
         }

@@ -456,7 +456,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact =
                 SfxAbstractDialogFactory::Create();
 
-            const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
+            const SfxStringItem* pStringItem = rReq.GetArg(SID_CONFIG);
 
             SfxItemSetFixed<SID_CONFIG, SID_CONFIG, SID_MACROINFO, SID_MACROINFO> aSet( GetPool() );
 
@@ -479,7 +479,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
 #if HAVE_FEATURE_SCRIPTING
             // Preselect a macro in the 'keyboard' page
-            if (auto const item = rReq.GetArg<SfxMacroInfoItem>(SID_MACROINFO)) {
+            if (auto const item = rReq.GetArg(SID_MACROINFO)) {
                 aSet.Put(*item);
             }
 #endif
@@ -699,7 +699,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case FN_CHANGE_THEME:
         {
-            const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
+            const SfxStringItem* pNewThemeArg = rReq.GetArg(FN_PARAM_NEW_THEME);
             OUString sSchemeName = ThemeColors::GetThemeColors().GetThemeName();
             AppearanceMode eAppearnceMode = MiscSettings::GetAppColorMode();
 
@@ -752,7 +752,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case FN_INVERT_BACKGROUND:
         {
-            const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
+            const SfxStringItem* pNewThemeArg = rReq.GetArg(FN_PARAM_NEW_THEME);
 
             svtools::EditableColorConfig aColorConfig;
             ::Color aDefLightColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 0);
@@ -797,7 +797,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPTIPS:
         {
             // Evaluate Parameter
-            const SfxBoolItem* pOnItem = rReq.GetArg<SfxBoolItem>(SID_HELPTIPS);
+            const SfxBoolItem* pOnItem = rReq.GetArg(SID_HELPTIPS);
             bool bOn = pOnItem
                             ? pOnItem->GetValue()
                             : !Help::IsQuickHelpEnabled();
@@ -826,7 +826,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPBALLOONS:
         {
             // Evaluate Parameter
-            const SfxBoolItem* pOnItem = rReq.GetArg<SfxBoolItem>(SID_HELPBALLOONS);
+            const SfxBoolItem* pOnItem = rReq.GetArg(SID_HELPBALLOONS);
             bool bOn = pOnItem
                             ? pOnItem->GetValue()
                             : !Help::IsBalloonHelpEnabled();
@@ -1659,12 +1659,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_OPTIONS_TREEDIALOG:
         {
             OUString sPageURL;
-            const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_OPTIONS_PAGEURL);
+            const SfxStringItem* pURLItem = rReq.GetArg(SID_OPTIONS_PAGEURL);
             if ( pURLItem )
                 sPageURL = pURLItem->GetValue();
 
             sal_uInt16 nPageID = 0;
-            const SfxUInt16Item* pIDItem = rReq.GetArg<SfxUInt16Item>(SID_OPTIONS_PAGEID);
+            const SfxUInt16Item* pIDItem = rReq.GetArg(SID_OPTIONS_PAGEID);
             if (pIDItem)
                 nPageID = pIDItem->GetValue();
 
@@ -1717,7 +1717,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             OUString sAdditionsTag = u""_ustr;
 
-            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
+            const SfxStringItem* pStringArg = rReq.GetArg(FN_PARAM_ADDITIONS_TAG);
             if (pStringArg)
                 sAdditionsTag = pStringArg->GetValue();
 

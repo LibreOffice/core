@@ -444,7 +444,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         break;
         case FN_DELETE_COMMENT:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
                 sal_uInt32 nPostItId = pIdItem->GetValue().toUInt32();
@@ -463,7 +463,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         }
         case FN_DELETE_COMMENT_THREAD:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
                 sal_uInt32 nPostItId = pIdItem->GetValue().toUInt32();
@@ -481,7 +481,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         }
         case FN_RESOLVE_NOTE:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
                 GetView().GetPostItMgr()->ToggleResolved(pIdItem->GetValue().toUInt32());
@@ -490,7 +490,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         }
         case FN_RESOLVE_NOTE_THREAD:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
                 GetView().GetPostItMgr()->ToggleResolvedForThread(pIdItem->GetValue().toUInt32());
@@ -536,7 +536,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         break;
         case FN_REPLY:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty())
             {
                 SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
@@ -546,7 +546,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     auto pWin = pMgr->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                     if(pWin)
                     {
-                        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+                        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg(SID_ATTR_POSTIT_HTML))
                         {
                             SwDocShell* pDocSh = GetView().GetDocShell();
                             Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
@@ -556,7 +556,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         }
 
                         OUString sText;
-                        if(const auto pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT))
+                        if(const auto pTextItem = rReq.GetArg(SID_ATTR_POSTIT_TEXT))
                             sText = pTextItem->GetValue();
                         pMgr->RegisterAnswerText(sText);
                         pWin->ExecuteCommand(nSlot);
@@ -572,17 +572,17 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         break;
         case SID_EDIT_POSTIT:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty())
             {
                 sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                 if (pAnnotationWin && lcl_canUserModifyAnnotation(GetView(), pAnnotationWin))
                 {
-                    if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+                    if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg(SID_ATTR_POSTIT_HTML))
                         pAnnotationWin->UpdateHTML(pHtmlItem->GetValue());
                     else
                     {
-                        const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+                        const SvxPostItTextItem* pTextItem = rReq.GetArg(SID_ATTR_POSTIT_TEXT);
                         OUString sText;
                         if (pTextItem)
                             sText = pTextItem->GetValue();
@@ -597,7 +597,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         break;
         case FN_PROMOTE_COMMENT:
         {
-            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
                 GetView().GetPostItMgr()->PromoteToRoot(pIdItem->GetValue().toUInt32());
@@ -621,7 +621,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
 
             OUString sCommentText;
-            const SfxStringItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+            const SfxStringItem* pTextItem = rReq.GetArg(SID_ATTR_POSTIT_TEXT);
             if (pTextItem)
                 sCommentText = pTextItem->GetValue();
 

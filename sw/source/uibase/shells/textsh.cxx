@@ -292,7 +292,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case SID_INSERT_OBJECT:
     {
-        const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
+        const SfxGlobalNameItem* pNameItem = rReq.GetArg(SID_INSERT_OBJECT);
         SvGlobalName *pName = nullptr;
         SvGlobalName aName;
         if ( pNameItem )

@@ -116,8 +116,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         }
         else if (pArgs->Count() == 4)
         {
-            const SfxStringItem* pNewName = rRequest.GetArg<SfxStringItem>(ID_VAL_PAGENAME);
-            const SfxUInt32Item* pNewAutoLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
+            const SfxStringItem* pNewName = rRequest.GetArg(ID_VAL_PAGENAME);
+            const SfxUInt32Item* pNewAutoLayout = rRequest.GetArg(ID_VAL_WHATLAYOUT);
             const SfxBoolItem* pBVisible = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEBACK);
             const SfxBoolItem* pBObjsVisible = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEOBJ);
             assert(pNewName && pNewAutoLayout && pBVisible && pBObjsVisible && "must be present");
@@ -223,8 +223,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
 void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, PageKind ePageKind )
 {
-    const SfxUInt32Item* pWhatPage = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE);
-    const SfxUInt32Item* pWhatLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
+    const SfxUInt32Item* pWhatPage = rRequest.GetArg(ID_VAL_WHATPAGE);
+    const SfxUInt32Item* pWhatLayout = rRequest.GetArg(ID_VAL_WHATLAYOUT);
 
     SdDrawDocument* pDocument = mrViewShell.GetDoc();
     if( !pDocument )

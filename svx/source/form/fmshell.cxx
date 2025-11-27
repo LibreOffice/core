@@ -444,7 +444,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
         {
-            const SfxBoolItem* pGrabFocusItem = rReq.GetArg<SfxBoolItem>(SID_FM_TOGGLECONTROLFOCUS);
+            const SfxBoolItem* pGrabFocusItem = rReq.GetArg(SID_FM_TOGGLECONTROLFOCUS);
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
@@ -556,7 +556,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
-            const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(SID_FM_SHOW_PROPERTIES);
+            const SfxBoolItem* pShowItem = rReq.GetArg(SID_FM_SHOW_PROPERTIES);
             bool bShow = true;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();

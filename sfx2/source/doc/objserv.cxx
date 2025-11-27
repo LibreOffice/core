@@ -694,7 +694,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_DOCINFO:
         {
-            const SfxDocumentInfoItem* pDocInfItem = rReq.GetArg<SfxDocumentInfoItem>(SID_DOCINFO);
+            const SfxDocumentInfoItem* pDocInfItem = rReq.GetArg(SID_DOCINFO);
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
@@ -712,7 +712,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 // no argument containing DocInfo; check optional arguments
                 bool bReadOnly = IsReadOnly();
-                const SfxBoolItem* pROItem = rReq.GetArg<SfxBoolItem>(SID_DOC_READONLY);
+                const SfxBoolItem* pROItem = rReq.GetArg(SID_DOC_READONLY);
                 if ( pROItem )
                     // override readonly attribute of document
                     // e.g. if a readonly document is saved elsewhere and user asks for editing DocInfo before
@@ -1039,7 +1039,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // TODO/LATER: do the following GUI related actions in standalone method
 
                 // Introduce a status indicator for GUI operation
-                const SfxUnoAnyItem* pStatusIndicatorItem = rReq.GetArg<SfxUnoAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);
+                const SfxUnoAnyItem* pStatusIndicatorItem = rReq.GetArg(SID_PROGRESS_STATUSBAR_CONTROL);
                 if ( !pStatusIndicatorItem )
                 {
                     // get statusindicator
@@ -1076,7 +1076,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
                 // Introduce an interaction handler for GUI operation
-                const SfxUnoAnyItem* pInteractionHandlerItem = rReq.GetArg<SfxUnoAnyItem>(SID_INTERACTIONHANDLER);
+                const SfxUnoAnyItem* pInteractionHandlerItem = rReq.GetArg(SID_INTERACTIONHANDLER);
                 if ( !pInteractionHandlerItem )
                 {
                     uno::Reference<css::awt::XWindow> xParentWindow;
@@ -1186,7 +1186,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( lErr && nErrorCode == ERRCODE_NONE )
             {
-                const SfxBoolItem* pWarnItem = rReq.GetArg<SfxBoolItem>(SID_FAIL_ON_WARNING);
+                const SfxBoolItem* pWarnItem = rReq.GetArg(SID_FAIL_ON_WARNING);
                 if ( pWarnItem && pWarnItem->GetValue() )
                     nErrorCode = lErr;
             }
@@ -1291,7 +1291,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( ( nId == SID_SAVEASDOC || nId == SID_SAVEASREMOTE ) && nErrorCode == ERRCODE_NONE )
             {
-                const SfxBoolItem* saveTo = rReq.GetArg<SfxBoolItem>(SID_SAVETO);
+                const SfxBoolItem* saveTo = rReq.GetArg(SID_SAVETO);
                 // IsReadOnly may still return true, e.g. when embedded fonts disallow editing
                 if ((saveTo == nullptr || !saveTo->GetValue()) && !IsReadOnly())
                 {

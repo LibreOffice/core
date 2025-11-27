@@ -395,7 +395,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     UIName sGraphicFormat( SwResId(STR_POOLFRM_GRAPHIC) );
 
-    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
+    const SfxStringItem* pName = rReq.GetArg(SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
 
     // No file pickers in a non-desktop (mobile app) build.
@@ -480,7 +480,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             rReq.AppendItem(SfxStringItem(SID_INSERT_GRAPHIC, pFileDlg->GetPath()));
             rReq.AppendItem(SfxStringItem(FN_PARAM_FILTER, pFileDlg->GetCurrentFilter()));
-            pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
+            pName = rReq.GetArg(SID_INSERT_GRAPHIC);
 
             bool bAsLink = false;
             if(nHtmlMode & HTMLMODE_ON)
@@ -512,7 +512,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     {
         OUString aFileName = pName->GetValue();
         OUString aFilterName;
-        if (const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(FN_PARAM_FILTER))
+        if (const SfxStringItem* pFilter = rReq.GetArg(FN_PARAM_FILTER))
             aFilterName = pFilter->GetValue();
         bool bAsLink = false;
         if (const SfxBoolItem* pAsLink = rReq.GetArg<SfxBoolItem>(FN_PARAM_1))

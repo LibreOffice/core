@@ -430,7 +430,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_NOTEBOOKBAR:
         {
-            const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
+            const SfxStringItem* pFile = rReq.GetArg( SID_NOTEBOOKBAR );
 
             if ( mpViewShell )
             {

@@ -1542,9 +1542,9 @@ void SvxTableController::changeTableEdge(const SfxRequest& rReq)
     if (!checkTableObject())
         return;
 
-    const auto* pType = rReq.GetArg<SfxStringItem>(SID_TABLE_BORDER_TYPE);
-    const auto* pIndex = rReq.GetArg<SfxUInt16Item>(SID_TABLE_BORDER_INDEX);
-    const auto* pOffset = rReq.GetArg<SfxInt32Item>(SID_TABLE_BORDER_OFFSET);
+    const auto* pType = rReq.GetArg(SID_TABLE_BORDER_TYPE);
+    const auto* pIndex = rReq.GetArg(SID_TABLE_BORDER_INDEX);
+    const auto* pOffset = rReq.GetArg(SID_TABLE_BORDER_OFFSET);
 
     if (!(pType && pIndex && pOffset))
         return;

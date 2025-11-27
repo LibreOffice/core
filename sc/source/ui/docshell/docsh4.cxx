@@ -714,7 +714,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_SC_ATTR_PAGE_MARGIN:
         {
-            const SvxLRSpaceItem* pLR = rReq.GetArg<SvxLRSpaceItem>(SID_ATTR_LRSPACE);
+            const SvxLRSpaceItem* pLR = rReq.GetArg(SID_ATTR_LRSPACE);
             if (!pLR) {
                 SAL_WARN( "sc", " Left & Right margins are missing");
                 break;
@@ -723,7 +723,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             SvxIndentValue nLeft = pLR->GetLeft();
             SvxIndentValue nRight = pLR->GetRight();
 
-            const SvxULSpaceItem* pUL = rReq.GetArg<SvxULSpaceItem>(SID_ATTR_ULSPACE);
+            const SvxULSpaceItem* pUL = rReq.GetArg(SID_ATTR_ULSPACE);
             if (!pUL) {
                 SAL_WARN( "sc", " Top & Bottom margins are missing");
                 break;
@@ -786,7 +786,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 ScDocument& rDoc = GetDocument();
                 // get argument (recorded macro)
-                const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(FID_CHG_RECORD);
+                const SfxBoolItem* pItem = rReq.GetArg(FID_CHG_RECORD);
                 bool bDo = true;
 
                 // desired state
@@ -1324,7 +1324,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         break;
         case SID_NOTEBOOKBAR:
         {
-            const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
+            const SfxStringItem* pFile = rReq.GetArg( SID_NOTEBOOKBAR );
 
             if ( pBindings && sfx2::SfxNotebookBar::IsActive() )
                 sfx2::SfxNotebookBar::ExecMethod(*pBindings, pFile ? pFile->GetValue() : u""_ustr);

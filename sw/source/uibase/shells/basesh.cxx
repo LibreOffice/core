@@ -3166,9 +3166,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
         if( pArgs && pArgs->Count() >= 2 )
         {
-            const SfxStringItem* pName = _rRequest.GetArg<SfxStringItem>(FN_INSERT_TABLE);
-            const SfxUInt16Item* pCols = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_COLUMN);
-            const SfxUInt16Item* pRows = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_ROW);
+            const SfxStringItem* pName = _rRequest.GetArg(FN_INSERT_TABLE);
+            const SfxUInt16Item* pCols = _rRequest.GetArg(SID_ATTR_TABLE_COLUMN);
+            const SfxUInt16Item* pRows = _rRequest.GetArg(SID_ATTR_TABLE_ROW);
             const SfxInt32Item* pFlags = _rRequest.GetArg<SfxInt32Item>(FN_PARAM_1);
             const SfxStringItem* pAuto = _rRequest.GetArg<SfxStringItem>(FN_PARAM_2);
 

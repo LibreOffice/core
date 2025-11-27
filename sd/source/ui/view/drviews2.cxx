@@ -4330,7 +4330,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_FONT:
         if( rReq.GetArgs() )
         {
-            const SvxFontItem* pItem = rReq.GetArg<SvxFontItem>(SID_ATTR_CHAR_FONT);
+            const SvxFontItem* pItem = rReq.GetArg(SID_ATTR_CHAR_FONT);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4340,7 +4340,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_FONTHEIGHT:
         if( rReq.GetArgs() )
         {
-            const SvxFontHeightItem* pItem = rReq.GetArg<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
+            const SvxFontHeightItem* pItem = rReq.GetArg(SID_ATTR_CHAR_FONTHEIGHT);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4350,7 +4350,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_WEIGHT:
         if( rReq.GetArgs() )
         {
-            const SvxWeightItem* pItem = rReq.GetArg<SvxWeightItem>(SID_ATTR_CHAR_WEIGHT);
+            const SvxWeightItem* pItem = rReq.GetArg(SID_ATTR_CHAR_WEIGHT);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4360,7 +4360,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_POSTURE:
         if( rReq.GetArgs() )
         {
-            const SvxPostureItem* pItem = rReq.GetArg<SvxPostureItem>(SID_ATTR_CHAR_POSTURE);
+            const SvxPostureItem* pItem = rReq.GetArg(SID_ATTR_CHAR_POSTURE);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4370,7 +4370,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_UNDERLINE:
         if( rReq.GetArgs() )
         {
-            const SvxUnderlineItem* pItem = rReq.GetArg<SvxUnderlineItem>(SID_ATTR_CHAR_UNDERLINE);
+            const SvxUnderlineItem* pItem = rReq.GetArg(SID_ATTR_CHAR_UNDERLINE);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4385,7 +4385,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_OVERLINE:
         if( rReq.GetArgs() )
         {
-            const SvxOverlineItem* pItem = rReq.GetArg<SvxOverlineItem>(SID_ATTR_CHAR_OVERLINE);
+            const SvxOverlineItem* pItem = rReq.GetArg(SID_ATTR_CHAR_OVERLINE);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4432,7 +4432,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_SHADOWED:
         if( rReq.GetArgs() )
         {
-            const SvxShadowedItem* pItem = rReq.GetArg<SvxShadowedItem>(SID_ATTR_CHAR_SHADOWED);
+            const SvxShadowedItem* pItem = rReq.GetArg(SID_ATTR_CHAR_SHADOWED);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4442,7 +4442,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_CONTOUR:
         if( rReq.GetArgs() )
         {
-            const SvxContourItem* pItem = rReq.GetArg<SvxContourItem>(SID_ATTR_CHAR_CONTOUR);
+            const SvxContourItem* pItem = rReq.GetArg(SID_ATTR_CHAR_CONTOUR);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4453,7 +4453,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_STRIKEOUT:
         if( rReq.GetArgs() )
         {
-            const SvxCrossedOutItem* pItem = rReq.GetArg<SvxCrossedOutItem>(SID_ATTR_CHAR_STRIKEOUT);
+            const SvxCrossedOutItem* pItem = rReq.GetArg(SID_ATTR_CHAR_STRIKEOUT);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4463,7 +4463,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_COLOR:
         if( rReq.GetArgs() )
         {
-            const SvxColorItem* pItem = rReq.GetArg<SvxColorItem>(SID_ATTR_CHAR_COLOR);
+            const SvxColorItem* pItem = rReq.GetArg(SID_ATTR_CHAR_COLOR);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4473,7 +4473,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_KERNING:
         if( rReq.GetArgs() )
         {
-            const SvxKerningItem* pItem = rReq.GetArg<SvxKerningItem>(SID_ATTR_CHAR_KERNING);
+            const SvxKerningItem* pItem = rReq.GetArg(SID_ATTR_CHAR_KERNING);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -4483,7 +4483,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_CASEMAP:
         if( rReq.GetArgs() )
         {
-            const SvxCaseMapItem* pItem = rReq.GetArg<SvxCaseMapItem>(SID_ATTR_CHAR_CASEMAP);
+            const SvxCaseMapItem* pItem = rReq.GetArg(SID_ATTR_CHAR_CASEMAP);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);

@@ -143,7 +143,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 && !SlideShow::IsInteractiveSlideshow(GetViewShellBase()) // IASS
                 && rReq.GetArgs())
             {
-                if (const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE))
+                if (const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE))
                     SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber(static_cast<sal_Int32>((pWhatPage->GetValue()-1)>>1));
             }
             else
@@ -157,7 +157,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
                 else if (pArgs->Count () == 2)
                 {
-                    const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE);
+                    const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE);
                     const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
                     sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
@@ -427,7 +427,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                const SfxStringItem* pBookmark = rReq.GetArg<SfxStringItem>(SID_JUMPTOMARK);
+                const SfxStringItem* pBookmark = rReq.GetArg(SID_JUMPTOMARK);
 
                 if (pBookmark)
                 {

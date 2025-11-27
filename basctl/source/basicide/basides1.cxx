@@ -318,7 +318,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     uno::Reference< task::XStatusIndicator > xStatusIndicator;
 
-                    const SfxUnoAnyItem* pStatusIndicatorItem = rReq.GetArg<SfxUnoAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);
+                    const SfxUnoAnyItem* pStatusIndicatorItem = rReq.GetArg(SID_PROGRESS_STATUSBAR_CONTROL);
                     if ( pStatusIndicatorItem )
                         OSL_VERIFY( pStatusIndicatorItem->GetValue() >>= xStatusIndicator );
                     else
@@ -720,7 +720,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     pDocument.reset( new ScriptDocument( ScriptDocument::getDocumentWithURLOrCaption( sDocumentCaption ) ) );
             }
 
-            const SfxUnoAnyItem* pDocModelItem = rReq.GetArg<SfxUnoAnyItem>(SID_BASICIDE_ARG_DOCUMENT_MODEL);
+            const SfxUnoAnyItem* pDocModelItem = rReq.GetArg(SID_BASICIDE_ARG_DOCUMENT_MODEL);
             if (!pDocument && pDocModelItem)
             {
                 uno::Reference< frame::XModel > xModel( pDocModelItem->GetValue(), UNO_QUERY );
@@ -731,7 +731,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if (!pDocument)
                 break;
 
-            const SfxStringItem* pLibNameItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_LIBNAME);
+            const SfxStringItem* pLibNameItem = rReq.GetArg(SID_BASICIDE_ARG_LIBNAME);
             if ( !pLibNameItem )
                 break;
 

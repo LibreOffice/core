@@ -288,7 +288,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             if( rReq.GetArgs() )
             {
-                const SvxUnderlineItem* pItem = rReq.GetArg<SvxUnderlineItem>(SID_ATTR_CHAR_UNDERLINE);
+                const SvxUnderlineItem* pItem = rReq.GetArg(SID_ATTR_CHAR_UNDERLINE);
                 if (pItem)
                 {
                     aNewAttr.Put(*pItem);

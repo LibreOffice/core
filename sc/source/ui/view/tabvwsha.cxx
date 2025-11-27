@@ -1032,7 +1032,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         case SID_STYLE_APPLY:
         {
             const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_APPLY_STYLE);
-            const SfxStringItem* pFamilyItem = rReq.GetArg<SfxStringItem>(SID_STYLE_FAMILYNAME);
+            const SfxStringItem* pFamilyItem = rReq.GetArg(SID_STYLE_FAMILYNAME);
             if ( pFamilyItem && pNameItem )
             {
                 try
