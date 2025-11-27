@@ -15,11 +15,13 @@ $(eval $(call gb_StaticLibrary_add_defs,quickstarter,\
 
 $(eval $(call gb_StaticLibrary_add_cxxflags,quickstarter,\
 	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
-    $(if $(filter -fsanitize=%,$(CC)),,/fno-sanitize-address-vcasan-lib) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,quickstarter,\
     setup_native/source/win32/customactions/quickstarter/quickstarter \
 ))
+
+$(call gb_StaticLibrary_get_linktarget_target,quickstarter): gb_CC := $(filter-out -fsanitize%,$(gb_CC))
+$(call gb_StaticLibrary_get_linktarget_target,quickstarter): gb_CXX := $(filter-out -fsanitize%,$(gb_CXX))
 
 # vim: set noet sw=4 ts=4:
