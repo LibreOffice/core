@@ -222,7 +222,7 @@ void ScDataProvidersTest::testTdf169541_TwoDataMapping()
     createScDoc("tdf169541_two_data_mapping.ods");
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
-    // Because this test is only about the crash, the pathes in the test document are
+    // Because this test is only about the crash, the paths in the test document are
     // not adapted to the test environment and thus no further tests about the content here.
 }
 
