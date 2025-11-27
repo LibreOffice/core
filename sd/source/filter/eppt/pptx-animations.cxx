@@ -1130,6 +1130,10 @@ void PPTXAnimationExport::WriteAnimationNodeMedia(const sal_Int16 nParentNodeTyp
         if (!convertEffectNodeType(nParentNodeType))
             return;
 
+        // Don't export audio node if embedding audio was unsuccessful
+        if (!xShape.is() && (sRelId.isEmpty() || sUrl.isEmpty()))
+            return;
+
         bool bNarration = xAudio->getNarration();
         mpFS->startElementNS(XML_p, XML_audio, XML_isNarration, bNarration ? "1" : "0");
         bool bHideDuringShow = xAudio->getHideDuringShow();
