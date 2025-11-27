@@ -492,6 +492,17 @@ void DocumentLayoutManager::ClearSwLayouterEntries()
     SwLayouter::ClearMoveBwdLayoutInfo( m_rDoc );
 }
 
+size_t DocumentLayoutManager::GetMovedFwdFramesCount() const
+{
+    return SwLayouter::GetMovedFwdFramesCount(m_rDoc);
+}
+
+void DocumentLayoutManager::ClearSwLayouterEntriesWithInvalidation()
+{
+    SwLayouter::InvalidateMovedFwdFrames(m_rDoc);
+    ClearSwLayouterEntries();
+}
+
 DocumentLayoutManager::~DocumentLayoutManager()
 {
 }

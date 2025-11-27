@@ -1820,6 +1820,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166181)
     CPPUNIT_ASSERT_LESS(sal_Int32(500), height.toInt32());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169399)
+{
+    createSwDoc("tdf169399.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, this failed, because there were two pages:
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

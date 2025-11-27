@@ -117,6 +117,8 @@ public:
     static bool FrameMovedFwdByObjPos( const SwDoc& _rDoc,
                                      const SwTextFrame& _rTextFrame,
                                      sal_uInt32& _ornToPageNum );
+    static size_t GetMovedFwdFramesCount(const SwDoc& _rDoc);
+    static void InvalidateMovedFwdFrames(const SwDoc& _rDoc);
     // --> #i40155# - unmark given frame as to be moved forward.
     static void RemoveMovedFwdFrame( const SwDoc& _rDoc,
                                    const SwTextFrame& _rTextFrame );
