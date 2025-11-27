@@ -36,6 +36,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <DocumentLayoutManager.hxx>
 
 #include <sfx2/event.hxx>
 
@@ -394,9 +395,20 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     if ( IsCalcLayout() )
         SetCheckPages( false );
 
+    // tdf#169399: workaround for frames unable to move backward after moved forward by objects
+    // in incomplete layout
+    auto& rLayoutManager = m_pRoot->GetFormat()->GetDoc()->GetDocumentLayoutManager();
+    const auto nOldMovedCount = rLayoutManager.GetMovedFwdFramesCount();
+
     InternalAction(pRenderContext);
     if (RemoveEmptyBrowserPages())
         SetAgain(true);
+    if (nOldMovedCount < rLayoutManager.GetMovedFwdFramesCount())
+    {
+        // Only do it once
+        rLayoutManager.ClearSwLayouterEntriesWithInvalidation();
+        SetAgain(true);
+    }
     while ( IsAgain() )
     {
         SetAgain(false);
@@ -1475,11 +1487,6 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 bChanged |= FormatLayout( pRenderContext, static_cast<SwLayoutFrame*>(pLow), bAddRect );
                 PopFormatLayout();
             }
-        }
-        else if (pLay->IsSctFrame() && pLay->GetNext() && pLay->GetNext()->IsSctFrame() && pLow->IsTextFrame() && pLow == pLay->GetLastLower())
-        {
-            // else: only calc the last text lower of sections, followed by sections
-            pLow->OptCalc();
         }
 
         if ( IsAgain() )

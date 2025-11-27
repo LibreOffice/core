@@ -2040,6 +2040,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169320)
     assertXPath(pXmlDoc, "//body/txt[5]//SwFieldPortion", "expand", u"4.1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169399)
+{
+    createSwDoc("tdf169399.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, this failed, because there were two pages:
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
