@@ -4693,7 +4693,6 @@ include/comphelper/interfacecontainer2.hxx
 include/comphelper/logging.hxx
 include/comphelper/mimeconfighelper.hxx
 include/comphelper/namedvaluecollection.hxx
-include/comphelper/newarray.hxx
 include/comphelper/numberedcollection.hxx
 include/comphelper/numbers.hxx
 include/comphelper/ofopxmlhelper.hxx
