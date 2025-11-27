@@ -1747,6 +1747,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenSectionFlys)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169399)
+{
+    createSwDoc("tdf169399.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, this failed, because there were two pages:
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
