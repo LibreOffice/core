@@ -54,6 +54,9 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <viewopt.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 using namespace ::com::sun::star;
 
@@ -975,13 +978,22 @@ short SwRedlineItr::Seek(SwFont& rFnt,
 
 void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType )
 {
+    const SwDocShell* pDocShell = m_rDoc.GetDocShell();
+    const SwWrtShell* pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
+    SwRedlineRenderMode eRenderMode = SwRedlineRenderMode::Standard;
+    if (pWrtShell)
+    {
+        const SwViewOption* pOptions = pWrtShell->GetViewOptions();
+        eRenderMode = pOptions->GetRedlineRenderMode();
+    }
+
     switch ( eType )
     {
         case RedlineType::Insert:
-            SwModule::get()->GetInsertAuthorAttr(nAuthor, *m_pSet);
+            SwModule::get()->GetInsertAuthorAttr(nAuthor, *m_pSet, eRenderMode);
             break;
         case RedlineType::Delete:
-            SwModule::get()->GetDeletedAuthorAttr(nAuthor, *m_pSet);
+            SwModule::get()->GetDeletedAuthorAttr(nAuthor, *m_pSet, eRenderMode);
             break;
         case RedlineType::Format:
         case RedlineType::FmtColl:

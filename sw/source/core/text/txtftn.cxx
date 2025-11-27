@@ -66,6 +66,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <viewopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1015,9 +1016,9 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
                     : pRedline->GetAuthor();
 
             if ( RedlineType::Delete == pRedline->GetType() )
-                SwModule::get()->GetDeletedAuthorAttr(aAuthor, aSet);
+                SwModule::get()->GetDeletedAuthorAttr(aAuthor, aSet, SwRedlineRenderMode::Standard);
             else
-                SwModule::get()->GetInsertAuthorAttr(aAuthor, aSet);
+                SwModule::get()->GetInsertAuthorAttr(aAuthor, aSet, SwRedlineRenderMode::Standard);
 
             if (const SvxColorItem* pItem = aSet.GetItemIfSet(RES_CHRATR_COLOR))
                 pNumFnt->SetColor(pItem->GetValue());

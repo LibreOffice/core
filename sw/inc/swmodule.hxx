@@ -73,6 +73,7 @@ namespace com::sun::star::linguistic2 { class XLinguServiceEventListener; }
 namespace ooo::vba { class XSinkCaller; }
 class SwLinguServiceEventListener;
 class SwTableAutoFormatTable;
+enum class SwRedlineRenderMode;
 
 class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
@@ -212,8 +213,8 @@ public:
     std::size_t         InsertRedlineAuthor(const OUString& rAuthor);
     SW_DLLPUBLIC void   SetRedlineAuthor(const OUString& rAuthor); // for unit tests
 
-    void                GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
-    void                GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
+    void                GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet, SwRedlineRenderMode eMode);
+    void                GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet, SwRedlineRenderMode eMode);
     void                GetFormatAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
 
     sal_uInt16              GetRedlineMarkPos() const;
