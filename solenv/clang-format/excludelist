@@ -13134,7 +13134,6 @@ sw/source/uibase/sidebar/StylePresetsPanel.hxx
 sw/source/uibase/sidebar/SwPanelFactory.cxx
 sw/source/uibase/sidebar/ThemePanel.cxx
 sw/source/uibase/sidebar/ThemePanel.hxx
-sw/source/uibase/sidebar/ValueSetWithTextControl.cxx
 sw/source/uibase/sidebar/WrapPropertyPanel.cxx
 sw/source/uibase/sidebar/WrapPropertyPanel.hxx
 sw/source/uibase/table/chartins.cxx
