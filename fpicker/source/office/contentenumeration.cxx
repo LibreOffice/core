@@ -38,19 +38,30 @@
 namespace svt
 {
 
+namespace
+{
+    enum class Column
+    {
+        Title = 1,
+        Size = 2,
+        DateMod = 3,
+        DateCreate = 4,
+        IsFolder = 5,
+        TargetURL = 6,
+        IsHidden = 7,
+        IsVolume = 8,
+        IsRemote = 9,
+        IsRemovable = 10,
+        IsFloppy = 11,
+        IsCompactDisc = 12,
+    };
 
-#define ROW_TITLE           1
-#define ROW_SIZE            2
-#define ROW_DATE_MOD        3
-#define ROW_DATE_CREATE     4
-#define ROW_IS_FOLDER       5
-#define ROW_TARGET_URL      6
-#define ROW_IS_HIDDEN       7
-#define ROW_IS_VOLUME       8
-#define ROW_IS_REMOTE       9
-#define ROW_IS_REMOVABLE    10
-#define ROW_IS_FLOPPY       11
-#define ROW_IS_COMPACTDISC  12
+    constexpr sal_Int32 ToColumnIndex(Column c)
+    {
+        return static_cast<sal_Int32>(c);
+    }
+
+}
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
@@ -192,20 +203,20 @@ namespace svt
                     bool bCancelled = false;
                     while ( !bCancelled && xResultSet->next() )
                     {
-                        bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
+                        bool bIsHidden = xRow->getBoolean(ToColumnIndex(Column::IsHidden));
                         // don't show hidden files
                         if ( !bIsHidden || xRow->wasNull() )
                         {
-                            aDT = xRow->getTimestamp( ROW_DATE_MOD );
+                            aDT = xRow->getTimestamp(ToColumnIndex(Column::DateMod));
                             bool bContainsDate = !xRow->wasNull();
                             if ( !bContainsDate )
                             {
-                                aDT = xRow->getTimestamp( ROW_DATE_CREATE );
+                                aDT = xRow->getTimestamp(ToColumnIndex(Column::DateCreate));
                                 bContainsDate = !xRow->wasNull();
                             }
 
                             OUString aContentURL = xContentAccess->queryContentIdentifierString();
-                            OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
+                            OUString aTargetURL = xRow->getString(ToColumnIndex(Column::TargetURL));
                             bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
 
                             OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
@@ -220,14 +231,14 @@ namespace svt
                             std::unique_ptr<SortingData_Impl> pData(new SortingData_Impl);
                             pData->maTargetURL = sRealURL;
 
-                            pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER ) && !xRow->wasNull();
-                            pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME ) && !xRow->wasNull();
-                            pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
-                            pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVABLE ) && !xRow->wasNull();
-                            pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY ) && !xRow->wasNull();
-                            pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC ) && !xRow->wasNull();
-                            pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
-                            pData->maSize = xRow->getLong( ROW_SIZE );
+                            pData->mbIsFolder = xRow->getBoolean(ToColumnIndex(Column::IsFolder)) && !xRow->wasNull();
+                            pData->mbIsVolume = xRow->getBoolean(ToColumnIndex(Column::IsVolume)) && !xRow->wasNull();
+                            pData->mbIsRemote = xRow->getBoolean(ToColumnIndex(Column::IsRemote)) && !xRow->wasNull();
+                            pData->mbIsRemoveable = xRow->getBoolean(ToColumnIndex(Column::IsRemovable)) && !xRow->wasNull();
+                            pData->mbIsFloppy = xRow->getBoolean(ToColumnIndex(Column::IsFloppy)) && !xRow->wasNull();
+                            pData->mbIsCompactDisc = xRow->getBoolean(ToColumnIndex(Column::IsCompactDisc)) && !xRow->wasNull();
+                            pData->SetNewTitle( xRow->getString(ToColumnIndex(Column::Title)) );
+                            pData->maSize = xRow->getLong(ToColumnIndex(Column::Size));
 
                             if ( bHasTargetURL &&
                                 INetURLObject( aContentURL ).GetProtocol() == INetProtocol::VndSunStarHier )
