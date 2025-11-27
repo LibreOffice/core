@@ -2007,7 +2007,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             if ( GetPortionData().IsIndexInFootnode(nIndex) )
             {
-                rValue.Value <<= sal_Int32(101);
+                rValue.Value <<= sal_Int16(101);
             }
             continue;
         }
