@@ -847,7 +847,7 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool b
         {
             if ( !mpTxtWnd->IsInputActive() )
             {
-                mpTxtWnd->StartEditEngine();
+                mpTxtWnd->StartEditEngine(ScInputHandler::ErrorMessage);
                 mpTxtWnd->GrabFocus();
 
                 mpEditView = mpTxtWnd->GetEditView();

@@ -380,10 +380,10 @@ void ScInputWindow::Select()
 void ScInputWindow::StartFormula()
 {
     ScModule* pScMod = ScModule::get();
-    mxTextWindow->StartEditEngine();
+    mxTextWindow->StartEditEngine(ScInputHandler::ErrorMessage);
     if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
     {
-        mxTextWindow->StartEditEngine();
+        mxTextWindow->StartEditEngine(ScInputHandler::ErrorMessage);
 
         sal_Int32 nStartPos = 1;
         sal_Int32 nEndPos = 1;
@@ -528,7 +528,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
     //! new method at ScModule to query if function autopilot is open
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
-    mxTextWindow->StartEditEngine();
+    mxTextWindow->StartEditEngine(ScInputHandler::ErrorMessage);
 
     ScModule* pScMod = ScModule::get();
     if ( !pScMod->IsEditMode() )
@@ -666,7 +666,7 @@ void ScInputWindow::SwitchToTextWin()
 {
     // used for shift-ctrl-F2
 
-    mxTextWindow->StartEditEngine();
+    mxTextWindow->StartEditEngine(ScInputHandler::ErrorMessage);
     if (ScModule::get()->IsEditMode())
     {
         mxTextWindow->TextGrabFocus();
@@ -958,9 +958,9 @@ void ScInputBarGroup::StopEditEngine(bool bAll)
     mxTextWndGroup->StopEditEngine(bAll);
 }
 
-void ScInputBarGroup::StartEditEngine()
+void ScInputBarGroup::StartEditEngine(const ErrorHdl& errorHdl)
 {
-    mxTextWndGroup->StartEditEngine();
+    mxTextWndGroup->StartEditEngine(errorHdl);
 }
 
 void ScInputBarGroup::MakeDialogEditView()
@@ -1286,9 +1286,9 @@ void ScTextWndGroup::SetTextString(const OUString& rString, bool bKitUpdate)
     mxTextWnd->SetTextString(rString, bKitUpdate);
 }
 
-void ScTextWndGroup::StartEditEngine()
+void ScTextWndGroup::StartEditEngine(const ErrorHdl& errorHdl)
 {
-    mxTextWnd->StartEditEngine();
+    mxTextWnd->StartEditEngine(errorHdl);
 }
 
 void ScTextWndGroup::StopEditEngine(bool bAll)
@@ -1447,7 +1447,7 @@ void ScTextWnd::DoScroll()
     }
 }
 
-void ScTextWnd::StartEditEngine()
+void ScTextWnd::StartEditEngine(const ErrorHdl& errorHdl)
 {
     // Don't activate if we're a modal dialog ourselves (Doc-modal dialog)
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
@@ -1461,7 +1461,10 @@ void ScTextWnd::StartEditEngine()
 
     ScInputHandler* pHdl = mpViewShell->GetInputHandler();
     if (pHdl)
-        pHdl->SetMode(SC_INPUT_TOP, nullptr, static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get()));
+    {
+        pHdl->SetMode(SC_INPUT_TOP, nullptr, static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get()),
+                      errorHdl);
+    }
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
@@ -1657,11 +1660,11 @@ bool ScTextWnd::CanFocus() const
     return ScModule::get()->IsEditMode();
 }
 
-void ScTextWnd::UpdateFocus()
+void ScTextWnd::UpdateFocus(const ErrorHdl& errorHdl)
 {
     if (!HasFocus())
     {
-        StartEditEngine();
+        StartEditEngine(errorHdl);
         if (CanFocus())
             TextGrabFocus();
     }
@@ -1669,7 +1672,19 @@ void ScTextWnd::UpdateFocus()
 
 bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    UpdateFocus();
+    // tdf#169351 If trying to set focus to the formula bar triggers an error
+    // dialog, intercept the launch of that dialog to detect this case, and in
+    // that case abandon the mouse handler.
+    bool bCanceled(false);
+    auto errorHdl = [&bCanceled](ScTabViewShell* pActiveViewShell, TranslateId messageId) {
+        ScInputHandler::ErrorMessage(pActiveViewShell, messageId);
+        bCanceled = true;
+    };
+
+    UpdateFocus(errorHdl);
+
+    if (bCanceled)
+        return true;
 
     bool bClickOnSelection = false;
     if (m_xEditView)
@@ -1794,7 +1809,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                 }
                 if (IsMouseCaptured())
                     ReleaseMouse();
-                UpdateFocus();
+                UpdateFocus(ScInputHandler::ErrorMessage);
                 pViewFrm->GetDispatcher()->ExecutePopup(u"formulabar"_ustr, &mrGroupBar.GetVclParent(), &aPos);
             }
         }
@@ -1828,7 +1843,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         // LOK uses this to setup caret position because drawingarea is replaced
         // with text input field, it sends logical caret position (start, end) not pixels
 
-        StartEditEngine();
+        StartEditEngine(ScInputHandler::ErrorMessage);
         TextGrabFocus();
 
         // information about paragraph is in additional data
