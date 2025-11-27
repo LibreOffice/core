@@ -2840,20 +2840,17 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     uno::Sequence<beans::PropertyValue> grabBag;
     OUString entryName;
-    try
+    uno::Reference<container::XChild> xChild(xObj, uno::UNO_QUERY);
+    if (xChild)
     {
-        uno::Reference<beans::XPropertySet> const xParent(
-            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY_THROW)->getParent(),
-            uno::UNO_QUERY_THROW);
-
-        xParent->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
-
-        entryName = uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY_THROW)->getEntryName();
-    }
-    catch (uno::Exception const&)
-    {
-        TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLE2Shape");
-        return *this;
+        uno::Reference<beans::XPropertySet> const xParent(xChild->getParent(), uno::UNO_QUERY);
+        if (xParent)
+        {
+            xParent->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
+            uno::Reference<embed::XEmbedPersist> xEmbedPersist(xObj, uno::UNO_QUERY);
+            if (xEmbedPersist)
+                entryName = xEmbedPersist->getEntryName();
+        }
     }
 
     OUString progID;
