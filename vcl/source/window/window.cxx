@@ -3376,6 +3376,7 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
     rJsonWriter.put("lokWindowId", GetLOKWindowId());
+    rJsonWriter.put("canFocus", bool(GetStyle() & WB_TABSTOP));
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 
