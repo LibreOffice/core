@@ -1034,6 +1034,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf44223)
     assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Target", u"../media/audio1.wav");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testtdf169438_invalid_audio_link)
+{
+    createSdImpressDoc("odp/tdf169438_invalid_audio_link.odp");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Without the patch the incompleet audio node would be exported
+    int nAudioNode = countXPathNodes(
+        pXmlDoc, "//p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
+                 "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
+                 "p:childTnLst/p:audio");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no audio node in the XML", 0, nAudioNode);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf135843)
 {
     createSdImpressDoc("pptx/tdf135843_export.pptx");
