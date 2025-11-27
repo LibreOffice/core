@@ -763,15 +763,39 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
-ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
+ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh)
+    : ScViewData(nullptr, &rDocSh, pViewSh)
+{
+}
+
+ScViewData::ScViewData(ScDocument& rDoc)
+    : ScViewData(&rDoc, nullptr, nullptr)
+{
+}
+
+static ScViewOptions DefaultOptions()
+{
+    ScViewOptions aOptions;
+    aOptions.SetOption(sc::ViewOption::GRID, true);
+    aOptions.SetOption(sc::ViewOption::SYNTAX, false);
+    aOptions.SetOption(sc::ViewOption::HEADER, true);
+    aOptions.SetOption(sc::ViewOption::TABCONTROLS, true);
+    aOptions.SetOption(sc::ViewOption::VSCROLL, true);
+    aOptions.SetOption(sc::ViewOption::HSCROLL, true);
+    aOptions.SetOption(sc::ViewOption::OUTLINER, true);
+    return aOptions;
+}
+
+// Either pDoc or pDocSh must be valid
+ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh) :
         nPPTX(0.0),
         nPPTY(0.0),
-        mrDocShell   ( rDocSh ),
-        mrDoc       (rDocSh.GetDocument()),
-        maMarkData  (mrDoc.GetSheetLimits()),
-        maHighlightData (mrDoc.GetSheetLimits()),
+        maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
+        maHighlightData (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
+        mrDocShell   ( pDocSh ? *pDocSh : *pDoc->GetDocumentShell() ),
+        mrDoc       (pDocSh ? pDocSh->GetDocument() : *pDoc),
         pView       ( pViewSh ),
-        maOptions   (mrDoc.GetViewOptions()),
+        maOptions   (pDocSh ? pDocSh->GetDocument().GetViewOptions() : DefaultOptions()),
         pSpellingView ( nullptr ),
         aLogicMode  ( MapUnit::Map100thMM ),
         eDefZoomType( SvxZoomType::PERCENT ),
@@ -807,6 +831,7 @@ ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
         nFormulaBarLines(1),
         m_nLOKPageUpDownOffset( 0 )
 {
+    assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
     maMarkData.SelectOneTable(0); // Sync with nTabNo
 
     aScrSize = Size( o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::px),

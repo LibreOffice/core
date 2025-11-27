@@ -276,11 +276,11 @@ private:
     OUString            msOldWindowState;           // imported window size
 
     ::std::vector<std::unique_ptr<ScViewDataTable>> maTabData;
-    ScDocShell&         mrDocShell;
-    ScDocument&         mrDoc;
     ScMarkData          maMarkData;
     ScMarkData          maHighlightData;
     ScViewDataTable* pThisTab;                   // Data of the displayed sheet
+    ScDocShell&         mrDocShell;
+    ScDocument&         mrDoc;
     ScTabViewShell*     pView;
     std::unique_ptr<EditView> pEditView[4];               // Belongs to the window
     ScViewOptions       maOptions;
@@ -354,8 +354,11 @@ private:
 
     bool IsValidTabNumber(SCTAB nTabNumber) const;
 
+    ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh);
+
 public:
     ScViewData( ScDocShell& rDocSh, ScTabViewShell* pViewSh );
+    ScViewData( ScDocument& rDoc );
     ~ScViewData() COVERITY_NOEXCEPT_FALSE;
 
     ScDocShell&     GetDocShell() const     { return mrDocShell; }
