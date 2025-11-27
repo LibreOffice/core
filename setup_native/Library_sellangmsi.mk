@@ -19,7 +19,6 @@ $(eval $(call gb_Library_add_defs,sellangmsi,\
 
 $(eval $(call gb_Library_add_cxxflags,sellangmsi,\
 	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
-    $(if $(filter -fsanitize=%,$(CC)),,/fno-sanitize-address-vcasan-lib) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,sellangmsi,\
@@ -43,5 +42,8 @@ $(eval $(call gb_Library_use_system_win32_libs,sellangmsi,\
 	advapi32 \
 	shell32 \
 ))
+
+$(call gb_Library_get_linktarget_target,sellangmsi): gb_CC := $(filter-out -fsanitize%,$(gb_CC))
+$(call gb_Library_get_linktarget_target,sellangmsi): gb_CXX := $(filter-out -fsanitize%,$(gb_CXX))
 
 # vim: set noet sw=4 ts=4:
