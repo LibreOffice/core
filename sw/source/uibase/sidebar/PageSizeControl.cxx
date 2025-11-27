@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "PageSizeControl.hxx"
-#include "ValueSetWithTextControl.hxx"
 
 #include <cmdid.h>
 #include <svx/pageitem.hxx>
@@ -69,10 +68,9 @@ namespace sw::sidebar {
 
 PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/swriter/ui/pagesizecontrol.ui"_ustr, u"PageSizeControl"_ustr)
+    , mxPageSizeTreeView(m_xBuilder->weld_tree_view(u"pagesizetreeview"_ustr))
     , mxMoreButton(m_xBuilder->weld_button(u"moreoptions"_ustr))
     , mxWidthHeightField(m_xBuilder->weld_metric_spin_button(u"metric"_ustr, FieldUnit::CM))
-    , mxSizeValueSet(new ValueSetWithTextControl)
-    , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, u"pagesizevalueset"_ustr, *mxSizeValueSet))
     , mxControl(pControl)
 {
     mxWidthHeightField->set_unit(FieldUnit::CM);
@@ -90,9 +88,6 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     maPaperList.push_back( PAPER_LETTER );
     maPaperList.push_back( PAPER_LEGAL );
 
-    mxSizeValueSet->SetStyle( mxSizeValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_FLATVALUESET );
-
-    sal_uInt16 nSelectedItem = 0;
     OUString aMetricStr;
     const OUString aText = mxWidthHeightField->get_text();
     for (short i = aText.getLength() - 1; i >= 0; i--)
@@ -141,25 +136,21 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
             true );
 
         const OUString aItemText2 = aWidthStr + " x " + aHeightStr + " " + aMetricStr;
-
-        mxSizeValueSet->AddItem(
-            SvxPaperInfo::GetName( maPaperList[ nPaperIdx ] ),
-            aItemText2 );
+        const int nPos = mxPageSizeTreeView->n_children();
+        mxPageSizeTreeView->append();
+        mxPageSizeTreeView->set_text(nPos, SvxPaperInfo::GetName(maPaperList[nPaperIdx]), 0);
+        mxPageSizeTreeView->set_text(nPos, aItemText2, 1);
 
         if ( pSize && aPaperSize == pSize->GetSize() )
-        {
-            nSelectedItem = nPaperIdx + 1;
-        }
+            mxPageSizeTreeView->select(nPaperIdx);
     }
 
-    mxSizeValueSet->SetNoSelection();
-    mxSizeValueSet->SetSelectHdl( LINK(this, PageSizeControl, ImplSizeHdl ) );
-    mxSizeValueSet->Show();
-    mxSizeValueSet->Resize();
+    mxPageSizeTreeView->columns_autosize();
+    const int nHeight = mxPageSizeTreeView->get_preferred_size().Height();
+    mxPageSizeTreeView->set_size_request(-1, nHeight);
+    mxPageSizeTreeView->queue_resize();
 
-    mxSizeValueSet->SelectItem( nSelectedItem );
-    mxSizeValueSet->SetFormat();
-    mxSizeValueSet->Invalidate();
+    mxPageSizeTreeView->connect_row_activated(LINK(this, PageSizeControl, ImplSizeHdl));
 
     mxMoreButton->connect_clicked( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );
     mxMoreButton->grab_focus();
@@ -167,7 +158,7 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
 
 void PageSizeControl::GrabFocus()
 {
-    mxSizeValueSet->GrabFocus();
+    mxPageSizeTreeView->grab_focus();
 }
 
 PageSizeControl::~PageSizeControl()
@@ -199,15 +190,18 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
         SfxCallMode::RECORD, { &aPageSizeItem });
 }
 
-
-IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, ValueSet*, void)
+IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, weld::TreeView&, bool)
 {
-    mxSizeValueSet->SetNoSelection();
-    const sal_uInt16 nSelectedPaper = mxSizeValueSet->GetSelectedItemId();
-    const Paper ePaper = maPaperList[nSelectedPaper - 1];
+    const int nIndex = mxPageSizeTreeView->get_selected_index();
+    if (nIndex < 0)
+        return false;
+
+    const Paper ePaper = maPaperList.at(nIndex);
     ExecuteSizeChange( ePaper );
 
     mxControl->EndPopupMode();
+
+    return true;
 }
 
 IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, weld::Button&, void)

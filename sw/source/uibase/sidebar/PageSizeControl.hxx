@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESIZECONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESIZECONTROL_HXX
 
-#include "ValueSetWithTextControl.hxx"
-
 #include <i18nutil/paper.hxx>
 
 #include <svtools/toolbarmenu.hxx>
@@ -41,18 +39,17 @@ public:
     virtual ~PageSizeControl() override;
 
 private:
+    std::unique_ptr<weld::TreeView> mxPageSizeTreeView;
     std::unique_ptr<weld::Button> mxMoreButton;
     // hidden metric field
     std::unique_ptr<weld::MetricSpinButton> mxWidthHeightField;
-    std::unique_ptr<ValueSetWithTextControl> mxSizeValueSet;
-    std::unique_ptr<weld::CustomWeld> mxSizeValueSetWin;
     rtl::Reference<PageSizePopup> mxControl;
 
     std::vector<Paper> maPaperList;
 
     static void ExecuteSizeChange(const Paper ePaper);
 
-    DECL_LINK(ImplSizeHdl, ValueSet*, void);
+    DECL_LINK(ImplSizeHdl, weld::TreeView&, bool);
     DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);
 };
 

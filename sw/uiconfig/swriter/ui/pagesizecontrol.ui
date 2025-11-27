@@ -12,6 +12,16 @@
     <property name="can-focus">False</property>
     <property name="icon-name">cmd/lc_attributepagesize.png</property>
   </object>
+  <object class="GtkTreeStore" id="pagesizemodel">
+    <columns>
+      <!-- column-name pagename -->
+      <column type="gchararray"/>
+      <!-- column-name dimensions -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="PageSizeControl">
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
@@ -33,32 +43,41 @@
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkScrolledWindow" id="valuesetwin">
+              <object class="GtkTreeView" id="pagesizetreeview">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
+                <property name="model">pagesizemodel</property>
+                <property name="headers-visible">False</property>
+                <property name="enable-search">False</property>
+                <property name="hover-selection">True</property>
+                <property name="show-expanders">False</property>
+                <property name="activate-on-single-click">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
                 <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                  <object class="GtkTreeViewColumn" id="papersize">
                     <child>
-                      <object class="GtkDrawingArea" id="pagesizevalueset">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="dimensions">
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
                     </child>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
