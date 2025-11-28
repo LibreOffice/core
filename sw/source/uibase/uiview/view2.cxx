@@ -392,7 +392,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     OUString sGraphicFormat = SwResId(STR_POOLFRM_GRAPHIC);
 
     const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
-    bool bShowError = !pName;
+    bool bShowError = !pName || comphelper::LibreOfficeKit::isActive();
 
     // No file pickers in a non-desktop (mobile app) build.
 
