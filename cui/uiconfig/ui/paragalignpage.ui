@@ -21,29 +21,25 @@
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPercent4">
-    <property name="upper">0</property>
     <property name="lower">-100</property>
-    <property name="value">0</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPercent5">
     <property name="upper">500</property>
-    <property name="lower">0</property>
-    <property name="value">0</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPercent6">
-    <property name="upper">100</property>
     <property name="lower">50</property>
+    <property name="upper">100</property>
     <property name="value">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPercent7">
-    <property name="upper">200</property>
     <property name="lower">100</property>
+    <property name="upper">200</property>
     <property name="value">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
@@ -126,6 +122,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radioBTN_LEFTALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|radioBTN_LEFTALIGN">Aligns the paragraph to the left page margin.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -141,6 +142,11 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radioBTN_LEFTALIGN</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radioBTN_RIGHTALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|radioBTN_RIGHTALIGN">Aligns the paragraph to the right page margin.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -156,6 +162,11 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radioBTN_LEFTALIGN</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radioBTN_CENTERALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|radioBTN_CENTERALIGN">Centers the contents of the paragraph on the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -171,6 +182,11 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radioBTN_LEFTALIGN</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radioBTN_JUSTIFYALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|radioBTN_JUSTIFYALIGN">Aligns the paragraph to the left and to the right page margins.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -186,6 +202,11 @@
                     <property name="margin-start">22</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_EXPAND-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|checkCB_EXPAND">If a justified paragraph ends with a single word, that word stretches to fill the line width.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -201,6 +222,11 @@
                     <property name="margin-start">22</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_SNAP-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|checkCB_SNAP">Aligns the paragraph to a text grid.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -285,6 +311,11 @@
                           <item id="2" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Centered</item>
                           <item id="3" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Justified</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="comboLB_LASTLINE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|comboLB_LASTLINE">Specify the alignment for the last line in the paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -307,6 +338,11 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radioBTN_LEFTALIGN</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radioBTN_ENDALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|radioBTN_ENDALIGN">Aligns the paragraph to the end of the line in the reading direction.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -322,6 +358,11 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radioBTN_LEFTALIGN</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radioBTN_STARTALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|radioBTN_STARTALIGN">Aligns the paragraph to the beginning of the line in the reading direction.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -386,6 +427,11 @@
                       <item id="3" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Middle</item>
                       <item id="4" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Bottom</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboLB_VERTALIGN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|comboLB_VERTALIGN">Select alignment for oversized/undersized characters in the paragraph.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -448,6 +494,11 @@
                       <object class="GtkComboBoxText" id="comboLB_TEXTDIRECTION">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="comboLB_TEXTDIRECTION-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|comboLB_TEXTDIRECTION">Specify the text direction for a paragraph that uses complex text layout (CTL).</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -470,6 +521,11 @@
                     <property name="margin-start">22</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_AUTOTEXTDIRECTION-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paragalignpage| extended_tip|checkCB_AUTOTEXTDIRECTION">Automatically adjust the writing direction of the paragraph based on its content.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
