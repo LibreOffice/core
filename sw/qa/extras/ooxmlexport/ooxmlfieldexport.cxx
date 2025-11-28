@@ -1092,9 +1092,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142464_ampm)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtDatePicker)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Check that roundtrip for date picker field does not lose essential data
     createSwDoc("test_sdt_datepicker.docx");
     save(TestFilter::DOCX);
@@ -1120,9 +1117,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDatePicker)
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Given a document with a <w:sdt> tag:
     createSwDoc("content-control-grab-bag.docx");
 
@@ -1134,9 +1128,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Given a document with a <w:sdt> tag:
     createSwDoc("content-control-shape.docx");
 
@@ -1148,9 +1139,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Test how we can roundtrip sdt plain text with databindings support
     createSwDoc("tdf104823.docx");
 
