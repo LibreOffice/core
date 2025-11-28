@@ -602,7 +602,7 @@ Dim i as Integer
 	CurrValue(20,2) = 2
 	CurrValue(20,3) = &quot;лв.&quot;
 	CurrValue(20,4) = &quot;лв.&quot;
-	CurrValue(20,5) = &quot;BLN&quot;
+	CurrValue(20,5) = &quot;BGN&quot;
 
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;

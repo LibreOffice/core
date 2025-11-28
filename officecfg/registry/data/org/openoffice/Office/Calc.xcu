@@ -244,7 +244,7 @@
         <value>EUR</value>
       </prop>
       <prop oor:name="ToUnit">
-        <value>BLN</value>
+        <value>BGN</value>
       </prop>
       <prop oor:name="Factor">
         <value>1.95583</value>
