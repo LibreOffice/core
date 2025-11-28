@@ -35,7 +35,6 @@ private:
     std::unique_ptr<weld::CustomWeld> mxCellLineStyleValueSetWin;
     std::unique_ptr<weld::Button> mxPushButtonMoreOptions;
 
-    void Initialize();
     void SetAllNoSel();
 
     DECL_LINK(VSSelectHdl, ValueSet*, void);

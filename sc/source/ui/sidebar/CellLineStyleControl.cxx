@@ -41,15 +41,6 @@ CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& r
     , mxCellLineStyleValueSetWin(new weld::CustomWeld(*m_xBuilder, u"linestylevalueset"_ustr, *mxCellLineStyleValueSet))
     , mxPushButtonMoreOptions(m_xBuilder->weld_button(u"more"_ustr))
 {
-    Initialize();
-}
-
-CellLineStylePopup::~CellLineStylePopup()
-{
-}
-
-void CellLineStylePopup::Initialize()
-{
     mxPushButtonMoreOptions->connect_clicked(LINK(this, CellLineStylePopup, PBClickHdl));
 
     mxCellLineStyleValueSet->SetStyle(mxCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
@@ -83,6 +74,10 @@ void CellLineStylePopup::Initialize()
 
     SetAllNoSel();
     mxCellLineStyleValueSet->SetSelectHdl(LINK(this, CellLineStylePopup, VSSelectHdl));
+}
+
+CellLineStylePopup::~CellLineStylePopup()
+{
 }
 
 void CellLineStylePopup::GrabFocus()
