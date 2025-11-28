@@ -543,8 +543,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( bCopy && pPage )
     {
-        ScDocShell& rDocShell = rViewData.GetDocShell();
-        ScModelObj* pModelObj = rDocShell.GetModel();
+        ScDocShell* pDocShell = rViewData.GetDocShell();
+        ScModelObj* pModelObj = ( pDocShell ? pDocShell->GetModel() : nullptr );
         if ( pModelObj )
         {
             SCTAB nTab = rViewData.GetTabNo();

@@ -213,7 +213,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 // Get info about current document and selected tab
                 SCTAB nTab = rViewData.GetTabNo();
-                OUString aDocName = GetViewData().GetDocShell().GetTitle(SFX_TITLE_FULLNAME);
+                OUString aDocName = GetViewData().GetDocShell()->GetTitle(SFX_TITLE_FULLNAME);
                 sal_uInt16 nDoc = 0;
                 bool bCpy = true;
 
@@ -392,8 +392,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TAB_RTL:
             {
-                ScDocShell& rDocSh = rViewData.GetDocShell();
-                ScDocFunc &rFunc = rDocSh.GetDocFunc();
+                ScDocShell* pDocSh = rViewData.GetDocShell();
+                ScDocFunc &rFunc = pDocSh->GetDocFunc();
                 bool bSet = !rDoc.IsLayoutRTL( nCurrentTab );
 
                 const ScMarkData& rMark = rViewData.GetMarkData();
@@ -401,7 +401,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     //  handle several sheets
 
-                    SfxUndoManager* pUndoManager = rDocSh.GetUndoManager();
+                    SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
                     OUString aUndo = ScResId( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 
@@ -421,7 +421,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 rViewData.SetShowGrid(!bShowGrid);
                 SfxBindings& rBindings = GetViewFrame().GetBindings();
                 rBindings.Invalidate( FID_TAB_TOGGLE_GRID );
-                ScDocShellModificator aModificator(rViewData.GetDocShell());
+                ScDocShellModificator aModificator(*rViewData.GetDocShell());
                 aModificator.SetDocumentModified();
                 PaintGrid();
                 rReq.Done();
@@ -435,8 +435,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TAB_EVENTS:
                 {
-                    ScDocShell& rDocSh = rViewData.GetDocShell();
-                    uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( &rDocSh, nCurrentTab ) );
+                    ScDocShell* pDocSh = rViewData.GetDocShell();
+                    uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
                     uno::Reference<frame::XFrame> xFrame = GetViewFrame().GetFrame().GetFrameInterface();
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
                     VclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
@@ -468,7 +468,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 {
     ScViewData& rViewData   = GetViewData();
     ScDocument& rDoc        = rViewData.GetDocument();
-    ScDocShell& rDocShell   = rViewData.GetDocShell();
+    ScDocShell* pDocShell   = rViewData.GetDocShell();
     ScMarkData& rMark       = GetViewData().GetMarkData();
     SCTAB       nTab        = rViewData.GetTabNo();
 
@@ -534,7 +534,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_TAB_APPEND:
                 if ( !rDoc.IsDocEditable() ||
                      nTabCount > MAXTAB ||
-                     ( nWhich == FID_INS_TABLE_EXT && rDocShell.IsDocShared() ) )
+                     ( nWhich == FID_INS_TABLE_EXT && pDocShell && pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -552,7 +552,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_TAB_MENU_RENAME:
                 if ( !rDoc.IsDocEditable() ||
                      rDoc.IsTabProtected(nTab) ||nTabSelCount > 1 ||
-                     rDocShell.IsDocShared() )
+                     ( pDocShell && pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -578,7 +578,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_TAB_MENU_SET_TAB_BG_COLOR:
                 {
                     if ( !rDoc.IsDocEditable()
-                        || rDocShell.IsDocShared()
+                        || ( pDocShell && pDocShell->IsDocShared() )
                         || rDoc.IsTabProtected(nTab) )
                         rSet.DisableItem( nWhich );
                 }
@@ -629,7 +629,7 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
             bUseCurrentDocument = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
         if (bUseCurrentDocument)
-            aDocName = GetViewData().GetDocShell().GetTitle();
+            aDocName = GetViewData().GetDocShell()->GetTitle();
         else if(pReqArgs->HasItem( FID_TAB_MOVE, &pItem ))
             aDocName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 

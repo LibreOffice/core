@@ -538,9 +538,9 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     }
 }
 
-ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter output(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
         formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

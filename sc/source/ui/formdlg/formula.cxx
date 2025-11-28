@@ -120,7 +120,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     SCTAB nTab = rViewData.GetTabNo();
     m_CursorPos = ScAddress( nCol, nRow, nTab );
 
-    m_pViewShell->InitFormEditData(rViewData.GetDocShell()); // create new
+    m_pViewShell->InitFormEditData(*rViewData.GetDocShell()); // create new
     pData = m_pViewShell->GetFormEditData();
     pData->SetInputHandler(pInputHdl);
 

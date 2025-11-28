@@ -275,7 +275,7 @@ private:
     ScMarkData          maMarkData;
     ScMarkData          maHighlightData;
     ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
-    ScDocShell&         mrDocShell;
+    ScDocShell*         pDocShell;
     ScDocument&         mrDoc;
     ScTabViewShell*     pView;
     std::unique_ptr<EditView> pEditView[4];               // Belongs to the window
@@ -353,11 +353,11 @@ public:
     ScViewData( ScDocument& rDoc );
     ~ScViewData() COVERITY_NOEXCEPT_FALSE;
 
-    ScDocShell&     GetDocShell() const     { return mrDocShell; }
+    ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDocFunc&      GetDocFunc() const;
     SC_DLLPUBLIC ScDBFunc* GetView() const;
     ScTabViewShell* GetViewShell() const    { return pView; }
-    SfxObjectShell& GetSfxDocShell() const  { return mrDocShell; }
+    SfxObjectShell* GetSfxDocShell() const  { return pDocShell; }
     SfxBindings&    GetBindings();          // from ViewShell's ViewFrame
     SC_DLLPUBLIC SfxDispatcher& GetDispatcher();        // from ViewShell's ViewFrame
 

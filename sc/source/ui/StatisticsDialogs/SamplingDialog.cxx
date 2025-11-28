@@ -170,7 +170,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument&
     mxButtonOk->set_sensitive(mInputRange.IsValid() && mOutputAddress.IsValid());
 }
 
-ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell& rDocShell)
+ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
 {
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
@@ -193,7 +193,7 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell& rDocShell)
                 if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
                 {
                     double aValue = mDocument.GetValue(ScAddress(inCol, inRow, inTab));
-                    rDocShell.GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
+                    pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
                     outRow++;
                 }
                 i++;
@@ -206,7 +206,7 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell& rDocShell)
     return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
 }
 
-ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell& rDocShell)
+ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
 {
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
@@ -273,7 +273,7 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell& rDocShell)
                 }
 
                 const double fValue = mDocument.GetValue( ScAddress(inCol, nRandom, inTab) );
-                rDocShell.GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), fValue, true);
+                pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), fValue, true);
                 outRow++;
             }
             outCol++;
@@ -284,7 +284,7 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell& rDocShell)
     return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
 }
 
-ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell& rDocShell)
+ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell* pDocShell)
 {
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
@@ -317,7 +317,7 @@ ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell& rDocShell)
                 else
                 {
                     double aValue = mDocument.GetValue( ScAddress(inCol, inRow, inTab) );
-                    rDocShell.GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
+                    pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
                     inRow++;
                     outRow++;
                 }
@@ -333,8 +333,8 @@ ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell& rDocShell)
 void ScSamplingDialog::PerformSampling()
 {
     OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
-    ScDocShell& rDocShell = mViewData.GetDocShell();
-    SfxUndoManager* pUndoManager = rDocShell.GetUndoManager();
+    ScDocShell* pDocShell = mViewData.GetDocShell();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
 
     ScRange aModifiedRange;
 
@@ -343,17 +343,17 @@ void ScSamplingDialog::PerformSampling()
     if (mxRandomMethodRadio->get_active())
     {
         if (mxKeepOrder->get_sensitive() && mxKeepOrder->get_active())
-            aModifiedRange = PerformRandomSamplingKeepOrder(rDocShell);
+            aModifiedRange = PerformRandomSamplingKeepOrder(pDocShell);
         else
-            aModifiedRange = PerformRandomSampling(rDocShell);
+            aModifiedRange = PerformRandomSampling(pDocShell);
     }
     else if (mxPeriodicMethodRadio->get_active())
     {
-        aModifiedRange = PerformPeriodicSampling(rDocShell);
+        aModifiedRange = PerformPeriodicSampling(pDocShell);
     }
 
     pUndoManager->LeaveListAction();
-    rDocShell.PostPaint(aModifiedRange, PaintPartFlags::Grid);
+    pDocShell->PostPaint(aModifiedRange, PaintPartFlags::Grid);
 }
 
 sal_Int64 ScSamplingDialog::GetPopulationSize() const

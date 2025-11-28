@@ -55,9 +55,9 @@ TranslateId ScMatrixComparisonGenerator::GetUndoNameId()
     return STR_CORRELATION_UNDO_NAME;
 }
 
-ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter output(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

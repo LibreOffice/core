@@ -23,7 +23,7 @@ class DataStream;
 
 class DataStreamDlg : public weld::GenericDialogController
 {
-    ScDocShell& m_rDocShell;
+    ScDocShell* m_pDocShell;
 
     std::unique_ptr<SvtURLBox> m_xCbUrl;
     std::unique_ptr<weld::Button> m_xBtnBrowse;
@@ -50,7 +50,7 @@ class DataStreamDlg : public weld::GenericDialogController
     ScRange GetStartRange();
 
 public:
-    DataStreamDlg(ScDocShell& rDocShell, weld::Window* pParent);
+    DataStreamDlg(ScDocShell* pDocShell, weld::Window* pParent);
     virtual ~DataStreamDlg() override;
 
     void Init(const DataStream& rStrm);

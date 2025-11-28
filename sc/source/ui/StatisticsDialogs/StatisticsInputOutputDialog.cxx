@@ -281,14 +281,14 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::
 void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
 {
     OUString aUndo(ScResId(GetUndoNameId()));
-    ScDocShell& rDocShell = mViewData.GetDocShell();
-    SfxUndoManager* pUndoManager = rDocShell.GetUndoManager();
+    ScDocShell* pDocShell = mViewData.GetDocShell();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData.GetViewShell()->GetViewShellId() );
 
-    ScRange aOutputRange = ApplyOutput(rDocShell);
+    ScRange aOutputRange = ApplyOutput(pDocShell);
 
     pUndoManager->LeaveListAction();
-    rDocShell.PostPaint( aOutputRange, PaintPartFlags::Grid );
+    pDocShell->PostPaint( aOutputRange, PaintPartFlags::Grid );
 }
 
 bool ScStatisticsInputOutputDialog::InputRangesValid()

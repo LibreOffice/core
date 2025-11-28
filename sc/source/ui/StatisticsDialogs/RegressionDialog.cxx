@@ -171,9 +171,9 @@ TranslateId ScRegressionDialog::GetUndoNameId()
     return STR_REGRESSION_UNDO_NAME;
 }
 
-ScRange ScRegressionDialog::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
     aTemplate.autoReplaceUses3D(mbUse3DAddresses);

@@ -416,8 +416,8 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         return;
 
     ScDocument& rDoc = aViewData.GetDocument();
-    ScDocShell& rDocSh = aViewData.GetDocShell();
-    ScModelObj* pModelObj = rDocSh.GetModel();
+    ScDocShell* pDocSh = aViewData.GetDocShell();
+    ScModelObj* pModelObj = pDocSh ? pDocSh->GetModel() : nullptr;
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();
@@ -431,6 +431,9 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     Size aNewSize(0, 0);
     if (pModelObj)
         aNewSize = pModelObj->getDocumentSize();
+
+    if (!pDocSh)
+        return;
 
     if (pModelObj)
     {
@@ -656,7 +659,7 @@ void ScTabView::CursorPosChanged()
 {
     bool bRefMode = ScModule::get()->IsFormulaMode();
     if ( !bRefMode ) // check that RefMode works when switching sheets
-        aViewData.GetDocShell().Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
+        aViewData.GetDocShell()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
     //  Broadcast, so that other Views of the document also switch
 
@@ -1927,7 +1930,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     // Update pending row heights before switching the sheet, so Reschedule from the progress bar
     // doesn't paint the new sheet with old heights
-    aViewData.GetDocShell().UpdatePendingRowHeights( nTab );
+    aViewData.GetDocShell()->UpdatePendingRowHeights( nTab );
 
     SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nOldPos = nTab;
@@ -3016,7 +3019,7 @@ void ScTabView::PaintRangeFinder( tools::Long nNumber )
         return;
 
     ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
-    if ( !(pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell().GetTitle()) )
+    if ( !(pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell()->GetTitle()) )
         return;
 
     SCTAB nTab = aViewData.GetTabNo();
@@ -3074,7 +3077,7 @@ void ScTabView::DoChartSelection(
     {
         Color aSelColor(ColorTransparency, rHighlightedRange.PreferredColor);
         ScRangeList aRangeList;
-        ScDocument& rDoc = aViewData.GetDocShell().GetDocument();
+        ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
                 aRangeList, rHighlightedRange.RangeRepresentation, rDoc, rDoc.GetAddressConvention(), sep ))
         {
@@ -3121,7 +3124,7 @@ void ScTabView::DoChartSelection(
 
 void ScTabView::DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize)
 {
-    ScDocument& rDocument = aViewData.GetDocShell().GetDocument();
+    ScDocument& rDocument = aViewData.GetDocShell()->GetDocument();
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
 
     if (!pWin)

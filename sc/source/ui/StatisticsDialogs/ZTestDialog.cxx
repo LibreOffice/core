@@ -39,9 +39,9 @@ TranslateId ScZTestDialog::GetUndoNameId()
     return STR_ZTEST_UNDO_NAME;
 }
 
-ScRange ScZTestDialog::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

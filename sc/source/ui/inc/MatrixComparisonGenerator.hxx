@@ -27,7 +27,7 @@ public:
 
 protected:
     virtual TranslateId GetUndoNameId() override;
-    virtual ScRange ApplyOutput(ScDocShell& rDocShell) override;
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 
     virtual OUString getLabel() = 0;
     virtual OUString getTemplate() = 0;

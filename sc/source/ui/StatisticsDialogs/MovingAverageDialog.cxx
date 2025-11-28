@@ -42,9 +42,9 @@ TranslateId ScMovingAverageDialog::GetUndoNameId()
     return STR_MOVING_AVERAGE_UNDO_NAME;
 }
 
-ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter output(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

@@ -48,14 +48,14 @@ weld::Window* ScTabViewShell::GetDialogParent()
         }
     }
 
-    ScDocShell& rDocSh = GetViewData().GetDocShell();
-    if (rDocSh.IsOle())
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    if (pDocSh->IsOle())
     {
         // TODO/LATER: how to GetEditWindow in embedded document?!
         // It should be OK to return the ViewShell Window!
         vcl::Window* pWin = GetWindow();
         return pWin ? pWin->GetFrameWeld() : nullptr;
-        // SvInPlaceEnvironment* pEnv = rDocSh.GetIPEnv();
+        // SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
         // if (pEnv)
         //    return pEnv->GetEditWin();
     }
