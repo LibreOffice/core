@@ -152,15 +152,22 @@ void TipOfTheDayDialog::UpdateTip()
     auto[sTip, sLink, sImage, nType] = TIPOFTHEDAY_STRINGARRAY[m_nCurrentTip];
 
     // text
-//replace MOD1 & MOD2 shortcuts depending on platform
+//replace MOD1, MOD2 & MOD3 shortcuts depending on platform
+//MOD3 is created to handle cases in macOS where Ctrl is used instead of Command.
+//In other OS's MOD3==MOD1 (Ctrl)
 #ifdef MACOSX
     const OUString aMOD1 = CuiResId(STR_CMD);
     const OUString aMOD2 = CuiResId(STR_Option);
+    const OUString aMOD3 = CuiResId(STR_CTRL);
 #else
     const OUString aMOD1 = CuiResId(STR_CTRL);
     const OUString aMOD2 = CuiResId(STR_Alt);
+    const OUString& aMOD3 = aMOD1;
 #endif
-    m_pText->set_label(CuiResId(sTip).replaceAll("%MOD1", aMOD1).replaceAll("%MOD2", aMOD2));
+    m_pText->set_label(CuiResId(sTip)
+                           .replaceAll("%MOD1", aMOD1)
+                           .replaceAll("%MOD2", aMOD2)
+                           .replaceAll("%MOD3", aMOD3));
 
     // hyperlink
     if (sLink.isEmpty())
