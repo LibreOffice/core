@@ -34,7 +34,6 @@ private:
     std::unique_ptr<CellLineStyleValueSet> mxCellLineStyleValueSet;
     std::unique_ptr<weld::CustomWeld> mxCellLineStyleValueSetWin;
     std::unique_ptr<weld::Button> mxPushButtonMoreOptions;
-    OUString maStr[CELL_LINE_STYLE_ENTRIES];
 
     void Initialize();
     void SetAllNoSel();
