@@ -532,7 +532,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/pagedlg/tphfedit \
     sc/source/ui/sidebar/AlignmentPropertyPanel \
     sc/source/ui/sidebar/CellLineStyleControl \
-    sc/source/ui/sidebar/CellLineStyleValueSet \
     sc/source/ui/sidebar/CellAppearancePropertyPanel \
     sc/source/ui/sidebar/CellBorderStyleControl \
     sc/source/ui/sidebar/NumberFormatControl \

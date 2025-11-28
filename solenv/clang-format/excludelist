@@ -8804,7 +8804,6 @@ sc/source/ui/sidebar/CellAppearancePropertyPanel.cxx
 sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx
 sc/source/ui/sidebar/CellBorderStyleControl.cxx
 sc/source/ui/sidebar/CellLineStyleControl.cxx
-sc/source/ui/sidebar/CellLineStyleValueSet.cxx
 sc/source/ui/sidebar/NumberFormatControl.cxx
 sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx
 sc/source/ui/sidebar/NumberFormatPropertyPanel.hxx
