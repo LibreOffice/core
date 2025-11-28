@@ -142,7 +142,7 @@
       <object class="GtkCheckMenuItem" id="405">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_READONLY_IDX">Read-_only</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_READONLY_IDX">Protected against manual changes</property>
         <property name="use-underline">True</property>
       </object>
     </child>

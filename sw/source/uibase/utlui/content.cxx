@@ -1956,7 +1956,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemovePostItEntries = true;
     bool bRemoveIndexEntry = true;
     bool bRemoveUpdateIndexEntry = true;
-    bool bRemoveReadonlyIndexEntry = true;
+    bool bRemoveProtectedAgainstManualChangesIndexEntry = true;
     bool bRemoveCopyEntry = true;
     bool bRemoveEditEntry = true;
     bool bRemoveUnprotectEntry = true;
@@ -2214,7 +2214,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     {
                         bRemoveIndexEntry = false;
                         bRemoveUpdateIndexEntry = false;
-                        bRemoveReadonlyIndexEntry = false;
+                        bRemoveProtectedAgainstManualChangesIndexEntry = false;
                         const SwTOXBase* pBase = pCnt->GetTOXBase();
                         xPop->set_active(OUString::number(405/*Readonly*/),
                                          SwEditShell::IsTOXBaseReadonly(*pBase));
@@ -2499,7 +2499,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveUpdateIndexEntry)
         xPop->remove(OUString::number(402));
 
-    if (bRemoveReadonlyIndexEntry)
+    if (bRemoveProtectedAgainstManualChangesIndexEntry)
         xPop->remove(OUString::number(405));
 
     if (bRemoveUnprotectEntry)
@@ -2518,8 +2518,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveGotoEntry && bRemoveCopyEntry && bRemoveSelectEntry && bRemoveDeleteEntry
         && bRemoveMakeFootnotesEndnotesViceVersaEntry && bRemoveChapterEntries
         && bRemovePostItEntries && bRemoveRenameEntry && bRemoveIndexEntry
-        && bRemoveUpdateIndexEntry && bRemoveReadonlyIndexEntry && bRemoveUnprotectEntry
-        && bRemoveEditEntry && bRemoveSortOutlineAlphabeticallyInDocument)
+        && bRemoveUpdateIndexEntry && bRemoveProtectedAgainstManualChangesIndexEntry
+        && bRemoveUnprotectEntry && bRemoveEditEntry && bRemoveSortOutlineAlphabeticallyInDocument)
         xPop->remove(u"separator2"_ustr);
 
     if (!bOutline)
