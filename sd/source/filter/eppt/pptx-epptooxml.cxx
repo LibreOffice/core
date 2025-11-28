@@ -1708,7 +1708,9 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     SAL_INFO("sd.eppt", "write slide: " << nPageNum << "\n----------------");
 
     // slides list
-    if (nPageNum == 0)
+    if (!mbHasCanvasPage && nPageNum == 0)
+        mPresentationFS->startElementNS(XML_p, XML_sldIdLst);
+    else if (mbHasCanvasPage && nPageNum  == 1)
         mPresentationFS->startElementNS(XML_p, XML_sldIdLst);
 
     // add explicit relation of presentation to this slide
@@ -2709,6 +2711,8 @@ bool PowerPointExport::ImplCreateDocument()
 
     for (sal_uInt32 i = 0; i < mnPages; i++)
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         if (!GetPageByIndex(i, NOTICE))
             return false;
 
