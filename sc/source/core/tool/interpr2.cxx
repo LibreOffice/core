@@ -3304,7 +3304,7 @@ static bool lclConvertMoney( std::u16string_view aSearchUnit, double& rfRate, in
         { "LVL", 0.702804, 2 },
         { "LTL", 3.45280,  2 },
         { "HRK", 7.53450,  2 },
-        { "BLN", 1.95583,  2 }
+        { "BGN", 1.95583,  2 }
     };
 
     for (const auto & i : aConvertTable)
