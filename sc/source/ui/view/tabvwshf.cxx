@@ -1101,6 +1101,14 @@ void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
         {
             rReq.Done( *pReqArgs );
         }
+        else
+        {
+            OUString aErrMsg(ScResId(STR_INVALIDTABNAME));
+            std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                GetFrameWeld(), VclMessageType::Warning,
+                VclButtonsType::Ok, aErrMsg));
+            xBox->runAsync(xBox, [](sal_uInt32) {});
+        }
     }
     else
     {
@@ -1192,8 +1200,8 @@ bool ScTabViewShell::DoAppendOrRenameTableDialog(sal_Int32 nResult, const VclPtr
         else
         {
             OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
             xBox->run();
         }
     }
