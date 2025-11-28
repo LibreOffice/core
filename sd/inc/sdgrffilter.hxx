@@ -33,7 +33,8 @@ public:
     bool Import();
     bool Export() override;
 
-    static void HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStreamError);
+    static void HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStreamError,
+                                         weld::Window* frameWeld = nullptr);
     static void InsertSdrGrafObj(const Graphic& rGraphic, SdPage* pPage);
 };
 
