@@ -834,7 +834,9 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
                 for( SwSectionFormats::size_type n = rFormats.size(); n;  )
                 {
                     const SwSectionFormat* pFormat = rFormats[ --n ];
-                    if( pFormat->GetProtect().IsContentProtected() )
+                    if (pFormat->GetSection()->GetType() != SectionType::ToxHeader
+                        && pFormat->GetSection()->GetType() != SectionType::ToxContent
+                        && pFormat->GetProtect().IsContentProtected())
                     {
                         const SwFormatContent& rContent = pFormat->GetContent(false);
                         OSL_ENSURE( rContent.GetContentIdx(), "where is the SectionNode?" );
