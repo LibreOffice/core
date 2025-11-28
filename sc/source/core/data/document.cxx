@@ -916,14 +916,6 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
         }
-        else
-        {
-            OUString aErrMsg(ScResId(STR_INVALIDTABNAME));
-            std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                GetDocumentShell()->GetFrame()->GetFrameWeld(), VclMessageType::Warning,
-                VclButtonsType::Ok, aErrMsg));
-            xBox->runAsync(xBox, [](sal_uInt32) {});
-        }
     }
 
     collectUIInformation({{"NewName", rName}}, u"Rename_Sheet"_ustr);
