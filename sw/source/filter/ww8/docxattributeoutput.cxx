@@ -777,6 +777,8 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
     // output sdt properties
     pSerializer->startElementNS(XML_w, XML_sdtPr);
 
+    WriteExtraParams(pSerializer);
+
     if (m_nSdtPrToken > 0 && m_pTokenChildren.is())
     {
         if (!m_pTokenAttributes.is())
@@ -804,8 +806,6 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
             pSerializer->singleElement(m_nSdtPrToken, detachFrom(m_pTokenAttributes));
         }
     }
-
-    WriteExtraParams(pSerializer);
 
     pSerializer->endElementNS(XML_w, XML_sdtPr);
 
