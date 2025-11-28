@@ -587,10 +587,9 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                              VclMessageType::Info, VclButtonsType::Ok,
-                                                              SwResId(pResId)));
-                xInfoBox->run();
+                std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+                    GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok, SwResId(pResId)));
+                xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
             }
             rReq.Ignore();
         }
@@ -800,10 +799,11 @@ void SwView::Execute(SfxRequest &rReq)
                         rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
                     else
                     {   // xmlsec05: message box for wrong password
-                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
-                        xInfoBox->run();
+                        std::shared_ptr<weld::MessageDialog> xInfoBox(
+                            Application::CreateMessageDialog(
+                                nullptr, VclMessageType::Info, VclButtonsType::Ok,
+                                SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
+                        xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
                         break;
                     }
                 }
@@ -2503,10 +2503,10 @@ void SwView::EditLinkDlg()
 {
     if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
     {
-        std::unique_ptr<weld::MessageDialog> xError(
+        std::shared_ptr<weld::MessageDialog> xError(
             Application::CreateMessageDialog(nullptr, VclMessageType::Warning, VclButtonsType::Ok,
                                              SvtResId(STR_WARNING_EXTERNAL_LINK_EDIT_DISABLED)));
-        xError->run();
+        xError->runAsync(xError, [](sal_uInt32) {});
         return;
     }
 
@@ -2975,10 +2975,10 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
 
             if (!bCompare && !nFound)
             {
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
-                                                              VclMessageType::Info, VclButtonsType::Ok,
-                                                              SwResId(STR_NO_MERGE_ENTRY)));
-                xInfoBox->run();
+                std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+                    GetEditWin().GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+                    SwResId(STR_NO_MERGE_ENTRY)));
+                xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
             }
             if( nRet==2 && xDocSh.is() )
                 xDocSh->DoClose();
@@ -3161,10 +3161,10 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
     std::unique_ptr<SfxMedium> pMed = m_pViewImpl->CreateMedium();
     if ( !pMed )
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      SwResId(RID_SVXSTR_TXTFILTER_FILTERERROR)));
-        xInfoBox->run();
+        std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+            GetEditWin().GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+            SwResId(RID_SVXSTR_TXTFILTER_FILTERERROR)));
+        xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
         return;
     }
 

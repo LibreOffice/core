@@ -1172,9 +1172,9 @@ bool ScTabViewShell::DoAppendOrRenameTableDialog(sal_Int32 nResult, const VclPtr
         else
         {
             OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
-            xBox->run();
+            std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
+            xBox->runAsync(xBox, [](sal_uInt32) {});
         }
     }
 
