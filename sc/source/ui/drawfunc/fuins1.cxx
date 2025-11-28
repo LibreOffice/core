@@ -25,6 +25,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
@@ -287,6 +288,14 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
         if ( nError == ERRCODE_NONE )
         {
             lcl_InsertGraphic( aGraphic, aFileName, bAsLink, true, rViewSh, pWindow, pView );
+        }
+        else
+        {
+            std::shared_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(
+                pWin->GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(SvxOpenGraphicDialog::SvxOpenGrfErr2ResId(nError))));
+
+            xWarn->runAsync(xWarn, [](sal_uInt32) {});
         }
     }
     else

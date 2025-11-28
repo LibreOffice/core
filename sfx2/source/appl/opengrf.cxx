@@ -45,20 +45,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-static TranslateId SvxOpenGrfErr2ResId( ErrCode err )
-{
-    if (err == ERRCODE_GRFILTER_OPENERROR)
-        return RID_SVXSTR_GRFILTER_OPENERROR;
-    else if (err == ERRCODE_GRFILTER_IOERROR)
-        return RID_SVXSTR_GRFILTER_IOERROR;
-    else if (err == ERRCODE_GRFILTER_VERSIONERROR)
-        return RID_SVXSTR_GRFILTER_VERSIONERROR;
-    else if (err == ERRCODE_GRFILTER_FILTERERROR)
-        return RID_SVXSTR_GRFILTER_FILTERERROR;
-    else
-        return RID_SVXSTR_GRFILTER_FORMATERROR;
-}
-
 struct SvxOpenGrf_Impl
 {
     SvxOpenGrf_Impl(weld::Window* pPreferredParent,
@@ -275,6 +261,20 @@ void SvxOpenGraphicDialog::SetCurrentFilter(const OUString& rStr)
 void SvxOpenGraphicDialog::SetDetectedFilter(const OUString& rStr)
 {
     mpImpl->sDetectedFilter = rStr;
+}
+
+TranslateId SvxOpenGraphicDialog::SvxOpenGrfErr2ResId(ErrCode err)
+{
+    if (err == ERRCODE_GRFILTER_OPENERROR)
+        return RID_SVXSTR_GRFILTER_OPENERROR;
+    else if (err == ERRCODE_GRFILTER_IOERROR)
+        return RID_SVXSTR_GRFILTER_IOERROR;
+    else if (err == ERRCODE_GRFILTER_VERSIONERROR)
+        return RID_SVXSTR_GRFILTER_VERSIONERROR;
+    else if (err == ERRCODE_GRFILTER_FILTERERROR)
+        return RID_SVXSTR_GRFILTER_FILTERERROR;
+    else
+        return RID_SVXSTR_GRFILTER_FORMATERROR;
 }
 
 Reference<ui::dialogs::XFilePickerControlAccess> const & SvxOpenGraphicDialog::GetFilePickerControlAccess() const

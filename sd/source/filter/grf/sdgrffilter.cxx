@@ -103,7 +103,8 @@ SdGRFFilter::~SdGRFFilter()
 {
 }
 
-void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStreamError )
+void SdGRFFilter::HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStreamError,
+                                           weld::Window* frameWeld)
 {
     if (ERRCODE_NONE != nStreamError)
     {
@@ -130,11 +131,12 @@ void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStrea
 
     if (pId && pId == STR_IMPORT_GRFILTER_IOERROR)
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-    else
+    else if (frameWeld || !comphelper::LibreOfficeKit::isActive())
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
-                                                       VclMessageType::Warning, VclButtonsType::Ok, pId ? SdResId(pId) : OUString()));
-        xErrorBox->run();
+        std::shared_ptr<weld::MessageDialog> xErrorBox(
+            Application::CreateMessageDialog(frameWeld, VclMessageType::Warning, VclButtonsType::Ok,
+                                             pId ? SdResId(pId) : OUString()));
+        xErrorBox->runAsync(xErrorBox, [](sal_uInt32) {});
     }
 }
 
