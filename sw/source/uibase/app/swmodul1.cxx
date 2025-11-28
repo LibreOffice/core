@@ -497,7 +497,8 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
             sal_uInt16 nSaturation;
             sal_uInt16 nBrightness;
             aCol.RGBtoHSB(nHue, nSaturation, nBrightness);
-            nSaturation = nSaturation / 2;
+            // 25% saturation: balance between complete gray and hard-to-notice small difference.
+            nSaturation = nSaturation / 4;
             aCol = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
         }
     }
