@@ -2637,21 +2637,6 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
-    if (!m_pContentControl->GetPlaceholderDocPart().isEmpty())
-    {
-        m_pSerializer->startElementNS(XML_w, XML_placeholder);
-        m_pSerializer->singleElementNS(XML_w, XML_docPart, FSNS(XML_w, XML_val),
-                                       m_pContentControl->GetPlaceholderDocPart());
-        m_pSerializer->endElementNS(XML_w, XML_placeholder);
-    }
-
-    if (!m_pContentControl->GetDataBindingPrefixMappings().isEmpty() || !m_pContentControl->GetDataBindingXpath().isEmpty() || !m_pContentControl->GetDataBindingStoreItemID().isEmpty())
-    {
-        m_pSerializer->singleElementNS( XML_w, XML_dataBinding,
-            FSNS(XML_w, XML_prefixMappings), m_pContentControl->GetDataBindingPrefixMappings(),
-            FSNS(XML_w, XML_xpath), m_pContentControl->GetDataBindingXpath(),
-            FSNS(XML_w, XML_storeItemID), m_pContentControl->GetDataBindingStoreItemID());
-    }
 
     if (!m_pContentControl->GetColor().isEmpty())
     {
@@ -2683,23 +2668,39 @@ void DocxAttributeOutput::WriteContentControlStart()
                                        OString::number(m_pContentControl->GetId()));
     }
 
-    if (m_pContentControl->GetTabIndex())
-    {
-        // write the unsigned value as if it were signed since that is all we can import
-        const sal_Int32 nTabIndex = static_cast<sal_Int32>(m_pContentControl->GetTabIndex());
-        m_pSerializer->singleElementNS(XML_w, XML_tabIndex, FSNS(XML_w, XML_val),
-                                       OString::number(nTabIndex));
-    }
-
     if (!m_pContentControl->GetLock().isEmpty())
     {
         m_pSerializer->singleElementNS(XML_w, XML_lock, FSNS(XML_w, XML_val),
                                        m_pContentControl->GetLock());
     }
 
+    if (!m_pContentControl->GetPlaceholderDocPart().isEmpty())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_placeholder);
+        m_pSerializer->singleElementNS(XML_w, XML_docPart, FSNS(XML_w, XML_val),
+                                       m_pContentControl->GetPlaceholderDocPart());
+        m_pSerializer->endElementNS(XML_w, XML_placeholder);
+    }
+
     if (m_pContentControl->GetShowingPlaceHolder())
     {
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
+    }
+
+    if (!m_pContentControl->GetDataBindingPrefixMappings().isEmpty() || !m_pContentControl->GetDataBindingXpath().isEmpty() || !m_pContentControl->GetDataBindingStoreItemID().isEmpty())
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_dataBinding,
+            FSNS(XML_w, XML_prefixMappings), m_pContentControl->GetDataBindingPrefixMappings(),
+            FSNS(XML_w, XML_xpath), m_pContentControl->GetDataBindingXpath(),
+            FSNS(XML_w, XML_storeItemID), m_pContentControl->GetDataBindingStoreItemID());
+    }
+
+    if (m_pContentControl->GetTabIndex())
+    {
+        // write the unsigned value as if it were signed since that is all we can import
+        const sal_Int32 nTabIndex = static_cast<sal_Int32>(m_pContentControl->GetTabIndex());
+        m_pSerializer->singleElementNS(XML_w, XML_tabIndex, FSNS(XML_w, XML_val),
+                                       OString::number(nTabIndex));
     }
 
     if (m_pContentControl->GetPicture())
