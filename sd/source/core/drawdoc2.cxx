@@ -433,6 +433,13 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
 // Move page
 void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
+    if (HasCanvasPage())
+    {
+        if (nPgNum == 1)
+            return;
+        if (nNewPos == 1)
+            nNewPos = 3;
+    }
     FmFormModel::MovePage(nPgNum, nNewPos);
 
     sal_uInt16 nMin = std::min(nPgNum, nNewPos);
@@ -1494,10 +1501,8 @@ bool SdDrawDocument::ValidateCanvasPage(const SdPage* pPage) const
 
 void SdDrawDocument::ImportCanvasPage()
 {
-    sal_uInt16 nStdPageCnt = GetSdPageCount(PageKind::Standard);
-
-    // what if canvas page is not the last page?
-    SdPage* pPage = GetSdPage(nStdPageCnt - 1, PageKind::Standard);
+    // what if canvas page is not the first page?
+    SdPage* pPage = GetSdPage(0, PageKind::Standard);
     bool bIsCanvasPageValid = ValidateCanvasPage(pPage);
     pPage->SetCanvasPage();
     mpCanvasPage = pPage;
@@ -1582,7 +1587,7 @@ void SdDrawDocument::ReshufflePages()
     {
         SdPage* pPage = static_cast<SdPage*>(aPageOrder[i]->GetReferencedPage());
         sal_uInt16 nCurrentPageNum = pPage->GetPageNum();
-        sal_uInt16 nTargetPageNum = 2 * i + 1;
+        sal_uInt16 nTargetPageNum = 2 * (i + 1) + 1;
         MovePage(nCurrentPageNum, nTargetPageNum); // Standard page
         MovePage(nCurrentPageNum + 1, nTargetPageNum + 1); // Notes page
     }
@@ -1597,14 +1602,19 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
     SdPage* pLastStandardPage = GetSdPage(nLastPageNum - 1, PageKind::Standard);
 
-    sal_uInt16 nCanvasPageNum = CreatePage(pLastStandardPage, PageKind::Standard,
+    sal_uInt16 nCanvasPageIndex = CreatePage(pLastStandardPage, PageKind::Standard,
                                            u"Canvas Page"_ustr, u"Canvas notes page"_ustr,
                                            AutoLayout::AUTOLAYOUT_NONE, AutoLayout::AUTOLAYOUT_NONE,
                                            false, false, pLastStandardPage->GetPageNum() + 2);
 
-    SdPage* pCanvasPage = GetSdPage(nCanvasPageNum, PageKind::Standard);
+    SdPage* pCanvasPage = GetSdPage(nCanvasPageIndex, PageKind::Standard);
     if (!pCanvasPage)
         return 0xffff;
+
+    // move the canvas page to the top
+    sal_uInt16 nCanvasPageNum = 2 * nCanvasPageIndex + 1;
+    MovePage(nCanvasPageNum, 1); // Canvas page
+    MovePage(nCanvasPageNum + 1, 2); // Canvas notes page
 
     const Size aCanvasSize(500000, 500000);
 
@@ -1641,9 +1651,9 @@ static int calculateGridColumns(const sal_uInt16 nCnt)
 
 void SdDrawDocument::populatePagePreviewsGrid()
 {
-    sal_uInt16 nPageCnt = GetSdPageCount(PageKind::Standard) - 1; // don't count the canvas page
-    sal_uInt16 nTotalCol = static_cast<sal_uInt16>(calculateGridColumns(nPageCnt));
-    sal_uInt16 nTotalRow = nPageCnt / nTotalCol + (nPageCnt % nTotalCol ? 1 : 0);
+    sal_uInt16 nPageCnt = GetSdPageCount(PageKind::Standard);
+    sal_uInt16 nTotalCol = static_cast<sal_uInt16>(calculateGridColumns(nPageCnt - 1));
+    sal_uInt16 nTotalRow = (nPageCnt - 1) / nTotalCol + ((nPageCnt - 1) % nTotalCol ? 1 : 0);
 
     // width and height of a standard 16:9 page
     sal_uInt16 nWidth = 28000;
@@ -1679,7 +1689,7 @@ void SdDrawDocument::populatePagePreviewsGrid()
         ::tools::Long nX = (mpCanvasPage->GetWidth() - nTotalGridWidth) / 2;
         for (sal_uInt16 nCol = 0; nCol < nTotalCol; nCol++)
         {
-            sal_uInt16 nCurrentPageIndex = nTotalCol * nRow + nCol;
+            sal_uInt16 nCurrentPageIndex = nTotalCol * nRow + nCol + 1;
             if (nCurrentPageIndex == nPageCnt)
                 return;
             SdPage* pPage = GetSdPage(nCurrentPageIndex, PageKind::Standard);

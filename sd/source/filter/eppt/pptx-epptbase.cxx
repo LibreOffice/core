@@ -234,12 +234,6 @@ bool PPTWriterBase::InitSOIface()
         if ( !GetPageByIndex( 0, NORMAL ) )
             break;
 
-        if (mXModel.is())
-        {
-            SdDrawDocument* pDoc = mXModel->GetDoc();
-            if (pDoc && pDoc->HasCanvasPage())
-                mnPages--;
-        }
         return true;
     }
     return false;
