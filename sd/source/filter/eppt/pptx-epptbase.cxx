@@ -204,6 +204,8 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
 
     for ( i = 0; i < mnPages; i++ )
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         SAL_INFO("sd.eppt", "call ImplCreateSlide( " << i << " )");
         if ( !CreateSlide( i ) )
             return;
@@ -211,6 +213,8 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
 
     for ( i = 0; i < mnPages; i++ )
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         if ( !CreateNotes( i ) )
             return;
     }
@@ -234,6 +238,11 @@ bool PPTWriterBase::InitSOIface()
         if ( !GetPageByIndex( 0, NORMAL ) )
             break;
 
+        SdDrawDocument* pDoc = mXModel->GetDoc();
+        if (pDoc && pDoc->HasCanvasPage())
+            mbHasCanvasPage = true;
+        else
+            mbHasCanvasPage = false;
         return true;
     }
     return false;

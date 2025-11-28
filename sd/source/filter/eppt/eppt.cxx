@@ -101,7 +101,7 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
     if ( mXStatusIndicator.is() )
     {
         mbStatusIndicator = true;
-        mnStatMaxValue = ( mnPages + mnMasterPages ) * 5;
+        mnStatMaxValue = ( mnPages + mnMasterPages - (2 * static_cast<int>(mbHasCanvasPage)) ) * 5;
         mXStatusIndicator->start( u"PowerPoint Export"_ustr, mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
     }
 
@@ -707,6 +707,8 @@ bool PPTWriter::ImplCreateDocument()
 
     for ( i = 0; i < mnPages; i++ )
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, mpStrm->Tell() );
         mpStrm->WriteUInt32( 0 )                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
@@ -732,6 +734,8 @@ bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->OpenContainer( EPP_SlideListWithText, 2 );   // animation information for the notes
     for( i = 0; i < mnPages; i++ )
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTES_PERSIST_KEY | i, mpStrm->Tell() );
         mpStrm->WriteUInt32( 0 )
@@ -1313,6 +1317,8 @@ void PPTWriter::ImplWriteAtomEnding()
     // write slide persists -> we have to write a valid value into EPP_SlidePersistAtome too
     for ( i = 0; i < mnPages; i++ )
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Slide | i );
         if ( nOfs )
         {
@@ -1323,6 +1329,8 @@ void PPTWriter::ImplWriteAtomEnding()
     // write Notes persists
     for ( i = 0; i < mnPages; i++ )
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Notes | i );
         if ( nOfs )
         {
