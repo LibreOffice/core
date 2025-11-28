@@ -785,9 +785,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82492)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("sdt-header.docx");
     saveAndReload(TestFilter::DOCX);
     // Problem was that w:sdt elements in headers were lost on import.
@@ -798,9 +795,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtCompanyMultipara)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("sdt-company-multipara.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -883,9 +877,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf66401)
 
 CPPUNIT_TEST_FIXTURE(Test, testDateFieldInShape)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this](bool bIsExport = false) {
     // This was crashed on export.
         if (bIsExport)
@@ -929,9 +920,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFieldInShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testDateFieldAtEndOfParagraph)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this](bool bIsExport = false) {
         // Additional line end was added by import and it was crashed on export
         if (bIsExport)
