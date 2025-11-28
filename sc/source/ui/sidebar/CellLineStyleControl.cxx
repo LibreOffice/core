@@ -177,47 +177,52 @@ void CellLineStylePopup::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_u
 
     //FIXME: fully for new border line possibilities
 
-    if(out == SvxBorderLineWidth::Hairline && in == 0 && dis == 0)  //1
+    if (out == SvxBorderLineWidth::Hairline && in == 0 && dis == 0)
     {
         mxCellLineStyleValueSet->SetSelItem(1);
     }
-    else if(out == SvxBorderLineWidth::VeryThin && in == 0 && dis == 0) //2
+    else if (out == SvxBorderLineWidth::VeryThin && in == 0 && dis == 0)
     {
         mxCellLineStyleValueSet->SetSelItem(2);
     }
-    else if(out == SvxBorderLineWidth::Thin && in == 0 && dis == 0) //3
+    else if (out == SvxBorderLineWidth::Thin && in == 0 && dis == 0)
     {
         mxCellLineStyleValueSet->SetSelItem(3);
     }
-    else if(out == SvxBorderLineWidth::Medium && in == 0 && dis == 0) //4
+    else if (out == SvxBorderLineWidth::Medium && in == 0 && dis == 0)
     {
         mxCellLineStyleValueSet->SetSelItem(4);
     }
-    else if(out == SvxBorderLineWidth::Thick && in == 0 && dis == 0) //5
+    else if (out == SvxBorderLineWidth::Thick && in == 0 && dis == 0)
     {
         mxCellLineStyleValueSet->SetSelItem(5);
     }
-    else if(out == SvxBorderLineWidth::ExtraThick && in == 0 && dis == 0) //6
+    else if (out == SvxBorderLineWidth::ExtraThick && in == 0 && dis == 0)
     {
         mxCellLineStyleValueSet->SetSelItem(6);
     }
-    else if(out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Thin) //7
+    else if (out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline
+             && dis == SvxBorderLineWidth::Thin)
     {
         mxCellLineStyleValueSet->SetSelItem(7);
     }
-    else if(out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Medium) //8
+    else if (out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline
+             && dis == SvxBorderLineWidth::Medium)
     {
         mxCellLineStyleValueSet->SetSelItem(8);
     }
-    else if(out == SvxBorderLineWidth::Thin && in == SvxBorderLineWidth::Medium && dis == SvxBorderLineWidth::Thin) //9
+    else if (out == SvxBorderLineWidth::Thin && in == SvxBorderLineWidth::Medium
+             && dis == SvxBorderLineWidth::Thin)
     {
         mxCellLineStyleValueSet->SetSelItem(9);
     }
-    else if(out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Medium) //10
+    else if (out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Hairline
+             && dis == SvxBorderLineWidth::Medium)
     {
         mxCellLineStyleValueSet->SetSelItem(10);
     }
-    else if(out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Medium && dis == SvxBorderLineWidth::Medium) //11
+    else if (out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Medium
+             && dis == SvxBorderLineWidth::Medium)
     {
         mxCellLineStyleValueSet->SetSelItem(11);
     }
