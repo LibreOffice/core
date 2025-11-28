@@ -1396,6 +1396,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidBuAutoNumEnumValue)
     saveAndReload(TestFilter::PPTX);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidCxAndCyAttribute)
+{
+    createSdImpressDoc("odp/invalidCxAndCyAttribute.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 4
+    // - validation error in OOXML export: Errors: 4
+    saveAndReload(TestFilter::PPTX);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidPrstDashEnumValue)
 {
     createSdImpressDoc("odp/invalidPrstDashEnumValue.odp");
