@@ -186,10 +186,11 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             }
         }
     }
-    else if (!comphelper::LibreOfficeKit::isActive())
+    else
     {
-        // TODO: enable in LOK, it contains synchronous error window without LOKNotifier
-        SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError() );
+        SdGRFFilter::HandleGraphicFilterError(nError,
+                                              GraphicFilter::GetGraphicFilter().GetLastError(),
+                                              mpWindow ? mpWindow->GetFrameWeld() : nullptr);
     }
 }
 

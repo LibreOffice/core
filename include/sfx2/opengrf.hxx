@@ -22,6 +22,7 @@
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <comphelper/errcode.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star::ui::dialogs { class XFilePickerControlAccess; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
@@ -58,6 +59,7 @@ public:
     void                    SetDetectedFilter(const OUString&);
 
     css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const & GetFilePickerControlAccess() const;
+    static TranslateId SvxOpenGrfErr2ResId(ErrCode err);
 
 private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;
