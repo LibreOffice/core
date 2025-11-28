@@ -896,7 +896,7 @@ sc::ExternalDataSource ScDataProviderDlg::getDataSource(ScDocument* pDoc)
 {
     sc::ExternalDataSource aSource(mxEditURL->get_text(), mxProviderList->get_active_id(), pDoc);
 
-    aSource.setID(mxProviderList->get_active_id());
+    aSource.setID(mxEditID->get_text());
     return aSource;
 }
 
