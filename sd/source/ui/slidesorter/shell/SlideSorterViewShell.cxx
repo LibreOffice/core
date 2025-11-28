@@ -765,7 +765,10 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
     SyncPageSelectionToDocument(xSelection);
 
     // Moves selected pages after page -1
-    GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
+    if (!GetDoc()->HasCanvasPage())
+        GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
+    else
+        GetDoc()->MoveSelectedPages(1);
 
     PostMoveSlidesActions(xSelection);
 }
@@ -799,11 +802,18 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
     }
 
     if (GetDoc()->HasCanvasPage())
-        if (firstSelectedPageNo == GetDoc()->GetSdPageCount(PageKind::Standard) - 1)
+    {
+        if (firstSelectedPageNo == 0)
+        {
+            rSet.DisableItem( SID_MOVE_PAGE_LAST );
+            rSet.DisableItem( SID_MOVE_PAGE_DOWN );
+        }
+        if (firstSelectedPageNo == 1)
         {
             rSet.DisableItem( SID_MOVE_PAGE_FIRST );
             rSet.DisableItem( SID_MOVE_PAGE_UP );
         }
+    }
 }
 
 void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
@@ -825,9 +835,8 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
 
     if (firstSelectedPageNo == 0)
         return;
-
     if (GetDoc()->HasCanvasPage())
-        if (firstSelectedPageNo == GetDoc()->GetSdPageCount(PageKind::Standard) - 1)
+        if (firstSelectedPageNo == 1)
             return;
 
     // Move pages before firstSelectedPageNo - 1 (so after firstSelectedPageNo - 2),
@@ -860,7 +869,7 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     if (lastSelectedPageNo == nNoOfPages - 1)
         return;
     if (GetDoc()->HasCanvasPage())
-        if (lastSelectedPageNo == nNoOfPages - 2)
+        if (lastSelectedPageNo == 0)
             return;
 
     // Move to position after lastSelectedPageNo
@@ -888,10 +897,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
 
     // Move to position after last page No (=Number of pages - 1)
-    if (!GetDoc()->HasCanvasPage())
-        GetDoc()->MoveSelectedPages( nNoOfPages - 1 );
-    else
-        GetDoc()->MoveSelectedPages( nNoOfPages - 2 );
+    GetDoc()->MoveSelectedPages( nNoOfPages - 1 );
 
     PostMoveSlidesActions(xSelection);
 }
@@ -922,14 +928,6 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
     {
         rSet.DisableItem( SID_MOVE_PAGE_LAST );
         rSet.DisableItem( SID_MOVE_PAGE_DOWN );
-    }
-    if (GetDoc()->HasCanvasPage())
-    {
-        if (lastSelectedPageNo == nNoOfPages - 2)
-        {
-            rSet.DisableItem( SID_MOVE_PAGE_LAST );
-            rSet.DisableItem( SID_MOVE_PAGE_DOWN );
-        }
     }
 }
 

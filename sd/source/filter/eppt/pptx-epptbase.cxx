@@ -241,13 +241,6 @@ bool PPTWriterBase::InitSOIface()
         if ( !GetPageByIndex( 0, NORMAL ) )
             break;
 
-        SdXImpressDocument* pModel = comphelper::getFromUnoTunnel<SdXImpressDocument>(mXModel);
-        if (pModel)
-        {
-            SdDrawDocument* pDoc = pModel->GetDoc();
-            if (pDoc && pDoc->HasCanvasPage())
-                mnPages--;
-        }
         return true;
     }
     return false;
