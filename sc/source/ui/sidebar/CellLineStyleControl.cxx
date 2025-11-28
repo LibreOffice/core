@@ -46,26 +46,26 @@ CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& r
     mxCellLineStyleValueSet->SetStyle(mxCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
 
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
-    OUString aStr[CELL_LINE_STYLE_ENTRIES];
-    aStr[0] = ScResId(STR_BORDER_HAIRLINE).replaceFirst("%s", rI18nHelper.GetNum(5, 2));
-    aStr[1] = ScResId(STR_BORDER_VERY_THIN).replaceFirst("%s", rI18nHelper.GetNum(50, 2));
-    aStr[2] = ScResId(STR_BORDER_THIN).replaceFirst("%s", rI18nHelper.GetNum(75, 2));
-    aStr[3] = ScResId(STR_BORDER_MEDIUM).replaceFirst("%s", rI18nHelper.GetNum(150, 2));
-    aStr[4] = ScResId(STR_BORDER_THICK).replaceFirst("%s", rI18nHelper.GetNum(225, 2));
-    aStr[5] = ScResId(STR_BORDER_EXTRA_THICK).replaceFirst("%s", rI18nHelper.GetNum(450, 2));
+    const std::vector<OUString> aStrings = {
+        ScResId(STR_BORDER_HAIRLINE).replaceFirst("%s", rI18nHelper.GetNum(5, 2)),
+        ScResId(STR_BORDER_VERY_THIN).replaceFirst("%s", rI18nHelper.GetNum(50, 2)),
+        ScResId(STR_BORDER_THIN).replaceFirst("%s", rI18nHelper.GetNum(75, 2)),
+        ScResId(STR_BORDER_MEDIUM).replaceFirst("%s", rI18nHelper.GetNum(150, 2)),
+        ScResId(STR_BORDER_THICK).replaceFirst("%s", rI18nHelper.GetNum(225, 2)),
+        ScResId(STR_BORDER_EXTRA_THICK).replaceFirst("%s", rI18nHelper.GetNum(450, 2)),
+        // Numbers in pt are the total width of the double line (inner + outer + distance)
+        ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(110, 2)),
+        ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(235, 2)),
+        ScResId(STR_BORDER_DOUBLE_2).replaceFirst("%s", rI18nHelper.GetNum(300, 2)),
+        ScResId(STR_BORDER_DOUBLE_3).replaceFirst("%s", rI18nHelper.GetNum(305, 2)),
+        ScResId(STR_BORDER_DOUBLE_4).replaceFirst("%s", rI18nHelper.GetNum(450, 2))
+    };
+    mxCellLineStyleValueSet->SetUnit(aStrings);
 
-    // Numbers in pt are the total width of the double line (inner + outer + distance)
-    aStr[6] = ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(110, 2));
-    aStr[7] = ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(235, 2));
-    aStr[8] = ScResId(STR_BORDER_DOUBLE_2).replaceFirst("%s", rI18nHelper.GetNum(300, 2));
-    aStr[9] = ScResId(STR_BORDER_DOUBLE_3).replaceFirst("%s", rI18nHelper.GetNum(305, 2));
-    aStr[10] = ScResId(STR_BORDER_DOUBLE_4).replaceFirst("%s", rI18nHelper.GetNum(450, 2));
-    mxCellLineStyleValueSet->SetUnit(&aStr[0]);
-
-    for (sal_uInt16 i = 1; i <= CELL_LINE_STYLE_ENTRIES; ++i)
+    for (size_t i = 1; i <= aStrings.size(); ++i)
     {
         mxCellLineStyleValueSet->InsertItem(i);
-        mxCellLineStyleValueSet->SetItemText(i, aStr[i-1]);
+        mxCellLineStyleValueSet->SetItemText(i, aStrings.at(i-1));
     }
 
     SetAllNoSel();

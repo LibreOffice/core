@@ -30,13 +30,13 @@ class CellLineStyleValueSet : public ValueSet
 private:
     tools::Long mnMaxTextWidth;
     sal_uInt16 nSelItem;
-    OUString maStrUnit[CELL_LINE_STYLE_ENTRIES];
+    std::vector<OUString> maStrUnit;
 
 public:
     CellLineStyleValueSet();
     virtual ~CellLineStyleValueSet() override;
 
-    void SetUnit(const OUString* str);
+    void SetUnit(const std::vector<OUString>& rStrings);
     void SetSelItem(sal_uInt16 nSel);
     tools::Long GetMaxTextWidth(const vcl::RenderContext* pDev);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

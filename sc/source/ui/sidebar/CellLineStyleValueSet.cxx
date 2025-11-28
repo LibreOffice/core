@@ -49,12 +49,10 @@ void CellLineStyleValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetColor(Application::GetSettings().GetStyleSettings().GetListBoxWindowBackgroundColor());
 }
 
-void CellLineStyleValueSet::SetUnit(const OUString* str)
+void CellLineStyleValueSet::SetUnit(const std::vector<OUString>& rStrings)
 {
-    for (int i = 0; i < CELL_LINE_STYLE_ENTRIES; ++i)
-    {
-        maStrUnit[i] = str[i];
-    }
+    assert(rStrings.size() == CELL_LINE_STYLE_ENTRIES);
+    maStrUnit = rStrings;
 }
 
 void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
@@ -77,9 +75,9 @@ tools::Long CellLineStyleValueSet::GetMaxTextWidth(const vcl::RenderContext* pDe
     if (mnMaxTextWidth > 0)
         return mnMaxTextWidth;
 
-    for (int i = 0; i < CELL_LINE_STYLE_ENTRIES; ++i)
+    for (const OUString& rStr : maStrUnit)
     {
-        mnMaxTextWidth = std::max(pDev->GetTextWidth(maStrUnit[i]), mnMaxTextWidth);
+        mnMaxTextWidth = std::max(pDev->GetTextWidth(rStr), mnMaxTextWidth);
     }
     return mnMaxTextWidth;
 }
@@ -123,7 +121,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     tools::Long nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     tools::Long nTRX = aBLPos.X() + nRectWidth - nTextWidth - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     Point aStart(aBLPos.X() + nRectWidth - nTextWidth - 5 , aBLPos.Y() + nRectHeight/6);
-    pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set DrawTextFlags::EndEllipsis here, or the text will disappear
+    pDev->DrawText(aStart, maStrUnit.at(nItemId - 1)); //can't set DrawTextFlags::EndEllipsis here, or the text will disappear
 
     //draw line
     if( nSelItem ==  nItemId )
