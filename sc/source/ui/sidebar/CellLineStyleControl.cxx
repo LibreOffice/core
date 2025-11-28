@@ -45,11 +45,6 @@ CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& r
 
     mxCellLineStyleValueSet->SetStyle(mxCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
 
-    for(sal_uInt16 i = 1 ; i <= CELL_LINE_STYLE_ENTRIES ; i++)
-    {
-        mxCellLineStyleValueSet->InsertItem(i);
-    }
-
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
     OUString aStr[CELL_LINE_STYLE_ENTRIES];
     aStr[0] = ScResId(STR_BORDER_HAIRLINE).replaceFirst("%s", rI18nHelper.GetNum(5, 2));
@@ -69,6 +64,7 @@ CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& r
 
     for (sal_uInt16 i = 1; i <= CELL_LINE_STYLE_ENTRIES; ++i)
     {
+        mxCellLineStyleValueSet->InsertItem(i);
         mxCellLineStyleValueSet->SetItemText(i, aStr[i-1]);
     }
 
