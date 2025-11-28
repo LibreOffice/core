@@ -24,6 +24,7 @@
 #include <o3tl/untaint.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/numformat.hxx>
 #include <poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -914,6 +915,14 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
+        }
+        else
+        {
+            OUString aErrMsg(ScResId(STR_INVALIDTABNAME));
+            std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                GetDocumentShell()->GetFrame()->GetFrameWeld(), VclMessageType::Warning,
+                VclButtonsType::Ok, aErrMsg));
+            xBox->runAsync(xBox, [](sal_uInt32) {});
         }
     }
 
