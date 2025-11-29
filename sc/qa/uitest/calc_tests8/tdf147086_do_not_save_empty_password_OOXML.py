@@ -31,7 +31,7 @@ class tdf147086(UITestCase):
                     xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                     xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
                     xFileTypeCombo = xSaveDialog.getChild("file_type")
-                    select_by_text(xFileTypeCombo, "Excel 2007–365 (.xlsx)")
+                    select_by_text(xFileTypeCombo, "Excel 2010–365 Spreadsheet (.xlsx)")
                     xPasswordCheckButton = xSaveDialog.getChild("password")
                     xPasswordCheckButton.executeAction("CLICK", tuple())
                     xOpen = xSaveDialog.getChild("open")
