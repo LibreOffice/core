@@ -356,7 +356,7 @@ SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
     // Record which page descriptions in this document used this page desc as their follow
     for (size_t i = 0; i < m_rDoc.GetPageDescCnt(); ++i)
     {
-        if (const auto rPageDesc = m_rDoc.GetPageDesc(i); rPageDesc.GetFollow() == &_aOld)
+        if (const SwPageDesc& rPageDesc = m_rDoc.GetPageDesc(i); rPageDesc.GetFollow() == &_aOld)
         {
             m_aPageDescsThisFollowed.emplace_back(rPageDesc.GetName());
         }
