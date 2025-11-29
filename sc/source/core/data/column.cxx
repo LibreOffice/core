@@ -95,9 +95,9 @@ ScColumn::ScColumn(ScSheetLimits const & rSheetLimits) :
     maCells.resize(rSheetLimits.GetMaxRowCount());
 }
 
-ScColumn::~ScColumn() COVERITY_NOEXCEPT_FALSE
+ScColumn::~ScColumn()
 {
-    FreeAll();
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyAttrArray)
