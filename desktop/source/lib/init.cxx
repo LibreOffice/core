@@ -356,7 +356,7 @@ constexpr ExtensionMap aCalcExtensionMap[] =
     { "xhtml", u"XHTML Calc File"_ustr },
     { "xls",   u"MS Excel 97"_ustr },
     { "xlsm",  u"Calc MS Excel 2007 VBA XML"_ustr },
-    { "xlsx",  u"Calc MS Excel 2007 XML"_ustr },
+    { "xlsx",  u"Calc Office Open XML"_ustr },
     { "png",   u"calc_png_Export"_ustr },
 };
 
