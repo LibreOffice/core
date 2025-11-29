@@ -862,7 +862,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
     CalcPPT();
 }
 
-ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
+ScViewData::~ScViewData()
 {
     KillEditView();
 }

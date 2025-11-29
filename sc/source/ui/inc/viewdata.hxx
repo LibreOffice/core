@@ -359,7 +359,7 @@ private:
 public:
     ScViewData( ScDocShell& rDocSh, ScTabViewShell* pViewSh );
     ScViewData( ScDocument& rDoc );
-    ~ScViewData() COVERITY_NOEXCEPT_FALSE;
+    ~ScViewData();
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDocFunc&      GetDocFunc() const;

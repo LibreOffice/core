@@ -2961,7 +2961,7 @@ public:
         }
     }
 
-    ~ClearableClipRegion() COVERITY_NOEXCEPT_FALSE
+    ~ClearableClipRegion()
     {
         // Pop() or SetClipRegion() must only be called in case bClip was true
         // in the ctor, and only then mpDev is set.

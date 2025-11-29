@@ -123,7 +123,7 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
     {
         public:
             explicit    PrepareSaveGuard( ScDocShell & rDocShell );
-                        ~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE;
+                        ~PrepareSaveGuard();
         private:
                         ScDocShell & mrDocShell;
     };
