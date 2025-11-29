@@ -494,6 +494,11 @@ SwUndoCopyHeaderFooter::SwUndoCopyHeaderFooter(SwDoc& rDoc, SwNode& rSttNd, cons
     : SwUndo(SwUndoId::COPY_HEADER_FOOTER, rDoc)
     , m_aOff(rSttNd.GetIndex())
     , m_aFmtName(rFmtName)
+    , m_bIsHeader(false)
+    , m_bIsMaster(false)
+    , m_bIsLeft(false)
+    , m_bIsFirstMaster(false)
+    , m_bIsFirstLeft(false)
 {
 }
 
