@@ -98,17 +98,7 @@ sal_Int64 GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
     sal_Int64 nVal = rField.get_value(FieldUnit::MM_100TH);
     // avoid rounding issues
     const sal_Int64 nSizeMask = 0xffffffffff000000LL;
-    bool bRoundBefore = true;
-    if( nVal >= 0 )
-    {
-        if( (nVal & nSizeMask) == 0 )
-            bRoundBefore = false;
-    }
-    else
-    {
-        if( ((-nVal) & nSizeMask ) == 0 )
-            bRoundBefore = false;
-    }
+    const bool bRoundBefore = (std::abs(nVal) & nSizeMask) != 0;
     if( bRoundBefore )
         nVal = rField.denormalize( nVal );
     sal_Int64 nUnitVal = OutputDevice::LogicToLogic(nVal, MapUnit::Map100thMM, eUnit);
