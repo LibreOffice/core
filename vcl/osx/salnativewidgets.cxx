@@ -174,8 +174,11 @@ bool AquaSalGraphics::isNativeControlSupported(ControlType nType, ControlPart nP
                 || nPart == ControlPart::SubEdit)
                 return true;
             break;
-        case ControlType::TabItem:
         case ControlType::TabPane:
+            if (nPart == ControlPart::TabPaneWithHeader)
+                return true;
+            [[fallthrough]];
+        case ControlType::TabItem:
         case ControlType::TabBody:
             if (nPart == ControlPart::Entire || nPart == ControlPart::TabsDrawRtl || nPart == ControlPart::HasBackgroundTexture)
                 return true;
