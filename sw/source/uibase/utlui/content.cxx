@@ -7240,8 +7240,8 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             }
             else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
             {
-                size_t nSectionFormatCount = m_pActiveShell->GetSectionFormatCount();
-                for (size_t i = 0; i < nSectionFormatCount; ++i)
+                for (size_t i = 0, nSectionFormatCount = m_pActiveShell->GetSectionFormatCount();
+                     i < nSectionFormatCount; ++i)
                 {
                     const SwSectionFormat& rSectionFormat = m_pActiveShell->GetSectionFormat(i);
                     if (!rSectionFormat.IsInNodesArr())
@@ -7249,9 +7249,25 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                     const SwSection* pSection = rSectionFormat.GetSection();
                     if (!pSection)
                         continue;
-                    if (pCnt->GetName() == pSection->GetSectionName())
+                    if (nType == ContentTypeId::INDEX)
                     {
-                        BringTypesWithFlowFramesToAttention({rSectionFormat.GetSectionNode()});
+                        if (const SwTOXBase* pTOXBase = pSection->GetTOXBase())
+                        {
+                            assert(dynamic_cast<SwTOXBaseContent*>(pCnt));
+                            const SwTOXBaseContent* pTOXBaseCnt
+                                = static_cast<const SwTOXBaseContent*>(pCnt);
+                            if (pTOXBaseCnt->GetTOXBase() == pTOXBase)
+                            {
+                                BringTypesWithFlowFramesToAttention(
+                                    { rSectionFormat.GetSectionNode() });
+                                break;
+                            }
+                        }
+                    }
+                    // nType == ContentTypeId::REGION
+                    else if (pSection->GetSectionName() == pCnt->GetName())
+                    {
+                        BringTypesWithFlowFramesToAttention({ rSectionFormat.GetSectionNode() });
                         break;
                     }
                 }
