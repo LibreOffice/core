@@ -290,7 +290,7 @@ friend class sc::FormulaGroupAreaListener;
 public:
                 ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
-                ~ScTable() COVERITY_NOEXCEPT_FALSE;
+                ~ScTable();
                 ScTable(const ScTable&) = delete;
     ScTable&    operator=(const ScTable&) = delete;
 
@@ -1212,6 +1212,8 @@ public:
     }
 
 private:
+
+    void ImplDestroy();
 
     void FillFormulaVertical(
         const ScFormulaCell& rSrcCell,

@@ -318,7 +318,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
         aCol[k].Init( k, nTab, rDocument, true );
 }
 
-ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
+void ScTable::ImplDestroy()
 {
     if (!rDocument.IsInDtorClear())
     {
@@ -345,6 +345,11 @@ ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
     mpRangeName.reset();
     pDBDataNoName.reset();
     DestroySortCollator();
+}
+
+ScTable::~ScTable()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 sal_Int64 ScTable::GetHashCode() const
