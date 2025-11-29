@@ -6499,15 +6499,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 break;
                 case EditEntryMode::UPD_IDX:
                 {
-                    rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                    rtl::Reference< SwXDocumentIndexes> xIdxAcc = xModel->getSwDocumentIndexes();
-                    if(xIdxAcc.is() && xIdxAcc->hasByName(pBase->GetTOXName().toString()))
-                    {
-                        Any aIdx = xIdxAcc->getByName(pBase->GetTOXName().toString());
-                        Reference< XDocumentIndex> xIdx;
-                        if(aIdx >>= xIdx)
-                            xIdx->update();
-                    }
+                    m_pActiveShell->UpdateTableOf(*pBase);
                 }
                 break;
                 default: break;
