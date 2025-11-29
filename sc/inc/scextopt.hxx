@@ -30,6 +30,7 @@ struct ScExtDocSettings
     double              mfTabBarWidth;      ///< Width of the tabbar, relative to frame window width (0.0 ... 1.0).
     sal_uInt32          mnLinkCnt;          ///< Recursive counter for loading external documents.
     SCTAB               mnDisplTab;         ///< Index of displayed sheet.
+    std::optional<sal_Int16> moLowestEdited; ///< Oldest Excel version that edited this document.
 
     explicit            ScExtDocSettings();
 };

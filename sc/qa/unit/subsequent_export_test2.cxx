@@ -127,6 +127,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testMatrixMultiplicationXLSX)
 {
     createScDoc("xlsx/matrix-multiplication.xlsx");
 
+    // tdf#165180: should be recognized as a 2007 XLSX format when loaded (and resaved...)
+    SfxMedium* pMedium = getScDocShell()->GetMedium();
+    SfxFilterMatcher aMatcher(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+    std::shared_ptr<const SfxFilter> pFilter;
+    aMatcher.DetectFilter(*pMedium, pFilter);
+    CPPUNIT_ASSERT_EQUAL(u"Calc MS Excel 2007 XML"_ustr, pFilter->GetFilterName());
+
     save(TestFilter::XLSX);
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
@@ -141,6 +148,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testMatrixMultiplicationXLSX)
 
     // make sure that the CellFormulaType is array.
     CPPUNIT_ASSERT_EQUAL(u"array"_ustr, CellFormulaType);
+
+    // tdf#165180: should be recognizable as a 2007 XLSX format when saved
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    // lowestEdited = 4 needs to be round-tripped in order to detect as a 2007 ECMA_376_1ST_EDITION
+    assertXPath(pWorkbook, "/x:workbook/x:fileVersion", "lowestEdited", u"4");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringXLSX)
@@ -1418,7 +1430,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf123645XLSX)
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf125173XLSX)
 {
     createScDoc("ods/text_box_hyperlink.ods");
-    save(TestFilter::XLSX);
+    saveAndReload(TestFilter::XLSX);
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
@@ -1430,6 +1442,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf125173XLSX)
                 u"http://www.google.com/");
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
                 u"External");
+
+    // tdf#137883: should be recognized as a 2010+ XLSX format when reloaded (and resaved...)
+    SfxMedium* pMedium = getScDocShell()->GetMedium();
+    SfxFilterMatcher aMatcher(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+    std::shared_ptr<const SfxFilter> pFilter;
+    aMatcher.DetectFilter(*pMedium, pFilter);
+    CPPUNIT_ASSERT_EQUAL(u"Calc Office Open XML"_ustr, pFilter->GetFilterName());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf79972XLSX)

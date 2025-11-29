@@ -37,7 +37,9 @@
 #include <oox/token/tokens.hxx>
 #include <unitconverter.hxx>
 #include <biffhelper.hxx>
+#include <document.hxx>
 #include <docuno.hxx>
+#include <scextopt.hxx>
 
 namespace oox::xls {
 
@@ -106,6 +108,13 @@ CalcSettingsModel::CalcSettingsModel() :
 WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
+    if (getScDocument().GetExtDocOptions())
+        maExtDocOptions = *getScDocument().GetExtDocOptions();
+}
+
+WorkbookSettings::~WorkbookSettings()
+{
+    getScDocument().SetExtDocOptions(std::make_unique<ScExtDocOptions>(maExtDocOptions));
 }
 
 void WorkbookSettings::importFileSharing( const AttributeList& rAttribs )
@@ -117,6 +126,13 @@ void WorkbookSettings::importFileSharing( const AttributeList& rAttribs )
     maFileSharing.mnSpinCount         = rAttribs.getUnsigned( XML_spinCount, 0);
     maFileSharing.mnPasswordHash      = oox::core::CodecHelper::getPasswordHash( rAttribs, XML_reservationPassword );
     maFileSharing.mbRecommendReadOnly = rAttribs.getBool( XML_readOnlyRecommended, false );
+}
+
+void WorkbookSettings::importFileVersion(const AttributeList& rAttribs)
+{
+    const sal_Int16 nLow = rAttribs.getInteger(XML_lowestEdited, -1);
+    if (nLow != -1)
+        maExtDocOptions.GetDocSettings().moLowestEdited = nLow;
 }
 
 void WorkbookSettings::importWorkbookPr( const AttributeList& rAttribs )

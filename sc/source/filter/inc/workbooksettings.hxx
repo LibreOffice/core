@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <scextopt.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox { class AttributeList; }
@@ -81,9 +82,12 @@ class WorkbookSettings : public WorkbookHelper
 {
 public:
     explicit            WorkbookSettings( const WorkbookHelper& rHelper );
+    ~WorkbookSettings();
 
     /** Imports the fileSharing element containing write protection settings. */
     void                importFileSharing( const AttributeList& rAttribs );
+    /** Imports the fileVersion element containing last-edited-by settings. */
+    void                importFileVersion( const AttributeList& rAttribs );
     /** Imports the workbookPr element containing global workbook settings. */
     void                importWorkbookPr( const AttributeList& rAttribs );
     /** Imports the calcPr element containing workbook calculation settings. */
@@ -112,6 +116,7 @@ private:
     FileSharingModel    maFileSharing;
     WorkbookSettingsModel maBookSettings;
     CalcSettingsModel   maCalcSettings;
+    ScExtDocOptions maExtDocOptions;
 };
 
 } // namespace oox::xls
