@@ -8,8 +8,11 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from libreoffice.calc.document import get_cell_by_position
+
+import os
 
 class DataProvider(UITestCase):
 
@@ -38,5 +41,40 @@ class DataProvider(UITestCase):
                 with self.ui_test.execute_blocking_action(
                         xApply.executeAction, args=('CLICK', ()), close_button="close") as dialog:
                     pass
+
+    def do_import(self, data_format, test_file, identifier, expected_value):
+        with self.ui_test.create_doc_in_start_center("calc") as xDoc:
+
+            # Make a database range on A1:K11 called "TestDB"
+            with self.ui_test.execute_dialog_through_command(".uno:DefineDBName") as xDialog:
+                xName = xDialog.getChild("entry")
+                xName.executeAction("SET", mkPropertyValues({"TEXT": "TestDB"}))
+
+                xRange = xDialog.getChild("assign")
+                xRange.executeAction("SET", mkPropertyValues({"TEXT": "$Sheet1.$A$1:$K$11"}))
+
+            # Set the provider for the range to be the data from the file
+            with self.ui_test.execute_dialog_through_command(".uno:DataProvider") as xDialog:
+                xRange = xDialog.getChild("select_db_range")
+                select_by_text(xRange, "TestDB")
+
+                xFormat = xDialog.getChild("provider_lst")
+                select_by_text(xFormat, data_format)
+
+                xURL = xDialog.getChild("ed_url")
+                xURL.executeAction("SET", mkPropertyValues({"TEXT": test_file}))
+
+                xId = xDialog.getChild("ed_id")
+                xId.executeAction("SET", mkPropertyValues({"TEXT": identifier}))
+
+            # Check that the import updated the A1 cell.
+            self.assertEqual(get_cell_by_position(xDoc, 0, 0, 0).getString(), expected_value)
+
+    def test_html_import(self):
+        # tdf#169077: Without the fix the none of the data gets imported
+        test_file = os.path.join(os.getenv("SRCDIR"),
+                                 "sc", "qa", "unit", "data", "dataprovider", "html",
+                                 "test1.html")
+        self.do_import("HTML", test_file, "//table", "Col1")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
