@@ -535,9 +535,12 @@ namespace basegfx::utils
                     // handle fDistance < 0.0
                     if(rCandidate.isClosed())
                     {
-                        // if fDistance < 0.0 increment with multiple of fLength
-                        sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
-                        fDistance += double(nCount + 1) * fLength;
+                        if (fLength != 0)
+                        {
+                            // if fDistance < 0.0 increment with multiple of fLength
+                            sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
+                            fDistance += double(nCount + 1) * fLength;
+                        }
                     }
                     else
                     {
@@ -551,9 +554,12 @@ namespace basegfx::utils
                     // handle fDistance >= fLength
                     if(rCandidate.isClosed())
                     {
-                        // if fDistance >= fLength decrement with multiple of fLength
-                        sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
-                        fDistance -= static_cast<double>(nCount) * fLength;
+                        if (fLength != 0)
+                        {
+                            // if fDistance >= fLength decrement with multiple of fLength
+                            sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
+                            fDistance -= static_cast<double>(nCount) * fLength;
+                        }
                     }
                     else
                     {
