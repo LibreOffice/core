@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <node oor:name="Calc Office Open XML" oor:op="replace">
-    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED ENCRYPTION PASSWORDTOMODIFY</value></prop>
+    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED ENCRYPTION PASSWORDTOMODIFY SUPPORTSSIGNING</value></prop>
     <prop oor:name="UIComponent"/>
     <prop oor:name="FilterService"><value>com.sun.star.comp.oox.xls.ExcelFilter</value></prop>
     <prop oor:name="UserData"><value>OOXML</value></prop>
@@ -25,6 +25,6 @@
     <prop oor:name="TemplateName"/>
     <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Office Open XML Spreadsheet</value>
+        <value xml:lang="en-US">Excel 2010–365 Spreadsheet</value>
     </prop>
     </node>

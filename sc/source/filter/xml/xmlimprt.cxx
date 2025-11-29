@@ -1789,7 +1789,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
         uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         }));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-            { "FilterName", uno::Any(u"Excel 2007–365"_ustr) },
+            { "FilterName", uno::Any(u"Excel 2010–365 Spreadsheet"_ustr) },
             { "OutputStream", uno::Any(xOutputStream) },
             { "FilterData", uno::Any(aFilterData) }
         }));
