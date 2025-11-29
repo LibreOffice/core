@@ -277,10 +277,10 @@ void setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, O
 
                         if (xProvider.is())
                         {
-                            if (bHasDataPilotSource)
+                            chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider = bHasDataPilotSource ?
+                                    dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xProvider.get()) : nullptr;
+                            if (pPivotTableDataProvider)
                             {
-                                chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
-                                    dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xProvider.get());
                                 pPivotTableDataProvider->setPivotTableName(sDataPilotSource);
                                 xDataReceiver->attachDataProvider(xProvider);
                                 bHasOwnData = !pPivotTableDataProvider->hasPivotTable();
