@@ -399,6 +399,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SW_DLLPUBLIC rtl::Reference<SwXTextSection> getSwTextSectionByName(const OUString& Name);
+    rtl::Reference<SwXTextSection> getSwTextSectionByIndex(sal_Int32 nIndex);
 };
 
 class SwXBookmarks final : public SwCollectionBaseClass,

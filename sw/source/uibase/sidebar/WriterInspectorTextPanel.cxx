@@ -24,6 +24,8 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <unoprnms.hxx>
+#include <unocoll.hxx>
+#include <unosection.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
@@ -692,14 +694,12 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     }
 
     // Collect sections at character position
-    uno::Reference<container::XIndexAccess> xTextSections(pSwTextDocument->getTextSections(),
-                                                          uno::UNO_QUERY);
+    rtl::Reference<SwXTextSections> xTextSections(pSwTextDocument->getSwTextSections());
     for (sal_Int32 i = 0; i < xTextSections->getCount(); ++i)
     {
         svx::sidebar::TreeNode aCurNode;
-        uno::Reference<text::XTextContent> section;
-        xTextSections->getByIndex(i) >>= section;
-        uno::Reference<container::XNamed> xTextSection(section, uno::UNO_QUERY);
+        rtl::Reference<SwXTextSection> section = xTextSections->getSwTextSectionByIndex(i);
+        uno::Reference<container::XNamed> xTextSection(section);
 
         try
         {
@@ -710,7 +710,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                 && xTextRangeCompare->compareRegionStarts(sectionRange, xRange) != -1
                 && xTextRangeCompare->compareRegionEnds(xRange, sectionRange) != -1)
             {
-                aCurNode.sNodeName = xTextSection->getName();
+                aCurNode.sNodeName = section->getName();
                 aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
                 MetadataToTreeNode(xTextSection, aCurNode);

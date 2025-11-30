@@ -1371,6 +1371,11 @@ sal_Int32 SwXTextSections::getCount()
 
 uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 {
+    return Any(css::uno::Reference<css::text::XTextSection>(getSwTextSectionByIndex(nIndex)));
+}
+
+rtl::Reference<SwXTextSection> SwXTextSections::getSwTextSectionByIndex(sal_Int32 nIndex)
+{
     if (nIndex < 0)
         throw IndexOutOfBoundsException();
     size_t nIndex2 = nIndex;
@@ -1383,8 +1388,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         if( !rSectFormats[i]->IsInNodesArr())
             nIndex2++;
         else if (nIndex2 == i)
-            return Any(css::uno::Reference<css::text::XTextSection>(
-                SwXTextSection::CreateXTextSection(rSectFormats[i])));
+            return SwXTextSection::CreateXTextSection(rSectFormats[i]);
     }
     throw IndexOutOfBoundsException();
 }
