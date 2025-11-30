@@ -40,6 +40,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>
 #include <unoidxcoll.hxx>
+#include <unoidx.hxx>
 #include <names.hxx>
 
 using namespace ::com::sun::star;
@@ -107,9 +108,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
         while(n)
         {
             n--;
-            uno::Any aIdx = xIdxs->getByIndex(n);
-            uno::Reference< text::XDocumentIndex >  xIdx;
-            aIdx >>= xIdx;
+            rtl::Reference< SwXDocumentIndex > xIdx = xIdxs->getDocumentIndexByIndex(n);
             xIdx->dispose();
         }
         CreateOrUpdateExample(m_eCurrentTOXType.eType);

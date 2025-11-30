@@ -38,7 +38,7 @@
 
 #include <unocrsr.hxx>
 #include "unorefmark.hxx"
-#include "unoidx.hxx"
+#include <unoidx.hxx>
 #include "unofootnote.hxx"
 #include "unometa.hxx"
 #include "unocontentcontrol.hxx"

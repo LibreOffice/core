@@ -30,10 +30,10 @@
 
 #include <sfx2/Metadatable.hxx>
 
-#include <toxe.hxx>
-#include <unobaseclass.hxx>
+#include "toxe.hxx"
+#include "unobaseclass.hxx"
 #include "unosection.hxx"
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 class SwDoc;
 class SwTOXBaseSection;

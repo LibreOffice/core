@@ -21,6 +21,8 @@
 
 #include "unocoll.hxx"
 
+class SwXDocumentIndex;
+
 class SW_DLLPUBLIC SwXDocumentIndexes final
     : public SwCollectionBaseClass
     , public SwUnoCollection
@@ -56,6 +58,7 @@ public:
         getElementNames() override;
     virtual sal_Bool SAL_CALL hasByName(const OUString& rName) override;
 
+    rtl::Reference< SwXDocumentIndex > getDocumentIndexByIndex(sal_Int32 nIndex);
 };
 
 #endif

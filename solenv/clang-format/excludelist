@@ -11866,12 +11866,14 @@ sw/inc/unocrsrhelper.hxx
 sw/inc/unodraw.hxx
 sw/inc/unofieldcoll.hxx
 sw/inc/unoframe.hxx
+sw/inc/unoidx.hxx
 sw/inc/unoidxcoll.hxx
 sw/inc/unomap.hxx
 sw/inc/unomid.h
 sw/inc/unoparagraph.hxx
 sw/inc/unoredline.hxx
 sw/inc/unoredlines.hxx
+sw/inc/unosection.hxx
 sw/inc/unosett.hxx
 sw/inc/unosrch.hxx
 sw/inc/unostyle.hxx
@@ -12264,12 +12266,10 @@ sw/source/core/inc/unofield.hxx
 sw/source/core/inc/unoflatpara.hxx
 sw/source/core/inc/unofldmid.h
 sw/source/core/inc/unofootnote.hxx
-sw/source/core/inc/unoidx.hxx
 sw/source/core/inc/unometa.hxx
 sw/source/core/inc/unoparaframeenum.hxx
 sw/source/core/inc/unoport.hxx
 sw/source/core/inc/unorefmark.hxx
-sw/source/core/inc/unosection.hxx
 sw/source/core/inc/unotextmarkup.hxx
 sw/source/core/inc/viewimp.hxx
 sw/source/core/inc/wrong.hxx

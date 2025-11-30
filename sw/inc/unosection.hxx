@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <swdllapi.h>
+#include "swdllapi.h"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -31,7 +31,7 @@
 
 #include <sfx2/Metadatable.hxx>
 
-#include <unobaseclass.hxx>
+#include "unobaseclass.hxx"
 
 class SwSectionFormat;
 
