@@ -639,7 +639,7 @@ namespace basegfx::utils
                             }
                         }
 
-                        if(!bDone)
+                        if(!bDone && fEdgeLength != 0)
                         {
                             const double fRelativeInEdge(fDistance / fEdgeLength);
                             aRetval = interpolate(aRetval, aNextPoint, fRelativeInEdge);
