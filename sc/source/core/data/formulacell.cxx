@@ -1486,13 +1486,19 @@ struct TemporaryCellGroupMaker
             mCell->GetDocument().GetRecursionHelper().AddTemporaryGroupCell( mCell );
         }
     }
-    ~TemporaryCellGroupMaker() COVERITY_NOEXCEPT_FALSE
+    ~TemporaryCellGroupMaker()
+    {
+        suppress_fun_call_w_exception(ImplDestroy());
+    }
+    ScFormulaCell* mCell;
+    const bool mEnabled;
+
+private:
+    void ImplDestroy()
     {
         if( mEnabled )
             mCell->GetDocument().GetRecursionHelper().CleanTemporaryGroupCells();
     }
-    ScFormulaCell* mCell;
-    const bool mEnabled;
 };
 
 } // namespace
