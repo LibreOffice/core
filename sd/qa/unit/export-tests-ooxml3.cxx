@@ -1034,9 +1034,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf44223)
     assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Target", u"../media/audio1.wav");
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testtdf169438_invalid_audio_link)
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testtdf169706_invalid_audio_link)
 {
-    createSdImpressDoc("odp/tdf169438_invalid_audio_link.odp");
+    createSdImpressDoc("odp/tdf169706_invalid_audio_link.odp");
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
