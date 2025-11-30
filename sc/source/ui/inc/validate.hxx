@@ -160,6 +160,8 @@ class ScValidationDlg
     bool    EnterRefStatus();
     bool    LeaveRefStatus();
 
+    void    ImplDestroy();
+
 public:
     explicit ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell* pTabViewSh);
     virtual ~ScValidationDlg() override;

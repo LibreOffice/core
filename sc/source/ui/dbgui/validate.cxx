@@ -126,10 +126,15 @@ void ScValidationDlg::EndDialog(int nResponse)
     ScValidationDlgBase::EndDialog(nResponse);
 }
 
-ScValidationDlg::~ScValidationDlg()
+void ScValidationDlg::ImplDestroy()
 {
     if (m_bOwnRefHdlr)
         RemoveRefDlg(false);
+}
+
+ScValidationDlg::~ScValidationDlg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , const ScDocument& rDoc )
