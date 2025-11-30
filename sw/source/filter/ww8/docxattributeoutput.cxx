@@ -9415,8 +9415,11 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
         if ( m_rExport.m_pCurrentPageDesc->GetLandscape( ) )
             attrList->add( FSNS( XML_w, XML_orient ), "landscape" );
 
-        attrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );
-        attrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
+        // Max page dimensions in practice, (2.1.220 Part 1 Section 17.6.13 in [MS-OI29500] says 31680,
+        // but Word can handle about 64k twips
+        const tools::Long nMaxSize = 65500;
+        attrList->add( FSNS( XML_w, XML_w ), OString::number( std::min( nMaxSize, rSize.GetWidth( ) ) ) );
+        attrList->add( FSNS( XML_w, XML_h ), OString::number( std::min( nMaxSize, rSize.GetHeight( ) ) ) );
 
         m_pSerializer->singleElementNS( XML_w, XML_pgSz, attrList );
     }
