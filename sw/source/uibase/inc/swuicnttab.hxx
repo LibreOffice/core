@@ -38,18 +38,18 @@ class SwTOXButton;
 class SwTOXEntryTabPage;
 class SwOneExampleFrame;
 class SwWrtShell;
+class SwXDocumentIndex;
 
 namespace com::sun::star{
     namespace text{
         class XTextSection;
-        class XDocumentIndex;
     }
 }
 
 struct SwIndexSections_Impl
 {
     css::uno::Reference< css::text::XTextSection >    xContainerSection;
-    css::uno::Reference< css::text::XDocumentIndex >    xDocumentIndex;
+    rtl::Reference< SwXDocumentIndex >  xDocumentIndex;
 };
 
 class SwMultiTOXTabDialog final : public SfxTabDialogController

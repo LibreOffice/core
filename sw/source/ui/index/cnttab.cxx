@@ -52,6 +52,7 @@
 #include <fldbas.hxx>
 #include <expfld.hxx>
 #include <unotools.hxx>
+#include <unoidx.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>

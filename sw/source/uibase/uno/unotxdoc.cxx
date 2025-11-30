@@ -1707,6 +1707,17 @@ rtl::Reference< SwXSection > SwXTextDocument::createSection(std::u16string_view 
     return dynamic_cast<SwXSection*>(xTmp.get());
 }
 
+rtl::Reference< SwXDocumentIndex > SwXTextDocument::createDocumentIndex(std::u16string_view rObjectType)
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    const SwServiceType nType = SwXServiceProvider::GetProviderType(rObjectType);
+    assert(nType != SwServiceType::Invalid);
+    auto xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    assert(!xTmp || dynamic_cast<SwXDocumentIndex*>(xTmp.get()));
+    return dynamic_cast<SwXDocumentIndex*>(xTmp.get());
+}
+
 rtl::Reference<SwXFieldMaster> SwXTextDocument::createFieldMaster(
     std::u16string_view rServiceName)
 {

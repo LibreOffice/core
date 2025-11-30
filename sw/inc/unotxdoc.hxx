@@ -120,6 +120,7 @@ class SvXMLEmbeddedObjectHelper;
 class SwXFieldmark;
 class SwXSection;
 class SwXFieldMaster;
+class SwXDocumentIndex;
 class SvNumberFormatsSupplierObj;
 namespace com::sun::star::frame { class XController; }
 
@@ -527,6 +528,7 @@ public:
     rtl::Reference<SwXFieldMaster> createFieldMaster(std::u16string_view sServiceName);
     rtl::Reference<SwXTextField> createTextField(std::u16string_view sServiceName);
     rtl::Reference<SwXFieldmark> createFieldmark(std::u16string_view sServiceName);
+    rtl::Reference<SwXDocumentIndex> createDocumentIndex(std::u16string_view sServiceName);
     /// returns either SwXDocumentIndex or SwXTextSection
     rtl::Reference<SwXSection> createSection(std::u16string_view rObjectType);
     rtl::Reference<SwXDocumentSettings> createDocumentSettings();

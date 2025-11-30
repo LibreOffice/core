@@ -154,8 +154,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
              OUString sIndexTypeName(OUString::createFromAscii( IndexServiceNames[
                     nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
-             m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.set(xModel->createInstance(sIndexTypeName), uno::UNO_QUERY);
-             uno::Reference< text::XTextContent >  xContent = m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex;
+             m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex = xModel->createDocumentIndex(sIndexTypeName);
+             uno::Reference< text::XTextContent >  xContent = static_cast<SwXSection*>(m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.get());
              xCursor->getText()->insertTextContent(xCursor, xContent, false);
         }
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
@@ -167,7 +167,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             }
         }
         // set properties
-        uno::Reference< beans::XPropertySet >  xIdxProps(m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex, uno::UNO_QUERY);
+        rtl::Reference< SwXDocumentIndex >  xIdxProps(m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex);
         uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
         SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
         SwTOIOptions nIdxOptions = rDesc.GetIndexOptions();
