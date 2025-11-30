@@ -1391,11 +1391,18 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 
 uno::Any SwXTextSections::getByName(const OUString& rName)
 {
-    SolarMutexGuard aGuard;
+    rtl::Reference< SwXTextSection > xSect = getSwTextSectionByName(rName);
     uno::Any aRet;
+    aRet <<= uno::Reference< XTextSection >(xSect);
+    return aRet;
+}
+
+rtl::Reference<SwXTextSection> SwXTextSections::getSwTextSectionByName(const OUString& rName)
+{
+    SolarMutexGuard aGuard;
 
     SwSectionFormats& rFormats = GetDoc().GetSections();
-    uno::Reference< XTextSection >  xSect;
+    rtl::Reference< SwXTextSection >  xSect;
     for(size_t i = 0; i < rFormats.size(); ++i)
     {
         SwSectionFormat* pFormat = rFormats[i];
@@ -1403,14 +1410,13 @@ uno::Any SwXTextSections::getByName(const OUString& rName)
             && (rName == pFormat->GetSection()->GetSectionName()))
         {
             xSect = SwXTextSection::CreateXTextSection(pFormat);
-            aRet <<= xSect;
             break;
         }
     }
     if(!xSect.is())
         throw NoSuchElementException();
 
-    return aRet;
+    return xSect;
 }
 
 uno::Sequence< OUString > SwXTextSections::getElementNames()

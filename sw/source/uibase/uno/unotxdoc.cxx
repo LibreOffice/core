@@ -1235,6 +1235,11 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks()
 
 Reference< XNameAccess >  SwXTextDocument::getTextSections()
 {
+    return getSwTextSections();
+}
+
+rtl::Reference< SwXTextSections >  SwXTextDocument::getSwTextSections()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXTextSections.is())

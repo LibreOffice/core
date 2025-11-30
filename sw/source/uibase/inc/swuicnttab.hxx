@@ -39,16 +39,11 @@ class SwTOXEntryTabPage;
 class SwOneExampleFrame;
 class SwWrtShell;
 class SwXDocumentIndex;
-
-namespace com::sun::star{
-    namespace text{
-        class XTextSection;
-    }
-}
+class SwXTextSection;
 
 struct SwIndexSections_Impl
 {
-    css::uno::Reference< css::text::XTextSection >    xContainerSection;
+    rtl::Reference< SwXTextSection >    xContainerSection;
     rtl::Reference< SwXDocumentIndex >  xDocumentIndex;
 };
 

@@ -94,14 +94,14 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
         if( xDoc )
             xDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );
 
-        uno::Reference< container::XNameAccess >  xSections =
-                                        xDoc->getTextSections();
+        rtl::Reference< SwXTextSections > xSections =
+                                        xDoc->getSwTextSections();
 
         for(int i = 0; i < 7; ++i )
         {
             OUString sTmp = "IndexSection_" + OUString::number(i);
-            uno::Any aSection = xSections->getByName( sTmp );
-            aSection >>= m_vTypeData[i].m_oIndexSections->xContainerSection;
+            m_vTypeData[i].m_oIndexSections->xContainerSection =
+                    xSections->getSwTextSectionByName( sTmp );
         }
         rtl::Reference< SwXDocumentIndexes >  xIdxs = xDoc->getSwDocumentIndexes();
         int n = xIdxs->getCount();
@@ -160,7 +160,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         }
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
         {
-            uno::Reference< beans::XPropertySet >  xSectPr(m_vTypeData[i].m_oIndexSections->xContainerSection, uno::UNO_QUERY);
+            rtl::Reference< SwXTextSection >  xSectPr(m_vTypeData[i].m_oIndexSections->xContainerSection);
             if(xSectPr.is())
             {
                 xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, Any(i == nTOXIndex));
