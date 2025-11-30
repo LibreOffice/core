@@ -1347,13 +1347,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
     CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSizeImport)
+CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSize)
 {
-    createSwDoc("tdf142693_hugePaperSizeImport.docx");
+    createSwDoc("tdf142693_hugePaperSize.docx");
+
+    // Verify that original page size is imported as is, since Writer can handle
+    // large page sizes
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Width (mm) ", sal_Int32(1594),
+                                 getProperty<sal_Int32>(xPageStyle, u"Width"_ustr) / 100);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(1841),
+                                 getProperty<sal_Int32>(xPageStyle, u"Height"_ustr) / 100);
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", u"90369");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", u"104372");
+    // Verify that exported page size is limited to conform to max page dimensions
+    // Word can handle in practice, which is about 64k twips (as opposed to 31680 in [MS-OI29500])
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", u"65500");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", u"65500");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
