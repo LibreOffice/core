@@ -1041,7 +1041,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testtdf169706_invalid_audio_link)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
-    // Without the patch the incompleet audio node would be exported
+    // Without the patch the incomplete audio node would be exported
     int nAudioNode = countXPathNodes(
         pXmlDoc, "//p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
                  "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
