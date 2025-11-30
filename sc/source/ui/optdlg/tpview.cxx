@@ -508,10 +508,9 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
     m_xUnitLB->connect_changed( LINK( this, ScTpLayoutOptions, MetricHdl ) );
     m_xAlignCB->connect_toggled(LINK(this, ScTpLayoutOptions, AlignHdl));
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_UNIT); ++i)
+    for (const auto& [pResId, eFUnit] : SCSTR_UNIT)
     {
-        OUString sMetric = ScResId(SCSTR_UNIT[i].first);
-        FieldUnit eFUnit = SCSTR_UNIT[i].second;
+        OUString sMetric = ScResId(pResId);
 
         switch ( eFUnit )
         {
