@@ -1329,7 +1329,7 @@ Private Sub _ConsoleRefresh()
 		&apos;	Do nothing if console inactive
 		If IsNull(.ConsoleDialog) Then GoTo Finally
 		If Not .ConsoleDialog._IsStillAlive(False) Then		&apos;	False to not generate an error when dead
-			Set .ConsoleControl = .ConsoleControl.Dispose()
+			If Not IsNull(.ConsoleControl) Then Set .ConsoleControl = .ConsoleControl.Dispose()
 			Set .ConsoleDialog = Nothing
 			GoTo Finally
 		End If
