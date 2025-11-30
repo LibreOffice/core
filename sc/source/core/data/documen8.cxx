@@ -488,16 +488,9 @@ public:
         mrDoc.EnableIdle(false);
     }
 
-    ~IdleCalcTextWidthScope() COVERITY_NOEXCEPT_FALSE
+    ~IdleCalcTextWidthScope()
     {
-        SfxPrinter* pDev = mrDoc.GetPrinter();
-        if (pDev)
-            pDev->SetMapMode(maOldMapMode);
-
-        if (mbProgress)
-            ScProgress::DeleteInterpretProgress();
-
-        mrDoc.EnableIdle(true);
+        suppress_fun_call_w_exception(ImplDestroy());
     }
 
     SCTAB Tab() const { return mrCalcPos.Tab(); }
@@ -525,6 +518,19 @@ public:
     bool hasProgressBar() const { return mbProgress; }
 
     ScStyleSheetPool* getStylePool() { return mpStylePool; }
+
+private:
+    void ImplDestroy()
+    {
+        SfxPrinter* pDev = mrDoc.GetPrinter();
+        if (pDev)
+            pDev->SetMapMode(maOldMapMode);
+
+        if (mbProgress)
+            ScProgress::DeleteInterpretProgress();
+
+        mrDoc.EnableIdle(true);
+    }
 };
 
 }
