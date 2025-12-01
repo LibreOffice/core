@@ -603,6 +603,11 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 
 Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules()
 {
+    return getSwChapterNumberingRules();
+}
+
+rtl::Reference< SwXChapterNumbering >  SwXTextDocument::getSwChapterNumberingRules()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXChapterNumbering.is())

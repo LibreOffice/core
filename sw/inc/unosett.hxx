@@ -187,6 +187,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+    SW_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue> getRuleByIndex(sal_Int32 nIndex);
+
     css::uno::Sequence< css::beans::PropertyValue>
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
     /// @throws css::uno::RuntimeException

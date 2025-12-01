@@ -1174,30 +1174,32 @@ uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUString&
 
 uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
 {
+    uno::Sequence<beans::PropertyValue> aRet = getRuleByIndex(nIndex);
+    uno::Any aVal;
+    aVal <<= aRet;
+    return aVal;
+}
+
+uno::Sequence<beans::PropertyValue> SwXNumberingRules::getRuleByIndex(sal_Int32 nIndex)
+{
     SolarMutexGuard aGuard;
     if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aVal;
     const SwNumRule* pRule = m_pNumRule;
     if(!pRule && m_pDoc && !m_sCreatedNumRuleName.isEmpty())
         pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
     if(pRule)
     {
-        uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
-                                        *pRule, nIndex);
-        aVal <<= aRet;
+        return GetNumberingRuleByIndex(*pRule, nIndex);
 
     }
     else if(m_pDocShell)
     {
-        uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
-                *m_pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
-        aVal <<= aRet;
+        return GetNumberingRuleByIndex(*m_pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
     }
     else
         throw uno::RuntimeException(u"Could not get numbering rule."_ustr);
-    return aVal;
 }
 
 uno::Type SwXNumberingRules::getElementType()
