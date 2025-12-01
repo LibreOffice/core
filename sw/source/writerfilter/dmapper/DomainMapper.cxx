@@ -95,6 +95,7 @@
 #include <tools/UnitConversion.hxx>
 #include <unotxdoc.hxx>
 #include <unostyle.hxx>
+#include <unosett.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -2764,7 +2765,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         //apply settings at XLineNumberingProperties
         try
         {
-            uno::Reference< beans::XPropertySet > xLineNumberingPropSet = m_pImpl->GetTextDocument()->getLineNumberingProperties();
+            rtl::Reference< SwXLineNumberingProperties > xLineNumberingPropSet = m_pImpl->GetTextDocument()->getSwLineNumberingProperties();
             if( aSettings.nInterval == 0 )
                 xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_IS_ON ), uno::Any(false) );
             else

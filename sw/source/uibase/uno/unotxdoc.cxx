@@ -591,6 +591,11 @@ void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener 
 
 Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 {
+    return getSwLineNumberingProperties();
+}
+
+rtl::Reference< SwXLineNumberingProperties > SwXTextDocument::getSwLineNumberingProperties()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
 
