@@ -8450,7 +8450,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     bool bStyleRef = aIt->second.eFieldId == FIELD_STYLEREF;
 
                     // Do we need a GetReference (default) or a GetExpression field?
-                    uno::Reference< container::XNameAccess > xFieldMasterAccess = GetTextDocument()->getTextFieldMasters();
+                    rtl::Reference< SwXTextFieldMasters > xFieldMasterAccess = GetTextDocument()->getSwXTextFieldMasters();
 
                     if (!xFieldMasterAccess->hasByName(
                             "com.sun.star.text.FieldMaster.SetExpression."
