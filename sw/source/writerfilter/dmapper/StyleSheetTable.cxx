@@ -59,6 +59,7 @@
 #include <unoxstyle.hxx>
 #include <unostyle.hxx>
 #include <unosett.hxx>
+#include <unotextbodyhf.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1023,7 +1024,7 @@ void StyleSheetTable::ApplyClonedTOCStyles()
     // text frames
     if (!m_xTextDocument)
         throw uno::RuntimeException();
-    uno::Reference<container::XEnumerationAccess> const xFrames(m_xTextDocument->getTextFrames(), uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXTextFrames> const xFrames(m_xTextDocument->getSwTextFrames());
     uno::Reference<container::XEnumeration> const xFramesEnum(xFrames->createEnumeration());
     while (xFramesEnum->hasMoreElements())
     {
@@ -1031,7 +1032,7 @@ void StyleSheetTable::ApplyClonedTOCStyles()
         ApplyClonedTOCStylesToXText(xFrame);
     }
     // body
-    uno::Reference<text::XText> const xBody(m_xTextDocument->getText());
+    rtl::Reference<SwXBodyText> const xBody(m_xTextDocument->getBodyText());
     ApplyClonedTOCStylesToXText(xBody);
 }
 

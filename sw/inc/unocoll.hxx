@@ -313,7 +313,7 @@ public:
     SwXFrames(SwDoc* pDoc, FlyCntType eSet);
 
     //XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual SW_DLLPUBLIC css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
