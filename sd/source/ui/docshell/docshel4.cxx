@@ -404,7 +404,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
     const bool bIsPowerPointECMA = aFilterName.startsWith("Impress MS PowerPoint 2007 XML");
     const bool bIsPowerPointISO29500 = aFilterName.startsWith("Impress Office Open XML"); // 2010+
-    if (bIsPowerPointECMA)
+    if (bIsPowerPointECMA || bIsPowerPointISO29500)
     {
         // As this is a MSFT format, we should use the "MS Compat"
         // mode for spacing before and after paragraphs.
@@ -419,10 +419,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
         mpDoc->SetSummationOfParagraphs();
-    }
 
-    if (bIsPowerPointECMA)
-    {
+        // tdf#149756 tdf#152545
         // This is a "MS Compact" mode for connectors.
         // The Libreoffice uses bounding rectangle of connected shapes but
         // MSO uses snap rectangle when calculate the edge track.
@@ -434,10 +432,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // tdf#168010: PowerPoint ignores empty trailing lines in autoshrink text when scaling font
         // (same as Impress), but takes into account in layout:
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout, true);
-    }
 
-    if (bIsPowerPointECMA || bIsPowerPointISO29500)
-    {
+        // tdf#96389
         // We need to be able to set the default tab size for each text object.
         // This is possible at the moment only for the whole document. See
         // TextParagraphPropertiesContext constructor. So default tab width
