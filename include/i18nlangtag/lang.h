@@ -98,7 +98,7 @@ namespace o3tl
     // delete "sal_Int16" constructor via specialization: values > 0x7FFF are
     // actually used, and unfortunately passed around in the API as signed
     // "short", so use this to find all places where casts must be inserted
-    template<> template<> constexpr strong_int<unsigned short,LanguageTypeTag>::strong_int(short, std::enable_if<std::is_integral<short>::value, int>::type) = delete;
+    template<> template<> constexpr strong_int<unsigned short,LanguageTypeTag>::strong_int(short) = delete;
 #endif
 }
 

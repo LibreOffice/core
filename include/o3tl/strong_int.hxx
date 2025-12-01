@@ -25,6 +25,7 @@
 #include <cassert>
 #include <type_traits>
 #include <compare>
+#include <concepts>
 #include <config_options.h>
 
 #include <o3tl/safeint.hxx>
@@ -56,10 +57,8 @@ public:
     explicit constexpr strong_int(int value) : m_value(value) {}
     explicit constexpr strong_int(unsigned int value) : m_value(value) {}
 #else
-    template<typename T> explicit constexpr strong_int(
-        T value,
-        typename std::enable_if<std::is_integral<T>::value, int>::type = 0):
-        m_value(value)
+    template <std::integral I> explicit constexpr strong_int(I value)
+        : m_value(value)
     {
         // catch attempts to pass in out-of-range values early
         assert(ValidRange<UNDERLYING_TYPE>::isInside(value) && "out of range");
