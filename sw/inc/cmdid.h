@@ -176,6 +176,8 @@ class SwUINumRuleItem;
 
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
 
+#define FN_VIEW_REDLINE_RENDER_MODE (FN_VIEW + 30)
+
 #define FN_PRINT_LAYOUT         (FN_VIEW + 37)  /* print layout */
 
 #define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller */

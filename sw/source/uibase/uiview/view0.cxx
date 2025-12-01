@@ -267,6 +267,11 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( lcl_IsViewMarks(*pOpt) ); break;
             case FN_VIEW_META_CHARS:
                 aBool.SetValue( pOpt->IsViewMetaChars() ); break;
+            case FN_VIEW_REDLINE_RENDER_MODE:
+            {
+                aBool.SetValue(pOpt->GetRedlineRenderMode() != SwRedlineRenderMode::Standard);
+            }
+            break;
             case FN_VIEW_TABLEGRID:
                 aBool.SetValue( pOpt->IsTableBoundaries() ); break;
             case SID_TOGGLE_NOTES:
@@ -667,6 +672,21 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         lcl_SetViewMetaChars( *pOpt, bFlag );
         break;
+
+    case FN_VIEW_REDLINE_RENDER_MODE:
+    {
+        SwRedlineRenderMode eMode
+            = bFlag ? SwRedlineRenderMode::OmitDeletes : SwRedlineRenderMode::Standard;
+        if (eState == STATE_TOGGLE)
+        {
+            eMode = pOpt->GetRedlineRenderMode() == SwRedlineRenderMode::Standard
+                        ? SwRedlineRenderMode::OmitDeletes
+                        : SwRedlineRenderMode::Standard;
+        }
+
+        pOpt->SetRedlineRenderMode(eMode);
+    }
+    break;
 
     case SID_AUTOSPELL_CHECK:
         const SfxPoolItem* pItem;

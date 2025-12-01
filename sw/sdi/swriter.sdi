@@ -679,6 +679,24 @@ SfxBoolItem ControlCodes FN_VIEW_META_CHARS
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem RedlineRenderMode FN_VIEW_REDLINE_RENDER_MODE
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem ConvertTableText FN_CONVERT_TEXT_TABLE
 ()
 [

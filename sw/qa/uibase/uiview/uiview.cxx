@@ -440,6 +440,33 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testReinstateTrackedChangeState)
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeCommand)
+{
+    // Given a document with default view options:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwRedlineRenderMode eActual = pWrtShell->GetViewOptions()->GetRedlineRenderMode();
+    CPPUNIT_ASSERT_EQUAL(SwRedlineRenderMode::Standard, eActual);
+
+    // When toggling redline render mode to omit deletes:
+    dispatchCommand(mxComponent, u".uno:RedlineRenderMode"_ustr, {});
+
+    // Then make sure the view option is updated:
+    eActual = pWrtShell->GetViewOptions()->GetRedlineRenderMode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2 (OmitDeletes)
+    // - Actual  : 0 (Standard)
+    // i.e. the view option wasn't set.
+    CPPUNIT_ASSERT_EQUAL(SwRedlineRenderMode::OmitDeletes, eActual);
+
+    // And when toggling off:
+    dispatchCommand(mxComponent, u".uno:RedlineRenderMode"_ustr, {});
+
+    // Then make sure the view option is back to its default:
+    eActual = pWrtShell->GetViewOptions()->GetRedlineRenderMode();
+    CPPUNIT_ASSERT_EQUAL(SwRedlineRenderMode::Standard, eActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

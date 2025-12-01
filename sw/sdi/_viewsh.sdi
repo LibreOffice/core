@@ -1003,6 +1003,12 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
+    FN_VIEW_REDLINE_RENDER_MODE // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
     FN_VIEW_TABLEGRID // status()
     [
         ExecMethod = ExecViewOptions ;
