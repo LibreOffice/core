@@ -968,7 +968,7 @@ void SwShellCursor::FillRects()
         if (SwVisibleCursor *const pVisibleCursor{GetShell()->FindVisibleCursorForPeer(*this)})
         {
             // use OutDev.GetSettings().GetStyleSettings().GetCursorSize() as width?
-            auto [cursorRect, _] {pVisibleCursor->SetPos()};
+            auto cursorRect{ pVisibleCursor->SetPos() };
             if (cursorRect.IsEmpty())
             {
                 cursorRect.Width(20);
