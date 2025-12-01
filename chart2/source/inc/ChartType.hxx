@@ -114,7 +114,7 @@ public:
     virtual rtl::Reference< ::chart::BaseCoordinateSystem >
         createCoordinateSystem2( sal_Int32 DimensionCount );
 
-    virtual void createCalculatedDataSeries();
+    static void createCalculatedDataSeries();
 
     void deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSeries );
 
