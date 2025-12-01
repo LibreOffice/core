@@ -690,7 +690,6 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     else if ( bOldInterop )
                     {
                         pGuess = std::move(pGuess2);
-                        SetSpaceCount( TextFrameIndex(nSpacesInLineShrink));
                         ExtraSpaceSize(0);
                         bFull = bFull2;
                     }

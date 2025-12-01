@@ -53,7 +53,6 @@ private:
     SwTwips m_nExtraShrunkWidth = 0;   // width of not shrunk line
     SwTwips m_nExtraSpaceSize = 0;     // extra space over normal space width
     bool m_bModifiedWidth = false;     // applied custom letter spacing and scale width
-    TextFrameIndex m_nSpaceCount = TextFrameIndex(0);  // space count for letter spacing
     TextFrameIndex m_nLetterCount = TextFrameIndex(0); // letter count for multi-portion lines
 
     std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
@@ -85,9 +84,7 @@ public:
     void ExtraSpaceSize(const SwTwips nNew) { m_nExtraSpaceSize = nNew; }
     bool IsModifiedWidth() const { return m_bModifiedWidth; }
     void SetModifiedWidth(const bool bNew) { m_bModifiedWidth = bNew; }
-    TextFrameIndex GetSpaceCount() const { return m_nSpaceCount; }
     TextFrameIndex GetLetterCount() const { return m_nLetterCount; }
-    void SetSpaceCount(TextFrameIndex const nSpaceCount) { m_nSpaceCount = nSpaceCount; }
     void SetLetterCount(TextFrameIndex const nLetterCount) { m_nLetterCount = nLetterCount; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
@@ -207,7 +204,6 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     m_nExtraShrunkWidth = rPortion.m_nExtraShrunkWidth;
     m_nExtraSpaceSize = rPortion.m_nExtraSpaceSize;
     m_bModifiedWidth = rPortion.m_bModifiedWidth;
-    m_nSpaceCount = rPortion.m_nSpaceCount;
     m_nLetterCount = rPortion.m_nLetterCount;
     m_nLayoutContext = rPortion.m_nLayoutContext;
     return *this;
@@ -227,7 +223,6 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     m_nExtraShrunkWidth(rPortion.m_nExtraShrunkWidth),
     m_nExtraSpaceSize(rPortion.m_nExtraSpaceSize),
     m_bModifiedWidth(rPortion.m_bModifiedWidth),
-    m_nSpaceCount(rPortion.m_nSpaceCount),
     m_nLetterCount(rPortion.m_nLetterCount),
     m_nLayoutContext(rPortion.m_nLayoutContext)
 {
