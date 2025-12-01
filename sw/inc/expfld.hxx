@@ -416,6 +416,8 @@ public:
     virtual void        SetPar2(const OUString& rStr) override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_SW_INC_EXPFLD_HXX

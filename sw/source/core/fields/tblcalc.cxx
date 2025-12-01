@@ -208,4 +208,17 @@ bool SwTableField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
+void SwTableField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableField"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("expand"),
+                                      BAD_CAST(m_sExpand.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("sub-type"),
+        BAD_CAST(OString::number(static_cast<int>(m_nSubType)).getStr()));
+    SwValueField::dumpAsXml(pWriter);
+    SwTableFormula::dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

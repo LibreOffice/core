@@ -1095,6 +1095,14 @@ sal_uInt16 SwTableFormula::GetLnPosInTable( const SwTable& rTable, const SwTable
     return nRet;
 }
 
+void SwTableFormula::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableFormula"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("formula"), BAD_CAST(m_sFormula.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
