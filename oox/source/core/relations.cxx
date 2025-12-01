@@ -54,6 +54,11 @@ OUString createOfficeDocRelationTypeStrict(std::u16string_view rType)
     return OUString::Concat("http://purl.oclc.org/ooxml/officeDocument/relationships/") + rType;
 }
 
+OUString createMSOfficeRelationType(std::u16string_view rType)
+{
+    return OUString::Concat("http://schemas.microsoft.com/office/2006/relationships/") + rType;
+}
+
 }
 
 Relations::Relations( OUString aFragmentPath )
@@ -150,6 +155,11 @@ OUString Relations::getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_vi
     {
         OUString aStrictType = createOfficeDocRelationTypeStrict(rType);
         pRelation = getRelationFromFirstType( aStrictType );
+        if (!pRelation)
+        {
+            OUString aMicrosoftType = createMSOfficeRelationType(rType);
+            pRelation = getRelationFromFirstType(aMicrosoftType);
+        }
     }
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }

@@ -1050,6 +1050,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf168736)
     assertXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship[1]", "Target", u"slide1.xml");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169781)
+{
+    createSdImpressDoc("pptx/tdf169781.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"ppt/slides/slide2.xml"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame[2]/a:graphic/a:graphicData/p:oleObj/p:pic",
+                1);
+    assertXPath(pXmlDoc2,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame[2]/a:graphic/a:graphicData/p:oleObj/p:pic",
+                1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
