@@ -58,10 +58,13 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
-    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"vmlDrawing" );
-    if( !aVMLDrawingFragmentPath.isEmpty() )
-        getFilter().importFragment( new oox::vml::DrawingFragment(
-            getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
+    OUString aVMLPath = getFragmentPathFromFirstTypeFromOfficeDoc(u"vmlDrawing");
+    if (aVMLPath.isEmpty())
+        aVMLPath = getFragmentPathFromFirstTypeFromOfficeDoc(u"legacyDrawing");
+
+    if (!aVMLPath.isEmpty())
+        getFilter().importFragment(
+            new oox::vml::DrawingFragment(getFilter(), aVMLPath, *pPersistPtr->getDrawing()));
 }
 
 SlideFragmentHandler::~SlideFragmentHandler()
