@@ -60,11 +60,10 @@ public:
             processor2d::createProcessor2DFromOutputDevice(*device, view));
         CPPUNIT_ASSERT(processor);
 
-        // I stumbled over this when hunting another problem, but I have to correct
-        // this: This test does test something that is not supported. It seems to be
-        // based on the *misunderstanding* that in the version of the constructor of
-        // FillGradientPrimitive2D (and similar others) with two ranges the 2nd
-        // B2DRange parameter 'OutputRange' is a 'clipping' parameter. This is *not*
+        // A bit of history: this test did not originally test supported functionality. It
+        // was apparently based on the *misunderstanding* that in the version of the
+        // constructor of FillGradientPrimitive2D (and similar others) with two ranges the
+        // 2nd B2DRange parameter 'OutputRange' is a 'clipping' parameter. This is *not*
         // the case --- it is in fact the *contrary*, it is there to *extend* the
         // usual definition/paintRange of a gradient:
         // It was originally needed to correctly display TextFrames (TF) in Writer: If you
