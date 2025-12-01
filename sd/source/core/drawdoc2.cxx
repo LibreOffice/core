@@ -28,6 +28,7 @@
 #include <svx/svdopage.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svdoedge.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
@@ -54,8 +55,16 @@
 #include <undo/undomanager.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <unomodel.hxx>
+#include <svx/constructhelper.hxx>
+
+#include <svx/strings.hrc>
+#include <svx/svdobj.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnedwit.hxx>
 
 #include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
 
 #include "PageListWatcher.hxx"
 #include <strings.hxx>
@@ -1518,6 +1527,7 @@ void SdDrawDocument::ImportCanvasPage()
             pPage->NbcRemoveObject(0);
         }
         populatePagePreviewsGrid();
+        connectPagePreviews();
     }
 }
 
@@ -1638,6 +1648,7 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     }
 
     populatePagePreviewsGrid();
+    connectPagePreviews();
 
     return pCanvasPage->GetPageNum() / 2;
 }
@@ -1743,6 +1754,76 @@ void SdDrawDocument::updatePagePreviewsGrid(SdPage* pPage)
         const ::tools::Long nY = (mpCanvasPage->GetHeight() - nPreviewHeight) / 2;
 
         mpCanvasPage->CreatePresObj(PresObjKind::PagePreview, true, ::tools::Rectangle(Point(nX,nY), Size(nPreviewWidth, nPreviewHeight)), OUString(), nPageNum);
+    }
+}
+
+void SdDrawDocument::connectPagePreviews()
+{
+    if (!HasCanvasPage())
+        return;
+    SdrObjList* pObjList = mpCanvasPage.get();
+    std::vector<SdrPageObj*> aPageOrder(GetSdPageCount(PageKind::Standard) - 1, nullptr);
+
+    SdrObjListIter aIter(pObjList, SdrIterMode::Flat);
+    for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
+    {
+        if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+        {
+            SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+            SdPage* pPage = static_cast<SdPage*>(pPageObj->GetReferencedPage());
+            sal_uInt16 nIndex = (pPage->GetPageNum() - 1) / 2 - 1; // without canvas page
+            aPageOrder[nIndex] = pPageObj;
+        }
+    }
+
+    for (size_t i = 0; i < aPageOrder.size() - 1; i++)
+    {
+        SdrPageObj* pPageObj1 = aPageOrder[i];
+        SdrPageObj* pPageObj2 = aPageOrder[i + 1];
+
+        ::tools::Rectangle aRect1 = pPageObj1->GetSnapRect();
+        ::tools::Rectangle aRect2 = pPageObj2->GetSnapRect();
+
+        Point aStart(aRect1.RightCenter());
+        Point aEnd(aRect2.LeftCenter());
+
+        rtl::Reference<SdrObject> pObj(
+            SdrObjFactory::MakeNewObject(*this, SdrInventor::Default, SdrObjKind::Edge));
+
+        SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>(pObj.get());
+        pEdge->SetTailPoint(true, aStart);
+        pEdge->SetTailPoint(false, aEnd);
+
+        // glue the connectors to preview shapes
+        pEdge->ConnectToNode(true,  pPageObj1);
+        pEdge->ConnectToNode(false, pPageObj2);
+
+        SfxItemSet aAttr(GetPool());
+
+        // curved connector
+        aAttr.Put(SdrEdgeKindItem(SdrEdgeKind::Bezier));
+
+        // copied from FuConstructRectangle::SetLineEnds
+        ::basegfx::B2DPolyPolygon aArrow(
+            ConstructHelper::GetLineEndPoly(RID_SVXSTR_ARROW, *this));
+        if (!aArrow.count())
+        {
+            ::basegfx::B2DPolygon aNewArrow;
+            aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
+            aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
+            aNewArrow.setClosed(true);
+            aArrow.append(aNewArrow);
+        }
+
+        ::tools::Long nWidth = 600;
+        aAttr.Put(XLineEndItem(SdResId(RID_SVXSTR_ARROW), aArrow));
+        aAttr.Put(XLineEndWidthItem(nWidth));
+
+        pEdge->SetMergedItemSet(aAttr);
+
+        pObj->SetMarkProtect(true);
+        mpCanvasPage->NbcInsertObject(pObj.get());
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
