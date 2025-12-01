@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 
 #include <memory>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -199,11 +200,8 @@ private:
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
-        std::unique_ptr<sal_uInt16[]>   pElement;   // Array with Indices for elements
-        std::unique_ptr<E_TYPE[]>       pType;      // ...with Type-Info
-        std::unique_ptr<sal_uInt16[]>   pSize;      // ...with size
-        sal_uInt16                      nElement;
-        sal_uInt16                      nElementCurrent;
+        // Array with Indices for elements, with Type-Info and with size
+        std::vector<std::tuple<sal_uInt16, E_TYPE, sal_uInt16>> maElements;
 
         static const sal_uInt16         nScTokenOff;// Offset for SC-Token
 #ifdef DBG_UTIL
@@ -212,7 +210,6 @@ private:
 
         bool                        GrowTripel( sal_uInt16 nByMin );
         bool                        GrowId();
-        bool                        GrowElement();
         bool                        GrowMatrix();
                                     /** @return false means nElementCurrent range
                                         below nScTokenOff would overflow or
@@ -220,7 +217,7 @@ private:
                                         new ID available other than
                                         nElementCurrent+1.
                                      */
-        bool                        CheckElementOrGrow();
+        bool                        CanAddElement();
         bool                        GetElement( const sal_uInt16 nId, ScTokenArray* pScToken );
         bool                        GetElementRek( const sal_uInt16 nId, ScTokenArray* pScToken );
         void                        ClearMatrix();
