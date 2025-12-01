@@ -420,7 +420,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->SetSummationOfParagraphs();
     }
 
-    if (aFilterName == "Impress MS PowerPoint 2007 XML")
+    if (bIsPowerPointECMA)
     {
         // This is a "MS Compact" mode for connectors.
         // The Libreoffice uses bounding rectangle of connected shapes but

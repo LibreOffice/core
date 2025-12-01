@@ -164,9 +164,11 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3019), nEdgeLineDelta);
 }
 
-CPPUNIT_TEST_FIXTURE(OoxShapeTest, testStandardConnectors)
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsECMA)
 {
-    loadFromFile(u"standardConnectors.pptx");
+    // This test was created for tdf#149756 tdf#152545
+    // and modified to simply use a template format for tdf#165180
+    loadFromFile(u"tdf165180_standardConnectorsECMA.potx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
