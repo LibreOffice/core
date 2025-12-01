@@ -273,7 +273,6 @@ class ScViewData
 {
 private:
     double              nPPTX, nPPTY;               // Scaling factors
-    OUString            msOldWindowState;           // imported window size
 
     ::std::vector<std::unique_ptr<ScViewDataTable>> maTabData;
     ScMarkData          maMarkData;

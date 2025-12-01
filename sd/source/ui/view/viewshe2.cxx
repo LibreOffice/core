@@ -965,11 +965,6 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 
 void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
-    for (const css::beans::PropertyValue& rValue : rSequence)
-    {
-        if (rValue.Name == "WindowState")
-            rValue.Value >>= msOldWindowState;
-    }
     mpFrameView->ReadUserDataSequence( rSequence );
 }
 

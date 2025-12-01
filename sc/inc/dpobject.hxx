@@ -121,10 +121,6 @@ private:
     css::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
     std::unique_ptr<ScDPOutput> mpOutput;
 
-    // name -> sequence of sequences of css::xml::FastAttribute or css::xml::Attribute
-    // see PivotTable::putToInteropGrabBag in sc/source/filter/oox/pivottablebuffer.cxx for details
-    std::map<OUString, css::uno::Any> maInteropGrabBag;
-
     sal_Int32 mnHeaderRows;    // page fields plus filter button
     bool mbHeaderLayout : 1;  // true : grid, false : standard
     bool mbAllowMove : 1;

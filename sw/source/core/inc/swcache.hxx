@@ -78,7 +78,6 @@ class SwCache
     tools::Long m_nFlushCnt;         /// number of flush calls
     tools::Long m_nFlushedObjects;
     tools::Long m_nIncreaseMax;      /// number of cache size increases
-    tools::Long m_nDecreaseMax;      /// number of cache size decreases
 
     void Check();
 #endif

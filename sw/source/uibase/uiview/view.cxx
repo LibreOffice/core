@@ -1513,7 +1513,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         }
         else if (rValue.Name == "WindowState")
         {
-            rValue.Value >>= m_sOldWindowState;
+            // ignored
         }
         // Fallback to common SdrModel processing
         else

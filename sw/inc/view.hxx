@@ -186,8 +186,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16          m_nOldPageNum;
     UIName              m_sOldSectionName;
 
-    OUString            m_sOldWindowState; // imported window state
-
     Point               m_aTabColFromDocPos;  // moving table columns out of the document
     SwTextNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 

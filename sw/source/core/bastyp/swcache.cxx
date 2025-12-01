@@ -97,7 +97,6 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     , m_nFlushCnt( 0 )
     , m_nFlushedObjects( 0 )
     , m_nIncreaseMax( 0 )
-    , m_nDecreaseMax( 0 )
 #endif
 {
     m_aCacheObjects.reserve( nInitSize );
@@ -119,8 +118,7 @@ SwCache::~SwCache()
             << "; number of Seek for Get without Index: " << m_nAverageSeekCnt
             << "; number of Flush calls: " << m_nFlushCnt
             << "; number of flushed objects: " << m_nFlushedObjects
-            << "; number of Cache expansions: " << m_nIncreaseMax
-            << "; number of Cache reductions: " << m_nDecreaseMax);
+            << "; number of Cache expansions: " << m_nIncreaseMax);
     Check();
 #endif
 }

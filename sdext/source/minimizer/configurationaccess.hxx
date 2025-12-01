@@ -98,8 +98,6 @@ class ConfigurationAccess
         css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     private:
-        std::map < PPPOptimizerTokenEnum, OUString > maStrings;
-
         std::vector< OptimizerSettings > maSettings;
 
         void LoadStrings();

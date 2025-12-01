@@ -4027,7 +4027,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             maOptions.SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if (sName == SC_WINDOWSTATE)
         {
-            rSetting.Value >>= msOldWindowState;
+            // ignored
         }
         else
         {
