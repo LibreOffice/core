@@ -92,6 +92,8 @@ public:
         ChgValid(false);
     }
     void Calc( SwTableCalcPara& rCalcPara, double& rValue );
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SW_DLLPUBLIC SwTableBoxValue final : public SfxPoolItem
@@ -113,6 +115,8 @@ public:
     }
 
     double GetValue() const                     { return m_nValue; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwTableBoxNumFormat      &SwAttrSet::GetTableBoxNumFormat(bool bInP) const
