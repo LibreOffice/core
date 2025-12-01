@@ -26,6 +26,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <oox/helper/textinputstream.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace oox::vml {
 
@@ -354,20 +355,20 @@ void InputStream::updateBuffer()
         if( bHasOpeningBracket && !mxTextStrm->isEOF() )
         {
             // read the element text (add the leading opening bracket manually)
-            OString aElement = "<" + readToElementEnd();
+            OStringBuffer aElement = "<" + readToElementEnd();
             // check for CDATA part, starting with '<![CDATA['
-            if( aElement.match( gaOpeningCData ) )
+            if( o3tl::starts_with(aElement, gaOpeningCData) )
             {
                 // search the end tag ']]>'
-                while( ((aElement.getLength() < gaClosingCData.getLength()) || !aElement.endsWith( gaClosingCData )) && !mxTextStrm->isEOF() )
-                    aElement += readToElementEnd();
+                while( ((aElement.getLength() < gaClosingCData.getLength()) || !o3tl::ends_with(aElement, gaClosingCData)) && !mxTextStrm->isEOF() )
+                    aElement.append(readToElementEnd());
                 // copy the entire CDATA part
                 aBuffer.append( aElement );
             }
             else
             {
                 // no CDATA part - process the contents of the element
-                lclProcessElement( aBuffer, aElement );
+                lclProcessElement( aBuffer, aElement.toString() );
             }
         }
 

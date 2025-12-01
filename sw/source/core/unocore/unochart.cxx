@@ -982,7 +982,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     uno::Sequence< sal_Int32 > aSequenceMapping( nNumDS_LDS );
     sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
 
-    OUString aCellRanges;
+    OUStringBuffer aCellRanges;
     sal_Int16 nDtaSrcIsColumns = -1;// -1: don't know yet, 0: false, 1: true  -2: neither
     sal_Int32 nLabelSeqLen  = -1;   // used to see if labels are always used or not and have
                                     // the expected size of 1 (i.e. if FirstCellAsLabel can
@@ -1200,8 +1200,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 OUString aEndCell( sw_GetCellName( k + nColSubLen - 1, i + nRowSubLen - 1) );
                 aCurRange = aCellRangeBase + aStartCell + ":" + aEndCell;
                 if (!aCellRanges.isEmpty())
-                    aCellRanges += ";";
-                aCellRanges += aCurRange;
+                    aCellRanges.append(";");
+                aCellRanges.append(aCurRange);
 
                 // clear already found sub-range from map
                 for (sal_Int32 nRowIndex2 = 0;  nRowIndex2 < nRowSubLen;  ++nRowIndex2)
@@ -1215,12 +1215,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     uno::Sequence< OUString > aSortedRanges;
     GetSubranges( aCellRanges, aSortedRanges, false /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
-    OUString aSortedCellRanges;
+    OUStringBuffer aSortedCellRanges;
     for (const OUString& rSortedRange : aSortedRanges)
     {
         if (!aSortedCellRanges.isEmpty())
-            aSortedCellRanges += ";";
-        aSortedCellRanges += rSortedRange;
+            aSortedCellRanges.append(";");
+        aSortedCellRanges.append(rSortedRange);
     }
 
     // build value for 'SequenceMapping'
@@ -1261,7 +1261,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     pResult[nProps  ].Name = "FirstCellAsLabel";
     pResult[nProps++].Value <<= bFirstCellIsLabel;
     pResult[nProps  ].Name = "CellRangeRepresentation";
-    pResult[nProps++].Value <<= aSortedCellRanges;
+    pResult[nProps++].Value <<= aSortedCellRanges.toString();
     if (!aBrokenCellRangeForExport.isEmpty())
     {
         pResult[nProps  ].Name = "BrokenCellRangeForExport";

@@ -583,8 +583,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
         }
         if ( !aName.empty() )
         {
-            pInfo->aUIName = aName;
-            pInfo->aUIName += " [ ";
+            pInfo->aUIName = OUString::Concat(aName) + " [ ";
         }
         pInfo->aUIName += pInfo->aTypeName;
         if ( !aName.empty() )

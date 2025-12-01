@@ -103,7 +103,7 @@ static std::vector< OUString > getInfoFromInd( std::u16string_view aInd )
             }
             else
             {
-                OUString aNum;
+                OUStringBuffer aNum;
                 for( int i = 1; i < 3; i++ )
                 {
                     if( !pLine[i]
@@ -115,10 +115,10 @@ static std::vector< OUString > getInfoFromInd( std::u16string_view aInd )
                         return aResult;
                     }
 
-                    aNum += OUStringChar( pLine[i] );
+                    aNum.append(OUStringChar( pLine[i] ));
                 }
 
-                newItem.append( sal_Unicode( aNum.toUInt32( 16 ) ) );
+                newItem.append( sal_Unicode( o3tl::toUInt32(aNum, 16) ) );
                 pLine += 3;
             }
 

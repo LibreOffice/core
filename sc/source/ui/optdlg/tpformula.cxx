@@ -261,7 +261,7 @@ std::unique_ptr<SfxTabPage> ScTpFormulaOptions::Create(weld::Container* pPage, w
 
 OUString ScTpFormulaOptions::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"formulasyntaxlabel"_ustr,
                           u"label3"_ustr, u"label6"_ustr,
                           u"label7"_ustr, u"label8"_ustr,
@@ -271,7 +271,7 @@ OUString ScTpFormulaOptions::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"calcdefault"_ustr, u"calccustom"_ustr };
@@ -279,7 +279,7 @@ OUString ScTpFormulaOptions::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString buttons[] = { u"reset"_ustr, u"details"_ustr };
@@ -287,13 +287,13 @@ OUString ScTpFormulaOptions::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     // check button
-    sAllStrings += mxCbEnglishFuncName->get_label() + " ";
+    sAllStrings.append(mxCbEnglishFuncName->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

@@ -20,6 +20,7 @@
 #include "optbasic.hxx"
 #include <basic/codecompletecache.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
+#include <rtl/ustrbuf.hxx>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, u"cui/ui/optbasicidepage.ui"_ustr, u"OptBasicIDEPage"_ustr, &rSet)
@@ -55,13 +56,13 @@ void SvxBasicIDEOptionsPage::LoadConfig()
 
 OUString SvxBasicIDEOptionsPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"codecomplete_enable"_ustr, u"autocorrect"_ustr,    u"autoclose_quotes"_ustr,
@@ -70,10 +71,10 @@ OUString SvxBasicIDEOptionsPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )

@@ -310,17 +310,17 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
 
 OUString SvxProxyTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr,    u"label2"_ustr,     u"httpft"_ustr,      u"httpsft"_ustr,
                           u"noproxyft"_ustr, u"httpportft"_ustr, u"httpsportft"_ustr, u"noproxydesc"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
@@ -835,7 +835,7 @@ DeactivateRC SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 OUString SvxSecurityTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr,         u"label4"_ustr,  u"label2"_ustr, u"masterpasswordtext"_ustr,
                           u"nopasswordsave"_ustr, u"label3"_ustr,  u"label5"_ustr, u"label8"_ustr,
                           u"label7"_ustr,         u"label10"_ustr, u"label9"_ustr, u"label12"_ustr,
@@ -844,7 +844,7 @@ OUString SvxSecurityTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"savepassword"_ustr, u"usemasterpassword"_ustr };
@@ -852,7 +852,7 @@ OUString SvxSecurityTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     // TODO: Should we exclude button strings from the search?
@@ -862,10 +862,10 @@ OUString SvxSecurityTabPage::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
@@ -945,16 +945,16 @@ std::unique_ptr<SfxTabPage> SvxEMailTabPage::Create( weld::Container* pPage, wel
 
 OUString SvxEMailTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"browsetitle"_ustr, u"suppress"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 /* -------------------------------------------------------------------------*/

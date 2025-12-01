@@ -1228,7 +1228,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     uno::Reference<container::XIndexReplace> xNumRule(
         xFactory->createInstance(u"com.sun.star.text.NumberingRules"_ustr),
         uno::UNO_QUERY_THROW);
-    OUString listFormat;
+    OUStringBuffer listFormat;
     for (sal_Int32 i = 0; i < xNumRule->getCount(); ++i)
     {
         uno::Sequence<beans::PropertyValue> format;
@@ -1247,10 +1247,10 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     [](auto const& r) { return r.Name == "ParentNumbering"; }));
             const_cast<uno::Any&>(it->Value) <<= sal_Int16(i + 1);
 #endif
-            listFormat += "%" + OUString::number(i+1) + "%.";
+            listFormat.append("%" + OUString::number(i+1) + "%.");
             auto it(::std::find_if(format.begin(), format.end(),
                     [](auto const& r) { return r.Name == "ListFormat"; }));
-            const_cast<uno::Any&>(it->Value) <<= listFormat;
+            const_cast<uno::Any&>(it->Value) <<= listFormat.toString();
         }
         xNumRule->replaceByIndex(i, uno::Any(format));
     }

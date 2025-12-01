@@ -461,11 +461,11 @@ void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUStrin
             std::set<OUString> filteredFamilies; // families can repeat, e.g. for bold/italic
             for (const auto& pair : temp)
                 filteredFamilies.insert(pair.first);
-            OUString fontlist;
+            OUStringBuffer fontlist;
             for (const auto& family : filteredFamilies)
-                fontlist += "\n" + family;
+                fontlist.append("\n" + family);
             rtl::Reference pRequest(new comphelper::OInteractionRequest(
-                uno::Any(document::FontsDisallowEditingRequest({}, {}, fontlist))));
+                uno::Any(document::FontsDisallowEditingRequest({}, {}, fontlist.toString()))));
             rtl::Reference pApprove(new comphelper::OInteractionApprove);
             pRequest->addContinuation(pApprove);
             pRequest->addContinuation(new comphelper::OInteractionDisapprove);

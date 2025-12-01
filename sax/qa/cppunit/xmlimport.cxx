@@ -148,7 +148,7 @@ void SAL_CALL TestDocumentHandler::endDocument()
 
 void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
 {
-    OUString sAttributes;
+    OUStringBuffer sAttributes;
     m_aCountStack.push(0);
     sal_uInt16 len = xAttribs->getLength();
     for (sal_uInt16 i=0; i<len; i++)
@@ -156,7 +156,7 @@ void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Re
         OUString sAttrValue = xAttribs->getValueByIndex(i);
         OUString sAttrName = canonicalform(xAttribs->getNameByIndex(i), sAttrValue, false);
         if (!sAttrName.isEmpty())
-            sAttributes += sAttrName + sAttrValue;
+            sAttributes.append(sAttrName + sAttrValue);
     }
     m_aStr.append(canonicalform(aName, u""_ustr, true) + sAttributes);
 }

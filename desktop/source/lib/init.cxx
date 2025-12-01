@@ -4744,18 +4744,18 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
         if (!pDocument->maFontsMissing.empty())
         {
-            OString sPayload = "{ \"fontsmissing\": [ "_ostr;
+            OStringBuffer sPayload("{ \"fontsmissing\": [ ");
             bool bFirst = true;
             for (const auto &f : pDocument->maFontsMissing)
             {
                 if (bFirst)
                     bFirst = false;
                 else
-                    sPayload += ", ";
-                sPayload += "\"" + f.toUtf8() + "\"";
+                    sPayload.append(", ");
+                sPayload.append("\"" + f.toUtf8() + "\"");
             }
-            sPayload += " ] }";
-            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.getStr(), pData);
+            sPayload.append(" ] }");
+            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.toString().getStr(), pData);
             pDocument->maFontsMissing.clear();
         }
 

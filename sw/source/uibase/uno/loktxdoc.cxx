@@ -617,12 +617,12 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
             if (xTitle.is())
             {
-                OUString aTitle;
+                OUStringBuffer aTitle;
                 const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
                     = xTitle->getText();
                 for (auto const& fs : aFSSeq)
-                    aTitle += fs->getString();
-                rJsonWriter.put("title", aTitle);
+                    aTitle.append(fs->getString());
+                rJsonWriter.put("title", aTitle.toString());
             }
         }
 
@@ -633,12 +633,12 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             uno::Reference<chart2::XTitle> xSubTitle = xSubTitled->getTitleObject();
             if (xSubTitle.is())
             {
-                OUString aSubTitle;
+                OUStringBuffer aSubTitle;
                 const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
                     = xSubTitle->getText();
                 for (auto const& fs : aFSSeq)
-                    aSubTitle += fs->getString();
-                rJsonWriter.put("subtitle", aSubTitle);
+                    aSubTitle.append(fs->getString());
+                rJsonWriter.put("subtitle", aSubTitle.makeStringAndClear());
             }
         }
 

@@ -440,39 +440,39 @@ public:
         auto xClass = mxMethod->getReturnType();
         aOutString = simpleTypeName(xClass);
 
-        OUString aInString;
+        OUStringBuffer aInString;
         const auto aParameters = mxMethod->getParameterInfos();
         bool bFirst = true;
         for (auto const& rParameterInfo : aParameters)
         {
             if (!bFirst)
-                aInString += ", ";
+                aInString.append(", ");
             else
                 bFirst = false;
 
             switch (rParameterInfo.aMode)
             {
                 case reflection::ParamMode_IN:
-                    aInString += SfxResId(STR_PARMETER_MODE_IN) + " ";
+                    aInString.append(SfxResId(STR_PARMETER_MODE_IN) + " ");
                     break;
                 case reflection::ParamMode_OUT:
-                    aInString += SfxResId(STR_PARMETER_MODE_OUT) + " ";
+                    aInString.append(SfxResId(STR_PARMETER_MODE_OUT) + " ");
                     break;
                 case reflection::ParamMode_INOUT:
-                    aInString += SfxResId(STR_PARMETER_MODE_IN_AND_OUT) + " ";
+                    aInString.append(SfxResId(STR_PARMETER_MODE_IN_AND_OUT) + " ");
                     break;
                 default:
                     break;
             }
 
-            aInString += rParameterInfo.aName + " : " + simpleTypeName(rParameterInfo.aType);
+            aInString.append(rParameterInfo.aName + " : " + simpleTypeName(rParameterInfo.aType));
         }
 
         OUString aImplementationClass = mxMethod->getDeclaringClass()->getName();
 
         return {
             { 1, aOutString },
-            { 2, aInString },
+            { 2, aInString.toString() },
             { 3, aImplementationClass },
         };
     }
@@ -827,19 +827,19 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                 aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_MAYBEDEFAULT));
 
             bool bSet = false;
-            OUString aInfoString;
+            OUStringBuffer aInfoString;
             for (auto const& rString : aInfoCollection)
             {
                 if (bSet)
-                    aInfoString += ", ";
+                    aInfoString.append(", ");
                 else
                     bSet = true;
 
-                aInfoString += rString;
+                aInfoString.append(rString);
             }
 
             auto* pObjectInspectorNode
-                = createNodeObjectForAny(aPropertyName, aCurrentAny, aInfoString);
+                = createNodeObjectForAny(aPropertyName, aCurrentAny, aInfoString.toString());
             if (pObjectInspectorNode)
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }

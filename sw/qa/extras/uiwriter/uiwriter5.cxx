@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     bool bAnnotationStart = false;
     bool bBeforeAnnotation = true;
-    OUString sTextBeforeAnnotation;
+    OUStringBuffer sTextBeforeAnnotation;
     while (xRunEnum->hasMoreElements())
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
@@ -426,13 +426,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
             else if (aType == "Text")
             {
                 uno::Reference<text::XTextRange> xRun(xPropertySet, uno::UNO_QUERY);
-                sTextBeforeAnnotation += xRun->getString();
+                sTextBeforeAnnotation.append(xRun->getString());
             }
         }
     }
 
     // This was "Lorem ipsum" (collapsed annotation range)
-    CPPUNIT_ASSERT_EQUAL(u"Lorem "_ustr, sTextBeforeAnnotation);
+    CPPUNIT_ASSERT_EQUAL(u"Lorem "_ustr, sTextBeforeAnnotation.toString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126206)

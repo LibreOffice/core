@@ -19,6 +19,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <emfreader.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/dibtools.hxx>
@@ -442,7 +443,7 @@ namespace emfio
                 sal_uInt32 nDescChars(0);
                 mpInputStream->ReadUInt32(nDescChars);
 
-                OUString aDesc;
+                OUStringBuffer aDesc;
                 for (sal_uInt32 i=0; i < nDescChars; i++)
                 {
                     sal_uInt16 cChar(0);
@@ -451,10 +452,10 @@ namespace emfio
                         break;
 
                     sal_Unicode cUniChar = static_cast<sal_Unicode>(cChar);
-                    aDesc += OUStringChar(cUniChar);
+                    aDesc.append(OUStringChar(cUniChar));
                 }
 
-                SAL_INFO("emfio", "\t\tDescription: " << aDesc);
+                SAL_INFO("emfio", "\t\tDescription: " << aDesc.toString());
             }
             break;
 
@@ -2186,18 +2187,18 @@ namespace emfio
                             sal_Int32 ihCS(0);
                             mpInputStream->ReadInt32(ihCS);
                             sal_Int32 nDescChars = nRemainingRecSize - 4;
-                            OUString aDesc;
+                            OUStringBuffer aDesc;
                             for (sal_Int32 i=0; i < nDescChars; i++)
                             {
                                 unsigned char cChar(0);
                                 mpInputStream->ReadUChar(cChar);
                                 if (cChar == 0)
                                     break;
-                                aDesc += OUStringChar(static_cast<sal_Unicode>(cChar));
+                                aDesc.append(OUStringChar(static_cast<sal_Unicode>(cChar)));
                             }
                             // if it's the standard color space name, no need to do anything
-                            if (aDesc != "COSP")
-                                SAL_WARN("emfio", "TODO: color space change for EMR_CREATECOLORSPACE not implemented: '" << aDesc << "' " << nDescChars);
+                            if (std::u16string_view(aDesc) != u"COSP")
+                                SAL_WARN("emfio", "TODO: color space change for EMR_CREATECOLORSPACE not implemented: '" << aDesc.toString() << "' " << nDescChars);
                         }
                     }
                     break;

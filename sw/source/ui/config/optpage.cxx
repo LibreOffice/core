@@ -54,6 +54,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <officecfg/Office/WriterWeb.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/printer.hxx>
@@ -360,7 +361,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
 
 OUString SwContentOptPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"guideslabel"_ustr, u"displaylabel"_ustr,  u"displayfl1"_ustr,       u"changeslabel"_ustr, u"label3"_ustr,
             u"hruler"_ustr,      u"settingslabel"_ustr, u"measureunitlabel"_ustr, u"outlinelabel"_ustr };
@@ -368,7 +369,7 @@ OUString SwContentOptPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"helplines"_ustr,
@@ -390,10 +391,10 @@ OUString SwContentOptPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
@@ -600,13 +601,13 @@ std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( weld::Container* pPage,
 
 OUString SwAddPrinterTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label2"_ustr, u"label10"_ustr, u"label1"_ustr, u"label5"_ustr, u"4"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -616,7 +617,7 @@ OUString SwAddPrinterTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"none"_ustr, u"only"_ustr, u"end"_ustr, u"endpage"_ustr, u"inmargins"_ustr };
@@ -624,10 +625,10 @@ OUString SwAddPrinterTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -934,19 +935,19 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
 
 OUString SwStdFontTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr,        u"font_label"_ustr, u"size_label"_ustr,    u"default_label"_ustr,
                           u"heading_label"_ustr, u"list_label"_ustr, u"caption_label"_ustr, u"index_label"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xStandardPB->get_label() + " ";
+    sAllStrings.append(m_xStandardPB->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
@@ -1439,7 +1440,7 @@ std::unique_ptr<SfxTabPage> SwTableOptionsTabPage::Create( weld::Container* pPag
 
 OUString SwTableOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr,  u"label3"_ustr,  u"label4"_ustr,  u"label5"_ustr,  u"label6"_ustr,  u"label10"_ustr, u"label2"_ustr,
             u"label14"_ustr, u"label15"_ustr, u"label16"_ustr, u"label11"_ustr, u"label12"_ustr, u"label13"_ustr };
@@ -1447,7 +1448,7 @@ OUString SwTableOptionsTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"header"_ustr,        u"repeatheader"_ustr,     u"dontsplit"_ustr,   u"border"_ustr,
@@ -1456,7 +1457,7 @@ OUString SwTableOptionsTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"fix"_ustr, u"fixprop"_ustr, u"var"_ustr };
@@ -1464,10 +1465,10 @@ OUString SwTableOptionsTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1817,14 +1818,14 @@ void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 
 OUString SwShdwCursorOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"layoutopt"_ustr, u"displayfl"_ustr, u"cursoropt"_ustr,       u"cursorlabel"_ustr,
                           u"fillmode"_ustr,  u"lbImage"_ustr,   u"lbDefaultAnchor"_ustr, u"autocomplete"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -1835,10 +1836,10 @@ OUString SwShdwCursorOptionsTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
@@ -2330,7 +2331,7 @@ std::unique_ptr<SfxTabPage> SwRedlineOptionsTabPage::Create( weld::Container* pP
 
 OUString SwRedlineOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label2"_ustr, u"insert_label"_ustr,  u"insertcolor_label"_ustr,
                           u"label3"_ustr, u"deleted_label"_ustr, u"deletedcolor_label"_ustr,
                           u"label4"_ustr, u"changed_label"_ustr, u"changedcolor_label"_ustr,
@@ -2339,10 +2340,10 @@ OUString SwRedlineOptionsTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2748,13 +2749,13 @@ std::unique_ptr<SfxTabPage> SwCompareOptionsTabPage::Create( weld::Container* pP
 
 OUString SwCompareOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"setting"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"auto"_ustr, u"byword"_ustr, u"bycharacter"_ustr };
@@ -2762,10 +2763,10 @@ OUString SwCompareOptionsTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2889,7 +2890,7 @@ std::unique_ptr<SfxTabPage> SwTestTabPage::Create( weld::Container* pPage, weld:
 
 OUString SwTestTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString checkButton[] = { u"unused"_ustr,           u"dynamic"_ustr,  u"nocalm"_ustr,
                                u"wysiwygdbg"_ustr,       u"noidle"_ustr,   u"noscreenadj"_ustr,
                                u"winformat"_ustr,        u"noscroll"_ustr, u"DrawingLayerNotLoading"_ustr,
@@ -2898,13 +2899,13 @@ OUString SwTestTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     if (const auto pString = m_xBuilder->weld_label(u"label1"_ustr))
-        sAllStrings += pString->get_label() + " ";
+        sAllStrings.append(pString->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

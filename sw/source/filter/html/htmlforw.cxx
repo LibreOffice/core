@@ -918,11 +918,11 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         return rWrt;
 
     const OString tag = rWrt.GetNamespace() + TagNames[eTag];
-    OString sOut = OString::Concat("<") + tag;
+    OStringBuffer sOut = OString::Concat("<") + tag;
     if( eType != TYPE_NONE )
     {
-        sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") +
-            TypeNames[eType] + "\"";
+        sOut.append(OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") +
+            TypeNames[eType] + "\"");
     }
 
     aTmp = xPropSet->getPropertyValue(u"Name"_ustr);
@@ -930,10 +930,10 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     {
         if( !s->isEmpty() )
         {
-            sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rWrt.Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( rWrt.Strm(), *s );
-            sOut = "\""_ostr;
+            sOut = "\"";
         }
     }
 
@@ -942,19 +942,19 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     {
         if( !*b )
         {
-            sOut += " " OOO_STRING_SVTOOLS_HTML_O_disabled;
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_disabled);
         }
     }
 
     if( !sValue.isEmpty() || bEmptyValue )
     {
-        sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), sValue );
-        sOut = "\""_ostr;
+        sOut = "\"";
     }
 
-    sOut += " " + sOptions;
+    sOut.append(" " + sOptions);
 
     if( TYPE_IMAGE == eType )
     {
@@ -963,11 +963,11 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         {
             if( !s->isEmpty() )
             {
-                sOut += " " OOO_STRING_SVTOOLS_HTML_O_src "=\"";
+                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
                 rWrt.Strm().WriteOString( sOut );
 
                 HTMLOutFuncs::Out_String(rWrt.Strm(), rWrt.normalizeURL(*s, false));
-                sOut = "\""_ostr;
+                sOut = "\"";
             }
         }
 
@@ -975,14 +975,14 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
 
         if( aPixelSz.Width() )
         {
-            sOut += " " OOO_STRING_SVTOOLS_HTML_O_width "=\"" +
-                OString::number(static_cast<sal_Int32>(aPixelSz.Width())) + "\"";
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"" +
+                OString::number(static_cast<sal_Int32>(aPixelSz.Width())) + "\"");
         }
 
         if( aPixelSz.Height() )
         {
-            sOut += " " OOO_STRING_SVTOOLS_HTML_O_height "=\"" +
-                OString::number(static_cast<sal_Int32>(aPixelSz.Height())) + "\"";
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_height "=\"" +
+                OString::number(static_cast<sal_Int32>(aPixelSz.Height())) + "\"");
         }
     }
 
@@ -995,8 +995,8 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             if( nTabIndex >= 32767 )
                 nTabIndex = 32767;
 
-            sOut += " " OOO_STRING_SVTOOLS_HTML_O_tabindex "=\"" +
-                OString::number(static_cast<sal_Int32>(nTabIndex)) + "\"";
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_tabindex "=\"" +
+                OString::number(static_cast<sal_Int32>(nTabIndex)) + "\"");
         }
     }
 
@@ -1181,15 +1181,15 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 sOut = "<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option;
                 if( !sVal.isEmpty() || bEmptyVal )
                 {
-                    sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
+                    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
                     rWrt.Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal );
-                    sOut = "\""_ostr;
+                    sOut = "\"";
                 }
                 if( bSelected )
-                    sOut += " " OOO_STRING_SVTOOLS_HTML_O_selected;
+                    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_selected);
 
-                sOut += ">";
+                sOut.append(">");
                 rWrt.Strm().WriteOString( sOut );
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i] );

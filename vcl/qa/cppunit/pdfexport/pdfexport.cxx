@@ -3614,16 +3614,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
     // Make sure the elements inside a formula in a RTL document are exported
     // LTR ( m=750abc ) and not RTL ( m=057cba )
     int nPageObjectCount = pPdfPage->getObjectCount();
-    OUString sText;
+    OUStringBuffer sText;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
             continue;
         OUString sChar = pPageObject->getText(pTextPage);
-        sText += o3tl::trim(sChar);
+        sText.append(o3tl::trim(sChar));
     }
-    CPPUNIT_ASSERT_EQUAL(u"m=750abc"_ustr, sText);
+    CPPUNIT_ASSERT_EQUAL(u"m=750abc"_ustr, sText.toString());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf167659)

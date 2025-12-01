@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <comphelper/string.hxx>
 #include <o3tl/untaint.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -1885,14 +1886,14 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 else if (sStrArray[i][0] >= '0' &&
                          sStrArray[i][0] <= '9' && !bDenomin) // denominator was not yet found
                 {
-                    OUString sDiv;
+                    OUStringBuffer sDiv;
                     sal_uInt16 j = i;
                     while(j < nStringsCnt && sStrArray[j][0] >= '0' && sStrArray[j][0] <= '9')
                     {
-                        sDiv += sStrArray[j++];
+                        sDiv.append(sStrArray[j++]);
                     }
                     assert(j > 0 && "if i is 0, first iteration through loop is guaranteed by surrounding if condition");
-                    if (std::u16string_view(OUString::number(sDiv.toInt32())) == sDiv)
+                    if (std::u16string_view(OUString::number(o3tl::toInt32(sDiv))) == sDiv)
                     {
                         // Found a Divisor
                         while (i < j)

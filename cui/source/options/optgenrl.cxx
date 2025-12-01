@@ -404,7 +404,7 @@ std::unique_ptr<SfxTabPage> SvxGeneralTabPage::Create( weld::Container* pPage, w
 
 OUString SvxGeneralTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr,     u"companyft"_ustr,         u"nameft"_ustr,          u"rusnameft"_ustr,
             u"eastnameft"_ustr, u"streetft"_ustr,          u"russtreetft"_ustr,     u"icityft"_ustr,
@@ -414,12 +414,12 @@ OUString SvxGeneralTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xUseDataCB->get_label() + " " + m_xEncryptToSelfCB->get_label() + " ";
+    sAllStrings.append(m_xUseDataCB->get_label() + " " + m_xEncryptToSelfCB->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )

@@ -1021,14 +1021,14 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
 OUString SwNumRule::MakeParagraphStyleListString() const
 {
-    OUString aParagraphStyleListString;
+    OUStringBuffer aParagraphStyleListString;
     for (const auto& rParagraphStyle : maParagraphStyleList)
     {
         if (!aParagraphStyleListString.isEmpty())
-            aParagraphStyleListString += ", ";
-        aParagraphStyleListString += rParagraphStyle->GetName().toString();
+            aParagraphStyleListString.append(", ");
+        aParagraphStyleListString.append(rParagraphStyle->GetName().toString());
     }
-    return aParagraphStyleListString;
+    return aParagraphStyleListString.toString();
 }
 
 /** Copy method of SwNumRule

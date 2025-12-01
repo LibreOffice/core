@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
@@ -143,14 +144,14 @@ std::unique_ptr<SfxTabPage> SvxAsianLayoutPage::Create(weld::Container* pPage, w
 
 OUString SvxAsianLayoutPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"languageft"_ustr, u"startft"_ustr, u"endft"_ustr, u"hintft"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"charkerning"_ustr, u"charpunctkerning"_ustr, u"nocompression"_ustr,
@@ -159,12 +160,12 @@ OUString SvxAsianLayoutPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xStandardCB->get_label() + " ";
+    sAllStrings.append(m_xStandardCB->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )

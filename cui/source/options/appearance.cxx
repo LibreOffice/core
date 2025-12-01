@@ -12,6 +12,7 @@
 #include <dialmgr.hxx>
 #include <editeng/editids.hrc>
 #include <officecfg/Office/Common.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <strings.hrc>
 #include <sfx2/AdditionsDialogHelper.hxx>
 #include <svtools/colorcfg.hxx>
@@ -177,17 +178,17 @@ std::unique_ptr<SfxTabPage> SvxAppearanceTabPage::Create(weld::Container* pPage,
 
 OUString SvxAppearanceTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"libreofficethemeslb"_ustr, u"optionslb"_ustr, u"appearancelb"_ustr,
                           u"itemslb"_ustr, u"colorlb"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)

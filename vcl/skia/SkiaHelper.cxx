@@ -14,6 +14,7 @@
 #include <string_view>
 
 #include <vcl/skia/SkiaHelper.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #if !HAVE_FEATURE_SKIA
 
@@ -125,12 +126,12 @@ OUString readLog()
 {
     SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::READ);
 
-    OUString sResult;
+    OUStringBuffer sResult;
     OStringBuffer sLine;
     while (logFile.ReadLine(sLine))
-        sResult += OStringToOUString(sLine, RTL_TEXTENCODING_UTF8) + "\n";
+        sResult.append(OStringToOUString(sLine, RTL_TEXTENCODING_UTF8) + "\n");
 
-    return sResult;
+    return sResult.toString();
 }
 
 uint32_t vendorId = 0;

@@ -878,18 +878,18 @@ std::unique_ptr<SfxTabPage> SvxLinguTabPage::Create( weld::Container* pPage, wel
 
 OUString SvxLinguTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"lingumodulesft"_ustr, u"lingudictsft"_ustr, u"label4"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xMoreDictsLink->get_label() + " ";
+    sAllStrings.append(m_xMoreDictsLink->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )

@@ -22,6 +22,7 @@
 #include <mmconfigitem.hxx>
 #include <mailmergehelper.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
@@ -146,14 +147,14 @@ std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage, wel
 
 OUString SwMailConfigPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"displayname_label"_ustr, u"address_label"_ustr, u"replyto_label"_ustr,
                           u"label2"_ustr, u"server_label"_ustr,      u"port_label"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"replytocb"_ustr, u"secure"_ustr };
@@ -161,7 +162,7 @@ OUString SwMailConfigPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString buttons[] = { u"serverauthentication"_ustr, u"test"_ustr };
@@ -169,10 +170,10 @@ OUString SwMailConfigPage::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )

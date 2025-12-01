@@ -19,6 +19,7 @@
 
 #include "optchart.hxx"
 #include <svx/SvxColorValueSet.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -189,13 +190,13 @@ std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( weld::Container* pPa
 
 OUString SvxDefaultColorOptPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label20"_ustr, u"label1"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString buttons[] = { u"add"_ustr, u"delete"_ustr, u"default"_ustr };
@@ -203,10 +204,10 @@ OUString SvxDefaultColorOptPage::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )

@@ -568,14 +568,14 @@ IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Toggleable&,
 
 OUString SwLoadOptPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label2"_ustr,   u"label1"_ustr, u"label3"_ustr, u"label5"_ustr,
                           u"tablabel"_ustr, u"label4"_ustr, u"label7"_ustr, u"labelstandardpages"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -584,7 +584,7 @@ OUString SwLoadOptPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"always"_ustr, u"onrequest"_ustr, u"never"_ustr };
@@ -592,10 +592,10 @@ OUString SwLoadOptPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
@@ -1039,7 +1039,7 @@ std::unique_ptr<SfxTabPage> SwCaptionOptPage::Create(weld::Container* pPage, wel
 
 OUString SwCaptionOptPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr,         u"label13"_ustr,     u"label2"_ustr,  u"label7"_ustr,  u"numberingft"_ustr,
                           u"numseparatorft"_ustr, u"separatorft"_ustr, u"label18"_ustr, u"label11"_ustr, u"label4"_ustr,
                           u"label6"_ustr,         u"label10"_ustr,     u"label3"_ustr };
@@ -1047,13 +1047,13 @@ OUString SwCaptionOptPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     if (const auto pString = m_xBuilder->weld_check_button(u"applyborder"_ustr))
-        sAllStrings += pString->get_label() + " ";
+        sAllStrings.append(pString->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )

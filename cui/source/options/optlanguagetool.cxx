@@ -19,6 +19,7 @@
 
 #include "optlanguagetool.hxx"
 #include <officecfg/Office/Linguistic.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
 
@@ -111,7 +112,7 @@ void OptLanguageToolTabPage::Reset(const SfxItemSet*)
 
 OUString OptLanguageToolTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = {
         u"langtoolsettings"_ustr, u"disclaimer"_ustr,  u"apisettingsheader"_ustr, u"base"_ustr,
         u"urldesc"_ustr,          u"usernamelbl"_ustr, u"usernamedesc"_ustr,      u"apikeylbl"_ustr,
@@ -121,7 +122,7 @@ OUString OptLanguageToolTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"activate"_ustr, u"verifyssl"_ustr };
@@ -129,13 +130,13 @@ OUString OptLanguageToolTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     if (const auto pString = m_xBuilder->weld_link_button(u"policy"_ustr))
-        sAllStrings += pString->get_label() + " ";
+        sAllStrings.append(pString->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OptLanguageToolTabPage::FillItemSet(SfxItemSet*)

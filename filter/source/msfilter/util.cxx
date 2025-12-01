@@ -568,7 +568,7 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
 {
     EquationResult aResult;
 
-    OUString sCombinedCharacters;
+    OUStringBuffer sCombinedCharacters;
     WW8ReadFieldParams aOriFldParam = rReadParam;
     const sal_Int32 cGetChar = rReadParam.SkipToNextToken();
     switch( cGetChar )
@@ -607,8 +607,8 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
 
                                 if (nBegin != -1 && nEnd != -1)
                                 {
-                                    sCombinedCharacters +=
-                                        sPart.subView(nBegin+1,nEnd-nBegin-1);
+                                    sCombinedCharacters.append(
+                                        sPart.subView(nBegin+1,nEnd-nBegin-1));
                                 }
                             }
                         }
@@ -641,7 +641,7 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                             else
                                 break;
                         }
-                        sCombinedCharacters = sPart.copy( nBegin+1, nEnd-nBegin-1 );
+                        sCombinedCharacters = sPart.subView( nBegin+1, nEnd-nBegin-1 );
                         if ( !sCombinedCharacters.isEmpty() )
                         {
                             aResult.sType = "Input";

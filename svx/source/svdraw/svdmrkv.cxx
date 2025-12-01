@@ -1109,7 +1109,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
                                                 Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
                                                 Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                                                OString sPolygonElem("<polygon points=\\\""_ostr);
+                                                OStringBuffer sPolygonElem("<polygon points=\\\"");
                                                 for (sal_uInt32 nIndex = 0; nIndex < nPolySize; ++nIndex)
                                                 {
                                                     const basegfx::B2DPoint aB2Point = aPolygon.getB2DPoint(nIndex);
@@ -1118,10 +1118,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                     if (mbNegativeX)
                                                         aPoint.setX(-aPoint.X());
                                                     if (nIndex > 0)
-                                                        sPolygonElem += " ";
-                                                    sPolygonElem += aPoint.toString();
+                                                        sPolygonElem.append(" ");
+                                                    sPolygonElem.append(aPoint.toString());
                                                 }
-                                                sPolygonElem += R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem";
+                                                sPolygonElem.append(R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem");
 
                                                 OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
                                                     OString::number(aSelection.GetWidth() / 100.0) +

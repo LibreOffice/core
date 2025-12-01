@@ -70,8 +70,8 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
                     continue;
                 if (!rtl::math::approxEqual(1.0, rDoc.GetValue(nCorrectCol, row, tab)))
                 {
-                    OUString result;
-                    OUString expected;
+                    OUStringBuffer result;
+                    OUStringBuffer expected;
                     for (SCCOL nOffset = 0; nOffset < nExpectedCol; ++ nOffset)
                     {
                         if (rDoc.HasValueData(nExpectedCol + nOffset, row, tab))
@@ -80,20 +80,20 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
                             // rounds to 15 decimals
                             char buf[25];
                             int len = snprintf(buf, 25, "%.17G", rDoc.GetValue(0 + nOffset, row, tab));
-                            result += OUString::createFromAscii(std::string_view(buf, len));
+                            result.append( OUString::createFromAscii(std::string_view(buf, len)) );
                             len = snprintf(buf, 25, "%.17G", rDoc.GetValue(nExpectedCol + nOffset, row, tab));
-                            expected += OUString::createFromAscii(std::string_view(buf, len));
+                            expected.append( OUString::createFromAscii(std::string_view(buf, len)) );
                         }
                         else
                         {
-                            result += rDoc.GetString(0 + nOffset, row, tab);
-                            expected += rDoc.GetString(nExpectedCol + nOffset, row, tab);
+                            result.append(rDoc.GetString(0 + nOffset, row, tab));
+                            expected.append(rDoc.GetString(nExpectedCol + nOffset, row, tab));
                         }
 
                         if (nOffset < nExpectedCol - 1)
                         {
-                            result += ", ";
-                            expected += ", ";
+                            result.append(", ");
+                            expected.append(", ");
                         }
                     }
                     CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "

@@ -1429,14 +1429,14 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
         {
             sal_Int32 nLigatureGlyph = ligature.first;
             OString sLigatureChars = ligature.second;
-            OString ligatureLine = "substitute"_ostr;
+            OStringBuffer ligatureLine("substitute");
             for (sal_Int32 i = 0; i < sLigatureChars.getLength(); i += 4)
             {
                 OString sLigatureChar = sLigatureChars.copy(i, 4);
                 sal_Int32 nCharGlyph = charsToGlyph[sLigatureChar];
-                ligatureLine += " \\" + OString::number(nCharGlyph);
+                ligatureLine.append(" \\" + OString::number(nCharGlyph));
             }
-            ligatureLine += " by \\" + OString::number(nLigatureGlyph) + ";";
+            ligatureLine.append(" by \\" + OString::number(nLigatureGlyph) + ";");
             Features.WriteLine(ligatureLine);
         }
         Features.WriteLine("} liga;");
@@ -1607,14 +1607,14 @@ static EmbeddedFontInfo mergeFontSubsets(sal_Int64 prefix, const OUString& merge
         {
             sal_Int32 nLigatureGlyph = ligature.first;
             OString sLigatureChars = ligature.second;
-            OString ligatureLine = "substitute"_ostr;
+            OStringBuffer ligatureLine("substitute");
             for (sal_Int32 i = 0; i < sLigatureChars.getLength(); i += 4)
             {
                 OString sLigatureChar = sLigatureChars.copy(i, 4);
                 sal_Int32 nCharGlyph = charsToGlyph[sLigatureChar];
-                ligatureLine += " \\" + OString::number(nCharGlyph);
+                ligatureLine.append(" \\" + OString::number(nCharGlyph));
             }
-            ligatureLine += " by \\" + OString::number(nLigatureGlyph) + ";";
+            ligatureLine.append(" by \\" + OString::number(nLigatureGlyph) + ";");
             Features.WriteLine(ligatureLine);
         }
         Features.WriteLine("} liga;");

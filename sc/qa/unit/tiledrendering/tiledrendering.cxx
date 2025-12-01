@@ -1787,7 +1787,7 @@ struct SheetDimData
                 continue;
 
             bool bBooleanValue = rEntry.aKey != "sizes";
-            OString aExpectedEncoding;
+            OStringBuffer aExpectedEncoding;
             bool bFirst = true;
             for (const auto& rSpan : rEntry.rSpanList)
             {
@@ -1795,15 +1795,15 @@ struct SheetDimData
                 if (bBooleanValue && bFirst)
                     nVal = static_cast<size_t>(!!nVal);
                 if (!bBooleanValue || bFirst)
-                    aExpectedEncoding += OString::number(nVal) + ":";
-                aExpectedEncoding += OString::number(rSpan.nEnd) + " ";
+                    aExpectedEncoding.append(OString::number(nVal) + ":");
+                aExpectedEncoding.append(OString::number(rSpan.nEnd) + " ");
                 bFirst = false;
             }
 
             // Get the tree's value for the property key ("sizes"/"hidden"/"filtered").
             OString aTreeValue(rTree.get<std::string>(rEntry.aKey.getStr()));
 
-            CPPUNIT_ASSERT_EQUAL(aExpectedEncoding, aTreeValue);
+            CPPUNIT_ASSERT_EQUAL(aExpectedEncoding.toString(), aTreeValue);
         }
     }
 };

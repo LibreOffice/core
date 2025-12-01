@@ -222,13 +222,13 @@ SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
 
 OUString SmPrintOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label4"_ustr, u"label5"_ustr, u"label1"_ustr, u"label6"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -237,7 +237,7 @@ OUString SmPrintOptionsTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"sizenormal"_ustr, u"sizescaled"_ustr, u"sizezoomed"_ustr };
@@ -245,10 +245,10 @@ OUString SmPrintOptionsTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)

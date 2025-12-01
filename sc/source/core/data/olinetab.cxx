@@ -143,12 +143,12 @@ ScOutlineCollection::iterator ScOutlineCollection::FindStart(SCCOLROW nMinStart)
 
 OString ScOutlineCollection::dumpAsString() const
 {
-    OString aOutput;
+    OStringBuffer aOutput;
     const char* const pGroupEntrySep = ",";
     for (const auto& rKeyValuePair : m_Entries)
-        aOutput += rKeyValuePair.second.dumpAsString() + pGroupEntrySep;
+        aOutput.append(rKeyValuePair.second.dumpAsString() + pGroupEntrySep);
 
-    return aOutput;
+    return aOutput.toString();
 }
 
 ScOutlineArray::ScOutlineArray() :
@@ -730,16 +730,16 @@ void ScOutlineArray::finalizeImport(const ScTable& rTable)
 
 OString ScOutlineArray::dumpAsString() const
 {
-    OString aOutput;
+    OStringBuffer aOutput;
     const char* const pLevelSep = " ";
     for (const auto& rCollection : aCollections)
     {
         if (rCollection.empty())
             continue;
-        aOutput += rCollection.dumpAsString() + pLevelSep;
+        aOutput.append(rCollection.dumpAsString() + pLevelSep);
     }
 
-    return aOutput;
+    return aOutput.toString();
 }
 
 ScOutlineTable::ScOutlineTable()

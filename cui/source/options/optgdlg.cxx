@@ -218,14 +218,14 @@ std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( weld::Container* pPage, weld
 
 OUString OfaMiscTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label4"_ustr, u"label5"_ustr, u"yearslabel"_ustr,
                           u"toyear"_ustr, u"label8"_ustr, u"label9"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -235,13 +235,13 @@ OUString OfaMiscTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     if (const auto pString = m_xBuilder->weld_button(u"assocfiles"_ustr))
-        sAllStrings += pString->get_label() + " ";
+        sAllStrings.append(pString->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -649,7 +649,7 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 
 OUString OfaViewTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label16"_ustr, u"label1"_ustr,      u"label6"_ustr,       u"label15"_ustr,
                           u"label14"_ustr, u"label8"_ustr,      u"label9"_ustr,       u"label4"_ustr, u"label12"_ustr,
                           u"label2"_ustr,  u"skiaenabled"_ustr, u"skiadisabled"_ustr, u"label5"_ustr, u"aafrom"_ustr };
@@ -657,7 +657,7 @@ OUString OfaViewTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -666,12 +666,12 @@ OUString OfaViewTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xSkiaLog->get_label() + " " + m_xRunGPTests->get_label() + " ";
+    sAllStrings.append(m_xSkiaLog->get_label() + " " + m_xRunGPTests->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -1071,7 +1071,7 @@ std::unique_ptr<SfxTabPage> OfaLanguagesTabPage::Create( weld::Container* pPage,
 
 OUString OfaLanguagesTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr, u"label4"_ustr,          u"label7"_ustr, u"localesettingFT"_ustr, u"defaultcurrency"_ustr,
             u"label6"_ustr, u"dataaccpatterns"_ustr, u"label2"_ustr, u"western"_ustr,         u"label3"_ustr };
@@ -1079,7 +1079,7 @@ OUString OfaLanguagesTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -1088,10 +1088,10 @@ OUString OfaLanguagesTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )

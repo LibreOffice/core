@@ -25,6 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <bitmaps.hlst>
 
 #include <sal/log.hxx>
@@ -945,7 +946,7 @@ bool EmbeddedObjectRef::IsChart() const
 // MT: Only used for getting accessible attributes, which are not localized
 OUString EmbeddedObjectRef::GetChartType()
 {
-    OUString Style;
+    OUStringBuffer Style;
     if ( mpImpl->mxObj.is() )
     {
         if ( IsChart() )
@@ -968,20 +969,20 @@ OUString EmbeddedObjectRef::GetChartType()
                         const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
                         int nDimesionCount = rCooSys->getDimension();
                         if( nDimesionCount == 3 )
-                            Style += "3D ";
+                            Style.append("3D ");
                         else
-                            Style += "2D ";
+                            Style.append("2D ");
                         for( const auto& rChartType : aChartTypes )
                         {
                             OUString strChartType = rChartType->getChartType();
                             if (strChartType == "com.sun.star.chart2.AreaChartType")
                             {
-                                Style += "Areas";
+                                Style.append("Areas");
                                 bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.BarChartType")
                             {
-                                Style += "Bars";
+                                Style.append("Bars");
                                 bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.ColumnChartType")
@@ -993,47 +994,47 @@ OUString EmbeddedObjectRef::GetChartType()
                                     if( xProp->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bCurrent )
                                     {
                                         if (bCurrent)
-                                            Style += "Bars";
+                                            Style.append("Bars");
                                         else
-                                            Style += "Columns";
+                                            Style.append("Columns");
                                         bGetChartType = true;
                                     }
                                 }
                             }
                             else if (strChartType == "com.sun.star.chart2.LineChartType")
                             {
-                                Style += "Lines";
+                                Style.append("Lines");
                                 bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.ScatterChartType")
                             {
-                                Style += "XY Chart";
+                                Style.append("XY Chart");
                                 bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.PieChartType")
                             {
-                                Style += "Pies";
+                                Style.append("Pies");
                                 bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.NetChartType")
                             {
-                                Style += "Radar";
+                                Style.append("Radar");
                                 bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.CandleStickChartType")
                             {
-                                Style += "Candle Stick Chart";
+                                Style.append("Candle Stick Chart");
                                 bGetChartType = true;
                             }
                             if (bGetChartType)
-                                return Style;
+                                return Style.toString();
                         }
                     }
                 }
             }
         }
     }
-    return Style;
+    return Style.toString();
 }
 
 // #i104867#

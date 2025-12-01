@@ -28,6 +28,7 @@
 #include <officecfg/Office/Draw.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/optgrid.hxx>
@@ -201,7 +202,7 @@ std::unique_ptr<SfxTabPage> SvxGridTabPage::Create(weld::Container* pPage, weld:
 
 OUString SvxGridTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr,    u"label2"_ustr, u"flddrawx"_ustr,  u"flddrawy"_ustr, u"label6"_ustr, u"label7"_ustr, u"label3"_ustr,
             u"divisionx"_ustr, u"label4"_ustr, u"divisiony"_ustr, u"label5"_ustr,   u"label8"_ustr, u"label9"_ustr };
@@ -209,7 +210,7 @@ OUString SvxGridTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -219,10 +220,10 @@ OUString SvxGridTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )

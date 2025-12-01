@@ -26,6 +26,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #ifdef _WIN32
@@ -233,18 +234,18 @@ javaFrameworkError jfw_startVM(
                 // Expand user classpath (might contain bootstrap vars)
                 const OUString& sUserPath(settings.getUserClassPath());
                 std::vector paths = jfw_convertUserPathList(sUserPath);
-                OUString sUserPathExpanded;
+                OUStringBuffer sUserPathExpanded;
                 for (auto& path : paths)
                 {
                     if (!sUserPathExpanded.isEmpty())
-                        sUserPathExpanded += OUStringChar(SAL_PATHSEPARATOR);
+                        sUserPathExpanded.append(OUStringChar(SAL_PATHSEPARATOR));
                     if (path.startsWith("$"))
                     {
                         OUString sURL = path;
                         rtl::Bootstrap::expandMacros(sURL);
                         osl::FileBase::getSystemPathFromFileURL(sURL, path);
                     }
-                    sUserPathExpanded += path;
+                    sUserPathExpanded.append(path);
                 }
                 sUserClassPath = jfw::makeClassPathOption(sUserPathExpanded);
             } // end mode FWK_MODE_OFFICE

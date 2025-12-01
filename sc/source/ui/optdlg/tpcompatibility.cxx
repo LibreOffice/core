@@ -9,6 +9,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <officecfg/Office/Calc.hxx>
@@ -37,18 +38,18 @@ std::unique_ptr<SfxTabPage> ScTpCompatOptions::Create(weld::Container* pPage, we
 
 OUString ScTpCompatOptions::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     // id "keybindings" GtkComboBoxText is not included
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)

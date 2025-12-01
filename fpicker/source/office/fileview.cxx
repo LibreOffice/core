@@ -1066,10 +1066,10 @@ IMPL_LINK(SvtFileView, HeaderSelect_Impl, int, nColumn, void)
 OUString SvtFileView::GetConfigString() const
 {
     // sort order
-    OUString sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
+    OUStringBuffer sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
 
     bool bUp = mpImpl->mbAscending;
-    sRet += OUString::Concat(bUp ? std::u16string_view(u"1") : std::u16string_view(u"0")) + ";";
+    sRet.append(OUString::Concat(bUp ? std::u16string_view(u"1") : std::u16string_view(u"0")) + ";");
 
     weld::TreeView* pView = mpImpl->mxView->getWidget();
     sal_uInt16 nCount = mpImpl->mxView->TypeColumnVisible() ? 4 : 3;
@@ -1080,13 +1080,13 @@ OUString SvtFileView::GetConfigString() const
         if (!mpImpl->mxView->TypeColumnVisible() && nId != COLUMN_TITLE)
             ++nId;
 
-        sRet += OUString::number( nId )
+        sRet.append(OUString::number( nId )
                 + ";"
                 + OUString::number(pView->get_column_width(i))
-                + ";";
+                + ";");
     }
 
-    return comphelper::string::stripEnd(sRet, ';');
+    return comphelper::string::stripEnd(sRet.toString(), ';');
 }
 
 ::std::vector< SvtContentEntry > SvtFileView::GetContent()

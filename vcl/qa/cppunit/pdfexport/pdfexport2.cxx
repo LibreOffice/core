@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159895)
             auto pStart = static_cast<const char*>(aUncompressed.GetData());
             const char* const pEnd = pStart + aUncompressed.GetSize();
 
-            OString sText;
+            OStringBuffer sText;
             while (true)
             {
                 auto const pLine = ::std::find(pStart, pEnd, '\n');
@@ -199,10 +199,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159895)
                 pStart = pLine + 1;
                 if (!line.empty() && line[0] != '%')
                 {
-                    sText += line + "\n"_ostr;
+                    sText.append(line + "\n"_ostr);
                 }
             }
-            CPPUNIT_ASSERT_EQUAL("/Tx BMC\nEMC\n"_ostr, sText);
+            CPPUNIT_ASSERT_EQUAL("/Tx BMC\nEMC\n"_ostr, sText.toString());
         }
     }
 }
