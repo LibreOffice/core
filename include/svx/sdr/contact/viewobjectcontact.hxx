@@ -65,7 +65,6 @@ private:
     // This bool gets set when the object gets invalidated by ActionChanged() and
     // can be used from the OC to late-invalidates
     bool                                            mbLazyInvalidate : 1;
-    mutable bool                                    mbInvalidateViewOnDestruct : 1;
 
 protected:
     // make redirector a protected friend, it needs to call createPrimitives as default action
@@ -98,7 +97,6 @@ public:
 
     // get the object size range
     const basegfx::B2DRange& getObjectRange() const;
-    bool hasCachedObjectRange() const { return !maObjectRange.isEmpty(); }
 
     // React on changes of the object of this ViewContact
     virtual void ActionChanged();
