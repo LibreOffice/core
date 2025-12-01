@@ -1234,6 +1234,11 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects()
 
 Reference< XNameAccess >  SwXTextDocument::getBookmarks()
 {
+    return getSwBookmarks();
+}
+
+rtl::Reference< SwXBookmarks >  SwXTextDocument::getSwBookmarks()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXBookmarks.is())

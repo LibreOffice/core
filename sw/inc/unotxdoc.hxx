@@ -556,6 +556,7 @@ public:
     rtl::Reference<SwXTextSections> getSwTextSections();
     rtl::Reference<SwXChapterNumbering> getSwChapterNumberingRules();
     rtl::Reference< SwXLineNumberingProperties > getSwLineNumberingProperties();
+    rtl::Reference< SwXBookmarks > getSwBookmarks();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

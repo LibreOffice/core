@@ -31,8 +31,8 @@
 #include <svl/listener.hxx>
 #include <sfx2/Metadatable.hxx>
 
-#include <unobaseclass.hxx>
-#include <IDocumentMarkAccess.hxx>
+#include "unobaseclass.hxx"
+#include "IDocumentMarkAccess.hxx"
 
 class SwDoc;
 class SwXTextRange;

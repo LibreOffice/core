@@ -1536,6 +1536,11 @@ sal_Int32 SwXBookmarks::getCount()
 
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
 {
+    return uno::Any(uno::Reference< text::XTextContent >(getBookmarkByIndex(nIndex)));
+}
+
+rtl::Reference<SwXBookmark> SwXBookmarks::getBookmarkByIndex(sal_Int32 nIndex)
+{
     SolarMutexGuard aGuard;
     auto& rDoc = GetDoc();
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
@@ -1551,9 +1556,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
         {
             if (count == nIndex)
             {
-                const rtl::Reference< SwXBookmark > xRef =
-                    SwXBookmark::CreateXBookmark(rDoc, *ppMark);
-                return uno::Any(uno::Reference< text::XTextContent >(xRef));
+                return SwXBookmark::CreateXBookmark(rDoc, *ppMark);
             }
             ++count; // only count real bookmarks
         }

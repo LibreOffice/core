@@ -41,6 +41,7 @@ struct SvEventDescription;
 class SwXFootnote;
 class SwXTextSection;
 class SwXTextTable;
+class SwXBookmark;
 
 const SvEventDescription* sw_GetSupportedMacroItems();
 
@@ -427,6 +428,7 @@ class SwXBookmarks final : public SwCollectionBaseClass,
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+        rtl::Reference<SwXBookmark> getBookmarkByIndex(sal_Int32 nIndex);
 };
 
 class SwXNumberingRulesCollection final : public cppu::WeakImplHelper

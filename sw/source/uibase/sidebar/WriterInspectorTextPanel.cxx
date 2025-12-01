@@ -49,6 +49,7 @@
 #include <strings.hrc>
 #include <rdfhelper.hxx>
 #include <unotxdoc.hxx>
+#include <unobookmark.hxx>
 
 namespace sw::sidebar
 {
@@ -661,18 +662,15 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                  aParaNode.children.end()); // Parent style should be first then children
 
     // Collect bookmarks at character position
-    uno::Reference<container::XIndexAccess> xBookmarks(pSwTextDocument->getBookmarks(),
-                                                       uno::UNO_QUERY);
+    rtl::Reference<SwXBookmarks> xBookmarks(pSwTextDocument->getSwBookmarks());
     for (sal_Int32 i = 0; i < xBookmarks->getCount(); ++i)
     {
         svx::sidebar::TreeNode aCurNode;
-        uno::Reference<text::XTextContent> bookmark;
-        xBookmarks->getByIndex(i) >>= bookmark;
-        uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
+        rtl::Reference<SwXBookmark> xBookmark = xBookmarks->getBookmarkByIndex(i);
 
         try
         {
-            uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
+            uno::Reference<text::XTextRange> bookmarkRange = xBookmark->getAnchor();
             uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
                                                                       uno::UNO_QUERY);
             if (xTextRangeCompare.is()
@@ -682,7 +680,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                 aCurNode.sNodeName = xBookmark->getName();
                 aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-                MetadataToTreeNode(xBookmark, aCurNode);
+                MetadataToTreeNode(cppu::getXWeak(xBookmark.get()), aCurNode);
                 // show bookmark only if it has RDF metadata
                 if (aCurNode.children.size() > 0)
                     aBookmarksNode.children.push_back(std::move(aCurNode));

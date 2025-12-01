@@ -11859,6 +11859,7 @@ sw/inc/txtrfmrk.hxx
 sw/inc/txttxmrk.hxx
 sw/inc/undobj.hxx
 sw/inc/unobaseclass.hxx
+sw/inc/unobookmark.hxx
 sw/inc/unochart.hxx
 sw/inc/unocoll.hxx
 sw/inc/unocrsr.hxx
@@ -12261,7 +12262,6 @@ sw/source/core/inc/txtfly.hxx
 sw/source/core/inc/txtfrm.hxx
 sw/source/core/inc/txttypes.hxx
 sw/source/core/inc/undoflystrattr.hxx
-sw/source/core/inc/unobookmark.hxx
 sw/source/core/inc/unofield.hxx
 sw/source/core/inc/unoflatpara.hxx
 sw/source/core/inc/unofldmid.h
