@@ -1965,6 +1965,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testDefaultTabStop)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), nDefTab);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf96389_deftabstopECMA)
+{
+    createSdImpressDoc("potx/tdf96389_deftabstopECMA.potx");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    sal_Int32 nDefTab = pDoc->GetDefaultTabulator();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), nDefTab);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testCropToZero)
 {
     // Must not crash because of division by zero
