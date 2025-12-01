@@ -304,7 +304,7 @@ cppu::WeakImplHelper
     css::lang::XServiceInfo
 > SwXFramesBaseClass;
 
-class SwXFrames : public SwXFramesBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
     const FlyCntType    m_eType;
@@ -374,7 +374,7 @@ public:
 
 };
 
-class SwXTextSections final : public SwCollectionBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXTextSections final : public SwCollectionBaseClass,
                         public SwUnoCollection
 {
     virtual ~SwXTextSections() override;
