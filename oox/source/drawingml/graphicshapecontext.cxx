@@ -35,6 +35,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
 #include <drawingml/transform2dcontext.hxx>
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/token/namespaces.hxx>
@@ -257,9 +258,16 @@ void OleObjectGraphicDataContext::onEndElement()
 {
     if( getCurrentElement() == PPT_TOKEN( oleObj ) && !isMCEStateEmpty() )
     {
-        if (getMCEState() == MCE_STATE::FoundChoice && !mrOleObjectInfo.mbHasPicture
-            && mrOleObjectInfo.maShapeId.isEmpty())
-            setMCEState( MCE_STATE::Started );
+        if (getMCEState() == MCE_STATE::FoundChoice && !mrOleObjectInfo.mbHasPicture)
+        {
+            // Use mcFallback if Shape ID is invalid
+            if (!mrOleObjectInfo.maShapeId.isEmpty())
+                if (::oox::vml::Drawing* pVmlDrawing = getFilter().getVmlDrawing())
+                    if (pVmlDrawing->getShapes().getShapeById(mrOleObjectInfo.maShapeId))
+                        return;
+
+            setMCEState(MCE_STATE::Started);
+        }
     }
 }
 
