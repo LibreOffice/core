@@ -1183,6 +1183,7 @@ private:
 
     SAL_DLLPRIVATE void populatePagePreviewsGrid();
     SAL_DLLPRIVATE void updatePagePreviewsGrid(SdPage* pPage);
+    SAL_DLLPRIVATE void connectPagePreviews();
 
     SAL_DLLPRIVATE virtual void PageListChanged() override;
     SAL_DLLPRIVATE virtual void MasterPageListChanged() override;
