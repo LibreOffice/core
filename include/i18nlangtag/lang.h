@@ -86,7 +86,7 @@
 #include <ostream>
 
 typedef o3tl::strong_int<sal_uInt16, struct LanguageTypeTag> LanguageType;
-inline std::ostream& operator<<(std::ostream& os, LanguageType const & lt) { os << sal_uInt16(lt); return os; }
+inline std::ostream& operator<<(std::ostream& os, LanguageType lt) { return os << sal_uInt16(lt); }
 constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16(lt) & 0x03ff); }
 
 namespace o3tl
