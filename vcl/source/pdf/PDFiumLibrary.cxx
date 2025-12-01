@@ -436,7 +436,6 @@ public:
     OUString getBaseFontName() override;
     int getFontAngle() override;
     std::unique_ptr<PDFiumFont> getFont() override;
-    bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
     std::unique_ptr<PDFiumBitmap> getRenderedFillPattern(PDFiumDocument& rDoc,
@@ -1338,28 +1337,6 @@ sal_uInt32 PDFiumFontImpl::getGlyphIndexFromCharCode(const sal_uInt32 nCharCode)
 }
 
 sal_Int32 PDFiumFontImpl::getFontDictObjNum() const { return FPDFFont_GetFontDictObjNum(mpFont); }
-
-bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
-{
-    // FPDFFont_GetWeight turns out not to be that useful. It seems to just
-    // reports what explicit "FontWeight" feature is mentioned in the PDF font,
-    // which is an optional property.
-    // So pull the font data and analyze it directly. Though the font might not
-    // have an OS/2 table so we may end up eventually inferring the weight from
-    // the style name.
-    auto font = getFont();
-    if (!font)
-        return false;
-    std::vector<uint8_t> aData;
-    if (!font->getFontData(aData))
-        return false;
-    if (!EmbeddedFontsManager::analyzeTTF(aData.data(), aData.size(), weight))
-    {
-        SAL_WARN("vcl.filter", "PDFiumImpl: failed to analyzeTTF");
-        return false;
-    }
-    return true;
-}
 
 PDFTextRenderMode PDFiumPageObjectImpl::getTextRenderMode()
 {

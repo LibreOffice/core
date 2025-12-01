@@ -26,7 +26,6 @@ public:
     void InsertItem(OUString aText);
     void SetActiveItem(sal_uInt32 nPos) { m_xComboBox->set_active(nPos); }
     OUString GetSelectedItem() { return m_xComboBox->get_active_text(); }
-    sal_Int32 ElementCount() { return m_xComboBox->get_count(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

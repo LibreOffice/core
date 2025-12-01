@@ -61,8 +61,6 @@ public:
 
     void dispose();
     ~ToolbarUnoDispatcher();
-
-    void Select(const OUString& rCommand) { SelectHdl(rCommand); }
 };
 
 #endif

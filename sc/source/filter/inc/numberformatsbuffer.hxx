@@ -64,10 +64,6 @@ public:
     void                setFormatCode(
                             const css::lang::Locale& rLocale,
                             const OUString& rcFmtCode );
-    /** Sets the passed format code, encoded in UTF-8. */
-    void                setFormatCode(
-                            const css::lang::Locale& rLocale,
-                            const char* pcFmtCode );
     /** Sets the passed predefined format code identifier. */
     void                setPredefinedId(
                             const css::lang::Locale& rLocale,

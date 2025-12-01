@@ -87,46 +87,11 @@ bool IsDoubleLinesEnabled()
     return true;
 }
 
-void        SetAll(bool bSet)
-{
-    SvtCJKOptions_Load();
-    if ( officecfg::Office::Common::I18N::CJK::CJKFont::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::VerticalText::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::AsianTypography::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::JapaneseFind::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::Ruby::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::ChangeCaseMap::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::DoubleLines::isReadOnly() )
-        return;
-
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::I18N::CJK::CJKFont::set(bSet, xChanges);
-    officecfg::Office::Common::I18N::CJK::VerticalText::set(bSet, xChanges);
-    officecfg::Office::Common::I18N::CJK::AsianTypography::set(bSet, xChanges);
-    officecfg::Office::Common::I18N::CJK::JapaneseFind::set(bSet, xChanges);
-    officecfg::Office::Common::I18N::CJK::Ruby::set(bSet, xChanges);
-    officecfg::Office::Common::I18N::CJK::ChangeCaseMap::set(bSet, xChanges);
-    officecfg::Office::Common::I18N::CJK::DoubleLines::set(bSet, xChanges);
-    xChanges->commit();
-}
-
 bool    IsAnyEnabled()
 {
     SvtCJKOptions_Load();
     return  IsCJKFontEnabled() || IsVerticalTextEnabled() || IsAsianTypographyEnabled() || IsJapaneseFindEnabled() ||
                 IsRubyEnabled() || IsChangeCaseMapEnabled() || IsDoubleLinesEnabled() ;
-}
-
-bool    IsAnyReadOnly()
-{
-    SvtCJKOptions_Load();
-    return officecfg::Office::Common::I18N::CJK::CJKFont::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::VerticalText::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::AsianTypography::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::JapaneseFind::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::Ruby::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::ChangeCaseMap::isReadOnly()
-        || officecfg::Office::Common::I18N::CJK::DoubleLines::isReadOnly();
 }
 
 } // namespace SvtCJKOptions

@@ -100,7 +100,6 @@ class ConfigurationAccess
     private:
         std::vector< OptimizerSettings > maSettings;
 
-        void LoadStrings();
         void LoadConfiguration();
         css::uno::Reference< css::uno::XInterface > OpenConfiguration( bool bReadOnly );
         static css::uno::Reference< css::uno::XInterface > GetConfigurationNode(

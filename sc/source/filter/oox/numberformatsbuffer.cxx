@@ -1824,11 +1824,6 @@ void NumberFormat::setFormatCode(const Locale& rLocale, const OUString& rcFmtCod
     maModel.mnPredefId = -1;
 }
 
-void NumberFormat::setFormatCode( const Locale& rLocale, const char* pcFmtCode )
-{
-    setFormatCode(rLocale, OStringToOUString(pcFmtCode, RTL_TEXTENCODING_UTF8));
-}
-
 void NumberFormat::setPredefinedId( const Locale& rLocale, sal_Int16 nPredefId )
 {
     maModel.maLocale = rLocale;

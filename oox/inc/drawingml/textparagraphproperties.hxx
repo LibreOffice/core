@@ -97,7 +97,6 @@ public:
     TextSpacing&                        getLineSpacing() { return maLineSpacing; }
     void                                setLineSpacing( const TextSpacing& rLineSpacing ) { maLineSpacing = rLineSpacing; }
 
-    bool                                getRestartNumbering( ) { return mbRestartNumbering; }
     void                                setRestartNumbering( const bool bRestartNumbering ) { mbRestartNumbering = bRestartNumbering; }
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,

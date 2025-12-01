@@ -482,11 +482,6 @@ void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
     rDest.maTableTag  = maTableTag;
 }
 
-void ScDPObject::WriteTempDataTo( ScDPObject& rDest ) const
-{
-    rDest.mnHeaderRows = mnHeaderRows;
-}
-
 bool ScDPObject::IsSheetData() const
 {
     return mpSheetDescription != nullptr;

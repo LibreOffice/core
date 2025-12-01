@@ -30,9 +30,7 @@ SVL_DLLPUBLIC bool IsRubyEnabled();
 SVL_DLLPUBLIC bool IsChangeCaseMapEnabled();
 SVL_DLLPUBLIC bool IsDoubleLinesEnabled();
 
-SVL_DLLPUBLIC void SetAll(bool bSet);
 SVL_DLLPUBLIC bool IsAnyEnabled();
-SVL_DLLPUBLIC bool IsAnyReadOnly();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

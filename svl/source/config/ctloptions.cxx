@@ -69,7 +69,6 @@ public:
     void            Load();
 
     bool            IsLoaded() const { return m_bIsLoaded; }
-    void            SetCTLFontEnabled( bool _bEnabled );
 
     void SetCTLVerticalText(bool bVertical);
 
@@ -83,7 +82,6 @@ public:
 
     void            SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals );
 
-    bool            IsReadOnly(SvtCTLOptions::EOption eOption) const;
 };
 namespace
 {
@@ -93,22 +91,7 @@ namespace
         return SINGLETON;
     }
 }
-bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
-{
-    bool bReadOnly = CFG_READONLY_DEFAULT;
-    switch(eOption)
-    {
-        case SvtCTLOptions::E_CTLFONT             : bReadOnly = m_bROCTLFontEnabled       ; break;
-        case SvtCTLOptions::E_CTLSEQUENCECHECKING : bReadOnly = m_bROCTLSequenceChecking  ; break;
-        case SvtCTLOptions::E_CTLCURSORMOVEMENT   : bReadOnly = m_bROCTLCursorMovement    ; break;
-        case SvtCTLOptions::E_CTLTEXTNUMERALS     : bReadOnly = m_bROCTLTextNumerals      ; break;
-        case SvtCTLOptions::E_CTLSEQUENCECHECKINGRESTRICTED: bReadOnly = m_bROCTLRestricted  ; break;
-        case SvtCTLOptions::E_CTLSEQUENCECHECKINGTYPEANDREPLACE: bReadOnly = m_bROCTLTypeAndReplace; break;
-        case SvtCTLOptions::E_CTLVERTICALTEXT : bReadOnly = m_bROCTLVerticalText ; break;
-        default: assert(false);
-    }
-    return bReadOnly;
-}
+
 SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
     utl::ConfigItem(u"Office.Common/I18N/CTL"_ustr),
@@ -340,15 +323,6 @@ void SvtCTLOptions_Impl::Load()
 
     m_bIsLoaded = true;
 }
-void SvtCTLOptions_Impl::SetCTLFontEnabled( bool _bEnabled )
-{
-    if(!m_bROCTLFontEnabled && m_bCTLFontEnabled != _bEnabled)
-    {
-        m_bCTLFontEnabled = _bEnabled;
-        SetModified();
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
 void SvtCTLOptions_Impl::SetCTLVerticalText(bool bVertical)
 {
     if (!m_bROCTLVerticalText && m_bCTLVerticalText != bVertical)
@@ -445,12 +419,6 @@ SvtCTLOptions::~SvtCTLOptions()
     m_pImpl.reset();
 }
 
-void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLFontEnabled( _bEnabled );
-}
-
 bool SvtCTLOptions::IsCTLFontEnabled()
 {
     // tdf#168719: The CTL font can no longer be disabled
@@ -525,12 +493,5 @@ SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals()
         return SvtCTLOptions::NUMERALS_ARABIC;
     return static_cast<SvtCTLOptions::TextNumerals>(officecfg::Office::Common::I18N::CTL::CTLTextNumerals::get());
 }
-
-bool SvtCTLOptions::IsReadOnly(EOption eOption) const
-{
-    assert(m_pImpl->IsLoaded());
-    return m_pImpl->IsReadOnly(eOption);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

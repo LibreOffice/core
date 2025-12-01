@@ -187,7 +187,6 @@ public:
     virtual OUString getBaseFontName() = 0;
     virtual int getFontAngle() = 0;
     virtual std::unique_ptr<PDFiumFont> getFont() = 0;
-    virtual bool getFontProperties(FontWeight& weight) = 0;
     virtual PDFTextRenderMode getTextRenderMode() = 0;
     virtual Color getFillColor() = 0;
     virtual std::unique_ptr<PDFiumBitmap> getRenderedFillPattern(PDFiumDocument& rDoc,

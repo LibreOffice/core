@@ -178,7 +178,6 @@ public:
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
     void                WriteSourceDataTo( ScDPObject& rDest ) const;
-    void                WriteTempDataTo( ScDPObject& rDest ) const;
 
     const ScSheetSourceDesc* GetSheetDesc() const { return mpSheetDescription.get(); }
     const ScImportSourceDesc* GetImportSourceDesc() const { return mpImportDescription.get(); }
