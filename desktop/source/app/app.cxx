@@ -303,7 +303,7 @@ bool shouldLaunchQuickstart()
     bool bQuickstart = Desktop::GetCommandLineArgs().IsQuickstart();
     if (!bQuickstart)
     {
-        SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aQLSet(SfxGetpApp()->GetPool());
+        auto aQLSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>(SfxGetpApp()->GetPool());
         SfxApplication::GetOptions(aQLSet);
         const SfxBoolItem* pLauncherItem = aQLSet.GetItemIfSet(SID_ATTR_QUICKLAUNCHER, false);
         if (pLauncherItem)

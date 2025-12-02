@@ -1396,7 +1396,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                     SID_ATTR_YEAR2000, SID_ATTR_YEAR2000> );
 
-            SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet( SfxGetpApp()->GetPool() );
+            auto aOptSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>( SfxGetpApp()->GetPool() );
             SfxApplication::GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1536,7 +1536,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-            SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet(SfxGetpApp()->GetPool());
+            auto aOptSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>( SfxGetpApp()->GetPool() );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SfxApplication::SetOptions( aOptSet );
