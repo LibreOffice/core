@@ -504,6 +504,8 @@ public:
     int getEditMode() override;
     /// @see vcl::ITiledRenderable::setEditMode().
     void setEditMode(int nEditMode) override;
+    /// @see vcl::ITiledRenderable::getPartInfo().
+    OUString getPartInfo(int nPart) override;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
