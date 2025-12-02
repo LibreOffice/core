@@ -10,6 +10,7 @@
 #include <xepivotxml.hxx>
 #include <dpcache.hxx>
 #include <pivot/PivotTableFormats.hxx>
+#include <pivot/PivotTableResultTraverser.hxx>
 #include <dpdimsave.hxx>
 #include <dpitemdata.hxx>
 #include <dpobject.hxx>
@@ -30,6 +31,7 @@
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <svl/numformat.hxx>
+#include <miscuno.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -37,8 +39,15 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
+#include <com/sun/star/sheet/XLevelsSupplier.hpp>
+#include <com/sun/star/sheet/XDataPilotResults.hpp>
+#include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
+#include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/XMembersSupplier.hpp>
 
 #include <vector>
+#include <unordered_map>
 
 using namespace oox;
 using namespace com::sun::star;
@@ -711,11 +720,232 @@ sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
     return XML_defaultSubtotal;
 }
 
+struct RowOrColumnItemsData
+{
+    bool mbSet = false;
+    bool mbContinue = false;
+    bool mbSubtotal = false;
+    bool mbGrandTotal = false;
+    OUString msName;
+    OUString maLevelName;
+};
+
+struct RowOrColumnMemberResultData
+{
+    std::vector<OUString> maFieldOrder;
+    std::vector<std::unordered_map<OUString, RowOrColumnItemsData>> maItemsData;
+    std::unordered_map<OUString, std::unordered_map<OUString, sal_Int32>> maLookUpIndexForMemberName;
+
+    void ensureItemData(sal_Int32 nSize)
+    {
+        if (maItemsData.size() < o3tl::make_unsigned(nSize))
+            maItemsData.resize(nSize);
+    }
+
+    RowOrColumnItemsData& addItemsData(OUString const& sName, sal_Int32 nIndex)
+    {
+        auto& rItemsMap = maItemsData[nIndex];
+
+        if (!rItemsMap.contains(sName))
+            rItemsMap.emplace(sName, RowOrColumnItemsData());
+
+        return rItemsMap[sName];
+    }
+
+    void initLookupFor(OUString const& sDimensionName)
+    {
+        maLookUpIndexForMemberName.emplace(sDimensionName, std::unordered_map<OUString, sal_Int32>{});
+    }
+
+    void addLookupEntryFor(OUString const& sDimensionName, OUString const& sMemberName, sal_Int32 nIndex)
+    {
+        maLookUpIndexForMemberName[sDimensionName].emplace(sMemberName, nIndex);
+    }
+
+    sal_Int32 lookup(OUString const& sDimensionName, OUString const& sMemberName)
+    {
+        return maLookUpIndexForMemberName[sDimensionName][sMemberName];
+    }
+};
+
+class RowColumnItemsDataVisitor : public sc::PivotTableResultVisitor
+{
+    RowOrColumnMemberResultData& mrRowMemberResultData;
+    RowOrColumnMemberResultData& mrColumnMemberResultData;
+
+public:
+    RowColumnItemsDataVisitor(RowOrColumnMemberResultData& rRowMemberResultData, RowOrColumnMemberResultData& rColumnMemberResultData)
+        : mrRowMemberResultData(rRowMemberResultData)
+        , mrColumnMemberResultData(rColumnMemberResultData)
+    {}
+
+    sheet::DataPilotFieldOrientation meCurrentOrientation = sheet::DataPilotFieldOrientation_HIDDEN;
+    OUString maLevelName;
+
+    bool filterOrientation(sheet::DataPilotFieldOrientation eOrientation) override
+    {
+        return eOrientation == sheet::DataPilotFieldOrientation_HIDDEN;
+    }
+
+    void startDimension(sal_Int32 /*nDimensionIndex*/, uno::Reference<uno::XInterface> const& /*xDimension*/, sheet::DataPilotFieldOrientation eOrientation) override
+    {
+        meCurrentOrientation = eOrientation;
+    }
+
+    void endDimension() override
+    {
+        meCurrentOrientation = sheet::DataPilotFieldOrientation_HIDDEN;
+    }
+
+    void startLevel(sal_Int32 /*nLevelIndex*/, uno::Reference<uno::XInterface> const& /*xLevel*/, OUString const& rLevelName) override
+    {
+        maLevelName = rLevelName;
+    }
+
+    void endLevel() override
+    {
+        maLevelName = OUString();
+    }
+
+    void memberResult(sheet::MemberResult const& rResult, sal_Int32 nIndex, sal_Int32 nSize) override
+    {
+        if (meCurrentOrientation == sheet::DataPilotFieldOrientation_ROW)
+        {
+            mrRowMemberResultData.ensureItemData(nSize);
+            gatherFieldsData(mrRowMemberResultData, rResult, nIndex);
+        }
+        else if (meCurrentOrientation == sheet::DataPilotFieldOrientation_COLUMN)
+        {
+            mrColumnMemberResultData.ensureItemData(nSize);
+            gatherFieldsData(mrColumnMemberResultData, rResult, nIndex);
+        }
+    }
+
+    void gatherFieldsData(RowOrColumnMemberResultData& rMemberResultData, sheet::MemberResult const& rResult, sal_Int32 nIndex)
+    {
+        auto& rItemsData = rMemberResultData.addItemsData(maLevelName, nIndex);
+        assert(!rItemsData.mbSet);
+
+        rItemsData.mbSet = true;
+        rItemsData.maLevelName = maLevelName;
+
+        bool bHasContinueFlag = rResult.Flags & sheet::MemberResultFlags::CONTINUE;
+        bool bIsGrandTotal = rResult.Flags & sheet::MemberResultFlags::GRANDTOTAL;
+        bool bIsSubtotal = rResult.Flags & sheet::MemberResultFlags::SUBTOTAL;
+
+        if (bIsGrandTotal)
+        {
+            rItemsData.mbGrandTotal = true;
+        }
+        else if (bIsSubtotal)
+        {
+            rItemsData.mbSubtotal = true;
+            rItemsData.msName = rResult.Name;
+        }
+        else if (bHasContinueFlag)
+        {
+            rItemsData.mbContinue = true;
+        }
+        else
+        {
+            rItemsData.msName = rResult.Name;
+        }
+    }
+};
+
+void writeRowColumnItems(sal_Int32 nItemElement, RowOrColumnMemberResultData& rMemberResultData, sax_fastparser::FSHelperPtr& pStream)
+{
+    if (rMemberResultData.maItemsData.empty() || rMemberResultData.maFieldOrder.empty())
+    {
+        pStream->startElement(nItemElement, XML_count, "1");
+        pStream->singleElement(XML_i);
+        pStream->endElement(nItemElement);
+        return;
+    }
+
+    pStream->startElement(nItemElement, XML_count, OString::number(rMemberResultData.maItemsData.size()));
+    for (auto& rItemMap : rMemberResultData.maItemsData)
+    {
+        bool bIsGrandTotal = false;
+        bool bIsSubtotal = false;
+
+        for (OUString const& rFieldName : rMemberResultData.maFieldOrder)
+        {
+            RowOrColumnItemsData const& rData = rItemMap[rFieldName];
+            if (rData.mbSubtotal)
+                bIsSubtotal = true;
+            if (rData.mbGrandTotal)
+                bIsGrandTotal = true;
+        }
+
+        {
+            OUString const& rFieldName = rMemberResultData.maFieldOrder[0];
+            RowOrColumnItemsData const& rData = rItemMap[rFieldName];
+            sal_Int32 nIndex = -1;
+            if (!rData.msName.isEmpty())
+                nIndex = rMemberResultData.lookup(rFieldName, rData.msName);
+            if (bIsGrandTotal)
+            {
+                pStream->startElement(XML_i, XML_t, "grand");
+                pStream->singleElement(XML_x);
+            }
+            else if (bIsSubtotal)
+            {
+                pStream->startElement(XML_i, XML_t, "default");
+
+                if (nIndex == 0) // 0 is the default
+                    pStream->singleElement(XML_x);
+                else
+                    pStream->singleElement(XML_x, XML_v, OString::number(nIndex));
+            }
+            else if (rData.mbContinue)
+            {
+                pStream->startElement(XML_i, XML_r, "1");
+            }
+            else if (nIndex >= 0)
+            {
+                pStream->startElement(XML_i);
+                if (nIndex == 0) // 0 is the default
+                    pStream->singleElement(XML_x);
+                else
+                    pStream->singleElement(XML_x, XML_v, OString::number(nIndex));
+            }
+            else
+            {
+                pStream->startElement(XML_i);
+            }
+        }
+
+        for (size_t i = 1; i < rMemberResultData.maFieldOrder.size(); i++)
+        {
+            OUString const& rItemName = rMemberResultData.maFieldOrder[i];
+            RowOrColumnItemsData const& rData = rItemMap[rItemName];
+
+            sal_Int32 nIndex = -1;
+            if (!rData.msName.isEmpty())
+                nIndex = rMemberResultData.lookup(rItemName, rData.msName);
+
+            if (nIndex >= 0)
+            {
+                if (nIndex == 0) // 0 is the default
+                    pStream->singleElement(XML_x);
+                else
+                    pStream->singleElement(XML_x, XML_v, OString::number(nIndex));
+            }
+        }
+
+        pStream->endElement(XML_i);
+    }
+    pStream->endElement(nItemElement);
 }
+
+} // end anonymous namespace
 
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
 {
     typedef std::unordered_map<OUString, long> NameToIdMapType;
+
+    auto& rDPObjectModifiable = const_cast<ScDPObject&>(rDPObj);
 
     const XclExpXmlPivotCaches::Entry* pCacheEntry = mrCaches.GetCache(nCacheId);
     if (!pCacheEntry)
@@ -744,11 +974,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     std::vector<tools::Long> aPageFields;
     std::vector<DataField> aDataFields;
 
-    // we should always export <rowItems> and <colItems>, even if the pivot table
-    // does not contain col/row items. otherwise, in Excel, pivot table will not
-    // have all context menu items.
-    tools::Long nRowItemsCount = 1; // for <rowItems count="..."> of pivotTable*.xml
-    tools::Long nColItemsCount = 1; // for <colItems count="..."> of pivotTable*.xml
+    RowOrColumnMemberResultData aRowMemberResultData;
+    RowOrColumnMemberResultData aColumnMemberResultData;
+
     tools::Long nDataDimCount = rSaveData.GetDataDimensionCount();
     // Use dimensions in the save data to get their correct ordering.
     // Dimension order here is significant as they specify the order of
@@ -785,9 +1013,11 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 if (nPos == -2 && nDataDimCount <= 1)
                     break;
                 aColFields.push_back(nPos);
+                aColumnMemberResultData.maFieldOrder.push_back(rDim.GetName());
             break;
             case sheet::DataPilotFieldOrientation_ROW:
                 aRowFields.push_back(nPos);
+                aRowMemberResultData.maFieldOrder.push_back(rDim.GetName());
             break;
             case sheet::DataPilotFieldOrientation_PAGE:
                 aPageFields.push_back(nPos);
@@ -833,9 +1063,6 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     // normalize the order to prevent negative row/col counts - just in case.
     aOutRange.PutInOrder();
-    // both start and end cells are included. subtraction excludes the start cells, therefore add +1.
-    SCROW pivotTableRowCount = aOutRange.aEnd.Row() - aOutRange.aStart.Row() + 1;
-    SCCOL pivotTableColCount = aOutRange.aEnd.Col() - aOutRange.aStart.Col() + 1;
 
     sal_Int32 nFirstHeaderRow = rDPObj.GetHideHeader() ? 0 : (rDPObj.GetHeaderLayout() ? 2 : 1);
     sal_Int32 nFirstDataRow = rDPObj.GetHideHeader() ? 1 : 2;
@@ -901,8 +1128,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             {
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_compact, ToPsz10(false),
-                    XML_showAll, ToPsz10(false),
-                    XML_outline, ToPsz10(false));
+                    XML_outline, ToPsz10(false),
+                    XML_showAll, ToPsz10(false));
             }
             else
             {
@@ -924,8 +1151,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_dataField, ToPsz10(true),
                     XML_compact, ToPsz10(false),
-                    XML_showAll, ToPsz10(false),
-                    XML_outline, ToPsz10(false));
+                    XML_outline, ToPsz10(false),
+                    XML_showAll, ToPsz10(false));
             }
             else
             {
@@ -946,8 +1173,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         std::vector<ScDPLabelData::Member> aMembers;
         {
             // We need to get the members in actual order, getting which requires non-const reference here
-            auto& dpo = const_cast<ScDPObject&>(rDPObj);
-            dpo.GetMembers(i, dpo.GetUsedHierarchy(i), aMembers);
+            rDPObjectModifiable.GetMembers(i, rDPObjectModifiable.GetUsedHierarchy(i), aMembers);
         }
 
         std::vector<OUString> aCacheFieldItems;
@@ -968,9 +1194,16 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         {
             aCacheFieldItems = SortGroupItems(rCache, i);
         }
+
+        if (eOrient == sheet::DataPilotFieldOrientation_ROW)
+            aRowMemberResultData.initLookupFor(pDim->GetName());
+        else if (eOrient == sheet::DataPilotFieldOrientation_COLUMN)
+            aColumnMemberResultData.initLookupFor(pDim->GetName());
+
         // The pair contains the member index in cache and if it is hidden
         std::vector< std::pair<size_t, bool> > aMemberSequence;
         std::set<size_t> aUsedCachePositions;
+        sal_Int32 nIndex = 0;
         for (const auto & rMember : aMembers)
         {
             auto it = std::find(aCacheFieldItems.begin(), aCacheFieldItems.end(), rMember.maName);
@@ -979,7 +1212,14 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 size_t nCachePos = static_cast<size_t>(std::distance(aCacheFieldItems.begin(), it));
                 auto aInserted = aUsedCachePositions.insert(nCachePos);
                 if (aInserted.second)
+                {
                     aMemberSequence.emplace_back(std::make_pair(nCachePos, !rMember.mbVisible));
+                    if (eOrient == sheet::DataPilotFieldOrientation_ROW)
+                        aRowMemberResultData.addLookupEntryFor(pDim->GetName(), rMember.maName, nIndex);
+                    else if (eOrient == sheet::DataPilotFieldOrientation_COLUMN)
+                        aColumnMemberResultData.addLookupEntryFor(pDim->GetName(), rMember.maName, nIndex);
+                    nIndex++;
+                }
             }
         }
         // Now add all remaining cache items as hidden
@@ -1011,6 +1251,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (!bDimInCompactMode)
             pAttList->add(XML_compact, ToPsz10(false));
 
+        if(bDimInTabularMode)
+            pAttList->add(XML_outline, ToPsz10(false));
+
         pAttList->add(XML_showAll, ToPsz10(false));
 
         tools::Long nSubTotalCount = pDim->GetSubTotalsCount();
@@ -1030,8 +1273,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (!bHasDefaultSubtotal)
             pAttList->add(XML_defaultSubtotal, ToPsz10(false));
 
-        if(bDimInTabularMode)
-            pAttList->add( XML_outline, ToPsz10(false));
+
         pPivotStrm->startElement(XML_pivotField, pAttList);
 
         sal_uInt32 nItems = aMemberSequence.size() + aSubtotalSequence.size();
@@ -1048,11 +1290,6 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 pItemAttList->add(XML_x, OString::number(static_cast<tools::Long>(nMember.first)));
                 pPivotStrm->singleElement(XML_item, pItemAttList);
             }
-
-            if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
-                nColItemsCount = pivotTableColCount - nFirstDataCol;
-            else if (strcmp(toOOXMLAxisType(eOrient), "axisRow") == 0)
-                nRowItemsCount = pivotTableRowCount - nFirstDataRow;
 
             for (const OString& sSubtotal : aSubtotalSequence)
             {
@@ -1081,32 +1318,13 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         pPivotStrm->endElement(XML_rowFields);
     }
 
+    RowColumnItemsDataVisitor aVisitor(aRowMemberResultData, aColumnMemberResultData);
+    sc::PivotTableResultTraverser aTraverser(rDPObjectModifiable, aVisitor);
+    aTraverser.traverse();
+
     // <rowItems>
-    if (nRowItemsCount > 0)
-    {
-        pPivotStrm->startElement(XML_rowItems, XML_count, OString::number(nRowItemsCount));
 
-        // export nRowItemsCount times <i> and <x> elements
-        for (tools::Long nCount = 0; nCount < nRowItemsCount; ++nCount)
-        {
-            /* we should add t="grand" to the last <i> element. Otherwise, Excel will not
-            have all functions in the context menu of the pivot table. Especially for the
-            "Grand Total" column/row cells.
-
-            note: it is not completely clear that the last <i> element always gets t="grand".
-            however, testing on the some docs indicate that t="grand" should be
-            in the last element, so let's try this here. */
-            if (nCount == nRowItemsCount - 1)
-                pPivotStrm->startElement(XML_i, XML_t, "grand");
-            else
-                pPivotStrm->startElement(XML_i);
-
-            pPivotStrm->singleElement(XML_x, XML_v, OString::number(nCount));
-            pPivotStrm->endElement(XML_i);
-        }
-
-        pPivotStrm->endElement(XML_rowItems);
-    }
+    writeRowColumnItems(XML_rowItems, aRowMemberResultData, pPivotStrm);
 
     // <colFields>
 
@@ -1124,31 +1342,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     }
 
     // <colItems>
-    if (nColItemsCount > 0)
-    {
-        pPivotStrm->startElement(XML_colItems, XML_count, OString::number(nColItemsCount));
 
-        // export nColItemsCount times <i> and <x> elements
-        for (tools::Long nCount = 0; nCount < nColItemsCount; ++nCount)
-        {
-            /* we should add t="grand" to the last <i> element. Otherwise, Excel will not
-            have all functions in the context menu of the pivot table. Especially for the
-            "Grand Total" column/row cells.
-
-            note: it is not completely clear that the last <i> element always gets t="grand".
-            however, testing on the some docs indicate that t="grand" should be
-            in the last element, so let's try this here. */
-            if (nCount == nColItemsCount - 1)
-                pPivotStrm->startElement(XML_i, XML_t, "grand");
-            else
-                pPivotStrm->startElement(XML_i);
-
-            pPivotStrm->singleElement(XML_x, XML_v, OString::number(nCount));
-            pPivotStrm->endElement(XML_i);
-        }
-
-        pPivotStrm->endElement(XML_colItems);
-    }
+    writeRowColumnItems(XML_colItems, aColumnMemberResultData, pPivotStrm);
 
     // <pageFields>
 
