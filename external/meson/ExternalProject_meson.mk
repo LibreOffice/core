@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,meson))
 
 ifeq ($(SYSTEM_PYTHON),)
-$(WORKDIR)/ExternalProject/meson.prepare : $(call gb_Package_get_target,python3)
+$(WORKDIR)/ExternalProject/meson.prepare : $(call gb_ExternalExecutable_get_dependencies,python)
 endif
 
 # vim: set noet sw=4 ts=4:
