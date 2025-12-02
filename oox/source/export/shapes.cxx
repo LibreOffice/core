@@ -51,6 +51,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -2849,7 +2850,17 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
             xParent->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
             uno::Reference<embed::XEmbedPersist> xEmbedPersist(xObj, uno::UNO_QUERY);
             if (xEmbedPersist)
-                entryName = xEmbedPersist->getEntryName();
+            {
+                // getEntryName() could throw a WrongStateException
+                try
+                {
+                    entryName = xEmbedPersist->getEntryName();
+                }
+                catch (embed::WrongStateException const &)
+                {
+                    TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLE2Shape");
+                }
+            }
         }
     }
 
