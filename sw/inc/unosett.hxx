@@ -100,7 +100,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXLineNumberingProperties final : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXLineNumberingProperties final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
