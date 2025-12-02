@@ -456,19 +456,26 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         bool bPageProvided = comphelper::LibreOfficeKit::isActive();
         sal_Int32 nPageToExport = -1;
 
-        for( const PropertyValue& rProp : rDescriptor )
+        comphelper::SequenceAsHashMap args(rDescriptor);
+        if (args.contains(u"ConversionRequestOrigin"_ustr))
         {
-            if (rProp.Name == "SelectionOnly")
-            {
-                // #i124608# extract single selection wanted from dialog return values
-                rProp.Value >>= bSelectionOnly;
-                bPageProvided = false;
-            }
-            else if (rProp.Name == "PagePos")
-            {
-                rProp.Value >>= nPageToExport;
+            // when invoked from command line, default to exporting everything (-1)
+            if (args[u"ConversionRequestOrigin"_ustr] == u"CommandLine"_ustr)
                 bPageProvided = true;
-            }
+        }
+
+        if (args.contains(u"PagePos"_ustr))
+        {
+            args[u"PagePos"_ustr] >>= nPageToExport;
+            bPageProvided = true;
+        }
+
+        if (args.contains(u"SelectionOnly"_ustr))
+        {
+            // #i124608# extract single selection wanted from dialog return values
+            args[u"SelectionOnly"_ustr] >>= bSelectionOnly;
+            if (bSelectionOnly)
+                bPageProvided = false;
         }
 
         uno::Reference<frame::XController > xController;
@@ -495,12 +502,12 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                     sal_Int32 i;
                     for( i = 0; i < nDPCount; ++i )
                     {
-                        if( nPageToExport != -1 && nPageToExport == i )
+                        if (nPageToExport == i)
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
                             mSelectedPages.push_back(xDrawPage);
                         }
-                        else
+                        else if (nPageToExport == -1)
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
                             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );

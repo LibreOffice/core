@@ -2831,6 +2831,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         bool bHasFilterName = false;
         bool bIsRedactMode = false;
         bool bIsPreview = false;
+        std::optional<OUString> oConversionRequestOrigin;
         sal_Int32 nEnd = aOldArgs.getLength();
 
         for ( sal_Int32 i = 0; i < nEnd; i++ )
@@ -2853,6 +2854,11 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             if( rMediumArgs[i].Name == "IsPreview" )
                 rMediumArgs[i].Value >>= bIsPreview;
+            else if (rMediumArgs[i].Name == "ConversionRequestOrigin")
+            {
+                if (OUString s; rMediumArgs[i].Value >>= s)
+                    oConversionRequestOrigin = s;
+            }
         }
 
         // FIXME: Handle this inside TransformItems()
@@ -2906,6 +2912,13 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             auto pArgs = aArgs.getArray();
             pArgs[nEnd-1].Name = "IsPreview";
             pArgs[nEnd-1].Value <<= bIsPreview;
+        }
+        if (oConversionRequestOrigin)
+        {
+            aArgs.realloc( ++nEnd );
+            auto pArgs = aArgs.getArray();
+            pArgs[nEnd-1].Name = u"ConversionRequestOrigin"_ustr;
+            pArgs[nEnd-1].Value <<= *oConversionRequestOrigin;
         }
 
         return xFilter->filter( aArgs );
