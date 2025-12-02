@@ -13,6 +13,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	basegfx \
 	binaryurp \
 	bridges \
+	chart2 \
 	cli_ure \
 	codemaker \
 	comphelper \
