@@ -598,6 +598,28 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testDoNotMirrorRtlDrawObjs)
     CPPUNIT_ASSERT(bDoNotMirrorRtlDrawObjs);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testRedlineRenderModePartInfo)
+{
+    // Given a document with redline render mode set to "omit deletes":
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
+    pWrtShell->ApplyViewOptions(aOpt);
+
+    // When getting the LOK part info:
+    OUString aPartInfo = getSwTextDoc()->getPartInfo(0);
+
+    // Then make sure we get the correct value:
+    std::stringstream aStream((std::string(aPartInfo.toUtf8())));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - <unspecified file>(1): expected value
+    // i.e. the json "mode" key was missing.
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), aTree.get<std::string>("mode"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1182,6 +1182,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
 
         { u"CharBackgroundExt", { PayloadType::IsActivePayload, true } },
         { u"ControlCodes", { PayloadType::IsActivePayload, true } },
+        { u"RedlineRenderMode", { PayloadType::IsActivePayload, true } },
         { u"DefaultBullet", { PayloadType::IsActivePayload, true } },
         { u"DefaultNumbering", { PayloadType::IsActivePayload, true } },
         { u"Italic", { PayloadType::IsActivePayload, true } },
