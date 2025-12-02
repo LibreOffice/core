@@ -519,7 +519,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
              *  We get all master page that are targeted by at least one draw page.
              *  The master page are put in an unordered set.
              */
-            ObjectSet aMasterPageTargetSet;
+            std::unordered_set<uno::Reference<drawing::XDrawPage>> aMasterPageTargetSet;
             for(const uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
             {
                 uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPage, uno::UNO_QUERY );
@@ -528,13 +528,9 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                     aMasterPageTargetSet.insert( xMasterPageTarget->getMasterPage() );
                 }
             }
-            // Later we move them to an uno::Sequence so we can get them by index
-            mMasterPageTargets.resize( aMasterPageTargetSet.size() );
-            sal_Int32 i = 0;
-            for (auto const& masterPageTarget : aMasterPageTargetSet)
-            {
-                mMasterPageTargets[i++].set(masterPageTarget,  uno::UNO_QUERY);
-            }
+            // Later we move them to a vector so we can get them by index
+            mMasterPageTargets.insert(mMasterPageTargets.end(), aMasterPageTargetSet.begin(),
+                                      aMasterPageTargetSet.end());
 
             bRet = implExport( rDescriptor );
         }
