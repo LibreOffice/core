@@ -187,8 +187,6 @@ css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedP
                 }
                 mSelectedPages.push_back(xDrawPage);
             }
-            if (!mSelectedPages.empty())
-                return xController;
         }
     }
 
@@ -461,8 +459,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                 {
                     sal_Int32 nDPCount = xDrawPages->getCount();
 
-                    sal_Int32 i;
-                    for( i = 0; i < nDPCount; ++i )
+                    for (sal_Int32 i = 0; i < nDPCount; ++i)
                     {
                         if( nPageToExport != -1 && nPageToExport == i )
                         {
@@ -473,12 +470,12 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
                             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
-                            bool bIsSlideVisible = true;     // default: true
                             if (xPropSet.is())
                             {
                                 Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
                                 if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"Visible"_ustr))
                                 {
+                                    bool bIsSlideVisible = true;     // default: true
                                     xPropSet->getPropertyValue( u"Visible"_ustr )  >>= bIsSlideVisible;
                                     if (!bIsSlideVisible)
                                         continue;
