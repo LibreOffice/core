@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.2.dylib,src/.libs/libcairo.2.dylib))
+$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo-lo.2.dylib,builddir/src/libcairo-lo.2.dylib))
 else
 $(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo-lo.so.2,builddir/src/libcairo-lo.so.2.1180$(CAIRO_VERSION_MICRO).$(CAIRO_VERSION_MICRO)))
 endif

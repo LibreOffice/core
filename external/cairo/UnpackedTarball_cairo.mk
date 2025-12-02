@@ -30,11 +30,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/disable-cairo-utilities.patch.1 \
 ))
 
-ifneq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/libcairo-bundled-soname.patch.1 \
 ))
-endif
 
 ifeq ($(ENABLE_CAIRO_RGBA),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
@@ -42,7 +40,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 ))
 endif
 
-ifneq (,$(filter MACOSX ANDROID iOS,$(OS)))
+ifneq (,$(filter ANDROID iOS,$(OS)))
 $(eval $(call gb_UnpackedTarball_add_file,cairo,.,external/cairo/cairo/dummy_pkg_config))
 endif
 
