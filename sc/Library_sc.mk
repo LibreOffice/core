@@ -213,6 +213,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/types \
     sc/source/core/data/userdat \
     sc/source/core/data/validat \
+    sc/source/core/data/pivot/PivotTableResultTraverser \
     sc/source/core/tool/addincfg \
     sc/source/core/tool/addincol \
     sc/source/core/tool/addinhelpid \
