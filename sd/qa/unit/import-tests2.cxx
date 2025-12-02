@@ -1897,9 +1897,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf128596)
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_REPEAT, bitmapmode);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest2, testDefaultTabStop)
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf96389_deftabstopISO29500)
 {
-    createSdImpressDoc("pptx/deftabstop.pptx");
+    createSdImpressDoc("potx/tdf96389_deftabstopISO29500.potx");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
