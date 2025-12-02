@@ -598,9 +598,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158436, "tdf158436.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159032, "tdf159032.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // This resulted crashing
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }

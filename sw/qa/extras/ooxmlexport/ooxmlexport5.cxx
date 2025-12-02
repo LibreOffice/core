@@ -178,9 +178,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120852_readOnlyUnProtected)
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorPropertySdt)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("author-property.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -223,9 +220,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76587 )
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77890 )
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("fdo77890.docx");
     save(TestFilter::DOCX);
     /*
@@ -297,9 +291,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131203)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76597)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("fdo76597.docx");
     save(TestFilter::DOCX);
     // check XML
@@ -577,9 +568,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78384)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78469)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("fdo78469.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header1.xml"_ustr);
@@ -774,9 +762,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO79915)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79817)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("fdo79817.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

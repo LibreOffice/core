@@ -281,9 +281,6 @@ DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf8255)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this]() {
         // A full-page-wide multi-page floating table should be allowed to split:
         uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
@@ -517,9 +514,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90810, "tdf90810short.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89165, "tdf89165.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // This must not hang in layout
 }
 
@@ -931,9 +925,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133363)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this](bool bIsExport = false) {
         if (bIsExport)
         {
@@ -995,9 +986,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("tdf138093B.docx");
     saveAndReload(TestFilter::DOCX);
 
@@ -1036,9 +1024,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131722)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this](bool bIsExport = false) {
         if (bIsExport)
         {
@@ -1193,9 +1178,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156548)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Given a document with two content controls - one block, one inline
     createSwDoc("tdf157136_TwoContentControls.docx");
 

@@ -39,9 +39,6 @@ protected:
 
 CPPUNIT_TEST_FIXTURE(Test, testRelorientation)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this](bool bIsExport = false) {
         uno::Reference<drawing::XShape> xShape = getShape(1);
         // This was text::RelOrientation::FRAME, when handling relativeFrom=page, align=right
@@ -260,9 +257,6 @@ DECLARE_OOXMLEXPORT_TEST(testRelSizeRound, "rel-size-round.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // this has 2 pages in Word
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPathContent(pXmlDoc, "/root/page[2]/footer/txt/text()", u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -370,9 +364,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146515)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO74106)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("FDO74106.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
@@ -721,9 +712,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCurruption)
 
 CPPUNIT_TEST_FIXTURE(Test, testDateControl)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("date-control.docx");
     save(TestFilter::DOCX);
     // check XML
@@ -1033,9 +1021,6 @@ CPPUNIT_TEST_FIXTURE(Test, testlvlPicBulletId)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtContent)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("SdtContent.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header1.xml"_ustr);
@@ -1163,9 +1148,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78292)
 
 CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("simple-sdts.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

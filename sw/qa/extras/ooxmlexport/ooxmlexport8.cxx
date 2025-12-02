@@ -100,9 +100,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo81486, "fdo81486.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo79738, "fdo79738.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( mxComponent, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<container::XNameContainer> xStyles;
@@ -397,9 +394,6 @@ DECLARE_OOXMLEXPORT_TEST(testN778828, "n778828.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106724, "tdf106724.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // This document simply crashed the importer.
 }
 
@@ -523,9 +517,6 @@ DECLARE_OOXMLEXPORT_TEST(testN780563, "n780563.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     /*
      * The problem was that the table was not imported.
      *
@@ -915,9 +906,6 @@ DECLARE_OOXMLEXPORT_TEST(testN592908_Picture, "n592908-picture.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // A combo box is imported
     if (getShapes() > 0)
     {
@@ -994,9 +982,6 @@ DECLARE_OOXMLEXPORT_TEST(testN816593, "n816593.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testN820509)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // M.d.yyyy date format was unhandled.
     createSwDoc("n820509.docx");
     SwDoc* pDoc = getSwDoc();
@@ -1045,9 +1030,6 @@ CPPUNIT_TEST_FIXTURE(Test, testN820509)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf151548_activeContentDemo, "tdf151548_activeContentDemo.docm")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     SwDoc* pDoc = getSwDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
@@ -1239,9 +1221,6 @@ DECLARE_OOXMLEXPORT_TEST(testChartProp, "chart-prop.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093b.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // The problem was that the direction and alignment are not correct for RTL paragraphs.
     uno::Reference<uno::XInterface> xParaRtlRight(getParagraph( 1, u"Right and RTL in M$"_ustr));
     sal_Int32 nRtlRight = getProperty< sal_Int32 >( xParaRtlRight, u"ParaAdjust"_ustr );

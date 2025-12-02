@@ -442,9 +442,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99602_charStyleSubscript2)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // sections 0 and 1 must be related to footnotes...

@@ -276,9 +276,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118361_RTLfootnoteSeparator, "tdf118361_RTLfootnoteSeparator.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote separator RTL", sal_Int16(2), getProperty<sal_Int16>(aPageStyle, u"FootnoteLineAdjust"_ustr));
 }
@@ -508,9 +505,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113399)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf114882, "tdf114882.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // fastserializer must not fail assertion because of mismatching elements
 }
 

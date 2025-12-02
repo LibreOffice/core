@@ -90,9 +90,6 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchorIdForWP14AndW14)
 
 DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // <a:pattFill prst="dkVert"> was exported as ltVert.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
@@ -746,9 +743,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76101)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtAndShapeOverlapping)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("ShapeOverlappingWithSdt.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -872,9 +866,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78663)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78957)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("fdo78957.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlHeader = parseExport(u"word/header2.xml"_ustr);

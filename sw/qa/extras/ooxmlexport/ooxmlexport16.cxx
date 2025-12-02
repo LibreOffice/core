@@ -485,9 +485,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("tdf148671.docx");
     save(TestFilter::DOCX);
     // Don't assert with 'pFieldMark' failed when document is opened
@@ -532,9 +529,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf168017, "tdf168017.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberingSuperscript.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Without the fix, the first character run was superscripted.
     CPPUNIT_ASSERT_EQUAL( sal_Int16(0), getProperty<sal_Int16>(getRun(getParagraph(1), 1, u"A-570-108"_ustr), u"CharEscapement"_ustr) );
 }

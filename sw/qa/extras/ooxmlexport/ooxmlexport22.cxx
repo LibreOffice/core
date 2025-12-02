@@ -39,9 +39,6 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("tdf165642_glossaryFootnote.docx");
     save(TestFilter::DOCX);
     // round-trip'ing the settings.xml file as is, it contains footnote/endnote references

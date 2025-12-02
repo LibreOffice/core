@@ -179,9 +179,6 @@ DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This was a com.sun.star.drawing.CustomShape, due to lack of handling of groupshapes inside groupshapes.
@@ -204,9 +201,6 @@ DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
 
 DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // The relativeFrom attribute was ignored for groupshapes, i.e. these were text::RelOrientation::FRAME.
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
@@ -308,9 +302,6 @@ DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Vertical position of the shape was incorrect due to incorrect nested mce handling.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     // positionV's posOffset from the bugdoc, was 0.
@@ -361,9 +352,6 @@ DECLARE_OOXMLEXPORT_TEST(testLOCrash, "file_crash.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // The problem was libreoffice confuse when there RTL default style for paragraph
     uno::Reference<uno::XInterface> xParaLeftRTL(getParagraph( 1, u"RTL LEFT"_ustr));
     uno::Reference<uno::XInterface> xParaRightLTR(getParagraph( 2, u"LTR RIGHT"_ustr));
@@ -429,9 +417,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65090, "fdo65090.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // The DOCX containing the Table of Contents was not imported with correct page nos
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes( );
@@ -500,9 +485,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
     CPPUNIT_ASSERT_EQUAL(u"sdt and sdtContent inside groupshape"_ustr, uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
@@ -510,9 +492,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This was 16: the first run of the second para incorrectly inherited the char height of the first para.
@@ -536,9 +515,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capita
 
 DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // At the start of the document, a picture which has a color specified with a color scheme, lost
     // it's color during import.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);

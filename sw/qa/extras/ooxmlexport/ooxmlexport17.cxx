@@ -209,9 +209,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139759_commentHighlightBackground, "tdf139759_co
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("tdf135906.docx");
     saveAndReload(TestFilter::DOCX);
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
@@ -513,9 +510,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137466)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("tdf137466.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -700,9 +694,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123642_BookmarkAtDocEnd)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     // Plain text Block SDT is imported as content control
     OUString aActual = getParagraph(1)->getString();
     // This was "itadmin".
@@ -869,9 +860,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148052, "tdf148052.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148111)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     auto verify = [this]() {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -937,9 +925,6 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81507)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("tdf81507.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

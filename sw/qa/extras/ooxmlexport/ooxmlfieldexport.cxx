@@ -95,9 +95,6 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlineIsEnd)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69649)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("fdo69649.docx");
     saveAndReload(TestFilter::DOCX);
     // The DOCX containing the Table of Contents was not exported with correct page nos
@@ -176,9 +173,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPreserveXfieldTOC)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("FDO77715.docx");
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -313,9 +307,6 @@ CPPUNIT_TEST_FIXTURE(Test, testAlphabeticalIndex_MultipleColumns)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageref)
 {
-    // FIXME: validation error in OOXML export
-    skipValidation();
-
     createSwDoc("testPageref.docx");
     saveAndReload(TestFilter::DOCX);
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
