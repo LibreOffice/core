@@ -218,7 +218,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     strncpy(imp_lib + partial_length, SOFFICEAPP_LIB, imp_lib_size - partial_length);
 
     struct stat st;
-    // If SOFFICEAPP_LUB exists but is ridiculously small, it is the
+    // If SOFFICEAPP_LIB exists but is ridiculously small, it is the
     // one-line text stub as in the --enable-mergedlib case.
     if (stat(imp_lib, &st) == 0 && st.st_size > 1000)
     {
