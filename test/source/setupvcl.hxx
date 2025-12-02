@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SETUPVCL_HXX
-#define INCLUDED_TEST_SETUPVCL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -19,7 +18,5 @@ namespace test
 // Calls InitVCL etc.; needed from multiple places in the test infrastructure:
 OOO_DLLPUBLIC_TEST_SETUPVCL void setUpVcl(bool forceHeadless = false);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
