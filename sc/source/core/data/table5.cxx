@@ -364,7 +364,7 @@ bool ScTable::HasRowPageBreak(SCROW nRow) const
     if (!ValidRow(nRow))
         return false;
 
-    return maRowPageBreaks.find(nRow) != maRowPageBreaks.end();
+    return maRowPageBreaks.contains(nRow);
 }
 
 bool ScTable::HasColPageBreak(SCCOL nCol) const
@@ -372,7 +372,7 @@ bool ScTable::HasColPageBreak(SCCOL nCol) const
     if (!ValidCol(nCol))
         return false;
 
-    return maColPageBreaks.find(nCol) != maColPageBreaks.end();
+    return maColPageBreaks.contains(nCol);
 }
 
 bool ScTable::HasRowManualBreak(SCROW nRow) const
@@ -380,7 +380,7 @@ bool ScTable::HasRowManualBreak(SCROW nRow) const
     if (!ValidRow(nRow))
         return false;
 
-    return maRowManualBreaks.find(nRow) != maRowManualBreaks.end();
+    return maRowManualBreaks.contains(nRow);
 }
 
 bool ScTable::HasColManualBreak(SCCOL nCol) const
@@ -388,7 +388,7 @@ bool ScTable::HasColManualBreak(SCCOL nCol) const
     if (!ValidCol(nCol))
         return false;
 
-    return maColManualBreaks.find(nCol) != maColManualBreaks.end();
+    return maColManualBreaks.contains(nCol);
 }
 
 SCROW ScTable::GetNextManualBreak(SCROW nRow) const
