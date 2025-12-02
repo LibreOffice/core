@@ -2824,110 +2824,37 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         SfxItemSet& rItems = rMedium.GetItemSet();
         TransformItems( SID_SAVEASDOC, rItems, aOldArgs );
 
-        const css::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
-        css::uno::Sequence < css::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
-        css::beans::PropertyValue * pNewValue = aArgs.getArray();
-
         // put in the REAL file name, and copy all PropertyValues
-        static constexpr OUString sOutputStream ( u"OutputStream"_ustr  );
-        static constexpr OUString sStream ( u"StreamForOutput"_ustr  );
-        bool bHasOutputStream = false;
-        bool bHasStream = false;
-        bool bHasBaseURL = false;
-        bool bHasFilterName = false;
-        bool bIsRedactMode = false;
-        bool bIsPreview = false;
-        std::optional<OUString> oConversionRequestOrigin;
-        sal_Int32 nEnd = aOldArgs.getLength();
+        comphelper::SequenceAsHashMap aNewArgs(aOldArgs);
+        comphelper::SequenceAsHashMap aMediumArgs(rMedium.GetArgs());
 
-        for ( sal_Int32 i = 0; i < nEnd; i++ )
-        {
-            pNewValue[i] = pOldValue[i];
-            if ( pOldValue[i].Name == "FileName" )
-                pNewValue[i].Value <<= rMedium.GetName();
-            else if ( pOldValue[i].Name == sOutputStream )
-                bHasOutputStream = true;
-            else if ( pOldValue[i].Name == sStream )
-                bHasStream = true;
-            else if ( pOldValue[i].Name == "DocumentBaseURL" )
-                bHasBaseURL = true;
-            else if( pOldValue[i].Name == "FilterName" )
-                bHasFilterName = true;
-        }
+        if (aNewArgs.contains(u"FileName"_ustr))
+            aNewArgs[u"FileName"_ustr] <<= rMedium.GetName();
 
-        const css::uno::Sequence<css::beans::PropertyValue>& rMediumArgs = rMedium.GetArgs();
-        for ( sal_Int32 i = 0; i < rMediumArgs.getLength(); i++ )
-        {
-            if( rMediumArgs[i].Name == "IsPreview" )
-                rMediumArgs[i].Value >>= bIsPreview;
-            else if (rMediumArgs[i].Name == "ConversionRequestOrigin")
-            {
-                if (OUString s; rMediumArgs[i].Value >>= s)
-                    oConversionRequestOrigin = s;
-            }
-        }
+        if (aMediumArgs.getUnpackedValueOrDefault(u"IsPreview"_ustr, false))
+            aNewArgs[u"IsPreview"_ustr] <<= true;
+
+        if (aMediumArgs.contains(u"ConversionRequestOrigin"_ustr))
+            aNewArgs[u"ConversionRequestOrigin"_ustr] = aMediumArgs[u"ConversionRequestOrigin"_ustr];
 
         // FIXME: Handle this inside TransformItems()
         if (rItems.GetItemState(SID_IS_REDACT_MODE) == SfxItemState::SET)
-            bIsRedactMode = true;
+            aNewArgs[u"IsRedactMode"_ustr] <<= true;
 
-        if ( !bHasOutputStream )
-        {
-            aArgs.realloc ( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = sOutputStream;
-            pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
-        }
+        if (!aNewArgs.contains(u"OutputStream"_ustr))
+            aNewArgs[u"OutputStream"_ustr] <<= uno::Reference<io::XOutputStream>(new utl::OOutputStreamWrapper(*rMedium.GetOutStream()));
 
         // add stream as well, for OOX export and maybe others
-        if ( !bHasStream )
-        {
-            aArgs.realloc ( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = sStream;
-            pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
-        }
+        if (!aNewArgs.contains(u"StreamForOutput"_ustr))
+            aNewArgs[u"StreamForOutput"_ustr] <<= uno::Reference<io::XStream>(new utl::OStreamWrapper(*rMedium.GetOutStream()));
 
-        if ( !bHasBaseURL )
-        {
-            aArgs.realloc ( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "DocumentBaseURL";
-            pArgs[nEnd-1].Value <<= rMedium.GetBaseURL( true );
-        }
+        if (!aNewArgs.contains(u"DocumentBaseURL"_ustr))
+            aNewArgs[u"DocumentBaseURL"_ustr] <<= rMedium.GetBaseURL(true);
 
-        if( !bHasFilterName )
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "FilterName";
-            pArgs[nEnd-1].Value <<= aFilterName;
-        }
+        if (!aNewArgs.contains(u"FilterName"_ustr))
+            aNewArgs[u"FilterName"_ustr] <<= aFilterName;
 
-        if (bIsRedactMode)
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "IsRedactMode";
-            pArgs[nEnd-1].Value <<= bIsRedactMode;
-        }
-
-        if (bIsPreview)
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "IsPreview";
-            pArgs[nEnd-1].Value <<= bIsPreview;
-        }
-        if (oConversionRequestOrigin)
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = u"ConversionRequestOrigin"_ustr;
-            pArgs[nEnd-1].Value <<= *oConversionRequestOrigin;
-        }
-
-        return xFilter->filter( aArgs );
+        return xFilter->filter(aNewArgs.getAsConstPropertyValueList());
         }
         catch (const css::uno::RuntimeException&)
         {
