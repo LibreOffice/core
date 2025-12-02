@@ -175,7 +175,7 @@ public:
 
     typedef std::unordered_set< sal_Unicode, HashUChar >                           UCharSet;
     typedef std::unordered_map< OUString, UCharSet >                               UCharSetMap;
-    typedef std::unordered_map< Reference< XInterface >, UCharSetMap >             UCharSetMapMap;
+    typedef std::unordered_map< Reference< css::drawing::XDrawPage >, UCharSetMap > UCharSetMapMap;
 
     typedef std::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap > MetaBitmapActionSet;
 
@@ -215,8 +215,8 @@ private:
     PagePropertySet                     mVisiblePagePropSet;
     OUString                            msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
-    Reference< XInterface >             mCreateOjectsCurrentMasterPage;
-    std::unordered_map< Reference< XInterface >, OUString >
+    Reference< css::drawing::XDrawPage > mCreateOjectsCurrentMasterPage;
+    std::unordered_map< Reference< css::drawing::XDrawPage >, OUString >
                                         mTextShapeIdListMap;
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;

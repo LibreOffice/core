@@ -120,7 +120,7 @@ namespace {
 class TextField
 {
 protected:
-    SVGFilter::ObjectSet mMasterPageSet;
+    std::unordered_set< Reference< css::drawing::XDrawPage > > mMasterPageSet;
 public:
     TextField() = default;
     TextField(TextField const &) = default;
@@ -150,7 +150,7 @@ protected:
         sal_Int32 nLength = sText.getLength();
         for (auto const& masterPage : mMasterPageSet)
         {
-            const Reference< XInterface > & xMasterPage = masterPage;
+            const Reference< css::drawing::XDrawPage > & xMasterPage = masterPage;
             for( sal_Int32 i = 0; i < nLength; ++i )
             {
                 aTextFieldCharSets[ xMasterPage ][ sTextFieldId ].insert( ustr[i] );
