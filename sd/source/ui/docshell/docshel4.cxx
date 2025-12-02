@@ -405,6 +405,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
 {
     const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
     const bool bIsPowerPointECMA = aFilterName.startsWith("Impress MS PowerPoint 2007 XML");
+    const bool bIsPowerPointISO29500 = aFilterName.startsWith("Impress Office Open XML"); // 2010+
     if (bIsPowerPointECMA)
     {
         // As this is a MSFT format, we should use the "MS Compat"
@@ -437,7 +438,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout, true);
     }
 
-    if (bIsPowerPointECMA || aFilterName == "Impress Office Open XML")
+    if (bIsPowerPointECMA || bIsPowerPointISO29500)
     {
         // We need to be able to set the default tab size for each text object.
         // This is possible at the moment only for the whole document. See
