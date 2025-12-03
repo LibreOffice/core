@@ -499,9 +499,12 @@ bool PowerPointExport::exportDocument()
 
     exportPPT(aProperties);
 
+    // clamp to minimum values supported by PPTX
+    sal_Int64 nDestPageWidth = std::max(sal_Int64(914400), PPTtoEMU(maDestPageSize.Width));
+    sal_Int64 nDestPageHeight = std::max(sal_Int64(914400), PPTtoEMU(maDestPageSize.Height));
     mPresentationFS->singleElementNS(XML_p, XML_sldSz,
-                                     XML_cx, OString::number(PPTtoEMU(maDestPageSize.Width)),
-                                     XML_cy, OString::number(PPTtoEMU(maDestPageSize.Height)));
+                                     XML_cx, OString::number(nDestPageWidth),
+                                     XML_cy, OString::number(nDestPageHeight));
     // for some reason if added before slides list it will not load the slides (alas with error reports) in mso
     mPresentationFS->singleElementNS(XML_p, XML_notesSz,
                                      XML_cx, OString::number(PPTtoEMU(maNotesPageSize.Width)),
