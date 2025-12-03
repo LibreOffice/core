@@ -43,8 +43,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 			NSS_DISABLE_GTESTS=1 \
-			CC="$(patsubst %,\"%\",$(CC))" \
-			CCC="$(patsubst %,\"%\",$(CXX))" \
+			CCC="$(CXX)" \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
