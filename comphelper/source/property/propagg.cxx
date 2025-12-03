@@ -87,7 +87,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     for ( std::size_t nMPLoop = 0; nMPLoop < m_aProperties.size(); ++nMPLoop )
     {
         auto &prop = m_aProperties[ nMPLoop ];
-        if ( aDelegatorProps.find( prop.Name ) != aDelegatorProps.end() )
+        if ( aDelegatorProps.contains( prop.Name ) )
         {
             m_aPropertyAccessors.insert_or_assign(
                 prop.Handle, OPropertyAccessor( -1, nMPLoop, false ));
@@ -101,7 +101,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
             if ( _pInfoService )
                 nHandle = _pInfoService->getPreferredPropertyId( prop.Name );
 
-            if ( ( -1 == nHandle ) || ( existingHandles.find( nHandle ) != existingHandles.end() ) )
+            if ( ( -1 == nHandle ) || ( existingHandles.contains( nHandle ) ) )
             {
                 // 1. no handle from the info service -> default
                 // 2. conflicts -> use another one (which we don't check anymore, assuming _nFirstAggregateId was large enough)

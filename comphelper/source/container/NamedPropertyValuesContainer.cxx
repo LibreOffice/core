@@ -73,7 +73,7 @@ NamedPropertyValuesContainer::NamedPropertyValuesContainer() noexcept
 // XNameContainer
 void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const uno::Any& aElement )
 {
-    if( maProperties.find( aName ) != maProperties.end() )
+    if( maProperties.contains( aName ) )
         throw container::ElementExistException();
 
     uno::Sequence<beans::PropertyValue> aProps;

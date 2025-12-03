@@ -160,7 +160,7 @@ bool DirectoryHelper::moveDirContent(const OUString& rSourceDirURL,
 
     for (const auto& dir : aDirs)
     {
-        const bool bExcluded(!rExcludeList.empty() && rExcludeList.find(dir) != rExcludeList.end());
+        const bool bExcluded(!rExcludeList.empty() && rExcludeList.contains(dir));
 
         if (!bExcluded)
         {
