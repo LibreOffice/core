@@ -903,6 +903,7 @@ bool ThemeExport::writeColorSet(model::Theme const& rTheme)
 
                 // drawingML alpha is a percentage on a 0..100000 scale.
                 sal_Int32 nAlpha = aColor.GetAlpha() * oox::drawingml::MAX_PERCENT / 255;
+                assert(nAlpha >= 0);
                 mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OUString::number(nAlpha));
 
                 mpFS->endElementNS(XML_a, XML_srgbClr);

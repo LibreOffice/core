@@ -363,6 +363,7 @@ void DrawingML::WriteColor( ::Color nColor, sal_Int32 nAlpha )
     if( nAlpha < MAX_PERCENT )
     {
         mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, sColor);
+        assert(nAlpha >= 0);
         mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OString::number(nAlpha));
         mpFS->endElementNS( XML_a, XML_srgbClr );
 
@@ -409,6 +410,7 @@ void DrawingML::WriteColor( const ::Color nColor, const Sequence< PropertyValue 
     else if(nAlpha < MAX_PERCENT)
     {
         mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, sColor);
+        assert(nAlpha >= 0);
         mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OString::number(nAlpha));
         mpFS->endElementNS(XML_a, XML_srgbClr);
     }
@@ -427,6 +429,7 @@ void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTra
         {
             if(nToken == XML_alpha && nAlpha < MAX_PERCENT)
             {
+                assert(nAlpha >= 0);
                 mpFS->singleElementNS(XML_a, nToken, XML_val, OString::number(nAlpha));
             }
             else
