@@ -455,8 +455,14 @@ bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
 {
     sal_Int32 nValue = 0;
     bool bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
-    if (bRet)
-        bRet = !o3tl::checked_sub<sal_Int32>(100, nValue, nValue);
+    if (!bRet)
+        return false;
+    if (nValue < 0 || nValue > 100)
+    {
+        SAL_WARN("xmloff", "Percentage property out of range, ignoring");
+        return false;
+    }
+    bRet = !o3tl::checked_sub<sal_Int32>(100, nValue, nValue);
     if (bRet)
         lcl_xmloff_setAny( rValue, nValue, nBytes );
     return bRet;
