@@ -1272,11 +1272,8 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
 
 bool PDFWriterImpl::emitGradients()
 {
-    for (auto const& gradient : m_aGradients)
-    {
-        if ( !writeGradientFunction( gradient ) ) return false;
-    }
-    return true;
+    return std::all_of(m_aGradients.begin(), m_aGradients.end(),
+                       [this](const auto& gradient) { return writeGradientFunction(gradient); });
 }
 
 bool PDFWriterImpl::emitTilings()

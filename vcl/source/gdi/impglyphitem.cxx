@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <impglyphitem.hxx>
+#include <algorithm>
 #include <utility>
+#include <impglyphitem.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vcllayout.hxx>
@@ -59,11 +60,9 @@ bool SalLayoutGlyphs::IsValid() const
         return false;
     if (!m_pImpl->IsValid())
         return false;
-    if (m_pExtraImpls)
-        for (std::unique_ptr<SalLayoutGlyphsImpl> const& impl : *m_pExtraImpls)
-            if (!impl->IsValid())
-                return false;
-    return true;
+
+    return !m_pExtraImpls
+           || std::ranges::all_of(*m_pExtraImpls, [](const auto& impl) { return impl->IsValid(); });
 }
 
 void SalLayoutGlyphs::Invalidate()

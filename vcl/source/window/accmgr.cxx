@@ -32,10 +32,9 @@ bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
     if ( !mxAccelList ) {
         mxAccelList.emplace();
     } else {
-        for (Accelerator* i : *mxAccelList) {
-            if ( i == pAccel ) {
-                return false;
-            }
+        if (std::ranges::find(*mxAccelList, pAccel) != mxAccelList->end())
+        {
+            return false;
         }
     }
 
