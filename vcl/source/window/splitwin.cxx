@@ -1467,7 +1467,9 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::
 
     if (rRect.Contains(GetPointerPosPixel()))
     {
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, 2, false, false, false);
+        rRenderContext.SetLineColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.DrawRect(rRect);
 
         aColor = rStyleSettings.GetDarkShadowColor();
     }
