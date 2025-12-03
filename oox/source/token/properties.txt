@@ -30,6 +30,7 @@ BlackDay
 BlockIncrement
 Border
 BorderColor
+BorderComplexColor
 BorderDashName
 BorderStyle
 BorderTransparency
@@ -108,6 +109,7 @@ Color
 ColumnGrand
 ColumnLabelRanges
 CompileEnglish
+ComplexColor
 ConditionalFormat
 ConnectBars
 ContainsHeader
@@ -317,6 +319,7 @@ Japanese
 Keys
 Label
 LabelBorderColor
+LabelBorderComplexColor
 LabelBorderStyle
 LabelBorderWidth
 LabelPlacement
@@ -326,6 +329,7 @@ LabelFillBackground
 LabelFillHatchName
 LabelFillStyle
 LabelFillColor
+LabelFillComplexColor
 CustomLabelFields
 LayoutInfo
 LeftBorder

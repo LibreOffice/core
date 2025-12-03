@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testPieChartDataPointExplosionXLSX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
 {
-    loadFromFile(u"pptx/tdf115107.pptx");
+    loadFromFile(u"pptx/CustomDataLabel_tdf115107.pptx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -357,12 +357,25 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
     save(TestFilter::PPTX_2007);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
+
     // Check the data labels font color for the complete data series
     assertXPathInsensitive(
         pXmlDoc,
         "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:p/a:pPr/"
-        "a:defRPr/a:solidFill/a:srgbClr",
-        "val", u"404040");
+        "a:defRPr/a:solidFill/a:schemeClr",
+        "val", u"tx1");
+
+    assertXPathInsensitive(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:p/a:pPr/"
+        "a:defRPr/a:solidFill/a:schemeClr/a:lumMod",
+        "val", u"75000");
+
+    assertXPathInsensitive(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:p/a:pPr/"
+        "a:defRPr/a:solidFill/a:schemeClr/a:lumOff",
+        "val", u"25000");
 }
 
 /// Test for tdf#94235

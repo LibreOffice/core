@@ -37,6 +37,7 @@ namespace FillProperties
         // com.sun.star.drawing.FillProperties
         PROP_FILL_STYLE = FAST_PROPERTY_ID_START_FILL_PROP
         , PROP_FILL_COLOR
+        , PROP_FILL_COMPLEX_COLOR
         , PROP_FILL_TRANSPARENCE
         , PROP_FILL_TRANSPARENCE_GRADIENT_NAME
 //        , PROP_FILL_TRANSPARENCE_GRADIENT //optional

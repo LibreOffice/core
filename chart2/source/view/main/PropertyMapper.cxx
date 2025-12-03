@@ -266,6 +266,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties
     //shape property -- chart model object property
     static tPropertyNameMap s_aShapePropertyMapForCharacterProperties{
         {"CharColor",                "CharColor"},
+        {"CharComplexColor",         "CharComplexColor"},
         {"CharContoured",            "CharContoured"},
         {"CharEmphasis",             "CharEmphasis"},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
         {"CharEscapement",           "CharEscapement"},
@@ -301,9 +302,11 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties
         {"CharStrikeout",            "CharStrikeout"},
         {"CharUnderline",            "CharUnderline"},
         {"CharUnderlineColor",       "CharUnderlineColor"},
+        {"CharUnderlineComplexColor", "CharUnderlineComplexColor"},
         {"CharUnderlineHasColor",    "CharUnderlineHasColor"},
         {"CharOverline",             "CharOverline"},
         {"CharOverlineColor",        "CharOverlineColor"},
+        {"CharOverlineComplexColor", "CharOverlineComplexColor"},
         {"CharOverlineHasColor",     "CharOverlineHasColor"},
         {"CharWeight",               "CharWeight"},
         {"CharWeightAsian",          "CharWeightAsian"},
@@ -338,6 +341,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
         {"FillBackground",               "FillBackground"},
         {"FillBitmapName",               "FillBitmapName"},
         {"FillColor",                    "FillColor"},
+        {"FillComplexColor",             "FillComplexColor"},
         {"FillGradientName",             "FillGradientName"},
         {"FillGradientStepCount",        "FillGradientStepCount"},
         {"FillHatchName",                "FillHatchName"},
@@ -362,6 +366,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
     //shape property -- chart model object property
     static tPropertyNameMap s_aShapePropertyMapForLineProperties{
         {"LineColor",              "LineColor"},
+        {"LineComplexColor",       "LineComplexColor"},
         {"LineDashName",           "LineDashName"},
         {"LineJoint",              "LineJoint"},
         {"LineStyle",              "LineStyle"},
@@ -411,6 +416,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPropertie
     //shape property -- chart model object property
     static tPropertyNameMap s_aShapePropertyMapForLineSeriesProperties{
         {"LineColor",           "Color"},
+        {"LineComplexColor",    "ComplexColor"},
         {"LineDashName",        "LineDashName"},
         {"LineStyle",           "LineStyle"},
         {"LineTransparence",    "Transparency"},
@@ -426,9 +432,11 @@ namespace {
             {"LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE},
             {"LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH},
             {"LineColor", CHART_UNONAME_LABEL_BORDER_COLOR},
+            {"LineComplexColor", CHART_UNONAME_LABEL_BORDER_COMPLEX_COLOR},
             {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS},
             {"FillStyle", CHART_UNONAME_LABEL_FILL_STYLE},
             {"FillColor", CHART_UNONAME_LABEL_FILL_COLOR},
+            {"FillComplexColor", CHART_UNONAME_LABEL_FILL_COMPLEX_COLOR},
             {"FillBackground", CHART_UNONAME_LABEL_FILL_BACKGROUND},
             {"FillHatchName", CHART_UNONAME_LABEL_FILL_HATCH_NAME}
             });
@@ -450,6 +458,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPropert
         {"FillBackground",               "FillBackground"},
         {"FillBitmapName",               "FillBitmapName"},
         {"FillColor",                    "Color"},
+        {"FillComplexColor",             "ComplexColor"},
         {"FillGradientName",             "GradientName"},
         {"FillGradientStepCount",        "GradientStepCount"},
         {"FillHatchName",                "HatchName"},
@@ -468,6 +477,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPropert
         {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"},
         //line properties
         {"LineColor",                    "BorderColor"},
+        {"LineComplexColor",             "BorderComplexColor"},
         {"LineDashName",                 "BorderDashName"},
         {"LineStyle",                    "BorderStyle"},
         {"LineTransparence",             "BorderTransparency"},

@@ -47,8 +47,13 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <tools/UnitConversion.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
-namespace oox::drawingml::chart {
+namespace oox::drawingml::chart
+{
+
+using namespace css;
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
@@ -525,17 +530,26 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
 
     if(xShapeProps.is())
     {
-        Color aFillColor = xShapeProps->getFillProperties().maFillColor;
-        aSymbol.FillColor = sal_Int32(aFillColor.getColor(getFilter().getGraphicHelper()));
+        Color aFillOOXColor = xShapeProps->getFillProperties().maFillColor;
+        aSymbol.FillColor = sal_Int32(aFillOOXColor.getColor(getFilter().getGraphicHelper()));
         // tdf#124817: if there is no fill color, use line color of the symbol
         if( aSymbol.FillColor < 0 )
         {
-            Color aLineColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
-            aSymbol.BorderColor = sal_Int32(aLineColor.getColor(getFilter().getGraphicHelper()));
+            Color aLineOOXColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
+            aSymbol.BorderColor = sal_Int32(aLineOOXColor.getColor(getFilter().getGraphicHelper()));
             rPropSet.setProperty(PROP_Color, aSymbol.BorderColor);
+
+            model::ComplexColor aComplexColor = aLineOOXColor.getComplexColor();
+            auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+            rPropSet.setProperty(PROP_ComplexColor, uno::Any(xComplexColor));
         }
         else
+        {
             rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
+            model::ComplexColor aComplexColor = aFillOOXColor.getComplexColor();
+            auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+            rPropSet.setProperty(PROP_ComplexColor, uno::Any(xComplexColor));
+        }
     }
 
     // set the property
