@@ -269,18 +269,18 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
 
 css::util::Date const & WorkbookSettings::getNullDate() const
 {
+    // Excel (inacurrately) treats Feb 29, 1900 as a valid date (for compatibility with Lotus).
+    // AFAICS, only Strict .xlsx treats that date as invalid
+    // (regardless of whether dateCompatibility="0" or "1").
+    // Thus the only purpose of dateCompatibility="1" is to determine the oldest recognizable date
+    // which will be Jan 1 1904 if date1904="true", otherwise it will be Jan 1 1900.
+
+    // LO never treats 1900 as a leap year (so we never match Excel's first two months of 1900),
+    // and doesn't have an earliest recognizable date limitation.
+    // The day-early null date of Dec 30 1899 takes care of the extra leap-day that Excel inserts.
+
     static const css::util::Date saDate1900                 ( 30, 12, 1899 );
     static const css::util::Date saDate1904                 ( 1, 1, 1904 );
-    static const css::util::Date saDateBackCompatibility1900( 31, 12, 1899 );
-
-    if( getOoxFilter().getVersion() == oox::core::ISOIEC_29500_2008 )
-    {
-        if( !maBookSettings.mbDateCompatibility )
-            return saDate1900;
-
-        return maBookSettings.mbDateMode1904 ? saDate1904 :
-                                               saDateBackCompatibility1900;
-    }
 
     return maBookSettings.mbDateMode1904 ? saDate1904 : saDate1900;
 }
