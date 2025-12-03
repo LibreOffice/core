@@ -682,21 +682,12 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         = bRemovePersonalInfo
           && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo);
 
-    // Although the spec says that ISOIEC_29500_2008 must use the "officedocument" URI,
-    // in MS errata they admit that DOCX just uses the old "package" URI from ECMA_376_1ST_EDITION.
-
-    OUString sValue;
-    const bool bDocx = dynamic_cast<text::XTextDocument*>(rSelf.getModel().get());
-    if (!bDocx && rSelf.getVersion() == oox::core::ISOIEC_29500_2008)
-    {
-        // The lowercase "officedocument" is intentional and according to the spec
-        // (although most other places are written "officeDocument")
-        sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
-    }
-    else
-        sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
-
-    rSelf.addRelation( sValue, u"docProps/core.xml" );
+    // Although the spec says that ISOIEC_29500_2008 must use the "officedocument" URI for core.xml,
+    // MS errata admits that MS Office just uses the old "package" URI from ECMA_376_1ST_EDITION.
+    // Tested with Office 2024 - and even "Strict Open XML" uses "package".
+    rSelf.addRelation(
+        u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"_ustr,
+        u"docProps/core.xml");
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
             u"docProps/core.xml"_ustr,
             u"application/vnd.openxmlformats-package.core-properties+xml"_ustr );

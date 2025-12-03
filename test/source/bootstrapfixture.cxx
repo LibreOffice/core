@@ -166,7 +166,7 @@ OUString filterOut(const OUString& s, std::u16string_view excludedSubstr)
     return result;
 }
 
-OUString filterValidationResults(const OUString& s, std::u16string_view rFilter)
+OUString filterValidationResults(const OUString& s)
 {
     OUString result = s;
     // In ECMA-376-1 Second Edition, 2008, there is the following restriction for oleObj:
@@ -190,11 +190,10 @@ OUString filterValidationResults(const OUString& s, std::u16string_view rFilter)
     // But officeotron only knows the old version...
     result = filterOut(result, u"Invalid content was found starting with element 'p:pic'. No child element is expected at this point.");
 
-    if (rFilter == u"Office Open XML Text")
     {
         /* While the spec says the core-properties relationship must be
          *     officedocument/2006/relationships/metadata/core-properties
-         * MS Word actually just writes the ECMA-376-1ST EDITION version
+         * MS Office actually just writes the ECMA-376-1ST EDITION version
          * for both ECMA_Transitional and ISO_Transitional formats.
          *
          * officeotron doesn't care that clause 15.2.12.1 fails on all MSWord-produced output.
@@ -308,7 +307,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, std::u16string_view
 
     if( eFormat == test::OOXML && !aContentOUString.isEmpty() )
     {
-        aContentOUString = filterValidationResults(aContentOUString, rFilter);
+        aContentOUString = filterValidationResults(aContentOUString);
         // check for validation errors here
         sal_Int32 nIndex = aContentOUString.lastIndexOf(grand_total);
         if(nIndex == -1)
