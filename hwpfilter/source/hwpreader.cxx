@@ -4171,8 +4171,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                     if( drawobj->type == HWPDO_ADVANCED_ARC ){
                                 ZZParall& pal = drawobj->property.parall;
 
-                                double start_angle = atan2(pal.pt[0].y - pal.pt[1].y,pal.pt[1].x - pal.pt[0].x );
-                                double end_angle = atan2(pal.pt[2].y - pal.pt[1].y, pal.pt[1].x - pal.pt[2].x);
+                                double start_angle = atan2(static_cast<double>(pal.pt[0].y) - pal.pt[1].y,
+                                                           static_cast<double>(pal.pt[1].x) - pal.pt[0].x );
+                                double end_angle = atan2(static_cast<double>(pal.pt[2].y) - pal.pt[1].y,
+                                                         static_cast<double>(pal.pt[1].x) - pal.pt[2].x);
 
                                 if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI ))
                                     std::swap( start_angle, end_angle );
