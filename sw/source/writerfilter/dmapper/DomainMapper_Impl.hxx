@@ -723,7 +723,7 @@ public:
             css::uno::Reference < css::uno::XComponentContext > xContext,
             rtl::Reference< SwXTextDocument > const& xModel,
             SourceDocumentType eDocumentType,
-            utl::MediaDescriptor const & rMediaDesc);
+            comphelper::SequenceAsHashMap const & rMediaDesc);
     ~DomainMapper_Impl();
 
     void setDocumentReference(writerfilter::ooxml::OOXMLDocument* pDocument) { if (!m_pOOXMLDocument) m_pOOXMLDocument = pDocument; };

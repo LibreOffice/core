@@ -22,6 +22,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
@@ -37,7 +38,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/saveopt.hxx>
 
 namespace
@@ -999,7 +999,7 @@ void Test::testODF13()
 
         // FIXME: it's not possible to use 'reload' here because the validation fails with
         // Error: unexpected attribute "loext:contextual-spacing"
-        utl::MediaDescriptor aMediaDescriptor;
+        comphelper::SequenceAsHashMap aMediaDescriptor;
         aMediaDescriptor[u"FilterName"_ustr] <<= u"writer8"_ustr;
 
         uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
@@ -1261,7 +1261,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     uno::Reference<beans::XPropertySet>(getParagraph(3), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingLevel"_ustr, uno::Any(sal_Int16(2)));
 
     // check PDF export of the list items (label in particular)
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
@@ -1668,7 +1668,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     pWrtShell->UpdateTableOf(*pTOX);
 
     // Export as PDF
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
@@ -1732,7 +1732,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getStyles(u"FrameStyles"_ustr)->getByName(u"Formula"_ustr), u"Decorative"_ustr));
 
     // check PDF export
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(

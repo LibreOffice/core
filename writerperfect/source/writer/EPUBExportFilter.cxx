@@ -22,6 +22,7 @@
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/filter/SvmWriter.hxx>
@@ -83,7 +84,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
             rProp.Value >>= nLayoutMethod;
     }
 
-    utl::MediaDescriptor aMediaDesc(rDescriptor);
+    comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
     mxStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STATUSINDICATOR, uno::Reference<task::XStatusIndicator>());
 

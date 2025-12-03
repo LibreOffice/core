@@ -31,6 +31,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <comphelper/configuration.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -161,8 +162,8 @@ bool HwpReader::importHStream(std::unique_ptr<HStream> stream)
 
 sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
 {
-    utl::MediaDescriptor aDescriptor(rDescriptor);
-    aDescriptor.addInputStream();
+    comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
+    utl::MediaDescriptor::addInputStream(aDescriptor);
 
     Reference< XInputStream > xInputStream(
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY_THROW);
@@ -4803,8 +4804,8 @@ OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue 
 {
     OUString sTypeName;
 
-    utl::MediaDescriptor aDescriptor(rDescriptor);
-    aDescriptor.addInputStream();
+    comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
+    utl::MediaDescriptor::addInputStream(aDescriptor);
 
     Reference< XInputStream > xInputStream(
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);

@@ -53,6 +53,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configuration.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/securityoptions.hxx>
@@ -1312,7 +1313,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
         throw lang::DisposedException(); // TODO
 
     bool AutoSaveEvent = false;
-    utl::MediaDescriptor lArgs(lObjArgs);
+    comphelper::SequenceAsHashMap lArgs(lObjArgs);
     lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
 
     if ( m_nObjectState == -1 )

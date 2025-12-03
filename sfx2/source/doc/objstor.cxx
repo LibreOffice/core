@@ -3638,7 +3638,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
     }
 
     bool AutoSaveEvent = false;
-    utl::MediaDescriptor lArgs(rMedium.GetArgs());
+    comphelper::SequenceAsHashMap lArgs(rMedium.GetArgs());
     lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
 
     if ( pImpl->mxObjectContainer )

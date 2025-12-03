@@ -24,6 +24,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <ResourceId.hxx>
 #include <DrawController.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -44,7 +45,7 @@ BasicToolBarFactory::BasicToolBarFactory(const rtl::Reference<::sd::DrawControll
     {
         mxController = rxController;
 
-        utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
+        comphelper::SequenceAsHashMap aDescriptor(mxController->getModel()->getArgs());
         if ( ! aDescriptor.getUnpackedValueOrDefault(
             utl::MediaDescriptor::PROP_PREVIEW,
             false))

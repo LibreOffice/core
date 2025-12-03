@@ -3847,7 +3847,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         std::vector<OUString> aFilteredOptionVec;
         bool bTakeOwnership = false;
         bool bCreateFromTemplate = false;
-        MediaDescriptor aSaveMediaDescriptor;
+        comphelper::SequenceAsHashMap aSaveMediaDescriptor;
         for (const auto& rOption : aOptionSeq)
         {
             if (rOption == "TakeOwnership")
@@ -5029,7 +5029,7 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
         SvMemoryStream aOutStream;
         uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aOutStream);
 
-        utl::MediaDescriptor aMediaDescriptor;
+        comphelper::SequenceAsHashMap aMediaDescriptor;
         switch (doc_getDocumentType(pThis))
         {
             case LOK_DOCTYPE_PRESENTATION:

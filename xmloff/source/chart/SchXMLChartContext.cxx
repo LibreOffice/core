@@ -29,7 +29,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -693,10 +693,9 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         OUString aChartOleObjectName;
         if( xNewDoc.is() )
         {
-            utl::MediaDescriptor aMediaDescriptor( xNewDoc->getArgs() );
+            comphelper::SequenceAsHashMap aMediaDescriptor(xNewDoc->getArgs());
 
-            utl::MediaDescriptor::const_iterator aIt(
-                aMediaDescriptor.find( u"HierarchicalDocumentName"_ustr));
+            auto aIt(aMediaDescriptor.find(u"HierarchicalDocumentName"_ustr));
             if( aIt != aMediaDescriptor.end() )
             {
                 aChartOleObjectName = (*aIt).second.get< OUString >();

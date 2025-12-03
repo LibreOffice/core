@@ -45,6 +45,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unodraw.hxx>
 #include <unotxdoc.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -164,7 +165,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         comphelper::ScopeGuard g([this] {
             m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(false));
         });
-        utl::MediaDescriptor aMediaDesc(rDescriptor);
+        comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false);
         bool bSkipImages = aMediaDesc.getUnpackedValueOrDefault(u"FilterOptions"_ustr, OUString())
                            == "SkipImages";

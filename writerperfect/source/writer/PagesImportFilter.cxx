@@ -18,7 +18,7 @@
 using libetonyek::EtonyekDocument;
 
 bool PagesImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                         OdtGenerator& rGenerator, utl::MediaDescriptor&)
+                                         OdtGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return EtonyekDocument::parse(&rInput, &rGenerator);
 }

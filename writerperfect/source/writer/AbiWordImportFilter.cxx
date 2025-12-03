@@ -16,7 +16,7 @@
 #include "AbiWordImportFilter.hxx"
 
 bool AbiWordImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                           OdtGenerator& rGenerator, utl::MediaDescriptor&)
+                                           OdtGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libabw::AbiDocument::parse(&rInput, &rGenerator);
 }

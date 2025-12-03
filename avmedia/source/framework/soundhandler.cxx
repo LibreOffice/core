@@ -19,6 +19,7 @@
 
 #include "soundhandler.hxx"
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -108,7 +109,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     // SAFE {
     const std::unique_lock aLock(m_aMutex);
 
-    utl::MediaDescriptor aDescriptor(lDescriptor);
+    comphelper::SequenceAsHashMap aDescriptor(lDescriptor);
 
     {
     //close streams otherwise on windows we can't reopen the file in the
@@ -184,7 +185,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...
-    utl::MediaDescriptor aDescriptor(lDescriptor);
+    comphelper::SequenceAsHashMap aDescriptor(lDescriptor);
     OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString());
     OUString                      sReferer   = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER, OUString());
 

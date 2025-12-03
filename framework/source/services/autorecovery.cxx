@@ -831,12 +831,12 @@ private:
 
     // TODO document me
     void implts_openOneDoc(const OUString&               sURL       ,
-                                 utl::MediaDescriptor& lDescriptor,
+                                 comphelper::SequenceAsHashMap& lDescriptor,
                                  AutoRecovery::TDocumentInfo&   rInfo      );
 
     // TODO document me
     void implts_generateNewTempURL(const OUString&               sBackupPath     ,
-                                         utl::MediaDescriptor& rMediaDescriptor,
+                                   comphelper::SequenceAsHashMap& rMediaDescriptor,
                                          AutoRecovery::TDocumentInfo&   rInfo           );
 
     /** @short  notifies all interested listener about the current state
@@ -1016,11 +1016,11 @@ private:
                 is used to set the new created progress as parameter on these set.
      */
     static void impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
-                                      utl::MediaDescriptor&             rArgs    ,
+                                       comphelper::SequenceAsHashMap& rArgs,
                                 const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
     static void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
-                                   utl::MediaDescriptor&             rArgs    ,
+                                    comphelper::SequenceAsHashMap& rArgs,
                              const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
     /** try to remove the specified file from disc.
@@ -2466,7 +2466,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     aCacheLock.unlock();
 
-    utl::MediaDescriptor lDescriptor(xDocument->getArgs2( { utl::MediaDescriptor::PROP_FILTERNAME, utl::MediaDescriptor::PROP_NOAUTOSAVE } ));
+    comphelper::SequenceAsHashMap lDescriptor(xDocument->getArgs2( { utl::MediaDescriptor::PROP_FILTERNAME, utl::MediaDescriptor::PROP_NOAUTOSAVE } ));
 
     // check if this document must be ignored for recovery !
     // Some use cases don't wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
@@ -2716,7 +2716,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     aInfo.OldTempURL.clear();
     aInfo.NewTempURL.clear();
 
-    utl::MediaDescriptor lDescriptor(aInfo.Document->getArgs());
+    comphelper::SequenceAsHashMap lDescriptor(aInfo.Document->getArgs());
     aInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME, OUString());
 
     css::uno::Reference< css::frame::XTitle > xDocTitle(xDocument, css::uno::UNO_QUERY);
@@ -2886,7 +2886,7 @@ bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo const & rInf
     if (! rInfo.Document.is())
         return true;
 
-    utl::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
+    comphelper::SequenceAsHashMap lDescriptor(rInfo.Document->getArgs());
     bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE, false);
 
     return bNoAutoSave;
@@ -3080,12 +3080,12 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     if (!rInfo.Document.is())
         return;
 
-    utl::MediaDescriptor lOldArgs(rInfo.Document->getArgs());
+    comphelper::SequenceAsHashMap lOldArgs(rInfo.Document->getArgs());
     implts_generateNewTempURL(sBackupPath, lOldArgs, rInfo);
 
     // if the document was loaded with a password, it should be
     // stored with password
-    utl::MediaDescriptor lNewArgs;
+    comphelper::SequenceAsHashMap lNewArgs;
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData =
         lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
                 css::uno::Sequence< css::beans::NamedValue >());
@@ -3287,7 +3287,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             continue;
         }
 
-        utl::MediaDescriptor lDescriptor;
+        comphelper::SequenceAsHashMap lDescriptor;
 
         // it's a UI feature - so the "USER" itself must be set as referrer
         lDescriptor[utl::MediaDescriptor::PROP_REFERRER] <<= OUString(REFERRER_USER);
@@ -3399,7 +3399,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 
         if (!info.RealFilter.isEmpty())
         {
-            utl::MediaDescriptor lPatchDescriptor(info.Document->getArgs());
+            comphelper::SequenceAsHashMap lPatchDescriptor(info.Document->getArgs());
             lPatchDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= info.RealFilter;
             info.Document->attachResource(info.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
                 // do *not* use sURL here. In case this points to the recovery file, it has already been passed
@@ -3443,7 +3443,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 }
 
 void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
-                                           utl::MediaDescriptor& lDescriptor,
+                                     comphelper::SequenceAsHashMap& lDescriptor,
                                            AutoRecovery::TDocumentInfo&   rInfo      )
 {
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
@@ -3578,7 +3578,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 }
 
 void AutoRecovery::implts_generateNewTempURL(const OUString&               sBackupPath     ,
-                                                   utl::MediaDescriptor& /*rMediaDescriptor*/,
+                                             comphelper::SequenceAsHashMap& /*rMediaDescriptor*/,
                                                    AutoRecovery::TDocumentInfo&   rInfo           )
 {
     // specify URL for saving (which points to a temp file inside backup directory)
@@ -4192,7 +4192,7 @@ void AutoRecovery::impl_showFullDiscError()
 
 // static
 void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
-                                                utl::MediaDescriptor&             rArgs    ,
+                                          comphelper::SequenceAsHashMap& rArgs,
                                           const css::uno::Reference< css::frame::XFrame >& xNewFrame)
 {
     // external well known frame must be preferred (because it was created by ourself
@@ -4258,7 +4258,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
 
 // static
 void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
-                                             utl::MediaDescriptor&             rArgs    ,
+                                       comphelper::SequenceAsHashMap& rArgs,
                                        const css::uno::Reference< css::frame::XFrame >& xNewFrame)
 {
     // external well known frame must be preferred (because it was created by ourself
@@ -4283,7 +4283,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
         xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], css::uno::Any(css::uno::Reference< css::task::XStatusIndicator >()));
 
     // forget progress inside list of arguments.
-    utl::MediaDescriptor::iterator pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR);
+    auto pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR);
     if (pArg != rArgs.end())
     {
         rArgs.erase(pArg);

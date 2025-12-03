@@ -62,6 +62,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>

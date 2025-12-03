@@ -51,9 +51,9 @@ namespace com::sun::star{
     }
 }
 
-namespace utl
+namespace comphelper
 {
-class MediaDescriptor;
+class SequenceAsHashMap;
 }
 
 typedef std::vector<css::beans::PropertyValue> PropertyValueVector_t;
@@ -80,7 +80,7 @@ public:
                  rtl::Reference<SwXTextDocument> const& xModel,
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
-                 utl::MediaDescriptor const & rMediaDesc);
+                 comphelper::SequenceAsHashMap const & rMediaDesc);
     virtual ~DomainMapper() override;
 
     virtual void setDocumentReference(writerfilter::ooxml::OOXMLDocument* pDocument) override;

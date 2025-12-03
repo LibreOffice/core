@@ -29,6 +29,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
@@ -1925,7 +1926,7 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     if (pViewShell && bNeedsRehash)
     {
         bool bAutoSaveEvent = false;
-        utl::MediaDescriptor lArgs(rMedium.GetArgs());
+        comphelper::SequenceAsHashMap lArgs(rMedium.GetArgs());
         lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= bAutoSaveEvent;
         if (bAutoSaveEvent)
         {

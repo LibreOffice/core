@@ -63,7 +63,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     const OUString sXMLImportService = msUserData[2];
     sal_Int32 nSteps= 0;
 
-    utl::MediaDescriptor aMediaMap(aDescriptor);
+    comphelper::SequenceAsHashMap aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >()));
 
@@ -228,7 +228,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
 
     // Status Bar
     sal_Int32 nSteps= 1;
-    utl::MediaDescriptor aMediaMap(aDescriptor);
+    comphelper::SequenceAsHashMap aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >()));
 

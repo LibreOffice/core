@@ -25,6 +25,7 @@
 #include <unotxdoc.hxx>
 #include <viewsh.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -40,7 +41,7 @@ RtfExportFilter::~RtfExportFilter() = default;
 
 sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
 {
-    utl::MediaDescriptor aMediaDesc = aDescriptor;
+    comphelper::SequenceAsHashMap aMediaDesc = aDescriptor;
     uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STREAMFOROUTPUT, uno::Reference<io::XStream>());
     std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(xStream, true);

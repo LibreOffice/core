@@ -30,6 +30,7 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>
@@ -262,7 +263,7 @@ bool implts_isPreviewModel( const uno::Reference< frame::XModel >& xModel )
 
     if ( xModel.is() )
     {
-        utl::MediaDescriptor aDesc( xModel->getArgs() );
+        comphelper::SequenceAsHashMap aDesc(xModel->getArgs());
         return aDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
     }
     else

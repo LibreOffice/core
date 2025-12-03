@@ -259,12 +259,12 @@ public:
 
 protected:
     virtual css::uno::Reference< css::io::XInputStream >
-        implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const override;
+        implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const override;
 
     virtual css::uno::Reference< css::io::XStream >
-        implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const override;
+        implGetOutputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const override;
 
-    virtual bool implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor ) override;
+    virtual bool implFinalizeExport(comphelper::SequenceAsHashMap& rMediaDescriptor) override;
 
 private:
     virtual StorageRef  implCreateStorage(

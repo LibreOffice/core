@@ -17,6 +17,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/passwd.hxx>
 #include <tools/urlobj.hxx>
@@ -186,7 +187,7 @@ private:
 bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
                                                librevenge::RVNGInputStream& rInput,
                                                OdsGenerator& rGenerator,
-                                               utl::MediaDescriptor& mediaDescriptor)
+                                               comphelper::SequenceAsHashMap& mediaDescriptor)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;
@@ -343,7 +344,7 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
     exporter.addDocumentHandler(&aHandler, ODF_FLAT_XML);
     doRegisterHandlers(exporter);
 
-    utl::MediaDescriptor aDescriptor(rDescriptor);
+    comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
     try
     {
         // time to check if the file is a WK3 file and a FM3 file is

@@ -31,6 +31,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
@@ -57,7 +58,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 
 using ::com::sun::star::container::XNameAccess;
-using utl::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 using ::oox::ole::VbaProject;
@@ -132,7 +132,7 @@ struct FilterBaseImpl
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
     SequenceAsHashMap   maFilterData;
-    MediaDescriptor     maMediaDesc;
+    SequenceAsHashMap   maMediaDesc;
     OUString            maFileUrl;
     StorageRef          mxStorage;
     OoxmlVersion        meVersion;
@@ -235,7 +235,7 @@ const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
     return mxImpl->mxStatusIndicator;
 }
 
-MediaDescriptor& FilterBase::getMediaDescriptor() const
+SequenceAsHashMap& FilterBase::getMediaDescriptor() const
 {
     return mxImpl->maMediaDesc;
 }
@@ -503,17 +503,17 @@ void SAL_CALL FilterBase::cancel()
 
 // protected
 
-Reference< XInputStream > FilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
+Reference< XInputStream > FilterBase::implGetInputStream( SequenceAsHashMap& rMediaDesc ) const
 {
-    return rMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INPUTSTREAM, Reference< XInputStream >() );
+    return rMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_INPUTSTREAM, Reference< XInputStream >() );
 }
 
-Reference< XStream > FilterBase::implGetOutputStream( MediaDescriptor& rMediaDesc ) const
+Reference< XStream > FilterBase::implGetOutputStream( SequenceAsHashMap& rMediaDesc ) const
 {
-    return rMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT, Reference< XStream >() );
+    return rMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STREAMFOROUTPUT, Reference< XStream >() );
 }
 
-bool FilterBase::implFinalizeExport( MediaDescriptor& /*rMediaDescriptor*/ )
+bool FilterBase::implFinalizeExport( SequenceAsHashMap& /*rMediaDescriptor*/ )
 {
     return true;
 }
@@ -535,7 +535,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
             OSL_FAIL( "FilterBase::setMediaDescriptor - invalid filter direction" );
         break;
         case FILTERDIRECTION_IMPORT:
-            mxImpl->maMediaDesc.addInputStream();
+            utl::MediaDescriptor::addInputStream(mxImpl->maMediaDesc);
             mxImpl->mxInStream = implGetInputStream( mxImpl->maMediaDesc );
             OSL_ENSURE( mxImpl->mxInStream.is(), "FilterBase::setMediaDescriptor - missing input stream" );
         break;
@@ -545,9 +545,9 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
         break;
     }
 
-    mxImpl->maFileUrl = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL, OUString() );
-    mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME, Reference< XFrame >() );
-    mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >() );
+    mxImpl->maFileUrl = mxImpl->maMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL, OUString() );
+    mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_FRAME, Reference< XFrame >() );
+    mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >() );
     mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( u"ParentShape"_ustr, mxImpl->mxParentShape );
     mxImpl->maFilterData = mxImpl->maMediaDesc.getUnpackedValueOrDefault( u"FilterData"_ustr, Sequence< PropertyValue >() );
 

@@ -54,6 +54,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -69,7 +70,6 @@
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
 
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/sharecontrolfile.hxx>
@@ -1978,7 +1978,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
             return false;
         }
 
-        if (utl::MediaDescriptor desc(pMedium->GetArgs());
+        if (comphelper::SequenceAsHashMap desc(pMedium->GetArgs());
             !desc.getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
         {
             mbContinueImportOnFilterExceptions = no;

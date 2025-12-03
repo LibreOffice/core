@@ -51,7 +51,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/compbase.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1548,7 +1547,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
                                                      uno::UNO_QUERY);
         xListStyle->setName(sChangedListStyle);
 
-        utl::MediaDescriptor aMediaDescriptor;
+        comphelper::SequenceAsHashMap aMediaDescriptor;
         aMediaDescriptor[u"FilterName"_ustr] <<= u"writer8"_ustr;
         uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());

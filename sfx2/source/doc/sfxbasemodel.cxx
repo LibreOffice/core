@@ -136,8 +136,8 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <vcl/threadex.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -1761,7 +1761,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
 
     SfxSaveGuard aSaveGuard(this, m_pData.get());
 
-    utl::MediaDescriptor aDescriptor(rArgs);
+    comphelper::SequenceAsHashMap aDescriptor(rArgs);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
     if (bOnMainThread)
     {
@@ -1809,7 +1809,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
 
     SfxSaveGuard aSaveGuard(this, m_pData.get());
     try {
-        utl::MediaDescriptor aDescriptor(rArgs);
+        comphelper::SequenceAsHashMap aDescriptor(rArgs);
         bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
         if (bOnMainThread)
             vcl::solarthread::syncExecute([this, rURL, rArgs]() { impl_store(rURL, rArgs, true); });

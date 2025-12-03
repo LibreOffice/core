@@ -20,9 +20,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
 
 #include <libxml/xpathInternals.h>
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_svg_Export"_ustr;
     aMediaDescriptor[u"OutputStream"_ustr] <<= xOut;
 

@@ -92,6 +92,7 @@
 #include <comphelper/profilezone.hxx>
 #include <classes/taskcreator.hxx>
 #include <tools/fileutil.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 constexpr OUString PROP_TYPES = u"Types"_ustr;
 constexpr OUString PROP_NAME = u"Name"_ustr;
@@ -214,15 +215,15 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
 namespace {
 
-utl::MediaDescriptor addModelArgs(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+comphelper::SequenceAsHashMap addModelArgs(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    utl::MediaDescriptor rResult(rDescriptor);
+    comphelper::SequenceAsHashMap rResult(rDescriptor);
     uno::Reference<frame::XModel> xModel(rResult.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MODEL, uno::Reference<frame::XModel>()));
 
     if (xModel.is())
     {
-        utl::MediaDescriptor aModelArgs(xModel->getArgs());
-        utl::MediaDescriptor::iterator pIt = aModelArgs.find( utl::MediaDescriptor::PROP_MACROEXECUTIONMODE);
+        comphelper::SequenceAsHashMap aModelArgs(xModel->getArgs());
+        auto pIt = aModelArgs.find(utl::MediaDescriptor::PROP_MACROEXECUTIONMODE);
         if (pIt != aModelArgs.end())
             rResult[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE] = pIt->second;
     }
@@ -283,7 +284,7 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_JUMPMARK] <<= m_aURL.Mark;
 
     // By the way: remove the old and deprecated value "FileName" from the descriptor!
-    utl::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FILENAME);
+    auto pIt = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FILENAME);
     if (pIt != m_lMediaDescriptor.end())
         m_lMediaDescriptor.erase(pIt);
 
@@ -313,7 +314,7 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
 }
 
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
-                                    utl::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
+                                    comphelper::SequenceAsHashMap& io_lMediaDescriptor, const bool i_bUIMode,
                                     rtl::Reference<QuietInteraction>* o_ppQuietInteraction )
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
@@ -591,11 +592,10 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
         return E_CAN_BE_LOADED;
 
     // using of an existing input stream
-    utl::MediaDescriptor                 stlMediaDescriptor(lMediaDescriptor);
-    utl::MediaDescriptor::const_iterator pIt;
+    comphelper::SequenceAsHashMap stlMediaDescriptor(lMediaDescriptor);
     if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateStream))
     {
-        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM);
+        auto pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM);
         css::uno::Reference< css::io::XInputStream > xStream;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xStream;
@@ -608,7 +608,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     // using of a full featured document
     if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateObject))
     {
-        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL);
+        auto pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL);
         css::uno::Reference< css::frame::XModel > xModel;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xModel;
@@ -855,7 +855,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         // SAFE ->
         aWriteLock.reset();
         // Don't overwrite external decisions! See comments before ...
-        utl::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE);
+        auto pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE);
         if (pAsTemplateItem == m_lMediaDescriptor.end())
             m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= true;
         aWriteLock.clear();
@@ -1385,7 +1385,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // and decide if it's really the same then the one will be.
             // It must be visible and must use the same file revision ...
             // or must not have any file revision set (-1 == -1!)
-            utl::MediaDescriptor lOldDocDescriptor;
+            comphelper::SequenceAsHashMap lOldDocDescriptor;
             if (xModel.is())
             {
                 lOldDocDescriptor = xModel->getArgs();
@@ -1572,7 +1572,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     css::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
     if (xOldDoc.is())
     {
-        utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
+        comphelper::SequenceAsHashMap lOldDocDescriptor(xModel->getArgs());
 
         // replaceable document
         if (!lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REPLACEABLE, false))
@@ -1637,7 +1637,7 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
         // it should be used. Otherwise we should do nothing. May be the outside code has already
         // set a frame name on the target!
-        utl::MediaDescriptor::const_iterator pFrameName = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FRAMENAME);
+        auto pFrameName = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FRAMENAME);
         if (pFrameName != m_lMediaDescriptor.end())
         {
             OUString sFrameName;

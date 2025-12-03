@@ -573,7 +573,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
 
     css::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
-    utl::MediaDescriptor aDescriptor(lArguments);
+    comphelper::SequenceAsHashMap aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
 
     if (bOnMainThread)
@@ -981,7 +981,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator(m_xContext);
-        xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
+        xTarget = aCreator.createTask(sTargetFrameName, {});
     }
 
     // I.II) "_parent"
@@ -1180,7 +1180,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
            )
         {
             TaskCreator aCreator(m_xContext);
-            xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
+            xTarget = aCreator.createTask(sTargetFrameName, {});
         }
     }
 

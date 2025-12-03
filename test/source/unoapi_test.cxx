@@ -15,6 +15,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <osl/file.hxx>
 
 #include <sfx2/app.hxx>
@@ -152,7 +153,7 @@ uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
 void UnoApiTest::save(TestFilter eFilter, const char* pPassword)
 {
     OUString aFilter(TestFilterNames.at(eFilter));
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= aFilter;
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor[u"FilterOptions"_ustr] <<= maFilterOptions;

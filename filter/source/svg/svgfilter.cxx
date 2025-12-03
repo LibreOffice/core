@@ -37,6 +37,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -218,7 +219,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
     {
         // Import.
         // use MediaDescriptor to get needed data out of Sequence< PropertyValue >
-        utl::MediaDescriptor aMediaDescriptor(rDescriptor);
+        comphelper::SequenceAsHashMap aMediaDescriptor(rDescriptor);
         uno::Reference<io::XInputStream> xInputStream;
 
         xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
@@ -774,7 +775,7 @@ public:
 
 OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {
-    utl::MediaDescriptor aMediaDescriptor(rDescriptor);
+    comphelper::SequenceAsHashMap aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
     OUString aRetval;
 

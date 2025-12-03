@@ -114,12 +114,12 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
 
     try
     {
-        utl::MediaDescriptor aMediaDesc(rDescriptor);
+        comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false);
         bool bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault(u"InsertMode"_ustr, false);
         uno::Reference<io::XInputStream> xInputStream;
 
-        aMediaDesc.addInputStream();
+        utl::MediaDescriptor::addInputStream(aMediaDesc);
         aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
 
         // If this is set, write to this file, instead of the real document during paste.

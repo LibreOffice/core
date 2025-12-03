@@ -48,7 +48,6 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/themecolors.hxx>
 #include <tools/json_writer.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -2905,12 +2904,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineNotificationDuringSave)
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Save the document.
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer8"_ustr;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // loop while sending not needed LOK notifications for redline changes during save.
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(),
+                          { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr) });
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHyperlink)

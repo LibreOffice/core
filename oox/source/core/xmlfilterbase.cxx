@@ -64,6 +64,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
 #include <tools/urlobj.hxx>
@@ -89,7 +90,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using utl::MediaDescriptor;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
@@ -292,7 +292,7 @@ void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css
 
 void XmlFilterBase::importDocumentProperties()
 {
-    MediaDescriptor aMediaDesc( getMediaDescriptor() );
+    comphelper::SequenceAsHashMap aMediaDesc(getMediaDescriptor());
     Reference< XInputStream > xInputStream;
     Reference< XComponentContext > xContext = getComponentContext();
     rtl::Reference< ::oox::core::FilterDetect > xDetector( new ::oox::core::FilterDetect( xContext ) );
@@ -1034,7 +1034,7 @@ void XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperti
 
 // protected ------------------------------------------------------------------
 
-Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
+Reference< XInputStream > XmlFilterBase::implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const
 {
     /*  Get the input stream directly from the media descriptor, or decrypt the
         package again. The latter is needed e.g. when the document is reloaded.
@@ -1043,10 +1043,10 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
     return xDetector->extractUnencryptedPackage( rMediaDesc );
 }
 
-Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDescriptor ) const
+Reference<XStream> XmlFilterBase::implGetOutputStream( comphelper::SequenceAsHashMap& rMediaDescriptor ) const
 {
     const Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
-                                        MediaDescriptor::PROP_ENCRYPTIONDATA,
+                                        utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
                                         Sequence< NamedValue >() );
 
     if (aMediaEncData.getLength() == 0)
@@ -1059,12 +1059,12 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
     }
 }
 
-bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
+bool XmlFilterBase::implFinalizeExport(comphelper::SequenceAsHashMap& rMediaDescriptor)
 {
     bool bRet = true;
 
     const Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
-                                        MediaDescriptor::PROP_ENCRYPTIONDATA,
+                                        utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
                                         Sequence< NamedValue >() );
 
     if (aMediaEncData.getLength())

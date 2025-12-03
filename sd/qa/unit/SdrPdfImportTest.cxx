@@ -11,9 +11,9 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <unotools/tempfile.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <svx/svdograf.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
 
     { // save as PDF and check annotations
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
+        comphelper::SequenceAsHashMap aMediaDescriptor;
         aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
         uno::Sequence<beans::PropertyValue> aFilterData(
             comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));

@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/memorystream.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -50,7 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uri;
 
-using utl::MediaDescriptor;
 using comphelper::IDocPasswordVerifier;
 using comphelper::DocPasswordVerifierResult;
 
@@ -335,16 +335,16 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
 
 } // namespace
 
-Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
+Reference< XInputStream > FilterDetect::extractUnencryptedPackage( comphelper::SequenceAsHashMap& rMediaDescriptor ) const
 {
     const bool bRepairPackage(rMediaDescriptor.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false));
     // try the plain input stream
-    Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
+    Reference<XInputStream> xInputStream( rMediaDescriptor[ utl::MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
     if (!xInputStream.is() || lclIsZipPackage(mxContext, xInputStream, bRepairPackage))
         return xInputStream;
 
     // check if a temporary file is passed in the 'ComponentData' property
-    Reference<XStream> xDecrypted( rMediaDescriptor.getComponentDataEntry( u"DecryptedPackage"_ustr ), UNO_QUERY );
+    Reference<XStream> xDecrypted( utl::MediaDescriptor::getComponentDataEntry(rMediaDescriptor, u"DecryptedPackage"_ustr ), UNO_QUERY );
     if( xDecrypted.is() )
     {
         Reference<XInputStream> xDecryptedInputStream = xDecrypted->getInputStream();
@@ -374,14 +374,15 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     (according to the verifier), or with an empty string if
                     user has cancelled the password input dialog. */
                 PasswordVerifier aVerifier( aDecryptor );
-                Sequence<NamedValue> aEncryptionData = rMediaDescriptor.requestAndVerifyDocPassword(
+                Sequence<NamedValue> aEncryptionData = utl::MediaDescriptor::requestAndVerifyDocPassword(
+                                                rMediaDescriptor,
                                                 aVerifier,
                                                 comphelper::DocPasswordRequestType::MS,
                                                 &aDefaultPasswords );
 
                 if( !aEncryptionData.hasElements() )
                 {
-                    rMediaDescriptor[ MediaDescriptor::PROP_ABORTED ] <<= true;
+                    rMediaDescriptor[ utl::MediaDescriptor::PROP_ABORTED ] <<= true;
                 }
                 else
                 {
@@ -391,12 +392,12 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     // if decryption was unsuccessful (corrupted file or any other reason)
                     if (!aDecryptor.decrypt(xTempStream))
                     {
-                        rMediaDescriptor[ MediaDescriptor::PROP_ABORTED ] <<= true;
+                        rMediaDescriptor[ utl::MediaDescriptor::PROP_ABORTED ] <<= true;
                     }
                     else
                     {
                         // store temp file in media descriptor to keep it alive
-                        rMediaDescriptor.setComponentDataEntry( u"DecryptedPackage"_ustr, Any( Reference<XStream>(xTempStream) ) );
+                        utl::MediaDescriptor::setComponentDataEntry(rMediaDescriptor, u"DecryptedPackage"_ustr, Any( Reference<XStream>(xTempStream) ) );
 
                         Reference<XInputStream> xDecryptedInputStream = xTempStream->getInputStream();
                         if (lclIsZipPackage(mxContext, xDecryptedInputStream, bRepairPackage))
@@ -434,11 +435,11 @@ Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames()
 OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq )
 {
     OUString aFilterName;
-    MediaDescriptor aMediaDescriptor( rMediaDescSeq );
+    comphelper::SequenceAsHashMap aMediaDescriptor(rMediaDescSeq);
 
     try
     {
-        aMediaDescriptor.addInputStream();
+        utl::MediaDescriptor::addInputStream(aMediaDescriptor);
 
         /*  Get the unencrypted input stream. This may include creation of a
             temporary file that contains the decrypted package. This temporary
@@ -481,7 +482,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     }
     catch( const Exception& )
     {
-        if ( aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED, false ) )
+        if ( aMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_ABORTED, false ) )
             /*  The user chose to abort detection, e.g. by hitting 'Cancel' in the password input dialog,
                 so we have to return non-empty type name to abort the detection loop. The loading code is
                 supposed to check whether the "Aborted" flag is present in the descriptor, and to not attempt
@@ -492,7 +493,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
                 already know that the file is OLE encrypted package, so trying with other type detectors doesn't
                 make much sense anyway.
             */
-            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
+            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
     }
 
     // write back changed media descriptor members

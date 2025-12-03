@@ -353,7 +353,7 @@ DomainMapper_Impl::DomainMapper_Impl(
             uno::Reference<uno::XComponentContext> xContext,
             rtl::Reference<SwXTextDocument> const& xModel,
             SourceDocumentType eDocumentType,
-            utl::MediaDescriptor const & rMediaDesc) :
+            comphelper::SequenceAsHashMap const & rMediaDesc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_pOOXMLDocument(nullptr),

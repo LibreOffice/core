@@ -36,7 +36,7 @@ namespace com::sun::star {
     namespace uno { class XComponentContext; }
 }
 
-namespace utl { class MediaDescriptor; }
+namespace comphelper { class SequenceAsHashMap; }
 
 namespace oox { class AttributeList; }
 
@@ -126,7 +126,7 @@ public:
         its input stream is returned.
      */
     css::uno::Reference< css::io::XInputStream >
-                        extractUnencryptedPackage( utl::MediaDescriptor& rMediaDesc ) const;
+                        extractUnencryptedPackage( comphelper::SequenceAsHashMap& rMediaDesc ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

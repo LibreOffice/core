@@ -14,7 +14,7 @@
 #include "MSPUBImportFilter.hxx"
 
 bool MSPUBImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                         OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                         OdgGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libmspub::MSPUBDocument::parse(&rInput, &rGenerator);
 }

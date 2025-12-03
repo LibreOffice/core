@@ -45,7 +45,6 @@
 #include <frmfmt.hxx>
 
 #include <svl/ownlist.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
@@ -74,6 +73,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <comphelper/fileurl.hxx>
 #include <o3tl/safeint.hxx>
@@ -1574,7 +1574,7 @@ static bool TrySaveFormulaAsPDF(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameF
     Graphic aGraphic(xTextContent->getReplacementGraphic());
     OUString aFileName = lcl_CalculateFileName(rWrt.GetOrigFileName(), aGraphic, u"pdf");
 
-    utl::MediaDescriptor aDescr;
+    comphelper::SequenceAsHashMap aDescr;
     aDescr[u"FilterName"_ustr] <<= u"math_pdf_Export"_ustr;
     // Properties from starmath/inc/unomodel.hxx
     aDescr[u"FilterData"_ustr] <<= comphelper::InitPropertySequence({
@@ -1631,7 +1631,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
                 // FIXME: exception for the simplest test document, too
                 SvMemoryStream aStream;
                 uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-                utl::MediaDescriptor aMediaDescriptor;
+                comphelper::SequenceAsHashMap aMediaDescriptor;
                 aMediaDescriptor[u"FilterName"_ustr] <<= aFilter;
                 aMediaDescriptor[u"FilterOptions"_ustr] <<= u"SkipHeaderFooter"_ustr;
                 aMediaDescriptor[u"OutputStream"_ustr] <<= xOutputStream;

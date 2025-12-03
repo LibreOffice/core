@@ -46,13 +46,14 @@ private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
                                   OdpGenerator& rGenerator,
-                                  utl::MediaDescriptor& rDescriptor) override;
+                                  comphelper::SequenceAsHashMap& rDescriptor) override;
 
     static void generate(librevenge::RVNGPresentationInterface& rDocument);
 };
 
 bool PresentationImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
-                                                OdpGenerator& rGenerator, utl::MediaDescriptor&)
+                                                OdpGenerator& rGenerator,
+                                                comphelper::SequenceAsHashMap&)
 {
     PresentationImportFilter::generate(rGenerator);
     return true;

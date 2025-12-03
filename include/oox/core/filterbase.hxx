@@ -51,9 +51,6 @@ namespace com::sun::star {
 namespace comphelper {
     class SequenceAsHashMap;
 }
-namespace utl {
-    class MediaDescriptor;
-}
 
 namespace oox {
     class GraphicHelper;
@@ -137,7 +134,7 @@ public:
     ::comphelper::SequenceAsHashMap& getFilterData() const;
 
     /** Returns the media descriptor. */
-    utl::MediaDescriptor& getMediaDescriptor() const;
+    comphelper::SequenceAsHashMap& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const OUString& getFileUrl() const;
@@ -241,11 +238,11 @@ public:
 
 protected:
     virtual css::uno::Reference< css::io::XInputStream >
-                        implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const;
+                        implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const;
     virtual css::uno::Reference< css::io::XStream >
-                        implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const;
+                        implGetOutputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const;
 
-    virtual bool        implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor );
+    virtual bool        implFinalizeExport( comphelper::SequenceAsHashMap& rMediaDescriptor );
 
     css::uno::Reference< css::io::XStream > const &
                         getMainDocumentStream( ) const;

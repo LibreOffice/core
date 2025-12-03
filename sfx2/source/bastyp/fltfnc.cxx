@@ -368,7 +368,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
         // stream exists => deep detection (with preselection ... if possible)
         if (xInStream.is())
         {
-            utl::MediaDescriptor aDescriptor;
+            comphelper::SequenceAsHashMap aDescriptor;
 
             aDescriptor[utl::MediaDescriptor::PROP_URL               ] <<= sURL;
             aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM       ] <<= xInStream;

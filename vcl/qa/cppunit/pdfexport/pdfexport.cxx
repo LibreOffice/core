@@ -17,8 +17,8 @@
 #include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <test/unoapi_test.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
@@ -34,7 +34,7 @@ namespace
 class PdfExportTest : public UnoApiTest
 {
 protected:
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
 
 public:
     PdfExportTest()
