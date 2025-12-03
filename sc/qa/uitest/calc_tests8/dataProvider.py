@@ -77,4 +77,10 @@ class DataProvider(UITestCase):
                                  "test1.html")
         self.do_import("HTML", test_file, "//table", "Col1")
 
+    def test_csv_import(self):
+        test_file = os.path.join(os.getenv("SRCDIR"),
+                                 "sc", "qa", "unit", "data", "dataprovider", "csv",
+                                 "test1.csv")
+        self.do_import("CSV", test_file, "", "1")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
