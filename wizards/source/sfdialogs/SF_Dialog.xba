@@ -2084,12 +2084,11 @@ Try:
 		&apos;	To make visible an on-the-fly designed dialog when macro triggered from Python
 		_DialogModel.DesktopAsParent = Not ( _BuiltFromScratch And _BuiltInPython )
 		_DialogControl.setVisible(True)
-		&apos;	Watch the window Close button - not to be done for stored dialogs
-		If _BuiltFromScratch Then
-			Set _TopWindowListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFNONMODAL_&quot; _
-												, &quot;com.sun.star.awt.XTopWindowListener&quot;)
-			_DialogControl.addTopWindowListener(_TopWindowListener)
-		End If
+		&apos;	Watch the window Close button
+		Set _TopWindowListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFNONMODAL_&quot; _
+											, &quot;com.sun.star.awt.XTopWindowListener&quot;)
+		_DialogControl.addTopWindowListener(_TopWindowListener)
+		&apos;	Default return code
 		lExecute = 0
 	End If
 
