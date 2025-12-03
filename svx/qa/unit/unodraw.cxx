@@ -22,6 +22,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <test/unoapixml_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/unopage.hxx>
@@ -31,7 +32,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testPngExport)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_png_Export"_ustr;
     aMediaDescriptor[u"FilterOptions"_ustr]
         <<= u"{\"PixelHeight\":{\"type\":\"long\",\"value\":\"192\"},"

@@ -17,9 +17,9 @@
 #include <rtl/ref.hxx>
 
 class SwXTextDocument;
-namespace utl
+namespace comphelper
 {
-class MediaDescriptor;
+class SequenceAsHashMap;
 }
 
 namespace writerfilter::dmapper
@@ -38,7 +38,7 @@ public:
     createMapper(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                  css::uno::Reference<css::io::XInputStream> const& xInputStream,
                  rtl::Reference<SwXTextDocument> const& xModel, bool bRepairStorage,
-                 SourceDocumentType eDocumentType, utl::MediaDescriptor const& rMediaDesc);
+                 SourceDocumentType eDocumentType, comphelper::SequenceAsHashMap const& rMediaDesc);
 };
 
 // export just for test

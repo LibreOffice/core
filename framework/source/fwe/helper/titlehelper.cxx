@@ -341,7 +341,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
 
     OUString sTitle;
 
-    utl::MediaDescriptor aDescriptor(
+    comphelper::SequenceAsHashMap aDescriptor(
         xModel->getArgs2({ utl::MediaDescriptor::PROP_DOCUMENTTITLE,
                            utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME }));
 

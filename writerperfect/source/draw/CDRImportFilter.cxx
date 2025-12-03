@@ -18,7 +18,7 @@
 #include "CDRImportFilter.hxx"
 
 bool CDRImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                       OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                       OdgGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libcdr::CDRDocument::parse(&rInput, &rGenerator);
 }

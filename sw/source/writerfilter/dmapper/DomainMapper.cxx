@@ -78,11 +78,11 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/escapementitem.hxx>
 #include <filter/msfilter/util.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include "TextEffectsHandler.hxx"
 #include "ThemeColorHandler.hxx"
@@ -116,7 +116,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             rtl::Reference<SwXTextDocument> const& xModel,
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
-                            utl::MediaDescriptor const & rMediaDesc) :
+                            comphelper::SequenceAsHashMap const & rMediaDesc) :
     LoggedProperties("DomainMapper"),
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),

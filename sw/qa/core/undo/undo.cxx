@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutSave)
 
     // Save.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"Office Open XML Text"_ustr;
 
     // Without the accompanying fix in place, this test would have failed with:

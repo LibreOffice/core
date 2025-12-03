@@ -26,6 +26,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "eqnolefilehdr.hxx"
 
@@ -35,7 +36,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using utl::MediaDescriptor;
 
 SmFilterDetect::SmFilterDetect()
 {
@@ -47,8 +47,8 @@ SmFilterDetect::~SmFilterDetect()
 
 OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
-    MediaDescriptor aMediaDesc( lDescriptor );
-    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
+    comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
+    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xInStream.is() )
         return OUString();
 

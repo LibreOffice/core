@@ -31,7 +31,7 @@ namespace beans = css::beans;
 namespace ucb = css::ucb;
 
 bool KeynoteImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                           OdpGenerator& rGenerator, utl::MediaDescriptor&)
+                                           OdpGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libetonyek::EtonyekDocument::parse(&rInput, &rGenerator);
 }

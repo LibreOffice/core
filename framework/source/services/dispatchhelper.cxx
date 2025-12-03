@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/profilezone.hxx>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <utility>
 #include <vcl/threadex.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -109,7 +109,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Reference<css::frame::XDispatch> xDispatch
         = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
 
-    utl::MediaDescriptor aDescriptor(lArguments);
+    comphelper::SequenceAsHashMap aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
 
     if (bOnMainThread)

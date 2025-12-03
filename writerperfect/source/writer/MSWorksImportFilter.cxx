@@ -11,6 +11,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <libwps/libwps.h>
 
@@ -30,7 +31,7 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData& data,
 bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
                                            librevenge::RVNGInputStream& rInput,
                                            OdtGenerator& rGenerator,
-                                           utl::MediaDescriptor& mediaDescriptor)
+                                           comphelper::SequenceAsHashMap& mediaDescriptor)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;

@@ -14,7 +14,8 @@
 #include "PageMakerImportFilter.hxx"
 
 bool PageMakerImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                             OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                             OdgGenerator& rGenerator,
+                                             comphelper::SequenceAsHashMap&)
 {
     return libpagemaker::PMDocument::parse(&rInput, &rGenerator);
 }

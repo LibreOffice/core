@@ -44,6 +44,7 @@
 #include <comphelper/interaction.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/string_view.hxx>
@@ -1254,12 +1255,12 @@ DocumentMetadataAccess::loadMetadataFromMedium(
     const uno::Sequence< beans::PropertyValue > & i_rMedium)
 {
     uno::Reference<io::XInputStream> xIn;
-    utl::MediaDescriptor md(i_rMedium);
+    comphelper::SequenceAsHashMap md(i_rMedium);
     OUString URL;
     md[ utl::MediaDescriptor::PROP_URL ] >>= URL;
     OUString BaseURL;
     md[ utl::MediaDescriptor::PROP_DOCUMENTBASEURL ] >>= BaseURL;
-    if (md.addInputStream()) {
+    if (utl::MediaDescriptor::addInputStream(md)) {
         md[ utl::MediaDescriptor::PROP_INPUTSTREAM ] >>= xIn;
     }
     if (!xIn.is() && URL.isEmpty()) {
@@ -1311,7 +1312,7 @@ void SAL_CALL
 DocumentMetadataAccess::storeMetadataToMedium(
     const uno::Sequence< beans::PropertyValue > & i_rMedium)
 {
-    utl::MediaDescriptor md(i_rMedium);
+    comphelper::SequenceAsHashMap md(i_rMedium);
     OUString URL;
     md[ utl::MediaDescriptor::PROP_URL ] >>= URL;
     if (URL.isEmpty()) {
@@ -1337,8 +1338,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
             "cannot get Storage"_ustr, *this);
     }
     // set MIME type of the storage
-    utl::MediaDescriptor::const_iterator iter
-        = md.find(utl::MediaDescriptor::PROP_MEDIATYPE);
+    auto iter = md.find(utl::MediaDescriptor::PROP_MEDIATYPE);
     if (iter != md.end()) {
         uno::Reference< beans::XPropertySet > xProps(xStorage,
             uno::UNO_QUERY_THROW);

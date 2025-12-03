@@ -9,6 +9,7 @@
 
 #include "DomainMapper.hxx"
 #include "TagLogger.hxx"
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 namespace writerfilter::dmapper
@@ -18,7 +19,7 @@ DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContex
                                   css::uno::Reference<css::io::XInputStream> const& xInputStream,
                                   rtl::Reference<SwXTextDocument> const& xModel,
                                   bool bRepairStorage, SourceDocumentType eDocumentType,
-                                  utl::MediaDescriptor const& rMediaDesc)
+                                  comphelper::SequenceAsHashMap const& rMediaDesc)
 {
 #ifdef DBG_UTIL
     OUString sURL

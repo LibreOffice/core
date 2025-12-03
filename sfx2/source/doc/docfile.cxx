@@ -2931,9 +2931,9 @@ void SfxMedium::GetLockingStream_Impl()
         return;
 
     // open the original document
-    utl::MediaDescriptor aMedium(TransformItems(SID_OPENDOC, GetItemSet()).getAsConstPropertyValueList());
+    comphelper::SequenceAsHashMap aMedium(TransformItems(SID_OPENDOC, GetItemSet()));
 
-    aMedium.addInputStreamOwnLock();
+    utl::MediaDescriptor::addInputStreamOwnLock(aMedium);
 
     uno::Reference< io::XInputStream > xInputStream;
     aMedium[utl::MediaDescriptor::PROP_STREAM] >>= pImpl->m_xLockingStream;
@@ -3015,7 +3015,7 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
-            utl::MediaDescriptor aMedium(TransformItems(SID_OPENDOC, GetItemSet()).getAsConstPropertyValueList());
+            comphelper::SequenceAsHashMap aMedium(TransformItems(SID_OPENDOC, GetItemSet()));
 
             if ( pImpl->m_xLockingStream.is() && !bFromTempFile )
             {
@@ -3028,12 +3028,12 @@ void SfxMedium::GetMedium_Impl()
                 {
                     aMedium[utl::MediaDescriptor::PROP_URL] <<= aFileName;
                     aMedium.erase( utl::MediaDescriptor::PROP_READONLY );
-                    aMedium.addInputStream();
+                    utl::MediaDescriptor::addInputStream(aMedium);
                 }
                 else if ( GetURLObject().GetProtocol() == INetProtocol::File )
                 {
                     // use the special locking approach only for file URLs
-                    aMedium.addInputStreamOwnLock();
+                    utl::MediaDescriptor::addInputStreamOwnLock(aMedium);
                 }
                 else
                 {
@@ -3043,7 +3043,7 @@ void SfxMedium::GetMedium_Impl()
                     {
                         aMedium[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER] <<= GetInteractionHandler( true );
                     }
-                    aMedium.addInputStream();
+                    utl::MediaDescriptor::addInputStream(aMedium);
                 }
                 // the ReadOnly property set in aMedium is ignored
                 // the check is done in LockOrigFileOnDemand() for file and non-file URLs

@@ -574,7 +574,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     css::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
-    utl::MediaDescriptor aDescriptor(lArguments);
+    comphelper::SequenceAsHashMap aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
 
     if (bOnMainThread)
@@ -943,7 +943,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator( m_xContext );
-        xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
+        xTarget = aCreator.createTask(sTargetFrameName, {});
     }
 
     // I.II) "_top"
@@ -1027,7 +1027,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
            )
         {
             TaskCreator aCreator( m_xContext );
-            xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
+            xTarget = aCreator.createTask(sTargetFrameName, {});
         }
     }
 

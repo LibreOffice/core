@@ -58,9 +58,9 @@ namespace rptxml
 {
     class ORptExport;
 }
-namespace utl
+namespace comphelper
 {
-    class MediaDescriptor;
+    class SequenceAsHashMap;
 }
 namespace reportdesign
 {
@@ -143,7 +143,7 @@ namespace reportdesign
 
         void notifyEvent(const OUString& _sEventName);
         void init();
-        void fillArgs(utl::MediaDescriptor& _aDescriptor);
+        void fillArgs(comphelper::SequenceAsHashMap& _aDescriptor);
 
         css::uno::Reference< css::frame::XTitle >             impl_getTitleHelper_throw();
         css::uno::Reference< css::frame::XUntitledNumbers >   impl_getUntitledHelper_throw();

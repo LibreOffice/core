@@ -18,6 +18,8 @@
  */
 
 #include <dispatch/oxt_handler.hxx>
+
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -142,7 +144,7 @@ OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyV
     OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or...
-    utl::MediaDescriptor aDescriptor( lDescriptor );
+    comphelper::SequenceAsHashMap aDescriptor(lDescriptor);
     OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL, OUString() );
 
     tools::Long nLength = sURL.getLength();

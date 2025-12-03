@@ -14,7 +14,8 @@
 #include "FreehandImportFilter.hxx"
 
 bool FreehandImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                            OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                            OdgGenerator& rGenerator,
+                                            comphelper::SequenceAsHashMap&)
 {
     return libfreehand::FreeHandDocument::parse(&rInput, &rGenerator);
 }

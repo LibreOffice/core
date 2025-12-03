@@ -21,7 +21,7 @@
 #include "basecontainer.hxx"
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
@@ -85,7 +85,7 @@ private:
      */
     static void impl_getAllFormatTypes(
         std::unique_lock<std::mutex>& rGuard,
-        const css::util::URL& aParsedURL, utl::MediaDescriptor const & rDescriptor,
+        const css::util::URL& aParsedURL, comphelper::SequenceAsHashMap const & rDescriptor,
         FlatDetection& rFlatTypes);
 
 
@@ -123,7 +123,7 @@ private:
                     An empty value if detection failed. ... but see rLastChance
                     for additional returns!
      */
-    OUString impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
+    OUString impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap& rDescriptor,
                                                const FlatDetection&                 lFlatTypes    ,
                                                      bool                       bAllowDeep    ,
                                                      OUString&               rLastChance   );
@@ -139,7 +139,7 @@ private:
         @param      rDescriptor
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
-    static void impl_seekStreamToZero(utl::MediaDescriptor const & rDescriptor);
+    static void impl_seekStreamToZero(comphelper::SequenceAsHashMap const& rDescriptor);
 
 
     /** @short      make deep type detection for a specified
@@ -160,7 +160,7 @@ private:
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
     OUString impl_askDetectService(const OUString&               sDetectService,
-                                                utl::MediaDescriptor& rDescriptor   );
+                                   comphelper::SequenceAsHashMap& rDescriptor);
 
 
     /** @short      try to find an interaction handler and
@@ -176,7 +176,7 @@ private:
         @return     [string]
                     a valid type name or an empty string if user canceled interaction.
      */
-    static OUString impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor);
+    static OUString impl_askUserForTypeAndFilterIfAllowed(comphelper::SequenceAsHashMap& rDescriptor);
 
 
     /** @short      check if an input stream is already part of the
@@ -212,7 +212,7 @@ private:
                     Note: If an interactionHandler is part of the given descriptor too, it was already used.
                     Means: let the exception pass through the top most interface method!
      */
-    void impl_openStream(utl::MediaDescriptor& rDescriptor);
+    void impl_openStream(comphelper::SequenceAsHashMap& rDescriptor);
 
 
     /** @short      validate the specified type and its relationships
@@ -233,7 +233,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    static bool impl_validateAndSetTypeOnDescriptor( utl::MediaDescriptor& rDescriptor,
+    static bool impl_validateAndSetTypeOnDescriptor(comphelper::SequenceAsHashMap& rDescriptor,
                                                      const OUString&               sType      );
 
 
@@ -254,8 +254,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    static bool impl_validateAndSetFilterOnDescriptor(
-                                                utl::MediaDescriptor& rDescriptor,
+    static bool impl_validateAndSetFilterOnDescriptor(comphelper::SequenceAsHashMap& rDescriptor,
                                                    const OUString&               sFilter    );
 
 
@@ -270,7 +269,7 @@ private:
                     reference to the MediaDescriptor (represented by an easy-to-use
                     stl interface!), which should be patched.
      */
-    static void impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor);
+    static void impl_removeTypeFilterFromDescriptor(comphelper::SequenceAsHashMap& rDescriptor);
 
 
     /** @short      search the best suitable filter for the given type
@@ -303,7 +302,7 @@ private:
                     rDescriptor will be changed by selecting another filter.
                     (see code)
      */
-    void impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDescriptor,
+    void impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHashMap& rDescriptor,
                                            OUString&               sType      );
 
 

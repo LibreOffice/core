@@ -9,6 +9,7 @@
 
 #include "filterdetect.hxx"
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <svtools/htmltokn.h>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
@@ -34,7 +35,6 @@ constexpr OUString WRITER_DOCSERVICE = u"com.sun.star.text.TextDocument"_ustr;
 constexpr OUString CALC_DOCSERVICE = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
 
 using namespace ::com::sun::star;
-using utl::MediaDescriptor;
 
 namespace {
 
@@ -137,45 +137,45 @@ PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
 OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor)
 {
-    MediaDescriptor aMediaDesc(lDescriptor);
+    comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
 
-    OUString aType = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_TYPENAME, OUString() );
-    OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
+    OUString aType = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME, OUString() );
+    OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
 
     if ((aType == "generic_HTML") || (aType == "calc_HTML"))
     {
-        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
         if (!xInStream.is() || !IsHTMLStream(xInStream))
             return OUString();
 
         if ((aDocService == CALC_DOCSERVICE) || (aType == "calc_HTML"))
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_HTML_FILTER);
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_HTML_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_HTML_FILTER);
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_HTML_FILTER);
         else
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WEB_HTML_FILTER);
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= OUString(WEB_HTML_FILTER);
     }
 
     else if(aType == "generic_Markdown")
     {
-        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
         if (!xInStream.is())
             return OUString();
-        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString() ) );
+        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString() ) );
         OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
         aExt = aExt.toAsciiLowerCase();
         if(aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_MARKDOWN_FILTER;
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= WRITER_MARKDOWN_FILTER;
         else if(aExt == "md" || aExt == "markdown")
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_MARKDOWN_FILTER;
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= WRITER_MARKDOWN_FILTER;
         else
             return OUString();
     }
 
     else if (aType == "generic_Text")
     {
-        uno::Reference<io::XStream> xStream(aMediaDesc[MediaDescriptor::PROP_STREAM], uno::UNO_QUERY);
-        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
+        uno::Reference<io::XStream> xStream(aMediaDesc[utl::MediaDescriptor::PROP_STREAM], uno::UNO_QUERY);
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
         if (xStream.is() || xInStream.is())
         {
             ZCodec aCodecGZ;
@@ -188,16 +188,16 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream))
             {
                 uno::Reference<io::XStream> xStreamDecompressed(new utl::OStreamWrapper(std::move(pDecompressedStream)));
-                aMediaDesc[MediaDescriptor::PROP_STREAM] <<= xStreamDecompressed;
-                aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM] <<= xStreamDecompressed->getInputStream();
-                OUString aURL = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString() );
+                aMediaDesc[utl::MediaDescriptor::PROP_STREAM] <<= xStreamDecompressed;
+                aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM] <<= xStreamDecompressed->getInputStream();
+                OUString aURL = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString() );
                 sal_Int32 nIdx = aURL.lastIndexOf(".gz");
                 if (nIdx != -1)
-                    aMediaDesc[MediaDescriptor::PROP_URL] <<= aURL.copy(0, nIdx);
+                    aMediaDesc[utl::MediaDescriptor::PROP_URL] <<= aURL.copy(0, nIdx);
             }
         }
         // Get the file name extension.
-        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString() ) );
+        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString() ) );
         OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
         aExt = aExt.toAsciiLowerCase();
         OUString aName = aParser.getName().toAsciiLowerCase();
@@ -206,13 +206,13 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         // then on extension if that's not available.
 
         if (aDocService == CALC_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= CALC_TEXT_FILTER;
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= CALC_TEXT_FILTER;
         else if (aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_TEXT_FILTER;
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= WRITER_TEXT_FILTER;
         else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith(".csv.gz"))
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= CALC_TEXT_FILTER;
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= CALC_TEXT_FILTER;
         else
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_TEXT_FILTER;
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= WRITER_TEXT_FILTER;
     }
 
     else

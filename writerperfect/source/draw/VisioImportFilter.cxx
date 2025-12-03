@@ -14,7 +14,7 @@
 #include "VisioImportFilter.hxx"
 
 bool VisioImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                         OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                         OdgGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libvisio::VisioDocument::parse(&rInput, &rGenerator);
 }

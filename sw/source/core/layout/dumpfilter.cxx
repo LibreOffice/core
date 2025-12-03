@@ -15,6 +15,7 @@
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -81,7 +82,7 @@ namespace sw
     {
         bool bRet = false;
 
-        utl::MediaDescriptor aMediaDesc = aDescriptor;
+        comphelper::SequenceAsHashMap aMediaDesc = aDescriptor;
 
         // Get the output stream
         uno::Reference< io::XOutputStream > xOut = aMediaDesc.getUnpackedValueOrDefault(

@@ -26,7 +26,6 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <unotools/tempfile.hxx>

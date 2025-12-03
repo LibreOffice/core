@@ -20,6 +20,7 @@
 #include <retrieveinputstream.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -60,9 +61,9 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
         comphelper::makePropertyValue(u"URL"_ustr, mrLinkedURL),
         comphelper::makePropertyValue(u"Referer"_ustr, mrReferer)
     };
-    utl::MediaDescriptor aMedium( xProps );
+    comphelper::SequenceAsHashMap aMedium(xProps);
 
-    aMedium.addInputStream();
+    utl::MediaDescriptor::addInputStream(aMedium);
 
     css::uno::Reference<css::io::XInputStream> xInputStream;
     aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
@@ -78,7 +79,7 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
 
     SwRetrievedInputStreamDataManager::GetManager().PushData( mnDataKey,
                                                               xInputStream,
-                                                              aMedium.isStreamReadOnly() );
+                                                              utl::MediaDescriptor::isStreamReadOnly(aMedium) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

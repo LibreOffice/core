@@ -1683,7 +1683,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
             m_xFormatter.set(util::NumberFormatter::create(m_xContext), UNO_QUERY_THROW);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
-            utl::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
+            comphelper::SequenceAsHashMap aDescriptor(m_xReportDefinition->getArgs());
             OUString sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(u"HierarchicalDocumentName"_ustr,OUString());
 
             if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )

@@ -365,7 +365,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
             xModel = xController->getModel();
         if (xModel.is())
         {
-            utl::MediaDescriptor lDocArgs(xModel->getArgs());
+            comphelper::SequenceAsHashMap lDocArgs(xModel->getArgs());
             bHiddenDoc = lDocArgs.getUnpackedValueOrDefault(
                 utl::MediaDescriptor::PROP_HIDDEN,
                 false);

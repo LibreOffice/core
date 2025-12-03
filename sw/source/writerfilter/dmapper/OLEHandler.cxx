@@ -26,7 +26,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
@@ -226,7 +226,7 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
     xImporter->setTargetDocument( xEmbeddedObject );
 
     // Import the input stream.
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"InputStream"_ustr] <<= m_xInputStream;
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY);
     xFilter->filter(aMediaDescriptor.getAsConstPropertyValueList());

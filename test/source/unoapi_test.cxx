@@ -349,7 +349,7 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
                       const char* pPassword)
 {
     OUString aFilter(TestFilterNames.at(eFilter));
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= aFilter;
 
     if (rParams.hasElements())

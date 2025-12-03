@@ -34,7 +34,8 @@ public:
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
-                                  OdtGenerator& rGenerator, utl::MediaDescriptor&) override;
+                                  OdtGenerator& rGenerator,
+                                  comphelper::SequenceAsHashMap&) override;
     virtual void doRegisterHandlers(OdtGenerator& rGenerator) override;
 };
 

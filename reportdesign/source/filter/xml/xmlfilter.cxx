@@ -45,6 +45,7 @@
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
@@ -421,7 +422,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             { u"BaseURI"_ustr,    0,    cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { u"StreamRelPath"_ustr, 0, cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
         };
-        utl::MediaDescriptor aDescriptor(rDescriptor);
+        comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString()) );
         assert(!sVal.isEmpty()); // needed for relative URLs

@@ -35,7 +35,8 @@ static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData
 }
 
 bool MWAWDrawImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                            OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                            OdgGenerator& rGenerator,
+                                            comphelper::SequenceAsHashMap&)
 {
     return MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&rInput, &rGenerator);
 }

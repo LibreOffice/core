@@ -10,6 +10,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -65,7 +66,7 @@ css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
 
 OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
 {
-    utl::MediaDescriptor aMediaDescriptor(rMediaDescSeq);
+    comphelper::SequenceAsHashMap aMediaDescriptor(rMediaDescSeq);
     bool bAborted
         = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED, false);
     if (bAborted)

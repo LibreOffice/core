@@ -3876,7 +3876,7 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
         // which breaks CSV filter options where token position matters.)
         bool bTakeOwnership = false;
         bool bCreateFromTemplate = false;
-        MediaDescriptor aSaveMediaDescriptor;
+        comphelper::SequenceAsHashMap aSaveMediaDescriptor;
         if (!aFilterOptions.startsWith("{"))
         {
             // Token-based filter options: scan for and remove special keywords.
@@ -5089,7 +5089,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
         SvMemoryStream aOutStream;
         uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aOutStream);
 
-        utl::MediaDescriptor aMediaDescriptor;
+        comphelper::SequenceAsHashMap aMediaDescriptor;
         switch (doc_getDocumentType(pThis))
         {
             case KIT_DOCTYPE_PRESENTATION:

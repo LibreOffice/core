@@ -44,13 +44,13 @@ private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
                                   OdtGenerator& rGenerator,
-                                  utl::MediaDescriptor& rDescriptor) override;
+                                  comphelper::SequenceAsHashMap& rDescriptor) override;
 
     static void generate(librevenge::RVNGTextInterface& rDocument);
 };
 
 bool TextImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
-                                        OdtGenerator& rGenerator, utl::MediaDescriptor&)
+                                        OdtGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     TextImportFilter::generate(rGenerator);
     return true;

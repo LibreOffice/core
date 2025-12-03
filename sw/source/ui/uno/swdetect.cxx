@@ -19,6 +19,7 @@
 
 #include "swdetect.hxx"
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -33,7 +34,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using utl::MediaDescriptor;
 
 SwFilterDetect::SwFilterDetect()
 {
@@ -45,9 +45,9 @@ SwFilterDetect::~SwFilterDetect()
 
 OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
-    MediaDescriptor aMediaDesc( lDescriptor );
-    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
-    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
+    comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
+    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
+    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xInStream.is() )
         return OUString();
 

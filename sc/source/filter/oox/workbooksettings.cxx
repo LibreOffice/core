@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <oox/core/binarycodec.hxx>
 #include <oox/core/filterbase.hxx>

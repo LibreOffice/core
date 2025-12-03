@@ -22,6 +22,7 @@
 
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -256,9 +257,9 @@ uno::Any VbaDocumentsBase::createDocument()
         throw uno::RuntimeException( u"Not implemented"_ustr );
 
     // prepare the media descriptor
-    utl::MediaDescriptor aMediaDesc;
+    comphelper::SequenceAsHashMap aMediaDesc;
     aMediaDesc[ utl::MediaDescriptor::PROP_MACROEXECUTIONMODE ] <<= document::MacroExecMode::USE_CONFIG;
-    aMediaDesc.setComponentDataEntry( u"ApplyFormDesignMode"_ustr , uno::Any( false ) );
+    utl::MediaDescriptor::setComponentDataEntry(aMediaDesc, u"ApplyFormDesignMode"_ustr , uno::Any( false ) );
 
     // create the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(

@@ -14,7 +14,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <rtl/ref.hxx>
 
 class SwXTextDocument;
 
@@ -41,7 +42,7 @@ public:
                    rtl::Reference<SwXTextDocument> const& xDstDoc,
                    css::uno::Reference<css::frame::XFrame> const& xFrame,
                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
-                   const utl::MediaDescriptor& rMediaDescriptor);
+                   const comphelper::SequenceAsHashMap& rMediaDescriptor);
 };
 } // namespace writerfilter::rtftok
 

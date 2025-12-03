@@ -21,6 +21,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/color.hxx>
 
@@ -96,7 +97,7 @@ WpftLoader ImportTest::createCalcLoader(std::u16string_view rFile) const
 
 WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFactoryUrl) const
 {
-    utl::MediaDescriptor aDesc;
+    comphelper::SequenceAsHashMap aDesc;
     aDesc[utl::MediaDescriptor::PROP_URL] <<= rUrl;
     aDesc[utl::MediaDescriptor::PROP_READONLY] <<= true;
     uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());

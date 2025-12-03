@@ -9,6 +9,8 @@
 
 #include "rtfdocumentimpl.hxx"
 
+#include <rtl/ref.hxx>
+
 namespace writerfilter::rtftok
 {
 RTFDocument::Pointer_t RTFDocumentFactory::createDocument(
@@ -17,7 +19,7 @@ RTFDocument::Pointer_t RTFDocumentFactory::createDocument(
     rtl::Reference<SwXTextDocument> const& xDstDoc,
     css::uno::Reference<css::frame::XFrame> const& xFrame,
     css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
-    const utl::MediaDescriptor& rMediaDescriptor)
+    const comphelper::SequenceAsHashMap& rMediaDescriptor)
 {
     return new RTFDocumentImpl(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator,
                                rMediaDescriptor);

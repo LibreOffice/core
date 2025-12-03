@@ -26,7 +26,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/pdfdocument.hxx>
@@ -92,7 +92,7 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
     }
 
     // Export just the signature line.
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_pdf_Export"_ustr;
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));

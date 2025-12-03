@@ -9,6 +9,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 
@@ -20,7 +23,7 @@ using libebook::EBOOKDocument;
 
 bool EBookImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                          OdtGenerator& rGenerator,
-                                         utl::MediaDescriptor& rDescriptor)
+                                         comphelper::SequenceAsHashMap& rDescriptor)
 {
     OUString aFilterName;
 

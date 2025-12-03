@@ -71,6 +71,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sax/tools/converter.hxx>
@@ -2051,13 +2052,13 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
     css::uno::Reference<css::io::XInputStream> xIn;
-    utl::MediaDescriptor md(Medium);
+    comphelper::SequenceAsHashMap md(Medium);
     // if we have a URL parameter, it replaces the one in the media descriptor
     if (!URL.isEmpty()) {
         md[ utl::MediaDescriptor::PROP_URL ] <<= URL;
         md[ utl::MediaDescriptor::PROP_READONLY ] <<= true;
     }
-    if (md.addInputStream()) {
+    if (utl::MediaDescriptor::addInputStream(md)) {
         md[ utl::MediaDescriptor::PROP_INPUTSTREAM ] >>= xIn;
     }
     css::uno::Reference<css::embed::XStorage> xStorage;
@@ -2092,7 +2093,7 @@ void SAL_CALL
 SfxDocumentMetaData::storeToMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
-    utl::MediaDescriptor md(Medium);
+    comphelper::SequenceAsHashMap md(Medium);
     if (!URL.isEmpty()) {
         md[ utl::MediaDescriptor::PROP_URL ] <<= URL;
     }
@@ -2107,8 +2108,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
                 *this);
     }
     // set MIME type of the storage
-    utl::MediaDescriptor::const_iterator iter
-        = md.find(utl::MediaDescriptor::PROP_MEDIATYPE);
+    auto iter = md.find(utl::MediaDescriptor::PROP_MEDIATYPE);
     if (iter != md.end()) {
         css::uno::Reference< css::beans::XPropertySet > xProps(xStorage,
             css::uno::UNO_QUERY_THROW);

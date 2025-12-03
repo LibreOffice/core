@@ -25,13 +25,13 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 
 using namespace ::com::sun::star;
-using utl::MediaDescriptor;
 
 namespace {
 
@@ -262,9 +262,9 @@ static bool lcl_MayBeDBase( SvStream& rStream )
 
 OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
 {
-    MediaDescriptor aMediaDesc( lDescriptor );
-    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
-    uno::Reference< io::XInputStream > xStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
+    comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
+    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
+    uno::Reference< io::XInputStream > xStream ( aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xStream.is() )
         return OUString();
 
@@ -322,7 +322,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     if (!pFilter)
         return OUString();
 
-    aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= pFilter->GetName();
+    aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= pFilter->GetName();
     aMediaDesc >> lDescriptor;
     return aTypeName;
 }

@@ -16,6 +16,7 @@
 #include "mathtype.hxx"
 #include <unomodel.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -51,8 +52,8 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
     bool bSuccess = false;
     try
     {
-        utl::MediaDescriptor aMediaDesc(rDescriptor);
-        aMediaDesc.addInputStream();
+        comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
+        utl::MediaDescriptor::addInputStream(aMediaDesc);
         uno::Reference<io::XInputStream> xInputStream;
         aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
         std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream));

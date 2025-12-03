@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
 #include <osl/diagnose.h>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
@@ -58,7 +59,7 @@ public:
     virtual sal_Bool SAL_CALL
     filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override
     {
-        utl::MediaDescriptor aDescriptor(rDescriptor);
+        comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
         css::uno::Reference<css::io::XInputStream> xInputStream;
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
         if (!xInputStream.is())
@@ -158,7 +159,7 @@ public:
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) = 0;
     virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
-                                  Generator& rGenerator, utl::MediaDescriptor& rDescriptor)
+                                  Generator& rGenerator, comphelper::SequenceAsHashMap& rDescriptor)
         = 0;
     virtual void doRegisterHandlers(Generator&){};
 

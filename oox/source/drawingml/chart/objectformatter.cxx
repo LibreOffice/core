@@ -24,6 +24,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
