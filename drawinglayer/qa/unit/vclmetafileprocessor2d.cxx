@@ -71,7 +71,7 @@ public:
     }
 
     // Test drawing a dotted line in Impress presentation mode.
-    void testTdf136957()
+    void tdf136957_draw_impress_dotted_line()
     {
         // Impress presentation mode first draws the slide to a metafile.
         GDIMetaFile metafile;
@@ -145,7 +145,7 @@ public:
     }
 
     CPPUNIT_TEST_SUITE(VclMetaFileProcessor2DTest);
-    CPPUNIT_TEST(testTdf136957);
+    CPPUNIT_TEST(tdf136957_draw_impress_dotted_line);
     CPPUNIT_TEST_SUITE_END();
 };
 

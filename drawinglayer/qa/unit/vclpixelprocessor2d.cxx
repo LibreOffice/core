@@ -47,7 +47,7 @@ public:
     }
 
     // Test that drawing only a part of a gradient draws the proper part of it.
-    void testTdf139000()
+    void tdf139000_draw_clipped_gradient()
     {
         ScopedVclPtr<VirtualDevice> device
             = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
@@ -128,7 +128,7 @@ public:
     }
 
     CPPUNIT_TEST_SUITE(VclPixelProcessor2DTest);
-    CPPUNIT_TEST(testTdf139000);
+    CPPUNIT_TEST(tdf139000_draw_clipped_gradient);
     CPPUNIT_TEST_SUITE_END();
 };
 
