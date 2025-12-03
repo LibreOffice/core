@@ -1117,9 +1117,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
-                    TransformItems( nId,
-                                    *rReq.GetArgs(),
-                                     aDispatchArgs );
+                    aDispatchArgs = TransformItems(nId, *rReq.GetArgs()).getAsConstPropertyValueList();
 
                 bool bForceSaveAs = nId == SID_SAVEDOC && IsReadOnlyMedium();
 

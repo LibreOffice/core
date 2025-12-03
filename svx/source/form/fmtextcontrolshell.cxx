@@ -668,11 +668,10 @@ namespace svx
 
                     if ( bFound )
                     {
-                        Sequence< PropertyValue > aArgs;
                         // temporarily put the modified item into a "clean" set,
                         // and let TransformItems calc the respective UNO parameters
                         xPureItems->Put( *pModifiedItem );
-                        TransformItems( nSlotForItemSet, *xPureItems, aArgs );
+                        Sequence<PropertyValue> aArgs = TransformItems(nSlotForItemSet, *xPureItems).getAsConstPropertyValueList();
                         xPureItems->ClearItem( nWhich );
 
                         if  (   ( nSlotForItemSet == SID_ATTR_PARA_HANGPUNCTUATION )
@@ -850,9 +849,8 @@ namespace svx
                     }
                 }
 
-                Sequence< PropertyValue > aArguments;
-                TransformItems( nSlot, aToggled, aArguments );
-                aFeaturePos->second->dispatch( aArguments );
+                comphelper::SequenceAsHashMap aArguments = TransformItems(nSlot, aToggled);
+                aFeaturePos->second->dispatch(aArguments.getAsConstPropertyValueList());
             }
             break;
 
@@ -868,7 +866,7 @@ namespace svx
                 const SfxItemSet* pArgs = _rReq.GetArgs();
                 Sequence< PropertyValue > aArgs;
                 if ( pArgs )
-                    TransformItems( nSlot, *pArgs, aArgs );
+                    aArgs = TransformItems(nSlot, *pArgs).getAsConstPropertyValueList();
                 aFeaturePos->second->dispatch( aArgs );
             }
             break;

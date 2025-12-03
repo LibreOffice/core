@@ -804,12 +804,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( xOldObj->IsModifyPasswordEntered() )
                     xNewObj->SetModifyPasswordEntered();
 
-                uno::Sequence < beans::PropertyValue > aLoadArgs;
-                TransformItems( SID_OPENDOC, *pNewSet, aLoadArgs );
+                comphelper::SequenceAsHashMap aLoadArgs = TransformItems(SID_OPENDOC, *pNewSet);
                 try
                 {
                     uno::Reference < frame::XLoadable > xLoad( xNewObj->GetModel(), uno::UNO_QUERY );
-                    xLoad->load( aLoadArgs );
+                    xLoad->load(aLoadArgs.getAsConstPropertyValueList());
                 }
                 catch ( uno::Exception& )
                 {
@@ -853,7 +852,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // the Reload and Silent items were only temporary, remove them
                     xNewObj->GetMedium()->GetItemSet().ClearItem( SID_RELOAD );
                     xNewObj->GetMedium()->GetItemSet().ClearItem( SID_SILENT );
-                    TransformItems( SID_OPENDOC, xNewObj->GetMedium()->GetItemSet(), aLoadArgs );
+                    aLoadArgs = TransformItems(SID_OPENDOC, xNewObj->GetMedium()->GetItemSet());
 
                     UpdateDocument_Impl();
 
@@ -872,9 +871,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     try
                     {
+                        const auto aArgs = aLoadArgs.getAsConstPropertyValueList();
                         for (auto const& viewFrame : aViewFrames)
                         {
-                            LoadViewIntoFrame_Impl( *xNewObj, viewFrame.first, aLoadArgs, viewFrame.second, false );
+                            LoadViewIntoFrame_Impl(*xNewObj, viewFrame.first, aArgs, viewFrame.second, false);
                         }
                         aViewFrames.clear();
                     }

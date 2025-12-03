@@ -2931,9 +2931,7 @@ void SfxMedium::GetLockingStream_Impl()
         return;
 
     // open the original document
-    uno::Sequence< beans::PropertyValue > xProps;
-    TransformItems( SID_OPENDOC, GetItemSet(), xProps );
-    utl::MediaDescriptor aMedium( xProps );
+    utl::MediaDescriptor aMedium(TransformItems(SID_OPENDOC, GetItemSet()).getAsConstPropertyValueList());
 
     aMedium.addInputStreamOwnLock();
 
@@ -2984,7 +2982,6 @@ void SfxMedium::GetMedium_Impl()
     }
     else
     {
-        uno::Sequence < beans::PropertyValue > xProps;
         OUString aFileName;
         if (!pImpl->m_aName.isEmpty())
         {
@@ -3018,8 +3015,7 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
-            TransformItems( SID_OPENDOC, GetItemSet(), xProps );
-            utl::MediaDescriptor aMedium( xProps );
+            utl::MediaDescriptor aMedium(TransformItems(SID_OPENDOC, GetItemSet()).getAsConstPropertyValueList());
 
             if ( pImpl->m_xLockingStream.is() && !bFromTempFile )
             {

@@ -2021,7 +2021,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
             Sequence < beans::PropertyValue > aSeq;
             if ( rReq.GetArgs() )
-                TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+                aSeq = TransformItems(rReq.GetSlot(), *rReq.GetArgs()).getAsConstPropertyValueList();
             Any aResult = xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aSeq );
             frame::DispatchResultEvent aEvent;
             bool bSuccess = (aResult >>= aEvent) &&
@@ -2041,7 +2041,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
             Sequence < beans::PropertyValue > aSeq;
             if ( rReq.GetArgs() )
-                TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+                aSeq = TransformItems(rReq.GetSlot(), *rReq.GetArgs()).getAsConstPropertyValueList();
             Any aResult = xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aSeq );
             frame::DispatchResultEvent aEvent;
             bool bSuccess = (aResult >>= aEvent) &&

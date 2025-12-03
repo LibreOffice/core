@@ -696,7 +696,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
                 bIsAPI = false;
 
-            uno::Sequence < beans::PropertyValue > aProps;
+            comphelper::SequenceAsHashMap aProps;
             if ( bIsAPI )
             {
                 // supported properties:
@@ -711,41 +711,28 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // bool Collate
                 // bool Silent
 
-                // the TransformItems function overwrite aProps
-                TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
+                aProps = TransformItems(nId, *rReq.GetArgs(), GetInterface()->GetSlot(nId));
 
-                for ( auto& rProp : asNonConstRange(aProps) )
+                if (aProps.contains(u"Copies"_ustr))
                 {
-                    if ( rProp.Name == "Copies" )
-                    {
-                        rProp.Name = "CopyCount";
-                    }
-                    else if ( rProp.Name == "RangeText" )
-                    {
-                        rProp.Name = "Pages";
-                    }
-                    else if ( rProp.Name == "Asynchron" )
-                    {
-                        rProp.Name = "Wait";
-                        bool bAsynchron = false;
-                        rProp.Value >>= bAsynchron;
-                        rProp.Value <<= !bAsynchron;
-                    }
-                    else if ( rProp.Name == "Silent" )
-                    {
-                        rProp.Name = "MonitorVisible";
-                        bool bPrintSilent = false;
-                        rProp.Value >>= bPrintSilent;
-                        rProp.Value <<= !bPrintSilent;
-                    }
+                    aProps[u"CopyCount"_ustr] = aProps[u"Copies"_ustr];
+                }
+
+                if (aProps.contains(u"RangeText"_ustr))
+                {
+                    aProps[u"Pages"_ustr] = aProps[u"RangeText"_ustr];
+                }
+
+                if (aProps.contains(u"Asynchron"_ustr))
+                {
+                    aProps[u"Wait"_ustr] <<= !aProps.getUnpackedValueOrDefault(u"Asynchron"_ustr, false);
+                }
+
+                if (aProps.contains(u"Silent"_ustr))
+                {
+                    aProps[u"MonitorVisible"_ustr] <<= !aProps.getUnpackedValueOrDefault(u"Silent"_ustr, false);
                 }
             }
-
-            // we will add the "PrintSelectionOnly" or "HideHelpButton" properties
-            // we have to increase the capacity of aProps
-            sal_Int32 nLen = aProps.getLength();
-            aProps.realloc( nLen + 1 );
-            auto pProps = aProps.getArray();
 
             // HACK: writer sets the SID_SELECTION item when printing directly and expects
             // to get only the selection document in that case (see getSelectionObject)
@@ -754,17 +741,15 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // it would be better if writer handled this internally
             if( nId == SID_PRINTDOCDIRECT )
             {
-                pProps[nLen].Name = "PrintSelectionOnly";
-                pProps[nLen].Value <<= bSelection;
+                aProps[u"PrintSelectionOnly"_ustr] <<= bSelection;
             }
             else // if nId == SID_PRINTDOC ; nothing to do with the previous HACK
             {
                 // should the printer selection and properties dialogue display an help button
-                pProps[nLen].Name = "HideHelpButton";
-                pProps[nLen].Value <<= bPrintOnHelp;
+                aProps[u"HideHelpButton"_ustr] <<= bPrintOnHelp;
             }
 
-            ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
+            ExecPrint(aProps.getAsConstPropertyValueList(), bIsAPI, (nId == SID_PRINTDOCDIRECT));
 
             // FIXME: Recording
             rReq.Done();

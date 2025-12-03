@@ -1132,9 +1132,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     m_bSignWithDefaultSignature = (pSignWithDefaultKey && pSignWithDefaultKey->GetValue());
     pDialogParams->ClearItem( SID_GPGSIGN );
 
-    uno::Sequence< beans::PropertyValue > aPropsFromDialog;
-    TransformItems( nSlotID, *pDialogParams, aPropsFromDialog );
-    GetMediaDescr() << aPropsFromDialog;
+    GetMediaDescr() = TransformItems(nSlotID, *pDialogParams);
 
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );

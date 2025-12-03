@@ -401,14 +401,9 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
         std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet().Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
-        css::uno::Sequence< css::beans::PropertyValue > aArgs;
-        TransformItems( SID_OPENDOC, *pNew, aArgs );
-        sal_Int32 nLength = aArgs.getLength();
-        aArgs.realloc( nLength + 1 );
-        auto pArgs = aArgs.getArray();
-        pArgs[nLength].Name = "Title";
-        pArgs[nLength].Value <<= xDoc->GetTitle( SFX_TITLE_DETECT );
-        xModel->attachResource( OUString(), aArgs );
+        comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, *pNew);
+        aArgs[u"Title"_ustr] <<= xDoc->GetTitle(SFX_TITLE_DETECT);
+        xModel->attachResource(OUString(), aArgs.getAsConstPropertyValueList());
     }
 
     return xDoc->GetErrorCode();
@@ -1072,18 +1067,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     // convert items to properties for framework API calls
-    Sequence < PropertyValue > aArgs;
-    TransformItems( SID_OPENDOC, *rReq.GetArgs(), aArgs );
+    comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, *rReq.GetArgs());
     // Any Referer (that was relevant in the above call to
     // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
     // this "open" request is initiated directly by the user:
-    auto pArg = std::find_if(std::cbegin(aArgs), std::cend(aArgs),
-        [](const PropertyValue& rArg) { return rArg.Name == "Referer"; });
-    if (pArg != std::cend(aArgs))
-    {
-        auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(aArgs), pArg));
-        comphelper::removeElementAt(aArgs, nIndex);
-    }
+    aArgs.erase(u"Referer"_ustr);
 
     // TODO/LATER: either remove LinkItem or create an asynchronous process for it
     if( bHidden || pLinkItem || rReq.IsSynchronCall() )
@@ -1094,7 +1082,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         try
         {
-            xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, aArgs );
+            xComp = comphelper::SynchronousDispatch::dispatch(xTargetFrame, aFileName, aTarget, aArgs.getAsConstPropertyValueList());
         }
         catch(const RuntimeException&)
         {
@@ -1121,7 +1109,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
         Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();
         if ( xDisp.is() )
-            xDisp->dispatch( aURL, aArgs );
+            xDisp->dispatch(aURL, aArgs.getAsConstPropertyValueList());
     }
 
     if ( xController.is() )
