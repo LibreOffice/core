@@ -75,13 +75,13 @@ namespace frm
             return;
 
         SfxItemSet aEmptySet(getEditView()->GetEmptyItemSet());
-        Sequence< PropertyValue > aUnoStateDescription;
+        comphelper::SequenceAsHashMap aUnoStateDescription;
         if ( _rState.getItem() )
         {
             aEmptySet.Put( *_rState.getItem() );
             SfxSlotId nSlotId = aEmptySet.GetPool()->GetSlotId( _rState.getItem()->Which() );
-            TransformItems( nSlotId, aEmptySet, aUnoStateDescription );
-            _rEvent.State <<= aUnoStateDescription;
+            aUnoStateDescription = TransformItems(nSlotId, aEmptySet);
+            _rEvent.State <<= aUnoStateDescription.getAsConstPropertyValueList();
         }
         else
             OAttributeDispatcher::fillFeatureEventFromAttributeState( _rEvent, _rState );

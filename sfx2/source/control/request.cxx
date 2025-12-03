@@ -598,7 +598,7 @@ void SfxRequest::Done_Impl
         uno::Sequence < beans::PropertyValue > aSeq;
 
         if ( bItemStateSet && SfxItemState::SET == eState )
-            TransformItems( pImpl->pSlot->GetSlotId(), *pSet, aSeq, pImpl->pSlot );
+            aSeq = TransformItems(pImpl->pSlot->GetSlotId(), *pSet, pImpl->pSlot).getAsConstPropertyValueList();
 
         pImpl->Record( aSeq );
     }
@@ -608,7 +608,7 @@ void SfxRequest::Done_Impl
     {
         uno::Sequence < beans::PropertyValue > aSeq;
         if ( pSet )
-            TransformItems( pImpl->pSlot->GetSlotId(), *pSet, aSeq, pImpl->pSlot );
+            aSeq = TransformItems(pImpl->pSlot->GetSlotId(), *pSet, pImpl->pSlot).getAsConstPropertyValueList();
         pImpl->Record( aSeq );
     }
 

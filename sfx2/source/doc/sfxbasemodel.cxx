@@ -1006,19 +1006,15 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
 
     if ( m_pData->m_pObjectShell.is() )
     {
-        Sequence< beans::PropertyValue > seqArgsNew;
-        Sequence< beans::PropertyValue > seqArgsOld;
         SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
 
         // we need to know which properties are supported by the transformer
         // hopefully it is a temporary solution, I guess nonconvertable properties
         // should not be supported so then there will be only ItemSet from medium
 
-        TransformItems( SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet(), seqArgsNew );
+        comphelper::SequenceAsHashMap seqArgsNew = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
         TransformParameters( SID_OPENDOC, m_pData->m_seqArguments, aSet );
-        TransformItems( SID_OPENDOC, aSet, seqArgsOld );
-
-        sal_Int32 nNewLength = seqArgsNew.getLength();
+        comphelper::SequenceAsHashMap seqArgsOld = TransformItems(SID_OPENDOC, aSet);
 
         if (requestedArgs.empty() || requestedArgs.count(u"WinExtent"))
         {
@@ -1036,20 +1032,14 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
                 o3tl::narrowing<int>(aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom())
             };
 
-            seqArgsNew.realloc( ++nNewLength );
-            auto pseqArgsNew = seqArgsNew.getArray();
-            pseqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
-            pseqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
+            seqArgsNew[u"WinExtent"_ustr] <<= aRectSeq;
         }
 
         if (requestedArgs.empty() || requestedArgs.count(u"PreusedFilterName"))
         {
             if ( !m_pData->m_aPreusedFilterName.isEmpty() )
             {
-                seqArgsNew.realloc( ++nNewLength );
-                auto pseqArgsNew = seqArgsNew.getArray();
-                pseqArgsNew[ nNewLength - 1 ].Name = "PreusedFilterName";
-                pseqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
+                seqArgsNew[u"PreusedFilterName"_ustr] <<= m_pData->m_aPreusedFilterName;
             }
         }
 
@@ -1068,10 +1058,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
                     o3tl::narrowing<int>(aBorder.Bottom())
                 };
 
-                seqArgsNew.realloc( ++nNewLength );
-                auto pseqArgsNew = seqArgsNew.getArray();
-                pseqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";
-                pseqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
+                seqArgsNew[u"DocumentBorder"_ustr] <<= aBorderSeq;
             }
         }
 
@@ -1083,15 +1070,12 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
 
             for (const auto& rOrg : m_pData->m_seqArguments)
             {
-                auto bNew = std::none_of(std::cbegin(seqArgsOld), std::cend(seqArgsOld),
-                    [&rOrg](const beans::PropertyValue& rOld){ return rOld.Name == rOrg.Name; });
-                if ( bNew )
+                if (!seqArgsOld.contains(rOrg.Name))
                 {
                     // the entity with this name should be new for seqArgsNew
                     // since it is not supported by transformer
 
-                    seqArgsNew.realloc( ++nNewLength );
-                    seqArgsNew.getArray()[ nNewLength - 1 ] = rOrg;
+                    seqArgsNew[rOrg.Name] = rOrg.Value;
 
                     aFinalCache.realloc( ++nFinalLength );
                     aFinalCache.getArray()[ nFinalLength - 1 ] = rOrg;
@@ -1101,7 +1085,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
             m_pData->m_seqArguments = std::move(aFinalCache);
         }
 
-        return seqArgsNew;
+        return seqArgsNew.getAsConstPropertyValueList();
     }
 
     return m_pData->m_seqArguments;
@@ -1788,9 +1772,8 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
         impl_store(rURL, rArgs, false);
     }
 
-    Sequence< beans::PropertyValue > aSequence ;
-    TransformItems( SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
-    attachResource( rURL, aSequence );
+    comphelper::SequenceAsHashMap aSequence = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
+    attachResource(rURL, aSequence.getAsConstPropertyValueList());
 
     loadCmisProperties( );
 
@@ -2672,9 +2655,8 @@ void SAL_CALL SfxBaseModel::checkOut(  )
         m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
         m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
         m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-        Sequence< beans::PropertyValue > aSequence ;
-        TransformItems( SID_OPENDOC, pMedium->GetItemSet(), aSequence );
-        attachResource( sURL, aSequence );
+        comphelper::SequenceAsHashMap aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
+        attachResource(sURL, aSequence.getAsConstPropertyValueList());
 
         // Reload the CMIS properties
         loadCmisProperties( );
@@ -2738,9 +2720,8 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
         if ( sName != sNewName )
         {
             m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-            Sequence< beans::PropertyValue > aSequence ;
-            TransformItems( SID_OPENDOC, pMedium->GetItemSet(), aSequence );
-            attachResource( sNewName, aSequence );
+            comphelper::SequenceAsHashMap aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
+            attachResource(sNewName, aSequence.getAsConstPropertyValueList());
 
             // Reload the CMIS properties
             loadCmisProperties( );
@@ -2982,8 +2963,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         {
             m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
 
-            Sequence< beans::PropertyValue > aArgs;
-            TransformItems( SID_SAVEASDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aArgs );
+            Sequence<beans::PropertyValue> aArgs
+                = TransformItems(SID_SAVEASDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet()).getAsConstPropertyValueList();
             addTitle_Impl( aArgs, m_pData->m_pObjectShell->GetTitle() );
             attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
         }

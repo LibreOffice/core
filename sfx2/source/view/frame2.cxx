@@ -237,16 +237,11 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
             xFrame->activate();
 
         // create load arguments
-        Sequence< PropertyValue > aLoadArgs;
-        TransformItems( SID_OPENDOC, rDoc.GetMedium()->GetItemSet(), aLoadArgs );
-
-        ::comphelper::NamedValueCollection aArgs( aLoadArgs );
-        aArgs.put( u"Model"_ustr, rDoc.GetModel() );
-        aArgs.put( u"Hidden"_ustr, true );
+        comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rDoc.GetMedium()->GetItemSet());
+        aArgs[u"Model"_ustr] <<= rDoc.GetModel();
+        aArgs[u"Hidden"_ustr] <<= true;
         if ( nViewId != SFX_INTERFACE_NONE )
-            aArgs.put( u"ViewId"_ustr, static_cast<sal_uInt16>(nViewId) );
-
-        aLoadArgs = aArgs.getPropertyValues();
+            aArgs[u"ViewId"_ustr] <<= static_cast<sal_uInt16>(nViewId);
 
         // load the doc into that frame
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
@@ -254,7 +249,7 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
             u"private:object"_ustr,
             u"_self"_ustr,
             0,
-            aLoadArgs
+            aArgs.getAsConstPropertyValueList()
         );
 
         for (   pFrame = SfxFrame::GetFirst();
