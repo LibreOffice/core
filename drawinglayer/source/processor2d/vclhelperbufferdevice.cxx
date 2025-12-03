@@ -169,10 +169,10 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                         if (bCandidateOkay)
                         {
                             // found and candidate are valid
-                            const sal_uLong aSquare(aFound->buf->GetOutputWidthPixel()
-                                                    * aFound->buf->GetOutputHeightPixel());
-                            const sal_uLong aCandidateSquare(a->buf->GetOutputWidthPixel()
-                                                             * a->buf->GetOutputHeightPixel());
+                            const sal_uInt64 aSquare(aFound->buf->GetOutputWidthPixel()
+                                                     * aFound->buf->GetOutputHeightPixel());
+                            const sal_uInt64 aCandidateSquare(a->buf->GetOutputWidthPixel()
+                                                              * a->buf->GetOutputHeightPixel());
 
                             if (aCandidateSquare < aSquare)
                             {
