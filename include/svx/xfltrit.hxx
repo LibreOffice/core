@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SVX_XFLTRIT_HXX
 #define INCLUDED_SVX_XFLTRIT_HXX
 
-#include <svl/intitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 /*************************************************************************
 |*
@@ -29,17 +30,36 @@
 |*
 \************************************************************************/
 
-class SVXCORE_DLLPUBLIC XFillTransparenceItem final : public SfxUInt16Item
+class SVXCORE_DLLPUBLIC XFillTransparenceItem final : public SfxPoolItem
 {
+    sal_uInt16 m_nValue;
 public:
-                            DECLARE_ITEM_TYPE_FUNCTION(XFillTransparenceItem)
-                            XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);
+//    static SfxPoolItem* CreateDefault();
+
+    DECLARE_ITEM_TYPE_FUNCTION(XFillTransparenceItem)
+    XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);
     virtual XFillTransparenceItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
+
+    sal_uInt16 GetValue() const { return m_nValue; }
+    void SetValue(sal_uInt16 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; assert(nTheValue <= 100); m_nValue = nTheValue; }
+
+    virtual bool operator ==(const SfxPoolItem & rItem) const override;
+
+    virtual bool supportsHashCode() const override final;
+    virtual size_t hashCode() const override final;
+
+    virtual bool QueryValue(css::uno::Any& rVal,
+                            sal_uInt8 nMemberId = 0) const override;
+
+    virtual bool PutValue(const css::uno::Any& rVal,
+                          sal_uInt8 nMemberId) override;
+
 };
 
 #endif
