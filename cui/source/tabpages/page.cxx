@@ -864,6 +864,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
             rSet->Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
                             m_xRegisterLB->get_active_text()));
         }
+        m_xRegisterCB->save_state();
     }
 
     if (m_xTextFlowBox->get_visible() && m_xTextFlowBox->get_value_changed_from_saved())
