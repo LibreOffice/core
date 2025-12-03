@@ -55,6 +55,9 @@
 #include <drawingml/textfield.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/hatchmap.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -196,72 +199,86 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
 void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper )
 {
-    LineProperties& rLP = rShape.getLineProperties();
+    LineProperties& rLineProperties = rShape.getLineProperties();
     // no fill has the same effect as no border so skip it
-    if (rLP.maLineFill.moFillType.has_value() && rLP.maLineFill.moFillType.value() == XML_noFill)
+    if (rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.value() == XML_noFill)
         return;
 
-    if (rLP.moLineWidth.has_value())
+    if (rLineProperties.moLineWidth.has_value())
     {
-        sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.value());
+        sal_Int32 nWidth = convertEmuToHmm(rLineProperties.moLineWidth.value());
         rPropSet.setProperty(PROP_LabelBorderWidth, uno::Any(nWidth));
         rPropSet.setProperty(PROP_LabelBorderStyle, uno::Any(drawing::LineStyle_SOLID));
     }
-    const Color& aColor = rLP.maLineFill.maFillColor;
-    ::Color nColor = aColor.getColor(rGraphicHelper);
+    const Color& aOOXColor = rLineProperties.maLineFill.maFillColor;
+    ::Color nColor = aOOXColor.getColor(rGraphicHelper);
     rPropSet.setProperty(PROP_LabelBorderColor, uno::Any(nColor));
+
+    model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
+    auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+    rPropSet.setProperty(PROP_LabelBorderComplexColor, uno::Any(xComplexColor));
 }
 
-void lcl_ImportLeaderLineProperties(PropertySet& rPropSet, Shape& rShape,
-                                    const GraphicHelper& rGraphicHelper)
+void lcl_ImportLeaderLineProperties(PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper)
 {
-    LineProperties& rLP = rShape.getLineProperties();
+    LineProperties& rLineProperties = rShape.getLineProperties();
     // no fill has the same effect as no line so skip it
-    if (rLP.maLineFill.moFillType.has_value() && rLP.maLineFill.moFillType.value() == XML_noFill)
+    if (rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.value() == XML_noFill)
         return;
 
-    if (rLP.moLineWidth.has_value())
+    if (rLineProperties.moLineWidth.has_value())
     {
-        sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.value());
+        sal_Int32 nWidth = convertEmuToHmm(rLineProperties.moLineWidth.value());
         rPropSet.setProperty(PROP_LineWidth, uno::Any(nWidth));
     }
 
-    if (rLP.maLineFill.moFillType.has_value() && rLP.maLineFill.moFillType.value() == XML_solidFill)
+    if (rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.value() == XML_solidFill)
     {
-        const Color& aColor = rLP.maLineFill.maFillColor;
-        ::Color nColor = aColor.getColor(rGraphicHelper);
+        const Color& aOOXColor = rLineProperties.maLineFill.maFillColor;
+        ::Color nColor = aOOXColor.getColor(rGraphicHelper);
         rPropSet.setProperty(PROP_LineColor, uno::Any(nColor));
+
+        model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
+        auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+        rPropSet.setProperty(PROP_LineComplexColor, uno::Any(xComplexColor));
     }
 }
 
 void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper, ModelObjectHelper& rModelObjHelper )
 {
-    FillProperties& rFP = rShape.getFillProperties();
+    FillProperties& rFillProperties = rShape.getFillProperties();
 
-    if (rFP.moFillType.has_value() && rFP.moFillType.value() == XML_solidFill)
+    if (rFillProperties.moFillType.has_value() && rFillProperties.moFillType.value() == XML_solidFill)
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_SOLID);
 
-        const Color& aColor = rFP.maFillColor;
-        ::Color nColor = aColor.getColor(rGraphicHelper);
+        const Color& aOOXColor = rFillProperties.maFillColor;
+        ::Color nColor = aOOXColor.getColor(rGraphicHelper);
         rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
+
+        model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
+        auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+        rPropSet.setProperty(PROP_LabelFillComplexColor, uno::Any(xComplexColor));
     }
-    else if(rFP.moFillType.has_value() && rFP.moFillType.value() == XML_pattFill)
+    else if(rFillProperties.moFillType.has_value() && rFillProperties.moFillType.value() == XML_pattFill)
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_HATCH);
         rPropSet.setProperty(PROP_LabelFillBackground, true);
 
-        Color aHatchColor( rFP.maPatternProps.maPattFgColor );
-        drawing::Hatch aHatch = createHatch(rFP.maPatternProps.moPattPreset.value(), aHatchColor.getColor(rGraphicHelper, 0));
+        Color aHatchColor( rFillProperties.maPatternProps.maPattFgColor );
+        drawing::Hatch aHatch = createHatch(rFillProperties.maPatternProps.moPattPreset.value(), aHatchColor.getColor(rGraphicHelper, 0));
 
         OUString sHatchName = rModelObjHelper.insertFillHatch(aHatch);
         rPropSet.setProperty(PROP_LabelFillHatchName, sHatchName);
 
-        const Color& aColor = rFP.maPatternProps.maPattBgColor;
-        ::Color nColor = aColor.getColor(rGraphicHelper);
+        const Color& aOOXColor = rFillProperties.maPatternProps.maPattBgColor;
+        ::Color nColor = aOOXColor.getColor(rGraphicHelper);
         rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
-    }
 
+        model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
+        auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+        rPropSet.setProperty(PROP_LabelFillComplexColor, uno::Any(xComplexColor));
+    }
 }
 
 DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( std::u16string_view rField )

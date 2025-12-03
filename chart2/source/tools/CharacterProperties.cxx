@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -85,6 +86,10 @@ void CharacterProperties::AddPropertiesToVector(
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back("CharComplexColor",
+                  PROP_CHAR_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT | beans::PropertyAttribute::MAYBEVOID );
     // CharEscapement
     rOutProperties.emplace_back( "CharEscapement",
                   PROP_CHAR_ESCAPEMENT,
@@ -110,6 +115,10 @@ void CharacterProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back("CharUnderlineComplexColor",
+                  PROP_CHAR_UNDERLINE_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT | beans::PropertyAttribute::MAYBEVOID );
     // CharUnderlineHasColor
     rOutProperties.emplace_back( "CharUnderlineHasColor",
                   PROP_CHAR_UNDERLINE_HAS_COLOR,
@@ -129,6 +138,10 @@ void CharacterProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back("CharOverlineComplexColor",
+                  PROP_CHAR_OVERLINE_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT | beans::PropertyAttribute::MAYBEVOID );
     // CharOverlineHasColor
     rOutProperties.emplace_back( "CharOverlineHasColor",
                   PROP_CHAR_OVERLINE_HAS_COLOR,

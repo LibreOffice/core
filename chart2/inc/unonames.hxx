@@ -26,6 +26,7 @@ inline constexpr OUString CHART_UNONAME_LABEL_SEP = u"LabelSeparator"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_BORDER_STYLE = u"LabelBorderStyle"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_BORDER_WIDTH = u"LabelBorderWidth"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_BORDER_COLOR = u"LabelBorderColor"_ustr;
+inline constexpr OUString CHART_UNONAME_LABEL_BORDER_COMPLEX_COLOR = u"LabelBorderComplexColor"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_BORDER_DASH = u"LabelBorderDash"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_BORDER_DASHNAME = u"LabelBorderDashName"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_BORDER_TRANS = u"LabelBorderTransparency"_ustr;
@@ -33,6 +34,7 @@ inline constexpr OUString CHART_UNONAME_LABEL_FILL_STYLE = u"LabelFillStyle"_ust
 inline constexpr OUString CHART_UNONAME_LABEL_FILL_BACKGROUND = u"LabelFillBackground"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_FILL_HATCH_NAME = u"LabelFillHatchName"_ustr;
 inline constexpr OUString CHART_UNONAME_LABEL_FILL_COLOR = u"LabelFillColor"_ustr;
+inline constexpr OUString CHART_UNONAME_LABEL_FILL_COMPLEX_COLOR = u"LabelFillComplexColor"_ustr;
 inline constexpr OUString CHART_UNONAME_CUSTOM_LABEL_FIELDS = u"CustomLabelFields"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

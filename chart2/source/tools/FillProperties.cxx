@@ -22,20 +22,18 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <tools/color.hxx>
 
-using namespace ::com::sun::star;
-
-using ::com::sun::star::beans::Property;
-
+using namespace css;
 namespace chart
 {
 
 namespace
 {
 
-void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans::Property > & rOutProperties )
+void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector<beans::Property> & rOutProperties )
 {
     rOutProperties.emplace_back( "FillStyle",
                   FillProperties::PROP_FILL_STYLE,
@@ -49,6 +47,11 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back("FillComplexColor",
+                  FillProperties::PROP_FILL_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "FillTransparence",
                   FillProperties::PROP_FILL_TRANSPARENCE,
@@ -92,7 +95,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-void lcl_AddPropertiesToVector_only_BitmapProperties( std::vector< css::beans::Property > & rOutProperties )
+void lcl_AddPropertiesToVector_only_BitmapProperties(std::vector<beans::Property> & rOutProperties)
 {
     rOutProperties.emplace_back( "FillBitmapName",
                   FillProperties::PROP_FILL_BITMAP_NAME,
@@ -183,7 +186,7 @@ void lcl_AddDefaultsToMap_only_BitmapProperties(
 }//end anonymous namespace
 
 void FillProperties::AddPropertiesToVector(
-    std::vector< Property > & rOutProperties )
+    std::vector<beans::Property> & rOutProperties )
 {
     // Fill Properties see service drawing::FillProperties
     lcl_AddPropertiesToVector_without_BitmapProperties( rOutProperties );

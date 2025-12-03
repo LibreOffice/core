@@ -2191,18 +2191,25 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
 
     pFS->startElement(FSNS(XML_a, XML_pPr));
 
-    bool bDummy = false;
-    sal_Int32 nDummy;
-    WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy );
+    {
+        WriteRunInput aInput;
+        aInput.bCheckDirect = true;
+        aInput.bUseTextSchemeColors = true;
+        WriteRunProperties(xPropSet, XML_defRPr, aInput);
+    }
 
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
 
     for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
     {
         pFS->startElement(FSNS(XML_a, XML_r));
-        bDummy = false;
         Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
-        WriteRunProperties(xRunPropSet, false, XML_rPr, true, bDummy, nDummy);
+        {
+            WriteRunInput aInput;
+            aInput.bCheckDirect = true;
+            aInput.bUseTextSchemeColors = true;
+            WriteRunProperties(xRunPropSet, XML_rPr, aInput);
+        }
         pFS->startElement(FSNS(XML_a, XML_t));
 
         // the linebreak should always be at the end of the XFormattedString text
@@ -2223,8 +2230,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
 
             pFS->startElement(FSNS(XML_a, XML_p));
             pFS->startElement(FSNS(XML_a, XML_pPr));
-            bDummy = false;
-            WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy);
+
+            WriteRunInput aInput;
+            aInput.bCheckDirect = true;
+            aInput.bUseTextSchemeColors = true;
+            WriteRunProperties(xPropSet, XML_defRPr, aInput);
+
             pFS->endElement(FSNS(XML_a, XML_pPr));
         }
     }
@@ -3960,8 +3971,10 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet,
     pFS->startElement(FSNS(XML_a, XML_p));
     pFS->startElement(FSNS(XML_a, XML_pPr));
 
-    WriteRunProperties(xPropSet, false, XML_defRPr, true, o3tl::temporary(false),
-                       o3tl::temporary(sal_Int32()));
+    WriteRunInput aInput;
+    aInput.bCheckDirect = true;
+    aInput.bUseTextSchemeColors = true;
+    WriteRunProperties(xPropSet, XML_defRPr, aInput);
 
     pFS->endElement(FSNS(XML_a, XML_pPr));
     pFS->endElement(FSNS(XML_a, XML_p));
@@ -4774,9 +4787,10 @@ OUString getFieldTypeString( const chart2::DataPointCustomLabelFieldType aType )
 
 void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet> const & xPropertySet )
 {
-    bool bDummy = false;
-    sal_Int32 nDummy;
-    pChartExport->WriteRunProperties(xPropertySet, false, XML_rPr, true, bDummy, nDummy);
+    WriteRunInput aInput;
+    aInput.bCheckDirect = true;
+    aInput.bUseTextSchemeColors = true;
+    pChartExport->WriteRunProperties(xPropertySet, XML_rPr, aInput);
 }
 
 void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,

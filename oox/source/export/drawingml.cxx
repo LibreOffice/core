@@ -155,20 +155,20 @@ using ::sax_fastparser::FastSerializerHelper;
 
 namespace
 {
-const char* const g_aPredefinedClrNames[] = {
-    "dk1",
-    "lt1",
-    "dk2",
-    "lt2",
-    "accent1",
-    "accent2",
-    "accent3",
-    "accent4",
-    "accent5",
-    "accent6",
-    "hlink",
-    "folHlink",
-};
+
+constexpr auto g_aSchemeColorNames = std::to_array<std::string_view>({
+    "dk1", "lt1", "dk2", "lt2",
+    "accent1", "accent2", "accent3",
+    "accent4", "accent5", "accent6",
+    "hlink", "folHlink",
+});
+
+constexpr auto g_aSchemeColorNamesText = std::to_array<std::string_view>({
+    "tx1", "bg1", "tx2", "bg2",
+    "accent1", "accent2", "accent3",
+    "accent4", "accent5", "accent6",
+    "hlink", "folHlink",
+});
 
 /** converts 1/100mm to the ST_TextSpacingPoint (1/100pt) */
 sal_Int64 toTextSpacingPoint(sal_Int64 mm100)
@@ -557,7 +557,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     }
 }
 
-bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet)
+bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors)
 {
     if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(rPropertyName))
         return false;
@@ -570,28 +570,40 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     if (aComplexColor.getThemeColorType() == model::ThemeColorType::Unknown)
         return false;
-    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aComplexColor.getThemeColorType())];
+
+    auto nThemeColorIndex = sal_Int16(aComplexColor.getThemeColorType());
+    OString aColorName;
+    if (bUseTextSchemeColors)
+        aColorName = OString(g_aSchemeColorNamesText[nThemeColorIndex]);
+    else
+        aColorName = OString(g_aSchemeColorNames[nThemeColorIndex]);
+
     mpFS->startElementNS(XML_a, XML_solidFill);
-    mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+    mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, aColorName);
+
     for (auto const& rTransform : aComplexColor.getTransformations())
     {
+        sal_Int32 nElement = XML_none;
         switch (rTransform.meType)
         {
             case model::TransformationType::LumMod:
-                mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(rTransform.mnValue * 10));
+                nElement = XML_lumMod;
                 break;
             case model::TransformationType::LumOff:
-                mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(rTransform.mnValue * 10));
+                nElement = XML_lumOff;
                 break;
             case model::TransformationType::Tint:
-                mpFS->singleElementNS(XML_a, XML_tint, XML_val, OString::number(rTransform.mnValue * 10));
+                nElement = XML_tint;
                 break;
             case model::TransformationType::Shade:
-                mpFS->singleElementNS(XML_a, XML_shade, XML_val, OString::number(rTransform.mnValue * 10));
+                nElement = XML_shade;
                 break;
             default:
                 break;
         }
+
+        if (nElement != XML_none)
+            mpFS->singleElementNS(XML_a, nElement, XML_val, OString::number(rTransform.mnValue * 10));
     }
     // Alpha is actually not contained in maTransformations although possible (as of Mar 2023).
     sal_Int16 nAPITransparency(0);
@@ -2481,14 +2493,12 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
     return sTarget;
 }
 
-void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement,
-                                    bool /*bCheckDirect*/,bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                                    sal_Int16 nScriptType, const Reference< XPropertySet >& rXShapePropSet)
+void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int32 nElement, WriteRunInput& rRunInput)
 {
     Reference< XPropertySet > rXPropSet = rRun;
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
     OUString usLanguage;
-    bool bComplex = ( nScriptType ==  css::i18n::ScriptType::COMPLEX );
+    bool bComplex = (rRunInput.nScriptType ==  css::i18n::ScriptType::COMPLEX);
     const char* bold = "0";
     const char* italic = nullptr;
     const char* underline = nullptr;
@@ -2499,17 +2509,17 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     sal_Int32 nCharKerning = 0;
     sal_Int32 nCharEscapementHeight = 0;
 
-    if ( nElement == XML_endParaRPr && rbOverridingCharHeight )
+    if (nElement == XML_endParaRPr && rRunInput.bOverridingCharHeight)
     {
-        nSize = rnCharHeight;
+        nSize = rRunInput.nCharHeight;
     }
     else if (GetProperty(rXPropSet, u"CharHeight"_ustr))
     {
         nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
         if ( nElement == XML_rPr || nElement == XML_defRPr )
         {
-            rbOverridingCharHeight = true;
-            rnCharHeight = nSize;
+            rRunInput.bOverridingCharHeight = true;
+            rRunInput.nCharHeight = nSize;
         }
     }
 
@@ -2627,7 +2637,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     }
 
     bool bLang = false;
-    switch(nScriptType)
+    switch (rRunInput.nScriptType)
     {
         case css::i18n::ScriptType::ASIAN:
             bLang = GetProperty(rXPropSet, u"CharLocaleAsian"_ustr); break;
@@ -2703,11 +2713,11 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     // Fontwork-shapes in LO have text outline and fill from shape stroke and shape fill
     // PowerPoint has this as run properties
-    if (IsFontworkShape(rXShapePropSet))
+    if (IsFontworkShape(rRunInput.xShapePropSet))
     {
-        WriteOutline(rXShapePropSet);
-        WriteBlipOrNormalFill(rXShapePropSet, u"Graphic"_ustr);
-        WriteShapeEffects(rXShapePropSet);
+        WriteOutline(rRunInput.xShapePropSet);
+        WriteBlipOrNormalFill(rRunInput.xShapePropSet, u"Graphic"_ustr);
+        WriteShapeEffects(rRunInput.xShapePropSet);
     }
     else
     {
@@ -2742,7 +2752,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 else
                 {
                     color.SetAlpha(255);
-                    if (!WriteSchemeColor(u"CharComplexColor"_ustr, rXPropSet))
+                    if (!WriteSchemeColor(u"CharComplexColor"_ustr, rXPropSet, rRunInput.bUseTextSchemeColors))
                         WriteSolidFill(color, nTransparency);
                 }
                 mpFS->endElementNS(XML_a, XML_ln);
@@ -2755,7 +2765,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
-                if (!WriteSchemeColor(u"CharComplexColor"_ustr, rXPropSet))
+                if (!WriteSchemeColor(u"CharComplexColor"_ustr, rXPropSet, rRunInput.bUseTextSchemeColors))
                 {
                     WriteSolidFill(color, nTransparency);
                 }
@@ -2764,9 +2774,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 // Resolve COL_AUTO for PPTX since MS Powerpoint doesn't have automatic colors.
                 bool bIsTextBackgroundDark = mbIsBackgroundDark;
-                if (rXShapePropSet.is() && GetProperty(rXShapePropSet, u"FillStyle"_ustr)
+                if (rRunInput.xShapePropSet.is() && GetProperty(rRunInput.xShapePropSet, u"FillStyle"_ustr)
                     && mAny.get<FillStyle>() != FillStyle_NONE
-                    && GetProperty(rXShapePropSet, u"FillColor"_ustr))
+                    && GetProperty(rRunInput.xShapePropSet, u"FillColor"_ustr))
                 {
                     ::Color aShapeFillColor(ColorTransparency, mAny.get<sal_uInt32>());
                     bIsTextBackgroundDark = aShapeFillColor.IsDark();
@@ -2778,10 +2788,10 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                     WriteSolidFill(COL_BLACK);
             }
 
-            if (rXShapePropSet.is() && GetDocumentType() != DOCUMENT_DOCX)
+            if (rRunInput.xShapePropSet.is() && GetDocumentType() != DOCUMENT_DOCX)
             {
                 mpFS->startElementNS(XML_a, XML_effectLst);
-                WriteTextGlowEffect(rXShapePropSet);
+                WriteTextGlowEffect(rRunInput.xShapePropSet);
                 mpFS->endElementNS(XML_a, XML_effectLst);
             }
         }
@@ -2861,7 +2871,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                                XML_charset, charset );
     }
 
-    if( bIsField )
+    if (rRunInput.bIsField)
     {
         Reference< XTextField > rXTextField;
         if (GetProperty(rXPropSet, u"TextField"_ustr))
@@ -3141,7 +3151,17 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
         Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
 
-        WriteRunProperties( xPropSet, bIsURLField, XML_rPr, true, rbOverridingCharHeight, rnCharHeight, GetScriptType(sText), rXShapePropSet);
+        WriteRunInput aInput;
+        aInput.bIsField = bIsURLField;
+        aInput.bCheckDirect = true;
+        aInput.nScriptType = GetScriptType(sText);
+        aInput.xShapePropSet = rXShapePropSet;
+        aInput.bOverridingCharHeight = rbOverridingCharHeight;
+        aInput.nCharHeight = rnCharHeight;
+        WriteRunProperties(xPropSet, XML_rPr, aInput);
+        rbOverridingCharHeight = aInput.bOverridingCharHeight;
+        rnCharHeight = aInput.nCharHeight;
+
         mpFS->startElementNS(XML_a, XML_t);
         mpFS->writeEscaped( sText );
         mpFS->endElementNS( XML_a, XML_t );
@@ -3717,8 +3737,17 @@ void DrawingML::WriteLstStyle(const css::uno::Reference<css::text::XTextContent>
 
         if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, nElement) )
             mpFS->startElementNS(XML_a, nElement);
-        WriteRunProperties(xFirstRunPropSet, false, XML_defRPr, true, rbOverridingCharHeight,
-                           rnCharHeight, GetScriptType(rRun->getString()), rXShapePropSet);
+
+        WriteRunInput aInput;
+        aInput.bCheckDirect = true;
+        aInput.nScriptType = GetScriptType(rRun->getString());
+        aInput.xShapePropSet = rXShapePropSet;
+        aInput.bOverridingCharHeight = rbOverridingCharHeight;
+        aInput.nCharHeight = rnCharHeight;
+        WriteRunProperties(xFirstRunPropSet, XML_defRPr, aInput);
+        rbOverridingCharHeight = aInput.bOverridingCharHeight;
+        rnCharHeight = aInput.nCharHeight;
+
         mpFS->endElementNS(XML_a, nElement);
     }
 }
@@ -3861,9 +3890,14 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
         }
     }
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
-    sal_Int16 nDummy = -1;
-    WriteRunProperties(rXPropSet, false, XML_endParaRPr, false, rbOverridingCharHeight,
-                       rnCharHeight, nDummy, rXShapePropSet);
+
+    WriteRunInput aInput;
+    aInput.xShapePropSet = rXShapePropSet;
+    aInput.bOverridingCharHeight = rbOverridingCharHeight;
+    aInput.nCharHeight = rnCharHeight;
+    WriteRunProperties(rXPropSet, XML_endParaRPr, aInput);
+    rbOverridingCharHeight = aInput.bOverridingCharHeight;
+    rnCharHeight = aInput.nCharHeight;
 
     mpFS->endElementNS( XML_a, XML_p );
 }
@@ -4564,9 +4598,15 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         {
             mpFS->startElementNS(XML_a, XML_p);
             WriteParagraphProperties(xParagraph, nCharHeight, XML_pPr);
-            sal_Int16 nDummy = -1;
-            WriteRunProperties(rXPropSet, false, XML_endParaRPr, false,
-                               bOverridingCharHeight, nCharHeight, nDummy, rXPropSet);
+
+            WriteRunInput aInput;
+            aInput.xShapePropSet = rXPropSet;
+            aInput.bOverridingCharHeight = bOverridingCharHeight;
+            aInput.nCharHeight = nCharHeight;
+            WriteRunProperties(rXPropSet, XML_endParaRPr, aInput);
+            bOverridingCharHeight = aInput.bOverridingCharHeight;
+            nCharHeight = aInput.nCharHeight;
+
             mpFS->endElementNS(XML_a, XML_p);
         }
         return;

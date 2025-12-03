@@ -280,6 +280,17 @@ public:
     void writeSvgExtension(OUString const& rSvgRelId);
 };
 
+struct WriteRunInput
+{
+    bool bIsField = false;
+    bool bCheckDirect = false;
+    bool bOverridingCharHeight = false;
+    sal_Int32 nCharHeight = -1;
+    sal_Int16 nScriptType = css::i18n::ScriptType::LATIN;
+    bool bUseTextSchemeColors = false;
+    css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
+};
+
 class DrawingML
 {
 
@@ -378,7 +389,7 @@ public:
     void WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID );
 
     bool WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
-    bool WriteSchemeColor(OUString const& rPropertyName, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    bool WriteSchemeColor(OUString const& rPropertyName, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false);
 
     void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
@@ -476,10 +487,8 @@ public:
     void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
                    const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
-    void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
-                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                             sal_Int16 nScriptType = css::i18n::ScriptType::LATIN,
-                             const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet = {});
+
+    void WriteRunProperties(const css::uno::Reference< css::beans::XPropertySet >& rRun, sal_Int32 nElement, WriteRunInput& rRunInput);
 
     void WritePresetShape( const OString& pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     OOX_DLLPUBLIC void WritePresetShape( const OString& pShape );

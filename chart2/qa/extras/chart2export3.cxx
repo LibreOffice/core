@@ -526,9 +526,28 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testBarChartDataPointPropXLSX)
     assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[1]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", u"000000");
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:idx", "val", u"2");
+
+    // TODO: Gradient should be using a scheme colors - accent 1
+    /*
+      <a:gs pos="0">
+        <a:schemeClr val="accent1">
+          <a:lumMod val="5000" />
+          <a:lumOff val="95000" />
+        </a:schemeClr>
+      </a:gs>
+
+      <a:gs pos="100000">
+        <a:schemeClr val="accent1">
+          <a:lumMod val="30000" />
+          <a:lumOff val="70000" />
+        </a:schemeClr>
+      </a:gs>
+    */
     assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", u"f6f8fc");
     assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", u"c7d5ed");
-    assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", u"70ad47");
+
+    // Should be a scheme color - accent6 as in input document
+    assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:ln/a:solidFill/a:schemeClr", "val", u"accent6");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testAxisCharacterPropertiesXLSX)
