@@ -167,12 +167,11 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getStringDefaulted( XML_Type);
 
-    // tdf#131936 Remember filter when opening file as 'Office Open XML Text'
-    if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties"))
-        maOOXMLVariant = OOXMLVariant::ISO_Transitional;
-    else if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"))
-        maOOXMLVariant = OOXMLVariant::ECMA_Transitional;
-    else if (aType.startsWithIgnoreAsciiCase("http://purl.oclc.org/ooxml/officeDocument"))
+    // Although the spec says that ISO_Transitional uses the "officedocument" URI for core.xml,
+    // MS errata admits that MS Office just uses the old "package" URI from ECMA_376_1ST_EDITION.
+    // So core-properties can't be used to identify a non-ECMA_376_1ST_EDITION document...
+
+    if (aType.startsWithIgnoreAsciiCase("http://purl.oclc.org/ooxml/officeDocument"))
         maOOXMLVariant = OOXMLVariant::ISO_Strict;
 
     if ( aType != "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
