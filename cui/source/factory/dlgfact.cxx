@@ -48,7 +48,6 @@
 #include <cuigaldlg.hxx>
 #include <transfrm.hxx>
 #include <bbdlg.hxx>
-#include <colorpicker.hxx>
 #include <cuisrchdlg.hxx>
 #include <cuitbxform.hxx>
 #include <optdict.hxx>
@@ -1420,31 +1419,6 @@ VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog(wel
     if (p)
         xLinkDlg->SetActLink(p);
     return VclPtr<AbstractLinksDialog_Impl>::Create(std::move(xLinkDlg));
-}
-
-namespace
-{
-class AbstractColorPickerDialog_Impl
-    : public vcl::AbstractDialogImpl_Async<AbstractColorPickerDialog, ColorPickerDialog>
-{
-public:
-    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
-
-    virtual void SetColor(const Color& rColor) override { m_pDlg->SetColor(rColor); }
-
-    virtual Color GetColor() const override { return m_pDlg->GetColor(); }
-
-    virtual weld::Dialog* GetDialog() const override { return m_pDlg->getDialog(); }
-};
-}
-
-VclPtr<AbstractColorPickerDialog>
-AbstractDialogFactory_Impl::CreateColorPickerDialog(weld::Window* pParent, Color nColor,
-                                                    vcl::ColorPickerMode eMode)
-{
-    std::unique_ptr<ColorPickerDialog> pColorPickerDialog(
-        std::make_unique<ColorPickerDialog>(pParent, nColor, eMode));
-    return VclPtr<AbstractColorPickerDialog_Impl>::Create(std::move(pColorPickerDialog));
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet& rAttr, const SdrModel& rModel, bool bStyle)

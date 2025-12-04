@@ -169,6 +169,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/brdwin \
     vcl/source/window/bufferdevice \
     vcl/source/window/accessibility \
+    vcl/source/window/colorpicker \
     vcl/source/window/legacyaccessibility \
     vcl/source/window/clipping \
     vcl/source/window/stacking \

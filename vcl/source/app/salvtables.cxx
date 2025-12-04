@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <colorpicker.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/string_view.hxx>
@@ -49,6 +50,7 @@
 #include <utility>
 #include <tools/helpers.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/abstdlgimpl.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -7352,13 +7354,34 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
     return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
 }
 
+namespace
+{
+class AbstractColorPickerDialog_Impl
+    : public vcl::AbstractDialogImpl_Async<AbstractColorPickerDialog, ColorPickerDialog>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+
+    virtual void SetColor(const Color& rColor) override { m_pDlg->SetColor(rColor); }
+
+    virtual Color GetColor() const override { return m_pDlg->GetColor(); }
+
+    virtual weld::Dialog* GetDialog() const override { return m_pDlg->getDialog(); }
+};
+
+VclPtr<AbstractColorPickerDialog> CreateColorPickerDialog(weld::Window* pParent, Color nColor,
+                                                          vcl::ColorPickerMode eMode)
+{
+    std::unique_ptr<ColorPickerDialog> pColorPickerDialog(
+        std::make_unique<ColorPickerDialog>(pParent, nColor, eMode));
+    return VclPtr<AbstractColorPickerDialog_Impl>::Create(std::move(pColorPickerDialog));
+}
+}
+
 std::unique_ptr<weld::ColorChooserDialog>
 SalInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    assert(pFact);
-    VclPtr<AbstractColorPickerDialog> pDialog
-        = pFact->CreateColorPickerDialog(pParent, COL_BLACK, eMode);
+    VclPtr<AbstractColorPickerDialog> pDialog = CreateColorPickerDialog(pParent, COL_BLACK, eMode);
     assert(pDialog);
     return std::make_unique<SalInstanceColorChooserDialog>(pDialog);
 }
