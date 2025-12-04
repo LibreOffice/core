@@ -864,14 +864,29 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
         if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
         {
             for (auto& aMember : maMembers)
+            {
                 if (aMember.maName == mpChecks->get_text(rEntry))
+                {
                     aMember.mbMarked = true;
+                    /*
+                     * if there are multiple entries with the same
+                     * name in the range, they all show up as a single
+                     * entry in the autofilter, so we can break
+                     */
+                    break;
+                }
+            }
         }
         else
         {
             for (auto& aMember : maMembers)
+            {
                 if (aMember.maName == mpChecks->get_text(rEntry))
+                {
                     aMember.mbCheck = false;
+                    break;
+                }
+            }
         }
 
         return false;
