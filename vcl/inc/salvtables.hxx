@@ -30,6 +30,7 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include "calendar.hxx"
+#include "colorpicker.hxx"
 #include "iconview.hxx"
 #include "messagedialog.hxx"
 #include "verticaltabctrl.hxx"
@@ -2312,10 +2313,10 @@ public:
 class SalInstanceColorChooserDialog : public SalInstanceDialog,
                                       public virtual weld::ColorChooserDialog
 {
-    ScopedVclPtr<AbstractColorPickerDialog> m_pAbstractColorPickerDialog;
+    std::unique_ptr<ColorPickerDialog> m_pColorPickerDialog;
 
 public:
-    SalInstanceColorChooserDialog(AbstractColorPickerDialog* pColorDialog);
+    SalInstanceColorChooserDialog(std::unique_ptr<ColorPickerDialog> pColorDialog);
     virtual ~SalInstanceColorChooserDialog() override;
 
     virtual void set_color(const Color& rColor) override;
