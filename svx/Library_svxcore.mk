@@ -121,7 +121,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/diagram/IDiagramHelper \
     svx/source/dialog/dialmgr \
     svx/source/dialog/dlgutil \
-    svx/source/dialog/hexcolorcontrol \
     svx/source/dialog/framelink \
     svx/source/dialog/framelinkarray \
     svx/source/dialog/langbox \

@@ -5626,7 +5626,6 @@ include/svx/grfflt.hxx
 include/svx/gridctrl.hxx
 include/svx/hdft.hxx
 include/svx/helperhittest3d.hxx
-include/svx/hexcolorcontrol.hxx
 include/svx/hlnkitem.hxx
 include/svx/hyperdlg.hxx
 include/svx/ifaceids.hxx
@@ -6101,6 +6100,7 @@ include/vcl/graphictools.hxx
 include/vcl/hatch.hxx
 include/vcl/headbar.hxx
 include/vcl/help.hxx
+include/vcl/hexcolorcontrol.hxx
 include/vcl/i18nhelp.hxx
 include/vcl/idle.hxx
 include/vcl/image.hxx
