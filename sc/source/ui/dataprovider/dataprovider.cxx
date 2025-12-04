@@ -240,7 +240,7 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     aDestRange.aEnd.SetRow(aDestRange.aStart.Row() + nRowSize);
 
     ScMarkData aMark(mpDoc->GetSheetLimits());
-    aMark.SelectTable(0, true);
+    aMark.SelectTable(aDestRange.aStart.Tab(), true);
     mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
     ScDocShell* pDocShell = mpDoc->GetDocumentShell();
     if (pDocShell)
