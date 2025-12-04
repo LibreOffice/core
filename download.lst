@@ -466,8 +466,8 @@ LIBXML_TARBALL := libxml2-2.14.$(LIBXML_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXSLT_SHA256SUM := 5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a
-LIBXSLT_VERSION_MICRO := 43
+LIBXSLT_SHA256SUM := 9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e
+LIBXSLT_VERSION_MICRO := 45
 LIBXSLT_TARBALL := libxslt-1.1.$(LIBXSLT_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
