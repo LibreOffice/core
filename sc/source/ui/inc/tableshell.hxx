@@ -26,7 +26,7 @@ public:
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
-    const ScDBData* GetDBDataAtCursor();
+    const ScDBData* GetTableDBDataAtCursor();
 
 public:
     ScTableShell(ScTabViewShell* pView);

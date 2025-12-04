@@ -109,12 +109,12 @@ IMPL_LINK_NOARG(TableStylesBox, SelectHdl, weld::ComboBox&, void)
         return;
 
     const ScAddress aAddr = pViewData->GetCurPos();
-    const ScDBData* pDBData = pViewData->GetDocument().GetDBAtCursor(
+    const ScDBData* pDBData = pViewData->GetDocument().GetTableDBAtCursor(
         aAddr.Col(), aAddr.Row(), aAddr.Tab(), ScDBDataPortion::AREA);
 
     bool bChanged = true;
     const OUString sValue = m_xCmbStyle->get_active_id();
-    if (pDBData && pDBData->GetTableStyleInfo())
+    if (pDBData)
     {
         const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
         if (pParam->maStyleID == sValue)

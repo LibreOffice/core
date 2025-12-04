@@ -895,11 +895,15 @@ public:
     SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection.get();}
     void                         SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollection,
                                                   bool bRemoveAutoFilter = false );
+
+    const ScDBData*              GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
+    ScDBData*                    GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData*              GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-    std::vector<const ScDBData*> GetAllDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const;
+    std::vector<const ScDBData*> GetAllNamedDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+                                                      SCROW nRow2, SCTAB nTab) const;
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 

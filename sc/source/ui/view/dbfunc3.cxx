@@ -706,9 +706,9 @@ void ScDBFunc::DeleteCalcTable()
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDBData* pDBObj = rDoc.GetDBAtCursor(GetViewData().GetCurX(), GetViewData().GetCurY(),
+    ScDBData* pDBObj = rDoc.GetTableDBAtCursor(GetViewData().GetCurX(), GetViewData().GetCurY(),
                                           GetViewData().CurrentTabForData(), ScDBDataPortion::AREA);
-    if (pDBObj && pDBObj->GetTableStyleInfo())
+    if (pDBObj)
     {
         ScDBDocFunc aFunc(*pDocSh);
         aFunc.DeleteDBTable(pDBObj, true, false);
