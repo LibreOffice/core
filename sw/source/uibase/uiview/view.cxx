@@ -2148,6 +2148,19 @@ IMPL_LINK_NOARG(SwView, BringToAttentionBlinkTimerHdl, Timer*, void)
     }
 }
 
+void SwView::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                       int nMode) const
+{
+    SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
+    if (static_cast<SwRedlineRenderMode>(nMode) == SwRedlineRenderMode::OmitDeletes)
+    {
+        // If an "omit deletes" mode is invalidated, also invalidate the matching "omit inserts"
+        // mode.
+        SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(
+            pRect, nPart, static_cast<int>(SwRedlineRenderMode::OmitInserts));
+    }
+}
+
 namespace sw {
 
 void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb)

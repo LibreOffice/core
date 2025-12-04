@@ -746,6 +746,10 @@ public:
     void BringToAttention(std::vector<basegfx::B2DRange>&& aRanges = {});
     void BringToAttention(const tools::Rectangle& rRect);
     void BringToAttention(const SwNode* pNode);
+
+    /// See SfxViewShell::libreOfficeKitViewInvalidateTilesCallback().
+    void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                   int nMode) const override;
 };
 
 std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,
