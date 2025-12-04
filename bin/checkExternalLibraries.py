@@ -19,6 +19,7 @@ python_branch = ""
 openssl_branch = ""
 postgres_branch = ""
 mariadb_branch = ""
+rhino_branch = ""
 
 libraryIds = {
     "openssl": 2,
@@ -106,6 +107,10 @@ def get_library_list(fileName):
             global mariadb_branch
             mariadb_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
             print("MariaDB is on branch: " + str(mariadb_branch))
+        elif libraryName.startswith("rhino"):
+            global rhino_branch
+            rhino_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
+            print("Rhino is on branch: " + str(rhino_branch))
         libraryList.append(libraryName.lower())
     return libraryList
 
@@ -152,6 +157,12 @@ def get_latest_version(libName):
     elif libName == "mariadb-connector-c":
         for idx, ver in enumerate(json['items'][item]['stable_versions']):
             if ver.startswith(mariadb_branch):
+                latest_version = idx
+                break
+
+    elif libName == "rhino":
+        for idx, ver in enumerate(json['items'][item]['stable_versions']):
+            if ver.startswith(rhino_branch):
                 latest_version = idx
                 break
 
