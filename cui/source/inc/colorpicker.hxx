@@ -23,7 +23,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -160,7 +159,7 @@ private:
     double mdValue;
 };
 
-class ColorPickerDialog : public SfxDialogController
+class ColorPickerDialog : public weld::GenericDialogController
 {
 private:
     ColorFieldControl m_aColorField;

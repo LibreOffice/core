@@ -579,7 +579,7 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
 }
 
 ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor, vcl::ColorPickerMode eDialogMode)
-    : SfxDialogController(pParent, u"cui/ui/colorpickerdialog.ui"_ustr, u"ColorPicker"_ustr)
+    : weld::GenericDialogController(pParent, u"cui/ui/colorpickerdialog.ui"_ustr, u"ColorPicker"_ustr)
     , m_xColorField(new weld::CustomWeld(*m_xBuilder, u"colorField"_ustr, m_aColorField))
     , m_xColorSlider(new weld::CustomWeld(*m_xBuilder, u"colorSlider"_ustr, m_aColorSlider))
     , m_xColorPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aColorPreview))
