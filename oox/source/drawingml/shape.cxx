@@ -2380,6 +2380,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (!aOrigSize.IsEmpty() && (std::abs(aOrigSize.GetHeight() - aAutoSize.GetHeight()) > 1 ||
                     std::abs(aOrigSize.GetWidth() - aAutoSize.GetWidth()) > 1))
                 {
+                    if (aAutoSize.GetHeight() > aOrigSize.GetHeight())
+                        aOrigSize.setHeight(aAutoSize.GetHeight());
+
                     pShape->NbcSetLogicRect(aOrigSize, false);
                 }
             }
