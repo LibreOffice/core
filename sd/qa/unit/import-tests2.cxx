@@ -2241,6 +2241,12 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf169524)
     sal_Int32 nLeftMargin;
     xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nLeftMargin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+
+    // Test tdf#169548 (uses the same test file)
+    uno::Reference<drawing::XShape> xRect(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRect.is());
+    sal_Int32 nHeight = xRect->getSize().Height;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(18073), nHeight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
