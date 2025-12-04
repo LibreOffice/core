@@ -320,12 +320,14 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
     if (const ScTableStyleParam* pParam = rData.GetTableStyleInfo())
     {
-        const OUString& rStyleName = pParam->maStyleID;
         if (const ScTableStyles* pTableStyles = rStrm.GetRoot().GetDoc().GetTableStyles())
         {
-            if (pTableStyles->GetTableStyle(rStyleName))
+            if (pParam->maStyleID == u"none" || pTableStyles->GetTableStyle(pParam->maStyleID))
             {
-                pTableStrm->singleElement(XML_tableStyleInfo, XML_name, rStyleName.toUtf8(),
+                std::optional<OString> aNameAttr
+                    = (pParam->maStyleID == u"none") ? std::nullopt
+                          : std::make_optional(pParam->maStyleID.toUtf8());
+                pTableStrm->singleElement(XML_tableStyleInfo, XML_name, aNameAttr,
                                           XML_showFirstColumn, ToPsz10(pParam->mbFirstColumn),
                                           XML_showLastColumn, ToPsz10(pParam->mbLastColumn),
                                           XML_showRowStripes, ToPsz10(pParam->mbRowStripes),
