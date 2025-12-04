@@ -18,8 +18,8 @@
  */
 
 #include <sax/tools/converter.hxx>
-#include <svx/hexcolorcontrol.hxx>
 #include <rtl/character.hxx>
+#include <vcl/hexcolorcontrol.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

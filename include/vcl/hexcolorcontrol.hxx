@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/link.hxx>
+#include <vcl/dllapi.h>
 
 namespace weld { class Entry; }
 
@@ -29,7 +29,7 @@ struct ImplSVEvent;
 
 namespace weld {
 
-class SVXCORE_DLLPUBLIC HexColorControl
+class VCL_DLLPUBLIC HexColorControl
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
