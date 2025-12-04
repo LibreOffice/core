@@ -267,14 +267,10 @@ sal_uInt16 Exc1904::GetNum() const
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( rStrm.getVersion() == oox::core::ECMA_376_1ST_EDITION ) // Word 2007 Compat
-    {
-        rStrm.WriteAttributes(XML_dateCompatibility, ToPsz(bDateCompatibility));
-    }
-    else
-    {
-        rStrm.WriteAttributes(XML_date1904, ToPsz(bVal));
-    }
+    // dateCompatibility appears to only apply to "strict xml" which we don't export to,
+    // (and seems to only determine whether date1904 is considered or not when in strict mode).
+
+    rStrm.WriteAttributes(XML_date1904, ToPsz(bVal));
 }
 
 //------------------------------------------------------ class ExcBundlesheet -
