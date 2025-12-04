@@ -858,6 +858,8 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
     for (auto& aMember : maMembers)
         aMember.mbCheck = true;
 
+    bool bLockCheckedEntries = mxChkLockChecked->get_active();
+
     // go over the members visible in the popup, and remember which one is
     // checked, and which one is not
     mpChecks->all_foreach([this](weld::TreeIter& rEntry){
@@ -908,14 +910,14 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
         std::vector<int> aFixedWidths { mnCheckWidthReq };
 
         // insert the members, remember whether checked or unchecked.
-        mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes](weld::TreeIter& rIter, int i) {
+        mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &bLockCheckedEntries](weld::TreeIter& rIter, int i) {
             size_t nIndex = aShownIndexes[i];
-            insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbCheck, mxChkLockChecked->get_active());
+            insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbCheck, bLockCheckedEntries);
         }, nullptr, &aFixedWidths);
     }
 
     // unmarking should happen after the members are inserted
-    if (!mxChkLockChecked->get_active())
+    if (!bLockCheckedEntries)
         for (auto& aMember : maMembers)
             aMember.mbMarked = false;
 }
