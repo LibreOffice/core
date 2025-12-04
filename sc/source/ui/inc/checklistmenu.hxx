@@ -152,7 +152,7 @@ public:
     void addMember(const OUString& rName, const double nVal, bool bVisible, bool bHiddenByOtherFilter,
                    bool bValue = false);
     void clearMembers();
-    size_t initMembers(int nMaxMemberWidth = -1, bool bUnlock=false);
+    size_t initMembers(int nMaxMemberWidth = -1, bool bCheckMarkedEntries = false);
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
