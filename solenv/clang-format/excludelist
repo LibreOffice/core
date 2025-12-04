@@ -2166,7 +2166,6 @@ cui/source/dialogs/DiagramDialog.cxx
 cui/source/dialogs/SpellAttrib.hxx
 cui/source/dialogs/SpellDialog.cxx
 cui/source/dialogs/about.cxx
-cui/source/dialogs/colorpicker.cxx
 cui/source/dialogs/cuifmsearch.cxx
 cui/source/dialogs/cuigaldlg.cxx
 cui/source/dialogs/cuigrfflt.cxx
@@ -14716,6 +14715,7 @@ vcl/source/window/brdwin.cxx
 vcl/source/window/bubblewindow.cxx
 vcl/source/window/builder.cxx
 vcl/source/window/clipping.cxx
+vcl/source/window/colorpicker.cxx
 vcl/source/window/commandevent.cxx
 vcl/source/window/cursor.cxx
 vcl/source/window/debugevent.cxx
