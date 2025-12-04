@@ -3489,12 +3489,14 @@ const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment, bool bPl
             sAlignment = "ctr";
             break;
         case style::ParagraphAdjust_RIGHT:
+        case style::ParagraphAdjust_END:
             sAlignment = "r";
             break;
         case style::ParagraphAdjust_BLOCK:
             sAlignment = "just";
             break;
         case style::ParagraphAdjust_LEFT:
+        case style::ParagraphAdjust_START:
             if (bPlaceHolder) // in case of PPTX placeholder objects, "l" is necessary for MSO
                 sAlignment = "l";
             break;
