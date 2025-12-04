@@ -1069,6 +1069,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169781)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169524)
+{
+    createSdImpressDoc("odp/tdf169524.odp");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+
+    // Verify that no left margin is exported
+    assertXPathNoAttribute(
+        pXmlDoc, "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr", "marL");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
