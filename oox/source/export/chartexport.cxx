@@ -32,6 +32,8 @@
 #include <cstdio>
 #include <limits>
 
+#include <tools/UnitConversion.hxx>
+
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
@@ -115,9 +117,12 @@
 
 #include <o3tl/temporary.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <docmodel/styles/ChartStyle.hxx>
 #include <docmodel/uno/UnoChartStyle.hxx>
+#include <docmodel/styles/ChartColorStyle.hxx>
+#include <docmodel/uno/UnoChartColorStyle.hxx>
 
 #include <oox/export/ThemeExport.hxx>
 
@@ -1282,16 +1287,47 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     SetFS( pColorStyle );
     pFS = GetFS();
 
-    pFS->startElement(FSNS(XML_cs, XML_colorStyle),
-            FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
-            FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
-            XML_meth, "cycle",
-            XML_id, "10" /* no idea what this number is supposed to be */);
+    Reference<com::sun::star::chart2::XChartColorStyle> xColorStyle = xChartDoc->getColorStyles();
+    model::ColorStyleSet* aCSS = model::style::getFromXChartColorStyle(xColorStyle);
 
-    pFS->singleElement(FSNS(XML_a, XML_schemeClr),
-            XML_val, "accent1");
+    if (!aCSS->maEntryList.empty()) {
+        // use the stored data in the document model
 
-    pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+        static const std::map<model::ColorStyleMethod, std::string> aMethMap {
+                { model::ColorStyleMethod::CYCLE, "cycle" },
+                { model::ColorStyleMethod::WITHIN_LINEAR, "withinLinear" },
+                { model::ColorStyleMethod::ACROSS_LINEAR, "acrossLinear" },
+                { model::ColorStyleMethod::WITHIN_LINEAR_REVERSED, "withinLinearReversed" },
+                { model::ColorStyleMethod::ACROSS_LINEAR_REVERSED, "acrossLinearReversed" }
+        };
+
+        for (const model::ColorStyleEntry& rCStyleEntry : aCSS->maEntryList) {
+            pFS->startElement(FSNS(XML_cs, XML_colorStyle),
+                    FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
+                    FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+                    XML_meth, aMethMap.at(rCStyleEntry.meMethod).c_str(),
+                    XML_id, OUString::number(rCStyleEntry.mnId));
+
+            ThemeExport aTE(mpFB, GetDocumentType(), pFS);
+            for (const model::ComplexColor& rColor : rCStyleEntry.maComplexColors) {
+                aTE.writeComplexColor(rColor);
+            }
+
+            pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+        }
+    } else {
+        // output a default value to make MS Office happy
+        pFS->startElement(FSNS(XML_cs, XML_colorStyle),
+                FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
+                FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+                XML_meth, "cycle",
+                XML_id, "10" /* no idea what this number is supposed to be */);
+
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent1");
+
+        pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+    }
 
     pColorStyle->endDocument();
 

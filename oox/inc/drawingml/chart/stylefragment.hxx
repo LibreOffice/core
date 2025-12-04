@@ -85,6 +85,21 @@ public:
                                                            const AttributeList& rAttribs) override;
 };
 
+struct ColorStyleModel;
+
+/** Handler for a color fragment (cs:colorStyle root element).
+ */
+class ColorsFragment final : public FragmentBase<ColorStyleModel>
+{
+public:
+    explicit ColorsFragment(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                            ColorStyleModel& rModel);
+    virtual ~ColorsFragment() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+};
+
 } // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

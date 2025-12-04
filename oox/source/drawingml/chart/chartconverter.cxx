@@ -23,8 +23,11 @@
 #include <drawingml/chart/chartspaceconverter.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <drawingml/chart/stylemodel.hxx>
+#include <drawingml/chart/colorsmodel.hxx>
 #include <docmodel/uno/UnoChartStyle.hxx>
+#include <docmodel/uno/UnoChartColorStyle.hxx>
 #include <docmodel/styles/ChartStyle.hxx>
+#include <docmodel/styles/ChartColorStyle.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <osl/diagnose.h>
@@ -173,6 +176,27 @@ void ChartStyleConverter::convertFromModel(XmlFilterBase& rFilter,
     // TODO: fill in all the stuff
 
     aStyles.mnId = rChartStyleModel.mnId;
+}
+
+// ===========
+// ChartColorStyleConverter
+// ===========
+void ChartColorStyleConverter::convertFromModel([[maybe_unused]] XmlFilterBase& rFilter,
+        ColorStyleModel& rChartColorStyleModel,
+        const Reference< XChartColorStyle >& rxChartColorStyle)
+{
+    OSL_ENSURE( rxChartColorStyle.is(), "ChartColorStyleConverter::convertFromModel - missing chart colorstyle" );
+    if (!rxChartColorStyle.is()) return;
+
+    UnoChartColorStyle *pUnoCS = static_cast<UnoChartColorStyle*>(rxChartColorStyle.get());
+    assert(pUnoCS);
+
+    model::ColorStyleSet& aColorStyles = pUnoCS->getChartColorStyle();
+
+    if (!rChartColorStyleModel.maComplexColors.empty()) {
+        aColorStyles.addEntry(rChartColorStyleModel.maComplexColors,
+                rChartColorStyleModel.meMethod, rChartColorStyleModel.mnId);
+    }
 }
 
 

@@ -39,6 +39,7 @@
 #include <drawingml/chart/chartspacefragment.hxx>
 #include <drawingml/chart/stylefragment.hxx>
 #include <drawingml/chart/stylemodel.hxx>
+#include <drawingml/chart/colorsmodel.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -91,6 +92,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartStyle.hpp>
+#include <com/sun/star/chart2/XChartColorStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -2660,6 +2662,19 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         rFilter, sStylePath, aStyleModel );
                 rFilter.importFragment( pStyleFragment );
 
+                // Import colors file.
+                OUString sColorPath(pFPath, nLastSlash + 1);
+                sColorPath += u"colors"_ustr;
+                sChartFName = sFullPath.copy(nLastSlash + 1, sFullPath.getLength() - nLastSlash - 1);
+                sColorPath += sNumber;
+                sColorPath += u".xml"_ustr;
+
+                chart::ColorStyleModel aColorsModel;
+                rtl::Reference<chart::ColorsFragment> pColorsFragment =
+                    new chart::ColorsFragment( rFilter, sColorPath, aColorsModel );
+                rFilter.importFragment( pColorsFragment );
+
+
                 // The original theme.
                 ThemePtr pTheme;
                 const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
@@ -2708,6 +2723,9 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 // convert chart style model to docmodel style data
                 Reference<com::sun::star::chart2::XChartStyle> xStyle = xChartDoc->getStyles();
                 oox::drawingml::chart::ChartStyleConverter::convertFromModel(rFilter, aStyleModel, xStyle);
+                // convert color style model to docmodel colors data
+                Reference<com::sun::star::chart2::XChartColorStyle> xCStyle = xChartDoc->getColorStyles();
+                oox::drawingml::chart::ChartColorStyleConverter::convertFromModel(rFilter, aColorsModel, xCStyle);
 
                 if (pPowerPointImport)
                 {

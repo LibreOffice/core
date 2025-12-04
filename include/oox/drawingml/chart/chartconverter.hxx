@@ -32,6 +32,7 @@ namespace com::sun::star {
     namespace drawing { class XShapes; }
     namespace chart2 { class XChartDocument; }
     namespace chart2 { class XChartStyle; }
+    namespace chart2 { class XChartColorStyle; }
     namespace chart2::data { class XDataProvider; }
     namespace chart2::data { class XDataSequence; }
 }
@@ -43,6 +44,7 @@ namespace oox::drawingml::chart {
 struct ChartSpaceModel;
 struct DataSequenceModel;
 struct StyleModel;
+struct ColorStyleModel;
 struct StyleEntryModel;
 typedef ModelRef< StyleEntryModel >      StyleEntryRef;
 
@@ -118,6 +120,28 @@ public:
 private:
     ChartStyleConverter( const ChartStyleConverter& ) = delete;
     ChartStyleConverter&     operator=( const ChartStyleConverter& ) = delete;
+};
+
+class OOX_DLLPUBLIC ChartColorStyleConverter
+{
+public:
+    explicit    ChartColorStyleConverter() = default;
+
+    /** Converts the passed ChartColorStyleModel to the passed chart2
+     * XChartColorStyle.
+
+        @param rChartColorStyleModel  The filled chart colorstyle model structure.
+
+        @param rxColorChartStyle  The UNO chart colorstyle structure to be initialized.
+
+     */
+    static void convertFromModel(
+                    oox::core::XmlFilterBase& rFilter,
+                    ColorStyleModel& rChartColorStyleModel,
+                    const css::uno::Reference< css::chart2::XChartColorStyle >& rxChartColorStyle);
+private:
+    ChartColorStyleConverter( const ChartColorStyleConverter& ) = delete;
+    ChartColorStyleConverter&     operator=( const ChartColorStyleConverter& ) = delete;
 };
 
 

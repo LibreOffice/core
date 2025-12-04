@@ -282,6 +282,38 @@ ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color* pColor,
     return nullptr;
 }
 
+//===========
+// VariationContext
+//===========
+
+VariationContext::VariationContext(ContextHandler2Helper const & rParent,
+        Color* pColor, model::ComplexColor* pComplexColor)
+    : ColorValueContext(rParent, pColor, pComplexColor)
+    , mpColor(pColor)
+    , mpComplexColor(pComplexColor)
+{
+}
+
+::oox::core::ContextHandlerRef VariationContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
+{
+    switch( nElement )
+    {
+        case A_TOKEN( scrgbClr ):
+        case A_TOKEN( srgbClr ):
+        case A_TOKEN( hslClr ):
+        case A_TOKEN( sysClr ):
+        case A_TOKEN( schemeClr ):
+        case A_TOKEN( prstClr ):
+            return new ColorValueContext(*this, mpColor, mpComplexColor);
+    }
+    return nullptr;
+}
+
+//===========
+// ColorsContext
+//===========
+
 ColorsContext::ColorsContext(ContextHandler2Helper const& rParent, std::vector<Color>& rColors)
     : ContextHandler2(rParent)
     , mrColors(rColors)

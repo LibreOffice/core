@@ -1992,6 +1992,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	TransparencyStyle \
 	XAnyDescriptionAccess \
 	XAxis \
+    XChartColorStyle \
 	XChartDocument \
 	XChartShape \
 	XChartShapeContainer \

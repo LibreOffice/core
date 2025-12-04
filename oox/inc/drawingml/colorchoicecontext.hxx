@@ -64,6 +64,24 @@ protected:
     ::model::ComplexColor* mpComplexColor;
 };
 
+/** Context handler for cs:variation elements, which describe transformations on
+ * colours.
+ */
+class VariationContext : public ColorValueContext
+{
+public:
+    explicit VariationContext(::oox::core::ContextHandler2Helper const & rParent,
+            Color* pColor, ::model::ComplexColor* pComplexColor);
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(
+            sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
+
+private:
+    Color* mpColor;
+    ::model::ComplexColor* mpComplexColor;
+};
+
+
 /// Same as ColorContext, but handles multiple colors.
 class ColorsContext final : public ::oox::core::ContextHandler2
 {

@@ -78,6 +78,7 @@
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoChartStyle.hxx>
+#include <docmodel/uno/UnoChartColorStyle.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -130,6 +131,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     , m_eColorPaletteType(ChartColorPaletteType::Unknown)
     , m_nColorPaletteIndex(0)
     , m_aStyles(new UnoChartStyle)
+    , m_aColorStyles(new UnoChartColorStyle)
     , mnStart(0)
     , mnEnd(0)
 {
@@ -143,6 +145,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
         m_xPageBackground->addModifyListener( this );
 #if 0 // TODO
         m_aStyles->addModifyListener( this );
+        m_aColorStyles->addModifyListener( this );
 #endif
         m_xChartTypeManager = new ::chart::ChartTypeManager( m_xContext );
     }
@@ -191,6 +194,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
             xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
         rtl::Reference< ::chart::PageBackground > xNewPageBackground = new PageBackground( *rOther.m_xPageBackground );
         rtl::Reference<UnoChartStyle> xNewChartStyle = new UnoChartStyle(*rOther.m_aStyles);
+        rtl::Reference<UnoChartColorStyle> xNewChartColorStyle = new
+            UnoChartColorStyle(*rOther.m_aColorStyles);
 
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
@@ -203,6 +208,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
                 m_xDiagram = xNewDiagram;
                 m_xPageBackground = xNewPageBackground;
                 m_aStyles = xNewChartStyle;
+                m_aColorStyles = xNewChartColorStyle;
                 m_xChartTypeManager = std::move(xChartTypeManager);
                 m_xXMLNamespaceMap = std::move(xXMLNamespaceMap);
             }
@@ -216,6 +222,9 @@ ChartModel::ChartModel( const ChartModel & rOther )
 #if 0 // TODO
         if( xNewChartStyle && xListener) {
             xNewChartStyle->addModifyListener( xListener );
+        }
+        if( xNewChartColorStyle && xListener) {
+            xNewChartColorStyle->addModifyListener( xListener );
         }
 #endif
         xListener.clear();
@@ -598,6 +607,7 @@ void SAL_CALL ChartModel::dispose()
     m_xPageBackground.clear();
     m_xXMLNamespaceMap.clear();
     m_aStyles.clear();
+    m_aColorStyles.clear();
 
     m_xStorage.clear();
         // just clear, don't dispose - we're not the owner
@@ -829,6 +839,12 @@ uno::Reference< chart2::XChartStyle > SAL_CALL ChartModel::getStyles()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_aStyles;
+}
+
+uno::Reference< chart2::XChartColorStyle > SAL_CALL ChartModel::getColorStyles()
+{
+    MutexGuard aGuard( m_aModelMutex );
+    return m_aColorStyles;
 }
 
 // ____ XDataReceiver ____

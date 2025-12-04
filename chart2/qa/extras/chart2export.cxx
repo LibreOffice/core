@@ -1386,6 +1386,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStyleImportExport)
     assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle/cs:fontRef", "idx", std::u16string_view(u"major"));
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testColorStyleImportExport)
+{
+    loadFromFile(std::u16string_view(u"xlsx/column-style.xlsx"));
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/colors1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/cs:colorStyle", "meth", u"acrossLinear");
+    assertXPath(pXmlDoc, "/cs:colorStyle/a:schemeClr", "val", u"dk2");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

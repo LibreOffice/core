@@ -26,6 +26,7 @@
 #include <drawingml/textbodypropertiescontext.hxx>
 #include <drawingml/textcharacterpropertiescontext.hxx>
 #include <drawingml/chart/stylemodel.hxx>
+#include <drawingml/chart/colorsmodel.hxx>
 #include <drawingml/colorchoicecontext.hxx>
 #include <docmodel/styles/ChartStyle.hxx>
 #include <oox/drawingml/color.hxx>
@@ -33,6 +34,8 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+
+#include <tools/UnitConversion.hxx>
 
 namespace oox::drawingml::chart
 {
@@ -252,6 +255,82 @@ ContextHandlerRef StyleFragment::onCreateContext(sal_Int32 nElement, const Attri
                 case CS_TOKEN(extLst):
                     // Don't handle this, at least yet
                     return nullptr;
+            }
+            break;
+    }
+    return nullptr;
+}
+
+//=======
+// ColorsFragment
+//=======
+ColorsFragment::ColorsFragment(XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                               ColorStyleModel& rModel)
+    : FragmentBase<ColorStyleModel>(rFilter, rFragmentPath, rModel)
+{
+}
+
+ColorsFragment::~ColorsFragment() {}
+
+ContextHandlerRef ColorsFragment::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
+{
+    switch (getCurrentElement())
+    {
+        case XML_ROOT_CONTEXT:
+            switch (nElement)
+            {
+                case CS_TOKEN(colorStyle):
+                    mrModel.mnId = rAttribs.getInteger(XML_id, -1);
+                    std::optional<OUString> sMethod = rAttribs.getString(XML_meth);
+                    if (sMethod)
+                    {
+                        if (*sMethod == "cycle")
+                        {
+                            mrModel.meMethod = ColorStyleMethod::CYCLE;
+                        }
+                        else if (*sMethod == "withinLinear")
+                        {
+                            mrModel.meMethod = ColorStyleMethod::WITHIN_LINEAR;
+                        }
+                        else if (*sMethod == "acrossLinear")
+                        {
+                            mrModel.meMethod = ColorStyleMethod::ACROSS_LINEAR;
+                        }
+                        else if (*sMethod == "withinLinearReversed")
+                        {
+                            mrModel.meMethod = ColorStyleMethod::WITHIN_LINEAR_REVERSED;
+                        }
+                        else if (*sMethod == "acrossLinearReversed")
+                        {
+                            mrModel.meMethod = ColorStyleMethod::ACROSS_LINEAR_REVERSED;
+                        }
+                        else
+                        {
+                            assert(false);
+                        }
+                    }
+                    return this;
+            }
+            break;
+
+        case CS_TOKEN(colorStyle):
+            switch (nElement)
+            {
+                case A_TOKEN(scrgbClr):
+                case A_TOKEN(srgbClr):
+                case A_TOKEN(hslClr):
+                case A_TOKEN(sysClr):
+                case A_TOKEN(schemeClr):
+                case A_TOKEN(prstClr):
+                    mrModel.maColors.emplace_back();
+                    mrModel.maComplexColors.emplace_back();
+                    return new ColorValueContext(*this, &mrModel.maColors.back(),
+                                                 &mrModel.maComplexColors.back());
+
+                case CS_TOKEN(variation):
+                    // "variation"s presumably apply to the preceding color entry
+                    return new VariationContext(*this, &mrModel.maColors.back(),
+                                                &mrModel.maComplexColors.back());
             }
             break;
     }
