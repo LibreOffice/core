@@ -117,6 +117,7 @@ fuzzer_core_libraries = \
     xo \
     xstor \
     chart2 \
+    chart2api \
     sm \
     oox \
     proxyfac \
