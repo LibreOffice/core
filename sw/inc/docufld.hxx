@@ -228,7 +228,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-/// Provides the expansion of of an SwFileNameField to a string.
+/// Provides the expansion of an SwFileNameField to a string.
 class SAL_DLLPUBLIC_RTTI SwFileNameFieldType final : public SwFieldType
 {
     SwDoc& m_rDoc;
