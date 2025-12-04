@@ -586,9 +586,9 @@ const OUString & ScDrawShell::GetSidebarContextName()
             const ScAddress aAddr = rViewData.GetCurPos();
             if (!rDocument.HasSparkline(aAddr))
             {
-                const ScDBData* pDbData = rDocument.GetDBAtCursor(
+                const ScDBData* pDbData = rDocument.GetTableDBAtCursor(
                     aAddr.Col(), aAddr.Row(), aAddr.Tab(), ScDBDataPortion::AREA);
-                if (pDbData && pDbData->GetTableStyleInfo())
+                if (pDbData)
                 {
                     eContext = vcl::EnumContext::Context::Table;
                 }

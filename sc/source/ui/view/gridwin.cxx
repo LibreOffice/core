@@ -2486,7 +2486,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pView->GetFunctionSet().SetAnchorFlag( false );    // #i5819# don't use AutoFill anchor flag for selection
         ScAddress aCurrentAddress = mrViewData.GetCurPos();
         ScDocument& rDocument = mrViewData.GetDocument();
-        if (ScDBData* pDBData = rDocument.GetDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(), aCurrentAddress.Tab(), ScDBDataPortion::AREA))
+        if (ScDBData* pDBData = rDocument.GetTableDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(), aCurrentAddress.Tab(), ScDBDataPortion::AREA))
         {
             SCTAB nTab = mrViewData.GetTabNumber();
             ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
@@ -7019,9 +7019,9 @@ void ScGridWindow::UpdateDatabaseOverlay()
     ScAddress aCurrentAddress = mrViewData.GetCurPos();
     std::vector<basegfx::B2DRange> aRanges;
     ScRange aCurrRange;
-    ScDBData* pDBData = rDocument.GetDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(),
-                                                aCurrentAddress.Tab(), ScDBDataPortion::AREA);
-    if (pDBData && pDBData->GetTableStyleInfo())
+    const ScDBData* pDBData = rDocument.GetTableDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(),
+        aCurrentAddress.Tab(), ScDBDataPortion::AREA);
+    if (pDBData)
     {
         pDBData->GetArea(aCurrRange);
         Point aStart = mrViewData.GetScrPos(aCurrRange.aStart.Col(),

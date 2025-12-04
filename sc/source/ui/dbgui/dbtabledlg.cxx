@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(ScDbTableDlg, OkBtnHdl, weld::Button&, void)
             aTmpRange.aEnd.IncRow();
         theCurArea = aTmpRange;
 
-        std::vector<const ScDBData*> aDBData = rDoc.GetAllDBsInArea(
+        std::vector<const ScDBData*> aDBData = rDoc.GetAllNamedDBsInArea(
             theCurArea.aStart.Col(), theCurArea.aStart.Row(), theCurArea.aEnd.Col(),
             theCurArea.aEnd.Row(), theCurArea.aStart.Tab());
 

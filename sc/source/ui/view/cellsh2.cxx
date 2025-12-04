@@ -1420,14 +1420,12 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
                         if (!bSelected)
                         {
-                            const ScDBData* pDBData = rDoc.GetDBAtCursor(
-                                nStartCol, nStartRow, nStartTab, ScDBDataPortion::AREA);
-                            if (pDBData && pDBData->GetTableStyleInfo())
+                            if (rDoc.GetTableDBAtCursor(nStartCol, nStartRow, nStartTab, ScDBDataPortion::AREA))
                                 bDisable = true;
                         }
                         else
                         {
-                            std::vector<const ScDBData*> aDBData = rDoc.GetAllDBsInArea(
+                            std::vector<const ScDBData*> aDBData = rDoc.GetAllNamedDBsInArea(
                                 nStartCol, nStartRow, nEndCol, nEndRow, nStartTab);
                             for (const ScDBData* pDBData : aDBData)
                             {
