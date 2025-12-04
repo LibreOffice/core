@@ -795,13 +795,10 @@ const SfxPoolItem* ScDocument::GetEffItem(
 
 const SfxItemSet* ScDocument::GetTableFormatSet(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
-    const ScDBData* pDBData = GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
-    if (pDBData)
+    const ScDBData* pDBData = GetTableDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+    if (pDBData && mpTableStyles)
     {
         const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
-        if (!pTableStyleInfo)
-            return nullptr;
-
         const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleID);
         if (!pTableStyle)
             return nullptr;

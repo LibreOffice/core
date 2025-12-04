@@ -411,7 +411,8 @@ void ScDocument::FillInfo(
         pCondFormList->startRendering();
 
     ScRange aTargetRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
-    std::vector<const ScDBData*> aDBData = pDBCollection->GetAllDBsInArea(nCol1, nRow1, nCol2, nRow2, nTab);
+    std::vector<const ScDBData*> aDBData
+        = pDBCollection->GetAllNamedDBsInArea(nCol1, nRow1, nCol2, nRow2, nTab);
     for (const ScDBData* pDBData : aDBData)
     {
         const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();

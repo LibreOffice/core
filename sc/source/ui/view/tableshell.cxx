@@ -50,12 +50,12 @@ ScTableShell::ScTableShell(ScTabViewShell* pViewShell)
 
 ScTableShell::~ScTableShell() = default;
 
-const ScDBData* ScTableShell::GetDBDataAtCursor()
+const ScDBData* ScTableShell::GetTableDBDataAtCursor()
 {
     ScViewData& rViewData = m_pViewShell->GetViewData();
     const ScAddress aAddr = rViewData.GetCurPos();
-    return rViewData.GetDocument().GetDBAtCursor(aAddr.Col(), aAddr.Row(), aAddr.Tab(),
-                                                 ScDBDataPortion::AREA);
+    return rViewData.GetDocument().GetTableDBAtCursor(aAddr.Col(), aAddr.Row(), aAddr.Tab(),
+                                                      ScDBDataPortion::AREA);
 }
 
 void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
@@ -76,8 +76,7 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
             {
                 const ScDatabaseSettingItem* pDBItem
                     = static_cast<const ScDatabaseSettingItem*>(pItem);
-                const ScDBData* pDBData = GetDBDataAtCursor();
-                if (pDBData && pDBData->GetTableStyleInfo())
+                if (const ScDBData* pDBData = GetTableDBDataAtCursor())
                 {
                     ScDBData aNewDBData(*pDBData);
                     aNewDBData.SetAutoFilter(pDBItem->HasShowFilters());
@@ -148,23 +147,13 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
         {
             case SCITEM_DATABASE_SETTING:
             {
-                const ScDBData* pDBData = GetDBDataAtCursor();
-                if (pDBData)
+                if (const ScDBData* pDBData = GetTableDBDataAtCursor())
                 {
                     const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
-                    if (pParam)
-                    {
-                        rSet.Put(ScDatabaseSettingItem(
-                            pDBData->HasHeader(), pDBData->HasTotals(), pParam->mbFirstColumn,
-                            pParam->mbLastColumn, pParam->mbRowStripes, pParam->mbColumnStripes,
-                            pDBData->HasAutoFilter(), pParam->maStyleID));
-                    }
-                    else
-                    {
-                        rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pDBData->HasTotals(),
-                                                       false, false, false, false,
-                                                       pDBData->HasAutoFilter(), u""_ustr));
-                    }
+                    rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pDBData->HasTotals(),
+                                                   pParam->mbFirstColumn, pParam->mbLastColumn,
+                                                   pParam->mbRowStripes, pParam->mbColumnStripes,
+                                                   pDBData->HasAutoFilter(), pParam->maStyleID));
                 }
             }
             break;

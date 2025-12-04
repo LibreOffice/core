@@ -1806,6 +1806,28 @@ OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
     return sNewName;
 }
 
+class FindTableByCursor
+{
+    SCCOL mnCol;
+    SCROW mnRow;
+    SCTAB mnTab;
+    ScDBDataPortion mePortion;
+
+public:
+    FindTableByCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion)
+        : mnCol(nCol)
+        , mnRow(nRow)
+        , mnTab(nTab)
+        , mePortion(ePortion)
+    {
+    }
+
+    bool operator()(std::unique_ptr<ScDBData> const& p)
+    {
+        return p->IsDBAtCursor(mnCol, mnRow, mnTab, mePortion) && p->GetTableStyleInfo();
+    }
+};
+
 class FindByCursor
 {
     SCCOL mnCol;
@@ -2128,6 +2150,30 @@ ScDBCollection::ScDBCollection(ScDocument& rDocument) :
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     rDoc(r.rDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs, *this), maAnonDBs(r.maAnonDBs) {}
 
+const ScDBData* ScDBCollection::GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                             ScDBDataPortion ePortion) const
+{
+    // only search the global named db ranges since Table names can only be there.
+    NamedDBs::DBsType::iterator itr = find_if(maNamedDBs.begin(), maNamedDBs.end(),
+                                              FindTableByCursor(nCol, nRow, nTab, ePortion));
+    if (itr != maNamedDBs.end())
+        return itr->get();
+
+    return nullptr;
+}
+
+ScDBData* ScDBCollection::GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                             ScDBDataPortion ePortion)
+{
+    // only search the global named db ranges since Table names can only be there.
+    NamedDBs::DBsType::iterator itr = find_if(maNamedDBs.begin(), maNamedDBs.end(),
+                                              FindTableByCursor(nCol, nRow, nTab, ePortion));
+    if (itr != maNamedDBs.end())
+        return itr->get();
+
+    return nullptr;
+}
+
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
     // First, search the global named db ranges.
@@ -2245,7 +2291,7 @@ bool intersectsRange(const ScDBData* pDBData, ScRange& rRange)
 
 }
 
-std::vector<const ScDBData*> ScDBCollection::GetAllDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const
+std::vector<const ScDBData*> ScDBCollection::GetAllNamedDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const
 {
     ScRange aTargetRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     std::vector<const ScDBData*> aDBData;
@@ -2258,11 +2304,6 @@ std::vector<const ScDBData*> ScDBCollection::GetAllDBsInArea(SCCOL nCol1, SCROW 
         {
             aDBData.emplace_back(rxNamedDB.get());
         }
-    }
-    const ScDBData* pAnonDBData = rDoc.GetAnonymousDBData(nTab);
-    if (pAnonDBData && intersectsRange(pAnonDBData, aTargetRange))
-    {
-        aDBData.emplace_back(pAnonDBData);
     }
     return aDBData;
 }
