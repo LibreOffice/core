@@ -3632,7 +3632,9 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (nLeftMargin > nMaxMarginVal)
         nLeftMargin = 0;
 
-    if (nParaLeftMargin) // For Paragraph
+    bool bIsListStyle = (nElement >= XML_lvl1pPr && nElement <= XML_lvl9pPr);
+
+    if (nParaLeftMargin || bIsListStyle) // For Paragraph or List-Style elements
         mpFS->startElementNS( XML_a, nElement,
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
