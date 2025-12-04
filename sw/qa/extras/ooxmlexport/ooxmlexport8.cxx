@@ -725,9 +725,6 @@ CPPUNIT_TEST_FIXTURE(Test, testN779642)
     createSwDoc("n779642.docx");
     verify();
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify();
 }
@@ -872,9 +869,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59273, "fdo59273.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testConditionalstylesTablelook, "conditionalstyles-tbllook.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 6
-    skipValidation();
-
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
