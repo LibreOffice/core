@@ -1005,6 +1005,42 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testXltxExport)
                 u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf165180_date1904)
+{
+    // given a hand-modified document (which added dateCompatibility="0")
+    // with an earliest date of 1904 (Excel-for-mac null-date)
+
+    // ensure en-US locale for expected date formatting
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString(u"en-US"_ustr);
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    createScDoc("xlsx/tdf165180_date1904.xlsx");
+    saveAndReload(TestFilter::XLSX_2007);
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"Tuesday, March 1, 1904"_ustr, pDoc->GetString(0, 0, 0));
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    // dateCompatibility is ignored: make sure that date1904=true is round-tripped
+    assertXPath(pWorkbook, "/x:workbook/x:workbookPr", "date1904", u"true");
+
+    createScDoc("xlsx/tdf165180_date1904.xlsx");
+    saveAndReload(TestFilter::XLSX);
+
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"Tuesday, March 1, 1904"_ustr, pDoc->GetString(0, 0, 0));
+
+    pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    // dateCompatibility is ignored: make sure that date1904=true is round-tripped
+    assertXPath(pWorkbook, "/x:workbook/x:workbookPr", "date1904", u"true");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testPivotCacheAfterExportXLSX)
 {
     createScDoc("ods/numgroup_example.ods");

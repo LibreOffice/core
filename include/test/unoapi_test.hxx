@@ -67,6 +67,7 @@ enum class TestFilter
     XLSM,
     XLST,
     XLSX,
+    XLSX_2007,
 };
 
 const std::unordered_map<TestFilter, OUString> TestFilterNames{
@@ -111,6 +112,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::XLSM, u"Calc MS Excel 2007 VBA XML"_ustr },
     { TestFilter::XLST, u"Calc MS Excel 2007 XML Template"_ustr },
     { TestFilter::XLSX, u"Calc Office Open XML"_ustr },
+    { TestFilter::XLSX_2007, u"Calc MS Excel 2007 XML"_ustr },
 };
 
 // basic uno api test class
