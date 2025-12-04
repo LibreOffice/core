@@ -527,7 +527,6 @@ ScCheckListMember::ScCheckListMember()
     : mnValue(0.0)
     , mbVisible(true)
     , mbMarked(false)
-    , mbCheck(true)
     , mbHiddenByOtherFilter(false)
     , mbDate(false)
     , mbLeaf(false)
@@ -855,14 +854,10 @@ namespace
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
 {
-    // assume all members are checked
-    for (auto& aMember : maMembers)
-        aMember.mbCheck = true;
-
     bool bLockCheckedEntries = mxChkLockChecked->get_active();
 
     // go over the members visible in the popup, and remember which one is
-    // checked, and which one is not
+    // checked, and which one is not by setting mbMarked to true;
     mpChecks->all_foreach([this](weld::TreeIter& rEntry){
         if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
         {
@@ -876,17 +871,6 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
                      * name in the range, they all show up as a single
                      * entry in the autofilter, so we can break
                      */
-                    break;
-                }
-            }
-        }
-        else
-        {
-            for (auto& aMember : maMembers)
-            {
-                if (aMember.maName == mpChecks->get_text(rEntry))
-                {
-                    aMember.mbCheck = false;
                     break;
                 }
             }
@@ -913,7 +897,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
         // insert the members, remember whether checked or unchecked.
         mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &bLockCheckedEntries](weld::TreeIter& rIter, int i) {
             size_t nIndex = aShownIndexes[i];
-            insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbCheck, bLockCheckedEntries);
+            insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbMarked, bLockCheckedEntries);
         }, nullptr, &aFixedWidths);
     }
 
@@ -1262,7 +1246,6 @@ void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal,
     aMember.mbValue = bValue;
     aMember.mbVisible = bVisible;
     aMember.mbMarked = false;
-    aMember.mbCheck = true;
     aMember.mbHiddenByOtherFilter = bHiddenByOtherFilter;
     aMember.mxParent.reset();
     maMembers.emplace_back(std::move(aMember));

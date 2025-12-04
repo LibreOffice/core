@@ -37,7 +37,6 @@ struct ScCheckListMember
     double                   mnValue; // number value of filter condition
     bool                     mbVisible;
     bool                     mbMarked;
-    bool                     mbCheck;
     bool                     mbHiddenByOtherFilter;
     bool                     mbDate;
     bool                     mbLeaf;
