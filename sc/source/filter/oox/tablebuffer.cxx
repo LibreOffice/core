@@ -96,7 +96,7 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 void Table::importTableStyleInfo(const AttributeList& rAttribs)
 {
     TableStyleInfo aInfo;
-    aInfo.maStyleName = rAttribs.getString(XML_name, OUString());
+    aInfo.maStyleName = rAttribs.getString(XML_name, u"none"_ustr);
     aInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, true);
     aInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, true);
     aInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, true);
