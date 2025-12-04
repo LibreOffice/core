@@ -2287,6 +2287,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, tdf158512)
                          pPage->GetObj(0)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND).GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf169524)
+{
+    createSdImpressDoc("pptx/tdf169524.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> const xParagraph(getParagraphFromShape(8, xShape),
+                                                         uno::UNO_QUERY_THROW);
+    sal_Int32 nLeftMargin;
+    xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nLeftMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
