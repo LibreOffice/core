@@ -494,6 +494,9 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     }
     if ( noParaLeftMargin )
         aPropSet.setProperty( PROP_ParaLeftMargin, *noParaLeftMargin);
+    else // Use 0 as default left margin
+        aPropSet.setProperty<sal_Int32>(PROP_ParaLeftMargin, 0);
+
     if ( noFirstLineIndentation )
     {
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
