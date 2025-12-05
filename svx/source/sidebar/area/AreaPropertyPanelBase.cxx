@@ -297,7 +297,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             if (pSh && pSh->GetItem(SID_COLOR_TABLE))
             {
                 basegfx::BGradient aGradient(createColorStops());
-                aGradient.SetAngle(Degree10(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10));
+                aGradient.SetAngle(Degree10((mxMTRAngle->get_value(FieldUnit::DEGREE) % 360) * 10));
                 aGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(mxGradientStyle->get_active()));
 
                 const XFillGradientItem aXFillGradientItem(mxLbFillAttr->get_active_text(), aGradient);
