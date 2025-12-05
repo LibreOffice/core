@@ -2576,28 +2576,26 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                        bCallDelete,
                                        nMoveIDToDelete,
                                        deletedMoveIDs };
-        switch( pNewRedl->GetType() )
+        switch (pNewRedl->GetType())
         {
-        case RedlineType::Insert:
-        {
-            PreAppendInsertRedline(aContext);
-            break;
-        }
+            case RedlineType::Insert:
+                PreAppendInsertRedline(aContext);
+                break;
 
-        case RedlineType::Delete:
-            PreAppendDeleteRedline(aContext);
-            break;
+            case RedlineType::Delete:
+                PreAppendDeleteRedline(aContext);
+                break;
 
-        case RedlineType::Format:
-            PreAppendFormatRedline(aContext);
-            break;
+            case RedlineType::Format:
+                PreAppendFormatRedline(aContext);
+                break;
 
-        case RedlineType::FmtColl:
-            // How should we behave here?
-            // insert as is
-            break;
-        default:
-            break;
+            case RedlineType::FmtColl:
+                // How should we behave here?
+                // insert as is
+                break;
+            default:
+                break;
         }
     }
 
