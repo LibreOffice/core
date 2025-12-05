@@ -2275,7 +2275,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         // shape properties
         if( xPropSet.is() )
         {
-            exportShapeProps( xPropSet, bIsChartex ? XML_cx : XML_c );
+            exportShapeProps(xPropSet, XML_cx);
         }
 
         pFS->startElement(FSNS(XML_cx, XML_txPr));
