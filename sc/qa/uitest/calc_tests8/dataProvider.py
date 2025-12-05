@@ -157,4 +157,33 @@ class DataProvider(UITestCase):
                 for i in range(1, 101):
                     self.assertEqual(str(i), get_cell_by_position(doc2, 0, 0, i).getString())
 
+    def test_insert_correct_sheet(self):
+
+        with self.ui_test.load_file(get_url_for_data_file('tdf169817.ods')) as document:
+
+            with self.ui_test.execute_dialog_through_command(".uno:DataProvider") as xDialog:
+                xDB = xDialog.getChild("select_db_range")
+                xURL = xDialog.getChild("ed_url")
+                xProvider = xDialog.getChild("provider_lst")
+                select_by_text(xDB, "Second")
+                self.assertEqual("Second", get_state_as_dict(xDB)['DisplayText'])
+
+                xBrowse = xDialog.getChild("browse")
+                with self.ui_test.execute_blocking_action(
+                        xBrowse.executeAction, args=('CLICK', ()), close_button="") as dialog:
+                    xFileName = dialog.getChild("file_name")
+                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf169817.csv")}))
+                    xOpen = dialog.getChild("open")
+                    xOpen.executeAction("CLICK", tuple())
+
+                self.assertEqual(get_url_for_data_file("tdf169817.csv"), get_state_as_dict(xURL)['Text'])
+                self.assertEqual("CSV", get_state_as_dict(xProvider)['DisplayText'])
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'ID' != ''
+            self.assertEqual("ID", get_cell_by_position(document, 1, 7, 4).getString())
+            self.assertEqual("Region", get_cell_by_position(document, 1, 8, 4).getString())
+            self.assertEqual("Name", get_cell_by_position(document, 1, 9, 4).getString())
+            self.assertEqual("Sales", get_cell_by_position(document, 1, 10, 4).getString())
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
