@@ -86,15 +86,23 @@ struct ScDPServiceDesc
 namespace sc
 {
 
+/** Stores the style information for a pivot table */
 struct PivotTableStyleInfo
 {
+    // Style name, which is used to determine how the pivot table is styles
     OUString maName;
+
+    // Shold headers be styled
     bool mbShowRowHeaders = false;
     bool mbShowColHeaders = false;
+
+    // Should use stripes / bands
     bool mbShowRowStripes = false;
     bool mbShowColStripes = false;
+
     bool mbShowLastColumn = false;
 
+    // If no name is set, the style is not used
     bool isSet() const
     {
         return !maName.isEmpty();

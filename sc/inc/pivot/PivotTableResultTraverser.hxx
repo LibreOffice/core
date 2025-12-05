@@ -24,6 +24,10 @@ SC_DLLPUBLIC css::uno::Any
 getMemberForLevel(css::uno::Reference<css::uno::XInterface> const& xLevel, OUString const& rName);
 }
 
+/** Visitor interface for traversing the pivot table result tree structure.
+ *
+ * Defines the functions that are triggered with data, when the tree is traversed.
+ **/
 class SC_DLLPUBLIC PivotTableResultVisitor
 {
 public:
@@ -53,6 +57,7 @@ public:
         = 0;
 };
 
+/// Traverses the pivot table result tree and triggers visitiors functions with data
 class SC_DLLPUBLIC PivotTableResultTraverser
 {
 private:
