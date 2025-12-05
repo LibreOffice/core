@@ -1404,11 +1404,11 @@ typedef const SwRectFnCollection* SwRectFn;
 extern const SwRectFn fnRectHori, fnRectVert, fnRectVertL2R, fnRectVertL2RB2T;
 class SwRectFnSet {
 public:
-    explicit SwRectFnSet(const SwFrame* pFrame) { Refresh(pFrame); }
+    explicit SwRectFnSet(const SwFrame& rFrame) { Refresh(rFrame); }
 
     explicit SwRectFnSet(bool vert, bool vL2R, bool vL2RB2T) { Refresh(vert, vL2R, vL2RB2T); }
 
-    void Refresh(const SwFrame* p) { Refresh(p->IsVertical(), p->IsVertLR(), p->IsVertLRBT()); }
+    void Refresh(const SwFrame& rFrame) { Refresh(rFrame.IsVertical(), rFrame.IsVertLR(), rFrame.IsVertLRBT()); }
 
     void Refresh(bool vert, bool vL2R, bool vL2RB2T)
     {

@@ -271,14 +271,14 @@ static SwRect lcl_CalculateRepaintRect(
             bSameFrame = false;
             SwRect aStFrame( pStartFrame->GetPaintArea() );
             {
-                SwRectFnSet aRectFnSet(pStartFrame);
+                SwRectFnSet aRectFnSet(*pStartFrame);
                 aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(aStFrame) );
                 aRectFnSet.SetRight( aTmp, aRectFnSet.GetRight(aStFrame) );
                 aRectFnSet.SetBottom( aTmp, aRectFnSet.GetBottom(aStFrame) );
             }
             aStFrame = pEndFrame->GetPaintArea();
             {
-                SwRectFnSet aRectFnSet(pEndFrame);
+                SwRectFnSet aRectFnSet(*pEndFrame);
                 aRectFnSet.SetTop( aRect, aRectFnSet.GetTop(aStFrame) );
                 aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(aStFrame) );
                 aRectFnSet.SetRight( aRect, aRectFnSet.GetRight(aStFrame) );
@@ -295,7 +295,7 @@ static SwRect lcl_CalculateRepaintRect(
     }
     if( bSameFrame )
     {
-        SwRectFnSet aRectFnSet(pStartFrame);
+        SwRectFnSet aRectFnSet(*pStartFrame);
         if( aRectFnSet.GetTop(aTmp) == aRectFnSet.GetTop(aRect) )
             aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(aTmp) );
         else

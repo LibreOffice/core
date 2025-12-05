@@ -263,7 +263,7 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
 
     // check positioning and alignment for invalidation of position
     {
-        SwRectFnSet aRectFnSet(&_rAnchorCharFrame);
+        SwRectFnSet aRectFnSet(_rAnchorCharFrame);
         // determine positioning and alignment
         const SwFrameFormat* pObjFormat = GetFrameFormat();
         SwFormatVertOrient aVert( pObjFormat->GetVertOrient() );

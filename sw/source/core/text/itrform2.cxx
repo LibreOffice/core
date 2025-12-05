@@ -599,7 +599,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             // its size so that its ends on the grid
             const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
             const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
-            SwRectFnSet aRectFnSet(pPageFrame);
+            SwRectFnSet aRectFnSet(*pPageFrame);
 
             const tools::Long nGridOrigin = pBody ?
                                     aRectFnSet.GetPrtLeft(*pBody) :
@@ -2458,7 +2458,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         if( IsRegisterOn() )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
-            SwRectFnSet aRectFnSet(m_pFrame);
+            SwRectFnSet aRectFnSet(*m_pFrame);
             if ( aRectFnSet.IsVert() )
                 nTmpY = m_pFrame->SwitchHorizontalToVertical( nTmpY );
             nTmpY = aRectFnSet.YDiff( nTmpY, RegStart() );
@@ -3137,7 +3137,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
     const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
 
-    SwRectFnSet aRectFnSet(pPageFrame);
+    SwRectFnSet aRectFnSet(*pPageFrame);
 
     const tools::Long nGridOrigin = pBody ?
                             aRectFnSet.GetPrtLeft(*pBody) :

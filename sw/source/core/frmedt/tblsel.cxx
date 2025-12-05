@@ -490,7 +490,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             SwSelUnion *pUnion = &rSelUnion;
             const SwTabFrame *pTable = pUnion->GetTable();
 
-            SwRectFnSet aRectFnSet(pTable);
+            SwRectFnSet aRectFnSet(*pTable);
             bool bRTL = pTable->IsRightToLeft();
 
             if( !pTable->isFrameAreaDefinitionValid() && nLoopMax  )
@@ -964,7 +964,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     tools::Long nWidth;
     SwTableBox* pLastBox = nullptr;
 
-    SwRectFnSet aRectFnSet(pStart->GetUpper());
+    SwRectFnSet aRectFnSet(*pStart->GetUpper());
 
     for ( auto & rSelUnion : aUnions )
     {
@@ -1622,7 +1622,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
     const SwTabFrame *pOrg = rpStart->FindTabFrame();
     const SwTabFrame *pTab = pOrg;
 
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
 
     bool bRTL = pTab->IsRightToLeft();
     const tools::Long nTmpWish = pOrg->GetFormat()->GetFrameSize().GetWidth();
@@ -1794,7 +1794,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
     }
     else
     {
-        SwRectFnSet aRectFnSet(pTable);
+        SwRectFnSet aRectFnSet(*pTable);
         tools::Long nSttTop = aRectFnSet.GetTop(pStart->getFrameArea());
         tools::Long nEndTop = aRectFnSet.GetTop(pEnd->getFrameArea());
         if( nSttTop == nEndTop )
@@ -1833,7 +1833,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
     const tools::Long nWish = std::max( tools::Long(1), pTable->GetFormat()->GetFrameSize().GetWidth() );
     while ( pTable )
     {
-        SwRectFnSet aRectFnSet(pTable);
+        SwRectFnSet aRectFnSet(*pTable);
         const tools::Long nOfst = aRectFnSet.GetPrtLeft(*pTable);
         const tools::Long nPrtWidth = aRectFnSet.GetWidth(pTable->getFramePrintArea());
         tools::Long nSt1 = ::lcl_CalcWish( pStart, nWish, nPrtWidth ) + nOfst;
@@ -1995,7 +1995,7 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
 
-    SwRectFnSet aRectFnSet(pStart->GetUpper());
+    SwRectFnSet aRectFnSet(*pStart->GetUpper());
 
     // First, compute tables and rectangles
     SwSelUnions aUnions;

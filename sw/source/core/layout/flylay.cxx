@@ -180,7 +180,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() || m_bFormatHeightOnly || !m_bValidContentPos )
     {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         const SwFormatFrameSize *pSz;
         {   // Additional scope, so aAccess will be destroyed before the check!
 
@@ -291,7 +291,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     Unlock();
 
 #if OSL_DEBUG_LEVEL > 0
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     OSL_ENSURE( m_bHeightClipped || ( aRectFnSet.GetHeight(getFrameArea()) > 0 &&
             aRectFnSet.GetHeight(getFramePrintArea()) > 0),
             "SwFlyFreeFrame::Format(), flipping Fly." );
@@ -1242,7 +1242,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             }
 
             rRect = pClip->getFrameArea();
-            SwRectFnSet aRectFnSet(pClip);
+            SwRectFnSet aRectFnSet(*pClip);
 
             // vertical clipping: Top and Bottom, also to PrtArea if necessary
             if( rV.GetVertOrient() != text::VertOrientation::NONE &&
@@ -1332,7 +1332,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 }
                 const SwLayoutFrame* pHoriClipFrame =
                         pFly->GetAnchorFrame()->FindPageFrame()->GetUpper();
-                SwRectFnSet aRectFnSet(pFly->GetAnchorFrame());
+                SwRectFnSet aRectFnSet(*pFly->GetAnchorFrame());
                 aRectFnSet.SetLeft( rRect, aRectFnSet.GetLeft(pHoriClipFrame->getFrameArea()) );
                 aRectFnSet.SetRight(rRect, aRectFnSet.GetRight(pHoriClipFrame->getFrameArea()));
             }
@@ -1341,7 +1341,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 // #i26945#
                 const SwFrame *pClip =
                         const_cast<SwFlyFrame*>(pFly)->GetAnchorFrameContainingAnchPos();
-                SwRectFnSet aRectFnSet(pClip);
+                SwRectFnSet aRectFnSet(*pClip);
                 const SwLayoutFrame *pUp = pClip->GetUpper();
                 const SwFrame *pCell = pUp->IsCellFrame() ? pUp : nullptr;
                 const SwFrameType nType = bMove
@@ -1434,7 +1434,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
         else
         {
             const SwFrame *pUp = pFly->GetAnchorFrame()->GetUpper();
-            SwRectFnSet aRectFnSet(pFly->GetAnchorFrame());
+            SwRectFnSet aRectFnSet(*pFly->GetAnchorFrame());
             bool bOnlyCellFrame = pUp->IsCellFrame();
             while( pUp->IsColumnFrame() || pUp->IsSctFrame() || pUp->IsColBodyFrame())
                 pUp = pUp->GetUpper();
@@ -1528,7 +1528,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 const SwFrame* pUp = pAnchorFrame->GetUpper();
                 rRect = pUp->getFramePrintArea();
                 rRect += pUp->getFrameArea().Pos();
-                SwRectFnSet aRectFnSet(pAnchorFrame);
+                SwRectFnSet aRectFnSet(*pAnchorFrame);
                 tools::Long nHeight = (9 * aRectFnSet.GetHeight(rRect)) / 10;
                 tools::Long nTop;
                 const SvxULSpaceItem& rUL = pFormat->GetULSpace();

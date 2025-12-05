@@ -87,7 +87,7 @@ namespace
 /// Gets the bottom position which is a deadline for a split fly.
 SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
 {
-    SwRectFnSet aRectFnSet(pFly);
+    SwRectFnSet aRectFnSet(*pFly);
 
     const SwPageFrame* pPage = rAnchor.FindPageFrame();
     if (!pPage)
@@ -533,7 +533,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow )
     {
         // To get a text flow we need to invalidate
         SwFrame *pInva = rMaster.FindLastLower();
-        SwRectFnSet aRectFnSet(&rMaster);
+        SwRectFnSet aRectFnSet(rMaster);
         const tools::Long nBottom = aRectFnSet.GetPrtBottom(rMaster);
         while ( pInva )
         {
@@ -1519,7 +1519,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         OSL_ENSURE( pAttrs->GetSize().Height() != 0 || rFrameSz.GetHeightPercent(), "FrameAttr height is 0." );
         OSL_ENSURE( pAttrs->GetSize().Width()  != 0 || rFrameSz.GetWidthPercent(), "FrameAttr width is 0." );
 
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         if( !HasFixSize() )
         {
             tools::Long nMinHeight = 0;
@@ -2063,7 +2063,7 @@ void SwFlyFrame::MakeObjPos()
     SetCurrRelPos( aObjPositioning.GetRelPos() );
 
     {
-        SwRectFnSet aRectFnSet(GetAnchorFrame());
+        SwRectFnSet aRectFnSet(*GetAnchorFrame());
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Pos( aObjPositioning.GetRelPos() );
         aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->getFrameArea());
@@ -2080,7 +2080,7 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
         setFramePrintAreaValid(true);
 
         // consider vertical layout
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         SwTwips nLeftLine = rAttrs.CalcLeftLine();
 
         // The fly frame may be partially outside the page, check for this case.
@@ -2122,7 +2122,7 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
     const SwTwips nUL = rAttrs.CalcTopLine()  + rAttrs.CalcBottomLine();
     Size aRelSize( CalcRel( GetFormat()->GetFrameSize() ) );
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     tools::Long nMinHeight = 0;
     if( IsMinHeight() )
         nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
@@ -2297,7 +2297,7 @@ SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
         return 0;
     }
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
     if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
         nDist = LONG_MAX - nSize;
@@ -2440,7 +2440,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
     SwFrame* pLower = Lower();
     if( pLower && !IsColLocked() && !HasFixSize() )
     {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         SwTwips nHeight = aRectFnSet.GetHeight(getFrameArea());
         if ( nDist > nHeight )
             nDist = nHeight;
@@ -2576,7 +2576,7 @@ bool SwFlyFrame::IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize)
         Size aRelSize( CalcRel( rFrameSz ) );
 
         tools::Long nMinHeight = 0;
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
         SwTwips nRemaining = CalcContentHeight(pAttrs, nMinHeight, nUL);
         nMinFrameHeight = nRemaining + nUL;
@@ -3440,7 +3440,7 @@ void SwFlyFrame::Calc(vcl::RenderContext* pRenderContext) const
 
 SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL)
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nHeight = 0;
     if ( Lower() )
     {

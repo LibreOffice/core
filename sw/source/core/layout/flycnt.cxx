@@ -408,7 +408,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // the anchor frame, thus it has to move forward.
     bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
     do {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
         SwFlyFreeFrame::MakeAll(pRenderContext);
 
@@ -544,7 +544,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
         if ( pCellFrame )
         {
-            SwRectFnSet aRectFnSet(pCellFrame);
+            SwRectFnSet aRectFnSet(*pCellFrame);
             if ( aRectFnSet.GetTop(pCellFrame->getFrameArea()) == 0 &&
                  aRectFnSet.GetHeight(pCellFrame->getFrameArea()) == 0 )
             {

@@ -211,7 +211,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
                               const SwRect &rOldRect,
                               tools::Long nOldBottom )
 {
-    SwRectFnSet aRectFnSet(pCnt);
+    SwRectFnSet aRectFnSet(*pCnt);
 
     if ( pCnt->IsCompletePaint() || !pCnt->IsTextFrame() )
     {
@@ -1458,7 +1458,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
          !pLay->GetNext() && pLay->IsRetoucheFrame() && pLay->IsRetouche() )
     {
         // vertical layout support
-        SwRectFnSet aRectFnSet(pLay);
+        SwRectFnSet aRectFnSet(*pLay);
         SwRect aRect( pLay->GetUpper()->GetPaintArea() );
         aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pLay) );
         if ( !m_pImp->GetShell().AddPaintRect( aRect ) )
@@ -1601,7 +1601,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     const SwPageFrame *pOldPage = pTab->FindPageFrame();
 
     // vertical layout support
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
 
     if ( !pTab->isFrameAreaDefinitionValid() || pTab->IsCompletePaint() || pTab->IsComplete() )
     {
@@ -2020,7 +2020,7 @@ void SwLayAction::FormatContent_( const SwContentFrame *pContent, const SwPageFr
 {
     // We probably only ended up here because the Content holds DrawObjects.
     const bool bDrawObjsOnly = pContent->isFrameAreaDefinitionValid() && !pContent->IsCompletePaint() && !pContent->IsRetouche();
-    SwRectFnSet aRectFnSet(pContent);
+    SwRectFnSet aRectFnSet(*pContent);
     if ( !bDrawObjsOnly && IsPaint() )
     {
         const SwRect aOldRect( pContent->UnionFrame() );

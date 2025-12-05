@@ -136,7 +136,7 @@ SwFrameNotify::~SwFrameNotify()
 
 void SwFrameNotify::ImplDestroy()
 {
-    SwRectFnSet aRectFnSet(mpFrame);
+    SwRectFnSet aRectFnSet(*mpFrame);
     const bool bAbsP = aRectFnSet.PosDiff(maFrame, mpFrame->getFrameArea());
     const bool bChgWidth =
             aRectFnSet.GetWidth(maFrame) != aRectFnSet.GetWidth(mpFrame->getFrameArea());
@@ -492,7 +492,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
 void SwLayNotify::ImplDestroy()
 {
     SwLayoutFrame *pLay = static_cast<SwLayoutFrame*>(mpFrame);
-    SwRectFnSet aRectFnSet(pLay);
+    SwRectFnSet aRectFnSet(*pLay);
     bool bNotify = false;
     if ( pLay->getFramePrintArea().SSize() != maPrt.SSize() )
     {
@@ -712,7 +712,7 @@ void SwFlyNotify::ImplDestroy()
 
     //Have the size or the position changed,
     //so should the view know this.
-    SwRectFnSet aRectFnSet(pFly);
+    SwRectFnSet aRectFnSet(*pFly);
     const bool bPosChgd = aRectFnSet.PosDiff( maFrame, pFly->getFrameArea() );
     const bool bFrameChgd = pFly->getFrameArea().SSize() != maFrame.SSize();
     const bool bPrtChgd = maPrt != pFly->getFramePrintArea();
@@ -829,7 +829,7 @@ void SwContentNotify::ImplDestroy()
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();
 
-    SwRectFnSet aRectFnSet(pCnt);
+    SwRectFnSet aRectFnSet(*pCnt);
     if ( pCnt->IsInTab() && ( aRectFnSet.PosDiff( pCnt->getFrameArea(), maFrame ) ||
                              pCnt->getFrameArea().SSize() != maFrame.SSize()))
     {
@@ -1486,7 +1486,7 @@ void RecreateStartTextFrames(SwTextNode & rNode)
 static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
-    SwRectFnSet aRectFnSet(&_rLayFrame);
+    SwRectFnSet aRectFnSet(_rLayFrame);
     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(_rNewFrame);
     aRectFnSet.SetPos( aFrm, aRectFnSet.GetPos(_rLayFrame.getFrameArea()) );
 
@@ -3053,7 +3053,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
 {
     assert(pSav && pParent && "no Save or Parent provided for RestoreContent.");
-    SwRectFnSet aRectFnSet(pParent);
+    SwRectFnSet aRectFnSet(*pParent);
 
     // If there are already FlowFrames below the new parent, so add the chain (starting with pSav)
     // after the last one. The parts are inserted and invalidated if needed.

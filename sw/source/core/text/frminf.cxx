@@ -106,7 +106,7 @@ SwTwips SwTextFrameInfo::GetLineStart() const
 // Calculates the character's position and returns the middle position
 SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) const
 {
-    SwRectFnSet aRectFnSet(m_pFrame);
+    SwRectFnSet aRectFnSet(*m_pFrame);
     SwFrameSwapper aSwapper( m_pFrame, true );
 
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );

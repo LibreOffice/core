@@ -94,8 +94,8 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
                     return false;
             }
         }
-        SwRectFnSet aRectFnSet(this);
-        SwRectFnSet fnRectX(pNewUpper);
+        SwRectFnSet aRectFnSet(*this);
+        SwRectFnSet fnRectX(*pNewUpper);
         if( std::abs( fnRectX.GetWidth(pNewUpper->getFramePrintArea()) -
                  aRectFnSet.GetWidth(GetUpper()->getFramePrintArea()) ) > 1 ) {
             // In this case, only a WouldFit_ with test move is possible
@@ -580,7 +580,7 @@ void SwFrame::MakePos()
 
     pPrv = ::sw::PrevSkipDead(this, false);
     const SwFrameType nMyType = GetType();
-    SwRectFnSet aRectFnSet((IsCellFrame() && GetUpper() ? GetUpper() : this));
+    SwRectFnSet aRectFnSet((IsCellFrame() && GetUpper() ? *GetUpper() : *this));
     if ( !bUseUpper && pPrv )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -1162,7 +1162,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
         return;
 
     setFramePrintAreaValid(true);
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nUpper = 0;
     if (IsTextFrame() && IsHiddenNow())
     {
@@ -1465,7 +1465,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
     }
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     SwFrame const* pMoveBwdPre(nullptr);
     bool isMoveBwdPreValid(false);
@@ -1487,7 +1487,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             SwFrame *pPre = GetIndPrev();
             if ( CheckMoveFwd( bMakePage, bKeep, bMovedBwd ) )
             {
-                aRectFnSet.Refresh(this);
+                aRectFnSet.Refresh(*this);
                 bMovedFwd = true;
                 if ( bMovedBwd )
                 {
@@ -1655,7 +1655,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
              ( !bFootnote || !GetUpper()->FindFootnoteFrame()->GetPrev() )
              && MoveBwd( bDummy ) )
         {
-            aRectFnSet.Refresh(this);
+            aRectFnSet.Refresh(*this);
             pMoveBwdPre = pTemp;
             isMoveBwdPreValid = bTemp;
             bMovedBwd = true;
@@ -1673,7 +1673,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 {
                     bMovedFwd = true;
                     bMoveable = IsMoveable();
-                    aRectFnSet.Refresh(this);
+                    aRectFnSet.Refresh(*this);
                 }
                 Point aOldPos = aRectFnSet.GetPos(getFrameArea());
                 MakePos();
@@ -1937,7 +1937,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if ( !bMovedFwd && !MoveFwd( bMakePage, false ) )
             bMakePage = false;
-        aRectFnSet.Refresh(this);
+        aRectFnSet.Refresh(*this);
         if (!bMovedFwd && bFootnote && GetIndPrev() != pPre)
         {   // SwFlowFrame::CutTree() could have formatted and deleted pPre
             auto const pPrevFootnoteFrame(static_cast<SwFootnoteFrame const*>(

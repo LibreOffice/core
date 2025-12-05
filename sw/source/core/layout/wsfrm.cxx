@@ -1384,7 +1384,7 @@ void SwContentFrame::Cut()
     }
     else
     {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
         if( nFrameHeight )
             pUp->Shrink( nFrameHeight );
@@ -1496,7 +1496,7 @@ void SwLayoutFrame::Cut()
     if ( GetNext() )
         GetNext()->InvalidatePos_();
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nShrink = aRectFnSet.GetHeight(getFrameArea());
 
     // Remove first, then shrink upper.
@@ -1589,7 +1589,7 @@ SwTwips SwFrame::Grow(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, boo
         }
     }
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
     if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
@@ -1630,7 +1630,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
                      pThisCell->GetLayoutRowSpan() < 1 )
                     return 0;
             }
-            SwRectFnSet aRectFnSet(this);
+            SwRectFnSet aRectFnSet(*this);
             SwTwips nReal = aRectFnSet.GetHeight(getFrameArea());
             ShrinkFrame( nDist, bTst, bInfo );
             nReal -= aRectFnSet.GetHeight(getFrameArea());
@@ -1840,7 +1840,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     SwTwips nReal = 0,
             nAdd  = 0;
     SwFrame *pFrame = nullptr;
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     if( IsBodyFrame() )
     {
@@ -2159,7 +2159,7 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 
 SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     if( nFrameHeight > 0 &&
@@ -2286,7 +2286,7 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
 
 SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
     OSL_ENSURE( nDist <= aRectFnSet.GetHeight(getFrameArea()),
             "nDist > than current size." );
@@ -2694,7 +2694,7 @@ SwTwips SwLayoutFrame::InnerHeight() const
     if (!pCnt)
         return 0;
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nRet = 0;
     if( pCnt->IsColumnFrame() || pCnt->IsCellFrame() )
     {
@@ -2744,7 +2744,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
         return 0;
     }
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     const SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     const SwTwips nFramePos = getFrameArea().Pos().X();
 
@@ -2965,7 +2965,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         return 0;
 
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     if ( nDist > nFrameHeight )
         nDist = nFrameHeight;
@@ -3203,7 +3203,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     const bool bHeightChgd = rOldSize.Height() != getFramePrintArea().Height();
     const bool bWidthChgd  = rOldSize.Width()  != getFramePrintArea().Width();
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     // This shortcut basically tries to handle only lower frames that
     // are affected by the size change. Otherwise much more lower frames
@@ -3929,7 +3929,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         tools::Long nMinimum = nMinHeight;
         tools::Long nMaximum;
         bool bNoBalance = false;
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         if( IsSctFrame() )
         {
             nMaximum = aRectFnSet.GetHeight(getFrameArea()) - nBorder +

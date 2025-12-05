@@ -176,7 +176,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
     // get text frame the object is anchored at
     const SwTextFrame& rAnchorTextFrame = GetAnchorTextFrame();
-    SwRectFnSet aRectFnSet(&rAnchorTextFrame);
+    SwRectFnSet aRectFnSet(rAnchorTextFrame);
 
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
 
@@ -265,7 +265,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             }
         }
     }
-    aRectFnSet.Refresh(pOrientFrame);
+    aRectFnSet.Refresh(*pOrientFrame);
 
     // Microsoft allows WrapThrough shapes to be placed outside of the cell despite layoutInCell
     // (Re-use existing compat flag to identify MSO formats. The name also matches this purpose.)
@@ -686,7 +686,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             }
             else
             {
-                aRectFnSet.Refresh(pAnchorFrameForVertPos);
+                aRectFnSet.Refresh(*pAnchorFrameForVertPos);
                 SwTwips nAvail =
                     aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*pUpperOfOrientFrame),
                                         nTopOfAnch );
@@ -767,7 +767,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                 {
                                     pUpperOfOrientFrame = pTmp;
                                     bMoveable = rAnchorTextFrame.IsMoveable( pUpperOfOrientFrame );
-                                    aRectFnSet.Refresh(pUpperOfOrientFrame);
+                                    aRectFnSet.Refresh(*pUpperOfOrientFrame);
                                     nAvail = aRectFnSet.GetHeight(pUpperOfOrientFrame->getFramePrintArea());
                                 }
                                 else
@@ -1015,7 +1015,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     }
                     if ( pNextLay )
                     {
-                        SwRectFnSet fnRectX(pNextLay);
+                        SwRectFnSet fnRectX(*pNextLay);
                         if ( !bInSct ||
                              ( pUpperOfOrientFrame->FindSctFrame()->IsAnFollow( pNextLay->FindSctFrame() ) &&
                                fnRectX.GetHeight(pNextLay->getFramePrintArea()) ) )
@@ -1028,7 +1028,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                             else
                                 aRelPos.setY( nTmpRelPosY );
                             pUpperOfOrientFrame = pNextLay;
-                            aRectFnSet.Refresh(pUpperOfOrientFrame);
+                            aRectFnSet.Refresh(*pUpperOfOrientFrame);
                             bMoveable = rAnchorTextFrame.IsMoveable( pUpperOfOrientFrame );
                             if( fnRectX.IsVert() )
                             {

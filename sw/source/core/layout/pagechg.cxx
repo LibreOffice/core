@@ -128,7 +128,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         {
             bNoGrid = false;
             tools::Long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
-            SwRectFnSet aRectFnSet(this);
+            SwRectFnSet aRectFnSet(*this);
             tools::Long nSize = aRectFnSet.GetWidth(getFrameArea());
             tools::Long nBorder = 0;
             if( SwTextGrid::LinesAndChars == pGrid->GetGridType() )

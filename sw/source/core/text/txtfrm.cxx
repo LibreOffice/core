@@ -1732,7 +1732,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
                         {
                             bRet = false;
                             // set needed data structure values for object positioning
-                            SwRectFnSet aRectFnSet(&_rFrame);
+                            SwRectFnSet aRectFnSet(_rFrame);
                             SwRect aLastCharRect( _rFrame.getFrameArea() );
                             aRectFnSet.SetWidth( aLastCharRect, 1 );
                             _pAnchoredObj->maLastCharRect = aLastCharRect;
@@ -3402,7 +3402,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     aOldFrame = pFrame->getFrameArea();
     aOldPrt = pFrame->getFramePrintArea();
 
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     SwTwips nLower = aRectFnSet.GetBottomMargin(*pFrame);
 
     {
@@ -3501,7 +3501,7 @@ bool SwTextFrame::WouldFit(SwTwips &rMaxHeight, bool &bSplit, bool bTst, bool bM
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::WouldFit with swapped frame" );
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     if( IsLocked() )
         return false;
@@ -4213,7 +4213,7 @@ SwScriptInfo* SwTextFrame::GetScriptInfo()
 static SwTwips lcl_CalcFlyBasePos( const SwTextFrame& rFrame, SwRect aFlyRect,
                             SwTextFly const & rTextFly )
 {
-    SwRectFnSet aRectFnSet(&rFrame);
+    SwRectFnSet aRectFnSet(rFrame);
     SwTwips nRet = rFrame.IsRightToLeft() ?
                    aRectFnSet.GetRight(rFrame.getFrameArea()) :
                    aRectFnSet.GetLeft(rFrame.getFrameArea());
@@ -4264,7 +4264,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     if (!GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_FLY_OFFSETS))
         return;
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     SwRect aFlyRect( getFrameArea().Pos() + getFramePrintArea().Pos(), getFramePrintArea().SSize() );
 

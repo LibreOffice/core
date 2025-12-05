@@ -770,7 +770,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         if ( !pFrame )
             pFrame = pTmp;
         _orRect = pFrame->getFrameArea();
-        SwRectFnSet aRectFnSet(pFrame);
+        SwRectFnSet aRectFnSet(*pFrame);
         bRTL = pFrame->IsRightToLeft();
         if ( bRTL )
             aPos = pFrame->getFrameArea().TopRight();
@@ -896,7 +896,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     {
         const SwFrame* pUpper = ( pFrame->IsPageFrame() || pFrame->IsFlyFrame() ) ?
                               pFrame : pFrame->GetUpper();
-        SwRectFnSet aRectFnSet(pUpper);
+        SwRectFnSet aRectFnSet(*pUpper);
         if ( _opPercent )
         {
             // If the size is relative from page, then full size should be counted from the page frame.

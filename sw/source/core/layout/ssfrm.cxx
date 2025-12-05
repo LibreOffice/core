@@ -597,7 +597,7 @@ SwRect SwFrame::GetPaintArea() const
     // NEW TABLES
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrame() ? GetUpper()->getFrameArea() : getFrameArea();
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     tools::Long nRight = aRectFnSet.GetRight(aRect);
     tools::Long nLeft  = aRectFnSet.GetLeft(aRect);
     const SwFrame* pTmp = this;
@@ -700,7 +700,7 @@ SwRect SwFrame::GetPaintArea() const
 |*/
 SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     tools::Long nLeft = aRectFnSet.GetLeft(getFrameArea());
     tools::Long nWidth = aRectFnSet.GetWidth(getFrameArea());
     tools::Long nPrtLeft = aRectFnSet.GetLeft(getFramePrintArea());

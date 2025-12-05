@@ -233,7 +233,7 @@ static SwTwips lcl_GetHeightOfRows( const SwFrame* pStart, tools::Long nCount )
     // to the new page's starting Y coordinate). This disallows to simplify the height calculation
     // to just difference between top row's top and bottom row's bottom.
     SwTwips nRet = 0;
-    SwRectFnSet aRectFnSet(pStart);
+    SwRectFnSet aRectFnSet(*pStart);
     while (pStart && nCount > 0)
     {
         nRet += aRectFnSet.GetHeight(pStart->getFrameArea());
@@ -342,7 +342,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
 static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
 {
     SwCellFrame* pCurrMasterCell = static_cast<SwCellFrame*>(rRow.Lower());
-    SwRectFnSet aRectFnSet(pCurrMasterCell);
+    SwRectFnSet aRectFnSet(*pCurrMasterCell);
 
     bool bAllCellsCollapsed = true;
     while ( pCurrMasterCell )
@@ -539,7 +539,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
     SwCellFrame* pCurrLastLineCell = static_cast<SwCellFrame*>(rLastLine.Lower());
     SwCellFrame* pCurrFollowFlowLineCell = static_cast<SwCellFrame*>(rFollowFlowLine.Lower());
 
-    SwRectFnSet aRectFnSet(pCurrLastLineCell);
+    SwRectFnSet aRectFnSet(*pCurrLastLineCell);
 
     // Move content of follow cells into master cells
     while ( pCurrLastLineCell )
@@ -683,7 +683,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
 
     vcl::RenderContext* pRenderContext = rLastLine.getRootFrame()->GetCurrShell()->GetOut();
     SwTabFrame& rTab = static_cast<SwTabFrame&>(*rLastLine.GetUpper());
-    SwRectFnSet aRectFnSet(rTab.GetUpper());
+    SwRectFnSet aRectFnSet(*rTab.GetUpper());
     SwTwips nCurLastLineHeight = aRectFnSet.GetHeight(rLastLine.getFrameArea());
 
     SwTwips nFootnoteHeight(0);
@@ -908,7 +908,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
 // Sets the correct height for all spanned cells
 static void lcl_AdjustRowSpanCells( SwRowFrame* pRow )
 {
-    SwRectFnSet aRectFnSet(pRow);
+    SwRectFnSet aRectFnSet(*pRow);
     SwCellFrame* pCellFrame = static_cast<SwCellFrame*>(pRow->GetLower());
     while ( pCellFrame )
     {
@@ -1001,7 +1001,7 @@ bool SwTabFrame::RemoveFollowFlowLine()
 
     if ( nRowsToMove > 1 )
     {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         SwFrame* pRow = pFollowFlowLine->GetNext();
         SwFrame* pInsertBehind = GetLastLower();
         SwTwips nGrow = 0;
@@ -1105,7 +1105,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
 {
     bool bRet = true;
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     // #i26745# - format row and cell frames of table
     {
@@ -1640,7 +1640,7 @@ void SwTabFrame::Join()
     if (!pFoll || !CanDeleteFollow(pFoll))
         return;
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     pFoll->Cut();   //Cut out first to avoid unnecessary notifications.
 
     SwFrame *pRow = pFoll->GetFirstNonHeadlineRow(),
@@ -1694,7 +1694,7 @@ static void SwInvalidatePositions( SwFrame *pFrame, tools::Long nBottom )
 {
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     do
     {   pFrame->InvalidatePos_();
         pFrame->InvalidateSize_();
@@ -1719,7 +1719,7 @@ void SwInvalidateAll( SwFrame *pFrame, tools::Long nBottom )
 {
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     do
     {
         pFrame->InvalidatePos_();
@@ -1784,7 +1784,7 @@ bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDont
     bool bAll = LONG_MAX == nBottom;
     bool bRet = false;
     SwContentFrame *pCnt = rLay.ContainsContent();
-    SwRectFnSet aRectFnSet(&rLay);
+    SwRectFnSet aRectFnSet(rLay);
 
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns = 0;
@@ -1898,7 +1898,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     const SwFrame* pOldUp = pFrame->GetUpper();
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     do
     {
         // #i26945# - parameter <_bOnlyRowsAndCells> controls,
@@ -2426,7 +2426,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     int nUnSplitted = 5; // Just another loop control :-(
     int nThrowAwayValidLayoutLimit = 5; // And another one :-(
     PosSizeOscillationControl posSizeOscillationControl; // And yet another one.
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
     {
         const bool bMoveable = IsMoveable();
@@ -2547,7 +2547,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             {
                 SAL_WARN_IF(oDeleteListener && oDeleteListener->WasDeleted(), "sw.layout", "SwFootnoteBossFrame unexpectedly deleted");
 
-                aRectFnSet.Refresh(this);
+                aRectFnSet.Refresh(*this);
                 bMovedBwd = true;
                 aNotify.SetLowersComplete( false );
                 if (bFootnotesInDoc && !oDeleteListener->WasDeleted())
@@ -3184,7 +3184,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         {
                             GetFollow()->GetLower()->InvalidatePos();
                         }
-                        SwRectFnSet fnRectX(GetFollow());
+                        SwRectFnSet fnRectX(*GetFollow());
 
                         static sal_uInt8 nStack = 0;
                         if ( !StackHack::IsLocked() && nStack < 4 )
@@ -3296,7 +3296,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             nUnSplitted = 5;
         }
 
-        aRectFnSet.Refresh(this);
+        aRectFnSet.Refresh(*this);
         m_bCalcLowers = true;
         bMovedFwd = true;
         aNotify.SetLowersComplete( false );
@@ -3437,7 +3437,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
     if (!bWrapAllowed || !pPage->GetSortedObjs())
         return bInvalidatePrtArea;
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     const bool bConsiderWrapOnObjPos
         = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
     tools::Long nPrtPos = aRectFnSet.GetTop(getFrameArea());
@@ -3594,7 +3594,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
             // tdf#138039 don't grow beyond the page body
             // if the fly is anchored below the table; the fly
             // must move with its anchor frame to the next page
-            SwRectFnSet fnPage(pPage);
+            SwRectFnSet fnPage(*pPage);
             if (!IsInDocBody() // TODO
                 || fnPage.YDiff(fnPage.GetBottom(aFlyRect), fnPage.GetPrtBottom(*pPage)) <= 0
                 || !IsNextOnSamePage(
@@ -3680,7 +3680,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 {
     OSL_ENSURE( pAttrs, "TabFrame::Format, pAttrs is 0." );
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     if ( !isFrameAreaSizeValid() )
     {
         tools::Long nDiff = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea()) -
@@ -3946,7 +3946,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
 SwTwips SwTabFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nHeight = aRectFnSet.GetHeight(getFrameArea());
     if( nHeight > 0 && nDist > ( LONG_MAX - nHeight ) )
         nDist = LONG_MAX - nHeight;
@@ -4315,12 +4315,12 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
         bool bMoveAnyway = false;
         SwTwips nSpace = 0;
 
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         if ( !SwFlowFrame::IsMoveBwdJump() )
         {
 
             tools::Long nOldWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
-            SwRectFnSet fnRectX(pNewUpper);
+            SwRectFnSet fnRectX(*pNewUpper);
             tools::Long nNewWidth = fnRectX.GetWidth(pNewUpper->getFramePrintArea());
             if( std::abs( nNewWidth - nOldWidth ) < 2 )
             {
@@ -4479,7 +4479,7 @@ void SwTabFrame::Cut()
 
     //First remove, then shrink the upper.
     SwLayoutFrame *pUp = GetUpper();
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     RemoveFromLayout();
     if ( pUp )
     {
@@ -4569,7 +4569,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
             GetNext()->InvalidatePage( pPage );
     }
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     if( aRectFnSet.GetHeight(getFrameArea()) )
         pParent->Grow( aRectFnSet.GetHeight(getFrameArea()) );
 
@@ -4904,7 +4904,7 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
 
 tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
 {
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     if (pFrame->IsSctFrame())
     {
         if (pFrame->IsHiddenNow())
@@ -4961,7 +4961,7 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
                                       const bool _bConsiderObjs,
                                       const SwBorderAttrs *pAttrs = nullptr )
 {
-    SwRectFnSet aRectFnSet(_pCell);
+    SwRectFnSet aRectFnSet(*_pCell);
     SwTwips nHeight = 0;
     const SwFrame* pLow = _pCell->Lower();
     tools::Long nFlyAdd = 0;
@@ -5076,7 +5076,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
         }
     }
 
-    SwRectFnSet aRectFnSet(_pRow);
+    SwRectFnSet aRectFnSet(*_pRow);
     const SwCellFrame* pLow = static_cast<const SwCellFrame*>(_pRow->Lower());
     while ( pLow )
     {
@@ -5228,7 +5228,7 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
     // We don't need to account for previous instances of repeated headlines
     if (rRow.IsRepeatedHeadline())
         return 0;
-    SwRectFnSet aRectFnSet(&rRow);
+    SwRectFnSet aRectFnSet(rRow);
     const SwTableLine* pLine = rRow.GetTabLine();
     const SwTabFrame* pTab = rRow.FindTabFrame();
     if (!pLine || !pTab || !pTab->IsFollow())
@@ -5261,7 +5261,7 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
 
 void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     OSL_ENSURE( pAttrs, "SwRowFrame::Format without Attrs." );
 
     const bool bFix = mbFixSize;
@@ -5438,7 +5438,7 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
     SwFrame *pFrame = Lower();
     if ( bHeight )
     {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
         SwRect aOldFrame;
 #endif
@@ -5557,7 +5557,7 @@ SwTwips SwRowFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool b
     SwTwips nReal = 0;
 
     SwTabFrame* pTab = FindTabFrame();
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
 
     bool bRestrictTableGrowth;
     bool bHasFollowFlowLine = pTab->HasFollowFlowLine();
@@ -5610,7 +5610,7 @@ SwTwips SwRowFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool b
     //Update the height of the cells to the newest value.
     if ( !bTst )
     {
-        SwRectFnSet fnRectX(this);
+        SwRectFnSet fnRectX(*this);
         AdjustCells( fnRectX.GetHeight(getFramePrintArea()) + nReal, true );
         if ( nReal )
             SetCompletePaint();
@@ -5622,7 +5622,7 @@ SwTwips SwRowFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool b
 
 SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     if( HasFixSize() )
     {
         AdjustCells( aRectFnSet.GetHeight(getFramePrintArea()), true );
@@ -5819,7 +5819,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
 {
     bool bRet = false;
     SwFrame *pFrame = pLay->Lower();
-    SwRectFnSet aRectFnSet(pLay);
+    SwRectFnSet aRectFnSet(*pLay);
     while ( pFrame )
     {
         tools::Long nFrameTop = aRectFnSet.GetTop(pFrame->getFrameArea());
@@ -6041,7 +6041,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 {
     OSL_ENSURE( pAttrs, "CellFrame::Format, pAttrs is 0." );
     const SwTabFrame* pTab = FindTabFrame();
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     SwFrame* pLower = Lower();
 
     if ( !isFramePrintAreaValid() )
@@ -6212,7 +6212,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         return;
 
     // From now on, all operations are related to the table cell.
-    aRectFnSet.Refresh(this);
+    aRectFnSet.Refresh(*this);
 
     SwPageFrame* pPg = nullptr;
     if ( !FindTabFrame()->IsRebuildLastLine() && text::VertOrientation::NONE != rOri.GetVertOrient() &&
@@ -6425,7 +6425,7 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwFrame* pLower = Lower();
             if(text::VertOrientation::NONE == eVertOrient && pLower && pLower->IsContentFrame())
             {
-                SwRectFnSet aRectFnSet(this);
+                SwRectFnSet aRectFnSet(*this);
                 const tools::Long lYStart = aRectFnSet.GetPrtTop(*this);
                 bInva = lcl_ArrangeLowers(this, lYStart, false);
             }
@@ -6723,7 +6723,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
 {
     // Find corresponding split line in master table
     const SwTabFrame* pTab = rSourceLine.FindTabFrame();
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     const SwCellFrame* pCurrSourceCell = static_cast<const SwCellFrame*>(rSourceLine.Lower());
 
     // 1. Case: rSourceLine is a follow flow line.
@@ -6870,7 +6870,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
 /// Function to calculate height of first text row
 SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     const bool bDontSplit = !IsFollow() && !GetFormat()->GetLayoutSplit().GetValue();
 

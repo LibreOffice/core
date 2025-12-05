@@ -1981,7 +1981,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
             SwTextInfo aInf( const_cast<SwTextFrame*>(this) );
             SwTextIter aLine( const_cast<SwTextFrame*>(this), &aInf );
             // We have to care for top-to-bottom layout, where right becomes top etc.
-            SwRectFnSet aRectFnSet(this);
+            SwRectFnSet aRectFnSet(*this);
             SwTwips nTop = aRectFnSet.GetTop(aRect);
             SwTwips nBottom = aRectFnSet.GetBottom(aRect);
             SwTwips nLeft = aRectFnSet.GetLeft(aRect);

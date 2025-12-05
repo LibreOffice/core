@@ -491,7 +491,7 @@ bool SwTextFrame::FormatEmpty()
             nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
     }
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nChg = nHeight - aRectFnSet.GetHeight(getFramePrintArea());
     const SwBodyFrame* pBody = FindBodyFrame();
     if (pNonLastSplitFlyDrawObj && pBody)
@@ -549,7 +549,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
         pFrame = pFrame->GetUpper();
     if( ( SwFrameType::Body| SwFrameType::Fly ) & pFrame->GetType() )
     {
-        SwRectFnSet aRectFnSet(pFrame);
+        SwRectFnSet aRectFnSet(*pFrame);
         rRegStart = aRectFnSet.GetPrtTop(*pFrame);
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )

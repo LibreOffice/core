@@ -1257,7 +1257,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
         rRect = pFrame->getFramePrintArea();
         rRect.Pos() += pFrame->getFrameArea().Pos();
 
-        SwRectFnSet fnRect(pFrame);
+        SwRectFnSet fnRect(*pFrame);
 
         const SvxBoxItem &rBox = rAttrs.GetBox();
         const bool bTop = 0 != fnRect.GetTopMargin(*pFrame);
@@ -3350,7 +3350,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 {
                     // enlarge paint rectangle to complete page width, subtract
                     // current paint area and invalidate the resulting region.
-                    SwRectFnSet aRectFnSet(pPage);
+                    SwRectFnSet aRectFnSet(*pPage);
                     SwRect aPageRectTemp( aPaintRect );
                     aRectFnSet.SetLeftAndWidth( aPageRectTemp,
                          aRectFnSet.GetLeft(pPage->getFrameArea()),
@@ -4921,7 +4921,7 @@ void SwFrame::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
               static_cast<const SwLayoutFrame*>(this)->GetFormat()->IsBackgroundTransparent()
             );
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     ::lcl_ExtendLeftAndRight( rOutRect, *(this), rAttrs, aRectFnSet.FnRect() );
 
     lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true, gProp);
@@ -5618,7 +5618,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         if(IsContentFrame())
         {
             const SwFrame* pDirRefFrame(IsCellFrame() ? FindTabFrame() : this);
-            const SwRectFnSet aRectFnSet(pDirRefFrame);
+            const SwRectFnSet aRectFnSet(*pDirRefFrame);
             const SwRectFn _aRectFn(aRectFnSet.FnRect());
 
             if(rAttrs.JoinedWithPrev(*this))
@@ -5763,7 +5763,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
         pPage = FindPageFrame();
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     SwTwips nPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
     Fraction aFract( nPrtWidth, 1 );
     aFract *= rInf.GetWidth();
@@ -5844,7 +5844,7 @@ void SwLayoutFrame::PaintColLines( const SwRect &rRect, const SwFormatCol &rForm
     if ( !pCol || !pCol->IsColumnFrame() )
         return;
 
-    SwRectFnSet fnRect(pCol);
+    SwRectFnSet fnRect(*pCol);
 
     SwRect aLineRect = getFramePrintArea();
     aLineRect += getFrameArea().Pos();

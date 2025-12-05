@@ -635,7 +635,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
     }
     SwFrame *pFloat = pStart;
     SwFrame *pLst = nullptr;
-    SwRectFnSet aRectFnSet(pParent);
+    SwRectFnSet aRectFnSet(*pParent);
     SwTwips nGrowVal = 0;
     do
     {   pFloat->mpUpper = pParent;
@@ -1795,7 +1795,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
                 const tools::Long nGridLineHeight =
                         pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
 
-                SwRectFnSet aRectFnSet(&m_rThis);
+                SwRectFnSet aRectFnSet(m_rThis);
                 const SwTwips nBodyPrtTop = aRectFnSet.GetPrtTop(*pBodyFrame);
                 const SwTwips nProposedPrtTop =
                         aRectFnSet.YInc( aRectFnSet.GetTop(m_rThis.getFrameArea()),
@@ -2203,7 +2203,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             bSamePage = pNewPage == pOldPage;
             // Set deadline, so the footnotes don't think up
             // silly things...
-            SwRectFnSet aRectFnSet(pOldBoss);
+            SwRectFnSet aRectFnSet(*pOldBoss);
             SwSaveFootnoteHeight aHeight( pOldBoss,
                 aRectFnSet.GetBottom(pOldBoss->getFrameArea()) );
             SwContentFrame* pStart = m_rThis.IsContentFrame() ?

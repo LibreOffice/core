@@ -2651,7 +2651,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     const SwTableBox* pBox = pBoxFrame->GetTabBox();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
     const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
                            aRectFnSet.GetLeft(pPage->getFrameArea());
@@ -2733,7 +2733,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     const SwFrame* pFrame = pTab->GetNextLayoutLeaf();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
     const tools::Long nLeftMin  = ( aRectFnSet.IsVert() ?
                              pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
@@ -2851,7 +2851,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     // we need to switch to absolute ones.
     SwTable& rTab = *pTab->GetTable();
     const SwFormatFrameSize& rTableFrameSz = rTab.GetFrameFormat()->GetFrameSize();
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     // #i17174# - With fix for #i9040# the shadow size is taken
     // from the table width. Thus, add its left and right size to current table
     // printing area width in order to get the correct table size attribute.
@@ -2903,7 +2903,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
 
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     SwTabCols aOld( rNew.Count() );
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
