@@ -632,6 +632,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 aNewPageItem.SetLandscape(bDesiredLandscape);
 
                 Size aOld = rOldSizeItem.GetSize();
+                // coverity[swapped_arguments : FALSE] - this is in the correct order
                 Size aNew(aOld.Height(), aOld.Width()); // swap W/H
                 SvxSizeItem aNewSizeItem(ATTR_PAGE_SIZE, aNew);
 
