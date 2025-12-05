@@ -25,6 +25,8 @@ class SwRubyListEntry
 {
     OUString m_sText;
     SwFormatRuby m_aRubyAttr;
+    sal_Int32 m_nSequence = 0;
+
 public:
     SwRubyListEntry() : m_aRubyAttr( OUString() ) {}
 
@@ -34,6 +36,9 @@ public:
     const SwFormatRuby& GetRubyAttr() const        { return m_aRubyAttr; }
           SwFormatRuby& GetRubyAttr()              { return m_aRubyAttr; }
     void SetRubyAttr( const SwFormatRuby& rAttr )  { m_aRubyAttr = rAttr; }
+
+    void SetSequence(sal_Int32 nSequence) { m_nSequence = nSequence; }
+    sal_Int32 GetSequence() const { return m_nSequence; }
 };
 
 #endif  //_ INCLUDED_SW_INC_RUBYLIST_HXX

@@ -624,6 +624,7 @@ inline constexpr OUString UNO_NAME_RUBY_ADJUST = u"RubyAdjust"_ustr;
 inline constexpr OUString UNO_NAME_RUBY_CHAR_STYLE_NAME = u"RubyCharStyleName"_ustr;
 inline constexpr OUString UNO_NAME_RUBY_IS_ABOVE = u"RubyIsAbove"_ustr;
 inline constexpr OUString UNO_NAME_RUBY_POSITION = u"RubyPosition"_ustr;
+inline constexpr OUString UNO_NAME_RUBY_SEQUENCE_NUMBER = u"RubySequenceNumber"_ustr;
 inline constexpr OUString UNO_NAME_FOOTNOTE_HEIGHT = u"FootnoteHeight"_ustr;
 inline constexpr OUString UNO_NAME_FOOTNOTE_LINE_WEIGHT = u"FootnoteLineWeight"_ustr;
 inline constexpr OUString UNO_NAME_FOOTNOTE_LINE_COLOR = u"FootnoteLineColor"_ustr;

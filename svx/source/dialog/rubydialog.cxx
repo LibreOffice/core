@@ -67,6 +67,7 @@ constexpr OUString cRubyText = u"RubyText"_ustr;
 constexpr OUString cRubyAdjust = u"RubyAdjust"_ustr;
 constexpr OUString cRubyPosition = u"RubyPosition"_ustr;
 constexpr OUString cRubyCharStyleName = u"RubyCharStyleName"_ustr;
+constexpr OUString cRubySequence = u"RubySequenceNumber"_ustr;
 
 } // end anonymous namespace
 
@@ -125,66 +126,116 @@ public:
     virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent) override;
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
-    bool IsSelectionGrouped() { return aRubyValues.getLength() < 2; }
+    bool IsSelectionGrouped()
+    {
+        auto nLastSequence = std::numeric_limits<sal_Int32>::lowest();
+        for (const PropertyValues& rVals : aRubyValues)
+        {
+            for (const PropertyValue& rVal : rVals)
+            {
+                sal_Int32 nValue;
+                if ((rVal.Name == cRubySequence) && (rVal.Value >>= nValue))
+                {
+                    if (nValue <= nLastSequence)
+                    {
+                        return false;
+                    }
+
+                    nLastSequence = nValue;
+                }
+            }
+        }
+
+        return true;
+    }
 
     void MakeSelectionGrouped()
     {
-        if (aRubyValues.getLength() < 2)
+        if (IsSelectionGrouped())
         {
             return;
         }
 
+        sal_Int32 nSequences = 0;
+        for (const PropertyValue& rVal : aRubyValues[aRubyValues.size() - 1])
+        {
+            if (rVal.Name == cRubySequence)
+            {
+                rVal.Value >>= nSequences;
+            }
+        }
+
+        ++nSequences;
+
+        Sequence<PropertyValues> aNewRubyValues{ nSequences };
+        PropertyValues* pNewRubyValues = aNewRubyValues.getArray();
+
         OUString sBaseTmp;
         OUStringBuffer aBaseString;
-        for (const PropertyValues& rVals : aRubyValues)
-        {
-            sBaseTmp.clear();
-            for (const PropertyValue& rVal : rVals)
+        OUStringBuffer aRubyString;
+        sal_Int32 nCurrSequence = 0;
+        bool bAtStartOfSequence = true;
+
+        auto fnFinishSequence = [&] {
+            for (PropertyValue& rVal : asNonConstRange(pNewRubyValues[nCurrSequence]))
             {
                 if (rVal.Name == cRubyBaseText)
                 {
-                    rVal.Value >>= sBaseTmp;
+                    sBaseTmp = aBaseString.makeStringAndClear();
+                    rVal.Value <<= sBaseTmp;
+                }
+                else if (rVal.Name == cRubyText)
+                {
+                    sBaseTmp = aRubyString.makeStringAndClear();
+                    rVal.Value <<= sBaseTmp;
                 }
             }
+        };
 
-            aBaseString.append(sBaseTmp);
-        }
-
-        Sequence<PropertyValues> aNewRubyValues{ 1 };
-        PropertyValues* pNewRubyValues = aNewRubyValues.getArray();
-
-        // Copy some reasonable style values from the previous ruby array
-        pNewRubyValues[0] = aRubyValues[0];
         for (const PropertyValues& rVals : aRubyValues)
         {
+            // Check for advance
             for (const PropertyValue& rVal : rVals)
             {
-                if (rVal.Name == cRubyText)
+                if (rVal.Name == cRubySequence)
                 {
-                    rVal.Value >>= sBaseTmp;
-                    if (!sBaseTmp.isEmpty())
+                    sal_Int32 nSeq = nCurrSequence;
+                    rVal.Value >>= nSeq;
+                    if (nSeq > nCurrSequence)
                     {
-                        pNewRubyValues[0] = rVals;
+                        fnFinishSequence();
+                        nCurrSequence = nSeq;
+                        bAtStartOfSequence = true;
                         break;
                     }
                 }
             }
+
+            if (bAtStartOfSequence)
+            {
+                // Copy some reasonable style values from the previous ruby array
+                pNewRubyValues[nCurrSequence] = rVals;
+                bAtStartOfSequence = false;
+            }
+
+            for (const PropertyValue& rVal : rVals)
+            {
+                if (rVal.Name == cRubyBaseText)
+                {
+                    sBaseTmp.clear();
+                    rVal.Value >>= sBaseTmp;
+                    aBaseString.append(sBaseTmp);
+                }
+                else if (rVal.Name == cRubyText)
+                {
+                    sBaseTmp.clear();
+                    rVal.Value >>= sBaseTmp;
+                    aRubyString.append(sBaseTmp);
+                }
+            }
         }
 
-        PropertyValue* pNewValues = pNewRubyValues[0].getArray();
-        for (sal_Int32 i = 0; i < pNewRubyValues[0].getLength(); ++i)
-        {
-            if (pNewValues[i].Name == cRubyBaseText)
-            {
-                sBaseTmp = aBaseString;
-                pNewValues[i].Value <<= sBaseTmp;
-            }
-            else if (pNewValues[i].Name == cRubyText)
-            {
-                sBaseTmp.clear();
-                pNewValues[i].Value <<= sBaseTmp;
-            }
-        }
+        fnFinishSequence();
 
         aRubyValues = std::move(aNewRubyValues);
     }
@@ -363,13 +414,14 @@ void SvxRubyData_Impl::AssertOneEntry()
     {
         aRubyValues.realloc(1);
         Sequence<PropertyValue>& rValues = aRubyValues.getArray()[0];
-        rValues.realloc(5);
+        rValues.realloc(6);
         PropertyValue* pValues = rValues.getArray();
         pValues[0].Name = cRubyBaseText;
         pValues[1].Name = cRubyText;
         pValues[2].Name = cRubyAdjust;
         pValues[3].Name = cRubyPosition;
         pValues[4].Name = cRubyCharStyleName;
+        pValues[5].Name = cRubySequence;
     }
 }
 
