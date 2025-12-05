@@ -24,33 +24,49 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
 
+namespace
+{
+class ColorChooserDialogController : public ColorDialogController
+{
+    std::unique_ptr<weld::ColorChooserDialog> m_pColorChooserDialog;
+
+public:
+    ColorChooserDialogController(std::unique_ptr<weld::ColorChooserDialog> pColorChooserDialog)
+        : m_pColorChooserDialog(std::move(pColorChooserDialog))
+    {
+    }
+
+    virtual void SetColor(const Color& rColor) override
+    {
+        m_pColorChooserDialog->set_color(rColor);
+    }
+    virtual Color GetColor() const override { return m_pColorChooserDialog->get_color(); }
+
+private:
+    virtual weld::ColorChooserDialog* getDialog() override { return m_pColorChooserDialog.get(); }
+};
+}
+
 ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
     std::unique_ptr<weld::ColorChooserDialog> pDialog
         = GetSalInstance()->CreateColorChooserDialog(pParent, eMode);
     assert(pDialog);
     pDialog->set_modal(true);
-    m_pColorChooserDialogController
-        = std::make_shared<ColorChooserDialogController>(std::move(pDialog));
+    m_pColorDialogController = std::make_shared<ColorChooserDialogController>(std::move(pDialog));
 }
 
 ColorDialog::~ColorDialog() {}
 
-void ColorDialog::SetColor(const Color& rColor)
-{
-    m_pColorChooserDialogController->getDialog()->set_color(rColor);
-}
+void ColorDialog::SetColor(const Color& rColor) { m_pColorDialogController->SetColor(rColor); }
 
-Color ColorDialog::GetColor() const
-{
-    return m_pColorChooserDialogController->getDialog()->get_color();
-}
+Color ColorDialog::GetColor() const { return m_pColorDialogController->GetColor(); }
 
-short ColorDialog::Execute() { return m_pColorChooserDialogController->run(); }
+short ColorDialog::Execute() { return m_pColorDialogController->run(); }
 
 void ColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
 {
-    weld::DialogController::runAsync(m_pColorChooserDialogController, func);
+    weld::DialogController::runAsync(m_pColorDialogController, func);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

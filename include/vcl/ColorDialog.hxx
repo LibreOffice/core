@@ -31,17 +31,11 @@ namespace vcl
     enum class ColorPickerMode { Select, Modify };
 }
 
-class ColorChooserDialogController : public weld::DialogController
+class ColorDialogController : public weld::DialogController
 {
-    std::unique_ptr<weld::ColorChooserDialog> m_pColorChooserDialog;
-
 public:
-    ColorChooserDialogController(std::unique_ptr<weld::ColorChooserDialog> pColorChooserDialog)
-        : m_pColorChooserDialog(std::move(pColorChooserDialog))
-    {
-    }
-
-    virtual weld::ColorChooserDialog* getDialog() override { return m_pColorChooserDialog.get(); }
+    virtual void SetColor(const Color& rColor) = 0;
+    virtual Color GetColor() const = 0;
 };
 
 class VCL_DLLPUBLIC ColorDialog final
@@ -57,7 +51,7 @@ public:
     void            ExecuteAsync(const std::function<void(sal_Int32)>& func);
 
 private:
-    std::shared_ptr<ColorChooserDialogController> m_pColorChooserDialogController;
+    std::shared_ptr<ColorDialogController> m_pColorDialogController;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
