@@ -88,6 +88,8 @@ SlidePersist::~SlidePersist()
 {
 }
 
+// the list 'const PPTXLayoutInfo aLayoutInfo[...]' used in PowerPointExport
+// likely needs to be updated after any changes here
 sal_Int16 SlidePersist::getLayoutFromValueToken() const
 {
     sal_Int16 nLayout = 20;     // 20 == blank (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
@@ -97,7 +99,7 @@ sal_Int16 SlidePersist::getLayoutFromValueToken() const
         case XML_chart:             nLayout =  2; break;
         case XML_chartAndTx:        nLayout =  7; break;
         case XML_clipArtAndTx:      nLayout =  9; break;
-        case XML_clipArtAndVertTx:  nLayout = 24; break;
+        case XML_clipArtAndVertTx:  nLayout = 30; break;
         case XML_fourObj:           nLayout = 18; break;
         case XML_obj:               nLayout = 11; break;
         case XML_objAndTx:          nLayout = 13; break;
@@ -112,15 +114,15 @@ sal_Int16 SlidePersist::getLayoutFromValueToken() const
         case XML_twoObjOverTx:      nLayout = 16; break;
         case XML_tx:                nLayout =  1; break;
         case XML_txAndChart:        nLayout =  4; break;
-        case XML_txAndClipArt:      nLayout =  6; break;
+        case XML_txAndClipArt:
         case XML_txAndMedia:        nLayout =  6; break;
         case XML_txAndObj:          nLayout = 10; break;
         case XML_objAndTwoObj:
         case XML_txAndTwoObj:       nLayout = 12; break;
         case XML_txOverObj:         nLayout = 17; break;
-        case XML_vertTitleAndTx:    nLayout = 22; break;
-        case XML_vertTitleAndTxOverChart: nLayout = 21; break;
-        case XML_vertTx:            nLayout = 23; break;
+        case XML_vertTitleAndTx:    nLayout = 28; break;
+        case XML_vertTitleAndTxOverChart: nLayout = 27; break;
+        case XML_vertTx:            nLayout = 29; break;
         case XML_objOnly:           nLayout = 32; break;
 
         case XML_twoTxTwoObj:
