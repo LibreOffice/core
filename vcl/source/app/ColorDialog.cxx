@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <colorpicker.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
@@ -49,6 +51,13 @@ private:
 
 ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
+    if (!officecfg::Office::Common::Misc::UseSystemColorDialog::get())
+    {
+        // use custom LibreOffice color picker dialog
+        m_pColorDialogController = std::make_shared<ColorPickerDialog>(pParent, COL_BLACK, eMode);
+        return;
+    }
+
     std::unique_ptr<weld::ColorChooserDialog> pDialog
         = GetSalInstance()->CreateColorChooserDialog(pParent, eMode);
     assert(pDialog);
