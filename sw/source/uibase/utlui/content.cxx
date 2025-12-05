@@ -1757,6 +1757,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         bRemoveGotoEntry = true;
 
     bool bRemovePostItEntries = true;
+    bool bRemoveIndexEntry = true;
     bool bRemoveUpdateIndexEntry = true;
     bool bRemoveReadonlyIndexEntry = true;
     bool bRemoveCopyEntry = true;
@@ -1917,7 +1918,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             const bool bEditable
                 = !bReadonly && pType->IsEditable()
                   && ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
-            const bool bDeletable = pType->IsDeletable() && IsDeletable(*xEntry);
+            const bool bDeletable = !bReadonly && pType->IsDeletable() && IsDeletable(*xEntry);
             const bool bRenamable
                 = !bReadonly
                   && (pType->IsRenamable()
@@ -1951,6 +1952,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     break;
                     case ContentTypeId::REFERENCE:
                         bRemoveDeleteReferenceEntry = false;
+                    break;
+                    case ContentTypeId::INDEX:
+                        bRemoveDeleteIndexEntry = false;
                     break;
                     case ContentTypeId::POSTIT:
                         bRemoveDeleteCommentEntry = false;
@@ -1993,18 +1997,15 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             }
             else if (bEditable)
             {
-                if(ContentTypeId::INDEX == nContentType)
+                if (ContentTypeId::INDEX == nContentType)
                 {
-                    bRemoveReadonlyIndexEntry = false;
+                    bRemoveIndexEntry = false;
+                    bRemoveUpdateIndexEntry = false;
                     bRemoveEditEntry = false;
-                    const SwTOXBase* pBase = weld::fromId<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry))->GetTOXBase();
-                    if (!pBase->IsTOXBaseInReadonly() && !SwEditShell::IsTOXBaseReadonly(*pBase))
-                    {
-                        bRemoveUpdateIndexEntry = false;
-                        bRemoveDeleteIndexEntry = false;
-                    }
-                    else
-                        bReadonly = true;
+                    bRemoveReadonlyIndexEntry = false;
+                    const SwTOXBase* pBase
+                        = weld::fromId<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry))
+                              ->GetTOXBase();
                     xPop->set_active(OUString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
                 }
                 else if(ContentTypeId::TABLE == nContentType)
@@ -2254,6 +2255,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveTextAlternative)
         xPop->remove(u"textalternative"_ustr);
 
+    if (bRemoveIndexEntry)
+        xPop->remove(OUString::number(401));
+
     if (bRemoveUpdateIndexEntry)
         xPop->remove(OUString::number(402));
 
@@ -2281,6 +2285,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveChapterEntries &&
             bRemovePostItEntries &&
             bRemoveRenameEntry &&
+            bRemoveIndexEntry &&
+            bRemoveUpdateIndexEntry &&
             bRemoveReadonlyIndexEntry &&
             bRemoveUnprotectEntry &&
             bRemoveEditEntry)
@@ -6045,6 +6051,9 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             if(m_nOutlineLevel != nSelectedPopupEntry )
                 SetOutlineLevel(static_cast<sal_Int8>(nSelectedPopupEntry));
         break;
+        case 401:
+            EditEntry(*xFirst, EditEntryMode::RMV_IDX);
+        break;
         case 402:
             EditEntry(*xFirst, EditEntryMode::UPD_IDX);
         break;
@@ -6481,6 +6490,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
 
                     }
                 break;
+                case EditEntryMode::RMV_IDX:
                 case EditEntryMode::DELETE:
                 {
                     if( pBase )
@@ -6585,12 +6595,6 @@ bool SwContentTree::IsDeletable(const SwContent* pContent)
     if (eContentTypeId == ContentTypeId::BOOKMARK)
         return !m_pActiveShell->getIDocumentSettingAccess().get(
             DocumentSettingId::PROTECT_BOOKMARKS);
-    // index
-    if (eContentTypeId == ContentTypeId::INDEX)
-    {
-        const SwTOXBase* pBase = static_cast<const SwTOXBaseContent*>(pContent)->GetTOXBase();
-        return !SwEditShell::IsTOXBaseReadonly(*pBase);
-    }
 
     return true;
 }
