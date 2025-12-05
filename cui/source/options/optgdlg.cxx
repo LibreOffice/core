@@ -162,9 +162,10 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xPopUpNoHelpImg(m_xBuilder->weld_widget(u"lockpopupnohelp"_ustr))
     , m_xShowTipOfTheDay(m_xBuilder->weld_check_button(u"cbShowTipOfTheDay"_ustr))
     , m_xShowTipOfTheDayImg(m_xBuilder->weld_widget(u"lockcbShowTipOfTheDay"_ustr))
-    , m_xFileDlgFrame(m_xBuilder->weld_widget(u"filedlgframe"_ustr))
     , m_xFileDlgROImage(m_xBuilder->weld_widget(u"lockimage"_ustr))
     , m_xFileDlgCB(m_xBuilder->weld_check_button(u"filedlg"_ustr))
+    , m_xColorDlgROImage(m_xBuilder->weld_widget(u"locksystemcolordialogs"_ustr))
+    , m_xColorDlgCB(m_xBuilder->weld_check_button(u"systemcolordialogs"_ustr))
     , m_xDocStatusCB(m_xBuilder->weld_check_button(u"docstatus"_ustr))
     , m_xDocStatusImg(m_xBuilder->weld_widget(u"lockdocstatus"_ustr))
     , m_xYearFrame(m_xBuilder->weld_widget(u"yearframe"_ustr))
@@ -261,6 +262,12 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
+    if (m_xColorDlgCB->get_state_changed_from_saved())
+    {
+        officecfg::Office::Common::Misc::UseSystemColorDialog::set(!m_xColorDlgCB->get_active(), batch);
+        bModified = true;
+    }
+
     if ( m_xFileDlgCB->get_state_changed_from_saved() )
     {
         officecfg::Office::Common::Misc::UseSystemFileDialog::set( !m_xFileDlgCB->get_active(), batch );
@@ -330,15 +337,17 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xShowTipOfTheDayImg->set_visible(!bEnable);
     m_xShowTipOfTheDay->save_state();
 
-    if (!lcl_HasSystemFilePicker())
-        m_xFileDlgFrame->hide();
-    else
-    {
-        bEnable = !officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
-        m_xFileDlgCB->set_sensitive(bEnable);
-        m_xFileDlgROImage->set_visible(!bEnable);
-    }
-    m_xFileDlgCB->set_active(!officecfg::Office::Common::Misc::UseSystemFileDialog::get());
+    bEnable = !officecfg::Office::Common::Misc::UseSystemColorDialog::isReadOnly();
+    m_xColorDlgCB->set_sensitive(bEnable);
+    m_xColorDlgROImage->set_visible(!bEnable);
+    m_xColorDlgCB->set_active(!officecfg::Office::Common::Misc::UseSystemColorDialog::get());
+    m_xColorDlgCB->save_state();
+
+    const bool bReadOnly = officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
+    bEnable = !bReadOnly && lcl_HasSystemFilePicker();
+    m_xFileDlgCB->set_sensitive(bEnable);
+    m_xFileDlgROImage->set_visible(bReadOnly);
+    m_xFileDlgCB->set_active(!lcl_HasSystemFilePicker() || !officecfg::Office::Common::Misc::UseSystemFileDialog::get());
     m_xFileDlgCB->save_state();
 
     bEnable = !officecfg::Office::Common::Print::PrintingModifiesDocument::isReadOnly();
