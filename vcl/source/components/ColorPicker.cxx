@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <salinst.hxx>
-#include <svdata.hxx>
-
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -20,6 +17,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/color.hxx>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -105,12 +103,10 @@ void SAL_CALL ColorPicker::setTitle(const OUString&) {}
 
 sal_Int16 SAL_CALL ColorPicker::execute()
 {
-    std::unique_ptr<weld::ColorChooserDialog> pColorChooserDialog
-        = ImplGetSVData()->mpDefInst->CreateColorChooserDialog(Application::GetFrameWeld(m_xParent),
-                                                               vcl::ColorPickerMode::Select);
-    const int nRet = pColorChooserDialog->run();
+    ColorDialog aColorDialog(Application::GetFrameWeld(m_xParent));
+    const int nRet = aColorDialog.Execute();
     if (nRet == RET_OK)
-        m_aColor = pColorChooserDialog->get_color();
+        m_aColor = aColorDialog.GetColor();
     return nRet;
 }
 
