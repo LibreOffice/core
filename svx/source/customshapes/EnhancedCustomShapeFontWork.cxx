@@ -453,7 +453,7 @@ static void GetTextAreaOutline(
                     }
 
 
-                    rParagraph.vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back(std::move(aCharacterData));
                 }
             }
 

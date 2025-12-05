@@ -1474,7 +1474,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             ScDocRowHeightUpdater::TabRanges aRecalcRanges(0, m_pDocument->MaxRow());
             ErrCode eError = DBaseImport( rMedium.GetPhysicalName(),
                     ScGlobal::GetCharsetValue(sItStr), aColWidthParam, aRecalcRanges.maRanges );
-            aRecalcRowRangesArray.push_back(aRecalcRanges);
+            aRecalcRowRangesArray.push_back(std::move(aRecalcRanges));
 
             if (eError != ERRCODE_NONE)
             {

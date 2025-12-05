@@ -997,7 +997,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             {
                 if( pFilter->GetUserData() == FILTER_WW8 && pFilter->CanExport() )
                 {
-                    pSfxFlt = pFilter;
+                    pSfxFlt = std::move(pFilter);
                     break;
                 }
                 pFilter = aIter.Next();

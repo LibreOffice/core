@@ -175,7 +175,7 @@ Writer::NewUnoCursor(SwDoc & rDoc, SwNodeOffset const nStartIdx, SwNodeOffset co
         OSL_FAIL( "No more ContentNode at StartPos" );
     }
 
-    auto const pNew = rDoc.CreateUnoCursor(SwPosition(aStt), false);
+    std::shared_ptr<SwUnoCursor> pNew = rDoc.CreateUnoCursor(SwPosition(aStt), false);
     pNew->SetMark();
     aStt = nEndIdx;
     pCNode = aStt.GetNode().GetContentNode();

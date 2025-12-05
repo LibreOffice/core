@@ -1316,7 +1316,7 @@ void SaveBox::SaveContentAttrs( SwDoc& rDoc )
                     pSet->Put( *pCNd->GetpSwAttrSet() );
                 }
 
-                m_Ptrs.pContentAttrs->push_back(pSet);
+                m_Ptrs.pContentAttrs->push_back(std::move(pSet));
             }
         }
     }

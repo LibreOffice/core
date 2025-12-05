@@ -2082,7 +2082,7 @@ SvxAutoCorrect::SearchWordsInList(
             auto pRet = lcl_SearchWordsInList(&rList, rTxt, rStt, nEndPos);
             if (pRet)
             {
-                rLang = aLanguageTag;
+                rLang = std::move(aLanguageTag);
                 return pRet;
             }
         }

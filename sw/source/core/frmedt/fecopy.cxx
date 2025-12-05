@@ -940,7 +940,7 @@ SwFEShell::Paste(SwDoc& rClpDoc, bool const bNestedTable)
                 else
                     aInsertion.first->GetPoint()->SetContent(
                         aInsertion.first->GetPointContentNode()->Len() );
-                aCopyVector.push_back( aInsertion );
+                aCopyVector.push_back(std::move(aInsertion));
             }
             // If there are no text portions left but there are some more
             // cursor positions to fill we have to restart with the first

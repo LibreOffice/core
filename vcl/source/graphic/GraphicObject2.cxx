@@ -451,7 +451,7 @@ void GraphicObject::ImplTransformBitmap( Bitmap&            rBmp,
             aBmp2.Scale(Size(nPadTotalWidth, nPadTotalHeight));
             aBmp2.Erase( Color(ColorAlpha,0,0,0,0) );
             aBmp2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), rBmp );
-            rBmp = aBmp2;
+            rBmp = std::move(aBmp2);
         }
     }
 
