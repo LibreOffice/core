@@ -85,9 +85,9 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Gets the bottom position which is a deadline for a split fly.
-SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
+SwTwips GetFlyAnchorBottom(SwFlyFrame& rFly, const SwFrame& rAnchor)
 {
-    SwRectFnSet aRectFnSet(*pFly);
+    SwRectFnSet aRectFnSet(rFly);
 
     const SwPageFrame* pPage = rAnchor.FindPageFrame();
     if (!pPage)
@@ -101,7 +101,7 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
         return 0;
     }
 
-    const auto* pFrameFormat = pFly->GetFrameFormat();
+    const auto* pFrameFormat = rFly.GetFrameFormat();
     const IDocumentSettingAccess& rIDSA = pFrameFormat->getIDocumentSettingAccess();
     // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
     bool bVertPageFrame = pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
@@ -112,9 +112,9 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
         // Word <= 2010 style: the fly can overlap with the bottom margin / footer area in case the
         // fly height fits the body height and the fly bottom fits the page.
         // See if the fly height would fit at least the page height, ignoring the vertical offset.
-        SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
+        SwTwips nFlyHeight = aRectFnSet.GetHeight(rFly.getFrameArea());
         SwTwips nPageHeight = aRectFnSet.GetHeight(pPage->getFramePrintArea());
-        SwTwips nFlyTop = aRectFnSet.GetTop(pFly->getFrameArea());
+        SwTwips nFlyTop = aRectFnSet.GetTop(rFly.getFrameArea());
         SwTwips nBodyTop = aRectFnSet.GetTop(pBody->getFrameArea());
         if (nFlyTop < nBodyTop)
         {
@@ -1550,7 +1550,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             {
                 // If the fly is allowed to be split, then limit its size to the upper of the
                 // anchor.
-                SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
+                SwTwips nDeadline = GetFlyAnchorBottom(*this, *pAnchor);
                 SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
                 SwTwips nBottom = aRectFnSet.GetTop(getFrameArea()) + nRemaining;
                 if (nBottom > nDeadline)
@@ -2335,7 +2335,7 @@ SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
         }
         if (pAnchor && IsFlySplitAllowed())
         {
-            SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
+            SwTwips nDeadline = GetFlyAnchorBottom(*this, *pAnchor);
             SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
             SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
             // Calculate max grow and compare to the requested growth, adding to nDist may
@@ -2404,7 +2404,7 @@ SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
         }
         if (pAnchor)
         {
-            SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
+            SwTwips nDeadline = GetFlyAnchorBottom(*this, *pAnchor);
             SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
             SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
             SwTwips nMaxGrow = nDeadline - nBottom;
