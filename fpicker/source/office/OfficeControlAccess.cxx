@@ -59,10 +59,6 @@ namespace svt
             PropFlags       nPropertyFlags;
         };
 
-
-        typedef const ControlDescription* ControlDescIterator;
-
-
         #define PROPERTY_FLAGS_COMMON       ( PropFlags::Enabled | PropFlags::Visible | PropFlags::HelpUrl )
         #define PROPERTY_FLAGS_LISTBOX      ( PropFlags::ListItems | PropFlags::SelectedItem | PropFlags::SelectedItemIndex )
         #define PROPERTY_FLAGS_CHECKBOX     ( PropFlags::Checked | PropFlags::Text )
@@ -273,10 +269,10 @@ namespace svt
         OUString* pControls = aControls.getArray();
 
         // collect the names of all _actually_existent_ controls
-        for ( ControlDescIterator aControl = s_pControls; aControl != s_pControlsEnd; ++aControl )
+        for (const ControlDescription* pControl = s_pControls; pControl != s_pControlsEnd; ++pControl)
         {
-            if ( m_pFilePicker->getControl( aControl->nControlId ) )
-                *pControls++ = OUString::createFromAscii( aControl->pControlName );
+            if (m_pFilePicker->getControl(pControl->nControlId))
+                *pControls++ = OUString::createFromAscii(pControl->pControlName);
         }
 
         aControls.realloc( pControls - aControls.getArray() );
