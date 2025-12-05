@@ -577,9 +577,7 @@ QString QtFilePicker::getResString(TranslateId pResId)
     if (!pResId)
         return aResString;
 
-    aResString = toQString(FpsResId(pResId));
-
-    return aResString.replace('~', '&');
+    return vclToQtStringWithAccelerator(FpsResId(pResId));
 }
 
 void QtFilePicker::applyTemplate(sal_Int16 nTemplateId)
