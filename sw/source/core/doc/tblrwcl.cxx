@@ -1034,7 +1034,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         {
             SwTableBox* pSelBox = rBoxes[n];
             const SwRowFrame* pRow = GetRowFrame( *pSelBox->GetUpper() );
-            OSL_ENSURE( pRow, "Where is the SwTableLine's Frame?" );
+            assert(pRow && "Where is the SwTableLine's Frame?");
             SwRectFnSet aRectFnSet(pRow);
             pRowHeights[ n ] = aRectFnSet.GetHeight(pRow->getFrameArea());
         }
