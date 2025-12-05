@@ -1070,22 +1070,7 @@ void SwEditWin::FlushInBuffer()
     m_aInBuffer.clear();
 }
 
-#define MOVE_LEFT_SMALL     0
-#define MOVE_UP_SMALL       1
-#define MOVE_RIGHT_BIG      2
-#define MOVE_DOWN_BIG       3
-#define MOVE_LEFT_BIG       4
-#define MOVE_UP_BIG         5
-#define MOVE_RIGHT_SMALL    6
-#define MOVE_DOWN_SMALL     7
-
-// #i121236# Support for shift key in writer
-#define MOVE_LEFT_HUGE      8
-#define MOVE_UP_HUGE        9
-#define MOVE_RIGHT_HUGE     10
-#define MOVE_DOWN_HUGE      11
-
-void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
+void SwEditWin::ChangeFly( Move::Direction eDir, Move::Size eDirSize, bool bWeb )
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
@@ -1103,15 +1088,8 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     rSh.GetFlyFrameAttr( aSet );
     RndStdIds eAnchorId = aSet.Get(RES_ANCHOR).GetAnchorId();
     Size aSnap;
-    bool bHuge(MOVE_LEFT_HUGE == nDir ||
-        MOVE_UP_HUGE == nDir ||
-        MOVE_RIGHT_HUGE == nDir ||
-        MOVE_DOWN_HUGE == nDir);
 
-    if(MOVE_LEFT_SMALL == nDir ||
-        MOVE_UP_SMALL == nDir ||
-        MOVE_RIGHT_SMALL == nDir ||
-        MOVE_DOWN_SMALL == nDir )
+    if(eDirSize == Move::Size::Small)
     {
         aSnap = PixelToLogic(Size(1,1));
     }
@@ -1126,7 +1104,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             aSnap.setHeight( std::max( sal_uLong(1), static_cast<sal_uLong>(aSnap.Height()) / nDiv ) );
     }
 
-    if(bHuge)
+    if(eDirSize == Move::Size::Huge)
     {
         // #i121236# 567twips == 1cm, but just take three times the normal snap
         aSnap = Size(aSnap.Width() * 3, aSnap.Height() * 3);
@@ -1151,40 +1129,46 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     tools::Long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
     tools::Long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
 
-    switch ( nDir )
+    switch (eDir)
     {
-        case MOVE_LEFT_BIG:
-        case MOVE_LEFT_HUGE:
-        case MOVE_LEFT_SMALL: aTmp.Left( aTmp.Left() - nLeft );
+        case Move::Direction::Left: aTmp.Left(aTmp.Left() - nLeft);
             break;
 
-        case MOVE_UP_BIG:
-        case MOVE_UP_HUGE:
-        case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp );
+        case Move::Direction::Up: aTmp.Top(aTmp.Top() - nUp);
             break;
 
-        case MOVE_RIGHT_SMALL:
-            if( aTmp.Width() < aSnap.Width() + MINFLY )
-                break;
-            nRight = aSnap.Width();
-            [[fallthrough]];
-        case MOVE_RIGHT_HUGE:
-        case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight );
+        case Move::Direction::Right:
+            switch (eDirSize) {
+                case Move::Size::Small:
+                    if (aTmp.Width() < aSnap.Width() + MINFLY)
+                        break;
+                    nRight = aSnap.Width();
+                    [[fallthrough]];
+
+                case Move::Size::Huge:
+                case Move::Size::Big: aTmp.Left(aTmp.Left() + nRight);
+
+            }
             break;
 
-        case MOVE_DOWN_SMALL:
-            if( aTmp.Height() < aSnap.Height() + MINFLY )
-                break;
-            nDown = aSnap.Height();
-            [[fallthrough]];
-        case MOVE_DOWN_HUGE:
-        case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown );
+        case Move::Direction::Down:
+            switch (eDirSize) {
+                case Move::Size::Small:
+                    if (aTmp.Height() < aSnap.Height() + MINFLY)
+                        break;
+                    nDown = aSnap.Height();
+                    [[fallthrough]];
+
+                case Move::Size::Huge:
+                case Move::Size::Big: aTmp.Top(aTmp.Top() + nDown);
+
+            }
             break;
 
         default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
     }
     bool bSet = false;
-    if ((RndStdIds::FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
+    if ((RndStdIds::FLY_AS_CHAR == eAnchorId) && (eDir == Move::Direction::Down || eDir == Move::Direction::Up))
     {
         tools::Long aDiff = aTmp.Top() - aRefPoint.Y();
         if( aDiff > 0 )
@@ -1196,7 +1180,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         if( bWeb )
         {
             eNew = aVert.GetVertOrient();
-            bool bDown = 0 != ( nDir & 0x02 );
+            bool bDown = eDir == Move::Direction::Down;
             switch( eNew )
             {
                 case text::VertOrientation::CHAR_TOP:
@@ -1230,7 +1214,8 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         bSet = true;
     }
     if (bWeb && (RndStdIds::FLY_AT_PARA == eAnchorId)
-        && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
+        && ( (eDir == Move::Direction::Left && eDirSize == Move::Size::Small)
+            || (eDir == Move::Direction::Right && eDirSize == Move::Size::Big) ))
     {
         SwFormatHoriOrient aHori( aSet.Get(RES_HORI_ORIENT) );
         sal_Int16 eNew;
@@ -1238,11 +1223,11 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         switch( eNew )
         {
             case text::HoriOrientation::RIGHT:
-                if( nDir==MOVE_LEFT_SMALL )
+                if(eDir == Move::Direction::Left && eDirSize == Move::Size::Small)
                     eNew = text::HoriOrientation::LEFT;
             break;
             case text::HoriOrientation::LEFT:
-                if( nDir==MOVE_RIGHT_BIG )
+                if(eDir == Move::Direction::Right && eDirSize == Move::Size::Big)
                     eNew = text::HoriOrientation::RIGHT;
             break;
             default:; //prevent warning
@@ -1268,7 +1253,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
 
 }
 
-void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
+void SwEditWin::ChangeDrawing(Move::Direction eDir, Move::Size eDirSize)
 {
     // start undo action in order to get only one
     // undo action for this change.
@@ -1277,39 +1262,22 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
     tools::Long nX = 0;
     tools::Long nY = 0;
-    const bool bOnePixel(
-        MOVE_LEFT_SMALL == nDir ||
-        MOVE_UP_SMALL == nDir ||
-        MOVE_RIGHT_SMALL == nDir ||
-        MOVE_DOWN_SMALL == nDir);
-    const bool bHuge(
-        MOVE_LEFT_HUGE == nDir ||
-        MOVE_UP_HUGE == nDir ||
-        MOVE_RIGHT_HUGE == nDir ||
-        MOVE_DOWN_HUGE == nDir);
+
     SwMove nAnchorDir = SwMove::UP;
-    switch(nDir)
+    switch(eDir)
     {
-        case MOVE_LEFT_SMALL:
-        case MOVE_LEFT_HUGE:
-        case MOVE_LEFT_BIG:
+        case Move::Direction::Left:
             nX = -1;
             nAnchorDir = SwMove::LEFT;
         break;
-        case MOVE_UP_SMALL:
-        case MOVE_UP_HUGE:
-        case MOVE_UP_BIG:
+        case Move::Direction::Up:
             nY = -1;
         break;
-        case MOVE_RIGHT_SMALL:
-        case MOVE_RIGHT_HUGE:
-        case MOVE_RIGHT_BIG:
+        case Move::Direction::Right:
             nX = +1;
             nAnchorDir = SwMove::RIGHT;
         break;
-        case MOVE_DOWN_SMALL:
-        case MOVE_DOWN_HUGE:
-        case MOVE_DOWN_BIG:
+        case Move::Direction::Down:
             nY = +1;
             nAnchorDir = SwMove::DOWN;
         break;
@@ -1326,11 +1294,11 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         if ( nDiv > 0 )
             aSnap.setHeight( std::max( sal_uLong(1), static_cast<sal_uLong>(aSnap.Height()) / nDiv ) );
 
-        if(bOnePixel)
+        if(eDirSize == Move::Size::Small)
         {
             aSnap = PixelToLogic(Size(1,1));
         }
-        else if(bHuge)
+        else if(eDirSize == Move::Size::Huge)
         {
             // #i121236# 567twips == 1cm, but just take three times the normal snap
             aSnap = Size(aSnap.Width() * 3, aSnap.Height() * 3);
@@ -1352,7 +1320,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
                 // Check if object is anchored as character and move direction
                 bool bDummy1, bDummy2;
                 const bool bVertAnchor = rSh.IsFrameVertical( true, bDummy1, bDummy2 );
-                bool bHoriMove = !bVertAnchor == !( nDir % 2 );
+                bool bHoriMove = !bVertAnchor == (eDir == Move::Direction::Left || eDir == Move::Direction::Right);
                 bool bMoveAllowed =
                     !bHoriMove || (rSh.GetAnchorId() != RndStdIds::FLY_AS_CHAR);
                 if ( bMoveAllowed )
@@ -1745,7 +1713,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     }
 
     SwKeyState eNextKeyState = SwKeyState::End;
-    sal_uInt8 nDir = 0;
+    Move::Direction eDir = Move::Direction::Left;
+    Move::Size eDirSize = Move::Size::Small;
 
     if (m_nKS_NUMDOWN_Count > 0)
         m_nKS_NUMDOWN_Count--;
@@ -1807,13 +1776,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 case KEY_RIGHT | KEY_MOD2:
                     eKeyState = SwKeyState::ColRightBig;
                     eFlyState = SwKeyState::Fly_Change;
-                    nDir = MOVE_RIGHT_SMALL;
+                    eDir = Move::Direction::Right;
+                    eDirSize = Move::Size::Small;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_LEFT | KEY_MOD2:
                     eKeyState = SwKeyState::ColRightSmall;
                     eFlyState = SwKeyState::Fly_Change;
-                    nDir = MOVE_LEFT_SMALL;
+                    eDir = Move::Direction::Left;
+                    eDirSize = Move::Size::Small;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT:
@@ -1843,13 +1814,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 case KEY_UP | KEY_MOD2:
                     eKeyState = SwKeyState::ColBottomSmall;
                     eFlyState = SwKeyState::Fly_Change;
-                    nDir = MOVE_UP_SMALL;
+                    eDir = Move::Direction::Up;
+                    eDirSize = Move::Size::Small;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_DOWN | KEY_MOD2:
                     eKeyState = SwKeyState::ColBottomBig;
                     eFlyState = SwKeyState::Fly_Change;
-                    nDir = MOVE_DOWN_SMALL;
+                    eDir = Move::Direction::Down;
+                    eDirSize = Move::Size::Small;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2 | KEY_MOD1:
@@ -1918,10 +1891,10 @@ KEYINPUT_CHECKTABLE:
                         }
                         switch ( rKeyCode.GetCode() )
                         {
-                            case KEY_RIGHT: nDir = MOVE_RIGHT_HUGE; break;
-                            case KEY_LEFT: nDir = MOVE_LEFT_HUGE; break;
-                            case KEY_UP: nDir = MOVE_UP_HUGE; break;
-                            case KEY_DOWN: nDir = MOVE_DOWN_HUGE; break;
+                            case KEY_RIGHT: eDir = Move::Direction::Right; eDirSize = Move::Size::Huge; break;
+                            case KEY_LEFT: eDir = Move::Direction::Left; eDirSize = Move::Size::Huge; break;
+                            case KEY_UP: eDir = Move::Direction::Up; eDirSize = Move::Size::Huge; break;
+                            case KEY_DOWN: eDir = Move::Direction::Down; eDirSize = Move::Size::Huge; break;
                         }
                     }
                     break;
@@ -1934,7 +1907,8 @@ KEYINPUT_CHECKTABLE:
                     if(!bMod1)
                     {
                         eFlyState = SwKeyState::Fly_Change;
-                        nDir = MOVE_LEFT_BIG;
+                        eDir = Move::Direction::Left;
+                        eDirSize = Move::Size::Big;
                     }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 }
@@ -1949,7 +1923,8 @@ KEYINPUT_CHECKTABLE:
                     if(!bMod1)
                     {
                         eFlyState = SwKeyState::Fly_Change;
-                        nDir = MOVE_UP_BIG;
+                        eDir = Move::Direction::Up;
+                        eDirSize = Move::Size::Big;
                     }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 }
@@ -1967,7 +1942,8 @@ KEYINPUT_CHECKTABLE:
                             break;
                         }
                         eFlyState = SwKeyState::Fly_Change;
-                        nDir = MOVE_DOWN_BIG;
+                        eDir = Move::Direction::Down;
+                        eDirSize = Move::Size::Big;
                     }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 }
@@ -2160,7 +2136,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_RIGHT:
                     {
                         eFlyState = SwKeyState::Fly_Change;
-                        nDir = MOVE_RIGHT_BIG;
+                        eDir = Move::Direction::Right;
+                        eDirSize = Move::Size::Big;
                         goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
                 case KEY_TAB:
@@ -2893,13 +2870,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 SdrView *pSdrView = rSh.GetDrawView();
                 const SdrHdlList& rHdlList = pSdrView->GetHdlList();
                 if(rHdlList.GetFocusHdl())
-                    ChangeDrawing( nDir );
+                    ChangeDrawing(eDir, eDirSize);
                 else
-                    ChangeFly( nDir, dynamic_cast<const SwWebView*>( &m_rView) !=  nullptr );
+                    ChangeFly(eDir, eDirSize, dynamic_cast<const SwWebView*>( &m_rView) !=  nullptr);
             }
             break;
             case SwKeyState::Draw_Change :
-                ChangeDrawing( nDir );
+                ChangeDrawing(eDir, eDirSize);
                 break;
             default:
                 break;
