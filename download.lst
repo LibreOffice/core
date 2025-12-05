@@ -574,8 +574,8 @@ PDFIUM_TARBALL := pdfium-7471.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-AFDKO_SHA256SUM := e1a31e871e83dd022635b852297c433c8e9c9d9d4f0c0f634e8d55dde28ad930
-AFDKO_TARBALL := afdko-4.0.2.tar.gz
+AFDKO_SHA256SUM := 5feed7c2468e25b25fce0479c04af07f4ed2680bc9251bb4c4aef9ec2fba5720
+AFDKO_TARBALL := afdko-4.0.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
