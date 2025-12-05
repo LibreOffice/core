@@ -2019,6 +2019,11 @@ void SwDocTest::testFillRubyList()
         for (auto const& rRuby : aRubies)
         {
             aTemp.append(rRuby->GetText() + u"["_ustr + rRuby->GetRubyAttr().GetText() + u"]"_ustr);
+
+            if (rRuby->GetSequence())
+            {
+                aTemp.append(u"("_ustr + OUString::number(rRuby->GetSequence()) + u")"_ustr);
+            }
         }
 
         return aTemp.toString();
@@ -2162,6 +2167,34 @@ void SwDocTest::testFillRubyList()
 
         CPPUNIT_ASSERT_EQUAL(u"学校[]"_ustr, fnGetCombinedString(aPaM));
     }
+
+    // tdf#169791: Characteristic test for ruby with non-contiguous selection
+    {
+        fnAppendJapanese(u"学校に行こう"_ustr);
+
+        SwPaM aPaM0{ *aPaM.GetPoint(), *aPaM.GetPoint() };
+        aPaM0.GetMark()->AdjustContent(2);
+
+        SwPaM aPaM1{ *aPaM.GetPoint(), *aPaM.GetPoint(), &aPaM0 };
+        aPaM1.GetPoint()->AdjustContent(3);
+        aPaM1.GetMark()->AdjustContent(4);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[]行[](1)"_ustr, fnGetCombinedString(aPaM1));
+    }
+
+    // tdf#169791: Another non-contiguous selection
+    {
+        fnAppendJapanese(u"経済学者の経済学者"_ustr);
+
+        SwPaM aPaM0{ *aPaM.GetPoint(), *aPaM.GetPoint() };
+        aPaM0.GetMark()->AdjustContent(4);
+
+        SwPaM aPaM1{ *aPaM.GetPoint(), *aPaM.GetPoint(), &aPaM0 };
+        aPaM1.GetPoint()->AdjustContent(5);
+        aPaM1.GetMark()->AdjustContent(9);
+
+        CPPUNIT_ASSERT_EQUAL(u"経済[]学者[]経済[](1)学者[](1)"_ustr, fnGetCombinedString(aPaM1));
+    }
 }
 
 void SwDocTest::testSetRubyList()
@@ -2191,11 +2224,13 @@ void SwDocTest::testSetRubyList()
         CPPUNIT_ASSERT_EQUAL(rText, aPaM.GetText());
     };
 
-    auto fnAppendRuby = [](SwRubyList* rList, OUString aBase, OUString aRuby)
+    auto fnAppendRuby
+        = [](SwRubyList* rList, OUString aBase, OUString aRuby, sal_Int32 nSequence = 0)
     {
         auto pEnt = std::make_unique<SwRubyListEntry>();
         pEnt->SetText(std::move(aBase));
         pEnt->SetRubyAttr(SwFormatRuby{ std::move(aRuby) });
+        pEnt->SetSequence(nSequence);
 
         rList->push_back(std::move(pEnt));
     };
@@ -2557,6 +2592,47 @@ void SwDocTest::testSetRubyList()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aEmptyPaM.GetMark()->GetContentIndex());
 
         CPPUNIT_ASSERT_EQUAL(u"学森林[しんりん]海上[かいじょう]地面[じめん]校"_ustr,
+                             fnGetCombinedString());
+    }
+
+    // tdf#169791: Characteristic test for ruby with non-contiguous selection
+    {
+        fnAppendJapanese(u"学校に行こう"_ustr);
+
+        SwPaM aPaM0{ *aPaM.GetPoint(), *aPaM.GetPoint() };
+        aPaM0.GetMark()->AdjustContent(2);
+
+        SwPaM aPaM1{ *aPaM.GetPoint(), *aPaM.GetPoint(), &aPaM0 };
+        aPaM1.GetPoint()->AdjustContent(3);
+        aPaM1.GetMark()->AdjustContent(4);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr, /*nSequence*/ 0);
+        fnAppendRuby(&rList, u"行"_ustr, u"い"_ustr, /*nSequence*/ 1);
+
+        m_pDoc->SetRubyList(aPaM1, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に行[い]こう"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#169791: Test for ruby with non-contiguous selection and deleted inner subsequence
+    {
+        fnAppendJapanese(u"経済学者の経済学者"_ustr);
+
+        SwPaM aPaM0{ *aPaM.GetPoint(), *aPaM.GetPoint() };
+        aPaM0.GetMark()->AdjustContent(4);
+
+        SwPaM aPaM1{ *aPaM.GetPoint(), *aPaM.GetPoint(), &aPaM0 };
+        aPaM1.GetPoint()->AdjustContent(5);
+        aPaM1.GetMark()->AdjustContent(9);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"経済学者"_ustr, u"けいざいがくしゃ"_ustr, /*nSequence*/ 0);
+        fnAppendRuby(&rList, u"経済学者"_ustr, u"けいざいがくしゃ"_ustr, /*nSequence*/ 1);
+
+        m_pDoc->SetRubyList(aPaM1, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"経済学者[けいざいがくしゃ]の経済学者[けいざいがくしゃ]"_ustr,
                              fnGetCombinedString());
     }
 }
