@@ -1415,11 +1415,11 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor )
     return nAlign;
 }
 
-static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
+static sal_uInt16 lcl_CalcCellFit(const SwLayoutFrame& rCell)
 {
     SwTwips nRet = 0;
-    const SwFrame *pFrame = pCell->Lower(); // The whole Line
-    SwRectFnSet aRectFnSet(*pCell);
+    const SwFrame *pFrame = rCell.Lower(); // The whole Line
+    SwRectFnSet aRectFnSet(rCell);
     while ( pFrame )
     {
         const SwTwips nAdd = aRectFnSet.GetWidth(pFrame->getFrameArea()) -
@@ -1434,8 +1434,8 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
         pFrame = pFrame->GetNext();
     }
     // Surrounding border as well as left and Right Border also need to be respected
-    nRet += aRectFnSet.GetWidth(pCell->getFrameArea()) -
-            aRectFnSet.GetWidth(pCell->getFramePrintArea());
+    nRet += aRectFnSet.GetWidth(rCell.getFrameArea()) -
+            aRectFnSet.GetWidth(rCell.getFramePrintArea());
 
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
@@ -1461,7 +1461,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
                               bool bWishValues )
 {
     const sal_uInt16 nWish = bWishValues ?
-                    ::lcl_CalcCellFit( pCell ) :
+                    ::lcl_CalcCellFit(*pCell) :
                     MINLAY + sal_uInt16(pCell->getFrameArea().Width() - pCell->getFramePrintArea().Width());
 
     SwRectFnSet aRectFnSet(*pTab);
@@ -1579,7 +1579,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                         bNotInCols = false;
                         if ( bWishValues )
                         {
-                            const sal_uInt16 nWish = ::lcl_CalcCellFit( pCell );
+                            const sal_uInt16 nWish = ::lcl_CalcCellFit(*pCell);
                             if ( nWish > nFit )
                                 nFit = nWish;
                         }
