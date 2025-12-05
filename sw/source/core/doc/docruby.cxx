@@ -49,6 +49,7 @@ constexpr int nMaxBaseTexts = 30;
  */
 sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
 {
+    sal_Int32 nCurrSequence = 0;
     const SwPaM *_pStartCursor = rPam.GetNext(),
                 *_pStartCursor2 = _pStartCursor;
     bool bCheckEmpty = &rPam != _pStartCursor;
@@ -59,6 +60,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
             SwPaM aPam( *pStart );
             do {
                 std::unique_ptr<SwRubyListEntry> pNew(new SwRubyListEntry);
+                pNew->SetSequence(nCurrSequence);
                 if( pEnd != pStart )
                 {
                     aPam.SetMark();
@@ -85,6 +87,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
         if (nMaxBaseTexts <= rList.size())
             break;
         _pStartCursor = _pStartCursor->GetNext();
+        ++nCurrSequence;
     } while( _pStartCursor != _pStartCursor2 );
 
     return rList.size();
@@ -100,124 +103,135 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
 
     SwRubyList::size_type nListEntry = 0;
     int nCurrBaseTexts = 0;
+    sal_Int32 nTotalContentGrowth = 0;
+    sal_Int32 nCurrSequence = 0;
 
     const SwPaM* pStartCursor = rPam.GetNext();
-    auto [pStart, pEnd] = pStartCursor->StartEnd();
-
-    bool bCheckEmpty = (&rPam == pStartCursor) || (pStart != pEnd && *pStart != *pEnd);
-
-    // Sequentially replace as many spans as possible
-    SwPaM aPam(*pStart);
-    while (bCheckEmpty && nListEntry < rList.size() && nCurrBaseTexts < nMaxBaseTexts)
+    const SwPaM* pStartCursor2 = pStartCursor;
+    do
     {
-        if (pEnd != pStart)
+        auto [pStart, pEnd] = pStartCursor->StartEnd();
+
+        bool bCheckEmpty = (&rPam == pStartCursor) || (pStart != pEnd && *pStart != *pEnd);
+
+        // Sequentially replace as many spans as possible
+        SwPaM aPam(*pStart);
+        while (bCheckEmpty && nListEntry < rList.size()
+               && rList[nListEntry]->GetSequence() == nCurrSequence
+               && nCurrBaseTexts < nMaxBaseTexts)
         {
-            aPam.SetMark();
-            *aPam.GetMark() = *pEnd;
+            if (pEnd != pStart)
+            {
+                aPam.SetMark();
+                *aPam.GetMark() = *pEnd;
+            }
+
+            SwRubyListEntry aCheckEntry;
+            auto bSelected = SelectNextRubyChars(aPam, aCheckEntry);
+
+            if (bSelected)
+            {
+                ++nCurrBaseTexts;
+
+                // Existing ruby text was located. Apply the new attributes.
+                const SwRubyListEntry* pEntry = rList[nListEntry++].get();
+                if (aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr())
+                {
+                    // set/reset the attribute
+                    if (!pEntry->GetRubyAttr().GetText().isEmpty())
+                    {
+                        getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
+                    }
+                    else
+                    {
+                        ResetAttrs(aPam, true, aDelArr);
+                    }
+                }
+
+                if (aCheckEntry.GetText() != pEntry->GetText())
+                {
+                    if (pEntry->GetText().isEmpty())
+                    {
+                        ResetAttrs(aPam, true, aDelArr);
+                    }
+
+                    // text is changed, so replace the original
+                    getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(), false);
+                    aPam.Exchange();
+                }
+
+                aPam.DeleteMark();
+            }
+            else
+            {
+                // No existing ruby text located. Advance to next paragraph.
+                aPam.DeleteMark();
+                aPam.Move(fnMoveForward, GoInNode);
+            }
+
+            // Stop substituting when the cursor advances to the end of the selection.
+            if (*aPam.GetPoint() >= *pEnd)
+            {
+                break;
+            }
         }
 
-        SwRubyListEntry aCheckEntry;
-        auto bSelected = SelectNextRubyChars(aPam, aCheckEntry);
-
-        if (bSelected)
+        // Delete any spans past the end of the ruby list
+        while ((nListEntry == rList.size() || rList[nListEntry]->GetSequence() != nCurrSequence)
+               && nCurrBaseTexts < nMaxBaseTexts && *aPam.GetPoint() < *pEnd)
         {
-            ++nCurrBaseTexts;
-
-            // Existing ruby text was located. Apply the new attributes.
-            const SwRubyListEntry* pEntry = rList[nListEntry++].get();
-            if (aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr())
+            if (pEnd != pStart)
             {
-                // set/reset the attribute
+                aPam.SetMark();
+                *aPam.GetMark() = *pEnd;
+            }
+
+            SwRubyListEntry aCheckEntry;
+            auto bSelected = SelectNextRubyChars(aPam, aCheckEntry);
+
+            if (bSelected)
+            {
+                ++nCurrBaseTexts;
+
+                ResetAttrs(aPam, true, aDelArr);
+                getIDocumentContentOperations().DeleteRange(aPam);
+                aPam.Exchange();
+
+                aPam.DeleteMark();
+            }
+            else
+            {
+                // No existing ruby text located. Advance to next paragraph.
+                aPam.DeleteMark();
+                aPam.Move(fnMoveForward, GoInNode);
+            }
+        }
+
+        // Insert any spans past the end of the base text list
+        while (nListEntry < rList.size() && rList[nListEntry]->GetSequence() == nCurrSequence)
+        {
+            const SwRubyListEntry* pEntry = rList[nListEntry++].get();
+
+            if (!pEntry->GetText().isEmpty())
+            {
+                aPam.SetMark();
+                getIDocumentContentOperations().InsertString(aPam, pEntry->GetText());
+                aPam.GetMark()->AdjustContent(-pEntry->GetText().getLength());
+
                 if (!pEntry->GetRubyAttr().GetText().isEmpty())
                 {
                     getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
                 }
-                else
-                {
-                    ResetAttrs(aPam, true, aDelArr);
-                }
+
+                aPam.DeleteMark();
+
+                nTotalContentGrowth += pEntry->GetText().getLength();
             }
-
-            if (aCheckEntry.GetText() != pEntry->GetText())
-            {
-                if (pEntry->GetText().isEmpty())
-                {
-                    ResetAttrs(aPam, true, aDelArr);
-                }
-
-                // text is changed, so replace the original
-                getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(), false);
-                aPam.Exchange();
-            }
-
-            aPam.DeleteMark();
-        }
-        else
-        {
-            // No existing ruby text located. Advance to next paragraph.
-            aPam.DeleteMark();
-            aPam.Move(fnMoveForward, GoInNode);
         }
 
-        // Stop substituting when the cursor advances to the end of the selection.
-        if (*aPam.GetPoint() >= *pEnd)
-        {
-            break;
-        }
-    }
-
-    // Delete any spans past the end of the ruby list
-    while (nListEntry == rList.size() && nCurrBaseTexts < nMaxBaseTexts && *aPam.GetPoint() < *pEnd)
-    {
-        if (pEnd != pStart)
-        {
-            aPam.SetMark();
-            *aPam.GetMark() = *pEnd;
-        }
-
-        SwRubyListEntry aCheckEntry;
-        auto bSelected = SelectNextRubyChars(aPam, aCheckEntry);
-
-        if (bSelected)
-        {
-            ++nCurrBaseTexts;
-
-            ResetAttrs(aPam, true, aDelArr);
-            getIDocumentContentOperations().DeleteRange(aPam);
-            aPam.Exchange();
-
-            aPam.DeleteMark();
-        }
-        else
-        {
-            // No existing ruby text located. Advance to next paragraph.
-            aPam.DeleteMark();
-            aPam.Move(fnMoveForward, GoInNode);
-        }
-    }
-
-    // Insert any spans past the end of the base text list
-    sal_Int32 nTotalContentGrowth = 0;
-    while (nListEntry < rList.size())
-    {
-        const SwRubyListEntry* pEntry = rList[nListEntry++].get();
-
-        if (!pEntry->GetText().isEmpty())
-        {
-            aPam.SetMark();
-            getIDocumentContentOperations().InsertString(aPam, pEntry->GetText());
-            aPam.GetMark()->AdjustContent(-pEntry->GetText().getLength());
-
-            if (!pEntry->GetRubyAttr().GetText().isEmpty())
-            {
-                getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
-            }
-
-            aPam.DeleteMark();
-
-            nTotalContentGrowth += pEntry->GetText().getLength();
-        }
-    }
+        pStartCursor = pStartCursor->GetNext();
+        ++nCurrSequence;
+    } while (pStartCursor != pStartCursor2);
 
     // Expand selection to account for insertion
     rPam.Normalize();
