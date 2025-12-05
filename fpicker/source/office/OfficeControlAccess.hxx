@@ -24,6 +24,7 @@
 #include <string_view>
 
 #include "fileview.hxx"
+#include "fpdialogbase.hxx"
 #include "pickercallbacks.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
@@ -61,11 +62,11 @@ namespace svt
     */
     class OControlAccess
     {
-        IFilePickerController*  m_pFilePickerController;
+        SvtFileDialog_Base* m_pFilePicker;
         SvtFileView*     m_pFileView;
 
     public:
-        OControlAccess( IFilePickerController* pController, SvtFileView* pFileView );
+        OControlAccess(SvtFileDialog_Base* pFilePicker, SvtFileView* pFileView);
 
         // XControlAccess implementation
         void setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const css::uno::Any& rValue );

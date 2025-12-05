@@ -227,7 +227,6 @@ private:
 
     AdjustFilterFlags           adjustFilter( const OUString& _rFilter );
 
-    // IFilePickerController, needed by OControlAccess
     virtual weld::Widget*       getControl( sal_Int16 nControlId, bool bLabelControl = false ) const override;
     virtual void                enableControl( sal_Int16 _nControlId, bool _bEnable ) override;
     virtual OUString            getCurFilter( ) const override;

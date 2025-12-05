@@ -54,7 +54,7 @@ inline constexpr OUString FILEDIALOG_FILTER_ALL = u"*.*"_ustr;
 
 // SvtFileDialog_Base
 
-class SvtFileDialog_Base : public weld::GenericDialogController, public ::svt::IFilePickerController
+class SvtFileDialog_Base : public weld::GenericDialogController
 {
 public:
     SvtFileDialog_Base(weld::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID)
@@ -73,6 +73,10 @@ public:
     virtual const OUString& GetPath() = 0;
     virtual std::vector<OUString> GetPathList() const = 0;
     virtual bool ContentIsFolder( const OUString& rURL ) = 0;
+
+    virtual weld::Widget* getControl(sal_Int16 nControlId, bool bLabelControl = false) const = 0;
+    virtual void enableControl(sal_Int16 nControlId, bool bEnable) = 0;
+    virtual OUString getCurFilter() const = 0;
 
     virtual OUString getCurrentFileText() const = 0;
     virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) = 0;
