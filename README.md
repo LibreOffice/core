@@ -64,7 +64,7 @@ in SUSE Linux Enterprise Desktop and the Maintenance Support version of
 Red Hat Enterprise Linux.
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
-version of Clang is 18.1.8. Since Xcode doesn't provide the compiler plugin
+version of Clang is 18. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
 
 You can find the TDF configure switches in the `distro-configs/` directory.
