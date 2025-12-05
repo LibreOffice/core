@@ -67,6 +67,13 @@ interface BaseTextDrawBase
         StateMethod = GetState ;
     ]
 
+    SID_DIAGRAM_TO_GROUP
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     SID_EDIT_DIAGRAM
     [
         AutoUpdate = TRUE ,

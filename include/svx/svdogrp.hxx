@@ -29,6 +29,7 @@ class SVXCORE_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
 {
 public:
     // Basic DiagramHelper support
+    virtual bool isDiagram() const override;
     virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const override;
 
 private:
@@ -66,7 +67,6 @@ public:
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     virtual SdrObjList* GetSubList() const override;
-    virtual void SetGrabBagItem(const css::uno::Any& rVal) override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;

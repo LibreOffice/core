@@ -39,6 +39,8 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
+using namespace ::com::sun::star;
+
 namespace {
 
 // helper to create the geometry for a rounded polygon, maybe
@@ -408,13 +410,35 @@ IDiagramHelper::IDiagramHelper(bool bSelfCreated)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
 , mbSelfCreated(bSelfCreated)
+, mbModified(false)
+, mpAssociatedSdrObjGroup(nullptr)
 {
 }
 
 IDiagramHelper::~IDiagramHelper() {}
 
-void IDiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
+void IDiagramHelper::disconnectFromSdrObjGroup()
 {
+    if (nullptr != mpAssociatedSdrObjGroup)
+    {
+        // if change was done, reset GrabBagItem to delete buffered DiagramData which is no longer valid
+        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
+        mpAssociatedSdrObjGroup->mp_DiagramHelper.reset();
+        mpAssociatedSdrObjGroup = nullptr;
+    }
+}
+
+void IDiagramHelper::connectToSdrObjGroup(SdrObjGroup& rTarget)
+{
+    if (mpAssociatedSdrObjGroup == &rTarget && rTarget.mp_DiagramHelper.get() == this)
+        // connection already established
+        return;
+
+    // ensure unconnect if already connected
+    disconnectFromSdrObjGroup();
+
+    // connect to target
+    mpAssociatedSdrObjGroup = &rTarget;
     rTarget.mp_DiagramHelper.reset(this);
 }
 

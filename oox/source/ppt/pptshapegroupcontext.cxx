@@ -112,7 +112,14 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
             {
                 pShape->getFillProperties().moFillType = XML_noFill;
             }
-            pShape->setModelId(rAttribs.getStringDefaulted( XML_modelId ));
+            const OUString aModelID(rAttribs.getStringDefaulted( XML_modelId ));
+            pShape->setModelId(aModelID);
+
+            // also set DataModelID to have these also available for the imported
+            // replacement visualization. This is key to allow changes to
+            // DiagramHelper model changes
+            pShape->setDiagramDataModelID(aModelID);
+
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
     case PPT_TOKEN( pic ):          // CT_Picture

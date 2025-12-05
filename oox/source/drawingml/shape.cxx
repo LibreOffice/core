@@ -1435,6 +1435,24 @@ Reference< XShape > const & Shape::createAndInsert(
 
         ActionLockGuard const alg(mxShape);
 
+        if (!getDiagramDataModelID().isEmpty())
+        {
+            SdrObject* pShape(SdrObject::getSdrObjectFromXShape(mxShape));
+
+            if (nullptr != pShape)
+            {
+                // check if we have a DiagramHelper
+                std::shared_ptr< svx::diagram::IDiagramHelper > pIDiagramHelper(
+                    pShape->getDiagramHelperFromDiagramOrMember());
+
+                if (pIDiagramHelper)
+                {
+                    // only needed when DiagramHelper exists
+                    pShape->setDiagramDataModelID(getDiagramDataModelID());
+                }
+            }
+        }
+
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
         {

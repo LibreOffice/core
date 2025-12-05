@@ -385,6 +385,7 @@ class XFillGradientItem;
 
 // CAUTION! Range <250 .. 250> used by EditEngine (!)
 
+#define SID_DIAGRAM_TO_GROUP                            ( SID_SVX_START + 252 )
 #define SID_DRAW_TEXT                                   ( SID_SVX_START + 253 )
 #define SID_DRAW_CAPTION                                ( SID_SVX_START + 254 )
 #define SID_DRAW_SELECT                                 ( SID_SVX_START + 255 )

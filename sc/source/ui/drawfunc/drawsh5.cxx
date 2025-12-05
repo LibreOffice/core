@@ -276,6 +276,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_REGENERATE_DIAGRAM:
+        case SID_DIAGRAM_TO_GROUP:
         case SID_EDIT_DIAGRAM:
             {
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -293,7 +294,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                             pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
-                        else // SID_EDIT_DIAGRAM
+                        else if (SID_EDIT_DIAGRAM == nSlotId)
                         {
                             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                             vcl::Window* pWin = rViewData.GetActiveWin();
@@ -306,6 +307,12 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     pDlg->disposeOnce();
                                 }
                             );
+                        }
+                        else // SID_DIAGRAM_TO_GROUP
+                        {
+                            pView->UnmarkAll();
+                            pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                            pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
                     }
                 }

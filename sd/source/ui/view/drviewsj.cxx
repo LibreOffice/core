@@ -158,6 +158,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if(!pSdrObjGroup || !pSdrObjGroup->isDiagram())
             {
                 rSet.DisableItem( SID_REGENERATE_DIAGRAM );
+                rSet.DisableItem( SID_DIAGRAM_TO_GROUP );
                 rSet.DisableItem( SID_EDIT_DIAGRAM );
             }
 
