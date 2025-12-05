@@ -26,6 +26,7 @@
 #include "epptooxml.hxx"
 #include <oox/export/shapes.hxx>
 #include <svx/svdlayer.hxx>
+#include <xmloff/autolayout.hxx>
 #include <unokywds.hxx>
 #include <osl/file.hxx>
 
@@ -232,20 +233,25 @@ struct PPTXLayoutInfo
 
 }
 
-const PPTXLayoutInfo aLayoutInfo[OOXML_LAYOUT_SIZE] =
+// the function 'SlidePersist::getLayoutFromValueToken()'
+// likely needs to be updated after any changes here
+// unsupported PPTX layouts: txAndMedia, twoColTx, twoTxTwoObj,
+//  twoObjAndObj, objTx, picTx, secHead, objOnly, objAndTwoObj,
+//  mediaAndTx, dgm, cust
+const PPTXLayoutInfo aLayoutInfo[] =
 {
     { 0, "Title Slide", "title" },
     { 1, "Title and text", "tx" },
     { 2, "Title and chart", "chart" },
     { 3, "Title, text on left, text on right", "twoObj" },
     { 4, "Title, text on left and chart on right", "txAndChart" },
+    { 20, "Blank Slide", "blank" },
     { 6, "Title, text on left, clip art on right", "txAndClipArt" },
-    { 6, "Title, text on left, media on right", "txAndMedia" },
     { 7, "Title, chart on left and text on right", "chartAndTx" },
     { 8, "Title and table", "tbl" },
     { 9, "Title, clipart on left, text on right", "clipArtAndTx" },
     { 10, "Title, text on left, object on right", "txAndObj" },
-    { 1, "Title and object", "obj" },
+    { 11, "Title and object", "obj" },
     { 12, "Title, text on left, two objects on right", "txAndTwoObj" },
     { 13, "Title, object on left, text on right", "objAndTx" },
     { 14, "Title, object on top, text on bottom", "objOverTx" },
@@ -255,22 +261,23 @@ const PPTXLayoutInfo aLayoutInfo[OOXML_LAYOUT_SIZE] =
     { 18, "Title and four objects", "fourObj" },
     { 19, "Title Only", "titleOnly" },
     { 20, "Blank Slide", "blank" },
-    { 21, "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
-    { 22, "Vertical title on right, vertical text on left", "vertTitleAndTx" },
-    { 23, "Title and vertical text body", "vertTx" },
-    { 24, "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
-    { 20, "Title, two objects each with text", "twoTxTwoObj" },
-    { 15, "Title, two objects on left, one object on right", "twoObjAndObj" },
-    { 20, "Title, object and caption text", "objTx" },
-    { 20, "Title, picture, and caption text", "picTx" },
-    { 20, "Section header title and subtitle text", "secHead" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 27, "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
+    { 28, "Vertical title on right, vertical text on left", "vertTitleAndTx" },
+    { 29, "Title and vertical text body", "vertTx" },
+    { 30, "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
+    { 20, "Blank Slide", "blank" },
     { 32, "Object only", "objOnly" },
-    { 12, "Title, one object on left, two objects on right", "objAndTwoObj" },
-    { 20, "Title, media on left, text on right", "mediaAndTx" },
-    { 34, "Title, 6 Content", "blank" }, // not defined in OOXML => blank
-    { 2, "Title and diagram", "dgm" },
-    { 0, "Custom layout defined by user", "cust" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" }
 };
+static_assert(std::size(aLayoutInfo) == AUTOLAYOUT_END,
+              "aLayoutInfo must have a corresponding item for each AUTOLAYOUT");
 
 PowerPointShapeExport::PowerPointShapeExport(FSHelperPtr pFS, ShapeHashMap* pShapeMap,
         PowerPointExport* pFB)
@@ -1975,7 +1982,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         Reference<XNamed> xNamed(mXDrawPage, UNO_QUERY);
         if (xNamed.is())
             aSlideName = xNamed->getName();
-        for (int i = 0; i < OOXML_LAYOUT_SIZE; ++i)
+        for (int i = 0; i < AUTOLAYOUT_END; ++i)
         {
             if (mLayoutInfo[i].mnFileIdArray.size() > nPageNum
                 && mLayoutInfo[i].mnFileIdArray[nPageNum] > 0)
