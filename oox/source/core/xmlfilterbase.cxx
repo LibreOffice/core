@@ -570,21 +570,13 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
     return OUString();
 }
 
-static bool lcl_isValidDate(const util::DateTime& rTime, XmlFilterBase& rSelf)
+static bool lcl_isValidDate(const util::DateTime& rTime)
 {
     if (rTime.Year == 0)
         return false;
 
     // MS Office reports document as corrupt if core.xml contains any Year <= 1600 or > 9999
-    // for the "package" URI (ECMA_376_1ST_EDITION or docx).
-    if (rTime.Year > 1600  && rTime.Year < 10000)
-        return true;
-
-    const bool bDocx = dynamic_cast<text::XTextDocument*>(rSelf.getModel().get());
-    if (bDocx || rSelf.getVersion() == oox::core::ECMA_376_1ST_EDITION)
-        return false;
-
-    return true;
+    return rTime.Year > 1600  && rTime.Year < 10000;
 }
 
 static void
@@ -728,7 +720,7 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     if (!bRemoveUserInfo)
     {
         const util::DateTime aCreateDate = xProperties->getCreationDate();
-        if (lcl_isValidDate(aCreateDate, rSelf))
+        if (lcl_isValidDate(aCreateDate))
             writeElement(pCoreProps, FSNS(XML_dcterms, XML_created), aCreateDate);
         writeElement(pCoreProps, FSNS(XML_dc, XML_creator), xProperties->getAuthor());
     }
@@ -748,11 +740,11 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     {
         writeElement(pCoreProps, FSNS(XML_cp, XML_lastModifiedBy), xProperties->getModifiedBy());
         const util::DateTime aPrintDate = xProperties->getPrintDate();
-        if (lcl_isValidDate(aPrintDate, rSelf))
+        if (lcl_isValidDate(aPrintDate))
             writeElement(pCoreProps, FSNS(XML_cp, XML_lastPrinted), aPrintDate);
 
         const util::DateTime aModifyDate = xProperties->getModificationDate();
-        if (lcl_isValidDate(aModifyDate, rSelf))
+        if (lcl_isValidDate(aModifyDate))
             writeElement(pCoreProps, FSNS(XML_dcterms, XML_modified), aModifyDate);
     }
     if (!bRemovePersonalInfo)

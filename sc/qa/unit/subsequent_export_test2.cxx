@@ -1005,6 +1005,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testXltxExport)
                 u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf169072_illegalDates)
+{
+    // Given a document that MS Word reports as corrupt
+    createScDoc("xlsx/tdf169072_illegalDates.xlsx");
+    save(TestFilter::XLSX);
+
+    // Date Years MUST be greater than 1600 and less than 10,000
+    // so by dropping invalid entries, we have a document that MS Excel can now cleanly open
+    xmlDocUniquePtr pXmlCore = parseExport(u"docProps/core.xml"_ustr);
+    assertXPathContent(pXmlCore, "/cp:coreProperties/dcterms:created", u"9999-10-10T13:07:54Z");
+    assertXPathContent(pXmlCore, "/cp:coreProperties/dcterms:modified", u"1601-01-01T13:09:08Z");
+    assertXPath(pXmlCore, "/cp:coreProperties/cp:lastPrinted", 0); // was 1600-12-31T00:00:52Z
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf165180_date1904)
 {
     // given a hand-modified document (which added dateCompatibility="0")
