@@ -159,7 +159,7 @@ private:
     double mdValue;
 };
 
-class ColorPickerDialog : public weld::GenericDialogController
+class ColorPickerDialog : public weld::GenericDialogController, public virtual ColorDialogController
 {
 private:
     ColorFieldControl m_aColorField;
@@ -204,8 +204,12 @@ private:
 public:
     ColorPickerDialog(weld::Window* pParent, const Color& rColor, vcl::ColorPickerMode eDialogMode);
 
-    Color GetColor() const;
-    void SetColor(const Color& rColor);
+    virtual weld::Dialog* getDialog() override
+    {
+        return weld::GenericDialogController::getDialog();
+    }
+    virtual Color GetColor() const override;
+    virtual void SetColor(const Color& rColor) override;
 
 private:
     void update_color(UpdateFlags n = UpdateFlags::All);
