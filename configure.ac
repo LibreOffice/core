@@ -2155,11 +2155,6 @@ AC_ARG_WITH(product-name,
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
 
-libo_FUZZ_ARG_ENABLE(community-flavor,
-    AS_HELP_STRING([--disable-community-flavor],
-        [Disable the Community branding.]),
-,)
-
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
         [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
@@ -3242,14 +3237,6 @@ else
     ENABLE_HARDENING_FLAGS=TRUE
 fi
 AC_SUBST(ENABLE_HARDENING_FLAGS)
-
-AC_MSG_CHECKING([whether to build a Community flavor])
-if test -z "$enable_community_flavor" -o "$enable_community_flavor" = "yes"; then
-    AC_DEFINE(HAVE_FEATURE_COMMUNITY_FLAVOR)
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
 
 dnl ===================================================================
 dnl Test whether to sign Windows Build
