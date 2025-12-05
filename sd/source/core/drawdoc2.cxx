@@ -1499,6 +1499,11 @@ bool SdDrawDocument::ValidateCanvasPage(const SdPage* pPage) const
             continue;
         SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
         SdrPage* pPreviewPage = pPageObj->GetReferencedPage();
+        if (!pPreviewPage)
+        {
+            SAL_WARN("sd", "SdrObject does point to a valid page");
+            return false;
+        }
         if (aPreviewPageSet.contains(pPreviewPage))
             return false;
         else
