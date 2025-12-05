@@ -163,13 +163,13 @@ bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
     }
 #if CLANG_VERSION >= 220000
     if (auto const t = dyn_cast<TagType>(type)) {
-        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+        return t->getKeyword() == ElaboratedTypeKeyword::None;
     }
     if (auto const t = dyn_cast<TypedefType>(type)) {
-        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+        return t->getKeyword() == ElaboratedTypeKeyword::None;
     }
     if (auto const t = dyn_cast<UsingType>(type)) {
-        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+        return t->getKeyword() == ElaboratedTypeKeyword::None;
     }
 #else
     if (isa<TagType>(type) || isa<TypedefType>(type))
@@ -177,7 +177,7 @@ bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
         return true;
     }
     if (auto const t = dyn_cast<ElaboratedType>(type)) {
-        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+        return t->getKeyword() == ElaboratedTypeKeyword::None;
     }
 #endif
     return false;
@@ -336,9 +336,8 @@ bool CStyleCast::isConstCast(QualType from, QualType to) {
 
 bool CStyleCast::isFromCIncludeFile(SourceLocation spellingLocation) const {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
-        && compat::ends_with(
-            StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename()),
-            ".h");
+        && StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename())
+           .ends_with(".h");
 }
 
 bool CStyleCast::isSharedCAndCppCode(SourceLocation location) const {
@@ -362,7 +361,7 @@ bool CStyleCast::isLastTokenOfImmediateMacroBodyExpansion(
     auto const spell = compiler.getSourceManager().getSpellingLoc(loc);
     auto name = Lexer::getImmediateMacroName(
         loc, compiler.getSourceManager(), compiler.getLangOpts());
-    while (compat::starts_with(name, "\\\n")) {
+    while (name.starts_with("\\\n")) {
         name = name.drop_front(2);
         while (!name.empty()
                && (name.front() == ' ' || name.front() == '\t' || name.front() == '\n'

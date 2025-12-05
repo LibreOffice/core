@@ -257,9 +257,8 @@ bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
 
 bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
-        && compat::ends_with(
-            StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename()),
-            ".h");
+        && StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename())
+           .ends_with(".h");
 }
 
 bool Nullptr::isSharedCAndCppCode(SourceLocation location) const {

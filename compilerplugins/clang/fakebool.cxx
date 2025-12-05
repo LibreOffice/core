@@ -19,7 +19,6 @@
 #include "config_clang.h"
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "functionaddress.hxx"
 #include "plugin.hxx"
 
@@ -374,7 +373,7 @@ void FakeBool::run() {
                            dyn_cast<FunctionDecl>(
                                decl->getDeclContext())
                            ->getNameInfo().getLoc()))
-                   || f->isDefined() || compat::isPureVirtual(f))
+                   || f->isDefined() || f->isPureVirtual())
                   && k != OverrideKind::MAYBE && rewrite(loc, fbk)))
             {
                 report(
@@ -425,7 +424,7 @@ void FakeBool::run() {
             if (!((compiler.getSourceManager().isInMainFile(
                        compiler.getSourceManager().getSpellingLoc(
                            decl->getNameInfo().getLoc()))
-                   || f->isDefined() || compat::isPureVirtual(f))
+                   || f->isDefined() || f->isPureVirtual())
                   && rewrite(loc, fbk)))
             {
                 report(
@@ -872,9 +871,8 @@ bool FakeBool::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
 
 bool FakeBool::isFromCIncludeFile(SourceLocation spellingLocation) const {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
-        && compat::ends_with(
-            StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename()),
-            ".h");
+        && StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename())
+           .ends_with(".h");
 }
 
 bool FakeBool::isSharedCAndCppCode(SourceLocation location) const {

@@ -116,7 +116,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
         };
     if( const clang::StringLiteral* area = dyn_cast< clang::StringLiteral >( call->getArg( areaArgIndex )->IgnoreParenImpCasts()))
         {
-        if( compat::isOrdinary(area) )
+        if( area->isOrdinary() )
             checkArea( area->getBytes(), area->getExprLoc());
         else
             report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?)",

@@ -13,7 +13,6 @@
 
 #include "clang/AST/Comment.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Remove dynamic exception specifications.  See the mail thread starting at
@@ -80,7 +79,7 @@ public:
                 << decl->getSourceRange();
         }
         if (rewriter != nullptr) {
-            if (!(decl->isDefined() || compat::isPureVirtual(decl))) {
+            if (!(decl->isDefined() || decl->isPureVirtual())) {
                 return true;
             }
             if (auto m = dyn_cast<CXXMethodDecl>(decl)) {
@@ -116,7 +115,7 @@ public:
                         auto s = StringRef(
                             compiler.getSourceManager().getCharacterData(prev),
                             n);
-                        while (compat::starts_with(s, "\\\n")) {
+                        while (s.starts_with("\\\n")) {
                             s = s.drop_front(2);
                             while (!s.empty()
                                    && (s.front() == ' ' || s.front() == '\t'
@@ -127,7 +126,7 @@ public:
                             }
                         }
                         if (!s.empty() && s != "\\") {
-                            if (compat::starts_with(s, "//")) {
+                            if (s.starts_with("//")) {
                                 beg = source.getBegin();
                             }
                             break;
