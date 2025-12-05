@@ -57,7 +57,7 @@ public:
         = 0;
 };
 
-/// Traverses the pivot table result tree and triggers visitiors functions with data
+/// Traverses the pivot table result tree and triggers visitors functions with data
 class SC_DLLPUBLIC PivotTableResultTraverser
 {
 private:
