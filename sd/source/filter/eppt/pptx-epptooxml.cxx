@@ -88,6 +88,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/ColorSets.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
@@ -2348,7 +2349,12 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
-            const bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+            bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+
+            // check if it was modified. For now, since we have no ppt export for Diagram,
+            // do not export as Diagram, that would be empty if the GrabBag was deleted
+            if (bIsDiagram && pDiagramCandidate->getDiagramHelper()->isModified())
+                bIsDiagram = false;
 
             if (bIsDiagram)
                 WriteDiagram(pFS, aDML, mXShape, mnDiagramId++);

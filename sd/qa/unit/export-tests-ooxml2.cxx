@@ -14,6 +14,8 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -1595,12 +1597,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
     createSdImpressDoc("pptx/smartart-rotation2.pptx");
 
     // clear SmartArt data to check how group shapes with double-rotated children are exported, not smartart
-    // NOTE: Resetting the GrabBag data is a *very* indirect way to reset the SmartArt functionality.
-    //       Since this worked before and there is not (yet?) a better way to do it using UNO API, I added
-    //       code to support this for now
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
-    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xShape->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));
+    // NOTE: Now we have a slot (comphelper::dispatchCommand(u".uno:DiagramToGroup"_ustr, {})) and method
+    //       at IDiagramHelper to do that, adapted removal of Diagram/SmartArt functionality
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    SdrObjGroup* pSdrObjGroup
+        = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
+    pSdrObjGroup->getDiagramHelper()->disconnectFromSdrObjGroup();
 
     save(TestFilter::PPTX);
 

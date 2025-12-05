@@ -2660,6 +2660,23 @@ SfxVoidItem RegenerateDiagram SID_REGENERATE_DIAGRAM
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxVoidItem DiagramToGroup SID_DIAGRAM_TO_GROUP
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem EditDiagram SID_EDIT_DIAGRAM
 ()
 [

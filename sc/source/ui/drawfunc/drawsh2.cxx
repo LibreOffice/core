@@ -284,6 +284,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         if (!pObj->isDiagram())
         {
             rSet.DisableItem( SID_REGENERATE_DIAGRAM );
+            rSet.DisableItem( SID_DIAGRAM_TO_GROUP );
             rSet.DisableItem( SID_EDIT_DIAGRAM );
         }
     }

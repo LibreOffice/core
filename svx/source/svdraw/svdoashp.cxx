@@ -76,6 +76,7 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -2608,8 +2609,20 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
     if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
     if (pViewInit!=nullptr) *pViewInit=aViewInit;
 }
+
 void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
+    if (!getDiagramDataModelID().isEmpty())
+    {
+        std::shared_ptr< svx::diagram::IDiagramHelper > pIDiagramHelper(getDiagramHelperFromDiagramOrMember());
+
+        if (pIDiagramHelper)
+        {
+            // try to do the needed changes at the associated DiagramData model
+            pIDiagramHelper->TextInformationChange(getDiagramDataModelID(), rOutl);
+        }
+    }
+
     SdrTextObj::EndTextEdit( rOutl );
     InvalidateRenderGeometry();
 }

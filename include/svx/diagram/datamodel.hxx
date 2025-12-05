@@ -34,6 +34,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <oox/token/tokens.hxx>
 
+class Outliner;
+
 namespace svx::diagram {
 
 enum TypeConstant {
@@ -229,6 +231,9 @@ public:
     // Undo/Redo helpers to extract/restore Diagram-defining data
     DiagramDataStatePtr extractDiagramDataState() const;
     void applyDiagramDataState(const DiagramDataStatePtr& rState);
+
+    // react on changes to objects identified by DiagramDataModelID, returns true if a change was done
+    bool TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl);
 
 protected:
     // helpers

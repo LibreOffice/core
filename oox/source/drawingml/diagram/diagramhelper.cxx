@@ -25,6 +25,7 @@
 #include <oox/ppt/pptimport.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdoutl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -233,6 +234,26 @@ void AdvancedDiagramHelper::applyDiagramDataState(const svx::diagram::DiagramDat
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
 }
 
+void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl)
+{
+    if(!mpDiagramPtr)
+    {
+        return;
+    }
+
+    // try text change for model part in DiagramData
+    const bool bChanged(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
+
+    if(bChanged && nullptr != mpAssociatedSdrObjGroup)
+    {
+        // if change was done, reset GrabBagItem to delete buffered DiagramData which is no longer valid
+        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
+
+        // also set self to modified to get correct exports
+        setModified();
+    }
+}
+
 void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape)
 {
     if(!mpDiagramPtr)
@@ -247,7 +268,8 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Sha
     // secure that data at the Diagram ModelData by copying.
     mpDiagramPtr->getData()->secureDataFromShapeToModelAfterDiagramImport(rRootShape);
 
-    anchorToSdrObjGroup(rTarget);
+    // initialize connection to GroupObject
+    connectToSdrObjGroup(rTarget);
 }
 
 const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCreateThemePtr(

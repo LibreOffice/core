@@ -34,6 +34,11 @@
 #include <vcl/canvastools.hxx>
 #include <svx/diagram/IDiagramHelper.hxx>
 
+bool SdrObjGroup::isDiagram() const
+{
+    return bool(mp_DiagramHelper);
+}
+
 const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObjGroup::getDiagramHelper() const
 {
     return mp_DiagramHelper;
@@ -204,39 +209,6 @@ SdrObjList* SdrObjGroup::GetSubList() const
 {
     return const_cast< SdrObjGroup* >(this);
 }
-
-static bool containsOOXData(const css::uno::Any& rVal)
-{
-    const css::uno::Sequence<css::beans::PropertyValue> propList(rVal.get< css::uno::Sequence<css::beans::PropertyValue> >());
-    for (const auto& rProp : propList)
-    {
-        if(rProp.Name.startsWith("OOX"))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void SdrObjGroup::SetGrabBagItem(const css::uno::Any& rVal)
-{
-    // detect if the intention is to disable Diagram functionality
-    if(isDiagram() && !containsOOXData(rVal))
-    {
-        css::uno::Any aOld;
-        GetGrabBagItem(aOld);
-
-        if(containsOOXData(aOld))
-        {
-            mp_DiagramHelper.reset();
-        }
-    }
-
-    // call parent
-    SdrObject::SetGrabBagItem(rVal);
-}
-
 const tools::Rectangle& SdrObjGroup::GetCurrentBoundRect() const
 {
     // <aOutRect> has to contain the bounding rectangle

@@ -201,10 +201,29 @@ struct SdrObject::Impl
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
+bool SdrObject::isDiagram() const
+{
+    return false;
+}
+
 const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelper() const
 {
     static std::shared_ptr< svx::diagram::IDiagramHelper > aEmpty;
     return aEmpty;
+}
+
+const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelperFromDiagramOrMember() const
+{
+    SdrObject* pCurrent(const_cast<SdrObject*>(this));
+
+    while (pCurrent)
+    {
+        if (pCurrent->isDiagram())
+            return pCurrent->getDiagramHelper();
+        pCurrent = pCurrent->getParentSdrObjectFromSdrObject();
+    }
+
+    return getDiagramHelper();
 }
 
 // BaseProperties section
@@ -347,6 +366,8 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     , mnLayerID(0)
     , mpSvxShape( nullptr )
     , mbDoNotInsertIntoPageAutomatically(false)
+    , msHyperlink()
+    , msDiagramDataModelID()
 {
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
@@ -383,6 +404,8 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     , mnLayerID(0)
     , mpSvxShape( nullptr )
     , mbDoNotInsertIntoPageAutomatically(false)
+    , msHyperlink()
+    , msDiagramDataModelID()
 {
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
@@ -1854,19 +1877,6 @@ void SdrObject::SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObj
     BroadcastObjectChange();
     if (GetCurrentBoundRect()!=aBoundRect0) {
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);
-    }
-
-    if (!getSdrModelFromSdrObject().IsUndoEnabled())
-        return;
-
-    // Don't do this during import.
-    if (SdrObject* pTopGroupObj = getParentSdrObjectFromSdrObject())
-    {
-        while (SdrObject* pParent = pTopGroupObj->getParentSdrObjectFromSdrObject())
-            pTopGroupObj = pParent;
-        // A shape was modified, which is in a group shape. Empty the group shape's grab-bag,
-        // which potentially contains the old text of the shapes in case of diagrams.
-        pTopGroupObj->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
     }
 }
 

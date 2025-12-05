@@ -7915,6 +7915,11 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Regenerate Diagram</value>
         </prop>
       </node>
+      <node oor:name=".uno:DiagramToGroup" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Convert Diagram to Group Object</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditDiagram" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Edit Diagram</value>

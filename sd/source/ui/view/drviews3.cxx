@@ -488,6 +488,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         break;
 
         case SID_REGENERATE_DIAGRAM:
+        case SID_DIAGRAM_TO_GROUP:
         case SID_EDIT_DIAGRAM:
         {
             if (1 == rMarkList.GetMarkCount())
@@ -497,13 +498,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 // Support advanced DiagramHelper
                 if(nullptr != pObj && pObj->isDiagram())
                 {
-                    if(SID_REGENERATE_DIAGRAM == nSlot)
+                    if (SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
                         pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
-                    else // SID_EDIT_DIAGRAM
+                    else if (SID_EDIT_DIAGRAM == nSlot)
                     {
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                         VclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
@@ -515,6 +516,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                                 pDlg->disposeOnce();
                             }
                         );
+                    }
+                    else // SID_DIAGRAM_TO_GROUP
+                    {
+                        mpDrawView->UnmarkAll();
+                        pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                        mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                 }
             }

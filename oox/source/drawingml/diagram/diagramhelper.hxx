@@ -82,6 +82,9 @@ public:
     void doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
+
+    // react on changes to objects identified by DiagramDataModelID, returns true if a change was done
+    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) override;
 };
 
 }

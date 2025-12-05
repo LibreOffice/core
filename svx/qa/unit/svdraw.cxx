@@ -237,46 +237,49 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 {
-    // Given a document with a groupshape, which has 2 children.
-    loadFromURL(u"private:factory/sdraw"_ustr);
-    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xRect1(
-        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
-    xRect1->setPosition(awt::Point(1000, 1000));
-    xRect1->setSize(awt::Size(10000, 10000));
-    uno::Reference<drawing::XShape> xRect2(
-        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
-    xRect2->setPosition(awt::Point(1000, 1000));
-    xRect2->setSize(awt::Size(10000, 10000));
-    uno::Reference<drawing::XShapes> xGroup(
-        xFactory->createInstance(u"com.sun.star.drawing.GroupShape"_ustr), uno::UNO_QUERY);
+    // Adapted this test to work with a *real* SmartArt/Diagram (SA). The former
+    // test created a 'fake' one and checked if on TextEdit The GrabBag gets deleted.
+    // The updated SA text edit *tries* to keep the SA Data (in IDiagramHelper
+    // attached to SdrObjGroup). It clears the GrabBag, but only if a 'real' SA
+    // exists.
+    // Thus I added a bugdoc for that task which contains a 'real' SA to test
+    // if GrabBag gets cleared on change of the SA model data.
+
+    // load document
+    loadFromFile(u"tdf132368.pptx");
+
+    // get DrawPage
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
-    xDrawPage->add(xGroupShape);
-    xGroup->add(xRect1);
-    xGroup->add(xRect2);
-    uno::Reference<text::XTextRange> xRect2Text(xRect2, uno::UNO_QUERY);
-    xRect2Text->setString(u"x"_ustr);
-    uno::Sequence<beans::PropertyValue> aGrabBag = {
-        comphelper::makePropertyValue(u"OOXLayout"_ustr, true),
-    };
-    uno::Reference<beans::XPropertySet> xGroupProps(xGroup, uno::UNO_QUERY);
-    xGroupProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag));
 
-    // When editing the shape text of the 2nd rectangle (insert a char at the start).
+    // get 1st object, this is the SA. Get as GroupObject
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroupShape(xShape, uno::UNO_QUERY);
+
+    // get the GrabBag. After import is *has* to be set, check that
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    uno::Reference<beans::XPropertySet> xGroupProps(xGroupShape, uno::UNO_QUERY);
+    xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+    CPPUNIT_ASSERT(aGrabBag.hasElements());
+
+    // get the 1st text shape (containing 'A'). There is a BGShape and an Arrow
+    // in indices before
+    uno::Reference<drawing::XShape> xShapeA(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+
+    // TextEdit: insert a char at the start
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
-    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xRect2);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShapeA);
     pSdrView->SdrBeginTextEdit(pObject);
     EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-    rEditView.InsertText(u"y"_ustr);
+    rEditView.InsertText(u"X"_ustr);
     pSdrView->SdrEndTextEdit();
 
     // Then make sure that grab-bag is empty to avoid losing the new text.
     xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
     // Without the accompanying fix in place, this test would have failed with:
     // assertion failed
     // - Expression: !aGrabBag.hasElements()
