@@ -101,12 +101,10 @@ namespace svt
 
     void OCommonPicker::prepareDialog()
     {
-        if(createPicker())
-        {
-            // set the title
-            if ( !m_aTitle.isEmpty() )
-                m_xDlg->set_title(m_aTitle);
-        }
+        createPicker();
+        // set the title
+        if (!m_aTitle.isEmpty())
+            m_xDlg->set_title(m_aTitle);
     }
 
 
@@ -197,7 +195,7 @@ namespace svt
         }
     }
 
-    bool OCommonPicker::createPicker()
+    void OCommonPicker::createPicker()
     {
         if ( !m_xDlg )
         {
@@ -241,8 +239,6 @@ namespace svt
                     // the adapter will add itself as listener, and forward notifications
             }
         }
-
-        return nullptr != m_xDlg;
     }
 
     // XControlAccess functions
@@ -251,11 +247,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            aAccess.setControlProperty( aControlName, aControlProperty, aValue );
-        }
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        aAccess.setControlProperty(aControlName, aControlProperty, aValue);
     }
 
     Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty )
@@ -263,13 +257,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.getControlProperty( aControlName, aControlProperty );
-        }
-
-        return Any();
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.getControlProperty(aControlName, aControlProperty);
     }
 
     // XControlInformation functions
@@ -278,13 +268,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.getSupportedControls( );
-        }
-
-        return Sequence< OUString >();
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.getSupportedControls();
     }
 
     sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName )
@@ -292,12 +278,8 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            return svt::OControlAccess::isControlSupported( aControlName );
-        }
-
-        return false;
+        createPicker();
+        return svt::OControlAccess::isControlSupported(aControlName);
     }
 
     Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName )
@@ -305,13 +287,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.getSupportedControlProperties( aControlName );
-        }
-
-        return Sequence< OUString >();
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.getSupportedControlProperties(aControlName);
     }
 
     sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty )
@@ -319,13 +297,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.isControlPropertySupported( aControlName, aControlProperty );
-        }
-
-        return false;
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.isControlPropertySupported(aControlName, aControlProperty);
     }
 
 
