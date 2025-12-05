@@ -516,10 +516,15 @@ SwFormatHeader::SwFormatHeader( bool bOn )
 {
 }
 
- SwFormatHeader::~SwFormatHeader()
+void SwFormatHeader::ImplDestroy()
 {
     if ( GetHeaderFormat() )
         lcl_DelHFFormat( this, GetHeaderFormat() );
+}
+
+SwFormatHeader::~SwFormatHeader()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 bool SwFormatHeader::operator==( const SfxPoolItem& rAttr ) const
@@ -575,10 +580,15 @@ SwFormatFooter::SwFormatFooter( bool bOn )
 {
 }
 
- SwFormatFooter::~SwFormatFooter()
+void SwFormatFooter::ImplDestroy()
 {
     if ( GetFooterFormat() )
         lcl_DelHFFormat( this, GetFooterFormat() );
+}
+
+SwFormatFooter::~SwFormatFooter()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwFormatFooter::RegisterToFormat( SwFormat& rFormat )
