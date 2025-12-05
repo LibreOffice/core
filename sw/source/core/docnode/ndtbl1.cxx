@@ -1457,12 +1457,12 @@ static sal_uInt16 lcl_CalcCellFit(const SwLayoutFrame& rCell)
  * the desired one. It's overwritten if it's smaller.
  */
 static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
-                              const SwLayoutFrame *pCell, const SwLayoutFrame *pTab,
+                              const SwLayoutFrame& rCell, const SwLayoutFrame *pTab,
                               bool bWishValues )
 {
     const sal_uInt16 nWish = bWishValues ?
-                    ::lcl_CalcCellFit(*pCell) :
-                    MINLAY + sal_uInt16(pCell->getFrameArea().Width() - pCell->getFramePrintArea().Width());
+                    ::lcl_CalcCellFit(rCell) :
+                    MINLAY + sal_uInt16(rCell.getFrameArea().Width() - rCell.getFramePrintArea().Width());
 
     SwRectFnSet aRectFnSet(*pTab);
 
@@ -1480,8 +1480,8 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
             nColLeft  += nDiff;
             nColRight += nDiff;
         }
-        const tools::Long nCellLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
-        const tools::Long nCellRight = aRectFnSet.GetRight(pCell->getFrameArea());
+        const tools::Long nCellLeft  = aRectFnSet.GetLeft(rCell.getFrameArea());
+        const tools::Long nCellRight = aRectFnSet.GetRight(rCell.getFrameArea());
 
         // Calculate overlapping value
         tools::Long nWidth = 0;
@@ -1491,9 +1491,9 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
             nWidth = nCellRight - nColLeft;
         else if ( nColLeft >= nCellLeft && nColRight <= nCellRight )
             nWidth = nColRight - nColLeft;
-        if ( nWidth && pCell->getFrameArea().Width() )
+        if ( nWidth && rCell.getFrameArea().Width() )
         {
-            tools::Long nTmp = nWidth * nWish / pCell->getFrameArea().Width();
+            tools::Long nTmp = nWidth * nWish / rCell.getFrameArea().Width();
             if ( o3tl::make_unsigned(nTmp) > rToFill[i] )
                 rToFill[i] = sal_uInt16(nTmp);
         }
@@ -1594,7 +1594,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                     }
                 }
                 if ( bNotInCols )
-                    ::lcl_CalcSubColValues( rToFill, rCols, pCell, pTab, bWishValues );
+                    ::lcl_CalcSubColValues( rToFill, rCols, *pCell, pTab, bWishValues );
             }
             do {
                 pCell = pCell->GetNextLayoutLeaf();
