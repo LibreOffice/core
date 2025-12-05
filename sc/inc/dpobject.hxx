@@ -92,7 +92,7 @@ struct PivotTableStyleInfo
     // Style name, which is used to determine how the pivot table is styles
     OUString maName;
 
-    // Shold headers be styled
+    // Should headers be styled
     bool mbShowRowHeaders = false;
     bool mbShowColHeaders = false;
 
