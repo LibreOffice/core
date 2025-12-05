@@ -720,6 +720,7 @@ sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
     return XML_defaultSubtotal;
 }
 
+/** Data for one row/column item entry that will be written to OOXML file */
 struct RowOrColumnItemsData
 {
     bool mbSet = false;
@@ -727,13 +728,16 @@ struct RowOrColumnItemsData
     bool mbSubtotal = false;
     bool mbGrandTotal = false;
     OUString msName;
-    OUString maLevelName;
 };
 
+/** Contains all the data necessary for writing the row/column items as required by OOXML */
 struct RowOrColumnMemberResultData
 {
+    // Order of fields as written to the file
     std::vector<OUString> maFieldOrder;
+    // Collected data from PT results
     std::vector<std::unordered_map<OUString, RowOrColumnItemsData>> maItemsData;
+    // Lookup that translates from item name (string value) to an index of the fields values
     std::unordered_map<OUString, std::unordered_map<OUString, sal_Int32>> maLookUpIndexForMemberName;
 
     void ensureItemData(sal_Int32 nSize)
@@ -768,6 +772,7 @@ struct RowOrColumnMemberResultData
     }
 };
 
+/** Implementation of a results visitor, to gather information used fro rowItems and columnItems*/
 class RowColumnItemsDataVisitor : public sc::PivotTableResultVisitor
 {
     RowOrColumnMemberResultData& mrRowMemberResultData;
@@ -827,7 +832,6 @@ public:
         assert(!rItemsData.mbSet);
 
         rItemsData.mbSet = true;
-        rItemsData.maLevelName = maLevelName;
 
         bool bHasContinueFlag = rResult.Flags & sheet::MemberResultFlags::CONTINUE;
         bool bIsGrandTotal = rResult.Flags & sheet::MemberResultFlags::GRANDTOTAL;
@@ -853,6 +857,7 @@ public:
     }
 };
 
+/** Combines all the data in RowOrColumnMemberResultData and writes the row/column items */
 void writeRowColumnItems(sal_Int32 nItemElement, RowOrColumnMemberResultData& rMemberResultData, sax_fastparser::FSHelperPtr& pStream)
 {
     if (rMemberResultData.maItemsData.empty() || rMemberResultData.maFieldOrder.empty())
