@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALINST_HXX
 
 #include <sal/types.h>
+#include <o3tl/sorted_vector.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
@@ -78,6 +79,7 @@ private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
     css::uno::Reference<css::uno::XInterface> m_clipboard;
+    o3tl::sorted_vector<OUString> m_usedUI;
 
 protected:
     bool m_bSupportsBitmap32 = false;
@@ -93,6 +95,8 @@ public:
 
     bool supportsBitmap32() const { return m_bSupportsBitmap32; }
     bool supportsOpenGL() const { return m_bSupportsOpenGL; }
+
+    o3tl::sorted_vector<OUString>& getUsedUIList() { return m_usedUI; }
 
     //called directly after Application::Init
     virtual void            AfterAppInit() {}

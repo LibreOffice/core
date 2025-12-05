@@ -1234,6 +1234,12 @@ public:
     /** Determines if safe mode is enabled */
     static bool                 IsSafeModeEnabled();
 
+    /** Collect what .ui files are used*/
+    static void                 EnableUICoverage(bool bEnable);
+
+    /** Report on what .ui files were used*/
+    static OString              UICoverageReport();
+
     ///@}
 
     /** Get the desktop environment the process is currently running in

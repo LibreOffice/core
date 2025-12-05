@@ -183,8 +183,36 @@ namespace
 
 }
 
+static bool bEnableUICoverage = false;
+
+void Application::EnableUICoverage(bool bEnable)
+{
+    bEnableUICoverage = bEnable;
+    if (!bEnableUICoverage)
+        ImplGetSVData()->mpDefInst->getUsedUIList().clear();
+}
+
+OString Application::UICoverageReport()
+{
+    tools::JsonWriter aJson;
+
+    const auto& entries = ImplGetSVData()->mpDefInst->getUsedUIList();
+    {
+        auto childrenNode = aJson.startArray("used");
+        for (const auto& entry : entries)
+            aJson.putSimpleValue(entry);
+    }
+
+    return aJson.finishAndGetAsOString();
+}
+
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
 {
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (bEnableUICoverage)
+        pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
+
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
@@ -206,11 +234,16 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+    return pSVData->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
 std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (bEnableUICoverage)
+        pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
+
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         // Notebookbar sub controls
@@ -226,7 +259,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
+    return pSVData->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
