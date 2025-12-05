@@ -772,7 +772,7 @@ struct RowOrColumnMemberResultData
     }
 };
 
-/** Implementation of a results visitor, to gather information used fro rowItems and columnItems*/
+/** Implementation of a results visitor, to gather information used for rowItems and columnItems*/
 class RowColumnItemsDataVisitor : public sc::PivotTableResultVisitor
 {
     RowOrColumnMemberResultData& mrRowMemberResultData;
