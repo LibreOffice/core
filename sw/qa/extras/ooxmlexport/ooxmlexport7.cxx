@@ -305,9 +305,6 @@ CPPUNIT_TEST_FIXTURE(Test, testShape3DEffectPreservation)
 {
     createSwDoc("shape-3d-effect-preservation.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
