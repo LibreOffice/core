@@ -539,12 +539,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
     SvxAdjustItem aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
-    bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
+    const bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING);
-    bool bInteropSmartJustify = bFullJustified &&
+    const bool bInteropSmartJustify = bFullJustified &&
             rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
-    bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
+    const bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
                     aAdjustItem.GetPropWordSpacingMinimum() == 100 &&
                     aAdjustItem.GetPropWordSpacingMaximum() == 100 &&
                     aAdjustItem.GetPropScaleWidthMinimum() == 100 &&
@@ -552,11 +552,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     aAdjustItem.GetPropLetterSpacingMinimum() == 0 &&
                     aAdjustItem.GetPropLetterSpacingMaximum() == 0;
     // support old ODT documents, where only JustifyLinesWithShrinking was set
-    bool bOldInterop = bInteropSmartJustify && bNoWordSpacing;
-    bool bWordSpacing = bFullJustified && (!bNoWordSpacing || bOldInterop);
-    bool bWordSpacingMaximum = bWordSpacing && !bOldInterop &&
+    const bool bOldInterop = bInteropSmartJustify && bNoWordSpacing;
+    const bool bWordSpacing = bFullJustified && (!bNoWordSpacing || bOldInterop);
+    const bool bWordSpacingMaximum = bWordSpacing && !bOldInterop &&
            aAdjustItem.GetPropWordSpacingMaximum() > aAdjustItem.GetPropWordSpacing();
-    bool bWordSpacingMinimum = bWordSpacing && ( bOldInterop ||
+    const bool bWordSpacingMinimum = bWordSpacing && ( bOldInterop ||
            aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing() );
 
     if ( ( bInteropSmartJustify || bWordSpacing || bWordSpacingMaximum || bWordSpacingMinimum ) &&
