@@ -132,11 +132,6 @@
  */
 #define HAVE_FEATURE_ANDROID_LOK 0
 
-/*
- * Whether this is a Community Edition.
- */
-#define HAVE_FEATURE_COMMUNITY_FLAVOR 0
-
 /* XMLHELP - whether we include the XML help mechanisms
  *
  * Can be turned off with --without-xmlhelp

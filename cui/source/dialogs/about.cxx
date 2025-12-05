@@ -149,13 +149,7 @@ OUString AboutDialog::GetVersionString() {
   OUString arch;
   auto const ok = rtl::Bootstrap::get(u"_ARCH"_ustr, arch);
   assert(ok); (void) ok;
-  OUString sVersion = CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX")) + " (" + arch + ")";
-
-#if HAVE_FEATURE_COMMUNITY_FLAVOR
-  sVersion += " / LibreOffice Community";
-#endif
-
-  return sVersion;
+  return CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX")) + " (" + arch + ")";
 }
 
 OUString AboutDialog::GetBuildString()
