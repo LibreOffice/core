@@ -197,47 +197,47 @@ namespace svt
 
     void OCommonPicker::createPicker()
     {
-        if ( !m_xDlg )
+        if (m_xDlg)
+            return;
+
+        m_xDlg = implCreateDialog(Application::GetFrameWeld(m_xDialogParent));
+        assert(m_xDlg);
+
+        weld::Dialog* pDlg = m_xDlg->getDialog();
+
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        // synchronize the help id of the dialog without help URL property
+        if ( !m_sHelpURL.isEmpty() )
+        {   // somebody already set the help URL while we had no dialog yet
+            aAccess.setHelpURL(pDlg, m_sHelpURL);
+        }
+        else
         {
-            m_xDlg = implCreateDialog(Application::GetFrameWeld(m_xDialogParent));
-            assert(m_xDlg);
+            m_sHelpURL = aAccess.getHelpURL(pDlg);
+        }
 
-            weld::Dialog* pDlg = m_xDlg->getDialog();
+        m_xWindow = pDlg->GetXWindow();
 
-            ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
-            // synchronize the help id of the dialog without help URL property
-            if ( !m_sHelpURL.isEmpty() )
-            {   // somebody already set the help URL while we had no dialog yet
-                aAccess.setHelpURL(pDlg, m_sHelpURL);
-            }
-            else
-            {
-                m_sHelpURL = aAccess.getHelpURL(pDlg);
-            }
+        // add as event listener to the window
+        OSL_ENSURE( m_xWindow.is(), "OCommonPicker::createFileDialog: invalid window component!" );
+        if ( m_xWindow.is() )
+        {
+            m_xWindowListenerAdapter = new OWeakEventListenerAdapter( this, m_xWindow );
+                // the adapter will add itself as listener, and forward notifications
+        }
 
-            m_xWindow = pDlg->GetXWindow();
-
-            // add as event listener to the window
-            OSL_ENSURE( m_xWindow.is(), "OCommonPicker::createFileDialog: invalid window component!" );
-            if ( m_xWindow.is() )
-            {
-                m_xWindowListenerAdapter = new OWeakEventListenerAdapter( this, m_xWindow );
-                    // the adapter will add itself as listener, and forward notifications
-            }
-
-            VclPtr<vcl::Window> xVclDialog(VCLUnoHelper::GetWindow(m_xWindow));
-            if (xVclDialog) // this block is quite possibly unnecessary by now
-            {
-                // _and_ add as event listener to the parent - in case the parent is destroyed
-                // before we are disposed, our disposal would access dead VCL windows then...
-                m_xDialogParent = VCLUnoHelper::GetInterface(xVclDialog->GetParent());
-                OSL_ENSURE(m_xDialogParent.is() || !xVclDialog->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!");
-            }
-            if ( m_xDialogParent.is() )
-            {
-                m_xParentListenerAdapter = new OWeakEventListenerAdapter( this, m_xDialogParent );
-                    // the adapter will add itself as listener, and forward notifications
-            }
+        VclPtr<vcl::Window> xVclDialog(VCLUnoHelper::GetWindow(m_xWindow));
+        if (xVclDialog) // this block is quite possibly unnecessary by now
+        {
+            // _and_ add as event listener to the parent - in case the parent is destroyed
+            // before we are disposed, our disposal would access dead VCL windows then...
+            m_xDialogParent = VCLUnoHelper::GetInterface(xVclDialog->GetParent());
+            OSL_ENSURE(m_xDialogParent.is() || !xVclDialog->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!");
+        }
+        if ( m_xDialogParent.is() )
+        {
+            m_xParentListenerAdapter = new OWeakEventListenerAdapter( this, m_xDialogParent );
+                // the adapter will add itself as listener, and forward notifications
         }
     }
 
