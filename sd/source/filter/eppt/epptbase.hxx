@@ -76,7 +76,6 @@ enum class EppLayout
 };
 
 #define EPP_LAYOUT_SIZE 25
-#define OOXML_LAYOUT_SIZE 36
 
 struct PHLayout
 {

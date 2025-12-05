@@ -20,6 +20,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -1710,6 +1711,94 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169496_hidden_graphic)
     }
     else
         CPPUNIT_FAIL("Names of graphics is incorrect");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_vertical_layouts)
+{
+    createSdImpressDoc("pptx/tdf169825_vertical_layouts.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXmlDocRels);
+    // find layout XML for the slide from the relationship file
+    OUString sLayoutRelRelative
+        = getXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship", "Target");
+    OUString sLayoutRelAbs = sLayoutRelRelative.replaceFirst("..", "ppt");
+    xmlDocUniquePtr pXmlDocLayout = parseExport(sLayoutRelAbs);
+    CPPUNIT_ASSERT(pXmlDocLayout);
+
+    // without the SlidePersist::getLayoutFromValueToken() part of the patch,
+    // this and the next layout types would both be exported as blank
+    assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"vertTitleAndTx");
+
+    pXmlDocRels = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXmlDocRels);
+    sLayoutRelRelative = getXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship", "Target");
+    sLayoutRelAbs = sLayoutRelRelative.replaceFirst("..", "ppt");
+    pXmlDocLayout = parseExport(sLayoutRelAbs);
+    CPPUNIT_ASSERT(pXmlDocLayout);
+
+    assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"vertTx");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_vertical_layouts_from_scratch)
+{
+    createSdImpressDoc();
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xPages = xDoc->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
+    xPageSet->setPropertyValue(
+        "Layout",
+        uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT)));
+
+    uno::Reference<drawing::XDrawPage> xPage2(xPages->insertNewByIndex(1), uno::UNO_SET_THROW);
+    uno::Reference<beans::XPropertySet> xPageSet2(xPage2, uno::UNO_QUERY_THROW);
+    xPageSet2->setPropertyValue(
+        "Layout", uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT)));
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXmlDocRels);
+    // find layout XML for the slide from the relationship file
+    OUString sLayoutRelRelative
+        = getXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship", "Target");
+    OUString sLayoutRelAbs = sLayoutRelRelative.replaceFirst("..", "ppt");
+    xmlDocUniquePtr pXmlDocLayout = parseExport(sLayoutRelAbs);
+    CPPUNIT_ASSERT(pXmlDocLayout);
+
+    // without the fix in place this would be exported as "objTx"
+    assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"vertTitleAndTxOverChart");
+
+    pXmlDocRels = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXmlDocRels);
+    sLayoutRelRelative = getXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship", "Target");
+    sLayoutRelAbs = sLayoutRelRelative.replaceFirst("..", "ppt");
+    pXmlDocLayout = parseExport(sLayoutRelAbs);
+    CPPUNIT_ASSERT(pXmlDocLayout);
+
+    // without the fix in place this would be exported as "picTx"
+    assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"vertTitleAndTx");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_layout_type)
+{
+    createSdImpressDoc("odp/tdf169825_layout_type.odp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXmlDocRels);
+    // find layout XML for the slide from the relationship file
+    OUString sLayoutRelRelative
+        = getXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship", "Target");
+    OUString sLayoutRelAbs = sLayoutRelRelative.replaceFirst("..", "ppt");
+    xmlDocUniquePtr pXmlDocLayout = parseExport(sLayoutRelAbs);
+    CPPUNIT_ASSERT(pXmlDocLayout);
+
+    // without the fix in place this would be exported as "vertTitleAndTxOverChart"
+    // while in the original ODP this was - still possibly bogus - notes layout
+    assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"blank");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
