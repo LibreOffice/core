@@ -229,7 +229,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         sal_uInt16 nPage, nVirtPage;
         // bCalcFrame=false is important to avoid calculating the layout when
         // we're in the middle of doing that already.
-        const_cast<SwCursorShell*>(m_pCursorShell)->GetPageNum(nPage, nVirtPage, /*bAtCursorPos=*/true, /*bCalcFrame=*/false);
+        m_pCursorShell->GetPageNum(nPage, nVirtPage, /*bAtCursorPos=*/true, /*bCalcFrame=*/false);
         if (nPage != m_nPageLastTime)
         {
             m_nPageLastTime = nPage;

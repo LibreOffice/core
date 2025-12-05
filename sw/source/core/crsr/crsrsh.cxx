@@ -1565,9 +1565,9 @@ void SwCursorShell::GetCharRectAt(SwRect& rRect, const SwPosition* pPos)
 }
 
 void SwCursorShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
-                              bool bAtCursorPos, const bool bCalcFrame )
+                              bool bAtCursorPos, const bool bCalcFrame ) const
 {
-    CurrShell aCurr( this );
+    CurrShell aCurr(const_cast<SwCursorShell*>(this));
     // page number: first visible page or the one at the cursor
     const SwContentFrame* pCFrame;
     const SwPageFrame *pPg = nullptr;
