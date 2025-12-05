@@ -145,6 +145,9 @@ private:
         <member>EnableUI</member> for details.
     */
     void                        EnableControl(weld::Widget* pControl, bool bEnable);
+
+    void AutoUpdateFileExtension(const OUString& rLastFilterExt);
+
     virtual bool                PrepareExecute() override;
 
     void ImplDestroy();
