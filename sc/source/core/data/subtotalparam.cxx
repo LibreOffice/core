@@ -171,8 +171,7 @@ void ScSubTotalParam::SetCustFuncs(sal_uInt16 nGroup,
                        sal_uInt16 nCount )
 {
     OSL_ENSURE((nGroup <= MAXSUBTOTAL), "ScSubTotalParam::SetCustFuncs(): nGroup > MAXSUBTOTAL!");
-    OSL_ENSURE((nCount > 0), "ScSubTotalParam::SetCustFuncs(): nCount == 0!");
-    if (!(nCount > 0 && nGroup <= MAXSUBTOTAL))
+    if (nGroup > MAXSUBTOTAL)
         return;
 
     aGroups[nGroup].AllocCustFuncs(nCount);
@@ -185,9 +184,7 @@ void ScSubTotalParam::SetSubLabels(sal_uInt16 nGroup,
                        sal_uInt16 nCount )
 {
     OSL_ENSURE((nGroup <= MAXSUBTOTAL), "ScSubTotalParam::SetSubLabels(): nGroup > MAXSUBTOTAL!");
-    OSL_ENSURE((nCount > 0), "ScSubTotalParam::SetSubLabels(): nCount == 0!");
-
-    if (!(nCount > 0 && nGroup <= MAXSUBTOTAL))
+    if (nGroup > MAXSUBTOTAL)
         return;
 
     aGroups[nGroup].AllocSubLabels(nCount);
