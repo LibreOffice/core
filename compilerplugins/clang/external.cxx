@@ -469,7 +469,7 @@ private:
         {
             return true;
         }
-        if (decl->getLinkageInternal() < compat::Linkage::Module)
+        if (decl->getLinkageInternal() < Linkage::Module)
         {
             return true;
         }

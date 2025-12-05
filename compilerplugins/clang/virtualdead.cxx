@@ -11,6 +11,8 @@
 #include "check.hxx"
 #include "compat.hxx"
 
+#include "llvm/ADT/StringExtras.h"
+
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -205,7 +207,7 @@ std::string VirtualDead::getCallValue(const Expr* arg)
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
-        return compat::toString(x1, 10);
+        return llvm::toString(x1, 10);
     }
     if (isa<CXXNullPtrLiteralExpr>(arg))
     {

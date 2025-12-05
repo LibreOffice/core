@@ -12,7 +12,6 @@
 #include <stack>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Rewrite some uses of O[U]String to use ""_ostr/u""_ustr literals.
@@ -302,7 +301,7 @@ public:
         {
             return true;
         }
-        if (!(compat::isOrdinary(e2) || e2->isUTF8()))
+        if (!(e2->isOrdinary() || e2->isUTF8()))
         {
             return true;
         }

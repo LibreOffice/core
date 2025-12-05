@@ -24,7 +24,6 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include "compat.hxx"
 
 #include "clang/AST/ParentMapContext.h"
 
@@ -185,7 +184,7 @@ private:
     bool isSomeKindOfZero(const Expr* arg);
     bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt* child, CallerWrapper callExpr,
                             CalleeWrapper calleeFunctionDecl);
-    compat::optional<CalleeWrapper> getCallee(CallExpr const*);
+    std::optional<CalleeWrapper> getCallee(CallExpr const*);
 
     RecordDecl* insideMoveOrCopyDeclParent = nullptr;
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
@@ -607,7 +606,7 @@ bool Locking2::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt* child,
     return false;
 }
 
-compat::optional<CalleeWrapper> Locking2::getCallee(CallExpr const* callExpr)
+std::optional<CalleeWrapper> Locking2::getCallee(CallExpr const* callExpr)
 {
     FunctionDecl const* functionDecl = callExpr->getDirectCallee();
     if (functionDecl)
@@ -625,7 +624,7 @@ compat::optional<CalleeWrapper> Locking2::getCallee(CallExpr const* callExpr)
         }
     }
 
-    return compat::optional<CalleeWrapper>();
+    return std::optional<CalleeWrapper>();
 }
 
 bool Locking2::VisitCompoundStmt(const CompoundStmt* compoundStmt)

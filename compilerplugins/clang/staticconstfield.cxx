@@ -15,6 +15,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "llvm/ADT/StringExtras.h"
+
 /**
  Look for fields which are const, which can be made static const
 */
@@ -135,7 +137,7 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
         APSInt x1;
         if (compat::EvaluateAsInt(initexpr, x1, compiler.getASTContext()))
         {
-            value = compat::toString(x1, 10);
+            value = llvm::toString(x1, 10);
             found = true;
         }
     }

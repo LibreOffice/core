@@ -12,7 +12,6 @@
 #include <memory>
 #include <set>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 #include "config_clang.h"
@@ -72,7 +71,7 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
 //        fprintf(stderr,"DEF: %s %s\n", macroToken.getIdentifierInfo()->getName().data(), filename );
         StringRef macro = macroToken.getIdentifierInfo()->getName();
         // Skia #defines do not have values, but we set them in config_skia.h .
-        if( compat::starts_with(macro, "SK_" ) && loplugin::isSamePathname(filename, BUILDDIR "/config_host/config_skia.h"))
+        if( macro.starts_with( "SK_" ) && loplugin::isSamePathname(filename, BUILDDIR "/config_host/config_skia.h"))
             return;
         configMacros.insert( macro.str());
         }

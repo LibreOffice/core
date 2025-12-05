@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
@@ -162,7 +163,7 @@ private:
     bool checkForWriteWhenUsingCollectionType(const CXXMethodDecl* calleeMethodDecl);
     bool IsPassedByNonConst(const VarDecl* varDecl, const Stmt* child, CallerWrapper callExpr,
                             CalleeWrapper calleeFunctionDecl);
-    compat::optional<CalleeWrapper> getCallee(CallExpr const*);
+    std::optional<CalleeWrapper> getCallee(CallExpr const*);
 
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
     // we store the parent function on the way down the AST.
@@ -1110,7 +1111,7 @@ bool WriteOnlyVars::VisitDeclRefExpr(const DeclRefExpr* declRefExpr)
     return true;
 }
 
-compat::optional<CalleeWrapper> WriteOnlyVars::getCallee(CallExpr const* callExpr)
+std::optional<CalleeWrapper> WriteOnlyVars::getCallee(CallExpr const* callExpr)
 {
     FunctionDecl const* functionDecl = callExpr->getDirectCallee();
     if (functionDecl)
@@ -1128,7 +1129,7 @@ compat::optional<CalleeWrapper> WriteOnlyVars::getCallee(CallExpr const* callExp
         }
     }
 
-    return compat::optional<CalleeWrapper>();
+    return std::optional<CalleeWrapper>();
 }
 
 loplugin::Plugin::Registration<WriteOnlyVars> X("writeonlyvars", false);

@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "llvm/ADT/StringExtras.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
@@ -173,7 +175,7 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
-        return compat::toString(x1, 10);
+        return llvm::toString(x1, 10);
     }
     if (isa<CXXNullPtrLiteralExpr>(arg)) {
         return "0";

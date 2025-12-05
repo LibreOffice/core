@@ -20,7 +20,6 @@
 #include <fstream>
 #include <regex>
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 #include "clang/Frontend/CompilerInstance.h"
 
@@ -171,7 +170,7 @@ bool GetImplementationName::isStringConstant(
     }
     clang::StringLiteral const * lit = dyn_cast<clang::StringLiteral>(expr);
     if (lit != nullptr) {
-        if (!compat::isOrdinary(lit)) {
+        if (!lit->isOrdinary()) {
             return false;
         }
         *string = lit->getString();

@@ -12,10 +12,10 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include <optional>
 #include <stack>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find cases where a variable of a OString/OUString type is initialized
@@ -447,7 +447,7 @@ private:
         {
         }
         Stmt const* innermostLoop;
-        compat::optional<Expr const*> singleUse;
+        std::optional<Expr const*> singleUse;
     };
 
     std::stack<Stmt const*> innermostLoop_;

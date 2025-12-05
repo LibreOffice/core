@@ -11,7 +11,6 @@
 
 #include <string>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Having an extern prototype for a method in a module and not actually declaring that method is dodgy.
@@ -34,9 +33,9 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (ignoreLocation(functionDecl)) {
         return true;
     }
-    if (functionDecl->isDefined() || compat::isPureVirtual(functionDecl)
+    if (functionDecl->isDefined() || functionDecl->isPureVirtual()
       || (functionDecl->getLinkageAndVisibility().getLinkage()
-          != compat::Linkage::External)) {
+          != Linkage::External)) {
         return true;
     }
     //TODO, filtering out anything template for now:

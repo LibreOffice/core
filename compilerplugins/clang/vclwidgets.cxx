@@ -851,7 +851,7 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
     if (ignoreLocation(constructExpr)) {
         return true;
     }
-    if (constructExpr->getConstructionKind() != compat::CXXConstructionKind::Complete) {
+    if (constructExpr->getConstructionKind() != CXXConstructionKind::Complete) {
         return true;
     }
     const CXXConstructorDecl* pConstructorDecl = constructExpr->getConstructor();

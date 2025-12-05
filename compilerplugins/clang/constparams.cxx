@@ -194,16 +194,16 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
         || compiler.getSourceManager().isMacroArgExpansion(canonicalDecl->getBeginLoc())) {
         StringRef name { Lexer::getImmediateMacroName(
                 canonicalDecl->getBeginLoc(), compiler.getSourceManager(), compiler.getLangOpts()) };
-        if (compat::starts_with(name, "DECL_LINK") || compat::starts_with(name, "DECL_STATIC_LINK")
-            || compat::starts_with(name, "DECL_DLLPRIVATE_STATIC_LINK") )
+        if (name.starts_with("DECL_LINK") || name.starts_with("DECL_STATIC_LINK")
+            || name.starts_with("DECL_DLLPRIVATE_STATIC_LINK") )
             return false;
         auto loc2 = compat::getImmediateExpansionRange(compiler.getSourceManager(), canonicalDecl->getBeginLoc()).first;
         if (compiler.getSourceManager().isMacroBodyExpansion(loc2))
         {
             StringRef name2 { Lexer::getImmediateMacroName(
                     loc2, compiler.getSourceManager(), compiler.getLangOpts()) };
-            if (compat::starts_with(name2, "DECL_DLLPRIVATE_LINK")
-                || compat::starts_with(name2, "DECL_DLLPRIVATE_STATIC_LINK") )
+            if (name2.starts_with("DECL_DLLPRIVATE_LINK")
+                || name2.starts_with("DECL_DLLPRIVATE_STATIC_LINK") )
                 return false;
         }
     }
@@ -213,13 +213,13 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
         StringRef name = functionDecl->getName();
         if (   name == "file_write"
             || name == "SalMainPipeExchangeSignal_impl"
-            || compat::starts_with(name, "SbRtl_")
+            || name.starts_with("SbRtl_")
             || name == "GoNext"
             || name == "GoPrevious"
-            || compat::starts_with(name, "Read_F_")
+            || name.starts_with("Read_F_")
                 // UNO component entry points
-            || compat::ends_with(name, "component_getFactory")
-            || compat::ends_with(name, "_get_implementation")
+            || name.ends_with("component_getFactory")
+            || name.ends_with("_get_implementation")
             // callback for some external code?
             || name == "ScAddInAsyncCallBack"
             // used as function pointers

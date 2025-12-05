@@ -15,6 +15,8 @@
 #include <set>
 #include <string>
 
+#include "llvm/ADT/StringExtras.h"
+
 /*
   Look for member functions that merely return a compile-time constant, or they are empty, and can thus
   be either removed, or converted into a constant.
@@ -185,7 +187,7 @@ std::string ReturnConstant::getExprValue(Expr const* arg)
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
-        return compat::toString(x1, 10);
+        return llvm::toString(x1, 10);
     }
     if (isa<CXXNullPtrLiteralExpr>(arg))
     {

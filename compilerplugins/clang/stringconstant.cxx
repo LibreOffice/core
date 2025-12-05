@@ -19,6 +19,8 @@
 #include <vector>
 #include <iostream>
 
+#include "llvm/ADT/StringExtras.h"
+
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -994,7 +996,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                         ("suspicious 'rtl::OUString' constructor with literal"
                          " of length %0 and non-matching length argument %1"),
                         expr->getExprLoc())
-                        << n << compat::toString(res, 10) << expr->getSourceRange();
+                        << n << llvm::toString(res, 10) << expr->getSourceRange();
                     return true;
                 }
                 APSInt enc;
@@ -1018,7 +1020,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                          " encoding %0 but plain ASCII content; use"
                          " 'RTL_TEXTENCODING_ASCII_US' instead"),
                         expr->getArg(2)->getExprLoc())
-                        << compat::toString(enc, 10) << expr->getSourceRange();
+                        << llvm::toString(enc, 10) << expr->getSourceRange();
                     return true;
                 }
                 if (encIsUtf8) {
@@ -1428,7 +1430,7 @@ bool StringConstant::isStringConstant(
     }
     clang::StringLiteral const * lit = dyn_cast<clang::StringLiteral>(expr);
     if (lit != nullptr) {
-        if (!(compat::isOrdinary(lit) || lit->isUTF8())) {
+        if (!(lit->isOrdinary() || lit->isUTF8())) {
             return false;
         }
         unsigned n = lit->getLength();
@@ -2089,7 +2091,7 @@ void StringConstant::handleStringCtor(
                 if (!first) {
                     StringRef s(
                         compiler.getSourceManager().getCharacterData(loc2), n);
-                    while (compat::starts_with(s, "\\\n")) {
+                    while (s.starts_with("\\\n")) {
                         s = s.drop_front(2);
                         while (!s.empty()
                                && (s.front() == ' ' || s.front() == '\t'
@@ -2099,7 +2101,7 @@ void StringConstant::handleStringCtor(
                             s = s.drop_front(1);
                         }
                     }
-                    if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
+                    if (!(s.empty() || s.starts_with("/*") || s.starts_with("//")
                           || s == "\\"))
                     {
                         break;
@@ -2115,7 +2117,7 @@ void StringConstant::handleStringCtor(
                 unsigned n = Lexer::MeasureTokenLength(
                     l, compiler.getSourceManager(), compiler.getLangOpts());
                 StringRef s(compiler.getSourceManager().getCharacterData(l), n);
-                while (compat::starts_with(s, "\\\n")) {
+                while (s.starts_with("\\\n")) {
                     s = s.drop_front(2);
                     while (!s.empty()
                            && (s.front() == ' ' || s.front() == '\t'
@@ -2125,7 +2127,7 @@ void StringConstant::handleStringCtor(
                         s = s.drop_front(1);
                     }
                 }
-                if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
+                if (!(s.empty() || s.starts_with("/*") || s.starts_with("//")
                       || s == "\\"))
                 {
                     break;

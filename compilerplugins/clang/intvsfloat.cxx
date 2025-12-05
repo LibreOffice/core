@@ -10,8 +10,8 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include "compat.hxx"
 #include <iostream>
+#include <optional>
 
 /**
 
@@ -35,7 +35,7 @@ public:
     bool VisitBinaryOperator(BinaryOperator const*);
 
 private:
-    compat::optional<double> getExprValue(Expr const* expr);
+    std::optional<double> getExprValue(Expr const* expr);
 };
 
 bool IntVsFloat::VisitVarDecl(VarDecl const* varDecl)
@@ -49,7 +49,7 @@ bool IntVsFloat::VisitVarDecl(VarDecl const* varDecl)
     if (varDecl->getType()->isFloatingType())
         return true;
     //    init->dump();
-    compat::optional<double> d = getExprValue(init);
+    std::optional<double> d = getExprValue(init);
     if (!d)
         return true;
     if (static_cast<long>(*d) == *d)
@@ -77,7 +77,7 @@ bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
         return true;
     if (rhs->getType()->isFloatingType())
         return true;
-    compat::optional<double> d = getExprValue(lhs);
+    std::optional<double> d = getExprValue(lhs);
     if (!d)
         return true;
     if (static_cast<long>(*d) == *d)
@@ -88,18 +88,18 @@ bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
     return true;
 }
 
-compat::optional<double> IntVsFloat::getExprValue(Expr const* expr)
+std::optional<double> IntVsFloat::getExprValue(Expr const* expr)
 {
     // Of the available clang Evaluate* APIs, this is the __only__ one that produces useful output
     // (as of 17 Aug 2018 checkout of clang, ie. towards clang 7)
 
     if (expr->isValueDependent())
-        return compat::optional<double>();
+        return std::optional<double>();
     Expr::EvalResult evalResult;
     if (!expr->EvaluateAsRValue(evalResult, compiler.getASTContext()))
-        return compat::optional<double>();
+        return std::optional<double>();
     if (!evalResult.Val.isFloat())
-        return compat::optional<double>();
+        return std::optional<double>();
     llvm::APFloat floatResult = evalResult.Val.getFloat();
     bool losesInfo;
     floatResult.convert(APFloat::IEEEdouble(), APFloat::rmNearestTiesToEven, &losesInfo);

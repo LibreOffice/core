@@ -12,7 +12,6 @@
 #include <string>
 #include <iostream>
 #include "config_clang.h"
-#include "compat.hxx"
 #include "plugin.hxx"
 #include <fstream>
 
@@ -77,9 +76,9 @@ private:
 bool ignoreClass(StringRef s)
 {
     // ignore stuff in the standard library, and UNO stuff we can't touch.
-    if (compat::starts_with(s, "rtl::") || compat::starts_with(s, "sal::")
-        || compat::starts_with(s, "com::sun::") || compat::starts_with(s, "std::")
-        || compat::starts_with(s, "boost::")
+    if (s.starts_with("rtl::") || s.starts_with("sal::")
+        || s.starts_with("com::sun::") || s.starts_with("std::")
+        || s.starts_with("boost::")
         || s == "OString" || s == "OUString" || s == "bad_alloc")
     {
         return true;

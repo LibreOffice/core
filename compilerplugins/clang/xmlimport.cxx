@@ -370,8 +370,7 @@ bool XmlImport::isXmlTokEnum(const Expr* expr)
     auto enumConstant = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl());
     if (!enumConstant)
         return false;
-    return enumConstant->getIdentifier()
-           && compat::starts_with(enumConstant->getName(), "XML_TOK_");
+    return enumConstant->getIdentifier() && enumConstant->getName().starts_with("XML_TOK_");
 }
 
 bool XmlImport::isUInt16(const Expr* expr)

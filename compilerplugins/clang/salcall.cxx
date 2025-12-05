@@ -152,7 +152,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     if (!bCanonicalDeclIsSalCall)
         return true;
 
-    if (!decl->isThisDeclarationADefinition() && !(methodDecl && compat::isPureVirtual(methodDecl)))
+    if (!decl->isThisDeclarationADefinition() && !(methodDecl && methodDecl->isPureVirtual()))
         return true;
 
     m_decls.insert(decl);
@@ -370,7 +370,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             assert(SM.isMacroBodyExpansion(startLoc));
             auto const startLoc2 = compat::getImmediateExpansionRange(SM, startLoc).second;
             auto name = Lexer::getImmediateMacroName(startLoc, SM, compiler.getLangOpts());
-            while (compat::starts_with(name, "\\\n"))
+            while (name.starts_with("\\\n"))
             {
                 name = name.drop_front(2);
                 while (!name.empty()
@@ -412,7 +412,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         if (SM.isMacroBodyExpansion(endLoc))
         {
             auto name = Lexer::getImmediateMacroName(endLoc, SM, compiler.getLangOpts());
-            while (compat::starts_with(name, "\\\n"))
+            while (name.starts_with("\\\n"))
             {
                 name = name.drop_front(2);
                 while (!name.empty()
@@ -505,8 +505,8 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
                     // in the first line and include the intervening spaces and (part of? looks like an
                     // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
                     // when looking backwards here, without even trying to look at their content:
-                    if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
-                          || compat::starts_with(s, "\\\n")))
+                    if (!(s.empty() || s.starts_with("/*") || s.starts_with("//")
+                          || s.starts_with("\\\n")))
                     {
                         break;
                     }
@@ -531,8 +531,8 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
                     // in the first line and include the intervening spaces and (part of? looks like an
                     // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
                     // when looking backwards here, without even trying to look at their content:
-                    if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
-                          || compat::starts_with(s, "\\\n")))
+                    if (!(s.empty() || s.starts_with("/*") || s.starts_with("//")
+                          || s.starts_with("\\\n")))
                     {
                         break;
                     }
@@ -567,7 +567,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         {
             unsigned n = Lexer::MeasureTokenLength(loc, SM, compiler.getLangOpts());
             auto s = StringRef(compiler.getSourceManager().getCharacterData(loc), n);
-            while (compat::starts_with(s, "\\\n"))
+            while (s.starts_with("\\\n"))
             {
                 s = s.drop_front(2);
                 while (!s.empty()

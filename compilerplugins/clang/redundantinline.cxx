@@ -10,7 +10,6 @@
 
 #include <cassert>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -55,7 +54,7 @@ private:
                 loc, compiler.getSourceManager(), compiler.getLangOpts());
             StringRef s(compiler.getSourceManager().getCharacterData(loc), n);
             //TODO: see compilerplugins/clang/override.cxx:
-            if (compat::starts_with(s, "\\\n")) {
+            if (s.starts_with("\\\n")) {
                 s = s.drop_front(2);
             }
             if (s == "inline") {
@@ -87,7 +86,7 @@ private:
                 StringRef s(
                     compiler.getSourceManager().getCharacterData(loc), n2);
                 //TODO: see compilerplugins/clang/override.cxx:
-                if (compat::starts_with(s, "\\\n")) {
+                if (s.starts_with("\\\n")) {
                     s = s.drop_front(2);
                 }
                 if (!s.empty()) {
@@ -142,7 +141,7 @@ private:
     }
 
     bool handleNonExternalLinkage(FunctionDecl const * decl) {
-        if (decl->getLinkageInternal() >= compat::Linkage::Module) {
+        if (decl->getLinkageInternal() >= Linkage::Module) {
             return false;
         }
         if (!compiler.getSourceManager().isInMainFile(decl->getLocation())) {

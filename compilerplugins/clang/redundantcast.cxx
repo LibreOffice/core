@@ -53,12 +53,12 @@ bool canConstCastFromTo(Expr const * from, Expr const * to) {
     auto const k2 = to->getValueKind();
     return (k2 == VK_LValue && k1 == VK_LValue)
         || (k2 == VK_XValue
-            && (k1 != compat::VK_PRValue || from->getType()->isRecordType()));
+            && (k1 != VK_PRValue || from->getType()->isRecordType()));
 }
 
 char const * printExprValueKind(ExprValueKind k) {
     switch (k) {
-    case compat::VK_PRValue:
+    case VK_PRValue:
         return "prvalue";
     case VK_LValue:
         return "lvalue";
@@ -590,7 +590,7 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
          " written as an explicit construction of a temporary}4"),
         expr->getExprLoc())
         << t1 << printExprValueKind(k1) << t2 << printExprValueKind(k3)
-        << (k3 == compat::VK_PRValue && (k1 != compat::VK_PRValue || t1->isRecordType()))
+        << (k3 == VK_PRValue && (k1 != VK_PRValue || t1->isRecordType()))
         << expr->getSourceRange();
     return true;
 }
@@ -617,7 +617,7 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
         {
             if (loplugin::TypeCheck(sub->getType()).Pointer().Const().Char()) {
                 if (auto const lit = dyn_cast<clang::StringLiteral>(expr->getSubExprAsWritten())) {
-                    if (lit->getKind() == compat::StringLiteralKind::UTF8) {
+                    if (lit->getKind() == StringLiteralKind::UTF8) {
                         // Don't warn about
                         //
                         //   redundant_cast<char const *>(u8"...")
@@ -805,7 +805,7 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     auto const t1 = expr->getTypeAsWritten();
     bool const fnptr = t1->isFunctionPointerType() || t1->isMemberFunctionPointerType();
     auto const sub = fnptr ? stopAtFunctionPointerDecay(expr) : compat::getSubExprAsWritten(expr);
-    if ((sub->getValueKind() != compat::VK_PRValue && !fnptr) || expr->getType()->isRecordType()
+    if ((sub->getValueKind() != VK_PRValue && !fnptr) || expr->getType()->isRecordType()
         || isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub))
     {
         return true;

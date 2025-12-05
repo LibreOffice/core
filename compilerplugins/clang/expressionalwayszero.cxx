@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "llvm/ADT/StringExtras.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
@@ -91,8 +93,8 @@ bool ExpressionAlwaysZero::VisitBinaryOperator(BinaryOperator const* binaryOpera
         return true;
     report(DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
            binaryOperator->getBeginLoc())
-        << (lhsValue ? compat::toString(*lhsValue, 10) : "unknown")
-        << (rhsValue ? compat::toString(*rhsValue, 10) : "unknown")
+        << (lhsValue ? llvm::toString(*lhsValue, 10) : "unknown")
+        << (rhsValue ? llvm::toString(*rhsValue, 10) : "unknown")
         << binaryOperator->getSourceRange();
     return true;
 }
@@ -122,8 +124,8 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* c
         return true;
     report(DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
            cxxOperatorCallExpr->getBeginLoc())
-        << (lhsValue ? compat::toString(*lhsValue, 10) : "unknown")
-        << (rhsValue ? compat::toString(*rhsValue, 10) : "unknown")
+        << (lhsValue ? llvm::toString(*lhsValue, 10) : "unknown")
+        << (rhsValue ? llvm::toString(*rhsValue, 10) : "unknown")
         << cxxOperatorCallExpr->getSourceRange();
     return true;
 }

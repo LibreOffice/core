@@ -12,6 +12,7 @@
 #include <limits>
 
 #include "clang/Lex/Lexer.h"
+#include "llvm/ADT/StringExtras.h"
 
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -81,9 +82,8 @@ bool LiteralToBoolConversion::isFromCIncludeFile(
     SourceLocation spellingLocation) const
 {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
-        && compat::ends_with(
-            StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename()),
-            ".h");
+        && StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename())
+           .ends_with(".h");
 }
 
 bool LiteralToBoolConversion::isSharedCAndCppCode(SourceLocation location) const
@@ -218,7 +218,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
                  " %1 with value %2 to %3"),
                 expr2->getBeginLoc())
                 << castExpr->getCastKindName() << subExpr->getType()
-                << compat::toString(*res, 10) << castExpr->getType()
+                << llvm::toString(*res, 10) << castExpr->getType()
                 << expr2->getSourceRange();
         }
     }

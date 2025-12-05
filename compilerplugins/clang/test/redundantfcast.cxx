@@ -9,7 +9,6 @@
 
 #include "sal/config.h"
 
-#include "config_clang.h"
 #include "rtl/ustring.hxx"
 #include "tools/color.hxx"
 
@@ -233,9 +232,7 @@ struct S
 void f()
 {
     (void)S{ 0 };
-#if CLANG_VERSION >= 160000
     (void)S(0);
-#endif
 }
 }
 

@@ -16,8 +16,6 @@
 #include <unordered_set>
 #include <vector>
 
-#include "config_clang.h"
-
 namespace
 {
 class RedundantFCast final : public loplugin::FilteringPlugin<RedundantFCast>
@@ -242,7 +240,7 @@ public:
                     report(DiagnosticsEngine::Fatal,
                            "TODO: unexpected std::function with %0 template arguments",
                            expr->getExprLoc())
-                        << compat::diagnosticSize(args.size()) << expr->getSourceRange();
+                        << args.size() << expr->getSourceRange();
                 }
                 return false;
             }
@@ -297,10 +295,8 @@ public:
             return true;
         if (isa<CXXStdInitializerListExpr>(e))
             return true;
-#if CLANG_VERSION >= 160000
         if (isa<CXXParenListInitExpr>(e))
             return true;
-#endif
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
         if (!(t1.getCanonicalType().getTypePtr() == t2.getCanonicalType().getTypePtr()
