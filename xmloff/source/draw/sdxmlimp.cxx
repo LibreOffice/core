@@ -405,6 +405,34 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 }
 
+void SAL_CALL SdXMLImport::endDocument()
+{
+    SvXMLImport::endDocument();
+
+    // Resolve SdrPageObj references that couldn't be resolved during import
+    // (because the target page didn't exist yet at import time).
+    for (const auto& rRef : maPageShapeRefs)
+    {
+        if (!rRef.mxShape.is())
+            continue;
+
+        uno::Reference<beans::XPropertySet> xPropSet(rRef.mxShape, uno::UNO_QUERY);
+        if (!xPropSet.is())
+            continue;
+
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"PageNumber"_ustr))
+        {
+            sal_Int32 nPageNum = 0;
+            if ((xPropSet->getPropertyValue(u"PageNumber"_ustr) >>= nPageNum) && nPageNum == 0)
+            {
+                xPropSet->setPropertyValue(u"PageNumber"_ustr, uno::Any(rRef.mnPageNumber));
+            }
+        }
+    }
+
+    maPageShapeRefs.clear();
+}
+
 SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
@@ -628,6 +656,11 @@ void SdXMLImport::AddDateTimeDecl( const OUString& rName, const OUString& rText,
         aDecl.maStrDateTimeFormat = rDateTimeFormat;
         maDateTimeDeclsMap[rName] = std::move(aDecl);
     }
+}
+
+void SdXMLImport::AddPageShapePageNum(const css::uno::Reference<css::drawing::XShape>& rxShape, sal_Int32 nPageNumber)
+{
+    maPageShapeRefs.push_back({rxShape, nPageNumber});
 }
 
 OUString SdXMLImport::GetHeaderDecl( const OUString& rName ) const

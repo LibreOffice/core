@@ -452,6 +452,10 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
     {
         if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
             eObjKind = PresObjKind::Title;
+        else if (GetPage()->GetPageKind() == PageKind::Standard
+            && !GetPage()->IsMasterPage())
+            // might be a canvas page
+            eObjKind = PresObjKind::PagePreview;
         else
             eObjKind = PresObjKind::Page;
     }

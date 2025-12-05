@@ -68,6 +68,7 @@
 #include <XMLReplacementImageContext.hxx>
 #include <XMLImageMapContext.hxx>
 #include "sdpropls.hxx"
+#include "sdxmlimp_impl.hxx"
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 #include "SignatureLineContext.hxx"
@@ -2252,6 +2253,14 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
         static constexpr OUString aPageNumberStr(u"PageNumber"_ustr);
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
             xPropSet->setPropertyValue(aPageNumberStr, uno::Any( mnPageNumber ));
+    }
+
+    // For later resolution of page shape references, in case the target page does not
+    // exist during import. This will be resolved in SdXMLImport::endDocument()
+    if (mnPageNumber > 0)
+    {
+        if (SdXMLImport* pSdImport = dynamic_cast<SdXMLImport*>(&GetImport()))
+            pSdImport->AddPageShapePageNum(mxShape, mnPageNumber);
     }
 
     SdXMLShapeContext::startFastElement(nElement, xAttrList);

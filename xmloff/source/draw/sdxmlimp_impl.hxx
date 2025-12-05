@@ -70,8 +70,16 @@ class SdXMLImport: public SvXMLImport
     HeaderFooterDeclMap         maFooterDeclsMap;
     DateTimeDeclMap             maDateTimeDeclsMap;
 
-protected:
+    // Storage for page shape references that need to be resolved in endDocument()
+    // when all pages have been imported
+    struct PageShapeRef
+    {
+        css::uno::Reference<css::drawing::XShape> mxShape;
+        sal_Int32 mnPageNumber;
+    };
+    std::vector<PageShapeRef> maPageShapeRefs;
 
+protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
@@ -89,6 +97,7 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
+    virtual void SAL_CALL endDocument() override;
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
@@ -125,6 +134,8 @@ public:
     void AddHeaderDecl( const OUString& rName, const OUString& rText );
     void AddFooterDecl( const OUString& rName, const OUString& rText );
     void AddDateTimeDecl( const OUString& rName, const OUString& rText, bool bFixed, const OUString& rDateTimeFormat );
+    void AddPageShapePageNum(const css::uno::Reference<css::drawing::XShape>& rxShape,
+                         sal_Int32 nPageNumber);
 
     OUString GetHeaderDecl( const OUString& rName ) const;
     OUString GetFooterDecl( const OUString& rName ) const;
