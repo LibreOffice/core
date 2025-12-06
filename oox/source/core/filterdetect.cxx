@@ -98,6 +98,14 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
                 parseSettings(aAttribs);
             break;
 
+        // cases for xl/workbook.xml
+        case XLS_TOKEN(workbook):
+            break;
+        case XLS_TOKEN(fileVersion):
+            if (!maContextStack.empty() && (maContextStack.back() == XLS_TOKEN(workbook)))
+                parseWorkbook(aAttribs);
+            break;
+
         // cases for _rels/.rels
         case PR_TOKEN( Relationships ):
         break;
@@ -162,6 +170,19 @@ void FilterDetectDocHandler::parseSettings(const AttributeList& rAttribs)
         if (nVal > 12 && maOOXMLVariant == OOXMLVariant::ECMA_Transitional)
             maOOXMLVariant = OOXMLVariant::ISO_Transitional; // Word 2010+
     }
+}
+
+void FilterDetectDocHandler::parseWorkbook(const AttributeList& rAttribs)
+{
+    if (maOOXMLVariant != OOXMLVariant::ECMA_Transitional)
+        return;
+
+    // tdf#165180 Remember filter when opening file as 'Office Open XML Spreadsheet'
+    // (fileVersion can only exist once, and lowestEdited can only be defined once - else corrupt)
+    // lowestEdited: 4 is 2007, 5 is 2010, 6 is 201?, 7 is 201?-2024
+    const sal_Int32 nDefaultValue = rAttribs.getInteger(XML_lastEdited, 99);
+    if (rAttribs.getInteger(XML_lowestEdited, nDefaultValue) > 4)
+        maOOXMLVariant = OOXMLVariant::ISO_Transitional; // Excel 2010+
 }
 
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
@@ -230,14 +251,32 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_vi
     }
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
-        return u"MS Excel 2007 XML"_ustr;
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return u"Office Open XML Spreadsheet"_ustr; // Excel 2010+
+            case OOXMLVariant::ECMA_Transitional:
+                return u"MS Excel 2007 XML"_ustr;
+        }
+    }
 
     if (rContentType == u"application/vnd.ms-excel.sheet.macroEnabled.main+xml")
         return u"MS Excel 2007 VBA XML"_ustr;
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
         rContentType == u"application/vnd.ms-excel.template.macroEnabled.main+xml" )
-        return u"MS Excel 2007 XML Template"_ustr;
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return u"Office Open XML Spreadsheet Template"_ustr; // Excel 2010+
+            case OOXMLVariant::ECMA_Transitional:
+                return u"MS Excel 2007 XML Template"_ustr;
+        }
+    }
 
     if ( rContentType == u"application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
         return u"MS Excel 2007 Binary"_ustr;
@@ -458,6 +497,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
             aParser.registerNamespace(NMSP_doc); // for W_TOKEN
+            aParser.registerNamespace(NMSP_xls); // for XLS_TOKEN
 
             OUString aFileName;
             aMediaDescriptor[utl::MediaDescriptor::PROP_URL] >>= aFileName;
@@ -470,11 +510,20 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             try
             {
                 // Text documents can't use .rels to determine maOOXMLVariant. Use compatibilityMode
-                 aParser.parseStream(aZipStorage, u"word/settings.xml"_ustr);
+                aParser.parseStream(aZipStorage, u"word/settings.xml"_ustr);
             }
             catch(const Exception&)
             {
                 // not a MS Word text document, or file might not exist
+                try
+                {
+                    // Spreadsheets distinguish maOOXMLVariant using fileVersion lowestEdited
+                    aParser.parseStream(aZipStorage, u"xl/workbook.xml"_ustr);
+                }
+                catch(const Exception&)
+                {
+                    // not a MS Excel spreadsheet document, or file might not exist
+                }
             }
             // Order is critical: .rels and then settings.xml must be parsed before [Content_Types]
             aParser.parseStream( aZipStorage, u"[Content_Types].xml"_ustr );
