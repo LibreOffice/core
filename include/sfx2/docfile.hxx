@@ -52,6 +52,7 @@ class XModel;
 }
 namespace ucbhelper { class Content; }
 namespace svl::crypto { class SigningContext; }
+namespace comphelper { class SequenceAsHashMap; }
 
 class SvKeyValueIterator;
 class SfxFilter;
@@ -133,7 +134,7 @@ public:
 
     SfxItemSet&         GetItemSet() const;
     void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-    const css::uno::Sequence<css::beans::PropertyValue> & GetArgs() const;
+    const comphelper::SequenceAsHashMap& GetArgs() const;
     void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
     void                ReOpen();

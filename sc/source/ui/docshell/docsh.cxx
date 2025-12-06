@@ -1925,10 +1925,7 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
 
     if (pViewShell && bNeedsRehash)
     {
-        bool bAutoSaveEvent = false;
-        comphelper::SequenceAsHashMap lArgs(rMedium.GetArgs());
-        lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= bAutoSaveEvent;
-        if (bAutoSaveEvent)
+        if (rMedium.GetArgs().getValue(utl::MediaDescriptor::PROP_AUTOSAVEEVENT) == true)
         {
             // skip saving recovery file instead of showing re-type password dialog window
             SAL_WARN("sc.filter",
@@ -2562,16 +2559,8 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             // Verbose only from command line, not UI (in case we actually
             // implement that) nor macro filter options.
-            bool bVerbose = false;
-            const css::uno::Sequence<css::beans::PropertyValue> & rArgs = rMed.GetArgs();
-            const auto pProp = std::find_if( rArgs.begin(), rArgs.end(),
-                    [](const css::beans::PropertyValue& rProp) { return rProp.Name == "ConversionRequestOrigin"; });
-            if (pProp != rArgs.end())
-            {
-                OUString aOrigin;
-                pProp->Value >>= aOrigin;
-                bVerbose = (aOrigin == "CommandLine");
-            }
+            bool bVerbose
+                = rMed.GetArgs().getValue(u"ConversionRequestOrigin"_ustr) == u"CommandLine"_ustr;
 
             SCTAB nStartTab;
             SCTAB nCount = m_pDocument->GetTableCount();

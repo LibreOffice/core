@@ -2786,7 +2786,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
         // put in the REAL file name, and copy all PropertyValues
         comphelper::SequenceAsHashMap aNewArgs = TransformItems(SID_SAVEASDOC, rItems);
-        comphelper::SequenceAsHashMap aMediumArgs(rMedium.GetArgs());
+        const comphelper::SequenceAsHashMap& aMediumArgs(rMedium.GetArgs());
 
         if (aNewArgs.contains(u"FileName"_ustr))
             aNewArgs[u"FileName"_ustr] <<= rMedium.GetName();
@@ -2795,7 +2795,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             aNewArgs[u"IsPreview"_ustr] <<= true;
 
         if (aMediumArgs.contains(u"ConversionRequestOrigin"_ustr))
-            aNewArgs[u"ConversionRequestOrigin"_ustr] = aMediumArgs[u"ConversionRequestOrigin"_ustr];
+            aNewArgs[u"ConversionRequestOrigin"_ustr] = aMediumArgs.getValue(u"ConversionRequestOrigin"_ustr);
 
         // FIXME: Handle this inside TransformItems()
         if (rItems.GetItemState(SID_IS_REDACT_MODE) == SfxItemState::SET)
@@ -3637,9 +3637,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         return true;
     }
 
-    bool AutoSaveEvent = false;
-    comphelper::SequenceAsHashMap lArgs(rMedium.GetArgs());
-    lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
+    bool AutoSaveEvent = rMedium.GetArgs().getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_AUTOSAVEEVENT, false);
 
     if ( pImpl->mxObjectContainer )
     {

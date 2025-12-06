@@ -475,7 +475,7 @@ public:
 
     util::DateTime m_aDateTime;
 
-    uno::Sequence<beans::PropertyValue> m_aArgs;
+    comphelper::SequenceAsHashMap m_aArgs;
 
     explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
@@ -3689,14 +3689,12 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
 void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
 {
-    comphelper::SequenceAsHashMap aArgsMap(rArgs);
-    aArgsMap.erase(u"Stream"_ustr);
-    aArgsMap.erase(u"InputStream"_ustr);
-
-    pImpl->m_aArgs = aArgsMap.getAsConstPropertyValueList();
+    pImpl->m_aArgs << rArgs;
+    pImpl->m_aArgs.erase(u"Stream"_ustr);
+    pImpl->m_aArgs.erase(u"InputStream"_ustr);
 }
 
-const uno::Sequence<beans::PropertyValue> & SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
+const comphelper::SequenceAsHashMap& SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const std::shared_ptr<SfxItemSet>& p ) :
     pImpl(new SfxMedium_Impl)

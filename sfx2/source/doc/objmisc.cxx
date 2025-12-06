@@ -1978,8 +1978,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
             return false;
         }
 
-        if (comphelper::SequenceAsHashMap desc(pMedium->GetArgs());
-            !desc.getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
+        if (!pMedium->GetArgs().getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
         {
             mbContinueImportOnFilterExceptions = no;
             return false;
