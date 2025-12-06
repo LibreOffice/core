@@ -427,7 +427,8 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
     tools::Long DPIOffset = nScale - 1;
 
     double nTick4 = aImplRulerUnitTab[mnUnitIndex].nTick4;
-    double nTick2 = 0;
+    double nTick3 = aImplRulerUnitTab[mnUnitIndex].nTick3;
+    double nTick2 = aImplRulerUnitTab[mnUnitIndex].nTick2;
     double nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1 / nScale;
     double nTickUnit = 0;
     tools::Long nTickWidth;
@@ -440,6 +441,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
         if (mnCharWidth == 0)
             mnCharWidth = 371;
         nTick4 = mnCharWidth * 2;
+        nTick3 = mnCharWidth;
         nTick2 = mnCharWidth;
         nTickCount = mnCharWidth;
         nTickUnit = mnCharWidth;
@@ -449,6 +451,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
         if (mnLineHeight == 0)
             mnLineHeight = 551;
         nTick4 = mnLineHeight * 2;
+        nTick3 = mnLineHeight;
         nTick2 = mnLineHeight;
         nTickUnit = mnLineHeight;
         nTickCount = mnLineHeight;
@@ -531,13 +534,6 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
 
     tools::Long n = 0;
     double nTick = 0.0;
-    double nTick3 = 0;
-
-    if ((mnUnitIndex != RULER_UNIT_CHAR) && (mnUnitIndex != RULER_UNIT_LINE))
-    {
-        nTick2 = aImplRulerUnitTab[mnUnitIndex].nTick2;
-        nTick3 = aImplRulerUnitTab[mnUnitIndex].nTick3;
-    }
 
     Size nTickGapSize;
 
