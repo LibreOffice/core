@@ -31,7 +31,7 @@
 class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 {
 private:
-    Color mColor;
+    Color maColor;
     model::ComplexColor maComplexColor;
 
 public:
@@ -59,22 +59,22 @@ public:
 
     const Color& GetValue() const
     {
-        return mColor;
+        return maColor;
     }
     void SetValue(const Color& rNewColor)
     {
         ASSERT_CHANGE_REFCOUNTED_ITEM;
-        mColor = rNewColor;
+        maColor = rNewColor;
     }
 
     const Color& getColor() const
     {
-        return mColor;
+        return maColor;
     }
     void setColor(const Color& rNewColor)
     {
         ASSERT_CHANGE_REFCOUNTED_ITEM;
-        mColor = rNewColor;
+        maColor = rNewColor;
     }
 
     model::ComplexColor const& getComplexColor() const { return maComplexColor; }
