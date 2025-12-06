@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
 #include <sal/config.h>
 
 #include "helper/qahelper.hxx"
@@ -903,7 +904,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             const char* pNames[] = { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10" };
 
             size_t nCount = pCache->GetFieldCount();
-            if (nCount != SAL_N_ELEMENTS(pNames))
+            if (nCount != std::size(pNames))
             {
                 std::cout << "Incorrect number of fields in pivot cache." << std::endl;
                 return false;
@@ -1036,10 +1037,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
             }
 
             const char* pNames[] = { "Name", "Value" };
-            (void)pNames;
 
             size_t nCount = pCache->GetFieldCount();
-            if (nCount != SAL_N_ELEMENTS(pNames))
+            if (nCount != std::size(pNames))
             {
                 std::cout << "Incorrect number of fields in pivot cache." << std::endl;
                 return false;
@@ -2335,7 +2335,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124736)
     const int vals[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
                          16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
                          31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 0,  44 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(vals); ++i)
+    for (size_t i = 0; i < std::size(vals); ++i)
     {
         assertXPath(pTable,
                     "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item["

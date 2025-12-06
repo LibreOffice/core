@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
 #include "helper/qahelper.hxx"
 
 #include <formulacell.hxx>
@@ -342,9 +343,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                 return false;
             }
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            for (const auto& rCheck : aChecks)
             {
-                sal_uInt16 nActId = aChecks[i].mnActionId;
+                sal_uInt16 nActId = rCheck.mnActionId;
                 const ScChangeAction* pAction = pCT->GetAction(nActId);
                 if (!pAction)
                 {
@@ -352,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                     return false;
                 }
 
-                if (pAction->GetType() != aChecks[i].meType)
+                if (pAction->GetType() != rCheck.meType)
                 {
                     std::cerr << "Unexpected action type for action number " << nActId << "."
                               << std::endl;
@@ -360,9 +361,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                 }
 
                 const ScBigRange& rRange = pAction->GetBigRange();
-                ScBigRange aCheck(aChecks[i].mnStartCol, aChecks[i].mnStartRow,
-                                  aChecks[i].mnStartTab, aChecks[i].mnEndCol, aChecks[i].mnEndRow,
-                                  aChecks[i].mnEndTab);
+                ScBigRange aCheck(rCheck.mnStartCol, rCheck.mnStartRow, rCheck.mnStartTab,
+                                  rCheck.mnEndCol, rCheck.mnEndRow, rCheck.mnEndTab);
 
                 if (!checkRange(pAction->GetType(), aCheck, rRange))
                 {
@@ -377,7 +377,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                     case SC_CAT_INSERT_ROWS:
                     {
                         const ScChangeActionIns* p = static_cast<const ScChangeActionIns*>(pAction);
-                        if (p->IsEndOfList() != aChecks[i].mbRowInsertedAtBottom)
+                        if (p->IsEndOfList() != rCheck.mbRowInsertedAtBottom)
                         {
                             std::cerr << "Unexpected end-of-list flag for action number " << nActId
                                       << "." << std::endl;
@@ -509,7 +509,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
             }
 
             const char* pNames[] = { "Green", "Red", "Blue", "Yellow" };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); ++i)
+            for (size_t i = 0; i < std::size(pNames); ++i)
             {
                 OUString aExpected = OUString::createFromAscii(pNames[i]);
                 if (aExpected != aTabNames[i])
@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
                 0x00FFFF00, // yellow
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aXclColors); ++i)
+            for (size_t i = 0; i < std::size(aXclColors); ++i)
             {
                 if (aXclColors[i] != rDoc.GetTabBgColor(i))
                 {

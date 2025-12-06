@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
 #include "helper/qahelper.hxx"
 
 #include <conditio.hxx>
@@ -836,11 +837,11 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testIconSet)
         { 2.0, 2 },
         { 3.0, 1 }
     };
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for(const auto& rTest : aTests)
     {
-        m_pDoc->SetValue(0,0,0,aTests[i].nVal);
+        m_pDoc->SetValue(0,0,0,rTest.nVal);
         std::unique_ptr<ScIconSetInfo> pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
-        CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
+        CPPUNIT_ASSERT_EQUAL(rTest.nIndex, pInfo->nIconIndex);
     }
 
     delete pEntry;
