@@ -26,6 +26,7 @@
 #include <unordered_map>
 
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
@@ -1344,21 +1345,22 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
 
 void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemSet"));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxItemSet");
     SfxItemIter aIter(*this);
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         if (IsInvalidItem(pItem))
         {
-            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("invalid"));
-            (void)xmlTextWriterEndElement(pWriter);
+            aWriter.startElement("invalid");
+            aWriter.endElement();
         }
         else
         {
             pItem->dumpAsXml(pWriter);
         }
     }
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 

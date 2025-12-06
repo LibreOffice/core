@@ -51,6 +51,7 @@
 #include <comphelper/lok.hxx>
 
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
@@ -356,10 +357,11 @@ bool XFillTransparenceItem::GetPresentation
 
 void XFillTransparenceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillTransparenceItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillTransparenceItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree XFillTransparenceItem::dumpAsJSON() const
@@ -482,10 +484,11 @@ bool XFillBmpTileItem::GetPresentation
 
 void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpTileItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBmpTileItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 
@@ -514,10 +517,11 @@ bool XFillBmpPosItem::GetPresentation
 
 void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpPosItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<int>(GetValue())).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBmpPosItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", sal_Int32(GetValue()));
+    aWriter.endElement();
 }
 
 
@@ -671,10 +675,11 @@ bool XFillBmpStretchItem::GetPresentation
 
 void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpStretchItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBmpStretchItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem(sal_Int32 nOffPosX)
@@ -740,10 +745,11 @@ bool XFillBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUni
 
 void XFillBackgroundItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBackgroundItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBackgroundItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 XFillUseSlideBackgroundItem::XFillUseSlideBackgroundItem( bool bFill ) :
@@ -765,10 +771,11 @@ bool XFillUseSlideBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/
 
 void XFillUseSlideBackgroundItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillUseSlideBackgroundItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillUseSlideBackgroundItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 

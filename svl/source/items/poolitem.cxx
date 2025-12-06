@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <typeinfo>
 #include <boost/property_tree/ptree.hpp>
 
@@ -187,19 +188,20 @@ bool SfxPoolItem::GetPresentation(
 
 void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxPoolItem"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
-                                      BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"),
-                                      BAD_CAST(typeid(*this).name()));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxPoolItem");
+    aWriter.attribute("ptr", reinterpret_cast<sal_IntPtr>(this));
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("typeName", typeid(*this).name());
+
     OUString rText;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     if (GetPresentation(SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM,
                         rText, aIntlWrapper))
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"),
-                                          BAD_CAST(rText.toUtf8().getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    {
+        aWriter.attribute("presentation", rText);
+    }
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree SfxPoolItem::dumpAsJSON() const

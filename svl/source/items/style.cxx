@@ -20,6 +20,7 @@
 #include <memory>
 
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 
 #include <svl/style.hxx>
 
@@ -273,14 +274,13 @@ std::optional<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
 
 void SfxStyleSheetBase::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxStyleSheetBase"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(aName.toUtf8().getStr()));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxStyleSheetBase");
+    aWriter.attribute("ptr", reinterpret_cast<sal_IntPtr>(this));
+    aWriter.attribute("name", aName);
     if (pSet)
-    {
         pSet->dumpAsXml(pWriter);
-    }
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 /**
@@ -694,17 +694,15 @@ void SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
 
 void SfxStyleSheetBasePool::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxStyleSheetBasePool"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-
-    std::shared_ptr<SfxStyleSheetIterator> aSSSI
-        = std::make_shared<SfxStyleSheetIterator>(this, SfxStyleFamily::All);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxStyleSheetBasePool");
+    aWriter.attribute("ptr", reinterpret_cast<sal_IntPtr>(this));
+    auto aSSSI = std::make_shared<SfxStyleSheetIterator>(this, SfxStyleFamily::All);
     for (SfxStyleSheetBase* pStyle = aSSSI->First(); pStyle; pStyle = aSSSI->Next())
     {
         pStyle->dumpAsXml(pWriter);
     }
-
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator=( const SfxStyleSheetBasePool& r )

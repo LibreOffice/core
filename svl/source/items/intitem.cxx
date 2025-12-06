@@ -17,16 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/intitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <svl/metitem.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <boost/property_tree/ptree.hpp>
-
-
 
 
 SfxPoolItem* SfxByteItem::CreateDefault()
@@ -100,10 +98,11 @@ SfxPoolItem* SfxUInt16Item::CreateDefault()
 
 void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUInt16Item"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxUInt16Item");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree SfxUInt16Item::dumpAsJSON() const
@@ -123,10 +122,11 @@ SfxPoolItem* SfxInt32Item::CreateDefault()
 
 void SfxInt32Item::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxInt32Item"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxInt32Item");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree SfxInt32Item::dumpAsJSON() const
@@ -146,10 +146,11 @@ SfxPoolItem* SfxUInt32Item::CreateDefault()
 
 void SfxUInt32Item::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUInt32Item"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxUInt32Item");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree SfxUInt32Item::dumpAsJSON() const

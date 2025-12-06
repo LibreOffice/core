@@ -19,6 +19,7 @@
 
 #include <svl/stritem.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/diagnose.h>
 #include <unotools/intlwrapper.hxx>
@@ -70,10 +71,11 @@ SfxStringItem* SfxStringItem::Clone(SfxItemPool *) const
 
 void SfxStringItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxStringItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toUtf8().getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxStringItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 SfxPoolItem* SfxStringItem::CreateDefault()
