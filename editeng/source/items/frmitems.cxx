@@ -50,6 +50,7 @@
 #include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/XmlWriter.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -1022,11 +1023,12 @@ bool SvxLeftMarginItem::HasMetrics() const
 
 void SvxLeftMarginItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLeftMarginItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nLeftMargin"), BAD_CAST(OString::number(m_nLeftMargin).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPropLeftMargin"), BAD_CAST(OString::number(m_nPropLeftMargin).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SvxLeftMarginItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("m_nLeftMargin", m_nLeftMargin);
+    aWriter.attribute("m_nPropLeftMargin", m_nPropLeftMargin);
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree SvxLeftMarginItem::dumpAsJSON() const
@@ -2806,13 +2808,14 @@ bool SvxShadowItem::HasMetrics() const
 
 void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxShadowItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aShadowColor"), BAD_CAST(aShadowColor.AsRGBHexString().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(nWidth).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLocation"), BAD_CAST(OString::number(static_cast<int>(eLocation)).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]).toUtf8().getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SvxShadowItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("aShadowColor", aShadowColor.AsRGBHexString());
+    aWriter.attribute("nWidth", nWidth);
+    aWriter.attribute("eLocation", sal_Int32(eLocation));
+    aWriter.attribute("presentation", EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]));
+    aWriter.endElement();
 }
 
 // class SvxBoxItem ------------------------------------------------------
@@ -2845,17 +2848,14 @@ SvxBoxItem::~SvxBoxItem()
 
 void SvxBoxItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBoxItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("top-dist"),
-                                      BAD_CAST(OString::number(mnTopDistance).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bottom-dist"),
-                                      BAD_CAST(OString::number(mnBottomDistance).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("left-dist"),
-                                      BAD_CAST(OString::number(mnLeftDistance).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("right-dist"),
-                                      BAD_CAST(OString::number(mnRightDistance).getStr()));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SvxBoxItem");
+    aWriter.attribute("top-dist", mnTopDistance);
+    aWriter.attribute("bottom-dist", mnBottomDistance);
+    aWriter.attribute("left-dist", mnLeftDistance);
+    aWriter.attribute("right-dist", mnRightDistance);
     SfxPoolItem::dumpAsXml(pWriter);
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree SvxBoxItem::dumpAsJSON() const
@@ -4373,11 +4373,10 @@ bool SvxFormatKeepItem::GetPresentation
 
 void SvxFormatKeepItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFormatKeepItem"));
-
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SvxFormatKeepItem");
     SfxBoolItem::dumpAsXml(pWriter);
-
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 SvxLineItem::SvxLineItem( const sal_uInt16 nId ) :
@@ -5138,16 +5137,17 @@ void SvxBrushItem::ApplyGraphicTransparency_Impl()
 
 void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBrushItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"), BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filtercolor"), BAD_CAST(aFilterColor.AsRGBHexString().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("shadingValue"), BAD_CAST(OString::number(nShadingValue).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("link"), BAD_CAST(maStrLink.toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filter"), BAD_CAST(maStrFilter.toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("graphicPos"), BAD_CAST(OString::number(eGraphicPos).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("loadAgain"), BAD_CAST(OString::boolean(bLoadAgain).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SvxBrushItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("color", aColor.AsRGBHexString());
+    aWriter.attribute("filtercolor", aFilterColor.AsRGBHexString());
+    aWriter.attribute("shadingValue", nShadingValue);
+    aWriter.attribute("link", maStrLink);
+    aWriter.attribute("filter", maStrFilter);
+    aWriter.attribute("graphicPos", eGraphicPos);
+    aWriter.attribute("loadAgain", bLoadAgain);
+    aWriter.endElement();
 }
 
 ItemInstanceManager* SvxFrameDirectionItem::getItemInstanceManager() const
@@ -5290,13 +5290,11 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
 
 void SvxFrameDirectionItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFrameDirectionItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nWhich"),
-                                BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(
-        pWriter, BAD_CAST("m_nValue"),
-        BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SvxFrameDirectionItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("m_nValue", sal_Int16(GetValue()));
+    aWriter.endElement();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

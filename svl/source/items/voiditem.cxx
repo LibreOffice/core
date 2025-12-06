@@ -19,6 +19,7 @@
 
 #include <svl/voiditem.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <sal/log.hxx>
 
 SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
@@ -59,10 +60,10 @@ bool SfxVoidItem::GetPresentation(SfxItemPresentation /*ePresentation*/, MapUnit
 
 void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxVoidItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
-                                      BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxVoidItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.endElement();
 }
 
 SfxVoidItem* SfxVoidItem::Clone(SfxItemPool*) const { return new SfxVoidItem(*this); }

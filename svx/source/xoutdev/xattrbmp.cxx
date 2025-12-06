@@ -39,6 +39,7 @@
 #include <vcl/GraphicLoader.hxx>
 
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -328,12 +329,11 @@ std::unique_ptr<XFillBitmapItem> XFillBitmapItem::checkForUniqueItem( SdrModel& 
 
 void XFillBitmapItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBitmapItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBitmapItem");
+    aWriter.attribute("whichId", Which());
     NameOrIndex::dumpAsXml(pWriter);
-
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
