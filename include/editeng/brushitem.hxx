@@ -23,6 +23,7 @@
 #include <editeng/editengdllapi.h>
 #include <memory>
 #include <docmodel/color/ComplexColor.hxx>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 
 class Graphic;
 class GraphicObject;
@@ -40,19 +41,19 @@ enum SvxGraphicPosition
 
 class EDITENG_DLLPUBLIC SvxBrushItem final : public SfxPoolItem
 {
-    Color               aColor;
+    Color maColor = COL_TRANSPARENT;
     model::ComplexColor maComplexColor;
-    Color               aFilterColor;
-    sal_Int32           nShadingValue;
-    mutable std::unique_ptr<GraphicObject> xGraphicObject;
-    sal_Int8            nGraphicTransparency; //contains a percentage value which is
-                                              //copied to the GraphicObject when necessary
-    OUString            maStrLink;
-    OUString            maStrFilter;
-    SvxGraphicPosition  eGraphicPos;
-    mutable bool        bLoadAgain;
+    Color maFilterColor = COL_TRANSPARENT;
+    sal_Int32 mnShadingValue = css::drawing::ShadingPattern::CLEAR;
+    mutable std::unique_ptr<GraphicObject> mxGraphicObject;
+    sal_Int8 mnGraphicTransparency = 0; //contains a percentage value which is
+                                    //copied to the GraphicObject when necessary
+    OUString maStrLink;
+    OUString maStrFilter;
+    SvxGraphicPosition meGraphicPos = GPOS_NONE;
+    mutable bool mbLoadAgain = true;
 
-    void        ApplyGraphicTransparency_Impl();
+    void ApplyGraphicTransparency_Impl();
 
 protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
@@ -85,20 +86,26 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual bool             supportsHashCode() const override { return true; }
-    virtual size_t           hashCode() const override;
-    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool operator==( const SfxPoolItem& ) const override;
+    virtual bool supportsHashCode() const override { return true; }
+    virtual size_t hashCode() const override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SvxBrushItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxBrushItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    const Color&    GetColor() const                { return aColor; }
-    Color&          GetColor()                      { return aColor; }
-    void            SetColor( const Color& rCol)
+    const Color& GetColor() const
+    {
+        return maColor;
+    }
+    Color& GetColor()
+    {
+        return maColor;
+    }
+    void SetColor( const Color& rCol)
     {
         ASSERT_CHANGE_REFCOUNTED_ITEM;
-        aColor = rCol;
+        maColor = rCol;
     }
 
     const model::ComplexColor& getComplexColor() const
@@ -114,32 +121,50 @@ public:
         maComplexColor = rComplexColor;
     }
 
-    const Color&    GetFiltColor() const             { return aFilterColor; }
-    void            SetFiltColor( const Color& rCol)
+    const Color& GetFiltColor() const
+    {
+        return maFilterColor;
+    }
+    void SetFiltColor( const Color& rCol)
     {
         ASSERT_CHANGE_REFCOUNTED_ITEM;
-        aFilterColor = rCol;
+        maFilterColor = rCol;
     }
 
-    SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }
+    SvxGraphicPosition  GetGraphicPos() const
+    {
+        return meGraphicPos;
+    }
 
-    sal_Int32               GetShadingValue() const     { return nShadingValue; }
-    const Graphic*          GetGraphic(OUString const & referer = OUString()/*TODO*/) const;
-    const GraphicObject*    GetGraphicObject(OUString const & referer = OUString()/*TODO*/) const;
-    const OUString&         GetGraphicLink() const      { return maStrLink; }
-    const OUString&         GetGraphicFilter() const    { return maStrFilter; }
+    sal_Int32 GetShadingValue() const
+    {
+        return mnShadingValue;
+    }
+    const Graphic* GetGraphic(OUString const & referer = OUString()/*TODO*/) const;
+    const GraphicObject* GetGraphicObject(OUString const & referer = OUString()/*TODO*/) const;
+    const OUString& GetGraphicLink() const
+    {
+        return maStrLink;
+    }
+    const OUString& GetGraphicFilter() const
+    {
+        return maStrFilter;
+    }
 
     // get graphic transparency in percent
-    sal_Int8 getGraphicTransparency() const { return nGraphicTransparency; }
+    sal_Int8 getGraphicTransparency() const
+    {
+        return mnGraphicTransparency;
+    }
     void setGraphicTransparency(sal_Int8 nNew);
 
-    void                SetGraphicPos( SvxGraphicPosition eNew );
-    void                SetGraphic( const Graphic& rNew );
-    void                SetGraphicObject( const GraphicObject& rNewObj );
-    void                SetGraphicLink( const OUString& rNew );
-    void                SetGraphicFilter( const OUString& rNew );
+    void SetGraphicPos( SvxGraphicPosition eNew );
+    void SetGraphic( const Graphic& rNew );
+    void SetGraphicObject( const GraphicObject& rNewObj );
+    void SetGraphicLink( const OUString& rNew );
+    void SetGraphicFilter( const OUString& rNew );
 
-    static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
+    static sal_Int8 TransparencyToPercent(sal_Int32 nTrans);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
