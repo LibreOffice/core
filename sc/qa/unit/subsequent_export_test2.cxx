@@ -21,6 +21,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <formula/grammar.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
@@ -45,8 +47,15 @@ ScExportTest2::ScExportTest2()
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)
 {
     createScDoc("xlsx/groupShape.xlsx");
-    save(TestFilter::XLSX);
 
+    // tdf#165180: should be recognized as a 2010+ XLSX format when loaded (and resaved...)
+    SfxMedium* pMedium = getScDocShell()->GetMedium();
+    SfxFilterMatcher aMatcher(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+    std::shared_ptr<const SfxFilter> pFilter;
+    aMatcher.DetectFilter(*pMedium, pFilter);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("import", u"Calc Office Open XML"_ustr, pFilter->GetFilterName());
+
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
