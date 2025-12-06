@@ -42,16 +42,22 @@ requires(sizeof(T) == sizeof(char)) void attributeBase64_impl(xmlTextWriterPtr w
 
 struct XmlWriterImpl
 {
+    SvStream* mpStream = nullptr;
+    xmlTextWriterPtr mpWriter = nullptr;
+    bool mbWriteXmlHeader = true;
+    bool mbExternalXmlWriter = false;
+
     XmlWriterImpl(SvStream* pStream)
         : mpStream(pStream)
-        , mpWriter(nullptr)
-        , mbWriteXmlHeader(true)
     {
     }
 
-    SvStream* mpStream;
-    xmlTextWriterPtr mpWriter;
-    bool mbWriteXmlHeader;
+    XmlWriterImpl(xmlTextWriterPtr pWriter)
+        : mpWriter(pWriter)
+        , mbWriteXmlHeader(false)
+        , mbExternalXmlWriter(true)
+    {
+    }
 };
 
 XmlWriter::XmlWriter(SvStream* pStream)
@@ -59,29 +65,41 @@ XmlWriter::XmlWriter(SvStream* pStream)
 {
 }
 
+XmlWriter::XmlWriter(xmlTextWriterPtr pWriter)
+    : mpImpl(std::make_unique<XmlWriterImpl>(pWriter))
+{
+}
+
 XmlWriter::~XmlWriter()
 {
-    if (mpImpl && mpImpl->mpWriter != nullptr)
+    if (mpImpl)
         endDocument();
 }
 
 bool XmlWriter::startDocument(sal_Int32 nIndent, bool bWriteXmlHeader)
 {
+    if (mpImpl->mpWriter)
+        return false;
+
     mpImpl->mbWriteXmlHeader = bWriteXmlHeader;
     xmlCharEncodingHandlerPtr pEncodingHandler = xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8);
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback,
                                                               mpImpl->mpStream, pEncodingHandler);
     mpImpl->mpWriter = xmlNewTextWriter(xmlOutBuffer);
-    if (mpImpl->mpWriter == nullptr)
+    if (!mpImpl->mpWriter)
         return false;
     xmlTextWriterSetIndent(mpImpl->mpWriter, nIndent);
     if (mpImpl->mbWriteXmlHeader)
         (void)xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
+
     return true;
 }
 
 void XmlWriter::endDocument()
 {
+    if (!mpImpl->mpWriter || mpImpl->mbExternalXmlWriter)
+        return;
+
     if (mpImpl->mbWriteXmlHeader)
         (void)xmlTextWriterEndDocument(mpImpl->mpWriter);
     xmlFreeTextWriter(mpImpl->mpWriter);
