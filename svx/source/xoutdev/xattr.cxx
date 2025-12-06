@@ -98,6 +98,12 @@ using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
 
+NameOrIndex::NameOrIndex()
+    : SfxStringItem(0)
+{
+    m_nPalIndex = -1;
+}
+
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
     SfxStringItem(_nWhich, OUString()),
     m_nPalIndex(nIndex)
@@ -272,15 +278,19 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem(); }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
-    NameOrIndex(_nWhich, nIndex),
-    m_aColor(rTheColor)
+XColorItem::XColorItem()
+    : NameOrIndex()
+{}
+
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor)
+    : NameOrIndex(_nWhich, nIndex)
+    , m_aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor) :
-    NameOrIndex(_nWhich, rName),
-    m_aColor(rTheColor)
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor)
+    : NameOrIndex(_nWhich, rName)
+    , m_aColor(rTheColor)
 {
 }
 
@@ -290,10 +300,10 @@ XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor)
 {
 }
 
-XColorItem::XColorItem(const XColorItem& rItem) :
-    NameOrIndex(rItem),
-    m_aColor(rItem.m_aColor),
-    maComplexColor(rItem.maComplexColor)
+XColorItem::XColorItem(const XColorItem& rItem)
+    : NameOrIndex(rItem)
+    , m_aColor(rItem.m_aColor)
+    , maComplexColor(rItem.maComplexColor)
 {
 }
 
@@ -309,11 +319,17 @@ bool XColorItem::operator==(const SfxPoolItem& rItem) const
             static_cast<const XColorItem&>(rItem).maComplexColor == maComplexColor;
 }
 
-const Color& XColorItem::GetColorValue() const
+Color const& XColorItem::GetColorValue() const
 {
     assert(!IsIndex());
     return m_aColor;
 
+}
+
+void XColorItem::SetColorValue(const Color& rNew)
+{
+    m_aColor = rNew;
+    Detach();
 }
 
 bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
@@ -1811,13 +1827,17 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
 
 SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
 
-XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
+XFillColorItem::XFillColorItem()
+    : XColorItem()
+{}
+
+XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor)
+    : XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
 {
 }
 
-XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
+XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor)
+    : XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
 {
 }
 
@@ -1826,13 +1846,8 @@ XFillColorItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillColorItem(*this);
 }
 
-bool XFillColorItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper&
-)   const
+bool XFillColorItem::GetPresentation(SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
+                                     OUString& rText, const IntlWrapper& /*rWrapper*/) const
 {
     rText = GetName();
     return true;

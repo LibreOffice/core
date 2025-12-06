@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XCOLIT_HXX
-#define INCLUDED_SVX_XCOLIT_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <docmodel/color/ComplexColor.hxx>
@@ -32,21 +31,21 @@ class SVXCORE_DLLPUBLIC XColorItem : public NameOrIndex
     model::ComplexColor maComplexColor;
 
 public:
-            static SfxPoolItem* CreateDefault();
-            DECLARE_ITEM_TYPE_FUNCTION(XColorItem)
-            XColorItem() : NameOrIndex() {}
-            XColorItem(TypedWhichId<XColorItem> nWhich, sal_Int32 nIndex, const Color& rTheColor);
-            XColorItem(TypedWhichId<XColorItem> nWhich, const Color& rTheColor);
-            XColorItem(TypedWhichId<XColorItem> nWhich, const OUString& rName, const Color& rTheColor);
-            XColorItem(const XColorItem& rItem);
+    static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(XColorItem)
+    XColorItem();
+    XColorItem(TypedWhichId<XColorItem> nWhich, sal_Int32 nIndex, const Color& rTheColor);
+    XColorItem(TypedWhichId<XColorItem> nWhich, const Color& rTheColor);
+    XColorItem(TypedWhichId<XColorItem> nWhich, const OUString& rName, const Color& rTheColor);
+    XColorItem(const XColorItem& rItem);
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual bool            operator==(const SfxPoolItem& rItem) const override;
+    virtual bool operator==(const SfxPoolItem& rItem) const override;
     virtual XColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
-    const Color&    GetColorValue() const;
-    void            SetColorValue(const Color& rNew) { m_aColor = rNew; Detach(); }
+    Color const& GetColorValue() const;
+    void SetColorValue(const Color& rNew);
 
     void setComplexColor(model::ComplexColor const& rComplexColor) { maComplexColor = rComplexColor; }
     const model::ComplexColor& getComplexColor() const { return maComplexColor; }
@@ -54,7 +53,5 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
