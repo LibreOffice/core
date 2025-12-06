@@ -109,7 +109,7 @@ void ScDocShell::InitItems()
         PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList(), SID_LINEEND_LIST ) );
 
         // Other modifications after creation of the DrawLayer
-        pDrawLayer->SetNotifyUndoActionHdl( std::bind( &ScDocFunc::NotifyDrawUndo, m_pDocFunc.get(), std::placeholders::_1 ) );
+        pDrawLayer->SetNotifyUndoActionHdl( [this](auto pUndo) { m_pDocFunc->NotifyDrawUndo(std::move(pUndo)); } );
     }
     else if (!comphelper::IsFuzzing())
     {
