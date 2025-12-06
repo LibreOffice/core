@@ -165,19 +165,6 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         void impl_resetObject();
 
-        /**
-            @short      append one sequence to another
-            @descr      There is no operation to add to sequences! Use this helper-method to do this.
-
-            @seealso    class Sequence
-
-            @param      "seqDestination", reference to sequence on which operation will append the other sequence.
-            @param      "seqSource"     , reference to sequence for append.
-            @return     "seqDestination" is parameter AND return value at the same time.
-        */
-        static void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
-                                     const  css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqSource       );
-
         static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
 
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)

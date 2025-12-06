@@ -21,6 +21,8 @@
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -110,7 +112,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     SAL_WARN_IF( !impldbg_checkParameter_queryFrames( nSearchFlags ), "fwk", "OFrames::queryFrames(): Invalid parameter detected!" );
 
     // Set default return value. (empty sequence)
-    Sequence< css::uno::Reference< XFrame > > seqFrames;
+    std::vector< css::uno::Reference< XFrame > > seqFrames;
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
@@ -140,14 +142,14 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 css::uno::Reference< XFrame > xParent = xOwner->getCreator();
                 if( xParent.is() )
                 {
-                    impl_appendSequence( seqFrames, { xParent } );
+                    seqFrames.insert(seqFrames.begin(), xParent);
                 }
             }
 
             // Add owner to list if SELF is searched.
             if( nSearchFlags & FrameSearchFlag::SELF )
             {
-                impl_appendSequence( seqFrames, { xOwner } );
+                seqFrames.insert(seqFrames.begin(), xOwner);
             }
 
             // Add SIBLINGS to list.
@@ -162,7 +164,8 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 if ( xParent.is() )
                 {
                     // ... ask him for right frames.
-                    impl_appendSequence( seqFrames, xParent->getFrames()->queryFrames( nSearchFlags ) );
+                    auto frames = xParent->getFrames()->queryFrames(nSearchFlags);
+                    seqFrames.insert(seqFrames.begin(), frames.begin(), frames.end());
                 }
                 // We have all searched information.
                 // Reset protection-mode.
@@ -182,7 +185,8 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                     // We don't must control this conversion.
                     // We have done this at append()!
                     css::uno::Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
-                    impl_appendSequence( seqFrames, xItem->getFrames()->queryFrames( nChildSearchFlags ) );
+                    auto frames = xItem->getFrames()->queryFrames(nChildSearchFlags);
+                    seqFrames.insert(seqFrames.begin(), frames.begin(), frames.end());
                 }
             }
         }
@@ -191,7 +195,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::queryFrames(): Our owner is dead - you can't query for frames ...!" );
 
     // Return result of this operation.
-    return seqFrames;
+    return comphelper::containerToSequence(seqFrames);
 }
 
 //  XIndexAccess
@@ -287,42 +291,6 @@ void OFrames::impl_resetObject()
     m_xOwner.clear();
     // Reset pointer to shared container to!
     m_pFrameContainer = nullptr;
-}
-
-void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFrame > >&  seqDestination  ,
-                                     const  Sequence< css::uno::Reference< XFrame > >&  seqSource       )
-{
-    // Get some information about the sequences.
-    sal_Int32                       nSourceCount        = seqSource.getLength();
-    sal_Int32                       nDestinationCount   = seqDestination.getLength();
-    const css::uno::Reference< XFrame >*        pSourceAccess       = seqSource.getConstArray();
-    css::uno::Reference< XFrame >*          pDestinationAccess  = seqDestination.getArray();
-
-    // Get memory for result list.
-    Sequence< css::uno::Reference< XFrame > >   seqResult           ( nSourceCount + nDestinationCount );
-    css::uno::Reference< XFrame >*          pResultAccess       = seqResult.getArray();
-    sal_Int32                       nResultPosition     = 0;
-
-    // Copy all items from first sequence.
-    for ( sal_Int32 nSourcePosition=0; nSourcePosition<nSourceCount; ++nSourcePosition )
-    {
-        pResultAccess[nResultPosition] = pSourceAccess[nSourcePosition];
-        ++nResultPosition;
-    }
-
-    // Don't manipulate nResultPosition between these two loops!
-    // It's the current position in the result list.
-
-    // Copy all items from second sequence.
-    for ( sal_Int32 nDestinationPosition=0; nDestinationPosition<nDestinationCount; ++nDestinationPosition )
-    {
-        pResultAccess[nResultPosition] = pDestinationAccess[nDestinationPosition];
-        ++nResultPosition;
-    }
-
-    // Return result of this operation.
-    seqDestination.realloc( 0 );
-    seqDestination = std::move(seqResult);
 }
 
 //  debug methods
