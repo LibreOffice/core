@@ -2120,7 +2120,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 {
                     aPortion1.bIgnoreThisError = true;
                 }
-                aRet.push_back(aPortion1);
+                aRet.push_back(std::move(aPortion1));
                 nStart = aStart->nPosition;
                 eLang = aStart->eLanguage;
                 ++aStart;
