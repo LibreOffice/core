@@ -20,6 +20,8 @@
 #include <o3tl/concepts.hxx>
 
 class SvStream;
+struct _xmlTextWriter;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace tools
 {
@@ -41,7 +43,7 @@ private:
 
 public:
     XmlWriter(SvStream* pStream);
-
+    XmlWriter(xmlTextWriterPtr pWriter);
     ~XmlWriter();
 
     bool startDocument(sal_Int32 nIndent = 2, bool bWriteXmlHeader = true);
