@@ -127,7 +127,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
         // try already instantiated services first
         {
-            const Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getConstArray();
+            const Sequence<Reference<XThesaurus>>& pRef = pEntry->aSvcRefs;
             while (i <= pEntry->nLastTriedSvcIndex
                    &&  !aMeanings.hasElements())
             {
@@ -141,7 +141,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         if (!aMeanings.hasElements()
             &&  pEntry->nLastTriedSvcIndex < nLen - 1)
         {
-            const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
+            const Sequence<OUString>& pImplNames = pEntry->aSvcImplNames;
             Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getArray();
 
             const Reference< XComponentContext >& xContext(

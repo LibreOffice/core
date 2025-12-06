@@ -595,7 +595,6 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
 
         // ParameterInfos
         Sequence<ParamInfo> aFParams        = xMethod->getParameterInfos();
-        const ParamInfo* pFParams           = aFParams.getConstArray();
         sal_Int32 nFParamsLen               = aFParams.getLength();
         if (nFParamsLen != InParams.getLength())
         {
@@ -604,9 +603,6 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                 ": expected " + OUString::number(nFParamsLen) + ", got " + OUString::number(InParams.getLength()),
                 getXWeak(), sal_Int16(1) );
         }
-
-        // IN Parameter
-        const Any* pInParams                = InParams.getConstArray();
 
         // Introspection Invoke Parameter
         Sequence<Any> aInvokeParams( nFParamsLen );
@@ -621,20 +617,20 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         {
             try
             {
-                const ParamInfo& rFParam = pFParams[nPos];
+                const ParamInfo& rFParam = aFParams[nPos];
                 const Reference<XIdlClass>& rDestType = rFParam.aType;
 
                 // is IN/INOUT parameter?
                 if (rFParam.aMode != ParamMode_OUT)
                 {
-                    if (rDestType->isAssignableFrom( TypeToIdlClass( pInParams[nPos].getValueType(), xCoreReflection ) ))
+                    if (rDestType->isAssignableFrom( TypeToIdlClass( InParams[nPos].getValueType(), xCoreReflection ) ))
                     {
-                        pInvokeParams[nPos] = pInParams[nPos];
+                        pInvokeParams[nPos] = InParams[nPos];
                     }
                     else if (xTypeConverter.is())
                     {
                         Type aDestType( rDestType->getTypeClass(), rDestType->getName() );
-                        pInvokeParams[nPos] = xTypeConverter->convertTo( pInParams[nPos], aDestType );
+                        pInvokeParams[nPos] = xTypeConverter->convertTo(InParams[nPos], aDestType);
                     }
                     else
                     {
@@ -732,36 +728,33 @@ void Invocation_Impl::getInfoSequenceImpl
 
     // Create and fill array of MemberItems
     std::unique_ptr< MemberItem []> pItems( new MemberItem[ nTotalCount ] );
-    const OUString* pStrings = aNameAccessNames.getConstArray();
-    const Property* pProps = aPropertySeq.getConstArray();
-    const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
 
     // Fill array of MemberItems
-    sal_Int32 i, iTotal = 0;
+    sal_Int32 iTotal = 0;
 
     // Name Access
-    for( i = 0 ; i < nNameAccessCount ; i++, iTotal++ )
+    for (sal_Int32 i = 0; i < nNameAccessCount; i++, iTotal++)
     {
         MemberItem& rItem = pItems[ iTotal ];
-        rItem.aName = pStrings[ i ];
+        rItem.aName = aNameAccessNames[i];
         rItem.eMode = MemberItem::Mode::NameAccess;
         rItem.nIndex = i;
     }
 
     // Property set
-    for( i = 0 ; i < nPropertyCount ; i++, iTotal++ )
+    for (sal_Int32 i = 0; i < nPropertyCount; i++, iTotal++)
     {
         MemberItem& rItem = pItems[ iTotal ];
-        rItem.aName = pProps[ i ].Name;
+        rItem.aName = aPropertySeq[i].Name;
         rItem.eMode = MemberItem::Mode::PropertySet;
         rItem.nIndex = i;
     }
 
     // Methods
-    for( i = 0 ; i < nMethodCount ; i++, iTotal++ )
+    for (sal_Int32 i = 0; i < nMethodCount; i++, iTotal++)
     {
         MemberItem& rItem = pItems[ iTotal ];
-        Reference< XIdlMethod > xMethod = pMethods[ i ];
+        Reference<XIdlMethod> xMethod = aMethodSeq[i];
         rItem.aName = xMethod->getName();
         rItem.eMode = MemberItem::Mode::Method;
         rItem.nIndex = i;
@@ -799,11 +792,11 @@ void Invocation_Impl::getInfoSequenceImpl
             }
             else if( rItem.eMode == MemberItem::Mode::PropertySet )
             {
-                fillInfoForProperty( pRetInfos[ iTotal ], pProps[ rItem.nIndex ] );
+                fillInfoForProperty(pRetInfos[iTotal], aPropertySeq[rItem.nIndex]);
             }
             else if( rItem.eMode == MemberItem::Mode::Method )
             {
-                fillInfoForMethod( pRetInfos[ iTotal ], pMethods[ rItem.nIndex ] );
+                fillInfoForMethod(pRetInfos[iTotal], aMethodSeq[rItem.nIndex]);
             }
         }
     }
@@ -925,8 +918,6 @@ void Invocation_Impl::fillInfoForMethod
     if( nParamCount <= 0 )
         return;
 
-    const ParamInfo* pInfo = aParamInfos.getConstArray();
-
     rInfo.aParamTypes.realloc( nParamCount );
     Type* pParamTypes = rInfo.aParamTypes.getArray();
     rInfo.aParamModes.realloc( nParamCount );
@@ -934,9 +925,9 @@ void Invocation_Impl::fillInfoForMethod
 
     for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
     {
-        Reference< XIdlClass > xParamClass = pInfo[i].aType;
+        Reference<XIdlClass> xParamClass = aParamInfos[i].aType;
         pParamTypes[ i ] = Type(xParamClass->getTypeClass(), xParamClass->getName());
-        pParamModes[ i ] = pInfo[i].aMode;
+        pParamModes[ i ] = aParamInfos[i].aMode;
     }
 }
 
@@ -1060,14 +1051,14 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
             aArg1 == "FromOLE")
         {
             return Reference< XInterface >
-                ( *new Invocation_Impl( *rArguments.getConstArray(),
+                ( *new Invocation_Impl( rArguments[0],
                                         xTypeConverter, xIntrospection, xCoreReflection, true ) );
         }
     }
     if (rArguments.getLength() == 1)
     {
         return Reference< XInterface >
-            ( *new Invocation_Impl( *rArguments.getConstArray(),
+            ( *new Invocation_Impl( rArguments[0],
                                     xTypeConverter, xIntrospection, xCoreReflection, false ) );
     }
 

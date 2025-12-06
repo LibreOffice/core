@@ -794,17 +794,13 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
         return ::std::vector< OUString >();
 
     ::std::vector< OUString >      lSubFolders;
-    const css::uno::Sequence< OUString > lNames = xFolder->getElementNames();
-    const OUString*                      pNames = lNames.getConstArray();
-    sal_Int32                            c      = lNames.getLength();
-    sal_Int32                            i      = 0;
 
-    for (i=0; i<c; ++i)
+    for (const OUString& rName : xFolder->getElementNames())
     {
         try
         {
-            if (xFolder->isStorageElement(pNames[i]))
-                lSubFolders.push_back(pNames[i]);
+            if (xFolder->isStorageElement(rName))
+                lSubFolders.push_back(rName);
         }
         catch(const css::uno::RuntimeException&)
             { throw; }

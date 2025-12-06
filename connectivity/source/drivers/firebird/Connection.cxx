@@ -137,18 +137,15 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
         {
             m_bIsEmbedded = true;
 
-            const PropertyValue* pIter = info.getConstArray();
-            const PropertyValue* pEnd = pIter + info.getLength();
-
-            for (;pIter != pEnd; ++pIter)
+            for (const PropertyValue& rPropertyValue : info)
             {
-                if ( pIter->Name == "Storage" )
+                if (rPropertyValue.Name == "Storage")
                 {
-                    m_xEmbeddedStorage.set(pIter->Value,UNO_QUERY);
+                    m_xEmbeddedStorage.set(rPropertyValue.Value, UNO_QUERY);
                 }
-                else if ( pIter->Name == "Document" )
+                else if (rPropertyValue.Name == "Document")
                 {
-                    pIter->Value >>= m_xParentDocument;
+                    rPropertyValue.Value >>= m_xParentDocument;
                 }
             }
 

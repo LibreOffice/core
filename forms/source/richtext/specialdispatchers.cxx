@@ -140,18 +140,12 @@ namespace frm
     SfxPoolItemHolder OAsianFontLayoutDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
         // look for the "Enable" parameter
-        const PropertyValue* pLookup = _rArguments.getConstArray();
-        const PropertyValue* pLookupEnd = _rArguments.getConstArray() + _rArguments.getLength();
-        while ( pLookup != pLookupEnd )
+        for (const PropertyValue& rArgument : _rArguments)
         {
-            if ( pLookup->Name == "Enable" )
-                break;
-            ++pLookup;
-        }
-        if ( pLookup != pLookupEnd )
-        {
+            if (rArgument.Name != "Enable")
+                continue;
             bool bEnable = true;
-            OSL_VERIFY( pLookup->Value >>= bEnable );
+            OSL_VERIFY(rArgument.Value >>= bEnable);
 
             if ( m_nAttributeId == sal_uInt16(SID_ATTR_PARA_SCRIPTSPACE) )
                 return SfxPoolItemHolder(

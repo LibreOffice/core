@@ -377,14 +377,8 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
     Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
     if (xDicList.is())
     {
-        Sequence< Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
-        const Reference< XDictionary >  *pDic = aDics.getConstArray();
-        sal_Int32 nCount = aDics.getLength();
-
-        sal_Int32 i = 0;
-        while (!xDic.is()  &&  i < nCount)
+        for (const Reference<XDictionary>& xTmp : xDicList->getDictionaries())
         {
-            Reference< XDictionary >  xTmp = pDic[i];
             if (xTmp.is())
             {
                 if ( xTmp->isActive() &&
@@ -394,11 +388,11 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
                     Reference< frame::XStorable >  xStor( xTmp, UNO_QUERY );
                     if (xStor.is() && xStor->hasLocation() && !xStor->isReadonly())
                     {
-                        xDic = std::move(xTmp);
+                        xDic = xTmp;
+                        break;
                     }
                 }
             }
-            ++i;
         }
 
         if (!xDic.is())

@@ -251,17 +251,11 @@ bool HelpOnStartup::its_isHelpUrlADefaultOne(std::u16string_view sHelpURL)
         return false;
 
     // check given help url against all default ones
-    const css::uno::Sequence< OUString > lModules = xConfig->getElementNames();
-    const OUString*                      pModules = lModules.getConstArray();
-    ::sal_Int32                          c        = lModules.getLength();
-    ::sal_Int32                          i        = 0;
-
-    for (i=0; i<c; ++i)
+    for (const OUString& rName : xConfig->getElementNames())
     {
         try
         {
-            css::uno::Reference< css::container::XNameAccess > xModuleConfig;
-            xConfig->getByName(pModules[i]) >>= xModuleConfig;
+            auto xModuleConfig = xConfig->getByName(rName).query<css::container::XNameAccess>();
             if (!xModuleConfig.is())
                 continue;
 

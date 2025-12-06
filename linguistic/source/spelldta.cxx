@@ -66,16 +66,8 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
     if (!xDicList.is())
         return;
 
-    const uno::Sequence< Reference< XDictionary > >
-            aDics( xDicList->getDictionaries() );
-    const Reference< XDictionary >
-            *pDic = aDics.getConstArray();
-    sal_Int32 nDics = xDicList->getCount();
-
-    for (sal_Int32 i = 0;  i < nDics;  i++)
+    for (const Reference<XDictionary>& xDic : xDicList->getDictionaries())
     {
-        Reference< XDictionary > xDic = pDic[i];
-
         LanguageType nLang = LinguLocaleToLanguage( xDic->getLocale() );
 
         if ( xDic.is() && xDic->isActive()

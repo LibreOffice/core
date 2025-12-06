@@ -625,7 +625,6 @@ AdapterImpl::AdapterImpl(
           m_vInterfaces( rTypes.getLength() )
 {
     // init adapters
-    const Type * pTypes = rTypes.getConstArray();
     for ( sal_Int32 nPos = rTypes.getLength(); nPos--; )
     {
         InterfaceAdapterImpl * pInterface = &m_vInterfaces[nPos];
@@ -634,7 +633,7 @@ AdapterImpl::AdapterImpl(
         pInterface->pDispatcher = adapter_dispatch;
         pInterface->m_pAdapter = this;
         pInterface->m_pTypeDescr = nullptr;
-        pTypes[nPos].getDescription(
+        rTypes[nPos].getDescription(
             reinterpret_cast<typelib_TypeDescription **>(&pInterface->m_pTypeDescr) );
         OSL_ASSERT( pInterface->m_pTypeDescr );
         if (! pInterface->m_pTypeDescr)
@@ -751,7 +750,6 @@ static AdapterImpl * lookup_adapter(
     if (adapters_set.empty())
         return nullptr; // shortcut
     // find matching adapter
-    Type const * pTypes = rTypes.getConstArray();
     sal_Int32 nTypes = rTypes.getLength();
     for (const auto& rpAdapter : adapters_set)
     {
@@ -760,7 +758,7 @@ static AdapterImpl * lookup_adapter(
         sal_Int32 nPosTypes;
         for ( nPosTypes = nTypes; nPosTypes--; )
         {
-            Type const & rType = pTypes[ nPosTypes ];
+            Type const& rType = rTypes[nPosTypes];
             // find in adapter's type list
             sal_Int32 nPos;
             for ( nPos = that->m_vInterfaces.size(); nPos--; )

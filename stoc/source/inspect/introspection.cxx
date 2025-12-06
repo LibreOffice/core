@@ -1643,7 +1643,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             bool bFast = pAccess->mbFastPropSet = xDummy.is();
 
             Sequence<Property> aPropSeq = xPropSetInfo->getProperties();
-            const Property* pProps = aPropSeq.getConstArray();
             sal_Int32 nLen = aPropSeq.getLength();
 
             // For a FastPropertySet we must remember the original handles
@@ -1655,7 +1654,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 // Put property in its own list
                 pAccess->checkPropertyArraysSize( rPropCount );
                 Property& rProp = rAllPropArray[ rPropCount ];
-                rProp = pProps[ i ];
+                rProp = aPropSeq[i];
 
                 if( bFast )
                     pAccess->mpOrgPropertyHandleArray[ i ] = rProp.Handle;
@@ -1781,7 +1780,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                     // Get and remember all methods
                     Sequence< Reference<XIdlMethod> > methods = rxIfaceClass->getMethods();
-                    const Reference<XIdlMethod>* pSourceMethods = methods.getConstArray();
                     sal_Int32 nSourceMethodCount = methods.getLength();
 
                     // 3. a) Search get/set and listener methods
@@ -1808,7 +1806,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         // Address method
-                        const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
+                        const Reference<XIdlMethod>& rxMethod_i = methods[i];
                         sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
 
                         // Fetch name
@@ -1972,7 +1970,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             for( k = 0 ; k < nSourceMethodCount ; k++ )
                             {
                                 // Address method
-                                const Reference<XIdlMethod>& rxMethod_k = pSourceMethods[k];
+                                const Reference<XIdlMethod>& rxMethod_k = methods[k];
 
                                 // Accept only methods that are not already assigned
                                 if( k == i || pMethodTypes[k] != STANDARD_METHOD )
@@ -2001,8 +1999,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                 }
 
                                 // Next, the return type must correspond to the parameter type
-                                const Reference<XIdlClass>* pParamArray2 = setParams.getConstArray();
-                                Reference<XIdlClass> xParamType = pParamArray2[ 0 ];
+                                Reference<XIdlClass> xParamType = setParams[0];
                                 if( xParamType->equals( xGetRetType ) )
                                 {
                                     pLocalMethodConcepts[ k ] = PROPERTY;
@@ -2041,7 +2038,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             for( k = 0 ; k < nSourceMethodCount ; k++ )
                             {
                                 // Address method
-                                const Reference<XIdlMethod>& rxMethod_k = pSourceMethods[k];
+                                const Reference<XIdlMethod>& rxMethod_k = methods[k];
 
                                 // Accept only methods that are not already assigned
                                 if( k == i || pMethodTypes[k] != STANDARD_METHOD )
@@ -2079,7 +2076,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         // Address method
-                        const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
+                        const Reference<XIdlMethod>& rxMethod_i = methods[i];
 
                         // Accept only methods that are not already assigned
                         if( pMethodTypes[i] != STANDARD_METHOD )
@@ -2128,7 +2125,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             pLocalMethodConcepts[ i ] = PROPERTY;
 
                             pMethodTypes[i] = GETSET_METHOD;
-                            Reference<XIdlClass> xGetRetType = setParams.getConstArray()[0];
+                            Reference<XIdlClass> xGetRetType = setParams[0];
 
                             // Is the property sequence big enough?
                             pAccess->checkPropertyArraysSize( rPropCount );
@@ -2190,7 +2187,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         if( pMethodTypes[ i ] != INVALID_METHOD )
                         {
                             // Address method
-                            const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
+                            const Reference<XIdlMethod>& rxMethod = methods[i];
 
                             // Enter name in hash table if not already known
                             OUString aMethName2 = rxMethod->getName();
@@ -2228,7 +2225,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         if( pMethodTypes[ i ] == ADD_LISTENER_METHOD )
                         {
                             // Determine class of listener
-                            const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
+                            const Reference<XIdlMethod>& rxMethod = methods[i];
 
                             // Enter void as default class
                             css::uno::Reference<css::reflection::XIdlClass>
@@ -2283,7 +2280,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 // Currently only one superclass is considered
                 if( aSuperClassSeq.getLength() >= 1 )
                 {
-                    xImplClass2 = aSuperClassSeq.getConstArray()[0];
+                    xImplClass2 = aSuperClassSeq[0];
                     OSL_ENSURE( xImplClass2.is(), "super class null" );
                 }
                 else

@@ -259,8 +259,7 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     // adjust buffersize if necessary
     if( m_nBytesToSkip )
     {
-        Sequence< sal_Int8 > seqCopy( nLen - m_nBytesToSkip );
-        memcpy( seqCopy.getArray() , &( aData.getConstArray()[m_nBytesToSkip] ) , nLen-m_nBytesToSkip );
+        Sequence<sal_Int8> seqCopy(aData.getConstArray() + m_nBytesToSkip, nLen - m_nBytesToSkip);
         m_oFIFO->write( seqCopy );
     }
     else

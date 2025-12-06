@@ -1001,8 +1001,6 @@ void FilterCache::impl_validateAndOptimize()
         it = aType.find(PROPNAME_URLPATTERN);
         if (it != aType.end())
             it->second >>= lURLPattern;
-        sal_Int32 ce = lExtensions.getLength();
-        sal_Int32 cu = lURLPattern.getLength();
 
 #if OSL_DEBUG_LEVEL > 0
 
@@ -1016,7 +1014,7 @@ void FilterCache::impl_validateAndOptimize()
             ++nWarnings;
         }
 
-        if (!ce && !cu)
+        if (!lExtensions.hasElements() && !lURLPattern.hasElements())
         {
             sLog.append("Warning\t:\t" "The type \"" + sType + "\" does not contain any URL pattern nor any extensions.\n");
             ++nWarnings;
@@ -1036,12 +1034,11 @@ void FilterCache::impl_validateAndOptimize()
         if (it != aType.end())
             it->second >>= bPreferred;
 
-        const OUString* pExtensions = lExtensions.getConstArray();
-        for (sal_Int32 e=0; e<ce; ++e)
+        for (const OUString& rExt : lExtensions)
         {
             // Note: We must be sure that address the right hash entry
             // does not depend from any upper/lower case problems ...
-            OUString sNormalizedExtension = pExtensions[e].toAsciiLowerCase();
+            OUString sNormalizedExtension = rExt.toAsciiLowerCase();
 
             std::vector<OUString>& lTypesForExtension = m_lExtensions2Types[sNormalizedExtension];
             if (::std::find(lTypesForExtension.begin(), lTypesForExtension.end(), sType) != lTypesForExtension.end())
@@ -1053,10 +1050,9 @@ void FilterCache::impl_validateAndOptimize()
                 lTypesForExtension.push_back(sType);
         }
 
-        const OUString* pURLPattern = lURLPattern.getConstArray();
-        for (sal_Int32 u=0; u<cu; ++u)
+        for (const OUString& rURLPattern : lURLPattern)
         {
-            std::vector<OUString>& lTypesForURLPattern = m_lURLPattern2Types[pURLPattern[u]];
+            std::vector<OUString>& lTypesForURLPattern = m_lURLPattern2Types[rURLPattern];
             if (::std::find(lTypesForURLPattern.begin(), lTypesForURLPattern.end(), sType) != lTypesForURLPattern.end())
                 continue;
 
@@ -1425,11 +1421,9 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     // But don't update optimized structures like e.g. hash
     // for mapping extensions to its types!
 
-    const OUString* pItems = lItems.getConstArray();
-    sal_Int32       c      = lItems.getLength();
-    for (sal_Int32 i=0; i<c; ++i)
+    for (const OUString& rItem : lItems)
     {
-        CacheItemList::iterator pItem = pCache->find(pItems[i]);
+        CacheItemList::iterator pItem = pCache->find(rItem);
         switch(eOption)
         {
             // a) read a standard set of properties only or read all
@@ -1438,7 +1432,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
             {
                 try
                 {
-                    (*pCache)[pItems[i]] = impl_loadItem(xSet, eType, pItems[i], eOption);
+                    (*pCache)[rItem] = impl_loadItem(xSet, eType, rItem, eOption);
                 }
                 catch(const css::uno::Exception& ex)
                 {
@@ -1457,12 +1451,12 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
             {
                 if (pItem == pCache->end())
                 {
-                    OUString sMsg("item \"" + pItems[i] + "\" not found for update!");
+                    OUString sMsg("item \"" + rItem + "\" not found for update!");
                     throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
                 }
                 try
                 {
-                    CacheItem aItem = impl_loadItem(xSet, eType, pItems[i], eOption);
+                    CacheItem aItem = impl_loadItem(xSet, eType, rItem, eOption);
                     pItem->second.update(aItem);
                 }
                 catch(const css::uno::Exception& ex)
@@ -1537,15 +1531,13 @@ void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::containe
     css::uno::Reference< css::container::XNameContainer > xAdd  (xNode, css::uno::UNO_QUERY);
 
     css::uno::Sequence< css::beans::PropertyValue > lUINames = rItem.getUnpackedValueOrDefault(PROPNAME_UINAMES, css::uno::Sequence< css::beans::PropertyValue >());
-    sal_Int32                                       c        = lUINames.getLength();
-    const css::beans::PropertyValue*                pUINames = lUINames.getConstArray();
 
-    for (sal_Int32 i=0; i<c; ++i)
+    for (const auto& rPropertyValue : lUINames)
     {
-        if (xNode->hasByName(pUINames[i].Name))
-            xNode->replaceByName(pUINames[i].Name, pUINames[i].Value);
+        if (xNode->hasByName(rPropertyValue.Name))
+            xNode->replaceByName(rPropertyValue.Name, rPropertyValue.Value);
         else
-            xAdd->insertByName(pUINames[i].Name, pUINames[i].Value);
+            xAdd->insertByName(rPropertyValue.Name, rPropertyValue.Value);
     }
 }
 
@@ -1880,13 +1872,11 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
 {
     SfxFilterFlags nField = SfxFilterFlags::NONE;
 
-    const OUString* pNames = lNames.getConstArray();
-    sal_Int32       c      = lNames.getLength();
-    for (sal_Int32 i=0; i<c; ++i)
+    for (const OUString& rName : lNames)
     {
         for (const auto& [eFlag, aName] : flagFilterSwitcher)
         {
-            if (pNames[i] == aName) {
+            if (rName == aName) {
                 nField |= eFlag;
                 break;
             }

@@ -732,9 +732,6 @@ namespace frm
 
     void SAL_CALL OFilterControl::initialize( const Sequence< Any >& aArguments )
     {
-        const Any* pArguments = aArguments.getConstArray();
-        const Any* pArgumentsEnd = pArguments + aArguments.getLength();
-
         PropertyValue aProp;
         NamedValue aValue;
         const OUString* pName = nullptr;
@@ -748,15 +745,15 @@ namespace frm
         {
             initControlModel(xControlModel);
         }
-        else for ( ; pArguments != pArgumentsEnd; ++pArguments )
+        else for (const Any& rArgument : aArguments)
         {
             // we recognize PropertyValues and NamedValues
-            if ( *pArguments >>= aProp )
+            if (rArgument >>= aProp)
             {
                 pName = &aProp.Name;
                 pValue = &aProp.Value;
             }
-            else if ( *pArguments >>= aValue )
+            else if (rArgument >>= aValue)
             {
                 pName = &aValue.Name;
                 pValue = &aValue.Value;

@@ -89,22 +89,20 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     osl_atomic_increment( &m_refCount );
 
     OUString aExt;
-    const PropertyValue *pIter  = info.getConstArray();
-    const PropertyValue *pEnd    = pIter + info.getLength();
-    for(;pIter != pEnd;++pIter)
+    for (const auto& rPropertyValue : info)
     {
-        if( pIter->Name == "Extension" )
-            OSL_VERIFY( pIter->Value >>= aExt );
-        else if( pIter->Name == "CharSet" )
+        if (rPropertyValue.Name == "Extension")
+            OSL_VERIFY(rPropertyValue.Value >>= aExt);
+        else if (rPropertyValue.Name == "CharSet")
         {
-            if (auto const numeric = o3tl::tryAccess<sal_uInt16>(pIter->Value))
+            if (auto const numeric = o3tl::tryAccess<sal_uInt16>(rPropertyValue.Value))
             {
                 m_nTextEncoding = *numeric;
             }
             else
             {
                 OUString sIanaName;
-                OSL_VERIFY( pIter->Value >>= sIanaName );
+                OSL_VERIFY(rPropertyValue.Value >>= sIanaName);
 
                 ::dbtools::OCharsetMap aLookupIanaName;
                 ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.findIanaName(sIanaName);
@@ -114,15 +112,15 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
                     m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
             }
         }
-        else if( pIter->Name == "ShowDeleted" )
+        else if (rPropertyValue.Name == "ShowDeleted")
         {
-            OSL_VERIFY( pIter->Value >>= m_bShowDeleted );
+            OSL_VERIFY(rPropertyValue.Value >>= m_bShowDeleted);
         }
-        else if( pIter->Name == "EnableSQL92Check" )
+        else if (rPropertyValue.Name == "EnableSQL92Check")
         {
-            pIter->Value >>= m_bCheckSQL92;
+            rPropertyValue.Value >>= m_bCheckSQL92;
         }
-    } // for(;pIter != pEnd;++pIter)
+    }
 
     {
         sal_Int32 nLen = url.indexOf(':');

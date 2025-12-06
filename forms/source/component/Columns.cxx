@@ -324,13 +324,11 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool 
     Sequence< Property > aNewProps( _rProps.getLength() );
     Property* pNewProps = aNewProps.getArray();
 
-    const Property* pProps = _rProps.getConstArray();
-    const Property* pPropsEnd = pProps + _rProps.getLength();
-    for ( ; pProps != pPropsEnd; ++pProps )
+    for (const Property& rProp : _rProps)
     {
-        if ( aForbiddenProperties.find( pProps->Name ) == aForbiddenProperties.end()
-            && (bAllowDropDown || pProps->Name != PROPERTY_DROPDOWN))
-            *pNewProps++ = *pProps;
+        if (aForbiddenProperties.find(rProp.Name) == aForbiddenProperties.end()
+            && (bAllowDropDown || rProp.Name != PROPERTY_DROPDOWN))
+            *pNewProps++ = rProp;
     }
 
     aNewProps.realloc( pNewProps - aNewProps.getArray() );

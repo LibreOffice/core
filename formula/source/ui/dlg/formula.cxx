@@ -131,7 +131,6 @@ public:
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
     mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
-    mutable const sheet::FormulaOpCodeMapEntry*             m_pFunctionOpCodesEnd;
     ::std::map<const FormulaToken*, sheet::FormulaToken>    m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     weld::Dialog&           m_rDialog;
@@ -215,8 +214,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
                                  IFormulaEditorHelper* _pHelper,
                                  const IFunctionManager* _pFunctionMgr,
                                  IControlReferenceHandler* _pDlg)
-    : m_pFunctionOpCodesEnd(nullptr)
-    , m_pHelper(_pHelper)
+    : m_pHelper(_pHelper)
     , m_rDialog(rDialog)
     , m_bUserMatrixFlag(false)
     , m_aTitle1( ForResId( STR_TITLE1 ) )
@@ -361,7 +359,6 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
 
     m_xOpCodeMapper = m_pHelper->getFormulaOpCodeMapper();
     m_aFunctionOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::FUNCTIONS);
-    m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
 
     // 0:TOKEN_OPEN, 1:TOKEN_CLOSE, 2:TOKEN_SEP
     uno::Sequence< OUString > aArgs { u"("_ustr, u")"_ustr, u";"_ustr };
@@ -389,8 +386,8 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
     const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
     const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
 
-    const sheet::FormulaToken* pIter = m_aTokenList.getConstArray();
-    const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
+    const sheet::FormulaToken* pIter = m_aTokenList.begin();
+    const sheet::FormulaToken* pEnd = m_aTokenList.end();
     try
     {
         bool  bFlag = false;
@@ -451,8 +448,8 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 bFlag = false;
                 nFuncPos = nPrevFuncPos;
             }
-            bool bIsFunction = std::any_of( m_aFunctionOpCodes.getConstArray(),
-                    m_pFunctionOpCodesEnd,
+            bool bIsFunction = std::any_of( m_aFunctionOpCodes.begin(),
+                    m_aFunctionOpCodes.end(),
                     [&eOp](const sheet::FormulaOpCodeMapEntry& aEntry) { return aEntry.Token.OpCode == eOp; });
 
             if ( bIsFunction && nOpSpaces != eOp && nOpWhitespace != eOp )

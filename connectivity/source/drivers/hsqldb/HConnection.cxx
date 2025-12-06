@@ -126,12 +126,9 @@ namespace connectivity::hsqldb
                 {
                     m_bIni = false;
                     Reference< XDatabaseMetaData2 > xMeta2(m_xConnection->getMetaData(),UNO_QUERY_THROW);
-                    const Sequence< PropertyValue > aInfo = xMeta2->getConnectionInfo();
-                    const PropertyValue* pIter = aInfo.getConstArray();
-                    const PropertyValue* pEnd  = pIter + aInfo.getLength();
-                    for(;pIter != pEnd;++pIter)
+                    for (const PropertyValue& rPropertyValue : xMeta2->getConnectionInfo())
                     {
-                        if ( pIter->Name == "readonly" )
+                        if (rPropertyValue.Name == "readonly")
                             m_bReadOnly = true;
                     }
                 }

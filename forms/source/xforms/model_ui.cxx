@@ -916,11 +916,8 @@ void xforms::getInstanceData(
     OUString* pURL,
     bool* pURLOnce )
 {
-    sal_Int32 nValues = aValues.getLength();
-    const PropertyValue* pValues = aValues.getConstArray();
-    for( sal_Int32 n = 0; n < nValues; n++ )
+    for (const PropertyValue& rValue : aValues)
     {
-        const PropertyValue& rValue = pValues[n];
         if( pID != nullptr && rValue.Name == "ID")
             rValue.Value >>= *pID;
         if( pInstance != nullptr && rValue.Name == "Instance")

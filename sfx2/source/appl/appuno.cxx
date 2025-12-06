@@ -183,7 +183,6 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     if ( !nCount )
         return;
 
-    const beans::PropertyValue* pPropsVal = rArgs.getConstArray();
     if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // slot is a property
@@ -201,7 +200,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         pItem->SetWhich( nWhich );
         sal_uInt16 nSubCount = pType->nAttribs;
 
-        const beans::PropertyValue& rProp = pPropsVal[0];
+        const beans::PropertyValue& rProp = rArgs[0];
         const OUString& rName = rProp.Name;
         if ( nCount == 1 && rName == pSlot->aUnoName )
         {

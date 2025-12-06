@@ -615,14 +615,9 @@ namespace frm
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests )
     {
         Sequence< Reference< XDispatch > >  aReturn( _rRequests.getLength() );
-        Reference< XDispatch >*             pReturn = aReturn.getArray();
-
-        const DispatchDescriptor* pRequest = _rRequests.getConstArray();
-        const DispatchDescriptor* pRequestEnd = pRequest + _rRequests.getLength();
-        for ( ; pRequest != pRequestEnd; ++pRequest, ++pReturn )
-        {
-            *pReturn = queryDispatch( pRequest->FeatureURL, pRequest->FrameName, pRequest->SearchFlags );
-        }
+        std::transform(_rRequests.begin(), _rRequests.end(), aReturn.getArray(),
+                       [this](const DispatchDescriptor& r)
+                       { return queryDispatch(r.FeatureURL, r.FrameName, r.SearchFlags); });
         return aReturn;
     }
 

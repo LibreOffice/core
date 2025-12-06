@@ -317,8 +317,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
 
         // try already instantiated services first
         {
-            const Reference< XSpellChecker >  *pRef  =
-                    pEntry->aSvcRefs.getConstArray();
+            const Sequence<Reference<XSpellChecker>>& pRef = pEntry->aSvcRefs;
             while (i <= pEntry->nLastTriedSvcIndex
                    && (!bTmpResValid || !bTmpRes))
             {
@@ -351,7 +350,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
         if ((!bTmpResValid || !bTmpRes)
             &&  pEntry->nLastTriedSvcIndex < nLen - 1)
         {
-            const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
+            const Sequence<OUString>& pImplNames = pEntry->aSvcImplNames;
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
             const Reference< XComponentContext >& xContext(
@@ -482,7 +481,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
     // try already instantiated services first
     {
-        const Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs.getConstArray();
+        const Sequence<Reference<XSpellChecker>>& pRef = pEntry->aSvcRefs;
         sal_Int32 nNumSuggestions = -1;
         while (i <= pEntry->nLastTriedSvcIndex
                &&  (!bTmpResValid || xTmpRes.is()) )
@@ -534,7 +533,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     if ((!bTmpResValid || xTmpRes.is())
         &&  pEntry->nLastTriedSvcIndex < nLen - 1)
     {
-        const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
+        const Sequence<OUString>& pImplNames = pEntry->aSvcImplNames;
         Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
         const Reference< XComponentContext >& xContext(

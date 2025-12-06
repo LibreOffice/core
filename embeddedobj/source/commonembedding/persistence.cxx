@@ -1085,14 +1085,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             else if ( prop.Value >>= aOutFramePropsTyped )
             {
                 aOutFrameProps.realloc( aOutFramePropsTyped.getLength() );
-                uno::Any* pProp = aOutFrameProps.getArray();
-                for (   const beans::NamedValue* pTypedProp = aOutFramePropsTyped.getConstArray();
-                        pTypedProp != aOutFramePropsTyped.getConstArray() + aOutFramePropsTyped.getLength();
-                        ++pTypedProp, ++pProp
-                    )
-                {
-                    *pProp <<= *pTypedProp;
-                }
+                std::transform(aOutFramePropsTyped.begin(), aOutFramePropsTyped.end(),
+                               aOutFrameProps.getArray(), [](const beans::NamedValue& rTypedProp)
+                               { return uno::Any(rTypedProp); });
                 m_xDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
             }
             else

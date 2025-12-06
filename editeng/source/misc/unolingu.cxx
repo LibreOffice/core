@@ -102,13 +102,12 @@ void ThesDummy_Impl::GetCfgLocales()
 
     SvtLinguConfig aCfg;
     Sequence < OUString > aNodeNames( aCfg.GetNodeNames( u"ServiceManager/ThesaurusList"_ustr ) );
-    const OUString *pNodeNames = aNodeNames.getConstArray();
     sal_Int32 nLen = aNodeNames.getLength();
     pLocaleSeq.reset( new Sequence< lang::Locale >( nLen ) );
     lang::Locale *pLocale = pLocaleSeq->getArray();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        pLocale[i] = LanguageTag::convertToLocaleWithFallback( pNodeNames[i] );
+        pLocale[i] = LanguageTag::convertToLocaleWithFallback(aNodeNames[i]);
     }
 }
 
@@ -149,17 +148,7 @@ sal_Bool SAL_CALL
         return xThes->hasLocale( rLocale );
     else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
         GetCfgLocales();
-    bool bFound = false;
-    sal_Int32 nLen = pLocaleSeq->getLength();
-    const lang::Locale *pLocale = pLocaleSeq->getConstArray();
-    const lang::Locale *pEnd = pLocale + nLen;
-    for ( ;  pLocale < pEnd  &&  !bFound;  ++pLocale)
-    {
-        bFound = pLocale->Language == rLocale.Language  &&
-                 pLocale->Country  == rLocale.Country   &&
-                 pLocale->Variant  == rLocale.Variant;
-    }
-    return bFound;
+    return std::find(pLocaleSeq->begin(), pLocaleSeq->end(), rLocale) != pLocaleSeq->end();
 }
 
 

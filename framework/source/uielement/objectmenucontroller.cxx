@@ -76,8 +76,6 @@ ObjectMenuController::ObjectMenuController( const css::uno::Reference< css::uno:
 // private function
 void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    const css::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
-
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
@@ -85,7 +83,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescri
     static constexpr OUStringLiteral aVerbCommand( u".uno:ObjectMenue?VerbID:short=" );
     for ( sal_Int32 i = 0; i < rVerbCommandSeq.getLength(); i++ )
     {
-        const css::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];
+        const css::embed::VerbDescriptor& rVerb = rVerbCommandSeq[i];
         if ( rVerb.VerbAttributes & css::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
         {
             m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );

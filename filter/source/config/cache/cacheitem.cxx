@@ -189,8 +189,8 @@ static bool isSubSet(const css::uno::Any& aSubSet,
                     (aSet    >>= uno_s2)
                    )
                 {
-                    auto s2Begin = uno_s2.getConstArray();
-                    auto s2End = uno_s2.getConstArray() + uno_s2.getLength();
+                    auto s2Begin = uno_s2.begin();
+                    auto s2End = uno_s2.end();
 
                     for (auto const& elem : uno_s1)
                     {

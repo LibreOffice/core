@@ -415,14 +415,9 @@ namespace svt
         NamedValue      aPairArg;
 
 
-        const Any* pArguments       = _rArguments.getConstArray();
-        const Any* pArgumentsEnd    = _rArguments.getConstArray() + _rArguments.getLength();
-        for (   const Any* pArgument = pArguments;
-                pArgument != pArgumentsEnd;
-                ++pArgument
-            )
+        for (const Any& rArgument : _rArguments)
         {
-            if ( *pArgument >>= aPropArg )
+            if (rArgument >>= aPropArg)
             {
                 if ( aPropArg.Name.isEmpty())
                     continue;
@@ -430,7 +425,7 @@ namespace svt
                 sSettingName = aPropArg.Name;
                 aSettingValue = aPropArg.Value;
             }
-            else if ( *pArgument >>= aPairArg )
+            else if (rArgument >>= aPairArg)
             {
                 if ( aPairArg.Name.isEmpty())
                     continue;
@@ -443,7 +438,7 @@ namespace svt
             else
             {
                 SAL_WARN( "fpicker", "OCommonPicker::initialize: unknown argument type at position "
-                    << (pArguments - _rArguments.getConstArray()));
+                    << (&rArgument - _rArguments.getConstArray()));
                 continue;
             }
 

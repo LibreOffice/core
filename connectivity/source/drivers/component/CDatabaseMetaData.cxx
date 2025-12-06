@@ -134,15 +134,12 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
 
     aRow[10] = new ORowSetValueDecorator(sal_Int32(10));
 
-    Sequence< OUString> aTabNames(xNames->getElementNames());
-    const OUString* pTabIter = aTabNames.getConstArray();
-    const OUString* pTabEnd      = pTabIter + aTabNames.getLength();
-    for(;pTabIter != pTabEnd;++pTabIter)
+    for (const OUString& rTab : xNames->getElementNames())
     {
-        if(match(tableNamePattern,*pTabIter,'\0'))
+        if (match(tableNamePattern, rTab, '\0'))
         {
-            const Reference< XColumnsSupplier> xTable(xNames->getByName(*pTabIter),UNO_QUERY_THROW);
-            aRow[3] = new ORowSetValueDecorator(*pTabIter);
+            const Reference<XColumnsSupplier> xTable(xNames->getByName(rTab), UNO_QUERY_THROW);
+            aRow[3] = new ORowSetValueDecorator(rTab);
 
             const Reference< XNameAccess> xColumns = xTable->getColumns();
             if(!xColumns.is())
@@ -150,16 +147,13 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
 
             const Sequence< OUString> aColNames(xColumns->getElementNames());
 
-            const OUString* pColumnIter = aColNames.getConstArray();
-            const OUString* pEnd = pColumnIter + aColNames.getLength();
-            Reference< XPropertySet> xColumn;
-            for(sal_Int32 i=1;pColumnIter != pEnd;++pColumnIter,++i)
+            for (sal_Int32 i = 0; i < aColNames.getLength(); ++i)
             {
-                if(match(columnNamePattern,*pColumnIter,'\0'))
+                if (match(columnNamePattern, aColNames[i], '\0'))
                 {
-                    aRow[4]  = new ORowSetValueDecorator( *pColumnIter);
+                    aRow[4] = new ORowSetValueDecorator(aColNames[i]);
 
-                    xColumns->getByName(*pColumnIter) >>= xColumn;
+                    auto xColumn = xColumns->getByName(aColNames[i]).query<XPropertySet>();
                     OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                     aRow[5] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                     aRow[6] = new ORowSetValueDecorator(::comphelper::getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
@@ -183,7 +177,7 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
                     default:
                         aRow[16] = new ORowSetValueDecorator(sal_Int32(0));
                     }
-                    aRow[17] = new ORowSetValueDecorator(i);
+                    aRow[17] = new ORowSetValueDecorator(i + 1);
                     switch(aRow[11]->getValue().getInt32())
                     {
                     case ColumnValue::NO_NULLS:

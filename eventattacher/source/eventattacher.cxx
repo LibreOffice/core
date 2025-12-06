@@ -141,10 +141,9 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
         sal_uInt32 nParamCount = aParamSeq.getLength();
         if( nParamCount > 1 )
         {
-            const ParamInfo* pInfo = aParamSeq.getConstArray();
             for( sal_uInt32 i = 0 ; i < nParamCount ; i++ )
             {
-                if( pInfo[ i ].aMode != ParamMode_IN )
+                if (aParamSeq[i].aMode != ParamMode_IN)
                 {
                     bApproveFiring = true;
                     break;
@@ -587,9 +586,9 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
 
         Reference< XIdlClass > xListenerType;
         if( nParamCount == 1 )
-            xListenerType = params.getConstArray()[0];
+            xListenerType = params[0];
         else if( nParamCount == 2 )
-            xListenerType = params.getConstArray()[1];
+            xListenerType = params[1];
 
         // Request Adapter for the actual Listener type
         Reference< XInterface > xAdapter = createAllListenerAdapter(
@@ -620,7 +619,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
             Any* pAnys = args.getArray();
 
             // Check the type of the 1st parameter
-            Reference< XIdlClass > xParamClass = params.getConstArray()[0];
+            Reference< XIdlClass > xParamClass = params[0];
             if( xParamClass->getTypeClass() == TypeClass_STRING )
             {
                 pAnys[0] <<= aAddListenerParam;
@@ -760,14 +759,8 @@ void EventAttacherImpl::removeListener
     aRemoveListenerName = "remove" + aListenerName;
 
     // Search methods for the correct removeListener method
-    Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
-    sal_uInt32 i, nLen = aMethodSeq.getLength();
-    const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
-    for( i = 0 ; i < nLen ; i++ )
+    for (const Reference<XIdlMethod>& rxMethod : xAccess->getMethods(MethodConcept::LISTENER))
     {
-        // Call Method
-        const Reference< XIdlMethod >& rxMethod = pMethods[i];
-
         // Is it the right method?
         if( aRemoveListenerName == rxMethod->getName() )
         {
@@ -795,7 +788,7 @@ void EventAttacherImpl::removeListener
                 Any* pAnys = args.getArray();
 
                 // Check the type of the 1st parameter
-                Reference< XIdlClass > xParamClass = params.getConstArray()[0];
+                Reference< XIdlClass > xParamClass = params[0];
                 if( xParamClass->getTypeClass() == TypeClass_STRING )
                     pAnys[0] <<= AddListenerParam;
 

@@ -102,56 +102,54 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _r
 std::unique_ptr<java_util_Properties> connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )
 {
     std::unique_ptr<java_util_Properties> pProps(new java_util_Properties());
-    const PropertyValue* pBegin = info.getConstArray();
-    const PropertyValue* pEnd   = pBegin + info.getLength();
 
-    for(;pBegin != pEnd;++pBegin)
+    for (const PropertyValue& rPropertyValue : info)
     {
         // these are properties used internally by LibreOffice,
         // and should not be passed to the JDBC driver
         // (which probably does not know anything about them anyway).
-        if  (   pBegin->Name != "JavaDriverClass"
-            &&  pBegin->Name != "JavaDriverClassPath"
-            &&  pBegin->Name != "SystemProperties"
-            &&  pBegin->Name != "CharSet"
-            &&  pBegin->Name != "AppendTableAliasName"
-            &&  pBegin->Name != "AppendTableAliasInSelect"
-            &&  pBegin->Name != "DisplayVersionColumns"
-            &&  pBegin->Name != "GeneratedValues"
-            &&  pBegin->Name != "UseIndexDirectionKeyword"
-            &&  pBegin->Name != "UseKeywordAsBeforeAlias"
-            &&  pBegin->Name != "AddIndexAppendix"
-            &&  pBegin->Name != "FormsCheckRequiredFields"
-            &&  pBegin->Name != "GenerateASBeforeCorrelationName"
-            &&  pBegin->Name != "EscapeDateTime"
-            &&  pBegin->Name != "ParameterNameSubstitution"
-            &&  pBegin->Name != "IsPasswordRequired"
-            &&  pBegin->Name != "IsAutoRetrievingEnabled"
-            &&  pBegin->Name != "AutoRetrievingStatement"
-            &&  pBegin->Name != "UseCatalogInSelect"
-            &&  pBegin->Name != "UseSchemaInSelect"
-            &&  pBegin->Name != "AutoIncrementCreation"
-            &&  pBegin->Name != "Extension"
-            &&  pBegin->Name != "NoNameLengthLimit"
-            &&  pBegin->Name != "EnableSQL92Check"
-            &&  pBegin->Name != "EnableOuterJoinEscape"
-            &&  pBegin->Name != "BooleanComparisonMode"
-            &&  pBegin->Name != "IgnoreCurrency"
-            &&  pBegin->Name != "TypeInfoSettings"
-            &&  pBegin->Name != "IgnoreDriverPrivileges"
-            &&  pBegin->Name != "ImplicitCatalogRestriction"
-            &&  pBegin->Name != "ImplicitSchemaRestriction"
-            &&  pBegin->Name != "SupportsTableCreation"
-            &&  pBegin->Name != "UseJava"
-            &&  pBegin->Name != "Authentication"
-            &&  pBegin->Name != "PreferDosLikeLineEnds"
-            &&  pBegin->Name != "PrimaryKeySupport"
-            &&  pBegin->Name != "RespectDriverResultSetType"
+        if  (   rPropertyValue.Name != "JavaDriverClass"
+            &&  rPropertyValue.Name != "JavaDriverClassPath"
+            &&  rPropertyValue.Name != "SystemProperties"
+            &&  rPropertyValue.Name != "CharSet"
+            &&  rPropertyValue.Name != "AppendTableAliasName"
+            &&  rPropertyValue.Name != "AppendTableAliasInSelect"
+            &&  rPropertyValue.Name != "DisplayVersionColumns"
+            &&  rPropertyValue.Name != "GeneratedValues"
+            &&  rPropertyValue.Name != "UseIndexDirectionKeyword"
+            &&  rPropertyValue.Name != "UseKeywordAsBeforeAlias"
+            &&  rPropertyValue.Name != "AddIndexAppendix"
+            &&  rPropertyValue.Name != "FormsCheckRequiredFields"
+            &&  rPropertyValue.Name != "GenerateASBeforeCorrelationName"
+            &&  rPropertyValue.Name != "EscapeDateTime"
+            &&  rPropertyValue.Name != "ParameterNameSubstitution"
+            &&  rPropertyValue.Name != "IsPasswordRequired"
+            &&  rPropertyValue.Name != "IsAutoRetrievingEnabled"
+            &&  rPropertyValue.Name != "AutoRetrievingStatement"
+            &&  rPropertyValue.Name != "UseCatalogInSelect"
+            &&  rPropertyValue.Name != "UseSchemaInSelect"
+            &&  rPropertyValue.Name != "AutoIncrementCreation"
+            &&  rPropertyValue.Name != "Extension"
+            &&  rPropertyValue.Name != "NoNameLengthLimit"
+            &&  rPropertyValue.Name != "EnableSQL92Check"
+            &&  rPropertyValue.Name != "EnableOuterJoinEscape"
+            &&  rPropertyValue.Name != "BooleanComparisonMode"
+            &&  rPropertyValue.Name != "IgnoreCurrency"
+            &&  rPropertyValue.Name != "TypeInfoSettings"
+            &&  rPropertyValue.Name != "IgnoreDriverPrivileges"
+            &&  rPropertyValue.Name != "ImplicitCatalogRestriction"
+            &&  rPropertyValue.Name != "ImplicitSchemaRestriction"
+            &&  rPropertyValue.Name != "SupportsTableCreation"
+            &&  rPropertyValue.Name != "UseJava"
+            &&  rPropertyValue.Name != "Authentication"
+            &&  rPropertyValue.Name != "PreferDosLikeLineEnds"
+            &&  rPropertyValue.Name != "PrimaryKeySupport"
+            &&  rPropertyValue.Name != "RespectDriverResultSetType"
             )
         {
             OUString aStr;
-            OSL_VERIFY( pBegin->Value >>= aStr );
-            pProps->setProperty(pBegin->Name,aStr);
+            OSL_VERIFY(rPropertyValue.Value >>= aStr);
+            pProps->setProperty(rPropertyValue.Name, aStr);
         }
     }
     return pProps;

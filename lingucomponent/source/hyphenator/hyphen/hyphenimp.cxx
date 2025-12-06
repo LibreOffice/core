@@ -808,8 +808,8 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
     if (2 == nLen)
     {
         Reference< XLinguProperties >   xPropSet;
-        rArguments.getConstArray()[0] >>= xPropSet;
-        // rArguments.getConstArray()[1] >>= xDicList;
+        rArguments[0] >>= xPropSet;
+        // rArguments[1] >>= xDicList;
 
         //! Pointer allows for access of the non-UNO functions.
         //! And the reference to the UNO-functions while increasing
