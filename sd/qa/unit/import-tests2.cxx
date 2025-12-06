@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157285)
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf152186)
 {
     createSdImpressDoc("pptx/tdf152186.pptx");
-    saveAndReload(TestFilter::PPTX_2007);
+    saveAndReload(TestFilter::PPTX);
 
     bool bHasShadow = bool();
     const SdrPage* pPage = GetPage(1);
@@ -2089,7 +2089,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149961AutofitIndentation)
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149588TransparentSolidFill)
 {
     createSdImpressDoc("pptx/tdf149588_transparentSolidFill.pptx");
-    saveAndReload(TestFilter::PPTX_2007);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(6, 0));
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));

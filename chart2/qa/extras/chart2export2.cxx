@@ -354,7 +354,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
                          aFields[1]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(u" <CELLREF"_ustr, aFields[1]->getString());
 
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -626,7 +626,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161607PieChartLeaderLinesColorWid
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testNumberFormatExportPPTX)
 {
     loadFromFile(u"pptx/tdf115859.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -661,7 +661,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLabelSeparatorExportDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesColorFillPPTX)
 {
     loadFromFile(u"pptx/testChartTitlePropertiesColorFill.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr",
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesColorFillPPTX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesGradientFillPPTX)
 {
     loadFromFile(u"pptx/testChartTitlePropertiesGradientFill.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathInsensitive(
@@ -687,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesGradientFillPPTX
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesBitmapFillPPTX)
 {
     loadFromFile(u"pptx/testChartTitlePropertiesBitmapFill.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed",
@@ -776,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testMultipleCategoryAxisLablesDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf116163)
 {
     loadFromFile(u"pptx/tdf116163.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -818,7 +818,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf119029)
 {
     loadFromFile(u"odp/tdf119029.odp");
     // Only use "chart", without number, because the number depends on the previous tests
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -1019,7 +1019,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf60316)
 {
     loadFromFile(u"pptx/tdf60316.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -1176,7 +1176,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf125812)
 {
     loadFromFile(u"odp/ellipticalGradientFill.odp");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", "path",
