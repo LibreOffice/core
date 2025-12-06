@@ -18,6 +18,7 @@ $(eval $(call gb_Library_add_exception_objects,docmodel,\
     docmodel/source/theme/ColorSet \
     docmodel/source/theme/Theme \
     docmodel/source/color/ComplexColorJSON \
+    docmodel/source/color/ComplexColor \
     docmodel/source/styles/ChartStyle \
     docmodel/source/styles/ChartColorStyle \
 ))
