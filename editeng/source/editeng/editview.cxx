@@ -1155,13 +1155,12 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     Sequence< OUString > aAlt;
     if (xSpellAlt.is())
         aAlt = xSpellAlt->getAlternatives();
-    const OUString *pAlt = aAlt.getConstArray();
     sal_uInt16 nWords = static_cast<sal_uInt16>(aAlt.getLength());
     if ( nWords )
     {
         for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
         {
-            OUString aAlternate( pAlt[nW] );
+            OUString aAlternate(aAlt[nW]);
             OUString sId(OUString::number(MN_ALTSTART + nW));
             xPopupMenu->insert(nW, sId, aAlternate, nullptr, nullptr, nullptr, TRISTATE_INDET);
             xAutoMenu->append(sId, aAlternate);
@@ -1177,10 +1176,8 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     SvtLinguConfig aCfg;
 
     Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
-    Sequence< Reference< linguistic2::XDictionary >  > aDics;
     if (xDicList.is())
     {
-        const Reference< linguistic2::XDictionary >  *pDic = nullptr;
         // add the default positive dictionary to dic-list (if not already done).
         // This is to ensure that there is at least one dictionary to which
         // words could be added.
@@ -1188,13 +1185,12 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         if (xDic.is())
             xDic->setActive( true );
 
-        aDics = xDicList->getDictionaries();
-        pDic  = aDics.getConstArray();
+        Sequence<Reference<linguistic2::XDictionary>> aDics = xDicList->getDictionaries();
         LanguageType nCheckedLanguage = getImpEditEngine().GetLanguage( aPaM2 ).nLang;
         sal_uInt16 nDicCount = static_cast<sal_uInt16>(aDics.getLength());
         for (sal_uInt16 i = 0; i < nDicCount; i++)
         {
-            uno::Reference< linguistic2::XDictionary >  xDicTmp = pDic[i];
+            uno::Reference<linguistic2::XDictionary> xDicTmp = aDics[i];
             if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
                 continue;
 
@@ -1339,7 +1335,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     else if ( sId.toInt32() >= MN_AUTOSTART )
     {
         DBG_ASSERT(sId.toInt32() - MN_AUTOSTART < aAlt.getLength(), "index out of range");
-        OUString aWord = pAlt[sId.toInt32() - MN_AUTOSTART];
+        OUString aWord = aAlt[sId.toInt32() - MN_AUTOSTART];
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if ( pAutoCorrect )
             pAutoCorrect->PutText( aSelected, aWord, getImpEditEngine().GetLanguage( aPaM2 ).nLang );
@@ -1348,7 +1344,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     else if ( sId.toInt32() >= MN_ALTSTART )  // Replace
     {
         DBG_ASSERT(sId.toInt32() - MN_ALTSTART < aAlt.getLength(), "index out of range");
-        OUString aWord = pAlt[sId.toInt32() - MN_ALTSTART];
+        OUString aWord = aAlt[sId.toInt32() - MN_ALTSTART];
         InsertText( aWord );
     }
     else

@@ -165,18 +165,16 @@ namespace connectivity
             {
                 OUString sURL;
                 Reference<XStorage> xStorage;
-                const PropertyValue* pIter = info.getConstArray();
-                const PropertyValue* pEnd = pIter + info.getLength();
 
-                for (;pIter != pEnd; ++pIter)
+                for (const PropertyValue& rPropertyValue : info)
                 {
-                    if ( pIter->Name == "Storage" )
+                    if (rPropertyValue.Name == "Storage")
                     {
-                        xStorage.set(pIter->Value,UNO_QUERY);
+                        xStorage.set(rPropertyValue.Value, UNO_QUERY);
                     }
-                    else if ( pIter->Name == "URL" )
+                    else if (rPropertyValue.Name == "URL")
                     {
-                        pIter->Value >>= sURL;
+                        rPropertyValue.Value >>= sURL;
                     }
                 }
 

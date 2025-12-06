@@ -2526,11 +2526,9 @@ void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEv
     // Only check for text, will also be there if bin or rtf
     datatransfer::DataFlavor aTextFlavor;
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aTextFlavor );
-    const css::datatransfer::DataFlavor* pFlavors = rDTDEE.SupportedDataFlavors.getConstArray();
-    int nFlavors = rDTDEE.SupportedDataFlavors.getLength();
-    for ( int n = 0; n < nFlavors; n++ )
+    for (const css::datatransfer::DataFlavor& rFlavor : rDTDEE.SupportedDataFlavors)
     {
-        if( TransferableDataHelper::IsEqual( pFlavors[n], aTextFlavor ) )
+        if (TransferableDataHelper::IsEqual(rFlavor, aTextFlavor))
         {
             mpDragAndDropInfo->bHasValidData = true;
             break;

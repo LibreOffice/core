@@ -88,17 +88,9 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
             if( !xContainer.is() )
                 return false;
 
-            const Sequence< OUString > aNameSequence( xContainer->getElementNames() );
-            const OUString* pNames = aNameSequence.getConstArray();
-            const sal_Int32 nCount = aNameSequence.getLength();
-            Any aAny;
-            sal_Int32 nAttr;
-
-            for( nAttr = 0; nAttr < nCount; nAttr++ )
+            for (const OUString& aName : xContainer->getElementNames())
             {
-                const OUString aName( *pNames++ );
-
-                aAny = xContainer->getByName( aName );
+                Any aAny = xContainer->getByName(aName);
                 auto pData = o3tl::tryAccess<AttributeData>(aAny);
                 if( !pData )
                     return false;
@@ -112,25 +104,22 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
                     if( pData->Namespace.isEmpty() )
                     {
                         if( !aNewImpl.AddAttr( aPrefix, aLName, pData->Value ) )
-                            break;
+                            return false;
                     }
                     else
                     {
                         if( !aNewImpl.AddAttr( aPrefix, pData->Namespace, aLName, pData->Value ) )
-                            break;
+                            return false;
                     }
                 }
                 else
                 {
                     if( !aNewImpl.AddAttr( aName, pData->Value ) )
-                        break;
+                        return false;
                 }
             }
 
-            if( nAttr == nCount )
-                maContainerData = std::move(aNewImpl);
-            else
-                return false;
+            maContainerData = std::move(aNewImpl);
         }
         catch(...)
         {

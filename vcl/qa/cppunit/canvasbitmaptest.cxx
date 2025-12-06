@@ -138,65 +138,61 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             aLayout.ScanLineStride == (200*nExpectedBitsPerPixel+7)/8 ||
                             aLayout.ScanLineStride == -(200*nExpectedBitsPerPixel+7)/8);
 
-    uno::Sequence< rendering::RGBColor >  aRGBColors  = xBmp->convertIntegerToRGB( aPixelData );
-    uno::Sequence< rendering::ARGBColor > aARGBColors = xBmp->convertIntegerToARGB( aPixelData );
+    const uno::Sequence<rendering::RGBColor> aRGBColors = xBmp->convertIntegerToRGB(aPixelData);
+    const uno::Sequence<rendering::ARGBColor> aARGBColors = xBmp->convertIntegerToARGB(aPixelData);
 
-    const rendering::RGBColor*  pRGBStart ( aRGBColors.getConstArray() );
-    const rendering::RGBColor*  pRGBEnd   ( aRGBColors.getConstArray()+aRGBColors.getLength() );
-    const rendering::ARGBColor* pARGBStart( aARGBColors.getConstArray() );
-    std::pair<const rendering::RGBColor*,
-        const rendering::ARGBColor*> aRes = std::mismatch( pRGBStart, pRGBEnd, pARGBStart );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "argb and rgb colors are not equal",
-                            pRGBEnd, aRes.first);
+    std::pair<const rendering::RGBColor*, const rendering::ARGBColor*> aRes
+        = std::mismatch(aRGBColors.begin(), aRGBColors.end(), aARGBColors.begin());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("argb and rgb colors are not equal", aRGBColors.end(), aRes.first);
 
     CPPUNIT_ASSERT_MESSAGE( "rgb colors are not within [0,1] range",
-                            std::none_of(pRGBStart,pRGBEnd,&rangeCheck));
+                            std::none_of(aRGBColors.begin(), aRGBColors.end(), &rangeCheck));
 
     if( !aContainedBmp.HasAlpha() )
     {
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "First pixel is not white", 1.0, pRGBStart[0].Red, 1E-12);
+            "First pixel is not white", 1.0, aRGBColors[0].Red, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "First pixel is not white", 1.0, pRGBStart[0].Green, 1E-12);
+            "First pixel is not white", 1.0, aRGBColors[0].Green, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "First pixel is not white", 1.0, pRGBStart[0].Blue, 1E-12);
+            "First pixel is not white", 1.0, aRGBColors[0].Blue, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
+            "Second pixel is not opaque", 1.0, aARGBColors[1].Alpha, 1E-12);
     }
     else
     {
         // with premultiplied alpha, the white becomes black
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "First pixel is not black", 0.0, pRGBStart[0].Red, 1E-12);
+            "First pixel is not black", 0.0, aRGBColors[0].Red, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "First pixel is not black", 0.0, pRGBStart[0].Green, 1E-12);
+            "First pixel is not black", 0.0, aRGBColors[0].Green, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "First pixel is not black", 0.0, pRGBStart[0].Blue, 1E-12);
+            "First pixel is not black", 0.0, aRGBColors[0].Blue, 1E-12);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "First pixel is not fully transparent",
-                                0.0, pARGBStart[0].Alpha);
+                                0.0, aARGBColors[0].Alpha);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
+            "Second pixel is not opaque", 1.0, aARGBColors[1].Alpha, 1E-12);
     }
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
-                            0.0, pRGBStart[1].Red);
+                            0.0, aRGBColors[1].Red);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
-                            0.0, pRGBStart[1].Green);
+                            0.0, aRGBColors[1].Green);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
-                            0.0, pRGBStart[1].Blue);
+                            0.0, aRGBColors[1].Blue);
 
     if( !bHasPalette )
     {
         const Color aCol(COL_GREEN);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Sixth pixel is not green (red component)",
-            vcl::unotools::toDoubleColor(aCol.GetRed()), pRGBStart[5].Red);
+            vcl::unotools::toDoubleColor(aCol.GetRed()), aRGBColors[5].Red);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Sixth pixel is not green (green component)",
-            vcl::unotools::toDoubleColor(aCol.GetGreen()), pRGBStart[5].Green);
+            vcl::unotools::toDoubleColor(aCol.GetGreen()), aRGBColors[5].Green);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Sixth pixel is not green (blue component)",
-            vcl::unotools::toDoubleColor(aCol.GetBlue()), pRGBStart[5].Blue);
+            vcl::unotools::toDoubleColor(aCol.GetBlue()), aRGBColors[5].Blue);
     }
     else
     {

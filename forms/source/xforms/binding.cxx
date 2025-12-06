@@ -796,13 +796,8 @@ static void lcl_removeOtherNamespaces( const css::uno::Reference<css::container:
     OSL_ENSURE( xTo.is(), "no target" );
 
     // iterate over name in source
-    Sequence<OUString> aNames = xTo->getElementNames();
-    sal_Int32 nNames = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
-    for( sal_Int32 i = 0; i < nNames; i++ )
+    for (const OUString& rName : xTo->getElementNames())
     {
-        const OUString& rName = pNames[i];
-
         if( ! xFrom->hasByName( rName ) )
             xTo->removeByName( rName );
     }
@@ -824,13 +819,8 @@ static void lcl_copyNamespaces( const css::uno::Reference<css::container::XNameC
     OSL_ENSURE( xTo.is(), "no target" );
 
     // iterate over name in source
-    Sequence<OUString> aNames = xFrom->getElementNames();
-    sal_Int32 nNames = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
-    for( sal_Int32 i = 0; i < nNames; i++ )
+    for (const OUString& rName : xFrom->getElementNames())
     {
-        const OUString& rName = pNames[i];
-
         // determine whether to copy the value, and whether to delete
         // it in the source:
 
@@ -881,12 +871,8 @@ void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameCon
         lcl_removeOtherNamespaces( rNamespaces, xModelNamespaces );
 
     // copy namespaces as appropriate
-    Sequence<OUString> aNames = rNamespaces->getElementNames();
-    sal_Int32 nNames = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
-    for( sal_Int32 i = 0; i < nNames; i++ )
+    for (const OUString& rName : rNamespaces->getElementNames())
     {
-        const OUString& rName = pNames[i];
         Any aValue = rNamespaces->getByName( rName );
 
         // determine whether the namespace should go into model's or

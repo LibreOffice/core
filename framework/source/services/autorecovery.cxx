@@ -1658,12 +1658,6 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
 
 void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
-    const css::uno::Sequence< css::util::ElementChange > lChanges (aEvent.Changes);
-    const css::util::ElementChange*                      pChanges = lChanges.getConstArray();
-
-    sal_Int32 c = lChanges.getLength();
-    sal_Int32 i = 0;
-
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -1673,15 +1667,15 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     if ((m_eJob & Job::DisableAutorecovery) == Job::DisableAutorecovery)
        return;
 
-    for (i=0; i<c; ++i)
+    for (const css::util::ElementChange& rChange : aEvent.Changes)
     {
         OUString sPath;
-        pChanges[i].Accessor >>= sPath;
+        rChange.Accessor >>= sPath;
 
         if ( sPath == CFG_ENTRY_AUTOSAVE_ENABLED )
         {
             bool bEnabled = false;
-            if (pChanges[i].Element >>= bEnabled)
+            if (rChange.Element >>= bEnabled)
             {
                 if (bEnabled)
                 {
@@ -1698,7 +1692,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
         else if (sPath == CFG_ENTRY_AUTOSAVE_USERAUTOSAVE_ENABLED)
         {
             bool bEnabled = false;
-            if (pChanges[i].Element >>= bEnabled)
+            if (rChange.Element >>= bEnabled)
             {
                 if (bEnabled)
                     m_eJob |= Job::UserAutoSave;
@@ -1858,18 +1852,14 @@ void AutoRecovery::implts_readConfig()
 
     css::uno::Reference<css::container::XNameAccess> xRecoveryList(
             officecfg::Office::Recovery::RecoveryList::get());
-    const css::uno::Sequence< OUString > lItems = xRecoveryList->getElementNames();
-    const OUString*                      pItems = lItems.getConstArray();
-    sal_Int32                            c      = lItems.getLength();
-    sal_Int32                            i      = 0;
 
     // REENTRANT -> --------------------------
     aCacheLock.lock(LOCK_FOR_CACHE_ADD_REMOVE);
 
-    for (i=0; i<c; ++i)
+    for (const OUString& rItem : xRecoveryList->getElementNames())
     {
         css::uno::Reference< css::beans::XPropertySet > xItem;
-        xRecoveryList->getByName(pItems[i]) >>= xItem;
+        xRecoveryList->getByName(rItem) >>= xItem;
         if (!xItem.is())
             continue;
 
@@ -1889,9 +1879,8 @@ void AutoRecovery::implts_readConfig()
         implts_specifyAppModuleAndFactory(aInfo);
         implts_specifyDefaultFilterAndExtension(aInfo);
 
-        if (pItems[i].startsWith(RECOVERY_ITEM_BASE_IDENTIFIER))
+        if (std::u16string_view sID; rItem.startsWith(RECOVERY_ITEM_BASE_IDENTIFIER, &sID))
         {
-            std::u16string_view sID = pItems[i].subView(RECOVERY_ITEM_BASE_IDENTIFIER.getLength());
             aInfo.ID = o3tl::toInt32(sID);
             /* SAFE */ {
             osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);

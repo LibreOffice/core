@@ -75,8 +75,8 @@ public:
     void            getSubFilters( UnoFilterList& _rSubFilterList );
 
     // helpers for iterating the sub filters
-    const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
-    const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
+    const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.begin(); }
+    const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.end(); }
 };
 
 
@@ -355,36 +355,18 @@ namespace {
 
 bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
 {
-    bool bRet = false;
-
-    if ( m_pFilterList )
-        bRet =
-            ::std::any_of(
-                m_pFilterList->begin(),
-                m_pFilterList->end(),
-                FilterTitleMatch( rTitle )
-            );
-
-    return bRet;
+    return m_pFilterList
+           && std::any_of(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(rTitle));
 }
 
 
 bool SvtFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 {
-    bool bRet = false;
+    for (const UnoFilterEntry& rEntry : _rGroupedFilters)
+        if (FilterNameExists(rEntry.First))
+            return true;
 
-    if ( m_pFilterList )
-    {
-        const UnoFilterEntry* pStart = _rGroupedFilters.getConstArray();
-        const UnoFilterEntry* pEnd = pStart + _rGroupedFilters.getLength();
-        for ( ; pStart != pEnd; ++pStart )
-            if ( ::std::any_of( m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch( pStart->First ) ) )
-                break;
-
-        bRet = pStart != pEnd;
-    }
-
-    return bRet;
+    return false;
 }
 
 

@@ -167,7 +167,7 @@ sal_Int8 ODataInputStream::readByte()
     {
         throw UnexpectedEOFException();
     }
-    return aTmp.getConstArray()[0];
+    return aTmp[0];
 }
 
 sal_Unicode ODataInputStream::readChar()

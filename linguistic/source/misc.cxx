@@ -261,15 +261,9 @@ uno::Reference< XDictionaryEntry > SearchDicList(
 
     const uno::Sequence< uno::Reference< XDictionary > >
             aDics( xDicList->getDictionaries() );
-    const uno::Reference< XDictionary >
-            *pDic = aDics.getConstArray();
-    sal_Int32 nDics = xDicList->getCount();
 
-    sal_Int32 i;
-    for (i = 0;  i < nDics;  i++)
+    for (const uno::Reference<XDictionary>& axDic : aDics)
     {
-        uno::Reference< XDictionary > axDic = pDic[i];
-
         DictionaryType  eType = axDic->getDictionaryType();
         LanguageType    nLang = LinguLocaleToLanguage( axDic->getLocale() );
 

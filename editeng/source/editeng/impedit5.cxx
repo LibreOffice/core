@@ -1244,12 +1244,9 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                                     mxTransliterationWrapper.changeLocale( eLang);
 
                                 const ::utl::TransliterationWrapper* pTransliteration = mxTransliterationWrapper.get();
-                                css::uno::Sequence< css::i18n::CalendarItem2 > xItem = mxLocaleDataWrapper->getDefaultCalendarDays();
-                                sal_Int32 nCount = xItem.getLength();
-                                const css::i18n::CalendarItem2* pArr = xItem.getConstArray();
-                                for( sal_Int32 n = 0; n <= nCount; ++n )
+                                for (const auto& rItem : mxLocaleDataWrapper->getDefaultCalendarDays())
                                 {
-                                    const OUString& rDay = pArr[n].FullName;
+                                    const OUString& rDay = rItem.FullName;
                                     if( pTransliteration->isMatch( aWord, rDay) )
                                     {
                                         aComplete = rDay;
@@ -1259,12 +1256,9 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
 
                                 if ( aComplete.isEmpty() )
                                 {
-                                    xItem = mxLocaleDataWrapper->getDefaultCalendarMonths();
-                                    sal_Int32 nMonthCount = xItem.getLength();
-                                    const css::i18n::CalendarItem2* pMonthArr = xItem.getConstArray();
-                                    for( sal_Int32 n = 0; n <= nMonthCount; ++n )
+                                    for (const auto& rItem : mxLocaleDataWrapper->getDefaultCalendarMonths())
                                     {
-                                        const OUString& rMon = pMonthArr[n].FullName;
+                                        const OUString& rMon = rItem.FullName;
                                         if( pTransliteration->isMatch( aWord, rMon) )
                                         {
                                             aComplete = rMon;

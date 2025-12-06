@@ -681,7 +681,7 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
             cals = getAllCalendars2( Locale(u"en"_ustr, u"US"_ustr, OUString()) );
             if (!cals.hasElements())
                 throw RuntimeException();
-            ref_cal = cals.getConstArray()[0];
+            ref_cal = cals[0];
         }
         ref_name = name;
     }

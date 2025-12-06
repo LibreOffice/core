@@ -30,6 +30,7 @@
 
 #include <comphelper/diagnose_ex.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 
 
@@ -275,16 +276,9 @@ namespace frm
             DBG_UNHANDLED_EXCEPTION("forms.component");
         }
         Sequence< PropertyValue > aPropertyValues( aValues.getLength() );
-        PropertyValue* pPropertyValue = aPropertyValues.getArray();
-
-        const OUString* pName = aPropertyNames.getConstArray();
-        const OUString* pNameEnd = aPropertyNames.getConstArray() + aPropertyNames.getLength();
-        const Any* pValue = aValues.getConstArray();
-        for ( ; pName != pNameEnd; ++pName, ++pValue, ++pPropertyValue )
-        {
-            pPropertyValue->Name = *pName;
-            pPropertyValue->Value = *pValue;
-        }
+        std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.begin(),
+                       aPropertyValues.getArray(), [](const OUString& name, const Any& value)
+                       { return comphelper::makePropertyValue(name, value); });
 
         return aPropertyValues;
     }
@@ -299,30 +293,27 @@ namespace frm
 
         // XMultiPropertySet::setPropertyValues expects its arguments to be sorted by name
         // while XPropertyAccess::setPropertyValues doesn't. So first of all, sort.
-        Sequence< PropertyValue > aSortedProps( _rProps );
-        ::std::sort( aSortedProps.getArray(), aSortedProps.getArray() + nPropertyValues, PropertyValueLessByName() );
+        std::vector<PropertyValue> aSortedProps(_rProps.begin(), _rProps.end());
+        std::sort(aSortedProps.begin(), aSortedProps.end(), PropertyValueLessByName());
 
         // also, XPropertyAccess::setPropertyValues is expected to throw an UnknownPropertyException
         // for unsupported properties, while XMultiPropertySet::setPropertyValues is expected to ignore
         // those. So, check for unsupported properties first.
         ::comphelper::OPropertyArrayAggregationHelper& rArrayHelper( impl_ts_getArrayHelper() );
-        for (   const PropertyValue* pProperties = aSortedProps.getConstArray();
-                pProperties != aSortedProps.getConstArray() + nPropertyValues;
-                ++pProperties
-            )
+        for (const PropertyValue& rProperty : aSortedProps)
         {
-            if ( !rArrayHelper.hasPropertyByName( pProperties->Name ) )
-                throw UnknownPropertyException( pProperties->Name, m_rContext.getPropertiesInterface() );
+            if (!rArrayHelper.hasPropertyByName(rProperty.Name))
+                throw UnknownPropertyException(rProperty.Name, m_rContext.getPropertiesInterface());
         }
 
         // Now finally split into a Name and a Value sequence, and forward to
         // XMultiPropertySet::setPropertyValues
         Sequence< OUString > aNames( nPropertyValues );
-        ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
+        std::transform(aSortedProps.begin(), aSortedProps.end(),
             aNames.getArray(), SelectNameOfPropertyValue() );
 
         Sequence< Any > aValues( nPropertyValues );
-        ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
+        std::transform(aSortedProps.begin(), aSortedProps.end(),
             aValues.getArray(), SelectValueOfPropertyValue() );
 
         Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );

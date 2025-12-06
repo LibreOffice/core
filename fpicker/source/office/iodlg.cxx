@@ -1671,10 +1671,8 @@ void SvtFileDialog::AddFilterGroup( const OUString& rFilter, const Sequence< Str
     SAL_WARN_IF( m_bIsInExecute, "fpicker.office", "SvtFileDialog::AddFilter: currently executing!" );
 
     implAddFilter( rFilter, OUString() );
-    const StringPair* pSubFilters       =               rFilters.getConstArray();
-    const StringPair* pSubFiltersEnd    = pSubFilters + rFilters.getLength();
-    for ( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        implAddFilter( pSubFilters->First, pSubFilters->Second );
+    for (const StringPair& rPair : rFilters)
+        implAddFilter(rPair.First, rPair.Second);
 }
 
 

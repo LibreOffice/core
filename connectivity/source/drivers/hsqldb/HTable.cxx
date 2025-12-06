@@ -309,13 +309,11 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  )
         Sequence< Type > aTypes = OTableHelper::getTypes();
         std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
-        const Type* pIter = aTypes.getConstArray();
-        const Type* pEnd = pIter + aTypes.getLength();
-        for(;pIter != pEnd;++pIter)
+        for (const Type& rType : aTypes)
         {
-            if( *pIter != cppu::UnoType<XRename>::get())
+            if (rType != cppu::UnoType<XRename>::get())
             {
-                aOwnTypes.push_back(*pIter);
+                aOwnTypes.push_back(rType);
             }
         }
         return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());

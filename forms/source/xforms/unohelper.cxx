@@ -43,13 +43,10 @@ void xforms::copy(const Reference<XPropertySet>& xFrom, Reference<XPropertySet> 
     OSL_ENSURE(xTo.is(), "no target");
 
     // get property names & infos, and iterate over target properties
-    Sequence<Property> aProperties = xTo->getPropertySetInfo()->getProperties();
-    sal_Int32 nProperties = aProperties.getLength();
-    const Property* pProperties = aProperties.getConstArray();
     Reference<XPropertySetInfo> xFromInfo = xFrom->getPropertySetInfo();
-    for (sal_Int32 n = 0; n < nProperties; n++)
+    for (const Property& rProperty : xTo->getPropertySetInfo()->getProperties())
     {
-        const OUString& rName = pProperties[n].Name;
+        const OUString& rName = rProperty.Name;
 
         // if both set have the property, copy the value
         // (catch and ignore exceptions, if any)

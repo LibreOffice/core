@@ -61,50 +61,48 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
 {
     osl_atomic_increment( &m_refCount );
 
-    const PropertyValue *pBegin  = info.getConstArray();
-    const PropertyValue *pEnd    = pBegin + info.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    for (const PropertyValue& rPropertyValue : info)
     {
-        if(pBegin->Name == "HeaderLine")
+        if (rPropertyValue.Name == "HeaderLine")
         {
-            if( ! (pBegin->Value >>= m_bHeaderLine) )
+            if (!(rPropertyValue.Value >>= m_bHeaderLine))
                 SAL_WARN("connectivity.flat", "construct: unable to get property HeaderLine");
         }
-        else if(pBegin->Name == "FieldDelimiter")
+        else if (rPropertyValue.Name == "FieldDelimiter")
         {
             OUString aVal;
-            if( ! (pBegin->Value >>= aVal) )
+            if (!(rPropertyValue.Value >>= aVal))
                 SAL_WARN("connectivity.flat", "construct: unable to get property FieldDelimiter");
 
             m_cFieldDelimiter = aVal.toChar();
         }
-        else if(pBegin->Name == "StringDelimiter")
+        else if (rPropertyValue.Name == "StringDelimiter")
         {
             OUString aVal;
-            if( ! (pBegin->Value >>= aVal) )
+            if (!(rPropertyValue.Value >>= aVal))
                 SAL_WARN("connectivity.flat", "construct: unable to get property StringDelimiter");
 
             m_cStringDelimiter = aVal.toChar();
         }
-        else if(pBegin->Name == "DecimalDelimiter")
+        else if (rPropertyValue.Name == "DecimalDelimiter")
         {
             OUString aVal;
-            if( ! (pBegin->Value >>= aVal) )
+            if (!(rPropertyValue.Value >>= aVal))
                 SAL_WARN("connectivity.flat", "construct: unable to get property DecimalDelimiter");
 
             m_cDecimalDelimiter = aVal.toChar();
         }
-        else if(pBegin->Name == "ThousandDelimiter")
+        else if (rPropertyValue.Name == "ThousandDelimiter")
         {
             OUString aVal;
-            if( ! (pBegin->Value >>= aVal) )
+            if (!(rPropertyValue.Value >>= aVal))
                 SAL_WARN("connectivity.flat", "construct: unable to get property ThousandDelimiter");
 
             m_cThousandDelimiter = aVal.toChar();
         }
-        else if ( pBegin->Name == "MaxRowScan" )
+        else if (rPropertyValue.Name == "MaxRowScan")
         {
-            pBegin->Value >>= m_nMaxRowsToScan;
+            rPropertyValue.Value >>= m_nMaxRowsToScan;
         }
     }
 

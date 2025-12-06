@@ -778,19 +778,16 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             Sequence< OUString > aVisibleList;
             xComponentSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aVisibleList;
             sal_Int32 nStringCnt = aVisibleList.getLength();
-            const OUString* pStrings = aVisibleList.getConstArray();
 
             // Value list
             Sequence< OUString > aValueList;
             xComponentSet->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueList;
             sal_Int32 nValCnt = aValueList.getLength();
-            const OUString* pVals = aValueList.getConstArray();
 
             // Selection
             Sequence<sal_Int16> aSelectList;
             xComponentSet->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectList;
             sal_Int32 nSelCount = aSelectList.getLength();
-            const sal_Int16* pSels = aSelectList.getConstArray();
 
             // Simple or multiple selection
             // For simple selections MT only accounts for the list's first entry.
@@ -803,21 +800,21 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             sal_Int32 i;
             for( i=0; i<nSelCount; ++i )
             {
-                if( pSels[i] < nStringCnt )
+                if (aSelectList[i] < nStringCnt)
                     ++nCurCnt;
             }
 
             OUString aSubValue;
             for(i=0; i<nCurCnt; ++i )
             {
-                sal_Int16  nSelPos = pSels[i];
-                if (nSelPos < nValCnt && !pVals[nSelPos].isEmpty())
+                sal_Int16 nSelPos = aSelectList[i];
+                if (nSelPos < nValCnt && !aValueList[nSelPos].isEmpty())
                 {
-                    aSubValue = pVals[nSelPos];
+                    aSubValue = aValueList[nSelPos];
                 }
                 else
                 {
-                    aSubValue = pStrings[nSelPos];
+                    aSubValue = aVisibleList[nSelPos];
                 }
                 rList.emplace_back(aName, aSubValue );
             }

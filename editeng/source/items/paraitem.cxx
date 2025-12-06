@@ -1120,12 +1120,10 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
 
             maTabStops.clear();
-            const style::TabStop* pArr = aSeq.getConstArray();
-            const sal_uInt16 nCount = static_cast<sal_uInt16>(aSeq.getLength());
-            for(sal_uInt16 i = 0; i < nCount ; i++)
+            for (const auto& rTabStop : aSeq)
             {
                 SvxTabAdjust eAdjust = SvxTabAdjust::Default;
-                switch(pArr[i].Alignment)
+                switch (rTabStop.Alignment)
                 {
                 case style::TabAlign_LEFT   : eAdjust = SvxTabAdjust::Left; break;
                 case style::TabAlign_CENTER : eAdjust = SvxTabAdjust::Center; break;
@@ -1133,12 +1131,10 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 case style::TabAlign_DECIMAL: eAdjust = SvxTabAdjust::Decimal; break;
                 default: ;//prevent warning
                 }
-                sal_Unicode cFill = pArr[i].FillChar;
-                sal_Unicode cDecimal = pArr[i].DecimalChar;
-                SvxTabStop aTab( bConvert ? o3tl::toTwips(pArr[i].Position, o3tl::Length::mm100) : pArr[i].Position,
+                SvxTabStop aTab( bConvert ? o3tl::toTwips(rTabStop.Position, o3tl::Length::mm100) : rTabStop.Position,
                                     eAdjust,
-                                    cDecimal,
-                                    cFill );
+                                    rTabStop.DecimalChar,
+                                    rTabStop.FillChar );
                 Insert(aTab);
             }
             break;
