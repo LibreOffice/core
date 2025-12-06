@@ -80,7 +80,10 @@ public:
     bool GetSupportsSigning() const { return bool(nFormatType & SfxFilterFlags::SUPPORTSSIGNING); }
     bool GetGpgEncryption() const { return bool(nFormatType & SfxFilterFlags::GPGENCRYPTION); }
     bool IsOwnTemplateFormat() const { return bool(nFormatType & SfxFilterFlags::TEMPLATEPATH); }
-    bool IsMSOFormat() const { return aTypeName.startsWith("MS"); }
+    bool IsMSOFormat() const
+    {
+        return aTypeName.startsWith("MS") || aTypeName.startsWith("Office Open XML ");
+    }
     /// not our built-in format
     bool IsAlienFormat() const { return bool(nFormatType & SfxFilterFlags::ALIEN); }
     /// an unusual/legacy file to be loading
