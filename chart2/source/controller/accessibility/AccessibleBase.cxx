@@ -80,7 +80,7 @@ AccessibleBase::AccessibleBase(
 
 AccessibleBase::~AccessibleBase()
 {
-    OSL_ASSERT(!isAlive());
+    SAL_WARN_IF(isAlive(), "chart2.accessibility", "AccessibleBase destroyed while still alive");
 }
 
 bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId & rId )

@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
 #include <memory>
 #include <functional>
 #include <epoxy/gl.h>
@@ -173,7 +174,7 @@ namespace oglcanvas
             for( sal_Int32 i=0; i<nNumCols; ++i )
                 *pCurrCol++ = rHelper.getDevice()->getDeviceColorSpace()->convertToARGB(rValues.maColors[i])[0];
 
-            OSL_ASSERT(nNumCols == rValues.maStops.getLength());
+            SAL_WARN_IF(nNumCols != rValues.maStops.getLength(), "canvas", "Color count does not match stops count");
 
             switch( rValues.meType )
             {

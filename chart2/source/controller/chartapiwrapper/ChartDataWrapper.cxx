@@ -26,11 +26,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
+#include <sal/log.hxx>
 #include <float.h>
 #include <cmath>
 #include <limits>
 #include <utility>
-#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -572,7 +572,7 @@ void ChartDataWrapper::fireChartDataChangeEvent( css::chart::ChartDataChangeEven
         return;
 
     uno::Reference< uno::XInterface > xSrc( static_cast< cppu::OWeakObject* >( this ));
-    OSL_ASSERT( xSrc.is());
+    SAL_WARN_IF( !xSrc.is(), "chart2", "Source is null" );
     if( xSrc.is() )
         aEvent.Source = std::move(xSrc);
 
@@ -622,7 +622,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     bool bPercent = false;
     bool bDeep = false;
     uno::Reference< css::chart::XChartDocument > xOldDoc( static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY );
-    OSL_ASSERT( xOldDoc.is());
+    SAL_WARN_IF( !xOldDoc.is(), "chart2", "Could not query XChartDocument" );
     uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );
     if( xDiaProp.is())
     {
@@ -656,7 +656,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     switchToInternalDataProvider();
     rDataOperator.apply(m_xDataAccess);
     uno::Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
-    OSL_ASSERT( xDataProvider.is() );
+    SAL_WARN_IF( !xDataProvider.is(), "chart2", "DataProvider is null" );
     if( !xDataProvider.is() )
         return;
     uno::Reference< chart2::data::XDataSource > xSource( xDataProvider->createDataSource( aArguments ) );
