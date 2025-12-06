@@ -183,7 +183,7 @@ std::unique_ptr<SwHTMLNumRuleInfo> SwHTMLWriter::ReleaseNextNumInfo()
 
 void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 {
-    uno::Sequence<beans::PropertyValue> aArgs = rMedium.GetArgs();
+    uno::Sequence<beans::PropertyValue> aArgs = rMedium.GetArgs().getAsConstPropertyValueList();
     if (const SfxStringItem* pItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ))
     {
         const OUString sFilterOptions = pItem->GetValue();

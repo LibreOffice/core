@@ -453,7 +453,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         return;
     }
 
-    comphelper::SequenceAsHashMap aLoadMap(pMed->GetArgs());
+    const comphelper::SequenceAsHashMap& aLoadMap(pMed->GetArgs());
     auto it = aLoadMap.find(u"AllowedRTFOLEMimeTypes"_ustr);
     if (it == aLoadMap.end())
     {
