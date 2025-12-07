@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation, void*, void)
 
         pHelper->RunOnConfigurationEvent(
             sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
-            ::std::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
+            [self = shared_from_this()](bool) { self->StartPresentation(); });
         pHelper->UpdateConfiguration();
     }
     else
