@@ -23,6 +23,7 @@
 #include "mysqlc_propertyids.hxx"
 #include "mysqlc_resultsetmetadata.hxx"
 
+#include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
@@ -87,7 +88,8 @@ Any SAL_CALL OPreparedStatement::queryInterface(const Type& rType)
 
 Sequence<Type> SAL_CALL OPreparedStatement::getTypes()
 {
-    return concatSequences(OPreparedStatement_BASE::getTypes(), OCommonStatement::getTypes());
+    return comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),
+                                       OCommonStatement::getTypes());
 }
 
 Reference<XResultSetMetaData> SAL_CALL OPreparedStatement::getMetaData()

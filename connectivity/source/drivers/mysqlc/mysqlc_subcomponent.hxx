@@ -96,34 +96,6 @@ template <class TYPE>::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYP
     }
     return s_pProps;
 }
-
-namespace internal
-{
-template <class T> void implCopySequence(const T* _pSource, T*& _pDest, sal_Int32 _nSourceLen)
-{
-    for (sal_Int32 i = 0; i < _nSourceLen; ++i, ++_pSource, ++_pDest)
-        *_pDest = *_pSource;
-}
-}
-
-/// concat two sequences
-template <class T>
-css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft,
-                                      const css::uno::Sequence<T>& _rRight)
-{
-    sal_Int32 nLeft(_rLeft.getLength()), nRight(_rRight.getLength());
-    const T* pLeft = _rLeft.getConstArray();
-    const T* pRight = _rRight.getConstArray();
-
-    sal_Int32 nReturnLen(nLeft + nRight);
-    css::uno::Sequence<T> aReturn(nReturnLen);
-    T* pReturn = aReturn.getArray();
-
-    internal::implCopySequence(pLeft, pReturn, nLeft);
-    internal::implCopySequence(pRight, pReturn, nRight);
-
-    return aReturn;
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

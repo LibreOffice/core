@@ -30,6 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 
