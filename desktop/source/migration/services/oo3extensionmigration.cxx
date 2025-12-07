@@ -281,12 +281,10 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    const Any* pIter = aArguments.getConstArray();
-    const Any* pEnd = pIter + aArguments.getLength();
-    for ( ; pIter != pEnd ; ++pIter )
+    for (const Any& rArg : aArguments)
     {
         beans::NamedValue aValue;
-        *pIter >>= aValue;
+        rArg >>= aValue;
         if ( aValue.Name == "UserData" )
         {
             if ( !(aValue.Value >>= m_sSourceDir) )
@@ -360,16 +358,10 @@ void TmpRepositoryCommandEnv::handle(
     bool approve = true;
 
     // select:
-    uno::Sequence< Reference< task::XInteractionContinuation > > conts(
-        xRequest->getContinuations() );
-    Reference< task::XInteractionContinuation > const * pConts =
-        conts.getConstArray();
-    sal_Int32 len = conts.getLength();
-    for ( sal_Int32 pos = 0; pos < len; ++pos )
+    for (const Reference<task::XInteractionContinuation>& rCont : xRequest->getContinuations())
     {
         if (approve) {
-            uno::Reference< task::XInteractionApprove > xInteractionApprove(
-                pConts[ pos ], uno::UNO_QUERY );
+            uno::Reference<task::XInteractionApprove> xInteractionApprove(rCont, uno::UNO_QUERY);
             if (xInteractionApprove.is()) {
                 xInteractionApprove->select();
                 // don't query again for ongoing continuations:

@@ -115,13 +115,11 @@ Sequence<Type> SAL_CALL OMySQLCatalog::getTypes()
     Sequence<Type> aTypes = OCatalog::getTypes();
     std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for (; pBegin != pEnd; ++pBegin)
+    for (const Type& rType : aTypes)
     {
-        if (*pBegin != cppu::UnoType<XGroupsSupplier>::get())
+        if (rType != cppu::UnoType<XGroupsSupplier>::get())
         {
-            aOwnTypes.push_back(*pBegin);
+            aOwnTypes.push_back(rType);
         }
     }
     return Sequence<Type>(aOwnTypes.data(), aOwnTypes.size());

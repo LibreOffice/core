@@ -3971,14 +3971,12 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
     if ( !xSection.is() )
         return;
 
-    const beans::PropertyValue* pIter = _aArgs.getConstArray();
-    const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
-    const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter, pEnd,
+    const beans::PropertyValue* pKeyModifier = ::std::find_if(_aArgs.begin(), _aArgs.end(),
         [] (const beans::PropertyValue& x) -> bool {
             return x.Name == "KeyModifier";
         });
     sal_Int16 nKeyModifier = 0;
-    if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
+    if ( pKeyModifier == _aArgs.end() || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
     {
         Sequence< PropertyValue > aCreateArgs;
         getDesignView()->unmarkAllObjects();

@@ -56,22 +56,20 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
     {
         uno::Reference< io::XStream > xSubStream;
         OUString aPwd;
-        const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
-        sal_Int32 nAttribs = rFilterData.getLength();
         sal_Int32 nPwPos = -1;
-        for( sal_Int32 i = 0; i < nAttribs; i++ )
+        for( sal_Int32 i = 0; i < rFilterData.getLength(); i++ )
         {
-            SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name
-                    << " = " << (pAttribs[i].Value.has<OUString>()
-                            ? pAttribs[i].Value.get<OUString>()
+            SAL_INFO("sdext.pdfimport", "filter: Attrib: " << rFilterData[i].Name
+                    << " = " << (rFilterData[i].Value.has<OUString>()
+                            ? rFilterData[i].Value.get<OUString>()
                             : u"<no string>"_ustr)
                     << "\n");
-            if ( pAttribs[i].Name == "EmbeddedSubstream" )
-                pAttribs[i].Value >>= xSubStream;
-            else if ( pAttribs[i].Name == "Password" )
+            if (rFilterData[i].Name == "EmbeddedSubstream")
+                rFilterData[i].Value >>= xSubStream;
+            else if (rFilterData[i].Name == "Password")
             {
                 nPwPos = i;
-                pAttribs[i].Value >>= aPwd;
+                rFilterData[i].Value >>= aPwd;
             }
         }
         bool bAddPwdProp = false;

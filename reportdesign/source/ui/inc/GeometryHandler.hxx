@@ -90,8 +90,8 @@ namespace rptui
         */
         sal_uInt32 impl_getDataFieldType_throw(const OUString& _sDataField = OUString()) const;
 
-        css::uno::Any getConstantValue(bool bToControlValue,const TranslateId* pResId,const css::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
-        css::beans::Property getProperty(const OUString & PropertyName);
+        css::uno::Any getConstantValue(bool bToControlValue,const TranslateId* pResId,const css::uno::Any& _aValue,const OUString& _sConstantName,std::u16string_view PropertyName );
+        css::beans::Property getProperty(std::u16string_view PropertyName);
         static void implCreateListLikeControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,css::inspection::LineDescriptor & out_Descriptor

@@ -278,17 +278,11 @@ static Reference< chart2::data::XLabeledDataSequence >
         const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aLabeledSeq,
         const OUString & rRole )
 {
-    Reference< chart2::data::XLabeledDataSequence > aNoResult;
-
-    const Reference< chart2::data::XLabeledDataSequence > * pBegin = aLabeledSeq.getConstArray();
-    const Reference< chart2::data::XLabeledDataSequence > * pEnd = pBegin + aLabeledSeq.getLength();
-    const Reference< chart2::data::XLabeledDataSequence > * pMatch =
-        ::std::find_if( pBegin, pEnd, lcl_MatchesRole( rRole ));
-
-    if( pMatch != pEnd )
+    auto* pMatch = std::find_if(aLabeledSeq.begin(), aLabeledSeq.end(), lcl_MatchesRole(rRole));
+    if (pMatch != aLabeledSeq.end())
         return *pMatch;
 
-    return aNoResult;
+    return {};
 }
 
 static bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xChartDoc )
@@ -5560,7 +5554,6 @@ void ChartExport::exportDataPoints(
         xSeriesProperties->getPropertyValue( u"VaryColorsByPoint"_ustr ) >>= bVaryColorsByPoint;
     }
 
-    const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
     sal_Int32 nElement;
     Reference< chart2::XColorScheme > xColorScheme;
     if( mxNewDiagram.is())
@@ -5570,8 +5563,8 @@ void ChartExport::exportDataPoints(
     {
         o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
         aAttrPointSet.reserve(aDataPointSeq.getLength());
-        for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
-            aAttrPointSet.insert(*p);
+        for (sal_Int32 point : aDataPointSeq)
+            aAttrPointSet.insert(point);
         const auto aEndIt = aAttrPointSet.end();
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
@@ -5631,8 +5624,8 @@ void ChartExport::exportDataPoints(
 
     o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
     aAttrPointSet.reserve(aDataPointSeq.getLength());
-    for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
-        aAttrPointSet.insert(*p);
+    for (sal_Int32 point : aDataPointSeq)
+        aAttrPointSet.insert(point);
     const auto aEndIt = aAttrPointSet.end();
     for( nElement = 0; nElement < nSeriesLength; ++nElement )
     {

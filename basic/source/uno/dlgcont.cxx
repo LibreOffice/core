@@ -422,13 +422,8 @@ Reference< css::resource::XStringResourcePersistence >
 void SfxDialogLibraryContainer::onNewRootStorage()
 {
     // the library container is not modified, go through the libraries and check whether they are modified
-    Sequence< OUString > aNames = maNameContainer.getElementNames();
-    const OUString* pNames = aNames.getConstArray();
-    sal_Int32 nNameCount = aNames.getLength();
-
-    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+    for (const OUString& aName : maNameContainer.getElementNames())
     {
-        OUString aName = pNames[ i ];
         SfxDialogLibrary* pDialogLibrary = static_cast<SfxDialogLibrary*>( getImplLib( aName ) );
 
         Reference< resource::XStringResourcePersistence > xStringResourcePersistence =

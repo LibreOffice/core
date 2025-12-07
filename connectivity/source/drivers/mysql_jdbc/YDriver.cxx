@@ -141,15 +141,13 @@ Sequence<PropertyValue> lcl_convertProperties(T_DRIVERTYPE _eType,
                                               const OUString& _sUrl)
 {
     std::vector<PropertyValue> aProps;
-    const PropertyValue* pSupported = info.getConstArray();
-    const PropertyValue* pEnd = pSupported + info.getLength();
 
     aProps.reserve(info.getLength() + 5);
     bool jdc = false;
-    for (; pSupported != pEnd; ++pSupported)
+    for (const PropertyValue& rSupported : info)
     {
-        aProps.push_back(*pSupported);
-        if (pSupported->Name == "JavaDriverClass")
+        aProps.push_back(rSupported);
+        if (rSupported.Name == "JavaDriverClass")
         {
             jdc = true;
         }

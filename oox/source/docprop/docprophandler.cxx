@@ -249,10 +249,9 @@ void OOXMLDocPropHandler::UpdateDocStatistic( std::u16string_view aChars )
     if ( aName.isEmpty() )
         return;
 
-    sal_Int32 nInd = 0;
-    for ( auto pProp = aSet.getConstArray(); nInd < aSet.getLength(); ++nInd )
-        if ( pProp[nInd].Name == aName )
-            break;
+    sal_Int32 nInd = std::distance(aSet.begin(), std::find_if(aSet.begin(), aSet.end(),
+                                                              [&aName](const beans::NamedValue& v)
+                                                              { return v.Name == aName; }));
 
     if (nInd == aSet.getLength())
         aSet.realloc( nInd + 1 );

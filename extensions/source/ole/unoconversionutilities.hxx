@@ -1089,7 +1089,6 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
             void* pSAData;
             if( SUCCEEDED( SafeArrayAccessData( pArray, &pSAData)))
             {
-                const sal_Int32* parElementCount= seqElementCounts.getConstArray();
                 uno_Sequence * pMultiSeq= *static_cast<uno_Sequence* const*>(rSeq.getValue());
                 sal_Int32 dimsSeq= dims - 1;
 
@@ -1139,13 +1138,13 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
                     // Calculate the current position within the datablock of the SAFEARRAY
                     // for the next Sequence.
                     sal_Int32 memOffset= 0;
-                    sal_Int32 dimWeight= parElementCount[ dims - 1]; // size of the rightmost dimension
+                    sal_Int32 dimWeight = seqElementCounts[dims - 1]; // size of the rightmost dimension
                     for(sal_Int32 idims=0; idims < dimsSeq; idims++ )
                     {
                         memOffset+= arDimsSeqIndices[dimsSeq - 1 - idims] * dimWeight;
                         // now determine the weight of the dimension to the left of the current.
                         if( dims - 2 - idims >=0)
-                            dimWeight*= parElementCount[dims - 2 - idims];
+                            dimWeight *= seqElementCounts[dims - 2 - idims];
                     }
                     psaCurrentData= static_cast<char*>(pSAData) + memOffset * oleElementSize;
                     // convert the Sequence and put the elements into the Safearray
@@ -1174,7 +1173,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
                         psaCurrentData+= oleElementSize;
                     }
                 }
-                while( incrementMultidimensionalIndex( dimsSeq, parElementCount, arDimsSeqIndices));
+                while( incrementMultidimensionalIndex( dimsSeq, seqElementCounts.getConstArray(), arDimsSeqIndices));
 
                 SafeArrayUnaccessData( pArray);
             }

@@ -1269,26 +1269,22 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark( const  Any& /*bookmark*/ )
 Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& rows )
 {
     Sequence< sal_Int32 > aRet(rows.getLength());
-    sal_Int32 *pRet = aRet.getArray();
-
-    const Any *pBegin   = rows.getConstArray();
-    const Any *pEnd     = pBegin + rows.getLength();
-
-    for(;pBegin != pEnd;++pBegin,++pRet)
-    {
-        try
-        {
-            if(moveToBookmark(*pBegin))
-            {
-                deleteRow();
-                *pRet = 1;
-            }
-        }
-        catch(const SQLException&)
-        {
-            *pRet = 0;
-        }
-    }
+    std::transform(rows.begin(), rows.end(), aRet.getArray(),
+                   [this](const Any& row)
+                   {
+                       try
+                       {
+                           if (moveToBookmark(row))
+                           {
+                               deleteRow();
+                               return 1;
+                           }
+                       }
+                       catch (const SQLException&)
+                       {
+                       }
+                       return 0;
+                   });
     return aRet;
 }
 

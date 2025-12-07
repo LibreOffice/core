@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 
+#include <comphelper/sequence.hxx>
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <com/sun/star/io/NotConnectedException.hpp>
@@ -62,15 +63,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
                 if( seqStart.hasElements() )
                 {
                   // prefix with what we had so far.
-                  sal_Int32 nLength = seq.getLength();
-                  seq.realloc( seqStart.getLength() + nLength );
-
-                  memmove (seq.getArray() + seqStart.getLength(),
-                       seq.getConstArray(),
-                       nLength);
-                  memcpy  (seq.getArray(),
-                       seqStart.getConstArray(),
-                       seqStart.getLength());
+                    seq = comphelper::concatSequences(seqStart, seq);
                 }
 
                 // autodetection with the first bytes

@@ -148,13 +148,10 @@ namespace pcr
             if ( !xSourceInfo.is() || !xDestInfo.is() )
                 return;
 
-            Sequence< Property > aProperties( xSourceInfo->getProperties() );
-            const Property* pProperties = aProperties.getConstArray();
-            const Property* pPropertiesEnd = pProperties + aProperties.getLength();
-            for ( ; pProperties != pPropertiesEnd; ++pProperties )
+            for (const Property& rProp : xSourceInfo->getProperties())
             {
-                if ( xDestInfo->hasPropertyByName( pProperties->Name ) )
-                    _rxDest->setPropertyValue( pProperties->Name, _rxSource->getPropertyValue( pProperties->Name ) );
+                if (xDestInfo->hasPropertyByName(rProp.Name))
+                    _rxDest->setPropertyValue(rProp.Name, _rxSource->getPropertyValue(rProp.Name));
             }
         }
     }

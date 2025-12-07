@@ -356,11 +356,9 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             Sequence< PropertyValue > aComponent;
             rProp.Value >>= aComponent;
-            const PropertyValue* pComponentIter = aComponent.getConstArray();
-            const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
-            pComponentIter = std::find_if(pComponentIter, pComponentEnd,
+            auto pComponentIter = std::find_if(aComponent.begin(), aComponent.end(),
                 [](const PropertyValue& rComponent) { return rComponent.Name == "ActiveConnection"; });
-            if (pComponentIter != pComponentEnd)
+            if (pComponentIter != aComponent.end())
             {
                 uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value, uno::UNO_QUERY);
                 xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);

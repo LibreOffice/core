@@ -784,7 +784,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                     // In parameter
                     if( pMethod->pParams[i].bIn && ! pMethod->pParams[i].bOut)
                     {
-                        anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
+                        anyToVariant( &pVarParams[parameterCount - i -1], Params[i]);
                     }
                     // Out parameter + in/out parameter
                     else if( pMethod->pParams[i].bOut )
@@ -937,7 +937,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                     // In parameter
                     if( pMethod->pParams[i].bIn && ! pMethod->pParams[i].bOut)
                     {
-                        anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
+                        anyToVariant( &pVarParams[parameterCount - i -1], Params[i]);
                     }
                     // Out parameter + in/out parameter
                     else if( pMethod->pParams[i].bOut )
@@ -962,7 +962,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                         if( pMethod->pParams[i].bIn ) // in / out
                         {
                             CComVariant varParam;
-                            anyToVariant( &varParam, Params.getConstArray()[i]);
+                            anyToVariant( &varParam, Params[i]);
                             CComDispatchDriver dispDriver( pDisp);
                             if(FAILED( dispDriver.PutPropertyByName( L"0", &varParam)))
                                 throw BridgeRuntimeError(
@@ -1359,7 +1359,7 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
                 arRefArgs[revIndex].byref = nullptr;
                 Any  anyArg;
                 if ( nInd < aParams.getLength() )
-                    anyArg = aParams.getConstArray()[nInd];
+                    anyArg = aParams[nInd];
 
                 // Property Put arguments
                 if ( anyArg.getValueType() == cppu::UnoType<PropertyPutArgument>::get() )
@@ -1805,7 +1805,7 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             arRefArgs[revIndex].byref=nullptr;
             Any  anyArg;
             if ( i < nUnoArgs)
-                anyArg= Params.getConstArray()[i];
+                anyArg= Params[i];
 
             unsigned short paramFlags = PARAMFLAG_FOPT | PARAMFLAG_FIN;
             VARTYPE varType = VT_VARIANT;
@@ -2115,7 +2115,6 @@ void IUnknownWrapper::getFuncDescForInvoke(const OUString & sFuncName,
                                            FUNCDESC** pFuncDesc)
 {
     int nUnoArgs = seqArgs.getLength();
-    const Any * arArgs = seqArgs.getConstArray();
     ITypeInfo* pInfo = getTypeInfo();
 
     //If the last of the positional arguments is a PropertyPutArgument
@@ -2125,7 +2124,7 @@ void IUnknownWrapper::getFuncDescForInvoke(const OUString & sFuncName,
     //or in a list of named arguments. A PropertyPutArgument is actually a named argument
     //hence it must not be put in an extra NamedArgument structure
     if (nUnoArgs > 0 &&
-        arArgs[nUnoArgs - 1].getValueType() == cppu::UnoType<PropertyPutArgument>::get())
+        seqArgs[nUnoArgs - 1].getValueType() == cppu::UnoType<PropertyPutArgument>::get())
     {
         // DISPATCH_PROPERTYPUT
         FuncDesc aDescGet(pInfo);

@@ -89,12 +89,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
     {
         css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
-        const OUString* pStart = sServices.getConstArray();
-        const OUString* pEnd = pStart + sServices.getLength();
-        for ( ; pStart != pEnd ; ++pStart )
-            if ( *pStart == ServiceName )
-                return true;
-        return false;
+        return std::find(sServices.begin(), sServices.end(), ServiceName) != sServices.end();
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
     {
