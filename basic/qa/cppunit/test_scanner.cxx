@@ -45,8 +45,8 @@ private:
     void testNumbers();
     void testDataType();
     void testHexOctal();
-    void testTdf103104();
-    void testTdf136032();
+    void testTdf103104_accept_dot_after_line_continuation();
+    void testTdf136032_end_scan_on_comma();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(ScannerTest);
@@ -62,8 +62,8 @@ private:
     CPPUNIT_TEST(testNumbers);
     CPPUNIT_TEST(testDataType);
     CPPUNIT_TEST(testHexOctal);
-    CPPUNIT_TEST(testTdf103104);
-    CPPUNIT_TEST(testTdf136032);
+    CPPUNIT_TEST(testTdf103104_accept_dot_after_line_continuation);
+    CPPUNIT_TEST(testTdf136032_end_scan_on_comma);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -1111,7 +1111,7 @@ void ScannerTest::testHexOctal()
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 }
 
-void ScannerTest::testTdf103104()
+void ScannerTest::testTdf103104_accept_dot_after_line_continuation()
 {
     std::vector<Symbol> symbols;
 
@@ -1141,7 +1141,7 @@ void ScannerTest::testTdf103104()
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
 }
 
-void ScannerTest::testTdf136032()
+void ScannerTest::testTdf136032_end_scan_on_comma()
 {
     std::vector<Symbol> symbols;
     sal_Int32 errors;
