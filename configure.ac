@@ -4829,10 +4829,10 @@ if test "$COM_IS_CLANG" = TRUE; then
         CLANG_FULL_VERSION=`echo __clang_version__ | $CC $my_args -`
         CLANGVER=`echo $clang_version \
             | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
-        if test "$CLANGVER" -ge 120000; then
+        if test "$CLANGVER" -ge 180000; then
             AC_MSG_RESULT([yes ($clang_version)])
         else
-            AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 12])
+            AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 18])
         fi
         if test "$CLANGVER" -ge 160000; then
             CLANG_16=TRUE
