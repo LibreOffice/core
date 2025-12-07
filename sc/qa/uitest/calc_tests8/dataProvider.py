@@ -42,6 +42,9 @@ class DataProvider(UITestCase):
                 self.assertEqual("CSV", get_state_as_dict(xProvider)['DisplayText'])
 
                 # tdf#165658: without the fix in place, it would have crashed here
+                # The fix for error 169049 changes the process slightly. The problem of no database
+                # range being specified is now detected earlier and an error message is displayed to
+                # the user.
                 with self.ui_test.execute_blocking_action(
                         xApply.executeAction, args=('CLICK', ()), close_button="close") as dialog:
                     pass
@@ -185,5 +188,54 @@ class DataProvider(UITestCase):
             self.assertEqual("Region", get_cell_by_position(document, 1, 8, 4).getString())
             self.assertEqual("Name", get_cell_by_position(document, 1, 9, 4).getString())
             self.assertEqual("Sales", get_cell_by_position(document, 1, 10, 4).getString())
+
+    def test_consider_labels_when_sorting(self):
+
+        with self.ui_test.load_file(get_url_for_data_file('tdf169049_WithLabel.ods')) as document:
+
+            with self.ui_test.execute_dialog_through_command(".uno:DataProvider") as xDialog:
+                xDB = xDialog.getChild("select_db_range")
+                select_by_text(xDB, "withheader")
+                self.assertEqual("withheader", get_state_as_dict(xDB)['DisplayText'])
+
+                xProvider = xDialog.getChild("provider_lst")
+                select_by_text(xProvider, "CSV")
+                self.assertEqual("CSV", get_state_as_dict(xProvider)['DisplayText'])
+
+                xURL = xDialog.getChild("ed_url")
+                xBrowse = xDialog.getChild("browse")
+                with self.ui_test.execute_blocking_action(
+                        xBrowse.executeAction, args=('CLICK', ()), close_button="") as dialog:
+                    xFileName = dialog.getChild("file_name")
+                    xFileName.executeAction(
+                        "TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf169049_Source.csv")}))
+                    xOpen = dialog.getChild("open")
+                    xOpen.executeAction("CLICK", tuple())
+                self.assertEqual(get_url_for_data_file("tdf169049_Source.csv"),
+                                 get_state_as_dict(xURL)['Text'])
+
+                xTransformation = xDialog.getChild("transformation_box")
+                select_by_text(xTransformation, "Sort Columns")
+                self.assertEqual("Sort Columns",
+                                 get_state_as_dict(xTransformation)['DisplayText'])
+
+                xAdd = xDialog.getChild("add_transformation")
+                xAdd.executeAction("CLICK", tuple())
+                xAscending = xDialog.getChild("ed_ascending")
+                select_by_text(xAscending, "Ascending Order")
+                self.assertEqual("Ascending Order", get_state_as_dict(xAscending)['DisplayText'])
+
+                xByColumn = xDialog.getChild("ed_columns")
+                xByColumn.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
+
+                # The transformation is only performed after clicking the Apply button.
+                xApply = xDialog.getChild("apply")
+                xApply.executeAction("CLICK", tuple())
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'Name' != 'Ali'
+            self.assertEqual("Name", get_cell_by_position(document, 0, 3, 1).getString())
+            self.assertEqual("Ali", get_cell_by_position(document, 0, 3, 2).getString())
+            self.assertEqual("Frieda", get_cell_by_position(document, 0, 3, 9).getString())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

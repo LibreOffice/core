@@ -40,28 +40,7 @@ public:
     void updateIndex(sal_uInt32 nIndex) { mnIndex = nIndex; }
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() = 0;
-
-    static SCROW getLastRow(const ScDocument& rDoc);
-    static SCCOL getLastCol(const ScDocument& rDoc);
 };
-
-SCROW ScDataTransformationBaseControl::getLastRow(const ScDocument& rDoc)
-{
-    SCROW nEndRow = rDoc.MaxRow();
-    return rDoc.GetLastDataRow(0, 0, 0, nEndRow);
-}
-
-SCCOL ScDataTransformationBaseControl::getLastCol(const ScDocument& rDoc)
-{
-    for (SCCOL nCol = 1; nCol <= rDoc.MaxCol(); ++nCol)
-    {
-        if (rDoc.GetCellType(nCol, 0, 0) == CELLTYPE_NONE)
-        {
-            return static_cast<SCCOL>(nCol - 1 );
-        }
-    }
-    return rDoc.MaxCol();
-}
 
 ScDataTransformationBaseControl::ScDataTransformationBaseControl(weld::Container* pParent, const OUString& rUIFile, sal_uInt32 nIndex)
     : mxBuilder(Application::CreateBuilder(pParent, rUIFile))
@@ -274,10 +253,44 @@ std::shared_ptr<sc::DataTransformation> ScSortTransformationControl::getTransfor
         aColumn = nCol - 1;     // translate from 1-based column notations to internal Calc one
 
     ScSortParam aSortParam;
-    aSortParam.nRow1=0;
-    aSortParam.nRow2=getLastRow(*mpDoc);
-    aSortParam.nCol1=0;
-    aSortParam.nCol2=getLastCol(*mpDoc);
+    SCCOL nEndCol = mpDoc->MaxCol();
+    SCROW nEndRow = mpDoc->MaxRow();
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCTAB nTab = 0; // for internal doc in case of Apply and clipboard in case of OK
+    if (!mpDoc->ShrinkToDataArea(nTab, nStartCol, nStartRow, nEndCol, nEndRow))
+    {
+        // tdf#169515 The preview document does not show the sorted data. Reason: ShrinkToDataArea
+        // fails. ToDo: Why?
+        // Workaround: We use the size of the "internalhelper" database range instead. In case the
+        // user has defined a huge range, LibreOffice seems to hang. Thus the size is restricted here
+        // although the preview does not show the final result in that case.
+        ScDBCollection::NamedDBs& rLocalDBs = mpDoc->GetDBCollection()->getNamedDBs();
+        ScDBData* pDB = rLocalDBs.findByName(u"internalhelper"_ustr);
+        if (pDB)
+        {
+            pDB->GetArea(nTab, nStartCol, nStartRow, nEndCol, nEndRow);
+            nEndCol = std::min<SCCOL>(nEndCol, nStartCol + 30);
+            nEndRow = std::min<SCROW>(nEndRow, nStartRow + 10000);
+        }
+        else
+        { // should not happen
+            nEndCol = 30;
+            nEndRow = 10000;
+        }
+    }
+    aSortParam.nCol1 = nStartCol;
+    aSortParam.nRow1 = nStartRow;
+    aSortParam.nCol2 = nEndCol;
+    aSortParam.nRow2 = nEndRow;
+    {
+        ScDBCollection::NamedDBs& rLocalDBs = mpDoc->GetDBCollection()->getNamedDBs();
+        ScDBData* pDB = rLocalDBs.findByName(u"internalhelper"_ustr);
+        if (pDB)
+            aSortParam.bHasHeader = pDB->HasHeader();
+        else
+            aSortParam.bHasHeader = true;
+    }
     aSortParam.maKeyState[0].bDoSort = true;
     aSortParam.maKeyState[0].nField = aColumn;
     aSortParam.maKeyState[0].bAscending = aIsAscending;
@@ -786,8 +799,8 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     mxBox->set_size_request(aPrefSize.Width(), aPrefSize.Height());
     mxTable->Show();
 
-    ScDBCollection* pDBCollection = pDocument->GetDBCollection();
-    auto& rNamedDBs = pDBCollection->getNamedDBs();
+    mpDestDBCollection = pDocument->GetDBCollection();
+    auto& rNamedDBs = mpDestDBCollection->getNamedDBs();
     for (auto& rNamedDB : rNamedDBs)
     {
         mxDBRanges->append_text(rNamedDB->GetName());
@@ -1007,7 +1020,7 @@ void ScDataProviderDlg::swapRowsTransformation()
 
 namespace {
 
-bool hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
+bool lcl_hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
 {
     if (pDBCollection->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(rName)))
         return true;
@@ -1029,6 +1042,38 @@ void ScDataProviderDlg::clearTablePreview()
 
 void ScDataProviderDlg::import(ScDocument& rDoc, bool bInternal)
 {
+    OUString sDestDBUpperName = ScGlobal::getCharClass().uppercase(mxDBRanges->get_active_text());
+    ScDBData* pDestDBRange = mpDestDBCollection->getNamedDBs().findByUpperName(sDestDBUpperName);
+    if (!pDestDBRange)
+    {
+        if (bInternal)
+        {
+            std::unique_ptr<weld::MessageDialog> xMsgBox(
+                Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Error,
+                VclButtonsType::Close, ScResId(STR_DATAPROVIDER_NODATABASERANGE)));
+            xMsgBox->run();
+        }
+        return;
+    }
+
+    if (bInternal)
+    {
+        // Use an additional database range in the temporary document to provide infos for transformations.
+        // Currently used for ersatz area in sorting and for HasHeader flag.
+        ScRange aDestRange;
+        pDestDBRange->GetArea(aDestRange);
+        SCCOL nHelperCol = aDestRange.aEnd.Col() - aDestRange.aStart.Col();
+        SCROW nHelperRow = aDestRange.aEnd.Row() - aDestRange.aStart.Row();
+        ScDBData* pDBHelper = new ScDBData(u"internalhelper"_ustr, 0, 0, 0, nHelperCol, nHelperRow);
+        pDBHelper->SetHeader(pDestDBRange->HasHeader());
+        ScDBCollection::NamedDBs& rLocalDBs = rDoc.GetDBCollection()->getNamedDBs();
+        auto iter = rLocalDBs.findByUpperName2(u"INTERNALHELPER"_ustr);
+        if (iter != rLocalDBs.end())
+            rLocalDBs.erase(iter);
+        bool bSuccess = rLocalDBs.insert(std::unique_ptr<ScDBData>(pDBHelper));
+        SAL_WARN_IF(!bSuccess, "sc", "Could not generate DBRange.");
+    }
+
     sc::ExternalDataSource aSource = getDataSource(&rDoc);
 
     for (size_t i = 0; i < maControls.size(); ++i)
@@ -1041,7 +1086,7 @@ void ScDataProviderDlg::import(ScDocument& rDoc, bool bInternal)
     else
     {
         aSource.setDBData(mxDBRanges->get_active_text());
-        if (!hasDBName(aSource.getDBName(), rDoc.GetDBCollection()))
+        if (!lcl_hasDBName(aSource.getDBName(), rDoc.GetDBCollection()))
             return;
         rDoc.GetExternalDataMapper().insertDataSource(aSource);
     }
