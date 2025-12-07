@@ -221,7 +221,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     // sigma and equal buttons
     if (!bIsLOKMobilePhone)
     {
-        SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
+        SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUM);
         SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
         SetHelpId   (SID_INPUT_CANCEL, HID_INSWIN_CANCEL);
         SetHelpId   (SID_INPUT_OK, HID_INSWIN_OK);
