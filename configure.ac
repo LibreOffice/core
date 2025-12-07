@@ -5078,11 +5078,7 @@ check_use_ld()
     use_ld_path=${1#*:}
     if test "$use_ld_path" != "$1"; then
         if test "$COM_IS_CLANG" = TRUE; then
-            if test "$CLANGVER" -ge 120000; then
-                use_ld="${use_ld} --ld-path=${use_ld_path}"
-            else
-                use_ld="-fuse-ld=${use_ld_path}"
-            fi
+            use_ld="${use_ld} --ld-path=${use_ld_path}"
         else
             # I tried to use gcc's '-B<path>' and a directory + symlink setup in
             # $BUILDDIR, but libtool always filtered-out that option, so gcc wouldn't
