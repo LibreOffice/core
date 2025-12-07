@@ -68,33 +68,6 @@ namespace pcr
     };
 
 
-    //= StlSyntaxSequence
-
-    template< class ELEMENT >
-    class StlSyntaxSequence : public css::uno::Sequence< ELEMENT >
-    {
-    private:
-        typedef css::uno::Sequence< ELEMENT >  UnoBase;
-
-    public:
-        StlSyntaxSequence() : UnoBase() { }
-        explicit StlSyntaxSequence( const UnoBase& rSeq ) : UnoBase( rSeq ) { }
-        explicit StlSyntaxSequence( sal_Int32 len ) : UnoBase( len ) { }
-
-        typedef const ELEMENT* const_iterator;
-        typedef       ELEMENT* iterator;
-
-        const_iterator begin() const { return UnoBase::getConstArray(); }
-        const_iterator end() const { return UnoBase::getConstArray() + UnoBase::getLength(); }
-
-        iterator begin() { return UnoBase::getArray(); }
-        iterator end() { return UnoBase::getArray() + UnoBase::getLength(); }
-
-        sal_Int32 size() const { return UnoBase::getLength(); }
-        bool empty() const { return !UnoBase::hasElements(); }
-    };
-
-
     //= UNO helpers
 
 #define DECLARE_XCOMPONENT() \

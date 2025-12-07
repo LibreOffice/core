@@ -103,10 +103,9 @@ namespace pcr
         if ( m_bConstructed )
             throw AlreadyInitializedException();
 
-        StlSyntaxSequence< Any > arguments( _arguments );
-        if ( arguments.size() == 1 )
+        if (_arguments.size() == 1)
         {   // constructor: "create( XObjectInspectorUI )"
-            Reference< XObjectInspectorUI > xUI( arguments[0], UNO_QUERY );
+            Reference<XObjectInspectorUI> xUI(_arguments[0], UNO_QUERY);
             create( xUI );
             return;
         }

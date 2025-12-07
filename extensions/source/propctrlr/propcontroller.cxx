@@ -278,17 +278,16 @@ namespace pcr
         if ( m_bConstructed )
             throw AlreadyInitializedException();
 
-        StlSyntaxSequence< Any > arguments( _arguments );
-        if ( arguments.empty() )
+        if (!_arguments.hasElements())
         {   // constructor: "createDefault()"
             m_bConstructed = true;
             return;
         }
 
         Reference< XObjectInspectorModel > xModel;
-        if ( arguments.size() == 1 )
+        if (_arguments.size() == 1)
         {   // constructor: "createWithModel( XObjectInspectorModel )"
-            if ( !( arguments[0] >>= xModel ) )
+            if (!(_arguments[0] >>= xModel))
                 throw IllegalArgumentException( OUString(), *this, 0 );
             createWithModel( xModel );
             return;
@@ -946,9 +945,9 @@ namespace pcr
             {
                 DBG_ASSERT( aHandler->get(), "OPropertyBrowserController::doInspection: invalid handler!" );
 
-                StlSyntaxSequence< Property > aThisHandlersProperties(  (*aHandler)->getSupportedProperties() );
+                Sequence<Property> aThisHandlersProperties((*aHandler)->getSupportedProperties());
 
-                if ( aThisHandlersProperties.empty() )
+                if (!aThisHandlersProperties.hasElements())
                 {
                     // this handler doesn't know anything about the current inspectee -> ignore it
                     (*aHandler)->dispose();
@@ -985,7 +984,7 @@ namespace pcr
                 }
 
                 // determine the superseded properties
-                StlSyntaxSequence< OUString > aSupersededByThisHandler( (*aHandler)->getSupersededProperties() );
+                Sequence<OUString> aSupersededByThisHandler((*aHandler)->getSupersededProperties());
                 for (const auto & superseded : aSupersededByThisHandler)
                 {
                     std::vector< Property >::iterator existent = std::find_if(
@@ -1012,7 +1011,7 @@ namespace pcr
                 }
 
                 // see if the handler expresses interest in any actuating properties
-                StlSyntaxSequence< OUString > aInterestingActuations( (*aHandler)->getActuatingProperties() );
+                Sequence<OUString> aInterestingActuations((*aHandler)->getActuatingProperties());
                 for (const auto & aInterestingActuation : aInterestingActuations)
                 {
                     m_aDependencyHandlers.emplace( aInterestingActuation, *aHandler );
@@ -1127,9 +1126,9 @@ namespace pcr
     {
         OSL_PRECOND( m_aPageIds.empty(), "OPropertyBrowserController::impl_buildCategories_throw: duplicate call!" );
 
-        StlSyntaxSequence< PropertyCategoryDescriptor > aCategories;
+        Sequence<PropertyCategoryDescriptor> aCategories;
         if ( m_xModel.is() )
-            aCategories = StlSyntaxSequence< PropertyCategoryDescriptor >(m_xModel->describeCategories());
+            aCategories = m_xModel->describeCategories();
 
         for (auto const& category : aCategories)
         {

@@ -686,13 +686,13 @@ namespace pcr
     namespace
     {
 
-        StlSyntaxSequence< OUString > lcl_convertMultiLineToList( std::u16string_view _rCompsedTextWithLineBreaks )
+        Sequence<OUString> lcl_convertMultiLineToList(std::u16string_view _rCompsedTextWithLineBreaks)
         {
             sal_Int32 nLines = comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n');
-            StlSyntaxSequence< OUString > aStrings( nLines );
+            Sequence<OUString> aStrings(nLines);
             if (nLines)
             {
-                StlSyntaxSequence< OUString >::iterator stringItem = aStrings.begin();
+                auto stringItem = aStrings.getArray();
                 sal_Int32 nIdx {0};
                 do
                 {
@@ -704,12 +704,10 @@ namespace pcr
             return aStrings;
         }
 
-        OUString lcl_convertListToMultiLine( const StlSyntaxSequence< OUString >& _rStrings )
+        OUString lcl_convertListToMultiLine(const Sequence<OUString>& _rStrings)
         {
             OUStringBuffer sMultiLineText;
-            for (   StlSyntaxSequence< OUString >::const_iterator item = _rStrings.begin();
-                    item != _rStrings.end();
-                )
+            for (auto item = _rStrings.begin(); item != _rStrings.end();)
             {
                 sMultiLineText.append(*item);
                 if ( ++item != _rStrings.end() )
@@ -719,13 +717,10 @@ namespace pcr
         }
 
 
-        OUString lcl_convertListToDisplayText( const StlSyntaxSequence< OUString >& _rStrings )
+        OUString lcl_convertListToDisplayText(const Sequence<OUString>& _rStrings)
         {
             OUStringBuffer aComposed;
-            for (   StlSyntaxSequence< OUString >::const_iterator strings = _rStrings.begin();
-                    strings != _rStrings.end();
-                    ++strings
-                )
+            for (auto strings = _rStrings.begin(); strings != _rStrings.end(); ++strings)
             {
                 if ( strings != _rStrings.begin() )
                     aComposed.append( ';' );
@@ -742,14 +737,14 @@ namespace pcr
         m_xEntry->set_sensitive(m_xEntry->get_text() == m_xTextView->get_text());
     }
 
-    void OMultilineEditControl::SetStringListValue(const StlSyntaxSequence<OUString>& rStrings)
+    void OMultilineEditControl::SetStringListValue(const Sequence<OUString>& rStrings)
     {
         m_xEntry->set_text(lcl_convertListToDisplayText(rStrings));
         m_xTextView->set_text(lcl_convertListToMultiLine(rStrings));
         CheckEntryTextViewMisMatch();
     }
 
-    StlSyntaxSequence<OUString> OMultilineEditControl::GetStringListValue() const
+    Sequence<OUString> OMultilineEditControl::GetStringListValue() const
     {
         return lcl_convertMultiLineToList(m_xTextView->get_text());
     }
@@ -833,7 +828,7 @@ namespace pcr
                 Sequence< OUString > aStringLines;
                 if ( !( _rValue >>= aStringLines ) && _rValue.hasValue() )
                     throw IllegalTypeException();
-                SetStringListValue( StlSyntaxSequence<OUString>(aStringLines) );
+                SetStringListValue(aStringLines);
                 break;
             }
         }
