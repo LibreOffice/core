@@ -258,17 +258,10 @@ namespace pcr
 
     Sequence< Reference< XDispatch > > SAL_CALL OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests )
     {
-        Sequence< Reference< XDispatch > > aReturn;
-        sal_Int32 nLen = Requests.getLength();
-        aReturn.realloc( nLen );
-
-        Reference< XDispatch >* pReturn     = aReturn.getArray();
-        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
-        const   DispatchDescriptor*     pDescripts  = Requests.getConstArray();
-
-        for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
-            *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
-
+        Sequence<Reference<XDispatch>> aReturn(Requests.getLength());
+        std::transform(Requests.begin(), Requests.end(), aReturn.getArray(),
+                       [this](const DispatchDescriptor& d)
+                       { return queryDispatch(d.FeatureURL, d.FrameName, d.SearchFlags); });
         return aReturn;
     }
 

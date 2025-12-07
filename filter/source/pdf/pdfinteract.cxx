@@ -56,9 +56,8 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
     if( aRequest >>= aExc )
     {
         std::set< vcl::pdf::PDFWriter::ErrorCode > aCodes;
-        sal_Int32 nCodes = aExc.ErrorCodes.getLength();
-        for( sal_Int32 i = 0; i < nCodes; i++ )
-            aCodes.insert( static_cast<vcl::pdf::PDFWriter::ErrorCode>(aExc.ErrorCodes.getConstArray()[i]) );
+        for (const sal_Int32 nErrorCode : aExc.ErrorCodes)
+            aCodes.insert(static_cast<vcl::pdf::PDFWriter::ErrorCode>(nErrorCode));
 
         ImplErrorDialog aDlg(Application::GetFrameWeld(m_xParent), aCodes);
         aDlg.run();

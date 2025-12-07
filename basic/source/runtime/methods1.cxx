@@ -1567,8 +1567,7 @@ void SbRtl_MonthName(StarBASIC *, SbxArray & rPar, bool)
     if( nParCount == 3 )
         bAbbreviate = rPar.Get(2)->GetBool();
 
-    const CalendarItem2* pCalendarItems = aMonthSeq.getConstArray();
-    const CalendarItem2& rItem = pCalendarItems[nVal - 1];
+    const CalendarItem2& rItem = aMonthSeq[nVal - 1];
 
     OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString(aRetStr);
@@ -1625,8 +1624,7 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
         }
     }
 
-    const CalendarItem2* pCalendarItems = aDaySeq.getConstArray();
-    const CalendarItem2& rItem = pCalendarItems[nDay - 1];
+    const CalendarItem2& rItem = aDaySeq[nDay - 1];
 
     OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString(aRetStr);

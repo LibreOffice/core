@@ -117,15 +117,13 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
     const uno::Sequence<beans::PropertyValue>& rEntry( m_aImages[nId] );
 
     // find "InputSequence" property
-    const beans::PropertyValue* pAry(rEntry.getConstArray());
-    const sal_Int32             nLen(rEntry.getLength());
     const beans::PropertyValue* pValue(
-        std::find_if(pAry, pAry+nLen,
+        std::find_if(rEntry.begin(), rEntry.end(),
             [] (beans::PropertyValue const& v) -> bool {
                 return v.Name == "InputSequence";
             }));
 
-    if (pValue == pAry + nLen )
+    if (pValue == rEntry.end())
     {
         SAL_WARN("sdext.pdfimport", "InputSequence not found");
         return;
@@ -148,15 +146,13 @@ OUString ImageContainer::asBase64EncodedString( ImageId nId ) const
     const uno::Sequence<beans::PropertyValue>& rEntry( m_aImages[nId] );
 
     // find "InputSequence" property
-    const beans::PropertyValue* pAry(rEntry.getConstArray());
-    const sal_Int32             nLen(rEntry.getLength());
     const beans::PropertyValue* pValue(
-        std::find_if(pAry, pAry+nLen,
+        std::find_if(rEntry.begin(), rEntry.end(),
             [] (beans::PropertyValue const& v) -> bool {
                 return v.Name == "InputSequence";
             }));
 
-    if (pValue == pAry + nLen )
+    if (pValue == rEntry.end())
     {
         SAL_WARN("sdext.pdfimport", "InputSequence not found");
         return u""_ustr;

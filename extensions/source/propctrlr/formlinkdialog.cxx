@@ -107,10 +107,8 @@ namespace pcr
     {
         weld::ComboBox* pBox = ( _eWhich == eDetailField ) ? m_xDetailColumn.get() : m_xMasterColumn.get();
 
-        const OUString* pFieldName    = _rFieldNames.getConstArray();
-        const OUString* pFieldNameEnd = pFieldName + _rFieldNames.getLength();
-        for ( ; pFieldName != pFieldNameEnd; ++pFieldName )
-            pBox->append_text( *pFieldName );
+        for (const OUString& rFieldName : _rFieldNames)
+            pBox->append_text(rFieldName);
     }
 
     bool FieldLinkRow::GetFieldName( LinkParticipant _eWhich, OUString& /* [out] */ _rName ) const

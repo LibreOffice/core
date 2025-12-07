@@ -194,24 +194,23 @@ namespace
 
 sal_Int32 fillAttributes(uno::Sequence<beans::PropertyValue> const& rFilterData, uno::Reference<io::XInputStream>& xInput, OUString& aURL, sal_Int32& nFilterNamePos, sal_Int32& nPasswordPos, OUString& aPassword)
 {
-    const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
     sal_Int32 nAttribs = rFilterData.getLength();
     for (sal_Int32 i = 0; i < nAttribs; i++)
     {
         OUString aVal( u"<no string>"_ustr );
-        pAttribs[i].Value >>= aVal;
-        SAL_INFO("sdext.pdfimport", "doDetection: Attrib: " + pAttribs[i].Name + " = " + aVal);
+        rFilterData[i].Value >>= aVal;
+        SAL_INFO("sdext.pdfimport", "doDetection: Attrib: " + rFilterData[i].Name + " = " + aVal);
 
-        if (pAttribs[i].Name == "InputStream")
-            pAttribs[i].Value >>= xInput;
-        else if (pAttribs[i].Name == "URL")
-            pAttribs[i].Value >>= aURL;
-        else if (pAttribs[i].Name == "FilterName")
+        if (rFilterData[i].Name == "InputStream")
+            rFilterData[i].Value >>= xInput;
+        else if (rFilterData[i].Name == "URL")
+            rFilterData[i].Value >>= aURL;
+        else if (rFilterData[i].Name == "FilterName")
             nFilterNamePos = i;
-        else if (pAttribs[i].Name == "Password")
+        else if (rFilterData[i].Name == "Password")
         {
             nPasswordPos = i;
-            pAttribs[i].Value >>= aPassword;
+            rFilterData[i].Value >>= aPassword;
         }
     }
     return nAttribs;

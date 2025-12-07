@@ -761,10 +761,7 @@ namespace oglcanvas
                 uno::Sequence<double> aLogicalAdvancements=xLayoutetText->queryLogicalAdvancements();
                 if( aLogicalAdvancements.hasElements() )
                 {
-                    KernArraySpan aDXArray(aLogicalAdvancements.getConstArray(), aLogicalAdvancements.getLength());
-
                     uno::Sequence<sal_Bool> aKashidaPositions=xLayoutetText->queryKashidaPositions();
-                    std::span<const sal_Bool> aKashidaArray(aKashidaPositions.getConstArray(), aKashidaPositions.getLength());
 
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,
@@ -773,8 +770,8 @@ namespace oglcanvas
                                           aTxt.StartPosition,
                                           aTxt.Length,
                                           0,
-                                          aDXArray,
-                                          aKashidaArray);
+                                          aLogicalAdvancements,
+                                          aKashidaPositions);
                 }
                 else
                 {

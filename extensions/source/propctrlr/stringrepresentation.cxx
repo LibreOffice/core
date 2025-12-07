@@ -237,14 +237,13 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
     if ( !nLength )
         return;
 
-    const uno::Any* pIter = aArguments.getConstArray();
-    m_xTypeConverter.set(*pIter++,uno::UNO_QUERY);
+    m_xTypeConverter.set(aArguments[0], uno::UNO_QUERY);
     if ( nLength != 3 )
         return;
 
     OUString sConstantName;
-    *pIter++ >>= sConstantName;
-    *pIter >>= m_aValues;
+    aArguments[1] >>= sConstantName;
+    aArguments[2] >>= m_aValues;
 
     if ( !m_xContext.is() )
         return;
@@ -274,11 +273,9 @@ OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )
                 sal_Int16 nConstantValue = 0;
                 if ( _rValue >>= nConstantValue )
                 {
-                    const uno::Reference< reflection::XConstantTypeDescription>* pIter = m_aConstants.getConstArray();
-                    const uno::Reference< reflection::XConstantTypeDescription>* pEnd  = pIter + m_aConstants.getLength();
-                    for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
+                    for (sal_Int32 i = 0; i < m_aConstants.getLength(); ++i)
                     {
-                        if ( (*pIter)->getConstantValue() == _rValue )
+                        if (m_aConstants[i]->getConstantValue() == _rValue)
                         {
                             OSL_ENSURE(i < m_aValues.getLength() ,"StringRepresentation::convertSimpleToString: Index is not in range of m_aValues");
                             sReturn = m_aValues[i];
@@ -465,11 +462,9 @@ uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,co
         {
             if ( m_aConstants.hasElements() && m_aValues.hasElements() )
             {
-                const OUString* pIter = m_aValues.getConstArray();
-                const OUString* pEnd   = pIter + m_aValues.getLength();
-                for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
+                for (sal_Int32 i = 0; i < m_aValues.getLength(); ++i)
                 {
-                    if ( *pIter == _rValue )
+                    if (m_aValues[i] == _rValue)
                     {
                         OSL_ENSURE(i < m_aConstants.getLength() ,"StringRepresentation::convertSimpleToString: Index is not in range of m_aValues");
                         aReturn = m_aConstants[i]->getConstantValue();

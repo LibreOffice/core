@@ -2517,8 +2517,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                     }
                     else
                     {
-                        OUString aFile
-                            = rRTLData.aDirSeq.getConstArray()[rRTLData.nCurDirPos++];
+                        OUString aFile = rRTLData.aDirSeq[rRTLData.nCurDirPos++];
 
                         if( bCompatibility )
                         {

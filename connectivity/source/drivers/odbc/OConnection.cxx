@@ -183,71 +183,69 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
 
     sal_Int32 nTimeout = 20;
     bool bSilent = true;
-    const PropertyValue *pBegin = info.getConstArray();
-    const PropertyValue *pEnd   = pBegin + info.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    for (const PropertyValue& rPropertyValue : info)
     {
-        if( pBegin->Name == "Timeout")
+        if (rPropertyValue.Name == "Timeout")
         {
-            if( ! (pBegin->Value >>= nTimeout) )
+            if (!(rPropertyValue.Value >>= nTimeout))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property Timeout");
         }
-        else if( pBegin->Name == "Silent")
+        else if (rPropertyValue.Name == "Silent")
         {
-            if( ! (pBegin->Value >>= bSilent) )
+            if (!(rPropertyValue.Value >>= bSilent))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property Silent");
         }
-        else if( pBegin->Name == "IgnoreDriverPrivileges")
+        else if (rPropertyValue.Name == "IgnoreDriverPrivileges")
         {
-            if( ! (pBegin->Value >>= m_bIgnoreDriverPrivileges) )
+            if (!(rPropertyValue.Value >>= m_bIgnoreDriverPrivileges))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property IgnoreDriverPrivileges");
         }
-        else if( pBegin->Name == "PreventGetVersionColumns")
+        else if (rPropertyValue.Name == "PreventGetVersionColumns")
         {
-            if( ! (pBegin->Value >>= m_bPreventGetVersionColumns) )
+            if (!(rPropertyValue.Value >>= m_bPreventGetVersionColumns))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property PreventGetVersionColumns");
         }
-        else if( pBegin->Name == "IsAutoRetrievingEnabled")
+        else if (rPropertyValue.Name == "IsAutoRetrievingEnabled")
         {
             bool bAutoRetrievingEnabled = false;
-            if( ! (pBegin->Value >>= bAutoRetrievingEnabled) )
+            if (!(rPropertyValue.Value >>= bAutoRetrievingEnabled))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property IsAutoRetrievingEnabled");
             enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
         }
-        else if( pBegin->Name == "AutoRetrievingStatement")
+        else if (rPropertyValue.Name == "AutoRetrievingStatement")
         {
             OUString sGeneratedValueStatement;
-            if( ! (pBegin->Value >>= sGeneratedValueStatement) )
+            if (!(rPropertyValue.Value >>= sGeneratedValueStatement))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property AutoRetrievingStatement");
             setAutoRetrievingStatement(sGeneratedValueStatement);
         }
-        else if( pBegin->Name == "user")
+        else if (rPropertyValue.Name == "user")
         {
-            if( ! (pBegin->Value >>= aUID) )
+            if (!(rPropertyValue.Value >>= aUID))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property user");
             aDSN += ";UID=" + aUID;
         }
-        else if( pBegin->Name == "password")
+        else if (rPropertyValue.Name == "password")
         {
-            if( ! (pBegin->Value >>= aPWD) )
+            if (!(rPropertyValue.Value >>= aPWD))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property password");
             aDSN += ";PWD=" + aPWD;
         }
-        else if( pBegin->Name == "UseCatalog")
+        else if (rPropertyValue.Name == "UseCatalog")
         {
-             if( !( pBegin->Value >>= m_bUseCatalog) )
+            if (!(rPropertyValue.Value >>= m_bUseCatalog))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property UseCatalog");
         }
-        else if( pBegin->Name == "SystemDriverSettings")
+        else if (rPropertyValue.Name == "SystemDriverSettings")
         {
-            if( ! (pBegin->Value >>= aSysDrvSettings) )
+            if (!(rPropertyValue.Value >>= aSysDrvSettings))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property SystemDriverSettings");
             aDSN += ";" + aSysDrvSettings;
         }
-        else if( pBegin->Name == "CharSet")
+        else if (rPropertyValue.Name == "CharSet")
         {
             OUString sIanaName;
-            if( ! (pBegin->Value >>= sIanaName) )
+            if (!(rPropertyValue.Value >>= sIanaName))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property CharSet");
 
             ::dbtools::OCharsetMap aLookupIanaName;

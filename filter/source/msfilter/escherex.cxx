@@ -4442,32 +4442,19 @@ sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             {
                 auto pSourcePolyPolygon =
                     o3tl::doAccess<drawing::PointSequenceSequence>(aAny);
-                sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->getLength();
-                drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->getConstArray();
-
-                if ( pOuterSequence )
+                sal_Int32 nIndex = 0;
+                sal_uInt32 nDistance = 0xffffffff;
+                for (drawing::PointSequence const& rInnerSequence : *pSourcePolyPolygon)
                 {
-                    sal_Int32 a, b, nIndex = 0;
-                    sal_uInt32 nDistance = 0xffffffff;
-                    for( a = 0; a < nOuterSequenceCount; a++ )
+                    for (awt::Point const& rPoint : rInnerSequence)
                     {
-                        drawing::PointSequence const * pInnerSequence = pOuterSequence++;
-                        if ( pInnerSequence )
+                        sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - rPoint.X, aRefPoint.Y - rPoint.Y ));
+                        if ( nDist < nDistance )
                         {
-                            awt::Point const * pArray = pInnerSequence->getConstArray();
-                            if ( pArray )
-                            {
-                                for ( b = 0; b < pInnerSequence->getLength(); b++, nIndex++, pArray++ )
-                                {
-                                    sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y ));
-                                    if ( nDist < nDistance )
-                                    {
-                                        nRule = nIndex;
-                                        nDistance = nDist;
-                                    }
-                                }
-                            }
+                            nRule = nIndex;
+                            nDistance = nDist;
                         }
+                        nIndex++;
                     }
                 }
             }
@@ -4486,42 +4473,24 @@ sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny);
                 sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
 
-                // get pointer of inner sequences
-                drawing::PointSequence const * pOuterSequence =
-                    pSourcePolyPolygon->Coordinates.getConstArray();
-                drawing::FlagSequence const *  pOuterFlags =
-                    pSourcePolyPolygon->Flags.getConstArray();
+                sal_Int32 nIndex = 0;
+                sal_uInt32 nDistance = 0xffffffff;
 
-                if ( pOuterSequence && pOuterFlags )
+                for (sal_Int32 a = 0; a < nOuterSequenceCount; a++)
                 {
-                    sal_Int32 a, b, nIndex = 0;
-                    sal_uInt32 nDistance = 0xffffffff;
-
-                    for ( a = 0; a < nOuterSequenceCount; a++ )
+                    drawing::PointSequence const& rInnerSequence = pSourcePolyPolygon->Coordinates[a];
+                    drawing::FlagSequence const& rInnerFlags = pSourcePolyPolygon->Flags[a];
+                    for (sal_Int32 b = 0; b < rInnerSequence.getLength(); b++)
                     {
-                        drawing::PointSequence const * pInnerSequence = pOuterSequence++;
-                        drawing::FlagSequence const *  pInnerFlags = pOuterFlags++;
-                        if ( pInnerSequence && pInnerFlags )
+                        if (rInnerFlags[b] == drawing::PolygonFlags_CONTROL)
+                            continue;
+                        sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - rInnerSequence[b].X, aRefPoint.Y - rInnerSequence[b].Y ));
+                        if ( nDist < nDistance )
                         {
-                            awt::Point const * pArray = pInnerSequence->getConstArray();
-                            drawing::PolygonFlags const * pFlags = pInnerFlags->getConstArray();
-                            if ( pArray && pFlags )
-                            {
-                                for ( b = 0; b < pInnerSequence->getLength(); b++, pArray++ )
-                                {
-                                    drawing::PolygonFlags ePolyFlags = *pFlags++;
-                                    if ( ePolyFlags == drawing::PolygonFlags_CONTROL )
-                                        continue;
-                                    sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y ));
-                                    if ( nDist < nDistance )
-                                    {
-                                        nRule = nIndex;
-                                        nDistance = nDist;
-                                    }
-                                    nIndex++;
-                                }
-                            }
+                            nRule = nIndex;
+                            nDistance = nDist;
                         }
+                        nIndex++;
                     }
                 }
             }

@@ -1996,23 +1996,17 @@ HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarR
                                             outParams);
 
         // try to write back out parameter
-        if (outIndex.getLength() > 0)
+        for (sal_Int32 i = 0; i < outIndex.getLength(); i++)
         {
-            const sal_Int16* pOutIndex = outIndex.getConstArray();
-            const Any* pOutParams = outParams.getConstArray();
+            CComVariant variant;
+            // Currently a Sequence is converted to an SafeArray of VARIANTs.
+            anyToVariant(&variant, outParams[i]);
 
-            for (sal_Int32 i = 0; i < outIndex.getLength(); i++)
-            {
-                CComVariant variant;
-                // Currently a Sequence is converted to an SafeArray of VARIANTs.
-                anyToVariant( &variant, pOutParams[i]);
-
-                // out parameter need special handling if they are VT_DISPATCH
-                // and used in JScript
-                int outindex= pOutIndex[i];
-                writeBackOutParameter2(&(pdispparams->rgvarg[pdispparams->cArgs - 1 - outindex]),
-                                       &variant );
-            }
+            // out parameter need special handling if they are VT_DISPATCH
+            // and used in JScript
+            int outindex = outIndex[i];
+            writeBackOutParameter2(&(pdispparams->rgvarg[pdispparams->cArgs - 1 - outindex]),
+                                   &variant );
         }
 
         // write back return value
@@ -2107,7 +2101,7 @@ HRESULT InterfaceOleWrapper::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
 
     try
     {
-        m_xInvocation->setValue( name, params.getConstArray()[0]);
+        m_xInvocation->setValue( name, params[0]);
     }
     catch(const UnknownPropertyException &)
     {

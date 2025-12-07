@@ -164,18 +164,13 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pMgr,
     const uno::Reference< container::XNameAccess >& xLibNameAccess, std::u16string_view aLibName )
 {
-    uno::Sequence< OUString > aModuleNames = xLibNameAccess->getElementNames();
-    sal_Int32 nModuleCount = aModuleNames.getLength();
-
     StarBASIC* pLib = pMgr->GetLib( aLibName );
     DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::addLibraryModulesImpl: Unknown lib!");
     if( !pLib )
         return;
 
-    const OUString* pNames = aModuleNames.getConstArray();
-    for( sal_Int32 j = 0 ; j < nModuleCount ; j++ )
+    for (const OUString& aModuleName : xLibNameAccess->getElementNames())
     {
-        OUString aModuleName = pNames[ j ];
         uno::Any aElement = xLibNameAccess->getByName( aModuleName );
         OUString aMod;
         aElement >>= aMod;
