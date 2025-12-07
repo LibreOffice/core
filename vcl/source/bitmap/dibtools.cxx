@@ -525,12 +525,12 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     }
     else
     {
-        if (rHeader.nV5RedMask > 0)
+        if (bTCMask && BITFIELDS == rHeader.nCompression)
+        {
             nRMask = rHeader.nV5RedMask;
-        if (rHeader.nV5GreenMask > 0)
             nGMask = rHeader.nV5GreenMask;
-        if (rHeader.nV5BlueMask > 0)
             nBMask = rHeader.nV5BlueMask;
+        }
 
         const tools::Long nWidth(rHeader.nWidth);
         const tools::Long nHeight(rHeader.nHeight);
