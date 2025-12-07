@@ -23,6 +23,7 @@
 class ScDocument;
 class ScDataTransformationBaseControl;
 class ScDBData;
+class ScDBCollection;
 
 class ScDataProviderDlg : public weld::GenericDialogController
 {
@@ -54,6 +55,7 @@ private:
 
     sal_uInt32 mnIndex;
     ScDBData* pDBData;
+    ScDBCollection* mpDestDBCollection;
 
     DECL_LINK(StartMenuHdl, const OString&, void);
     DECL_LINK(ColumnMenuHdl, const weld::ComboBox&, void);
