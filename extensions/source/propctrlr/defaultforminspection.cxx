@@ -172,17 +172,16 @@ namespace pcr
         if ( m_bConstructed )
             throw AlreadyInitializedException();
 
-        StlSyntaxSequence< Any > arguments( _arguments );
-        if ( arguments.empty() )
+        if (!_arguments.hasElements())
         {   // constructor: "createDefault()"
             m_bConstructed = true;
             return;
         }
 
-        if ( arguments.size() == 2 )
+        if (_arguments.size() == 2 )
         {   // constructor: "createWithHelpSection( long, long )"
             sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
-            if ( !( arguments[0] >>= nMinHelpTextLines ) || !( arguments[1] >>= nMaxHelpTextLines ) )
+            if (!(_arguments[0] >>= nMinHelpTextLines) || !(_arguments[1] >>= nMaxHelpTextLines))
                 throw IllegalArgumentException( OUString(), *this, 0 );
             createWithHelpSection( nMinHelpTextLines, nMaxHelpTextLines );
             return;

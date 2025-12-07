@@ -61,7 +61,7 @@ namespace pcr
     {
     private:
         /// cache for getSupportedProperties
-        mutable StlSyntaxSequence< css::beans::Property >
+        mutable css::uno::Sequence<css::beans::Property>
                                     m_aSupportedProperties;
         mutable bool                m_bSupportedPropertiesAreKnown;
 
