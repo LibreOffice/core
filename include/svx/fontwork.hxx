@@ -73,19 +73,19 @@ class SAL_WARN_UNUSED SvxFontWorkDialog final : public SfxDockingWindow
 {
 #define CONTROLLER_COUNT 11
 
-    SfxBindings&    rBindings;
-    Idle            aInputIdle;
+    SfxBindings&    m_rBindings;
+    Idle            m_aInputIdle;
 
     OUString         m_sLastStyleTbxId;
     OUString         m_sLastAdjustTbxId;
     OUString         m_sLastShadowTbxId;
 
-    tools::Long            nSaveShadowX;
-    tools::Long            nSaveShadowY;
-    tools::Long            nSaveShadowAngle;
-    tools::Long            nSaveShadowSize;
+    tools::Long            m_nSaveShadowX;
+    tools::Long            m_nSaveShadowY;
+    tools::Long            m_nSaveShadowAngle;
+    tools::Long            m_nSaveShadowSize;
 
-    SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
+    SvxFontWorkControllerItem* m_pCtrlItems[CONTROLLER_COUNT];
 
     std::unique_ptr<weld::Toolbar> m_xTbxStyle;
     std::unique_ptr<weld::Toolbar> m_xTbxAdjust;
