@@ -51,7 +51,7 @@ namespace rptui
     {
     public:
         // IPropertyInfoService
-        static sal_Int32                    getPropertyId(const OUString& _rName);
+        static sal_Int32                    getPropertyId(std::u16string_view _rName);
         static OUString                     getPropertyTranslation(sal_Int32 _nId);
         static OUString                     getPropertyHelpId(sal_Int32 _nId);
         static PropUIFlags                  getPropertyUIFlags(sal_Int32 _nId);
@@ -65,7 +65,7 @@ namespace rptui
     private:
         static const OPropertyInfoImpl* getPropertyInfo();
 
-        static const OPropertyInfoImpl* getPropertyInfo(const OUString& _rName);
+        static const OPropertyInfoImpl* getPropertyInfo(std::u16string_view _rName);
         static const OPropertyInfoImpl* getPropertyInfo(sal_Int32 _nId);
 
         OPropertyInfoService(const OPropertyInfoService&) = delete;
