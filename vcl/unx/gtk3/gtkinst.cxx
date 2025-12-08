@@ -21044,6 +21044,9 @@ private:
                 set_active_including_mru(nPos, true);
             }
             select_entry_region(aText.getLength(), aStartText.getLength());
+            // take over clipboard handling for the autocomplete selection
+            // in order to defeat klipper
+            autocomplete_update_primary_selection(GTK_ENTRY(m_pEntry));
         }
         enable_notify_events();
     }
@@ -22016,6 +22019,61 @@ private:
         if (m_nMRUCount && pos != -1)
             pos += (m_nMRUCount + 1);
         return pos;
+    }
+
+    static void autocomplete_clip_get(GtkClipboard*, GtkSelectionData* pSelectionData, guint, gpointer user_data)
+    {
+        GtkEntry *pEntry = GTK_ENTRY(user_data);
+
+        gint nStart, nEnd;
+        if (gtk_editable_get_selection_bounds(GTK_EDITABLE(pEntry), &nStart, &nEnd))
+        {
+            gchar* pStr = gtk_editable_get_chars(GTK_EDITABLE(pEntry), nStart, nEnd);
+            gtk_selection_data_set_text(pSelectionData, pStr, -1);
+            g_free(pStr);
+        }
+    }
+
+    static void autocomplete_clip_clear(GtkClipboard*, gpointer user_data)
+    {
+        GtkEntry* pEntry = GTK_ENTRY(user_data);
+
+        // We lose the clipboard, but we still have focus, keep the text selected anyway
+        // so autocomplete doesn't get broken.
+        if (gtk_widget_has_focus(GTK_WIDGET(pEntry)))
+            return;
+
+        gint nCurrentPos = gtk_editable_get_position(GTK_EDITABLE(pEntry));
+        gtk_editable_select_region(GTK_EDITABLE(pEntry), nCurrentPos, nCurrentPos);
+    }
+
+
+    // This is intended to be basically the same as
+    // gtk_entry_update_primary_selection except that the clipboard cleared
+    // callback will only unselect the text selection if the widget no longer
+    // has focus. This attempts to defeat klipper breaking autocomplete when it
+    // appears to steal the clipboard during autocomplete.
+    static void autocomplete_update_primary_selection(GtkEntry* pEntry)
+    {
+        if (!gtk_widget_get_realized(GTK_WIDGET(pEntry)))
+            return;
+
+        gint nStart, nEnd;
+        if (!gtk_editable_get_selection_bounds(GTK_EDITABLE(pEntry), &nStart, &nEnd))
+            return;
+
+        GtkTargetList* pTargetList = gtk_target_list_new(nullptr, 0);
+        gtk_target_list_add_text_targets(pTargetList, 0);
+
+        gint nTargets;
+        GtkTargetEntry* pTargets = gtk_target_table_new_from_list(pTargetList, &nTargets);
+
+        GtkClipboard* pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(pEntry), GDK_SELECTION_PRIMARY);
+
+        gtk_clipboard_set_with_owner(pClipboard, pTargets, nTargets, autocomplete_clip_get, autocomplete_clip_clear, G_OBJECT(pEntry));
+
+        gtk_target_table_free(pTargets, nTargets);
+        gtk_target_list_unref(pTargetList);
     }
 
 public:
