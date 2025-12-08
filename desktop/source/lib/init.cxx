@@ -5615,7 +5615,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                     tools::JsonWriter aJson;
                     aJson.put("commandName", aCommand);
                     aJson.put("success", true);
-                    aJson.put("result", Application::UICoverageReport());
+                    Application::UICoverageReport(aJson);
                     pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
                 }
             }
