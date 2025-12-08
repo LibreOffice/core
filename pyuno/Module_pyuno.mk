@@ -53,6 +53,7 @@ endif # !SYSTEM_PYTHON
 $(eval $(call gb_Module_add_subsequentcheck_targets,pyuno, \
     PythonTest_pyuno_pytests_testcollections \
     PythonTest_pyuno_pytests_insertremovecells \
+    $(if $(ENABLE_EMBINDTEST_UNO),PythonTest_pyuno_pytests_embindtest) \
 ))
 
 endif # DISABLE_PYTHON

@@ -134,6 +134,7 @@ interface XTest {
     boolean checkAttributes([in] org::libreoffice::embindtest::XAttributes object);
     [attribute] string StringAttribute;
     boolean testSolarMutex();
+    void executeTest([in] XTest test);
 };
 
 }; }; };
