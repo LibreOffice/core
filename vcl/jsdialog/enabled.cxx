@@ -631,6 +631,17 @@ bool isBuilderEnabledForFormulabar(std::u16string_view rUIFile)
 {
     return isInMap(FormulabarList, rUIFile);
 }
+
+bool completeWriterDialogList(const o3tl::sorted_vector<OUString>& entries)
+{
+    for (const auto& entry : SwriterDialogList)
+    {
+        if (entries.find(OUString(entry)) == entries.end())
+            return false;
+    }
+    return true;
+}
+
 } // end of jsdialog
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -204,6 +204,8 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
         for (const auto& entry : entries)
             rJson.putSimpleValue(entry);
     }
+
+    rJson.put("CompleteWriterDialogCoverage", jsdialog::completeWriterDialogList(entries));
 }
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
