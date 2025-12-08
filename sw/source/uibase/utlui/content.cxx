@@ -130,6 +130,8 @@
 
 #include <rootfrm.hxx>
 
+#include <doctxm.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -269,6 +271,13 @@ namespace
         }
         rWrtShell.LeaveAddMode();
         rWrtShell.EndAction();
+    }
+
+    void lcl_MaybeSetInvisible(const SwWrtShell* pWrtShell, SwContent* pCnt, const SwContentNode* pNd)
+    {
+        if (!pNd || /*in folded content*/ !pNd->getLayoutFrame(pWrtShell->GetLayout())
+            || /*in hidden section*/ pNd->getLayoutFrame(pWrtShell->GetLayout())->IsHiddenNow())
+            pCnt->SetInvisible();
     }
 }
 
@@ -573,8 +582,9 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
 
                 auto pCnt(std::make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable(i), nYPos));
-                if (!pNode->getLayoutFrame(m_pWrtShell->GetLayout()))
-                    pCnt->SetInvisible();
+
+                lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                 m_pMember->insert(std::move(pCnt));
             }
 
@@ -613,14 +623,27 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     continue;
                 }
                 tools::Long nYPos = 0;
+                SwTable* pTable = SwTable::FindTable(&rTableFormat);
                 if (!m_bAlphabeticSort)
                 {
-                    if (SwTable* pTable = SwTable::FindTable(&rTableFormat))
+                    if (pTable)
                         nYPos = getYPos(*pTable->GetTableNode());
                 }
                 auto pCnt = std::make_unique<SwContent>(this, rTableFormat.GetName().toString(), nYPos);
-                if(!rTableFormat.IsVisible())
-                    pCnt->SetInvisible();
+
+                // visibility
+                const SwStartNode* pSectionNd = pTable->GetTableNode()->GetStartNode();
+                const SwContentNode* pNode = nullptr;
+                if (pSectionNd)
+                {
+                    if (SwNodeType::Start & pSectionNd->GetNodeType())
+                    {
+                        SwNodeIndex aIdx(*pSectionNd);
+                        pNode = SwNodes::GoNext(&aIdx);
+                    }
+                }
+                lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                 m_pMember->insert(std::move(pCnt));
             }
 
@@ -652,7 +675,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             nCount = formats.size();
             for (size_t i = 0; i < nCount; ++i)
             {
-                SwFrameFormat const*const pFrameFormat = formats[i];
+                const SwFrameFormat* pFrameFormat = formats[i];
                 const UIName sFrameName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
@@ -670,8 +693,28 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 {
                     pCnt = new SwContent(this, sFrameName.toString(), nYPos);
                 }
-                if(!pFrameFormat->IsVisible())
-                    pCnt->SetInvisible();
+
+                // visibility
+                const SwNode* pNode = pFrameFormat->GetAnchor().GetAnchorNode();
+                while (pNode /*&& pNode->IsStartNode()
+                       && pNode->GetStartNode()->GetStartNodeType()
+                              == SwStartNodeType::SwFlyStartNode*/
+                       && pFrameFormat
+                       && pFrameFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_FLY
+                       && (pFrameFormat = pNode->GetFlyFormat()))
+                {
+                    pNode = pFrameFormat->GetAnchor().GetAnchorNode();
+                }
+                assert(pFrameFormat);
+                if (pFrameFormat
+                    && pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE)
+                {
+                    if (pNode && pNode->IsContentNode())
+                        lcl_MaybeSetInvisible(m_pWrtShell, pCnt, pNode->GetContentNode());
+                    else
+                        pCnt->SetInvisible();
+                }
+
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
 
@@ -702,6 +745,12 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
                     auto pCnt(std::make_unique<SwContent>(this, rBkmName.toString(),
                                                           m_bAlphabeticSort ? 0 : nYPos++));
+
+                    // visibility
+                    SwPosition& rPosition = (*ppBookmark)->GetMarkPos();
+                    const SwContentNode* pNode = rPosition.GetContentNode();
+                    lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                     m_pMember->insert(std::move(pCnt));
                 }
             }
@@ -829,8 +878,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 auto pCnt(std::make_unique<SwTextFieldContent>(this, sText,
                                                                &pTextField->GetFormatField(),
                                                                m_bAlphabeticSort ? 0 : nYPos++));
-                if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
-                    pCnt->SetInvisible();
+
+                // visibility
+                SwTextNode* pNode = &(pTextField->GetTextNode());
+                lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                 m_pMember->insert(std::move(pCnt));
             }
         }
@@ -858,8 +910,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                           + " " + lcl_GetFootnoteText(*pTextFootnote);
                     auto pCnt(std::make_unique<SwTextFootnoteContent>(
                         this, sText, pTextFootnote, ++nPos));
-                    if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
-                        pCnt->SetInvisible();
+
+                    // visibility
+                    const SwTextNode* pNode = &(pTextFootnote->GetTextNode());
+                    lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                     m_pMember->insert(std::move(pCnt));
                 }
             }
@@ -894,8 +949,19 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                             m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode()),
                                                                 pFormat));
 
-                    if (!pFormat->IsVisible() || pSection->IsHidden())
-                        pCnt->SetInvisible();
+                    // visibility
+                    const SwSectionNode* pSectionNd = pFormat->GetSectionNode();
+                    const SwContentNode* pNode = nullptr;
+                    if (pSectionNd)
+                    {
+                        if (SwNodeType::Start & pSectionNd->GetNodeType())
+                        {
+                            SwNodeIndex aIdx(*pSectionNd);
+                            pNode = SwNodes::GoNext(&aIdx);
+                        }
+                    }
+                    lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                     m_pMember->insert(std::move(pCnt));
                 }
 
@@ -915,21 +981,59 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         break;
         case ContentTypeId::REFERENCE:
         {
-            std::vector<OUString> aRefMarks;
-            m_pWrtShell->GetRefMarks( &aRefMarks );
+            std::vector<OUString> aRefMarkNames;
+            m_pWrtShell->GetRefMarks( &aRefMarkNames );
 
             tools::Long nYPos = 0;
-            for (const auto& rRefMark : aRefMarks)
+            for (const auto& rRefMarkName : aRefMarkNames)
             {
-                m_pMember->insert(std::make_unique<SwContent>(this, rRefMark,
-                                                              m_bAlphabeticSort ? 0 : nYPos++));
+                auto pCnt(std::make_unique<SwContent>(this, rRefMarkName,
+                                                      m_bAlphabeticSort ? 0 : nYPos++));
+
+                // visibility
+                const SwFormatRefMark* pFormatRefMark = m_pWrtShell->GetRefMark(SwMarkName(rRefMarkName));
+                const SwTextRefMark* pTextRefMark = pFormatRefMark->GetTextRefMark();
+                const SwTextNode* pNode = &(pTextRefMark->GetTextNode());
+                lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
+                m_pMember->insert(std::move(pCnt));
             }
         }
         break;
         case ContentTypeId::URLFIELD:
         {
+            // INetAttrs
             SwGetINetAttrs aArr;
-            m_pWrtShell->GetINetAttrs(aArr, false);
+
+            // Fill aArr using a modified verision of SwEditShell::GetINetAttrs
+            const SwCharFormats* pFormats = m_pWrtShell->GetDoc()->GetCharFormats();
+            for (auto n = pFormats->size(); 1 < n;)
+            {
+                SwIterator<SwTextINetFormat, SwCharFormat> aIter(*(*pFormats)[--n]);
+                for (SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next())
+                {
+                    const SwTextNode* pTextNd = pFnd->GetpTextNode();
+                    if (pTextNd && pTextNd->GetNodes().IsDocNodes())
+                    {
+                        // tdf#52113, tdf#148312 Don't include table of contents hyperlinks
+                        if (const SwSectionNode* pSectNd = pTextNd->FindSectionNode();
+                            pSectNd && pSectNd->GetSection().GetType() == SectionType::ToxContent)
+                            continue;
+
+                        SwTextINetFormat& rAttr = *pFnd;
+                        OUString sText(pTextNd->GetExpandText(m_pWrtShell->GetLayout(),
+                                                              rAttr.GetStart(),
+                                                              *rAttr.GetEnd() - rAttr.GetStart()));
+                        sText = sText.replaceAll("\x0a", "");
+                        sText = comphelper::string::strip(sText, ' ');
+
+                        if (!sText.isEmpty())
+                        {
+                            aArr.emplace_back(sText, rAttr);
+                        }
+                    }
+                }
+            }
 
             if (m_bAlphabeticSort)
             {
@@ -939,6 +1043,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                                     r.rINetAttr.GetINetFormat().GetValue(),
                                                     INetURLObject::DecodeMechanism::Unambiguous),
                                                              &r.rINetAttr, 0));
+
+                    // visiblity
+                    const SwTextNode* pNode = &(r.rINetAttr.GetTextNode());
+                    lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                     m_pMember->insert(std::move(pCnt));
                 }
                 break;
@@ -1001,6 +1110,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                             INetURLObject::decode(p->rINetAttr.GetINetFormat().GetValue(),
                                                   INetURLObject::DecodeMechanism::Unambiguous),
                             &p->rINetAttr, ++n);
+
+                // visiblity
+                const SwTextNode* pNode = &(p->rINetAttr.GetTextNode());
+                lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                 m_pMember->insert(std::move(pCnt));
             }
         }
@@ -1014,11 +1128,22 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 const SwTOXBase* pBase = m_pWrtShell->GetTOX( nTox );
                 UIName sTOXNm( pBase->GetTOXName() );
 
-                SwContent* pCnt = new SwTOXBaseContent(
-                        this, sTOXNm.toString(), m_bAlphabeticSort ? 0 : nTox, *pBase);
+                SwContent* pCnt = new SwTOXBaseContent(this, sTOXNm.toString(),
+                                                       m_bAlphabeticSort ? 0 : nTox, *pBase);
 
-                if(pBase && !pBase->IsVisible())
-                    pCnt->SetInvisible();
+                // visiblity
+                const SwContentNode* pNode = nullptr;
+                const SwSectionNode* pSectionNd
+                    = static_cast<const SwTOXBaseSection*>(pBase)->GetFormat()->GetSectionNode();
+                if (pSectionNd)
+                {
+                    if (SwNodeType::Start & pSectionNd->GetNodeType())
+                    {
+                        SwNodeIndex aIdx(*pSectionNd);
+                        pNode = SwNodes::GoNext(&aIdx);
+                    }
+                }
+                lcl_MaybeSetInvisible(m_pWrtShell, pCnt, pNode);
 
                 m_pMember->insert( std::unique_ptr<SwContent>(pCnt) );
                 const size_t nPos = m_pMember->size() - 1;
@@ -1046,14 +1171,17 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         {
                             OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
+
                             std::unique_ptr<SwPostItContent> pCnt(new SwPostItContent(
                                                 this,
                                                 sEntry,
                                                 pFormatField,
                                                 nYPos));
-                            if (!pFormatField->GetTextField()->GetTextNode().getLayoutFrame(
-                                        m_pWrtShell->GetLayout()))
-                                pCnt->SetInvisible();
+
+                            // visibility
+                            SwTextNode* pNode = &pFormatField->GetTextField()->GetTextNode();
+                            lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
+
                             if (pOldMember)
                             {
                                 assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
