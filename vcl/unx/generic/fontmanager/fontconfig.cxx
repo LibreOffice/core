@@ -660,6 +660,12 @@ void PrintFontManager::countFontconfigFonts()
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eScalableRes != FcResultMatch || eStyleRes != FcResultMatch )
                 continue;
 
+#ifdef MACOSX
+            // Skip system fonts not intended for app use
+            if (family && family[0] == '.')
+                continue;
+#endif
+
             SAL_INFO(
                 "vcl.fonts.detail",
                 "found font \"" << family << "\" in file " << file << ", weight = "
