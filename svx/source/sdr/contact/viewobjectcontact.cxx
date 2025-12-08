@@ -227,9 +227,20 @@ void ViewObjectContact::ActionChanged()
     // set local flag
     mbLazyInvalidate = true;
 
-    // reset gridOffset, it needs to be recalculated
-    if (GetObjectContact().supportsGridOffsets())
-        resetGridOffset();
+    // force ObjectRange
+    getObjectRange();
+
+    if(!getObjectRange().isEmpty())
+    {
+        // invalidate current valid range
+        GetObjectContact().InvalidatePartOfView(maObjectRange);
+
+        // reset gridOffset, it needs to be recalculated
+        if (GetObjectContact().supportsGridOffsets())
+            resetGridOffset();
+        else
+            maObjectRange.reset();
+    }
 
     // register at OC for lazy invalidate
     GetObjectContact().setLazyInvalidate(*this);
