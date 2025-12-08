@@ -390,7 +390,7 @@ static void GetTextAreaOutline(
                             aSingleCharacterUnion.Union( aCharacterData.aBoundRect );
                         }
                     }
-                    rParagraph.vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back(std::move(aCharacterData));
                 }
                 for ( auto& rCharacter : rParagraph.vCharacters )
                 {
