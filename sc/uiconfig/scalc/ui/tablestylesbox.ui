@@ -16,7 +16,7 @@
         <property name="column-spacing">4</property>
         <child>
           <object class="GtkCheckButton" id="chk_header_row2">
-            <property name="label" translatable="yes" context="tablestylebox|chk_header_row">Show Header Row</property>
+            <property name="label" translatable="yes" context="tablestylebox|chk_header_row">Header Row</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -30,7 +30,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_total_row2">
-            <property name="label" translatable="yes" context="tablestylebox|chk_total_row">Show Total Row</property>
+            <property name="label" translatable="yes" context="tablestylebox|chk_total_row">Total Row</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -44,7 +44,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="chk_filter_buttons2">
-            <property name="label" translatable="yes" context="tablestylebox|chk_filter_buttons">Show Filter Buttons</property>
+            <property name="label" translatable="yes" context="tablestylebox|chk_filter_buttons">Filter Buttons</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
