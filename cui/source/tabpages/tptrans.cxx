@@ -245,11 +245,11 @@ std::unique_ptr<SfxTabPage> SvxTransparenceTabPage::Create(weld::Container* pPag
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
 {
     const SfxPoolItem* pGradientItem = nullptr;
-    const SfxPoolItem* pLinearItem = nullptr;
+    const XFillTransparenceItem* pLinearItem = nullptr;
     SfxItemState eStateGradient(rOutAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
     SfxItemState eStateLinear(rOutAttrs.GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
     bool bGradActive = (eStateGradient == SfxItemState::SET && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled());
-    bool bLinearActive = (eStateLinear == SfxItemState::SET && static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue() != 0);
+    bool bLinearActive = (eStateLinear == SfxItemState::SET && pLinearItem->GetValue() != 0);
 
     bool bGradUsed = (eStateGradient == SfxItemState::INVALID);
     bool bLinearUsed = (eStateLinear == SfxItemState::INVALID);
