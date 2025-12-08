@@ -192,18 +192,16 @@ void Application::EnableUICoverage(bool bEnable)
         ImplGetSVData()->mpDefInst->getUsedUIList().clear();
 }
 
-OString Application::UICoverageReport()
+void Application::UICoverageReport(tools::JsonWriter& rJson)
 {
-    tools::JsonWriter aJson;
+    auto resultNode = rJson.startNode("result");
 
     const auto& entries = ImplGetSVData()->mpDefInst->getUsedUIList();
     {
-        auto childrenNode = aJson.startArray("used");
+        auto childrenNode = rJson.startArray("used");
         for (const auto& entry : entries)
-            aJson.putSimpleValue(entry);
+            rJson.putSimpleValue(entry);
     }
-
-    return aJson.finishAndGetAsOString();
 }
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
