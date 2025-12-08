@@ -354,7 +354,7 @@ sal_uLong RTSDevicePage::getColorDevice() const
         case 1:
             return 1;
         case 2:
-            return -1;
+            return static_cast<sal_uLong>(-1);
     }
     return 0;
 }
