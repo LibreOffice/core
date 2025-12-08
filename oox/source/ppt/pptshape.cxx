@@ -238,9 +238,6 @@ void PPTShape::addShape(
         ::oox::drawingml::ShapeIdMap* pShapeMap )
 {
     SAL_INFO("oox.ppt","add shape id: " << msId << " location: " << ((meShapeLocation == Master) ? "master" : ((meShapeLocation == Slide) ? "slide" : ((meShapeLocation == Layout) ? "layout" : "other"))) << " subtype: " << mnSubType << " service: " << msServiceName);
-    // only placeholder from layout are being inserted
-    if ( mnSubType && ( meShapeLocation == Master ) )
-        return;
 
     OUString sServiceName( msServiceName );
     if (sServiceName.isEmpty())
@@ -521,6 +518,13 @@ void PPTShape::addShape(
                 setMasterTextListStyle( aCombinedTextListStyle );
             } else
                 setMasterTextListStyle( aMasterTextListStyle );
+
+            if (mnSubType && meShapeLocation == Master)
+            {
+                if (getTextBody() && !getTextBody()->isEmpty())
+                    setTextMasterStyles(rSlidePersist, rFilterBase, sServiceName);
+                return;
+            }
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, mpPlaceholder, aTransformation, getFillProperties() ) );
 

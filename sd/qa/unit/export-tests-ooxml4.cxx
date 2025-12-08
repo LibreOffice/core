@@ -1859,6 +1859,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testFooterIdxConsistency)
     // - In <>, attribute 'idx' of '//p:sp/p:nvSpPr/p:nvPr/p:ph' incorrect value.
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169559)
+{
+    createSdImpressDoc("pptx/tdf169524.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(
+        pXmlDoc,
+        "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr/a:spcAft/a:spcPts",
+        "val", u"1701");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
