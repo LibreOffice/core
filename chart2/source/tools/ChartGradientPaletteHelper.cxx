@@ -238,7 +238,7 @@ basegfx::BColorStops ComputeLightVariationStops(const Color& rBase)
 
         // 4) Add stop (offsets 0.0, 0.5, 1.0)
         const double offset = i == 0 ? 1.0 : (i == 1 ? 0.5 : 0.0);
-        stops.emplace_back(offset, toBColor(finalRgb));
+        stops.addStop(offset, toBColor(finalRgb));
     }
 
     return stops;
@@ -278,7 +278,7 @@ basegfx::BColorStops ComputeDarkVariationStops(const Color& rBase)
 
         // 3) append stop at 0.0, 0.5, 1.0
         const double offset = i == 0 ? 1.0 : (i == 1 ? 0.5 : 0.0);
-        stops.emplace_back(offset, basegfx::BColor(out.r, out.g, out.b));
+        stops.addStop(offset, basegfx::BColor(out.r, out.g, out.b));
     }
 
     return stops;

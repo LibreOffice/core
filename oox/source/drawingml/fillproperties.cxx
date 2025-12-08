@@ -477,7 +477,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 for (const auto& rCandidate : maGradientProps.maGradientStops)
                 {
                     const ::Color aColor(rCandidate.second.getColor(rGraphicHelper, nPhClr));
-                    aColorStops.emplace_back(rCandidate.first, aColor.getBColor());
+                    aColorStops.addStop(rCandidate.first, aColor.getBColor());
                     bContainsTransparency = bContainsTransparency || rCandidate.second.hasTransparency();
                 }
 
@@ -487,7 +487,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                     for (const auto& rCandidate : maGradientProps.maGradientStops)
                     {
                         const double fTrans(rCandidate.second.getTransparency() * (1.0/100.0));
-                        aTransparencyStops.emplace_back(rCandidate.first, basegfx::BColor(fTrans, fTrans, fTrans));
+                        aTransparencyStops.addStop(rCandidate.first, basegfx::BColor(fTrans, fTrans, fTrans));
                     }
                 }
 

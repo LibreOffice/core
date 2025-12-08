@@ -656,10 +656,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
     basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-    CPPUNIT_ASSERT_EQUAL(Color(0x5f497a), Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x5f497a), Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops.getStopColor(1)));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
     // without the fix, this was 1350 (visually the colors were reversed)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3150), aGradient.Angle);

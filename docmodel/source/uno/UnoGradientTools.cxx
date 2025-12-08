@@ -92,10 +92,9 @@ void fillFromColorStopSequence(basegfx::BColorStops& rColorStops,
 
         for (css::awt::ColorStop const& rSourceStop : rUnoColorStopSequence)
         {
-            rColorStops.emplace_back(rSourceStop.StopOffset,
-                                     basegfx::BColor(rSourceStop.StopColor.Red,
-                                                     rSourceStop.StopColor.Green,
-                                                     rSourceStop.StopColor.Blue));
+            basegfx::BColor aBColor(rSourceStop.StopColor.Red, rSourceStop.StopColor.Green,
+                                    rSourceStop.StopColor.Blue);
+            rColorStops.addStop(rSourceStop.StopOffset, aBColor);
         }
     }
 }

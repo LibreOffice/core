@@ -344,7 +344,7 @@ namespace basegfx
                     // create fallback synched with existing AlphaStops
                     for (const auto& cand : rAlphaStops)
                     {
-                        rColorStops.emplace_back(cand.getStopOffset(), rSingleColor);
+                        rColorStops.addStop(cand.getStopOffset(), rSingleColor);
                     }
                 }
 
@@ -357,7 +357,7 @@ namespace basegfx
                 // create fallback AlphaStops synched with existing ColorStops using SingleAlpha
                 for (const auto& cand : rColorStops)
                 {
-                    rAlphaStops.emplace_back(cand.getStopOffset(), rSingleAlpha);
+                    rAlphaStops.addStop(cand.getStopOffset(), rSingleAlpha);
                 }
 
                 // preparations complete, we are done
@@ -414,24 +414,24 @@ namespace basegfx
                         if (fTools::less(fColorOff, fAlphaOff))
                         {
                             // copy color, create alpha
-                            aNewColor.emplace_back(fColorOff, aCurrColor->getStopColor());
-                            aNewAlpha.emplace_back(fColorOff, rAlphaStops.getInterpolatedBColor(fColorOff, 0, aAlphaStopRange));
+                            aNewColor.addStop(fColorOff, aCurrColor->getStopColor());
+                            aNewAlpha.addStop(fColorOff, rAlphaStops.getInterpolatedBColor(fColorOff, 0, aAlphaStopRange));
                             bRealChange = true;
                             aCurrColor++;
                         }
                         else if (fTools::more(fColorOff, fAlphaOff))
                         {
                             // copy alpha, create color
-                            aNewColor.emplace_back(fAlphaOff, rColorStops.getInterpolatedBColor(fAlphaOff, 0, aColorStopRange));
-                            aNewAlpha.emplace_back(fAlphaOff, aCurrAlpha->getStopColor());
+                            aNewColor.addStop(fAlphaOff, rColorStops.getInterpolatedBColor(fAlphaOff, 0, aColorStopRange));
+                            aNewAlpha.addStop(fAlphaOff, aCurrAlpha->getStopColor());
                             bRealChange = true;
                             aCurrAlpha++;
                         }
                         else
                         {
                             // equal: copy both, advance
-                            aNewColor.emplace_back(fColorOff, aCurrColor->getStopColor());
-                            aNewAlpha.emplace_back(fAlphaOff, aCurrAlpha->getStopColor());
+                            aNewColor.addStop(fColorOff, aCurrColor->getStopColor());
+                            aNewAlpha.addStop(fAlphaOff, aCurrAlpha->getStopColor());
                             aCurrColor++;
                             aCurrAlpha++;
                         }
@@ -439,16 +439,16 @@ namespace basegfx
                     else if (bColor)
                     {
                         const double fColorOff(aCurrColor->getStopOffset());
-                        aNewAlpha.emplace_back(fColorOff, rAlphaStops.getInterpolatedBColor(fColorOff, 0, aAlphaStopRange));
-                        aNewColor.emplace_back(fColorOff, aCurrColor->getStopColor());
+                        aNewAlpha.addStop(fColorOff, rAlphaStops.getInterpolatedBColor(fColorOff, 0, aAlphaStopRange));
+                        aNewColor.addStop(fColorOff, aCurrColor->getStopColor());
                         bRealChange = true;
                         aCurrColor++;
                     }
                     else if (bAlpha)
                     {
                         const double fAlphaOff(aCurrAlpha->getStopOffset());
-                        aNewColor.emplace_back(fAlphaOff, rColorStops.getInterpolatedBColor(fAlphaOff, 0, aColorStopRange));
-                        aNewAlpha.emplace_back(fAlphaOff, aCurrAlpha->getStopColor());
+                        aNewColor.addStop(fAlphaOff, rColorStops.getInterpolatedBColor(fAlphaOff, 0, aColorStopRange));
+                        aNewAlpha.addStop(fAlphaOff, aCurrAlpha->getStopColor());
                         bRealChange = true;
                         aCurrAlpha++;
                     }

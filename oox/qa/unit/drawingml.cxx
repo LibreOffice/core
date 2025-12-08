@@ -199,16 +199,16 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
         = model::gradient::getColorStopsFromUno(aTransparence.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(5), aColorStops.size());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00, aColorStops[0].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.19, aColorStops[1].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.35, aColorStops[2].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.58, aColorStops[3].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, aColorStops[4].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x9e9e9e), Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x363636), Color(aColorStops[2].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[3].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[4].getStopColor()));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00, aColorStops.getStopOffset(0), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.19, aColorStops.getStopOffset(1), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.35, aColorStops.getStopOffset(2), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.58, aColorStops.getStopOffset(3), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, aColorStops.getStopOffset(4), 1E-3);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x9e9e9e), Color(aColorStops.getStopColor(1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x363636), Color(aColorStops.getStopColor(2)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(3)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(4)));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)

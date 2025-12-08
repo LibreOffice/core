@@ -96,27 +96,29 @@ public:
         is read-only, this can/will be guaranteed by forcing/checking this
         in the constructor, see ::FillGradientAttribute
     */
-class BASEGFX_DLLPUBLIC BColorStops final : public std::vector<BColorStop>
+class BASEGFX_DLLPUBLIC BColorStops final
 {
+private:
+    std::vector<BColorStop> maStops;
+
 public:
-    explicit BColorStops()
-        : vector()
+    typedef typename std::vector<BColorStop>::size_type size_type;
+    typedef typename std::vector<BColorStop>::iterator iterator;
+    typedef typename std::vector<BColorStop>::const_iterator const_iterator;
+    typedef typename std::vector<BColorStop>::const_reverse_iterator const_reverse_iterator;
+
+    explicit BColorStops() {}
+
+    BColorStops(const BColorStops& rOther)
+        : maStops(rOther.maStops)
     {
     }
-    BColorStops(const BColorStops& other)
-        : vector(other)
-    {
-    }
-    BColorStops(BColorStops&& other) noexcept
-        : vector(std::move(other))
+    BColorStops(BColorStops&& rOther) noexcept
+        : maStops(std::move(rOther.maStops))
     {
     }
     BColorStops(std::initializer_list<BColorStop> init)
-        : vector(init)
-    {
-    }
-    BColorStops(const_iterator first, const_iterator last)
-        : vector(first, last)
+        : maStops(init)
     {
     }
 
@@ -124,16 +126,42 @@ public:
     // BColorStops for StartColor @0.0 & EndColor @1.0
     BColorStops(const BColor& rStart, const BColor& rEnd);
 
-    BColorStops& operator=(const BColorStops& r)
+    BColorStops& operator=(const BColorStops& rOther)
     {
-        vector::operator=(r);
+        maStops = rOther.maStops;
         return *this;
     }
-    BColorStops& operator=(BColorStops&& r) noexcept
+    BColorStops& operator=(BColorStops&& rOther) noexcept
     {
-        vector::operator=(std::move(r));
+        maStops = std::move(rOther.maStops);
         return *this;
     }
+
+    void addStop(double fOffset, BColor aColor) { maStops.emplace_back(fOffset, aColor); }
+
+    void addStop(BColorStop const& aColorStop) { maStops.push_back(aColorStop); }
+
+    BColorStop const& getStop(size_t i) const { return maStops[i]; }
+    double getStopOffset(size_t i) const { return maStops[i].getStopOffset(); }
+    BColor const& getStopColor(size_t i) const { return maStops[i].getStopColor(); }
+
+    void removeLastStop() { return maStops.pop_back(); }
+
+    void reserve(size_t nNumber) { maStops.reserve(nNumber); }
+    void clear() { maStops.clear(); }
+    bool empty() const { return maStops.empty(); }
+    size_type size() const { return maStops.size(); }
+    iterator begin() { return maStops.begin(); }
+    iterator end() { return maStops.end(); }
+    const_iterator begin() const { return maStops.begin(); }
+    const_iterator end() const { return maStops.end(); }
+    const_reverse_iterator rbegin() const { return maStops.rbegin(); }
+    const_reverse_iterator rend() const { return maStops.rend(); }
+    const BColorStop& front() const { return maStops.front(); }
+    const BColorStop& back() const { return maStops.back(); }
+    BColorStop& front() { return maStops.front(); }
+    BColorStop& back() { return maStops.back(); }
+    bool operator==(BColorStops const& rOther) const { return maStops == rOther.maStops; }
 
     // helper data struct to support buffering entries in
     // gradient texture mapping, see usages for more info
