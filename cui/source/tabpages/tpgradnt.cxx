@@ -671,8 +671,8 @@ basegfx::BColorStops SvxGradientTabPage::createColorStops()
     }
     else
     {
-        aColorStops.emplace_back(0.0, m_xLbColorFrom->GetSelectEntryColor().getBColor());
-        aColorStops.emplace_back(1.0, m_xLbColorTo->GetSelectEntryColor().getBColor());
+        aColorStops.addStop(0.0, m_xLbColorFrom->GetSelectEntryColor().getBColor());
+        aColorStops.addStop(1.0, m_xLbColorTo->GetSelectEntryColor().getBColor());
     }
 
     return aColorStops;

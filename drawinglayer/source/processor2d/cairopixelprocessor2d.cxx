@@ -2874,12 +2874,12 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
     // add color stops
     for (size_t a(0); a < aBColorStops.size(); a++)
     {
-        const basegfx::BColorStop& rStop(aBColorStops[a]);
+        const basegfx::BColorStop& rStop = aBColorStops.getStop(a);
         const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rStop.getStopColor()));
 
         if (bHasAlpha)
         {
-            const basegfx::BColor aAlpha(aBColorStopsAlpha[a].getStopColor());
+            const basegfx::BColor aAlpha(aBColorStopsAlpha.getStopColor(a));
             cairo_pattern_add_color_stop_rgba(pPattern, rStop.getStopOffset(), aColor.getRed(),
                                               aColor.getGreen(), aColor.getBlue(),
                                               1.0 - aAlpha.luminance());
@@ -3276,12 +3276,12 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
     // add color stops
     for (size_t a(0); a < aBColorStops.size(); a++)
     {
-        const basegfx::BColorStop& rStop(aBColorStops[a]);
+        const basegfx::BColorStop& rStop = aBColorStops.getStop(a);
         const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rStop.getStopColor()));
 
         if (bHasAlpha)
         {
-            const basegfx::BColor aAlpha(aBColorStopsAlpha[a].getStopColor());
+            const basegfx::BColor aAlpha(aBColorStopsAlpha.getStopColor(a));
             cairo_pattern_add_color_stop_rgba(pPattern, rStop.getStopOffset(), aColor.getRed(),
                                               aColor.getGreen(), aColor.getBlue(),
                                               1.0 - aAlpha.luminance());
@@ -3652,7 +3652,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     // create ColorStops at same stops but single color
     aColorStops.reserve(rAlphaStops.size());
     for (const auto& entry : rAlphaStops)
-        aColorStops.emplace_back(entry.getStopOffset(), aFillColor);
+        aColorStops.addStop(entry.getStopOffset(), aFillColor);
 
     // create FillGradient using that single-color ColorStops
     const attribute::FillGradientAttribute aFillGradient(

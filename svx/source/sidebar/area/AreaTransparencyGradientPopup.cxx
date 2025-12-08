@@ -142,13 +142,13 @@ void AreaTransparencyGradientPopup::ExecuteValueModify()
     if (maColorStops.size() >= 2)
     {
         aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
+        aColorStops.front()  = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
         aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), aEndBColor);
     }
     else
     {
-        aColorStops.emplace_back(0.0, aStartBColor);
-        aColorStops.emplace_back(1.0, aEndBColor);
+        aColorStops.addStop(0.0, aStartBColor);
+        aColorStops.addStop(1.0, aEndBColor);
     }
 
     basegfx::BGradient aTmpGradient(

@@ -368,10 +368,10 @@ void SdMiscTest::testFillGradient()
         = model::gradient::getColorStopsFromUno(aGradient2.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops.getStopColor(1)));
 }
 
 void SdMiscTest::testTdf44774()

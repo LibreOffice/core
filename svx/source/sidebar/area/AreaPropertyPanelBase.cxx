@@ -1377,15 +1377,13 @@ basegfx::BColorStops AreaPropertyPanelBase::createColorStops()
     if (maColorStops.size() >= 2)
     {
         aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(),
-                                                  mxLbFillGradFrom->GetSelectEntryColor().getBColor());
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(),
-                                                 mxLbFillGradTo->GetSelectEntryColor().getBColor());
+        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), mxLbFillGradFrom->GetSelectEntryColor().getBColor());
+        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), mxLbFillGradTo->GetSelectEntryColor().getBColor());
     }
     else
     {
-        aColorStops.emplace_back(0.0, mxLbFillGradFrom->GetSelectEntryColor().getBColor());
-        aColorStops.emplace_back(1.0, mxLbFillGradTo->GetSelectEntryColor().getBColor());
+        aColorStops.addStop(0.0, mxLbFillGradFrom->GetSelectEntryColor().getBColor());
+        aColorStops.addStop(1.0, mxLbFillGradTo->GetSelectEntryColor().getBColor());
     }
 
     return aColorStops;

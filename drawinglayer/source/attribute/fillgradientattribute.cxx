@@ -64,7 +64,7 @@ namespace drawinglayer::attribute
                 // fallback value
                 if (maColorStops.empty())
                 {
-                    maColorStops.emplace_back(0.0, basegfx::BColor());
+                    maColorStops.addStop(0.0, basegfx::BColor());
                 }
             }
 
@@ -78,7 +78,7 @@ namespace drawinglayer::attribute
                 mnSteps(0)
             {
                 // always add a fallback color, see above
-                maColorStops.emplace_back(0.0, basegfx::BColor());
+                maColorStops.addStop(0.0, basegfx::BColor());
             }
 
             // data read access

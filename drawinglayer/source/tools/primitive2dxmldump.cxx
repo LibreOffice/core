@@ -312,15 +312,14 @@ void writeSdrFillAttribute(::tools::XmlWriter& rWriter,
         for (size_t a(0); a < rColorStops.size(); a++)
         {
             if (0 == a)
-                rWriter.attribute("startColor",
-                                  convertColorToString(rColorStops[a].getStopColor()));
+                rWriter.attribute("startColor", convertColorToString(rColorStops.getStopColor(a)));
             else if (rColorStops.size() == a + 1)
-                rWriter.attribute("endColor", convertColorToString(rColorStops[a].getStopColor()));
+                rWriter.attribute("endColor", convertColorToString(rColorStops.getStopColor(a)));
             else
             {
                 rWriter.startElement("colorStop");
-                rWriter.attribute("stopOffset", rColorStops[a].getStopOffset());
-                rWriter.attribute("stopColor", convertColorToString(rColorStops[a].getStopColor()));
+                rWriter.attribute("stopOffset", rColorStops.getStopOffset(a));
+                rWriter.attribute("stopColor", convertColorToString(rColorStops.getStopColor(a)));
                 rWriter.endElement();
             }
         }

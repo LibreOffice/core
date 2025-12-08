@@ -526,8 +526,8 @@ basegfx::BColorStops SvxTransparenceTabPage::createColorStops()
     }
     else
     {
-        aColorStops.emplace_back(0.0, aStartBColor);
-        aColorStops.emplace_back(1.0, aEndBColor);
+        aColorStops.addStop(0.0, aStartBColor);
+        aColorStops.addStop(1.0, aEndBColor);
     }
 
     return aColorStops;

@@ -1301,8 +1301,8 @@ basegfx::BColorStops SlideBackground::createColorStops()
     }
     else
     {
-        aColorStops.emplace_back(0.0, mxFillGrad1->GetSelectEntryColor().getBColor());
-        aColorStops.emplace_back(1.0, mxFillGrad2->GetSelectEntryColor().getBColor());
+        aColorStops.addStop(0.0, mxFillGrad1->GetSelectEntryColor().getBColor());
+        aColorStops.addStop(1.0, mxFillGrad2->GetSelectEntryColor().getBColor());
     }
 
     return aColorStops;

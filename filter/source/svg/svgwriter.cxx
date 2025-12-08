@@ -2433,8 +2433,8 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
             else
             {
                 // else create color stops with 'old' start/endColor
-                aColorStops.emplace_back(0.0, rGradient.GetStartColor().getBColor());
-                aColorStops.emplace_back(1.0, rGradient.GetEndColor().getBColor());
+                aColorStops.addStop(0.0, rGradient.GetStartColor().getBColor());
+                aColorStops.addStop(1.0, rGradient.GetEndColor().getBColor());
             }
 
             // create a basegfx::BGradient with the info to be able to directly
@@ -3503,7 +3503,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             aMemStm.ReadDouble(fG);
                             aMemStm.ReadDouble(fB);
 
-                            aColorStops.emplace_back(fOff, basegfx::BColor(fR, fG, fB));
+                            aColorStops.addStop(fOff, basegfx::BColor(fR, fG, fB));
                         }
 
                         // export with real Color Stops
