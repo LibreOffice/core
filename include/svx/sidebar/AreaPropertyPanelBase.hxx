@@ -91,7 +91,7 @@ public:
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) = 0;
     virtual void setFillUseBackground(const XFillStyleItem* pStyleItem, const XFillUseSlideBackgroundItem& rItem) = 0;
 
-    void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const XFillTransparenceItem* pState);
     void updateFillFloatTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillStyle(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillGradient(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
@@ -154,7 +154,7 @@ protected:
     OUString  maImgLinear;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
-    std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
+    std::unique_ptr< XFillTransparenceItem >        mpTransparenceItem;
 
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops maColorStops;

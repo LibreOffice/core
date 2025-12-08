@@ -806,7 +806,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
     }
 }
 
-void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
+void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const XFillTransparenceItem* pState)
 {
     if (bDisabled)
     {
@@ -817,8 +817,7 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
     {
         if (pState)
         {
-            const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
-            mpTransparenceItem.reset(pItem->Clone());
+            mpTransparenceItem.reset(pState->Clone());
         }
         else
         {
@@ -1089,7 +1088,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     switch(nSID)
     {
         case SID_ATTR_FILL_TRANSPARENCE:
-            updateFillTransparence(bDisabled, bDefaultOrSet, pState);
+            updateFillTransparence(bDisabled, bDefaultOrSet, static_cast<const XFillTransparenceItem*>(pState));
         break;
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
             updateFillFloatTransparence(bDisabled, bDefaultOrSet, pState);
