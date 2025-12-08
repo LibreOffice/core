@@ -46,6 +46,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/lok.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
