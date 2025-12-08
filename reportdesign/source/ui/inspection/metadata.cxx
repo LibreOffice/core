@@ -73,6 +73,10 @@ namespace rptui
         {
             return _lhs.sName < _rhs.sName;
         }
+        bool operator()(const OPropertyInfoImpl& lhs, std::u16string_view rhs) const
+        {
+            return lhs.sName < rhs;
+        }
     };
 
     }
@@ -143,7 +147,7 @@ namespace rptui
     }
 
 
-    sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName)
+    sal_Int32 OPropertyInfoService::getPropertyId(std::u16string_view _rName)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
@@ -171,15 +175,14 @@ namespace rptui
     }
 
 
-    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
+    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(std::u16string_view _rName)
     {
         // initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0, OUString(), u""_ustr, PropUIFlags::NONE);
 
         const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
-            s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
+            s_pPropertyInfos, s_pPropertyInfos + s_nCount, _rName, PropertyInfoLessByName() );
 
         if ( ( pPropInfo < s_pPropertyInfos + s_nCount ) && pPropInfo->sName == _rName )
             return pPropInfo;
