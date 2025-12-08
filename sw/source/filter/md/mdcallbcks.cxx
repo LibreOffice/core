@@ -236,7 +236,8 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
 int SwMarkdownParser::leave_span_callback(MD_SPANTYPE type, void* /*detail*/, void* userdata)
 {
     SwMarkdownParser* parser = static_cast<SwMarkdownParser*>(userdata);
-    parser->m_aAttrStack.pop_back();
+    if (!parser->m_aAttrStack.empty())
+        parser->m_aAttrStack.pop_back();
     switch (type)
     {
         case MD_SPAN_IMG:
