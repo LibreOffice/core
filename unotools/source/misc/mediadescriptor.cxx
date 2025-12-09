@@ -66,7 +66,7 @@ OUString removeFragment(OUString const & uri) {
 
 /** @short  tries to open a stream by using the given URL.
 
-    @descr  First it tries to open the content in r/w mode (if its
+    @descr  First it tries to open the content in r/w mode (if it's
             allowed to do so). Only in case it's not allowed or it failed
             the stream will be tried to open in readonly mode.
 
