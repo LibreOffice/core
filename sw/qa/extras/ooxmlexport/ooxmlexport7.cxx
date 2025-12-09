@@ -748,9 +748,6 @@ CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
 {
     createSwDoc("fdo78658.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 40
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for lockedCanvas tag
@@ -995,9 +992,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
 {
     createSwDoc("fdo80895.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     // DML shapes in header and footer were not getting rendered in LO and the same were not preserved after RT.
     // In actual there was a shape but because of fetching wrong theme for header.xml or footer.xml
@@ -1016,9 +1010,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
 CPPUNIT_TEST_FIXTURE(Test, testTdf118242)
 {
     createSwDoc("tdf118242.odt");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
