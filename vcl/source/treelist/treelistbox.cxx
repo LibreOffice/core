@@ -391,6 +391,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbContextBmpExpanded(false),
     mbQuickSearch(false),
     mbActivateOnSingleClick(false),
+    mbCustomEntryRenderer(false),
     mbHoverSelection(false),
     mbSelectingByHover(false),
     mbIsTextColumEnabled(false),

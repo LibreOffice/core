@@ -1892,6 +1892,7 @@ void JSTreeView::render_entry(int pos, int dpix, int dpiy)
 
     Size aRenderSize = signal_custom_get_size(*pDevice, get_id(pos));
     pDevice->SetOutputSize(aRenderSize);
+    m_xTreeView->MakeVisible(pEntry);
     m_xTreeView->DrawCustomEntry(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), *pEntry);
 
     BitmapEx aImage = pDevice->GetBitmapEx(Point(0, 0), aRenderSize);
