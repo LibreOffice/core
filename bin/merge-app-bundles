@@ -54,6 +54,8 @@ OUT=$(cd "$3" && /bin/pwd)
 (
     cd "$ONE"
     find . -type d -print
+    cd "$TWO"
+    find . -type d -print
 ) |
 (
     cd "$OUT"
