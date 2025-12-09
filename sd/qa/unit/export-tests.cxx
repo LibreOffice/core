@@ -1984,8 +1984,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf152606)
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf154754)
 {
-    //Without the fix in place, it would crash at export time
+    // odfvalidator warns because we are missing a xlink:href attribute and it therefore concludes that
+    // we must have a <office:binary-data> sub-element. Most likely the input file is invalid.
     skipValidation();
+
+    //Without the fix in place, it would crash at export time
     createSdImpressDoc("odp/tdf154754.odp");
     saveAndReload(TestFilter::ODP);
 }
