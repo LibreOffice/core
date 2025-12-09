@@ -554,9 +554,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132514)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153891, "tdf153891.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // This document simply crashed the importer.
 }
 
@@ -739,9 +736,6 @@ CPPUNIT_TEST_FIXTURE(Test, testBehinddoc)
 {
     createSwDoc("behinddoc.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was "0", shape was in the foreground.
@@ -792,9 +786,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
 CPPUNIT_TEST_FIXTURE(Test, testFdo70942)
 {
     createSwDoc("fdo70942.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -932,9 +923,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO73546)
 {
     createSwDoc("FDO73546.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL",u"0");
@@ -1050,9 +1038,6 @@ CPPUNIT_TEST_FIXTURE(Test, testOuterShdw)
 {
     createSwDoc("testOuterShdw.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", u"1041400");
@@ -1061,9 +1046,6 @@ CPPUNIT_TEST_FIXTURE(Test, testOuterShdw)
 CPPUNIT_TEST_FIXTURE(Test, testExtentValue)
 {
     createSwDoc("fdo74605.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 45
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
