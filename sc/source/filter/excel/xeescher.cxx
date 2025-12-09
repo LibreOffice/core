@@ -1102,6 +1102,7 @@ public:
                            const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
                            const OUString& sControlName, const OUString& sFmlaLink,
                            OUString aLabel, OUString aMacroName, sal_Int16 nState);
+    bool m_bLook3d = true;
 
 protected:
     using VMLExport::StartShape;
@@ -1180,6 +1181,9 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
         XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Checked), "1");
     }
 
+    if (!m_bLook3d)
+        pVmlDrawing->singleElement(FSNS(XML_x, XML_NoThreeD));
+
     // XclExpOcxControlObj::WriteSubRecs() has the same fixed values.
     if (m_nObjType == EXC_OBJTYPE_BUTTON)
     {
@@ -1216,6 +1220,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
                                                 mnState);
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
+    aFormControlExporter.m_bLook3d = !mbFlatButton;
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);
