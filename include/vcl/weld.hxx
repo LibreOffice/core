@@ -1034,6 +1034,9 @@ public:
 private:
     OUString m_sSavedValue;
 
+    // if handler returns true, then menu has been shown and event is consumed
+    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
+
 protected:
     Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
@@ -1047,8 +1050,6 @@ protected:
     Link<const TreeIter&, bool> m_aCollapsingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
-    // if handler returns true, then menu has been shown and event is consumed
-    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
     // if handler returns true, drag is disallowed, consumer can change bool
     // arg to false to disable the treeview default dnd icon
     Link<bool&, bool> m_aDragBeginHdl;
@@ -1101,7 +1102,7 @@ protected:
         return m_aEditingDoneHdl.Call(rIterText);
     }
 
-    void signal_popup_menu(const CommandEvent& rCommand) { m_aPopupMenuHdl.Call(rCommand); }
+    bool signal_popup_menu(const CommandEvent& rCommand) { return m_aPopupMenuHdl.Call(rCommand); }
 
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
 

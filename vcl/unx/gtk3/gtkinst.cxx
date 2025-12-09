@@ -13981,7 +13981,7 @@ private:
 
     virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
     {
-        return m_aPopupMenuHdl.Call(rCEvt);
+        return weld::TreeView::signal_popup_menu(rCEvt);
     }
 
     void insert_row(GtkTreeIter& iter, const GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
