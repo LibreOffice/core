@@ -30,9 +30,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76248)
 {
     createSwDoc("FDO76248.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 6
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // In two cases the a:graphicData elements had no children, which is invalid.
@@ -208,9 +205,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76586)
 CPPUNIT_TEST_FIXTURE(Test, testFDO76587 )
 {
     createSwDoc("fdo76587.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
