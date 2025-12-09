@@ -661,9 +661,13 @@ void DocxAttributeOutput::TableRowRedline(
             RTL_TEXTENCODING_UTF8));
 
         const DateTime aDateTime = aRedlineData.GetTimeStamp();
-        bool bNoDate = bRemovePersonalInfo
-                       || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
-                           && aDateTime.GetDay() == 1);
+        bool bNoDate
+            = bRemovePersonalInfo
+              || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
+                  && aDateTime.GetDay() == 1)
+              // The officeotron validator does not think year 0 is valid, so just dont put anything,
+              // a zero year is not useful anyway.
+              || (aDateTime.GetYear() == 0 && aDateTime.GetMonth() == 0 && aDateTime.GetDay() == 0);
 
         if (bNoDate)
             m_pSerializer->singleElementNS(
@@ -732,9 +736,13 @@ void DocxAttributeOutput::TableCellRedline(
             RTL_TEXTENCODING_UTF8));
 
         const DateTime aDateTime = aRedlineData.GetTimeStamp();
-        bool bNoDate = bRemovePersonalInfo
-                       || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
-                           && aDateTime.GetDay() == 1);
+        bool bNoDate
+            = bRemovePersonalInfo
+              || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
+                  && aDateTime.GetDay() == 1)
+              // The officeotron validator does not think year 0 is valid, so just dont put anything,
+              // a zero year is not useful anyway.
+              || (aDateTime.GetYear() == 0 && aDateTime.GetMonth() == 0 && aDateTime.GetDay() == 0);
 
         if (bNoDate)
             m_pSerializer->singleElementNS(
