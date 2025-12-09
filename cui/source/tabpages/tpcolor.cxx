@@ -204,37 +204,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
     if (!m_pColorList.is())
         return;
 
-    if (const XFillColorItem* pFillColorItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_FILLCOLOR)))
-    {
-        SetColorModel( ColorModel::RGB );
-        ChangeColorModel();
-
-        const Color aColor = pFillColorItem->GetColorValue();
-        NamedColor aNamedColor;
-        aNamedColor.m_aColor = aColor;
-        ChangeColor(aNamedColor);
-
-        for (size_t i = 0, nSize = maPaletteManager.GetPaletteList().size(); i < nSize; ++i)
-        {
-            maPaletteManager.SetPalette(i, true/*bPosOnly*/);
-
-            m_pColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
-                XPropertyListType::Color, maPaletteManager.GetSelectedPalettePath()));
-            if (!m_pColorList->Load())
-                continue;
-
-            sal_Int32 nPos = FindInPalette(aColor);
-            if (nPos == -1)
-                continue;
-
-            m_xSelectPalette->set_active_text(maPaletteManager.GetPaletteName());
-            SelectPaletteLBHdl(*m_xSelectPalette);
-
-            m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nPos));
-
-            break;
-        }
-    }
+    SelectPaletteLBHdl(*m_xSelectPalette);
 
     m_aCtlPreviewOld.SetAttributes(m_aXFillAttr.GetItemSet());
     m_aCtlPreviewOld.Invalidate();
@@ -501,6 +471,46 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
     }
 
     m_xValSetColorList->Resize();
+
+    // select the 'Active' color in the m_xValSetColorList if it has it
+    if (const XFillColorItem* pFillColorItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_FILLCOLOR)))
+    {
+        SetColorModel(ColorModel::RGB);
+        ChangeColorModel();
+
+        const Color aColor = pFillColorItem->GetColorValue();
+        NamedColor aNamedColor;
+        aNamedColor.m_aColor = aColor;
+        ChangeColor(aNamedColor);
+
+        if (sal_Int32 nPalettePos = maPaletteManager.GetPalette();
+            /* theme colors palette */ maPaletteManager.IsThemePaletteSelected() ||
+            /* document colors palette */ nPalettePos == maPaletteManager.GetPaletteCount() - 1
+            || /* custom palette */ nPalettePos == 0)
+        {
+            for (size_t nItemPos = 0, nItemCount = m_xValSetColorList->GetItemCount();
+                 nItemPos < nItemCount; nItemPos++)
+            {
+                auto nItemId = m_xValSetColorList->GetItemId(nItemPos);
+                if (m_xValSetColorList->GetItemColor(nItemId) == aColor)
+                {
+                    m_xValSetColorList->SelectItem(nItemId);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            m_pColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+                XPropertyListType::Color, maPaletteManager.GetSelectedPalettePath()));
+            if (m_pColorList->Load())
+            {
+                auto nItemPos = FindInPalette(aColor);
+                if (nItemPos != -1)
+                    m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nItemPos));
+            }
+        }
+    }
 }
 
 IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
