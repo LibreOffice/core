@@ -12,6 +12,9 @@
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -2125,6 +2128,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf168272)
+{
+    createSwDoc();
+
+    // Use "Landscape" - this is the standard name in a default English template
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue(u"PageStyleName"_ustr, u"Landscape"_ustr),
+    };
+
+    dispatchCommand(mxComponent, ".uno:InsertPageBreak", aPropertyValues);
+
+    // Refresh layout
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    xModel->lockControllers();
+    xModel->unlockControllers();
+
+    uno::Reference<text::XTextViewCursorSupplier> xViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xPageCursor(xViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xPageCursor->jumpToLastPage();
+
+    // Verify page number
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), xPageCursor->getPage());
+
+    // Verify style
+    uno::Reference<beans::XPropertySet> xCursorProps(xViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    OUString sActualStyle;
+    xCursorProps->getPropertyValue("PageStyleName") >>= sActualStyle;
+
+    // This should now match "Landscape"
+    CPPUNIT_ASSERT_EQUAL(u"Landscape"_ustr, sActualStyle);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

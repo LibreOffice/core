@@ -217,7 +217,18 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_PAGEBREAK:
-        rSh.InsertPageBreak();
+        if (const SfxStringItem* pStyleItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1))
+        {
+            UIName aStyleName(pStyleItem->GetValue());
+            if (!aStyleName.isEmpty())
+                rSh.InsertPageBreak(&aStyleName);
+            else
+                rSh.InsertPageBreak();
+        }
+        else
+        {
+            rSh.InsertPageBreak();
+        }
         rReq.Done();
         break;
 

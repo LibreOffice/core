@@ -3499,7 +3499,9 @@ SfxVoidItem InsertObjectStarMath FN_INSERT_SMA
 ]
 
 SfxVoidItem InsertPagebreak FN_INSERT_PAGEBREAK
-()
+(
+    SfxStringItem PageStyleName FN_PARAM_1
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
