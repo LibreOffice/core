@@ -1047,7 +1047,7 @@ protected:
     Link<const TreeIter&, bool> m_aCollapsingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
-    // if handler returns true, then menu has been show and event is consumed
+    // if handler returns true, then menu has been shown and event is consumed
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
     // if handler returns true, drag is disallowed, consumer can change bool
     // arg to false to disable the treeview default dnd icon
