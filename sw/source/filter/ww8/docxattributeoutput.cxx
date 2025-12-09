@@ -4387,7 +4387,10 @@ void DocxAttributeOutput::StartRedline(const SwRedlineData* pRedlineData, bool b
 
     const DateTime& aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
-        ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
+        ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 ) ||
+        // The officeotron validator does not think year 0 is valid, so just dont put anything,
+        // a zero year is not useful anyway.
+        ( aDateTime.GetYear() == 0 && aDateTime.GetMonth() == 0 && aDateTime.GetDay() == 0 );
     bool isInMoveBookmark = false;
     for (const auto& openedBookmark : m_rOpenedBookmarksIds)
     {
