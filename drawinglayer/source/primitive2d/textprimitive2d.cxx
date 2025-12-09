@@ -348,10 +348,7 @@ void TextSimplePortionPrimitive2D::createTextLayouter(TextLayouterDevice& rTextL
         // tdf#101686: This is LTR text, but the output device may have RTL state.
         vcl::text::ComplexTextLayoutFlags nLTRLayoutMode(rTextLayouter.getLayoutMode());
         nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiRtl;
-        if (getFontAttribute().getBiDiStrong())
-            nLTRLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
-        else
-            nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+        nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
         rTextLayouter.setLayoutMode(nLTRLayoutMode);
     }
 }
