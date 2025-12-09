@@ -96,7 +96,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
 
 namespace msfilter::rtfutil
 {
-OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
+OString OutHex(sal_uInt32 nHex, sal_uInt8 nLen)
 {
     char aNToABuf[] = "0000000000000000";
 
