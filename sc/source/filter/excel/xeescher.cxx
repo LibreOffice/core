@@ -1138,6 +1138,9 @@ sal_Int32 VmlFormControlExporter::StartShape()
     if (!m_sControlName.isEmpty())
         AddShapeAttribute(XML_id, m_sControlName.toUtf8());
 
+    // control background: set filled as false so the control is transparent instead of white
+    AddShapeAttribute(XML_filled, "f");
+
     return VMLExport::StartShape();
 }
 
