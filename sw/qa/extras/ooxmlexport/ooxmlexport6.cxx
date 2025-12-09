@@ -505,9 +505,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127814)
 {
     createSwDoc("tdf127814.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 136
-    skipValidation();
-
     save(TestFilter::DOCX);
     // Paragraph top margin was 0 in a table started on a new page
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
