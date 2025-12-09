@@ -606,8 +606,7 @@ lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
 {
     OUStringBuffer buf("Couldn't convert ");
     PyRef reprString( PyObject_Str(o), SAL_NO_ACQUIRE );
-    buf.appendAscii( PyUnicode_AsUTF8(reprString.get()) );
-    buf.append(" to a UNO type");
+    buf.append(pyString2ustring(reprString.get()) + " to a UNO type");
     if (pWrapped)
     {
         buf.append("; caught exception: " + *pWrapped);
