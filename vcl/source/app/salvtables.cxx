@@ -3646,7 +3646,7 @@ void SalInstanceTreeView::set_font_color(SvTreeListEntry* pEntry, const Color& r
 void SalInstanceTreeView::AddStringItem(SvTreeListEntry* pEntry, const OUString& rStr, int nCol)
 {
     auto xCell = std::make_unique<SvLBoxString>(rStr);
-    if (m_aCustomRenders.count(nCol))
+    if (m_aCustomRenders.contains(nCol))
         xCell->SetCustomRender();
     pEntry->AddItem(std::move(xCell));
 }
@@ -4789,7 +4789,7 @@ bool SalInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
 bool SalInstanceTreeView::get_children_on_demand(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    if (m_aExpandingPlaceHolderParents.count(rVclIter.iter))
+    if (m_aExpandingPlaceHolderParents.contains(rVclIter.iter))
         return true;
     return GetPlaceHolderChild(rVclIter.iter) != nullptr;
 }

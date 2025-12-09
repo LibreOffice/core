@@ -490,7 +490,7 @@ bool SwViewShell::PrintOrPDFExport(
 
         const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
         OSL_ENSURE( nPage < 0 ||
-            rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1,
+            rPrintData.GetRenderData().GetValidPagesSet().contains(nPage),
             "SwViewShell::PrintOrPDFExport: nPage not valid" );
         SwViewShell *const pViewSh2 = (nPage < 0)
                 ? rPrintData.GetRenderData().m_pPostItShell.get()// post-it page

@@ -481,7 +481,7 @@ void ImpEditEngine::FormatDoc()
         if (!aRepaintParagraphList.empty())
         {
             auto CombineRepaintParasAreas = [&](const LineAreaInfo& rInfo) {
-                if (aRepaintParagraphList.count(rInfo.nPortion))
+                if (aRepaintParagraphList.contains(rInfo.nPortion))
                     maInvalidRect.Union(rInfo.aArea);
                 return CallbackResult::Continue;
             };

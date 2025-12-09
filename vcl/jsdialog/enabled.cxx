@@ -644,7 +644,7 @@ bool completeWriterDialogList(const o3tl::sorted_vector<OUString>& entries)
 {
     for (const auto& entry : SwriterDialogList)
     {
-        if (entries.find(OUString(entry)) == entries.end())
+        if (!entries.contains(OUString(entry)))
             return false;
     }
     return true;

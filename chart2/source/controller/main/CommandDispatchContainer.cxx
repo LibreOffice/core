@@ -113,7 +113,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             m_aToBeDisposedDispatches.push_back(pDispatch);
             return pDispatch;
         }
-        if (s_aContainerDocumentCommands.count(rURL.Path) > 0)
+        if (s_aContainerDocumentCommands.contains(rURL.Path))
         {
             // ToDo: can those dispatches be cached?
             return cacheIt(getContainerDispatchForURL(xModel->getCurrentController(), rURL));
@@ -122,7 +122,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
 
     if (m_xChartDispatcher.is()
         && (m_xChartDispatcher->commandHandled(rURL.Complete)
-            || m_aAdditionalChartCommands.count(rURL.Path) > 0))
+            || m_aAdditionalChartCommands.contains(rURL.Path)))
         return cacheIt(m_xChartDispatcher);
 
     // #i12587# support for shapes in chart

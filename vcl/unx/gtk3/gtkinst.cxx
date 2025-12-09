@@ -14558,7 +14558,7 @@ private:
     bool child_is_placeholder(GtkInstanceTreeIter& rGtkIter) const
     {
         GtkTreePath* pPath = gtk_tree_model_get_path(m_pTreeModel, &rGtkIter.iter);
-        bool bExpanding = m_aExpandingPlaceHolderParents.count(pPath);
+        bool bExpanding = m_aExpandingPlaceHolderParents.contains(pPath);
         gtk_tree_path_free(pPath);
         if (bExpanding)
             return true;

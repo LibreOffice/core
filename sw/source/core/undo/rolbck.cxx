@@ -844,7 +844,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet(
     for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
     {
         // check if Item is intended to be contained
-        if (rSetArr.count(aIter.GetCurWhich()))
+        if (rSetArr.contains(aIter.GetCurWhich()))
         {
             // do include item, but take care of some 'special' cases
             switch (aIter.GetCurWhich())
@@ -1435,7 +1435,7 @@ void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
         }
         else if (const SfxPoolItem* pItem = SfxItemIter(rSet).GetCurItem())
         {
-            if ( m_WhichIdSet.count( pItem->Which() ) )
+            if ( m_WhichIdSet.contains( pItem->Which() ) )
             {
                 pNewHstr.reset( new SwHistorySetFormat( pItem, m_nNodeIndex ) );
             }

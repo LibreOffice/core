@@ -983,7 +983,7 @@ static bool lcl_PageDescOrFollowContainsHeaderFooter(const SwPageDesc& rPageDesc
     // remember already checked page descs to avoid cycle
     o3tl::sorted_vector<const SwPageDesc*> aCheckedPageDescs;
     const SwPageDesc* pCurPageDesc = &rPageDesc;
-    while (aCheckedPageDescs.count(pCurPageDesc) == 0)
+    while (!aCheckedPageDescs.contains(pCurPageDesc))
     {
         const SwFrameFormat& rMaster = pCurPageDesc->GetMaster();
         if (rMaster.GetHeader().IsActive() || rMaster.GetFooter().IsActive())
