@@ -1723,7 +1723,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
     rtl::Reference<SdrObject> pObj;
     while( (pObj = maPresentationShapeList.getNextShape()) )
     {
-        if( aUsedPresentationObjects.count(pObj.get()) == 0 )
+        if (!aUsedPresentationObjects.contains(pObj.get()))
         {
 
             if( pObj->IsEmptyPresObj() )

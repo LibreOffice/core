@@ -1273,7 +1273,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     {
                                         m_setParaAdd.insert(pAccPara);
                                     }
-                                    else if(m_setParaAdd.count(pAccPara) == 0)
+                                    else if (!m_setParaAdd.contains(pAccPara))
                                     {
                                         m_setParaRemove.insert(pAccPara);
                                     }
@@ -1531,7 +1531,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
                                       || xParaContext->getAccessibleRole() == AccessibleRole::BLOCK_QUOTE))
             {
                 SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
-                if (m_setParaAdd.count(pAccPara) == 0 )
+                if (!m_setParaAdd.contains(pAccPara))
                 {
                     m_setParaRemove.insert(pAccPara);
                 }
