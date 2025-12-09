@@ -39,7 +39,6 @@
 #include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unodraw.hxx>
 
