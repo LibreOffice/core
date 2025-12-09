@@ -180,6 +180,8 @@ public:
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 
     void setFont(vcl::Font rFont);
+
+    static OUString getHelpId(QWidget& rWidget);
     static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
 
 protected:
