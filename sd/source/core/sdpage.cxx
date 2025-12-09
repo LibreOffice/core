@@ -1402,6 +1402,13 @@ OUString SdPage::autoLayoutToString(AutoLayout nLayoutId)
     return enumtoString(nLayoutId);
 }
 
+void SdPage::SetCanvasPage()
+{
+    mbIsCanvasPage = true;
+    SetExcluded(true);
+    static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).StoreCanvasPage(this);
+}
+
 static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const OUString& sLayoutType )
 {
     ::tools::Rectangle aTitleRect;

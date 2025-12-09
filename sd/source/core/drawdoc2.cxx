@@ -1515,8 +1515,6 @@ void SdDrawDocument::ImportCanvasPage()
     SdPage* pPage = GetSdPage(0, PageKind::Standard);
     bool bIsCanvasPageValid = ValidateCanvasPage(pPage);
     pPage->SetCanvasPage();
-    pPage->SetExcluded(true);
-    mpCanvasPage = pPage;
     SdPage* pMPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
     pMPage->SetCanvasMasterPage();
     // re-populate the previews grid if not valid
@@ -1625,9 +1623,6 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     if (!pCanvasPage)
         return 0xffff;
 
-    // exclude from slideshow
-    pCanvasPage->SetExcluded(true);
-
     // move the canvas page to the top
     sal_uInt16 nCanvasPageNum = 2 * nCanvasPageIndex + 1;
     MovePage(nCanvasPageNum, 1); // Canvas page
@@ -1637,7 +1632,6 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 
     ResizeCurrentPage(pCanvasPage, aCanvasSize, PageKind::Standard);
     pCanvasPage->SetCanvasPage();
-    mpCanvasPage = pCanvasPage;
 
     SdPage* pMasterCanvas = static_cast<SdPage*>(&pCanvasPage->TRG_GetMasterPage());
     pMasterCanvas->SetCanvasMasterPage();
