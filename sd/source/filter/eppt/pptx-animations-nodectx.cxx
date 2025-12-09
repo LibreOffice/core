@@ -40,18 +40,6 @@ namespace oox::core
 {
 namespace
 {
-bool isValidTarget(const Any& rTarget)
-{
-    Reference<XShape> xShape;
-
-    if ((rTarget >>= xShape) && drawingml::ShapeExport::IsShapeTypeKnown(xShape))
-        return true;
-
-    ParagraphTarget aParagraphTarget;
-
-    return (rTarget >>= aParagraphTarget) && aParagraphTarget.Shape.is();
-}
-
 bool IsAudioURL(std::u16string_view rURL)
 {
     return o3tl::endsWithIgnoreAsciiCase(rURL, ".wav")
@@ -95,10 +83,11 @@ bool initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChil
 }
 }
 
-NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild,
-                         bool bIsIterateChild)
+NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, PowerPointExport& rExport,
+                         bool bMainSeqChild, bool bIsIterateChild)
     : mxNode(xNode)
     , mbValid(true)
+    , mrPowerPointExport(rExport)
     , mbOnSubTnLst(false)
     , mnEffectNodeType(-1)
     , mnEffectPresetClass(css::presentation::EffectPresetClass::CUSTOM)
@@ -115,6 +104,19 @@ NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqCh
                    && mxNode->getType() == AnimationNodeType::AUDIO;
 
     initCondList(getNodeForCondition()->getEnd(), maEndCondList, bMainSeqChild);
+}
+
+bool NodeContext::isValidTarget(const Any& rTarget)
+{
+    Reference<XShape> xShape;
+
+    if ((rTarget >>= xShape) && drawingml::ShapeExport::IsShapeTypeKnown(xShape)
+        && (mrPowerPointExport.GetShapeID(xShape) != -1))
+        return true;
+
+    ParagraphTarget aParagraphTarget;
+
+    return (rTarget >>= aParagraphTarget) && aParagraphTarget.Shape.is();
 }
 
 void NodeContext::initUserData()
@@ -209,8 +211,8 @@ bool NodeContext::initChildNodes()
                 Reference<XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY);
                 if (xChildNode.is())
                 {
-                    auto pChildContext
-                        = std::make_unique<NodeContext>(xChildNode, bIsMainSeq, bIsIterateChild);
+                    auto pChildContext = std::make_unique<NodeContext>(
+                        xChildNode, mrPowerPointExport, bIsMainSeq, bIsIterateChild);
                     if (pChildContext->isValid())
                         bValid = true;
                     maChildNodes.push_back(std::move(pChildContext));
