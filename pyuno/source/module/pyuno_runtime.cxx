@@ -516,6 +516,24 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             // the exception base functions want to have an "args" tuple,
             // which contains the message
             PyObject_SetAttrString( ret.get(), "args", args.get() );
+            PyRef excType, excValue, excTraceback;
+            PyErr_Fetch(
+                reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject **>(&excValue),
+                reinterpret_cast<PyObject **>(&excTraceback));
+#if defined SAL_LOG_INFO
+            if (excType.is()) {
+                OUString more;
+                if (excValue.is()) {
+                    PyRef valueRep(PyObject_Repr(excValue.get()), SAL_NO_ACQUIRE);
+                    more = ": " + pyString2ustring(valueRep.get());
+                }
+                PyRef typeRep(PyObject_Repr(excType.get()), SAL_NO_ACQUIRE);
+                SAL_INFO(
+                    "pyuno.runtime",
+                    "setting exception args raised Python exception "
+                        << pyString2ustring(typeRep.get()) << more);
+            }
+#endif
         }
         return ret;
     }

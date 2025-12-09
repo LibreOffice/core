@@ -554,7 +554,20 @@ class EmbindTest(unittest.TestCase):
                         test)),)))
             #TODO: direct call?
 
-        #TODO: v = test.getAnyException()
+        v = test.getAnyException()
+        self.assertTrue(v.Message.startswith('error')) #TODO: use Python 3.14 assertStartsWith
+        self.assertEqual(v.Context, None)
+        self.assertEqual(v.m1, -123456)
+        self.assertEqual(v.m2, 100.5)
+        self.assertEqual(v.m3, 'hä')
+        self.assertTrue(test.isAnyException(v))
+        self.assertTrue(
+            uno.invoke(
+                test, 'isAnyException',
+                (uno.Any(
+                    'org.libreoffice.embindtest.Exception',
+                    Exception('error', None, -123456, 100.5, 'hä')),)))
+            #TODO: direct call?
 
         v = test.getAnyInterface()
         self.assertEqual(v, test)

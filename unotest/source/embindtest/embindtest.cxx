@@ -396,8 +396,8 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
     {
         auto const val = test->getAnyException();
         verify(checkAnyException(val));
-        //TODO: bool const ok = test->isAnyException(val);
-        //TODO: verify(ok);
+        bool const ok = test->isAnyException(val);
+        verify(ok);
     }
     {
         auto const val = test->getAnyInterface();
