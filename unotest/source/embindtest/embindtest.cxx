@@ -66,6 +66,151 @@ void verify(bool value, std::source_location const& location = std::source_locat
     }
 }
 
+bool checkAnyVoid(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<void>::get();
+}
+
+bool checkAnyBoolean(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<bool>::get() && *o3tl::forceAccess<bool>(value);
+}
+
+bool checkAnyByte(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_Int8>::get()
+           && *o3tl::forceAccess<sal_Int8>(value) == -12;
+}
+
+bool checkAnyShort(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_Int16>::get()
+           && *o3tl::forceAccess<sal_Int16>(value) == -1234;
+}
+
+bool checkAnyUnsignedShort(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_uInt16>::get()
+           && *o3tl::forceAccess<sal_uInt16>(value) == 54321;
+}
+
+bool checkAnyLong(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_Int32>::get()
+           && *o3tl::forceAccess<sal_Int32>(value) == -123456;
+}
+
+bool checkAnyUnsignedLong(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_uInt32>::get()
+           && *o3tl::forceAccess<sal_uInt32>(value) == 3456789012;
+}
+
+bool checkAnyHyper(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_Int64>::get()
+           && *o3tl::forceAccess<sal_Int64>(value) == -123456789;
+}
+
+bool checkAnyUnsignedHyper(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_uInt64>::get()
+           && *o3tl::forceAccess<sal_uInt64>(value) == 9876543210;
+}
+
+bool checkAnyFloat(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<float>::get()
+           && *o3tl::forceAccess<float>(value) == -10.25;
+}
+
+bool checkAnyDouble(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<double>::get()
+           && *o3tl::forceAccess<double>(value) == 100.5;
+}
+
+bool checkAnyChar(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<sal_Unicode>::get()
+           && *o3tl::forceAccess<sal_Unicode>(value) == u'Ö';
+}
+
+bool checkAnyString(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<OUString>::get()
+           && *o3tl::forceAccess<OUString>(value) == u"hä";
+}
+
+bool checkAnyType(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<css::uno::Type>::get()
+           && *o3tl::forceAccess<css::uno::Type>(value) == cppu::UnoType<sal_Int32>::get();
+}
+
+bool checkAnySequence(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<css::uno::Sequence<OUString>>::get()
+           && *o3tl::forceAccess<css::uno::Sequence<OUString>>(value)
+                  == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
+}
+
+bool checkAnyEnum(css::uno::Any const& value)
+{
+    return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Enum>::get()
+           && *o3tl::forceAccess<org::libreoffice::embindtest::Enum>(value)
+                  == org::libreoffice::embindtest::Enum_E_2;
+}
+
+bool checkAnyStruct(css::uno::Any const& value,
+                    css::uno::Reference<css::uno::XInterface> const& object)
+{
+    return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Struct>::get()
+           && *o3tl::forceAccess<org::libreoffice::embindtest::Struct>(value)
+                  == org::libreoffice::embindtest::Struct{ true,
+                                                           -12,
+                                                           -1234,
+                                                           54321,
+                                                           -123456,
+                                                           3456789012,
+                                                           -123456789,
+                                                           9876543210,
+                                                           -10.25,
+                                                           100.5,
+                                                           u'Ö',
+                                                           u"hä"_ustr,
+                                                           cppu::UnoType<sal_Int32>::get(),
+                                                           css::uno::Any(sal_Int32(-123456)),
+                                                           { u"foo"_ustr, u"barr"_ustr,
+                                                             u"bazzz"_ustr },
+                                                           org::libreoffice::embindtest::Enum_E_2,
+                                                           { -123456 },
+                                                           { { u"foo"_ustr },
+                                                             -123456,
+                                                             css::uno::Any(sal_Int32(-123456)),
+                                                             { u"barr"_ustr } },
+                                                           object };
+}
+
+bool checkAnyException(css::uno::Any const& value)
+{
+    if (value.getValueType() != cppu::UnoType<org::libreoffice::embindtest::Exception>::get())
+    {
+        return false;
+    }
+    auto const& e = *o3tl::forceAccess<org::libreoffice::embindtest::Exception>(value);
+    return e.Message.startsWith("error") && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
+           && e.m3 == u"hä";
+}
+
+bool checkAnyInterface(css::uno::Any const& value,
+                       css::uno::Reference<org::libreoffice::embindtest::XTest> const& object)
+{
+    return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::XTest>::get()
+           && *o3tl::forceAccess<css::uno::Reference<org::libreoffice::embindtest::XTest>>(value)
+                  == object;
+}
+
 void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> const& test)
 {
     {
@@ -148,9 +293,121 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
     }
     {
         auto const val = test->getAnyVoid();
-        verify(val == css::uno::Any());
+        verify(checkAnyVoid(val));
         bool const ok = test->isAnyVoid(val);
         verify(ok);
+    }
+    {
+        auto const val = test->getAnyBoolean();
+        verify(checkAnyBoolean(val));
+        bool const ok = test->isAnyBoolean(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyByte();
+        verify(checkAnyByte(val));
+        bool const ok = test->isAnyByte(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyShort();
+        verify(checkAnyShort(val));
+        bool const ok = test->isAnyShort(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyUnsignedShort();
+        verify(checkAnyUnsignedShort(val));
+        bool const ok = test->isAnyUnsignedShort(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyLong();
+        verify(checkAnyLong(val));
+        bool const ok = test->isAnyLong(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyUnsignedLong();
+        verify(checkAnyUnsignedLong(val));
+        bool const ok = test->isAnyUnsignedLong(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyHyper();
+        verify(checkAnyHyper(val));
+        bool const ok = test->isAnyHyper(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyUnsignedHyper();
+        verify(checkAnyUnsignedHyper(val));
+        bool const ok = test->isAnyUnsignedHyper(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyFloat();
+        verify(checkAnyFloat(val));
+        bool const ok = test->isAnyFloat(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyDouble();
+        verify(checkAnyDouble(val));
+        bool const ok = test->isAnyDouble(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyChar();
+        verify(checkAnyChar(val));
+        bool const ok = test->isAnyChar(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyString();
+        verify(checkAnyString(val));
+        bool const ok = test->isAnyString(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyType();
+        verify(checkAnyType(val));
+        bool const ok = test->isAnyType(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnySequence();
+        verify(checkAnySequence(val));
+        bool const ok = test->isAnySequence(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyEnum();
+        verify(checkAnyEnum(val));
+        bool const ok = test->isAnyEnum(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyStruct();
+        verify(checkAnyStruct(val, test));
+        bool const ok = test->isAnyStruct(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getAnyException();
+        verify(checkAnyException(val));
+        //TODO: bool const ok = test->isAnyException(val);
+        //TODO: verify(ok);
+    }
+    {
+        auto const val = test->getAnyInterface();
+        verify(checkAnyInterface(val, test));
+        bool const ok = test->isAnyInterface(val);
+        //TODO: Test.isAnyInterface in pyuno/qa/pytests/embindtest.py doesn't work as intended:
+        if (ok)
+        {
+            verify(ok);
+        }
     }
     {
         auto const val = test->getEnum();
@@ -494,33 +751,24 @@ class Test
 
     css::uno::Any SAL_CALL getAnyVoid() override { return {}; }
 
-    sal_Bool SAL_CALL isAnyVoid(css::uno::Any const& value) override
-    {
-        return value.getValueType() == cppu::UnoType<void>::get();
-    }
+    sal_Bool SAL_CALL isAnyVoid(css::uno::Any const& value) override { return checkAnyVoid(value); }
 
     css::uno::Any SAL_CALL getAnyBoolean() override { return css::uno::Any(true); }
 
     sal_Bool SAL_CALL isAnyBoolean(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<bool>::get()
-               && *o3tl::forceAccess<bool>(value);
+        return checkAnyBoolean(value);
     }
 
     css::uno::Any SAL_CALL getAnyByte() override { return css::uno::Any(sal_Int8(-12)); }
 
-    sal_Bool SAL_CALL isAnyByte(css::uno::Any const& value) override
-    {
-        return value.getValueType() == cppu::UnoType<sal_Int8>::get()
-               && *o3tl::forceAccess<sal_Int8>(value) == -12;
-    }
+    sal_Bool SAL_CALL isAnyByte(css::uno::Any const& value) override { return checkAnyByte(value); }
 
     css::uno::Any SAL_CALL getAnyShort() override { return css::uno::Any(sal_Int16(-1234)); }
 
     sal_Bool SAL_CALL isAnyShort(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<sal_Int16>::get()
-               && *o3tl::forceAccess<sal_Int16>(value) == -1234;
+        return checkAnyShort(value);
     }
 
     css::uno::Any SAL_CALL getAnyUnsignedShort() override
@@ -530,17 +778,12 @@ class Test
 
     sal_Bool SAL_CALL isAnyUnsignedShort(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<sal_uInt16>::get()
-               && *o3tl::forceAccess<sal_uInt16>(value) == 54321;
+        return checkAnyUnsignedShort(value);
     }
 
     css::uno::Any SAL_CALL getAnyLong() override { return css::uno::Any(sal_Int32(-123456)); }
 
-    sal_Bool SAL_CALL isAnyLong(css::uno::Any const& value) override
-    {
-        return value.getValueType() == cppu::UnoType<sal_Int32>::get()
-               && *o3tl::forceAccess<sal_Int32>(value) == -123456;
-    }
+    sal_Bool SAL_CALL isAnyLong(css::uno::Any const& value) override { return checkAnyLong(value); }
 
     css::uno::Any SAL_CALL getAnyUnsignedLong() override
     {
@@ -549,16 +792,14 @@ class Test
 
     sal_Bool SAL_CALL isAnyUnsignedLong(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<sal_uInt32>::get()
-               && *o3tl::forceAccess<sal_uInt32>(value) == 3456789012;
+        return checkAnyUnsignedLong(value);
     }
 
     css::uno::Any SAL_CALL getAnyHyper() override { return css::uno::Any(sal_Int64(-123456789)); }
 
     sal_Bool SAL_CALL isAnyHyper(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<sal_Int64>::get()
-               && *o3tl::forceAccess<sal_Int64>(value) == -123456789;
+        return checkAnyHyper(value);
     }
 
     css::uno::Any SAL_CALL getAnyUnsignedHyper() override
@@ -568,40 +809,32 @@ class Test
 
     sal_Bool SAL_CALL isAnyUnsignedHyper(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<sal_uInt64>::get()
-               && *o3tl::forceAccess<sal_uInt64>(value) == 9876543210;
+        return checkAnyUnsignedHyper(value);
     }
 
     css::uno::Any SAL_CALL getAnyFloat() override { return css::uno::Any(-10.25f); }
 
     sal_Bool SAL_CALL isAnyFloat(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<float>::get()
-               && *o3tl::forceAccess<float>(value) == -10.25;
+        return checkAnyFloat(value);
     }
 
     css::uno::Any SAL_CALL getAnyDouble() override { return css::uno::Any(100.5); }
 
     sal_Bool SAL_CALL isAnyDouble(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<double>::get()
-               && *o3tl::forceAccess<double>(value) == 100.5;
+        return checkAnyDouble(value);
     }
 
     css::uno::Any SAL_CALL getAnyChar() override { return css::uno::Any(u'Ö'); }
 
-    sal_Bool SAL_CALL isAnyChar(css::uno::Any const& value) override
-    {
-        return value.getValueType() == cppu::UnoType<sal_Unicode>::get()
-               && *o3tl::forceAccess<sal_Unicode>(value) == u'Ö';
-    }
+    sal_Bool SAL_CALL isAnyChar(css::uno::Any const& value) override { return checkAnyChar(value); }
 
     css::uno::Any SAL_CALL getAnyString() override { return css::uno::Any(u"hä"_ustr); }
 
     sal_Bool SAL_CALL isAnyString(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<OUString>::get()
-               && *o3tl::forceAccess<OUString>(value) == u"hä";
+        return checkAnyString(value);
     }
 
     css::uno::Any SAL_CALL getAnyType() override
@@ -609,11 +842,7 @@ class Test
         return css::uno::Any(cppu::UnoType<sal_Int32>::get());
     }
 
-    sal_Bool SAL_CALL isAnyType(css::uno::Any const& value) override
-    {
-        return value.getValueType() == cppu::UnoType<css::uno::Type>::get()
-               && *o3tl::forceAccess<css::uno::Type>(value) == cppu::UnoType<sal_Int32>::get();
-    }
+    sal_Bool SAL_CALL isAnyType(css::uno::Any const& value) override { return checkAnyType(value); }
 
     css::uno::Any SAL_CALL getAnySequence() override
     {
@@ -622,9 +851,7 @@ class Test
 
     sal_Bool SAL_CALL isAnySequence(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<css::uno::Sequence<OUString>>::get()
-               && *o3tl::forceAccess<css::uno::Sequence<OUString>>(value)
-                      == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
+        return checkAnySequence(value);
     }
 
     css::uno::Any SAL_CALL getAnyEnum() override
@@ -632,12 +859,7 @@ class Test
         return css::uno::Any(org::libreoffice::embindtest::Enum_E_2);
     }
 
-    sal_Bool SAL_CALL isAnyEnum(css::uno::Any const& value) override
-    {
-        return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Enum>::get()
-               && *o3tl::forceAccess<org::libreoffice::embindtest::Enum>(value)
-                      == org::libreoffice::embindtest::Enum_E_2;
-    }
+    sal_Bool SAL_CALL isAnyEnum(css::uno::Any const& value) override { return checkAnyEnum(value); }
 
     css::uno::Any SAL_CALL getAnyStruct() override
     {
@@ -665,32 +887,7 @@ class Test
 
     sal_Bool SAL_CALL isAnyStruct(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Struct>::get()
-               && *o3tl::forceAccess<org::libreoffice::embindtest::Struct>(value)
-                      == org::libreoffice::embindtest::Struct{
-                             true,
-                             -12,
-                             -1234,
-                             54321,
-                             -123456,
-                             3456789012,
-                             -123456789,
-                             9876543210,
-                             -10.25,
-                             100.5,
-                             u'Ö',
-                             u"hä"_ustr,
-                             cppu::UnoType<sal_Int32>::get(),
-                             css::uno::Any(sal_Int32(-123456)),
-                             { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
-                             org::libreoffice::embindtest::Enum_E_2,
-                             { -123456 },
-                             { { u"foo"_ustr },
-                               -123456,
-                               css::uno::Any(sal_Int32(-123456)),
-                               { u"barr"_ustr } },
-                             static_cast<OWeakObject*>(this)
-                         };
+        return checkAnyStruct(value, static_cast<OWeakObject*>(this));
     }
 
     css::uno::Any SAL_CALL getAnyException() override
@@ -701,13 +898,7 @@ class Test
 
     sal_Bool SAL_CALL isAnyException(css::uno::Any const& value) override
     {
-        if (value.getValueType() != cppu::UnoType<org::libreoffice::embindtest::Exception>::get())
-        {
-            return false;
-        }
-        auto const& e = *o3tl::forceAccess<org::libreoffice::embindtest::Exception>(value);
-        return e.Message.startsWith("error") && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
-               && e.m3 == u"hä";
+        return checkAnyException(value);
     }
 
     css::uno::Any SAL_CALL getAnyInterface() override
@@ -717,10 +908,7 @@ class Test
 
     sal_Bool SAL_CALL isAnyInterface(css::uno::Any const& value) override
     {
-        return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::XTest>::get()
-               && *o3tl::forceAccess<css::uno::Reference<org::libreoffice::embindtest::XTest>>(
-                      value)
-                      == static_cast<OWeakObject*>(this);
+        return checkAnyInterface(value, this);
     }
 
     css::uno::Sequence<sal_Bool> SAL_CALL getSequenceBoolean() override

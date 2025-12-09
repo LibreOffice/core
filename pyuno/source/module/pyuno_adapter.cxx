@@ -235,7 +235,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         raiseInvocationTargetExceptionWhenNeeded( runtime);
         if( pyRet.is() )
         {
-            ret = runtime.pyObject2Any( pyRet );
+            ret = runtime.pyObject2Any( pyRet, ACCEPT_UNO_ANY );
 
             if( ret.hasValue() &&
                 ret.getValueTypeClass() == css::uno::TypeClass_SEQUENCE &&

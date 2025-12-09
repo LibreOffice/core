@@ -12,6 +12,7 @@ import unittest
 import uno
 import unohelper
 from com.sun.star.uno import RuntimeException
+from org.libreoffice.embindtest import Exception
 from org.libreoffice.embindtest import Struct
 from org.libreoffice.embindtest import StructLong
 from org.libreoffice.embindtest import StructString
@@ -104,6 +105,128 @@ class Test(unohelper.Base, XTest):
 
     def isAnyVoid(self, value):
         return value == None
+
+    def getAnyBoolean(self):
+        return True
+
+    def isAnyBoolean(self, value):
+        return value == True
+
+    def getAnyByte(self):
+        return uno.Any('byte', -12)
+
+    def isAnyByte(self, value):
+        return value == -12
+
+    def getAnyShort(self):
+        return uno.Any('short', -1234)
+
+    def isAnyShort(self, value):
+        return value == -1234
+
+    def getAnyUnsignedShort(self):
+        return uno.Any('unsigned short', 54321)
+
+    def isAnyUnsignedShort(self, value):
+        return value == 54321
+
+    def getAnyLong(self):
+        return -123456
+
+    def isAnyLong(self, value):
+        return value == -123456
+
+    def getAnyUnsignedLong(self):
+        return uno.Any('unsigned long', 3456789012)
+
+    def isAnyUnsignedLong(self, value):
+        return value == 3456789012
+
+    def getAnyHyper(self):
+        return uno.Any('hyper', -123456789)
+
+    def isAnyHyper(self, value):
+        return value == -123456789
+
+    def getAnyUnsignedHyper(self):
+        return uno.Any('unsigned hyper', 9876543210)
+
+    def isAnyUnsignedHyper(self, value):
+        return value == 9876543210
+
+    def getAnyFloat(self):
+        return uno.Any('float', -10.25)
+
+    def isAnyFloat(self, value):
+        return value == -10.25
+
+    def getAnyDouble(self):
+        return 100.5
+
+    def isAnyDouble(self, value):
+        return value == 100.5
+
+    def getAnyChar(self):
+        return uno.Char('Ö')
+
+    def isAnyChar(self, value):
+        return value == 'Ö'
+
+    def getAnyString(self):
+        return 'hä'
+
+    def isAnyString(self, value):
+        return value == 'hä'
+
+    def getAnyType(self):
+        return uno.getTypeByName('long')
+
+    def isAnyType(self, value):
+        return value == uno.getTypeByName('long')
+
+    def getAnySequence(self):
+        return uno.Any('[]string', ('foo', 'barr', 'bazzz'))
+
+    def isAnySequence(self, value):
+        return value == ('foo', 'barr', 'bazzz')
+
+    def getAnyEnum(self):
+        return E_2
+
+    def isAnyEnum(self, value):
+        return value == E_2
+
+    def getAnyStruct(self):
+        return Struct(
+            True, -12, -1234, 54321, -123456, 3456789012, -123456789, 9876543210, -10.25, 100.5,
+            'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
+            StructLong(-123456),
+            uno.createUnoStruct(
+                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                StructString('foo'), -123456, -123456, StructString('barr')),
+            self)
+
+    def isAnyStruct(self, value):
+        return value == Struct(
+            True, -12, -1234, 54321, -123456, 3456789012, -123456789, 9876543210, -10.25, 100.5,
+            'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
+            StructLong(-123456),
+            uno.createUnoStruct(
+                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                StructString('foo'), -123456, -123456, StructString('barr')),
+            self)
+
+    def getAnyException(self):
+        return Exception('error', None, -123456, 100.5, 'hä')
+
+    def isAnyException(self, value):
+        return value == Exception('error', None, -123456, 100.5, 'hä')
+
+    def getAnyInterface(self):
+        return uno.Any('org.libreoffice.embindtest.XTest', self)
+
+    def isAnyInterface(self, value):
+        return value == self #TODO: this doesn't work as intended
 
     def getEnum(self):
         return E_2
