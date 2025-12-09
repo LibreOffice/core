@@ -136,7 +136,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/profilezone.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <vcl/threadex.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
