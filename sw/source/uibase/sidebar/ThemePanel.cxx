@@ -50,6 +50,7 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
         const int nIndex = mxIconViewColors->n_children();
         const OUString sId = OUString::number(nIndex);
         mxIconViewColors->insert(nIndex, nullptr, &sId, &aBitmap, nullptr);
+        mxIconViewColors->set_item_accessible_name(nIndex, rColorSet.getName());
     }
 
     if (!rColorSets.getColorSetVector().empty())
