@@ -38,13 +38,11 @@ public:
         boost::property_tree::ptree& /*rState*/) override {};
 
 private:
-    std::unique_ptr<weld::TreeView> mxListBoxFonts;
     std::unique_ptr<svx::ThemeColorValueSet> mxValueSetColors;
     std::unique_ptr<weld::CustomWeld> mxValueSetColorsWin;
     std::unique_ptr<weld::Button> mxApplyButton;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
-    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);
     void DoubleClickHdl();
 

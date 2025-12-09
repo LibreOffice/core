@@ -76,12 +76,6 @@ IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
     DoubleClickHdl();
 }
 
-IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl, weld::TreeView&, bool)
-{
-    DoubleClickHdl();
-    return true;
-}
-
 void ThemePanel::DoubleClickHdl()
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
