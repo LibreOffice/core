@@ -4805,9 +4805,6 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     bool const bEcma = GetExport().GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
 
-    // Output any table cell redlines if there are any attached to this specific cell
-    TableCellRedline( pTableTextNodeInfoInner );
-
     if (const SfxGrabBagItem* pItem = pTableBox->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
     {
         const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
@@ -4873,6 +4870,9 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     }
 
     TableVerticalCell( pTableTextNodeInfoInner );
+
+    // Output any table cell redlines if there are any attached to this specific cell
+    TableCellRedline( pTableTextNodeInfoInner );
 
     m_pSerializer->endElementNS( XML_w, XML_tcPr );
 }
