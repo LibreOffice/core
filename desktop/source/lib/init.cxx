@@ -2745,6 +2745,9 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* pThis,
                        LibreOfficeKitAnyInputCallback pAnyInputCallback,
                        void* pData);
 
+static void lo_registerFileSaveDialogCallback(LibreOfficeKit* pThis,
+                       LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback);
+
 static void lo_sendDialogEvent(LibreOfficeKit* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
@@ -2794,6 +2797,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setForkedChild = lo_setForkedChild;
         m_pOfficeClass->extractDocumentStructureRequest = lo_extractDocumentStructureRequest;
         m_pOfficeClass->registerAnyInputCallback = lo_registerAnyInputCallback;
+        m_pOfficeClass->registerFileSaveDialogCallback = lo_registerFileSaveDialogCallback;
         m_pOfficeClass->getDocsCount = lo_getDocsCount;
 
         gOfficeClass = m_pOfficeClass;
@@ -7977,6 +7981,13 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* /*pThis*/,
     comphelper::LibreOfficeKit::setAnyInputCallback(pAnyInputCallback, pData, []() -> int {
         return Scheduler::GetMostUrgentTaskPriority();
     });
+}
+
+static void lo_registerFileSaveDialogCallback(LibreOfficeKit* /*pThis*/,
+                       LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback)
+{
+    SolarMutexGuard aGuard;
+    comphelper::LibreOfficeKit::setFileSaveDialogCallback(pFileSaveDialogCallback);
 }
 
 static int lo_getDocsCount(LibreOfficeKit* /*pThis*/)

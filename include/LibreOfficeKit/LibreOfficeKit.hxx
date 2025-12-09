@@ -1326,6 +1326,14 @@ public:
     }
 
     /**
+     * Registers a callback that can display an interactive file save dialog.
+     */
+    void registerFileSaveDialogCallback(LibreOfficeKitFileSaveDialogCallback pCallback)
+    {
+        return mpThis->pClass->registerFileSaveDialogCallback(mpThis, pCallback);
+    }
+
+    /**
      * Frees the memory pointed to by pFree.
      *
      * Use on dynamically allocated data returned by LibreOfficeKit
