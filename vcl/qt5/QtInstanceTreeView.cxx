@@ -10,6 +10,7 @@
 #include <QtInstanceTreeView.hxx>
 #include <QtInstanceTreeView.moc>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QHeaderView>
@@ -1109,6 +1110,14 @@ bool QtInstanceTreeView::eventFilter(QObject* pObject, QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::ToolTip && pObject == m_pTreeView->viewport())
         return handleViewPortToolTipEvent(static_cast<QHelpEvent&>(*pEvent));
+
+    if (pEvent->type() == QEvent::ContextMenu)
+    {
+        QContextMenuEvent* pContextMenuEvent = static_cast<QContextMenuEvent*>(pEvent);
+        CommandEvent aCEvt(toPoint(pContextMenuEvent->pos()), CommandEventId::ContextMenu,
+                           pContextMenuEvent->reason() == QContextMenuEvent::Mouse);
+        return signal_popup_menu(aCEvt);
+    }
 
     return QtInstanceWidget::eventFilter(pObject, pEvent);
 }
