@@ -449,18 +449,25 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         }
         else
         {
-            bool bAutomaticMark = false;
-            if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
-            {
-                rViewSh.GetViewData().GetView()->MarkDataArea();
-                bAutomaticMark = true;
-            }
-
-            ScMarkData aMultiMark(std::move(aMark));
-            aMultiMark.MarkToMulti();
-
             ScRangeList aRanges;
-            aMultiMark.FillRangeListWithMarks( &aRanges, false );
+            if (aMark.IsMarked() || aMark.IsMultiMarked())
+            {
+                ScMarkData aMultiMark(std::move(aMark));
+                aMultiMark.MarkToMulti();
+                aMultiMark.FillRangeListWithMarks(&aRanges, false);
+            }
+            else
+            {
+                ScViewData& rViewData = rViewSh.GetViewData();
+                SCTAB nTab = rViewData.CurrentTabForData();
+                SCCOL nStartCol = rViewData.GetCurX();
+                SCROW nStartRow = rViewData.GetCurY();
+                SCCOL nEndCol = nStartCol;
+                SCROW nEndRow = nStartRow;
+                rViewData.GetDocument().GetDataArea(nTab, nStartCol, nStartRow, nEndCol, nEndRow,
+                                                    true, false);
+                aRanges = ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
+            }
             OUString aStr;
             aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, rDocument, rDocument.GetAddressConvention() );
             aRangeString = aStr;
@@ -474,9 +481,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                     aPositionRange.ExtendTo( aRanges[ i ] );
                 }
             }
-
-            if(bAutomaticMark)
-                rViewSh.GetViewData().GetView()->Unmark();
         }
     }
 
