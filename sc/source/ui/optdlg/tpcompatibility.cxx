@@ -24,6 +24,8 @@ ScTpCompatOptions::ScTpCompatOptions(weld::Container* pPage, weld::DialogControl
     , m_xLbKeyBindingsImg(m_xBuilder->weld_widget(u"lockkeybindings"_ustr))
     , m_xBtnLink(m_xBuilder->weld_check_button(u"cellLinkCB"_ustr))
     , m_xBtnLinkImg(m_xBuilder->weld_widget(u"lockcellLinkCB"_ustr))
+    , m_xBtnAcceptInvalidData(m_xBuilder->weld_check_button(u"cbAcceptInvalidData"_ustr))
+    , m_xBtnAcceptInvalidDataImg(m_xBuilder->weld_widget(u"lockcbAcceptInvalidData"_ustr))
 {
 }
 
@@ -67,6 +69,11 @@ bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)
         rCoreAttrs->Put(SfxBoolItem(SID_SC_OPT_LINKS, m_xBtnLink->get_active()));
         bRet = true;
     }
+    if (m_xBtnAcceptInvalidData->get_state_changed_from_saved())
+    {
+        rCoreAttrs->Put(SfxBoolItem(SID_SC_OPT_ALLOWINVALIDDATA, m_xBtnAcceptInvalidData->get_active()));
+        bRet = true;
+    }
 
     return bRet;
 }
@@ -101,6 +108,14 @@ void ScTpCompatOptions::Reset(const SfxItemSet *rCoreAttrs)
     m_xBtnLink->set_sensitive(!officecfg::Office::Calc::Compatibility::Links::isReadOnly());
     m_xBtnLinkImg->set_visible(officecfg::Office::Calc::Compatibility::Links::isReadOnly());
     m_xBtnLink->save_state();
+
+    if (const SfxBoolItem* pbItem = rCoreAttrs->GetItemIfSet(SID_SC_OPT_ALLOWINVALIDDATA))
+    {
+        m_xBtnAcceptInvalidData->set_active(pbItem->GetValue());
+    }
+    m_xBtnAcceptInvalidData->set_sensitive(!officecfg::Office::Calc::Compatibility::AcceptInvalidData::isReadOnly());
+    m_xBtnAcceptInvalidDataImg->set_visible(officecfg::Office::Calc::Compatibility::AcceptInvalidData::isReadOnly());
+    m_xBtnAcceptInvalidData->save_state();
 }
 
 DeactivateRC ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)

@@ -86,6 +86,9 @@ public:
     void        SetLinksInsertedLikeMSExcel(bool bNew) { mbLinksInsertedLikeMSExcel = bNew; }
     bool        GetLinksInsertedLikeMSExcel() const { return mbLinksInsertedLikeMSExcel; }
 
+    void        SetAllowInvalidData(bool bNew) { mbAllowInvalidData = bNew; }
+    bool        GetAllowInvalidData() const { return mbAllowInvalidData; }
+
     ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
 private:
@@ -111,6 +114,7 @@ private:
     bool            bClickChangeRotation;
     ScOptionsUtil::KeyBindingType meKeyBindingType;
     bool            mbLinksInsertedLikeMSExcel;
+    bool            mbAllowInvalidData;
 };
 
 //  Config Item containing app options

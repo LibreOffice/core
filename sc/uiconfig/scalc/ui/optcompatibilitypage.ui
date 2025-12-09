@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="OptCompatibilityPage">
@@ -29,15 +29,11 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes" context="optcompatibilitypage|label2">Select desired _key binding type. Changing the key binding type may overwrite some of the existing key bindings.</property>
+                <property name="tooltip-text" translatable="yes" context="optcompatibilitypage|label2|tooltip">Changing the key binding type may overwrite some of the existing key bindings</property>
+                <property name="label" translatable="yes" context="optcompatibilitypage|label2">Select desired _key binding type</property>
                 <property name="use-underline">True</property>
                 <property name="wrap">True</property>
                 <property name="mnemonic-widget">keybindings</property>
-                <property name="width-chars">60</property>
-                <property name="max-width-chars">60</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -48,6 +44,7 @@
               <object class="GtkComboBoxText" id="keybindings">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <property name="valign">start</property>
                 <items>
                   <item translatable="yes" context="optcompatibilitypage|keybindings">Default</item>
@@ -111,7 +108,7 @@
             <property name="column-spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="cellLinkCB">
-                <property name="label" translatable="yes" context="optcompatibilitypage|cellLinkCB">Insert _hyperlink for the cell, not for the text in the cell.</property>
+                <property name="label" translatable="yes" context="optcompatibilitypage|cellLinkCB">Insert _hyperlink for the cell, not for the text in the cell</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -160,6 +157,75 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="frame3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <!-- n-columns=3 n-rows=1 -->
+          <object class="GtkGrid" id="grid3">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="hexpand">True</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <child>
+              <object class="GtkCheckButton" id="cbAcceptInvalidData">
+                <property name="label" translatable="yes" context="optcompatibilitypage|cbAcceptInvalidData">Allow inserting invalid values</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="optcompatibilitypage|cbAcceptInvalidData|tooltip">By default, Excel accepts data that do not match the validation criteria</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cbAcceptInvalidData-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cellLinkCB">Calc can insert multiple hyperlinks in a cell as text fields, but multiple hyperlinks in a cell cannot be saved to Excel file formats. This option prevents inserting multiple hyperlinks in a cell when Excel files are edited, in order to be interoperable with Excel.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockcbAcceptInvalidData">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="lbAcceptInvalidData">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optcompatibilitypage|lbAcceptInvalidData">Data Validity</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
       </packing>
     </child>
     <child internal-child="accessible">
