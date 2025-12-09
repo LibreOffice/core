@@ -1316,6 +1316,14 @@ public:
     {
         return mpThis->pClass->getDocsCount(mpThis);
     }
+
+    /**
+     * Registers a callback that can display an interactive file save dialog.
+     */
+    void registerFileSaveDialogCallback(LibreOfficeKitFileSaveDialogCallback pCallback)
+    {
+        return mpThis->pClass->registerFileSaveDialogCallback(mpThis, pCallback);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

@@ -4239,10 +4239,11 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(23), offsetof(struct _LibreOfficeKitClass, extractDocumentStructureRequest));
     CPPUNIT_ASSERT_EQUAL(classOffset(24), offsetof(struct _LibreOfficeKitClass, registerAnyInputCallback));
     CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(struct _LibreOfficeKitClass, getDocsCount));
+    CPPUNIT_ASSERT_EQUAL(classOffset(26), offsetof(struct _LibreOfficeKitClass, registerFileSaveDialogCallback));
 
     // When extending LibreOfficeKit with a new function pointer,  add new assert for the offsetof the
     // new function pointer and bump this assert for the size of the class.
-    CPPUNIT_ASSERT_EQUAL(classOffset(26), sizeof(struct _LibreOfficeKitClass));
+    CPPUNIT_ASSERT_EQUAL(classOffset(27), sizeof(struct _LibreOfficeKitClass));
 
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(struct _LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(struct _LibreOfficeKitDocumentClass, saveAs));

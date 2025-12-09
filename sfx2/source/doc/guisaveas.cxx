@@ -1718,25 +1718,18 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     {
         OUString aFileName;
         aFileNameIter->second >>= aFileName;
-#ifdef _WIN32
         if (comphelper::LibreOfficeKit::isActive())
         {
-            // FIXME: Horrible hack. In CODA-W, we didn't actually
-            // display any dialog yet, so call into a function in
-            // CODA.cpp.
-            typedef void (*ofd_t)(const std::wstring& suggestedURI, std::string& result);
-            // Use mangled name to catch changes in parameters...
-            ofd_t ofd = (ofd_t)GetProcAddress(GetModuleHandle(NULL), "?output_file_dialog_from_core@@YAXAEBV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@AEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z");
-            if (ofd != NULL)
+            // In the LOK case, we didn't actually display any dialog yet, so invoke a callback if
+            // that's set.
+            OUString aNewURI;
+            if (comphelper::LibreOfficeKit::fileSaveDialog(aFileName, aNewURI))
             {
-                std::string newURI;
-                (*ofd)(std::wstring(o3tl::toW(aFileName)), newURI);
-                if (newURI == "")
+                if (aNewURI.isEmpty())
                     return false;
-                aFileName = OUString::fromUtf8(newURI.c_str());
+                aFileName = aNewURI;
             }
         }
-#endif
 
         aURL.SetURL( aFileName );
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
