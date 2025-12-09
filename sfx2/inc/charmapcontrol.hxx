@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
-#include <sfx2/charwin.hxx>
+#include <sfx2/charmapcontainer.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <deque>
 

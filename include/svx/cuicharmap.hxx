@@ -22,11 +22,11 @@
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/charmapcontainer.hxx>
 #include <svl/itemset.hxx>
 #include <svx/charmap.hxx>
 #include <svx/searchcharmap.hxx>
 #include <svx/ucsubset.hxx>
-#include <sfx2/charwin.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
