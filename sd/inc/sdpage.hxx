@@ -404,7 +404,7 @@ public:
     static sal_uInt16 mnLastPageId;
 
     bool IsCanvasPage() const { return mbIsCanvasPage; }
-    void SetCanvasPage() { mbIsCanvasPage = true; }
+    void SetCanvasPage();
 
     bool IsCanvasMasterPage() const { return mbIsCanvasMasterPage; }
     void SetCanvasMasterPage() { mbIsCanvasMasterPage = true; }

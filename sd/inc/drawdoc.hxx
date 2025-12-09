@@ -36,6 +36,7 @@
 #include "sddllapi.h"
 #include "pres.hxx"
 #include "stlpool.hxx"
+#include "sdpage.hxx"
 
 namespace com::sun::star::xml::dom { class XNode; }
 namespace com::sun::star::uno { class XInterface; }
@@ -1104,6 +1105,8 @@ public:
         SdDrawDocument* pBookmarkDoc = nullptr,
         bool bUndo = true,
         const OUString& sNewName = OUString());
+
+    void StoreCanvasPage(SdPage* pPage) { mpCanvasPage = pPage; }
 
     /** Re-order the pages based on the position of their previews on canvas page.
      */
