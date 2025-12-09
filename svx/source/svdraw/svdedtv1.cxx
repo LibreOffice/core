@@ -1008,7 +1008,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                         const SfxPoolItem* pItem = rSet.GetItem(XATTR_FILLTRANSPARENCE);
                         if (pItem)
                         {
-                            sal_uInt16 nTransparency = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sal_uInt16 nTransparency = static_cast<const XFillTransparenceItem*>(pItem)->GetValue();
                             sPayload = OUString::number(nTransparency);
 
                             sPayload = ".uno:FillTransparence=" + sPayload;
