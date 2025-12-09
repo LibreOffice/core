@@ -770,6 +770,8 @@ ScTPValidationError::ScTPValidationError(weld::Container* pPage, weld::DialogCon
     , m_xBtnSearch(m_xBuilder->weld_button(u"browseBtn"_ustr))
     , m_xEdtTitle(m_xBuilder->weld_entry(u"erroralert_title"_ustr))
     , m_xFtError(m_xBuilder->weld_label(u"errormsg_label"_ustr))
+    , m_xFtTitle(m_xBuilder->weld_label(u"title_label"_ustr))
+    , m_xFtAction(m_xBuilder->weld_label(u"action_label"_ustr))
     , m_xEdError(m_xBuilder->weld_text_view(u"errorMsg"_ustr))
 {
     m_xEdError->set_size_request(m_xEdError->get_approximate_digit_width() * 40, m_xEdError->get_height_rows(12));
@@ -782,6 +784,7 @@ ScTPValidationError::~ScTPValidationError()
 
 void ScTPValidationError::Init()
 {
+    m_xTsbShow->connect_toggled(LINK(this, ScTPValidationError, ToggleErrorMessage));
     m_xLbAction->connect_changed(LINK(this, ScTPValidationError, SelectActionHdl));
     m_xBtnSearch->connect_clicked(LINK( this, ScTPValidationError, ClickSearchHdl));
 
@@ -829,6 +832,17 @@ bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
     rArgSet->Put( SfxStringItem( FID_VALID_ERRTEXT, m_xEdError->get_text() ) );
 
     return true;
+}
+
+IMPL_LINK_NOARG(ScTPValidationError, ToggleErrorMessage, weld::Toggleable&, void)
+{
+    bool const bEnable(m_xTsbShow->get_active());
+    m_xLbAction->set_sensitive(bEnable);
+    m_xEdtTitle->set_sensitive(bEnable);
+    m_xEdError->set_sensitive(bEnable);
+    m_xFtError->set_sensitive(bEnable);
+    m_xFtTitle->set_sensitive(bEnable);
+    m_xFtAction->set_sensitive(bEnable);
 }
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, weld::ComboBox&, void)

@@ -258,11 +258,14 @@ private:
     std::unique_ptr<weld::Button> m_xBtnSearch;
     std::unique_ptr<weld::Entry> m_xEdtTitle;
     std::unique_ptr<weld::Label> m_xFtError;
+    std::unique_ptr<weld::Label> m_xFtTitle;
+    std::unique_ptr<weld::Label> m_xFtAction;
     std::unique_ptr<weld::TextView> m_xEdError;
 
     void    Init();
 
     // Handler ------------------------
+    DECL_LINK(ToggleErrorMessage, weld::Toggleable&, void);
     DECL_LINK(SelectActionHdl, weld::ComboBox&, void);
     DECL_LINK(ClickSearchHdl, weld::Button&, void);
 
