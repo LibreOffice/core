@@ -18,9 +18,10 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,python3,\
 		mkdir -p externals/pythonx86 && \
 		unzip -q -d externals/pythonx86 -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(PYTHON_BOOTSTRAP_TARBALL) && \
 		chmod +x externals/pythonx86/tools/* && \
+		cp PC/pyconfig.h.in PC/pyconfig.h && \
 	) \
 	unzip -q -d Lib/ -o Lib/test/wheeldata/setuptools-79.0.1-py3-none-any.whl && \
-	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-25.0.1-py3-none-any.whl && \
+	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-25.3-py3-none-any.whl && \
 	mv Lib/setuptools/_vendor/jaraco/text/Lorem\ ipsum.txt Lib/setuptools/_vendor/jaraco/text/Lorem_ipsum.txt \
 ))
 
@@ -40,10 +41,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/python-3.7.6-msvc-ssl.patch.1 \
 	external/python3/python-3.5.4-msvc-disable.patch.1 \
 	external/python3/ubsan.patch.0 \
-	external/python3/init-sys-streams-cant-initialize-stdin.patch.0 \
 	external/python3/setuptools.patch.1 \
 	external/python3/sqlite3.patch.1 \
 	external/python3/lzma.patch.1 \
+	external/python3/decimal.patch.1 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)

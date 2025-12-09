@@ -46,6 +46,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:zlibDir=$(gb_UnpackedTarball_workdir)/zlib \
 			/p:sqlite3Dir=$(gb_UnpackedTarball_workdir)/sqlite3 \
 			/p:lzmaDir=$(gb_UnpackedTarball_workdir)/lzma/ \
+			/p:mpdecimalDir=$(gb_UnpackedTarball_workdir)/python3/Modules/_decimal/ \
 			/p:libffiOutDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs \
 			/p:libffiIncludeDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/include \
 			/maxcpucount \
@@ -115,7 +116,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		CC="$(strip $(CC) \
 			$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
 			$(if $(SYSTEM_BZIP2),,-I$(gb_UnpackedTarball_workdir)/bzip2) \
-			$(if $(SYSTEM_EXPAT),,-I$(gb_UnpackedTarball_workdir)/expat/lib) \
+			$(if $(SYSTEM_EXPAT),, \
+				-I$(gb_UnpackedTarball_workdir)/expat \
+				-I$(gb_UnpackedTarball_workdir)/expat/lib) \
 			$(if $(SYSTEM_SQLITE3),,-I$(gb_UnpackedTarball_workdir)/sqlite3) \
 			$(if $(SYSTEM_LZMA),,-I$(gb_UnpackedTarball_workdir)/lzma/src/liblzma/api) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
@@ -168,7 +171,6 @@ $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_Exter
 	$(call gb_Output_announce,python3 - remove reference to installroot from scripts,build,CUS,5)
 	$(COMMAND_ECHO)cd $(python3_fw_prefix)/bin/ && \
 	for file in \
-		2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		pip$(PYTHON_VERSION_MAJOR) \
 		pip$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
