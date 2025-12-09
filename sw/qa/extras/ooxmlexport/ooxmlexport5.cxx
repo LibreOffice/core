@@ -235,9 +235,6 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberedList)
 {
     createSwDoc("NumberedList.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -254,9 +251,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
 {
     createSwDoc("NumberedList.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     save(TestFilter::DOCX);
     // keep width of fixed size cells in the nested table
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -268,9 +262,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131959)
 {
     createSwDoc("NumberedList.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
 
     save(TestFilter::DOCX);
     // import tblInd from table style
@@ -310,9 +301,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeTIF)
 
 DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 6
-    skipValidation();
-
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This checks textbox textrun size of font which is in group shape.
@@ -363,9 +351,6 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeleft)
 CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeTableInTable)
 {
     createSwDoc("ooo96040-2.odt");
-
-    //FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
 
     save(TestFilter::DOCX);
     parseExport(u"word/document.xml"_ustr);
