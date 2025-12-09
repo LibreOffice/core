@@ -138,7 +138,7 @@ Recommended configure setup is thusly:
 ```
 
 FWIW: it's also possible to build an almost static Linux LibreOffice by just using
---disable-dynloading --enable-customtarget-components. System externals are still
+--disable-dynamic-loading --enable-customtarget-components. System externals are still
 linked dynamically, but everything else is static.
 
 ### "Deploying" soffice.wasm
