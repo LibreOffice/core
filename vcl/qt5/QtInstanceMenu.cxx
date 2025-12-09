@@ -15,8 +15,15 @@
 #include <QtTools.hxx>
 
 #include <tools/debug.hxx>
+#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/qt/QtUtils.hxx>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QtGui/QShortcut>
+#else
+#include <QtWidgets/QShortcut>
+#endif
 
 // Property for storing an action name in a menu item
 const char* const PROPERTY_ACTION_NAME = "action-name";
@@ -25,6 +32,13 @@ QtInstanceMenu::QtInstanceMenu(QMenu* pMenu)
     : m_pMenu(pMenu)
 {
     assert(m_pMenu);
+
+    // connect slots in order to show help for current entry on F1
+    connect(m_pMenu, &QMenu::hovered, this, &QtInstanceMenu::menuActionHovered);
+    QKeySequence sequence(QKeySequence::HelpContents);
+    QShortcut* pQShortcut = new QShortcut(sequence, m_pMenu);
+    connect(pQShortcut, &QShortcut::activated, this, &QtInstanceMenu::showHelp);
+    connect(pQShortcut, &QShortcut::activatedAmbiguously, this, &QtInstanceMenu::showHelp);
 }
 
 OUString QtInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
@@ -158,9 +172,14 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
     });
 }
 
-void QtInstanceMenu::set_item_help_id(const OUString&, const OUString&)
+void QtInstanceMenu::set_item_help_id(const OUString& rIdent, const OUString& rHelpId)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            QtInstanceWidget::setHelpId(*pAction, rHelpId);
+    });
 }
 
 void QtInstanceMenu::remove(const OUString& rId)
@@ -244,6 +263,25 @@ QAction* QtInstanceMenu::getAction(const OUString& rIdent) const
     }
 
     return nullptr;
+}
+
+void QtInstanceMenu::menuActionHovered(QAction* pAction) { m_pCurrentAction = pAction; }
+
+void QtInstanceMenu::showHelp()
+{
+    SolarMutexGuard aGuard;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (!m_pCurrentAction)
+            return;
+
+        const OUString sHelpId = QtInstanceWidget::getHelpId(*m_pCurrentAction);
+        if (sHelpId.isEmpty())
+            return;
+
+        if (Help* pHelp = Application::GetHelp())
+            pHelp->Start(sHelpId);
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
