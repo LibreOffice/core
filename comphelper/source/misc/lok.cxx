@@ -14,6 +14,9 @@
 #include <osl/process.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
+#ifdef _WIN32
+#include <tools/UnixWrappers.h>
+#endif
 
 #include <iostream>
 
@@ -50,6 +53,8 @@ static ViewShellDocId g_nCurrentDocId;
 static std::function<bool(void*, int)> g_pAnyInputCallback;
 static void* g_pAnyInputCallbackData;
 static std::function<int()> g_pMostUrgentPriorityGetter;
+
+static std::function<void(const char*, char*, size_t)> g_pFileSaveDialogCallback;
 
 static std::function<void(int)> g_pViewSetter;
 static std::function<int()> g_pViewGetter;
@@ -372,6 +377,25 @@ bool anyInput()
     }
 
     return bRet;
+}
+
+void setFileSaveDialogCallback(const std::function<void(const char*, char*, size_t)>& pFileSaveDialogCallback)
+{
+    g_pFileSaveDialogCallback = pFileSaveDialogCallback;
+}
+
+bool fileSaveDialog(const OUString& rSuggested, OUString& rResult)
+{
+    if (!g_pFileSaveDialogCallback)
+    {
+        return false;
+    }
+
+    OString aSuggested = rSuggested.toUtf8();
+    char aResult[PATH_MAX];
+    g_pFileSaveDialogCallback(aSuggested.getStr(), aResult, PATH_MAX);
+    rResult = OUString::fromUtf8(aResult);
+    return true;
 }
 
 void setViewSetter(const std::function<void(int)>& pViewSetter)

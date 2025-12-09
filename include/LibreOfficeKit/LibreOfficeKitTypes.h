@@ -10,6 +10,8 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,6 +29,10 @@ typedef void (*LibreOfficeKitWakeCallback)(void* pData);
 
 /// @see lok::Office::registerAnyInputCallback()
 typedef bool (*LibreOfficeKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
+
+/// @see lok::Office::registerFileSaveDialogCallback()
+typedef void (*LibreOfficeKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
+                                                     size_t nResultUri);
 
 #ifdef __cplusplus
 }
