@@ -487,8 +487,8 @@ protected:
     sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
-    sal_uInt16            mnCanvasPageZoom = 0;
-    sal_uInt16            mnNonCanvasPageZoom = 0;
+    sal_uInt16            mnCanvasPageZoom = 20;
+    sal_uInt16            mnNonCanvasPageZoom = 100;
 
     //af    bool        bPrintDirectSelected;       // Print only selected objects in direct print
     //afString      sPageRange;                 // pagerange if selected objects in direct print
