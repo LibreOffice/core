@@ -4790,6 +4790,7 @@ void SalInstanceTreeView::visible_foreach(const std::function<bool(weld::TreeIte
 
 void SalInstanceTreeView::connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink)
 {
+    m_xTreeView->SetCustomEntryRenderer(true);
     weld::TreeView::connect_visible_range_changed(rLink);
     m_xTreeView->SetScrolledHdl(LINK(this, SalInstanceTreeView, VisibleRangeChangedHdl));
 }

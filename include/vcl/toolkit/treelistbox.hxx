@@ -218,6 +218,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox
     bool mbContextBmpExpanded;
     bool mbQuickSearch; // Enables type-ahead search in the check list box.
     bool mbActivateOnSingleClick; // Make single click "activate" a row like a double-click normally does
+    bool mbCustomEntryRenderer; // Used to define if the list entries are updated on demand
     bool mbHoverSelection; // Make mouse over a row "select" a row like a single-click normally does
     bool mbSelectingByHover; // true during "Select" if it was due to hover
     bool mbIsTextColumEnabled; // true if the property name text-column is enabled
@@ -663,6 +664,9 @@ public:
     // Make single click "activate" a row like a double-click normally does
     void            SetActivateOnSingleClick(bool bEnable) { mbActivateOnSingleClick = bEnable; }
     bool            GetActivateOnSingleClick() const { return mbActivateOnSingleClick; }
+
+    void            SetCustomEntryRenderer(bool bEnable) { mbCustomEntryRenderer = bEnable; }
+    bool            GetCustomEntryRenderer() const { return mbCustomEntryRenderer; }
 
     // Make mouse over a row "select" a row like a single-click normally does
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
