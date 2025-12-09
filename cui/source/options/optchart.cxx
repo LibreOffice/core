@@ -99,26 +99,55 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl, weld::
     Color& rColor(aColorList[nIndex]);
 
     XColorListRef xColorList;
-    for (size_t i = 0, nSize = aPaletteManager.GetPaletteList().size(); i < nSize; ++i)
+    for (sal_uInt16 nPalettePos = 0, nPaletteCount = aPaletteManager.GetPaletteCount();
+         nPalettePos < nPaletteCount; ++nPalettePos)
     {
-        aPaletteManager.SetPalette(i, true/*bPosOnly*/);
+        aPaletteManager.SetPalette(nPalettePos, true /*bPosOnly*/);
 
-        xColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
-            XPropertyListType::Color, aPaletteManager.GetSelectedPalettePath()));
-        if (!xColorList->Load())
-            continue;
+        if (/*custom palette*/ nPalettePos == 0 ||
+            /*theme colors palette*/ aPaletteManager.IsThemePaletteSelected() ||
+            /*document colors palette*/ nPalettePos == aPaletteManager.GetPaletteCount() - 1)
+        {
+            aPaletteManager.ReloadColorSet(*m_xValSetColorBox);
 
-        auto nPos = xColorList->GetIndexOfColor(rColor);
-        if (nPos == -1)
-            continue;
+            for (size_t nItemPos = 0, nItemCount = m_xValSetColorBox->GetItemCount();
+                 nItemPos < nItemCount; nItemPos++)
+            {
+                auto nItemId = m_xValSetColorBox->GetItemId(nItemPos);
+                if (m_xValSetColorBox->GetItemColor(nItemId) == rColor)
+                {
+                    m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
+                    SelectPaletteLbHdl(*m_xLbPaletteSelector);
 
-        m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
-        SelectPaletteLbHdl(*m_xLbPaletteSelector);
+                    m_xValSetColorBox->SelectItem(nItemId);
 
-        m_xValSetColorBox->SelectItem(m_xValSetColorBox->GetItemId(nPos));
+                    return;
+                }
+            }
+        }
+        else
+        {
+            xColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+                XPropertyListType::Color, aPaletteManager.GetSelectedPalettePath()));
+            if (!xColorList->Load())
+                continue;
 
-        return;
+            auto nPos = xColorList->GetIndexOfColor(rColor);
+            if (nPos == -1)
+                continue;
+
+            m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
+            SelectPaletteLbHdl(*m_xLbPaletteSelector);
+
+            m_xValSetColorBox->SelectItem(m_xValSetColorBox->GetItemId(nPos));
+
+            return;
+        }
     }
+
+    // color not found in any palette
+    m_xLbPaletteSelector->set_active_text(OUString());
+    m_xValSetColorBox->Clear();
 }
 
 SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
