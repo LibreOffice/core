@@ -350,13 +350,13 @@ void QtInstanceWidget::setFont(vcl::Font rFont)
     GetQtInstance().RunInMainThread([&] { getQWidget()->setFont(toQtFont(rFont)); });
 }
 
-OUString QtInstanceWidget::getHelpId(QWidget& rWidget)
+OUString QtInstanceWidget::getHelpId(QObject& rObject)
 {
     SolarMutexGuard g;
 
     OUString sHelpId;
     GetQtInstance().RunInMainThread([&] {
-        const QVariant aHelpIdVariant = rWidget.property(PROPERTY_HELP_ID);
+        const QVariant aHelpIdVariant = rObject.property(PROPERTY_HELP_ID);
         if (!aHelpIdVariant.isValid())
             return;
 
@@ -367,11 +367,11 @@ OUString QtInstanceWidget::getHelpId(QWidget& rWidget)
     return sHelpId;
 }
 
-void QtInstanceWidget::setHelpId(QWidget& rWidget, const OUString& rHelpId)
+void QtInstanceWidget::setHelpId(QObject& rObject, const OUString& rHelpId)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread(
-        [&] { rWidget.setProperty(PROPERTY_HELP_ID, toQString(rHelpId)); });
+        [&] { rObject.setProperty(PROPERTY_HELP_ID, toQString(rHelpId)); });
 }
 
 void QtInstanceWidget::set_help_id(const OUString& rHelpId) { setHelpId(*getQWidget(), rHelpId); }

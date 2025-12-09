@@ -181,8 +181,8 @@ public:
 
     void setFont(vcl::Font rFont);
 
-    static OUString getHelpId(QWidget& rWidget);
-    static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
+    static OUString getHelpId(QObject& rObject);
+    static void setHelpId(QObject& rObject, const OUString& rHelpId);
 
 protected:
     virtual bool handleToolTipEvent(const QHelpEvent& rHelpEvent);
