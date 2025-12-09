@@ -46,6 +46,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -1102,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     createScDoc("xlsx/checkbox-form-control.xlsx");
 
     // When exporting to XLSX:
-    save(u"Calc Office Open XML"_ustr);
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     // Then make sure its VML markup is written and it has a correct position + size:
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
@@ -1110,6 +1111,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor"_ostr,
                        u"1, 22, 3, 3, 3, 30, 6, 1"_ustr);
+
+    // reloaded document: make sure it still has a flat (non-3d) look
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA_DrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(0),
+                                                         UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+
+    OUString sLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Check Box 1"_ustr, sLabel);
+
+    sal_Int16 nStyle;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nStyle;
+    // without the fix, this was 1 (3d)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nStyle); // flat
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testButtonFormControlXlsxExport)
