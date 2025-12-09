@@ -18,9 +18,9 @@
 #include <ThemeColorChanger.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/dialog/ThemeColorValueSet.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace sw::sidebar
@@ -36,33 +36,28 @@ std::unique_ptr<PanelLayout> ThemePanel::Create(weld::Widget* pParent)
 
 ThemePanel::ThemePanel(weld::Widget* pParent)
     : PanelLayout(pParent, u"ThemePanel"_ustr, u"modules/swriter/ui/sidebartheme.ui"_ustr)
-    , mxValueSetColors(new svx::ThemeColorValueSet)
-    , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, u"valueset_colors"_ustr, *mxValueSetColors))
+    , mxIconViewColors(m_xBuilder->weld_icon_view(u"iconview_colors"_ustr))
     , mxApplyButton(m_xBuilder->weld_button(u"apply"_ustr))
 {
-    mxValueSetColors->SetColCount(2);
-    mxValueSetColors->SetLineCount(3);
-    mxValueSetColors->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
-
     mxApplyButton->connect_clicked(LINK(this, ThemePanel, ClickHdl));
-    mxValueSetColors->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickValueSetHdl));
+    mxIconViewColors->connect_item_activated(LINK(this, ThemePanel, ItemActivatedHdl));
 
     auto const& rColorSets = svx::ColorSets::get();
     for (model::ColorSet const& rColorSet : rColorSets.getColorSetVector())
     {
-        mxValueSetColors->insert(rColorSet);
+        ScopedVclPtr<VirtualDevice> pDev = CreateImage(rColorSet);
+        const Bitmap aBitmap = pDev->GetBitmap(Point(0, 0), pDev->GetOutputSize());
+        const int nIndex = mxIconViewColors->n_children();
+        const OUString sId = OUString::number(nIndex);
+        mxIconViewColors->insert(nIndex, nullptr, &sId, &aBitmap, nullptr);
     }
 
-    mxValueSetColors->SetOptimalSize();
-
     if (!rColorSets.getColorSetVector().empty())
-        mxValueSetColors->SelectItem(1); // ItemId 1, position 0
+        mxIconViewColors->select(0);
 }
 
 ThemePanel::~ThemePanel()
 {
-    mxValueSetColorsWin.reset();
-    mxValueSetColors.reset();
     mxApplyButton.reset();
 }
 
@@ -71,9 +66,66 @@ IMPL_LINK_NOARG(ThemePanel, ClickHdl, weld::Button&, void)
     DoubleClickHdl();
 }
 
-IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ThemePanel, ItemActivatedHdl, weld::IconView&, bool)
 {
     DoubleClickHdl();
+    return true;
+}
+
+VclPtr<VirtualDevice> ThemePanel::CreateImage(const model::ColorSet& rColorSet)
+{
+    constexpr tools::Long BORDER = 4;
+    constexpr tools::Long SIZE = 16;
+    constexpr tools::Long LABEL_HEIGHT = 16;
+    constexpr tools::Long LABEL_TEXT_HEIGHT = 14;
+    constexpr tools::Long constElementNumber = 8;
+
+    const Size aMin(BORDER * 7 + SIZE * constElementNumber / 2 + BORDER * 2,
+                    BORDER * 3 + SIZE * 2 + LABEL_HEIGHT);
+
+    const Size aSize(aMin.Width() + 40, aMin.Height());
+    VclPtr<VirtualDevice> pDev = mxIconViewColors->create_virtual_device();
+    pDev->SetOutputSizePixel(aSize);
+
+    tools::Long startX = (aSize.Width() / 2.0) - (aMin.Width() / 2.0);
+    tools::Long x = BORDER;
+    tools::Long y1 = BORDER + LABEL_HEIGHT;
+    tools::Long y2 = y1 + SIZE + BORDER;
+
+    pDev->SetLineColor(COL_LIGHTGRAY);
+    pDev->SetFillColor(COL_LIGHTGRAY);
+    tools::Rectangle aNameRect(Point(0, 0), Size(aSize.Width(), LABEL_HEIGHT));
+    pDev->DrawRect(aNameRect);
+
+    vcl::Font aFont;
+    OUString aName = rColorSet.getName();
+    aFont.SetFontHeight(LABEL_TEXT_HEIGHT);
+    pDev->SetFont(aFont);
+
+    Size aTextSize(pDev->GetTextWidth(aName), pDev->GetTextHeight());
+
+    Point aPoint((aNameRect.GetWidth() / 2.0) - (aTextSize.Width() / 2.0),
+                 (aNameRect.GetHeight() / 2.0) - (aTextSize.Height() / 2.0));
+
+    pDev->DrawText(aPoint, aName);
+
+    pDev->SetLineColor(COL_LIGHTGRAY);
+    pDev->SetFillColor();
+
+    for (sal_uInt32 i = 2; i < 10; i += 2)
+    {
+        pDev->SetFillColor(rColorSet.getColor(model::convertToThemeColorType(i)));
+        pDev->DrawRect(tools::Rectangle(Point(x + startX, y1), Size(SIZE, SIZE)));
+
+        pDev->SetFillColor(rColorSet.getColor(model::convertToThemeColorType(i + 1)));
+        pDev->DrawRect(tools::Rectangle(Point(x + startX, y2), Size(SIZE, SIZE)));
+
+        x += SIZE + BORDER;
+        if (i == 2 || i == 8)
+            x += BORDER;
+    }
+
+    return pDev;
 }
 
 void ThemePanel::DoubleClickHdl()
@@ -82,10 +134,10 @@ void ThemePanel::DoubleClickHdl()
     if (!pDocSh)
         return;
 
-    sal_uInt32 nItemId = mxValueSetColors->GetSelectedItemId();
-    if (!nItemId)
+    const OUString sId = mxIconViewColors->get_selected_id();
+    if (sId.isEmpty())
         return;
-    sal_uInt32 nIndex = nItemId - 1;
+    const sal_uInt32 nIndex = sId.toUInt32();
 
     auto const& rColorSets = svx::ColorSets::get();
     model::ColorSet const& rColorSet = rColorSets.getColorSet(nIndex);
