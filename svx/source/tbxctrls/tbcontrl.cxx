@@ -1378,9 +1378,6 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         }
     }
 
-    if (nItem <= 0 || nItem >= m_xWidget->get_count() - 1)
-        return;
-
     SfxObjectShell *pShell = SfxObjectShell::Current();
     if (!pShell)
         return;
@@ -1390,9 +1387,18 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         return;
 
     SfxStyleSheetBase* pStyle = pPool->First(eStyleFamily);
-    while (pStyle && pStyle->GetName() != rStyleName)
+    SfxStyleSheetBase* pDefaultStyle = nullptr;
+    while (pStyle)
+    {
+        if (pStyle->GetName() == rStyleName)
+            break;
+        if (pStyle->GetName() == sDefaultStyle)
+            pDefaultStyle = pStyle;
         pStyle = pPool->Next();
+    }
 
+    if (!pStyle)
+        pStyle = pDefaultStyle;
     if (!pStyle )
         return;
 
