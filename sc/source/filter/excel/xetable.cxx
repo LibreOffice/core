@@ -262,7 +262,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         return xRec;
 
     // Check to see if this shared formula contains any tokens that Excel's shared formula cannot handle.
-    if (maBadTokens.count(pShrdScTokArr) > 0)
+    if (maBadTokens.contains(pShrdScTokArr))
         // Already on the black list. Skip it.
         return xRec;
 
