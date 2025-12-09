@@ -497,9 +497,9 @@ void DocxTableStyleExport::Impl::tableStylePPr(const uno::Sequence<beans::Proper
     }
     if (bWordWrap)
         m_pSerializer->singleElementNS(XML_w, XML_wordWrap);
-    tableStylePInd(aInd);
     handleBoolean(aSnapToGrid, XML_snapToGrid);
     tableStylePSpacing(aSpacing);
+    tableStylePInd(aInd);
     if (!aJc.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), aJc);
 
