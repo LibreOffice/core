@@ -83,9 +83,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapeRelsize)
 {
     createSwDoc("dml-groupshape-relsize.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Relative size wasn't imported.
