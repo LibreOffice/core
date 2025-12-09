@@ -1171,6 +1171,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nStyle;
     // without the fix, this was 1 (3d)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nStyle); // flat
+
+    Color aColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= aColor;
+    // without the fix, this was white
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aColor); // black apparently == transparent
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testButtonFormControlXlsxExport)
