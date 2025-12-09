@@ -1244,7 +1244,7 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
     if (!(xEnumeration.is() && xEnumeration->hasMoreElements()))
         return;
 
-    auto pNodeContext = std::make_unique<NodeContext>(xNode, false, false);
+    auto pNodeContext = std::make_unique<NodeContext>(xNode, mrPowerPointExport, false, false);
     if (pNodeContext->isValid())
     {
         mpFS->startElementNS(XML_p, XML_timing);
