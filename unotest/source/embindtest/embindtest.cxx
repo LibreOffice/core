@@ -292,6 +292,53 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
         verify(ok);
     }
     {
+        auto const val = test->getEnum();
+        verify(val == org::libreoffice::embindtest::Enum_E_2);
+        bool const ok = test->isEnum(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getStruct();
+        verify(
+            val
+            == org::libreoffice::embindtest::Struct{ true,
+                                                     -12,
+                                                     -1234,
+                                                     54321,
+                                                     -123456,
+                                                     3456789012,
+                                                     -123456789,
+                                                     9876543210,
+                                                     -10.25,
+                                                     100.5,
+                                                     u'Ö',
+                                                     u"hä"_ustr,
+                                                     cppu::UnoType<sal_Int32>::get(),
+                                                     css::uno::Any(sal_Int32(-123456)),
+                                                     { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                                                     org::libreoffice::embindtest::Enum_E_2,
+                                                     { -123456 },
+                                                     { { u"foo"_ustr },
+                                                       -123456,
+                                                       css::uno::Any(sal_Int32(-123456)),
+                                                       { u"barr"_ustr } },
+                                                     test });
+        bool const ok = test->isStruct(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getStructLong();
+        verify(val == org::libreoffice::embindtest::StructLong{ -123456 });
+        bool const ok = test->isStructLong(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getStructString();
+        verify(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
+        bool const ok = test->isStructString(val);
+        verify(ok);
+    }
+    {
         auto const val = test->getAnyVoid();
         verify(checkAnyVoid(val));
         bool const ok = test->isAnyVoid(val);
@@ -408,53 +455,6 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
         {
             verify(ok);
         }
-    }
-    {
-        auto const val = test->getEnum();
-        verify(val == org::libreoffice::embindtest::Enum_E_2);
-        bool const ok = test->isEnum(val);
-        verify(ok);
-    }
-    {
-        auto const val = test->getStruct();
-        verify(
-            val
-            == org::libreoffice::embindtest::Struct{ true,
-                                                     -12,
-                                                     -1234,
-                                                     54321,
-                                                     -123456,
-                                                     3456789012,
-                                                     -123456789,
-                                                     9876543210,
-                                                     -10.25,
-                                                     100.5,
-                                                     u'Ö',
-                                                     u"hä"_ustr,
-                                                     cppu::UnoType<sal_Int32>::get(),
-                                                     css::uno::Any(sal_Int32(-123456)),
-                                                     { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
-                                                     org::libreoffice::embindtest::Enum_E_2,
-                                                     { -123456 },
-                                                     { { u"foo"_ustr },
-                                                       -123456,
-                                                       css::uno::Any(sal_Int32(-123456)),
-                                                       { u"barr"_ustr } },
-                                                     test });
-        bool const ok = test->isStruct(val);
-        verify(ok);
-    }
-    {
-        auto const val = test->getStructLong();
-        verify(val == org::libreoffice::embindtest::StructLong{ -123456 });
-        bool const ok = test->isStructLong(val);
-        verify(ok);
-    }
-    {
-        auto const val = test->getStructString();
-        verify(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
-        bool const ok = test->isStructString(val);
-        verify(ok);
     }
     {
         auto const val = test->getSequenceBoolean();
