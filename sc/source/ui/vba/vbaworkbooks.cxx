@@ -176,6 +176,7 @@ ScVbaWorkbooks::isSpreadSheetFile( std::u16string_view sType )
     // include calc_QPro etc. ? ( not for the moment anyway )
     return o3tl::starts_with( sType, u"calc_MS" )
       || o3tl::starts_with( sType, u"MS Excel" )
+      || o3tl::starts_with( sType, u"Office Open XML Spreadsheet" ) // Excel 2010+
       || o3tl::starts_with( sType, u"calc8" )
       || o3tl::starts_with( sType, u"calc_StarOffice" );
 }
