@@ -83,10 +83,12 @@ bool initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChil
 }
 }
 
-NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, PowerPointExport& rExport,
-                         bool bMainSeqChild, bool bIsIterateChild)
+NodeContext::NodeContext(const Reference<XAnimationNode>& xNode,
+                         const std::unordered_set<sal_Int32>& rSlideShapeIDs,
+                         PowerPointExport& rExport, bool bMainSeqChild, bool bIsIterateChild)
     : mxNode(xNode)
     , mbValid(true)
+    , mrSlideShapeIDs(rSlideShapeIDs)
     , mrPowerPointExport(rExport)
     , mbOnSubTnLst(false)
     , mnEffectNodeType(-1)
@@ -111,7 +113,7 @@ bool NodeContext::isValidTarget(const Any& rTarget)
     Reference<XShape> xShape;
 
     if ((rTarget >>= xShape) && drawingml::ShapeExport::IsShapeTypeKnown(xShape)
-        && (mrPowerPointExport.GetShapeID(xShape) != -1))
+        && (mrSlideShapeIDs.find(mrPowerPointExport.GetShapeID(xShape)) != mrSlideShapeIDs.end()))
         return true;
 
     ParagraphTarget aParagraphTarget;
@@ -216,8 +218,9 @@ bool NodeContext::initChildNodes()
                 Reference<XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY);
                 if (xChildNode.is())
                 {
-                    auto pChildContext = std::make_unique<NodeContext>(
-                        xChildNode, mrPowerPointExport, bIsMainSeq, bIsIterateChild);
+                    auto pChildContext = std::make_unique<NodeContext>(xChildNode, mrSlideShapeIDs,
+                                                                       mrPowerPointExport,
+                                                                       bIsMainSeq, bIsIterateChild);
                     if (pChildContext->isValid())
                         bValid = true;
                     maChildNodes.push_back(std::move(pChildContext));
