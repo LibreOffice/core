@@ -13,7 +13,6 @@
 #include <QtAccessibleWidget.hxx>
 #include <QtData.hxx>
 
-#include <vcl/commandevent.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtGui/QHelpEvent>
@@ -121,15 +120,6 @@ bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
 
     switch (pEvent->type())
     {
-        case QEvent::ContextMenu:
-        {
-            QContextMenuEvent* pContextMenuEvent = static_cast<QContextMenuEvent*>(pEvent);
-            const Point aPos = toPoint(pContextMenuEvent->pos());
-            const CommandEvent aEvent(aPos, CommandEventId::ContextMenu);
-            if (signal_command(aEvent))
-                return true;
-            break;
-        }
         case QEvent::Paint:
             handlePaintEvent();
             return false;

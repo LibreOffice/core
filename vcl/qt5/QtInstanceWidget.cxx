@@ -13,6 +13,7 @@
 #include <QtInstanceContainer.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
@@ -273,6 +274,13 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
 
     switch (pEvent->type())
     {
+        case QEvent::ContextMenu:
+        {
+            QContextMenuEvent* pContextMenuEvent = static_cast<QContextMenuEvent*>(pEvent);
+            CommandEvent aCEvt(toPoint(pContextMenuEvent->pos()), CommandEventId::ContextMenu,
+                               pContextMenuEvent->reason() == QContextMenuEvent::Mouse);
+            return signal_command(aCEvt);
+        }
         case QEvent::DragEnter:
         {
             if (!m_pDropTarget)
