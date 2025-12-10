@@ -552,6 +552,31 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testActiveXCheckboxXLSX)
     sal_Int16 nState;
     xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
+
+    saveAndReload(TestFilter::XLSX);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
+    xIA_DrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), UNO_QUERY_THROW);
+    xControlShape.set(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
+
+    sal_Int16 nStyle;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nStyle;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nStyle); // 3d
+
+    nColor = COL_TRANSPARENT;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
+    // without the fix, this was COL_WHITE
+    CPPUNIT_ASSERT_EQUAL(Color(0x316ac5), nColor);
+
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
+    //CPPUNIT_ASSERT_EQUAL(Color(0xD4D0C8), nColor);
+
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf60673)

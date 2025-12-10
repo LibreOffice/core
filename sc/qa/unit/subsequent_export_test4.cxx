@@ -1105,10 +1105,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     // without the fix, this was 1 (3d)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nStyle); // flat
 
-    Color aColor;
+    Color aColor(COL_TRANSPARENT);
     xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= aColor;
-    // without the fix, this was white
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aColor); // black apparently == transparent
+    // without the fix, this was COL_WHITE
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, aColor);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testButtonFormControlXlsxExport)
