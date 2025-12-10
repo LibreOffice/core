@@ -427,25 +427,22 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyVoid()
         self.assertEqual(v, None)
         self.assertTrue(test.isAnyVoid(v))
-        self.assertTrue(uno.invoke(test, 'isAnyVoid', (uno.Any('void', None),))) #TODO: direct call?
+        self.assertTrue(test.isAnyVoid(None))
 
         v = test.getAnyBoolean()
         self.assertEqual(v, True)
         self.assertTrue(test.isAnyBoolean(v))
-        self.assertTrue(uno.invoke(test, 'isAnyBoolean', (uno.Any('boolean', True),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyBoolean(True))
 
         v = test.getAnyByte()
         self.assertEqual(v, -12)
         self.assertTrue(test.isAnyByte(v))
-        self.assertTrue(uno.invoke(test, 'isAnyByte', (uno.Any('byte', -12),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyByte(-12))
 
         v = test.getAnyShort()
         self.assertEqual(v, -1234)
         self.assertTrue(test.isAnyShort(v))
-        self.assertTrue(uno.invoke(test, 'isAnyShort', (uno.Any('short', -1234),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyShort(-1234))
 
         v = test.getAnyUnsignedShort()
         self.assertEqual(v, 54321)
@@ -456,8 +453,7 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyLong()
         self.assertEqual(v, -123456)
         self.assertTrue(test.isAnyLong(v))
-        self.assertTrue(uno.invoke(test, 'isAnyLong', (uno.Any('long', -123456),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyLong(-123456))
 
         v = test.getAnyUnsignedLong()
         self.assertEqual(v, 3456789012)
@@ -488,27 +484,22 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyDouble()
         self.assertEqual(v, 100.5)
         self.assertTrue(test.isAnyDouble(v))
-        self.assertTrue(uno.invoke(test, 'isAnyDouble', (uno.Any('double', 100.5),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyDouble(100.5))
 
         v = test.getAnyChar()
         self.assertEqual(v, 'Ö')
         self.assertTrue(test.isAnyChar(v))
-        self.assertTrue(uno.invoke(test, 'isAnyChar', (uno.Any('char', 'Ö'),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyChar(uno.Char('Ö')))
 
         v = test.getAnyString()
         self.assertEqual(v, 'hä')
         self.assertTrue(test.isAnyString(v))
-        self.assertTrue(uno.invoke(test, 'isAnyString', (uno.Any('string', 'hä'),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyString('hä'))
 
         v = test.getAnyType()
         self.assertEqual(v, uno.getTypeByName('long'))
         self.assertTrue(test.isAnyType(v))
-        self.assertTrue(
-            uno.invoke(test, 'isAnyType', (uno.Any('type', uno.getTypeByName('long')),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyType(uno.getTypeByName('long')))
 
         v = test.getAnySequence()
         self.assertEqual(v, ('foo', 'barr', 'bazzz'))
@@ -521,9 +512,7 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyEnum()
         self.assertEqual(v, E_2)
         self.assertTrue(test.isAnyEnum(v))
-        self.assertTrue(
-            uno.invoke(test, 'isAnyEnum', (uno.Any('org.libreoffice.embindtest.Enum', E_2),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyEnum(E_2))
 
         v = test.getAnyStruct()
         self.assertEqual(
@@ -539,20 +528,16 @@ class EmbindTest(unittest.TestCase):
                 test))
         self.assertTrue(test.isAnyStruct(v))
         self.assertTrue(
-            uno.invoke(
-                test, 'isAnyStruct',
-                (uno.Any(
-                    'org.libreoffice.embindtest.Struct',
-                    Struct(
-                        True, -12, -1234, 54321, -123456, 3456789012, -123456789, 9876543210,
-                        -10.25, 100.5, 'Ö', 'hä', uno.getTypeByName('long'), -123456,
-                        ('foo', 'barr', 'bazzz'), E_2, StructLong(-123456),
-                        uno.createUnoStruct(
-                            'org.libreoffice.embindtest.Template<'
-                                'any,org.libreoffice.embindtest.StructString>',
-                                StructString('foo'), -123456, -123456, StructString('barr')),
-                        test)),)))
-            #TODO: direct call?
+            test.isAnyStruct(
+                Struct(
+                    True, -12, -1234, 54321, -123456, 3456789012, -123456789, 9876543210, -10.25,
+                    100.5, 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'),
+                    E_2, StructLong(-123456),
+                    uno.createUnoStruct(
+                        'org.libreoffice.embindtest.Template<'
+                            'any,org.libreoffice.embindtest.StructString>',
+                        StructString('foo'), -123456, -123456, StructString('barr')),
+                    test)))
 
         v = test.getAnyException()
         self.assertTrue(v.Message.startswith('error')) #TODO: use Python 3.14 assertStartsWith
@@ -561,13 +546,7 @@ class EmbindTest(unittest.TestCase):
         self.assertEqual(v.m2, 100.5)
         self.assertEqual(v.m3, 'hä')
         self.assertTrue(test.isAnyException(v))
-        self.assertTrue(
-            uno.invoke(
-                test, 'isAnyException',
-                (uno.Any(
-                    'org.libreoffice.embindtest.Exception',
-                    Exception('error', None, -123456, 100.5, 'hä')),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyException(Exception('error', None, -123456, 100.5, 'hä')))
 
         v = test.getAnyInterface()
         self.assertEqual(v, test)
