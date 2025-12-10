@@ -2892,9 +2892,11 @@ class VCL_DLLPUBLIC DrawingArea : virtual public Widget
 public:
     typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> draw_args;
 
+private:
+    Link<const CommandEvent&, bool> m_aCommandHdl;
+
 protected:
     Link<draw_args, void> m_aDrawHdl;
-    Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
     // if handler returns true, drag is disallowed
@@ -2903,6 +2905,8 @@ protected:
     Link<OUString&, int> m_aGetSurroundingHdl;
     // attempt to delete the range, return true if successful
     Link<const Selection&, bool> m_aDeleteSurroundingHdl;
+
+    bool signal_command(const CommandEvent& rCEvt) { return m_aCommandHdl.Call(rCEvt); }
 
     OUString signal_query_tooltip(tools::Rectangle& rHelpArea)
     {

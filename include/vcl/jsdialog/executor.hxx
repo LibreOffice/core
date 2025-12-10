@@ -135,9 +135,9 @@ public:
         rWidget.m_aKeyReleaseHdl.Call(rEvent);
     }
 
-    static void command(const weld::DrawingArea& rArea, const CommandEvent& rCmd)
+    static void command(weld::DrawingArea& rArea, const CommandEvent& rCmd)
     {
-        rArea.m_aCommandHdl.Call(rCmd);
+        rArea.signal_command(rCmd);
     }
 
     static void enter_page(const weld::Notebook& rNotebook, const OUString& rPage)

@@ -18412,7 +18412,7 @@ private:
         CommandWheelData aWheelData(aEvt.mnDelta, aEvt.mnNotchDelta, aEvt.mnScrollLines,
                                     nMode, nCode, bHorz, aEvt.mbDeltaIsPixel);
         CommandEvent aCEvt(Point(aEvt.mnX, aEvt.mnY), CommandEventId::Wheel, true, &aWheelData);
-        return m_aCommandHdl.Call(aCEvt);
+        return signal_command(aCEvt);
     }
     static gboolean signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer widget)
     {
@@ -18432,7 +18432,7 @@ private:
 
         CommandGestureZoomData aGestureData(x, y, eEventType, fScaleDelta);
         CommandEvent aCEvt(Point(x, y), CommandEventId::GestureZoom, true, &aGestureData);
-        return m_aCommandHdl.Call(aCEvt);
+        return signal_command(aCEvt);
     }
 
     static bool signalZoomBegin(GtkGesture* gesture, GdkEventSequence* sequence, gpointer widget)
@@ -18749,9 +18749,9 @@ public:
         return *m_xDevice;
     }
 
-    bool signal_command(const CommandEvent& rCEvt)
+    bool signalCommand(const CommandEvent& rCEvt)
     {
-        return m_aCommandHdl.Call(rCEvt);
+        return signal_command(rCEvt);
     }
 
     virtual void click(const Point& rPos) override
@@ -18853,7 +18853,7 @@ void IMHandler::updateIMSpotLocation()
 {
     CommandEvent aCEvt(Point(), CommandEventId::CursorPos);
     // we expect set_cursor_location to get triggered by this
-    m_pArea->signal_command(aCEvt);
+    m_pArea->signalCommand(aCEvt);
 }
 
 void IMHandler::set_cursor_location(const tools::Rectangle& rRect)
@@ -18875,7 +18875,7 @@ void IMHandler::signalIMCommit(GtkIMContext* /*pContext*/, gchar* pText, gpointe
     OUString sText(pText, strlen(pText), RTL_TEXTENCODING_UTF8);
     CommandExtTextInputData aData(sText, nullptr, sText.getLength(), 0, false);
     CommandEvent aCEvt(Point(), CommandEventId::ExtTextInput, false, &aData);
-    pThis->m_pArea->signal_command(aCEvt);
+    pThis->m_pArea->signalCommand(aCEvt);
 
     pThis->updateIMSpotLocation();
 
@@ -18904,7 +18904,7 @@ void IMHandler::signalIMPreeditChanged(GtkIMContext* pIMContext, gpointer im_han
 
     CommandExtTextInputData aData(sText, aInputFlags.data(), nCursorPos, nCursorFlags, false);
     CommandEvent aCEvt(Point(), CommandEventId::ExtTextInput, false, &aData);
-    pThis->m_pArea->signal_command(aCEvt);
+    pThis->m_pArea->signalCommand(aCEvt);
 
     pThis->updateIMSpotLocation();
 }
@@ -18952,7 +18952,7 @@ void IMHandler::StartExtTextInput()
     if (m_bExtTextInput)
         return;
     CommandEvent aCEvt(Point(), CommandEventId::StartExtTextInput);
-    m_pArea->signal_command(aCEvt);
+    m_pArea->signalCommand(aCEvt);
     m_bExtTextInput = true;
 }
 
@@ -18969,7 +18969,7 @@ void IMHandler::EndExtTextInput()
     if (!m_bExtTextInput)
         return;
     CommandEvent aCEvt(Point(), CommandEventId::EndExtTextInput);
-    m_pArea->signal_command(aCEvt);
+    m_pArea->signalCommand(aCEvt);
     m_bExtTextInput = false;
 }
 

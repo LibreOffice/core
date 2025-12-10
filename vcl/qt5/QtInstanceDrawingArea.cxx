@@ -126,7 +126,7 @@ bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
             QContextMenuEvent* pContextMenuEvent = static_cast<QContextMenuEvent*>(pEvent);
             const Point aPos = toPoint(pContextMenuEvent->pos());
             const CommandEvent aEvent(aPos, CommandEventId::ContextMenu);
-            if (m_aCommandHdl.Call(aEvent))
+            if (signal_command(aEvent))
                 return true;
             break;
         }
