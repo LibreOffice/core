@@ -1112,6 +1112,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:color", "themeColor", u"dark1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf166325_scheme_color)
+{
+    createSwDoc("tdf166325_scheme_color.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the fix this would be "light2" (type ST_ThemeColor instead of ST_SchemeColorVal)
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr", "val",
+                u"lt2");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
 {
     // only 2, but not 3 pages in document
