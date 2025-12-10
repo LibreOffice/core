@@ -3465,8 +3465,6 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 
 IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool) { return m_aActivateHdl.Call(*this); }
 
-class SalInstanceTreeView;
-
 static SalInstanceTreeView* g_DragSource;
 
 namespace
