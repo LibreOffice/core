@@ -171,17 +171,14 @@ void SvxCharView::createContextMenu(const Point& rPosition)
     std::unique_ptr<weld::Builder> xBuilder(
         Application::CreateBuilder(pDrawingArea, u"sfx/ui/charviewmenu.ui"_ustr));
     std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu(u"charviewmenu"_ustr));
-    ContextMenuSelect(
-        xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(rPosition, Size(1, 1))));
-    Invalidate();
-}
-
-void SvxCharView::ContextMenuSelect(std::u16string_view rMenuId)
-{
-    if (rMenuId == u"clearchar")
+    const OUString sMenuId
+        = xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(rPosition, Size(1, 1)));
+    if (sMenuId == u"clearchar")
         maClearClickHdl.Call(this);
-    else if (rMenuId == u"clearallchar")
+    else if (sMenuId == u"clearallchar")
         maClearAllClickHdl.Call(this);
+
+    Invalidate();
 }
 
 void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)

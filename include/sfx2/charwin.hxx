@@ -69,8 +69,6 @@ public:
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
-
-    void ContextMenuSelect(std::u16string_view rIdent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
