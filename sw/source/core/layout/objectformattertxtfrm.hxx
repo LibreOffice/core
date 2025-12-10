@@ -96,8 +96,7 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
         SwAnchoredObject* GetFirstObjWithMovedFwdAnchor(
                                     const sal_Int16 _nWrapInfluenceOnPosition,
                                     sal_uInt32& _noToPageNum,
-                                    bool& _boInFollow,
-                                    bool& o_rbPageHasFlysAnchoredBelowThis);
+                                    bool& _boInFollow);
 
         /** method to format the anchor frame for checking of the move forward condition
 
@@ -181,8 +180,7 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
                                             SwPageFrame const& rFromPageFrame,
                                             const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
-                                            bool& _boInFollow,
-                                            bool& o_rbPageHasFlysAnchoredBelowThis);
+                                            bool& _boInFollow);
 };
 
 #endif

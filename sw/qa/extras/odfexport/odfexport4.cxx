@@ -1644,6 +1644,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168980)
     saveAndReload(u"OpenDocument Text Flat XML"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169882)
+{
+    // The document must not hang on layout
+    createSwDoc("tdf169882.odt");
+    saveAndReload(TestFilter::ODT);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

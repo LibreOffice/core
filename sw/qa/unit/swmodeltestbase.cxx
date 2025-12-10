@@ -397,6 +397,13 @@ void SwModelTestBase::saveAndReload(const OUString& pFilter, const char* pPasswo
     loadURL(maTempFile.GetURL(), pPassword);
 }
 
+void SwModelTestBase::saveAndReload(TestFilter eFilter, const char* pPassword)
+{
+    save(eFilter, pPassword);
+
+    loadURL(maTempFile.GetURL(), pPassword);
+}
+
 void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
 {
     loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);

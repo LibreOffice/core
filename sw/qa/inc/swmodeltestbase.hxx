@@ -197,6 +197,7 @@ protected:
     void header();
 
     void saveAndReload(const OUString& pFilter, const char* pPassword = nullptr);
+    void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
 
     /// Combines load() and save().
     void loadAndSave(const char* pName, const char* pPassword = nullptr);
