@@ -75,8 +75,8 @@ public:
     void getRecentCharacterList(); //gets both recent char and recent char font list
     void updateRecentCharControl();
 
-    void updateRecentCharacterList(const OUString& sTitle, const OUString& rFont);
-    void updateFavCharacterList(const OUString& sTitle, const OUString& rFont);
+    void updateRecentCharacterList(const OUString& rTitle, const OUString& rFont);
+    void updateFavCharacterList(const OUString& rTitle, const OUString& rFont);
     void deleteFavCharacterFromList(const OUString& rTitle, const OUString& rFont);
 
     bool isFavChar(const OUString& rTitle, const OUString& rFont);

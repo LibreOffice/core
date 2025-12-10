@@ -136,14 +136,14 @@ void SfxCharmapContainer::getFavCharacterList()
     m_aFavChars.clear();
 
     //retrieve recent character list
-    const css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
+    const css::uno::Sequence<OUString> aFavCharList(officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get());
 
     //retrieve recent character font list
-    const css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
+    const css::uno::Sequence<OUString> aFavCharFontList(officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get());
 
-    const auto nCommonLength = std::min(rFavCharList.size(), rFavCharFontList.size());
+    const auto nCommonLength = std::min(aFavCharList.size(), aFavCharFontList.size());
     for (sal_uInt32 i = 0; i < nCommonLength; i++)
-        m_aFavChars.emplace_back(rFavCharList[i], rFavCharFontList[i]);
+        m_aFavChars.emplace_back(aFavCharList[i], aFavCharFontList[i]);
 }
 
 void SfxCharmapContainer::updateFavCharControl()
@@ -172,14 +172,14 @@ void SfxCharmapContainer::getRecentCharacterList()
     m_aRecentChars.clear();
 
     //retrieve recent character list
-    const css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
+    const css::uno::Sequence<OUString> aRecentCharList(officecfg::Office::Common::RecentCharacters::RecentCharacterList::get());
 
     //retrieve recent character font list
-    const css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
+    const css::uno::Sequence<OUString> aRecentCharFontList(officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get());
 
-    const sal_uInt32 nCommonLength = std::min(rRecentCharList.size(), rRecentCharFontList.size());
+    const sal_uInt32 nCommonLength = std::min(aRecentCharList.size(), aRecentCharFontList.size());
     for (sal_uInt32 i = 0; i < nCommonLength; i++)
-        m_aRecentChars.emplace_back(rRecentCharList[i], rRecentCharFontList[i]);
+        m_aRecentChars.emplace_back(aRecentCharList[i], aRecentCharFontList[i]);
 }
 
 void SfxCharmapContainer::GrabFocusToFirstFavorite()
@@ -208,17 +208,17 @@ void SfxCharmapContainer::updateRecentCharControl()
     m_aUpdateRecentHdl.Call(nullptr);
 }
 
-void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
+void SfxCharmapContainer::updateRecentCharacterList(const OUString& rTitle, const OUString& rFont)
 {
     // if recent char to be added is already in list, remove it
-    auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(sTitle, rFont));
+    auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(rTitle, rFont));
     if (itChar != m_aRecentChars.end())
         m_aRecentChars.erase(itChar);
 
     if (m_aRecentChars.size() == 16)
         m_aRecentChars.pop_back();
 
-    m_aRecentChars.emplace_front(sTitle, rFont);
+    m_aRecentChars.emplace_front(rTitle, rFont);
 
     css::uno::Sequence<OUString> aRecentCharList(m_aRecentChars.size());
     auto aRecentCharListRange = asNonConstRange(aRecentCharList);
@@ -239,17 +239,17 @@ void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, cons
     updateRecentCharControl();
 }
 
-void SfxCharmapContainer::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
+void SfxCharmapContainer::updateFavCharacterList(const OUString& rTitle, const OUString& rFont)
 {
     // if Fav char to be added is already in list, remove it
-    auto itChar = std::ranges::find(m_aFavChars, CharAndFont(sTitle, rFont));
+    auto itChar = std::ranges::find(m_aFavChars, CharAndFont(rTitle, rFont));
     if (itChar != m_aFavChars.end())
         m_aFavChars.erase(itChar);
 
     if (m_aFavChars.size() == 16)
         m_aFavChars.pop_back();
 
-    m_aFavChars.emplace_back(sTitle, rFont);
+    m_aFavChars.emplace_back(rTitle, rFont);
 
     css::uno::Sequence<OUString> aFavCharList(m_aFavChars.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
