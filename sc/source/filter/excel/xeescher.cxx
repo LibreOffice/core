@@ -721,6 +721,10 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         aPropOpt.AddOpt( ESCHER_Prop_wzDescription, aAltTxt );
     }
 
+    ::Color aBackColor;
+    if (aCtrlProp.GetProperty(aBackColor, u"BackgroundColor"_ustr))
+        moBackgroundFill = aBackColor;
+
     // write DFF property set to stream
     aPropOpt.Commit( mrEscherEx.GetStream() );
 
@@ -1103,6 +1107,7 @@ public:
                            const OUString& sControlName, const OUString& sFmlaLink,
                            OUString aLabel, OUString aMacroName, sal_Int16 nState);
     bool m_bLook3d = true;
+    std::optional<Color> m_oBackgroundFill;
 
 protected:
     using VMLExport::StartShape;
@@ -1138,8 +1143,11 @@ sal_Int32 VmlFormControlExporter::StartShape()
     if (!m_sControlName.isEmpty())
         AddShapeAttribute(XML_id, m_sControlName.toUtf8());
 
-    // control background: set filled as false so the control is transparent instead of white
-    AddShapeAttribute(XML_filled, "f");
+    if (m_oBackgroundFill.has_value())
+        AddShapeAttribute(XML_fillcolor,
+                          OUString("#" + m_oBackgroundFill->AsRGBHexString()).toUtf8());
+    else
+        AddShapeAttribute(XML_filled, "f");
 
     return VMLExport::StartShape();
 }
@@ -1224,6 +1232,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
     aFormControlExporter.m_bLook3d = !mbFlatButton;
+    aFormControlExporter.m_oBackgroundFill = moBackgroundFill;
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);
