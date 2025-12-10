@@ -635,9 +635,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO79062)
 {
     createSwDoc("fdo79062.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlFootNotes = parseExport(u"word/footnotes.xml"_ustr);
     assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", u"w14 wp14 w15");
