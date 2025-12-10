@@ -39,6 +39,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <openuriexternally.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/json_writer.hxx>
@@ -801,7 +802,8 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     , m_xNameED(m_xBuilder->weld_label(u"nameed"_ustr))
     , m_xChangePassBtn(m_xBuilder->weld_button(u"changepass"_ustr))
     , m_xShowTypeFT(m_xBuilder->weld_label(u"showtype"_ustr))
-    , m_xFileValEd(m_xBuilder->weld_link_button(u"showlocation"_ustr))
+    , m_xFileValEd(m_xBuilder->weld_label(u"showlocation"_ustr))
+    , m_xFileValBtn(m_xBuilder->weld_button(u"btnShowLocation"_ustr))
     , m_xShowSizeFT(m_xBuilder->weld_label(u"showsize"_ustr))
     , m_xCreateValFt(m_xBuilder->weld_label(u"showcreate"_ustr))
     , m_xChangeValFt(m_xBuilder->weld_label(u"showmodify"_ustr))
@@ -850,6 +852,11 @@ SfxDocumentPage::~SfxDocumentPage()
         m_xPasswordDialog->Response(RET_CANCEL);
         m_xPasswordDialog.reset();
     }
+}
+
+IMPL_LINK_NOARG(SfxDocumentPage, FileValHdl, weld::Button&, void)
+{
+    sfx2::openUriExternally(m_sFileURL, false, GetFrameWeld());
 }
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, weld::Button&, void)
@@ -1137,12 +1144,13 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         aDescription = SfxResId( STR_SFX_NEWOFFICEDOC );
     m_xShowTypeFT->set_label( aDescription );
 
+    m_sFileURL.clear();
     // determine location
     // online we don't know file location so we just set it as the name
     if (comphelper::LibreOfficeKit::isActive())
     {
         m_xFileValEd->set_label(aName);
-        m_xFileValEd->set_uri(aName);
+        m_sFileURL = aName;
 
         // Disable setting/changing password on text files.
         // Perhaps this needs to be done for both Online and Desktop.
@@ -1168,15 +1176,17 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             m_xFileValEd->set_label(aText);
             OUString aURLStr;
             osl::FileBase::getFileURLFromSystemPath(aText, aURLStr);
-            m_xFileValEd->set_uri(aURLStr);
+            m_sFileURL = aURLStr;
         }
         else if (aURL.GetProtocol() != INetProtocol::PrivSoffice)
         {
             m_xFileValEd->set_label(aURL.GetPartBeforeLastName());
-            m_xFileValEd->set_uri(m_xFileValEd->get_label());
+            m_sFileURL = m_xFileValEd->get_label();
         }
     }
-
+    m_xFileValBtn->connect_clicked( LINK( this, SfxDocumentPage, FileValHdl ) );
+    if (m_sFileURL.isEmpty())
+        m_xFileValBtn->set_sensitive(false);
 
     // handle access data
     bool bUseUserData = rInfoItem.IsUseUserData();

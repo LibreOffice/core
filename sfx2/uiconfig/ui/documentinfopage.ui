@@ -379,20 +379,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLinkButton" id="showlocation">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="relief">none</property>
-        <property name="xalign">0</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkCheckButton" id="thumbnailsavecb">
         <property name="label" translatable="yes" context="documentinfopage|thumbnailsavecb">Save preview image with this document</property>
         <property name="visible">True</property>
@@ -443,8 +429,8 @@
             </items>
             <child internal-child="entry">
               <object class="GtkEntry">
-                <property name="truncate-multiline">True</property>
                 <property name="can-focus">False</property>
+                <property name="truncate-multiline">True</property>
               </object>
             </child>
             <accessibility>
@@ -475,6 +461,32 @@
       <packing>
         <property name="left-attach">1</property>
         <property name="top-attach">13</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnShowLocation">
+        <property name="label" translatable="yes" context="documentinfopage|btnShowLocation">Open</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="use-underline">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">2</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="showlocation">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="valign">center</property>
+        <property name="selectable">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
