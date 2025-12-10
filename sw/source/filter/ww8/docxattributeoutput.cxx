@@ -300,41 +300,60 @@ auto detachFrom(rtl::Reference<sax_fastparser::FastAttributeList>& src)
     return rtl::Reference(std::move(src));
 }
 
-constexpr auto constThemeColorTypeTokenMap = frozen::make_unordered_map<model::ThemeColorType, const char*>({
-    { model::ThemeColorType::Dark1, "dark1" },
-    { model::ThemeColorType::Light1, "light1" },
-    { model::ThemeColorType::Dark2, "dark2" },
-    { model::ThemeColorType::Light2, "light2" },
-    { model::ThemeColorType::Accent1, "accent1" },
-    { model::ThemeColorType::Accent2, "accent2" },
-    { model::ThemeColorType::Accent3, "accent3" },
-    { model::ThemeColorType::Accent4, "accent4" },
-    { model::ThemeColorType::Accent5, "accent5" },
-    { model::ThemeColorType::Accent6, "accent6" },
-    { model::ThemeColorType::Hyperlink, "hyperlink" },
-    { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
+struct ThemeSchemeName
+{
+    const char* ThemeName;
+    const char* SchemeName;
+};
+
+constexpr auto constThemeColorTypeTokenMap = frozen::make_unordered_map<model::ThemeColorType, const ThemeSchemeName>({
+    { model::ThemeColorType::Dark1, { "dark1", "dk1" } },
+    { model::ThemeColorType::Light1, { "light1", "lt1" } },
+    { model::ThemeColorType::Dark2, {"dark2", "dk2" } },
+    { model::ThemeColorType::Light2, {"light2", "lt2" } },
+    { model::ThemeColorType::Accent1, {"accent1", "accent1" } },
+    { model::ThemeColorType::Accent2, {"accent2", "accent2" } },
+    { model::ThemeColorType::Accent3, {"accent3", "accent3" } },
+    { model::ThemeColorType::Accent4, {"accent4", "accent4" } },
+    { model::ThemeColorType::Accent5, {"accent5", "accent5" } },
+    { model::ThemeColorType::Accent6, {"accent6", "accent6" } },
+    { model::ThemeColorType::Hyperlink, {"hyperlink", "hlink" } },
+    { model::ThemeColorType::FollowedHyperlink, {"followedHyperlink", "folHlink" } }
 });
 
-OString lclGetSchemeType(model::ComplexColor const& rComplexColor)
+// Returns colors as OOXML ST_ThemeColor or ST_SchemeColorVal types, which are very similar
+OString lclGetThemeOrSchemeType(model::ComplexColor const& rComplexColor, bool bIsTheme = true)
 {
     const auto iter = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType());
     assert(iter != constThemeColorTypeTokenMap.end());
-    OString sSchemeType = iter->second;
+    OString sSchemeType = bIsTheme ? iter->second.ThemeName : iter->second.SchemeName;
     if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
     {
         if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)
-            sSchemeType = "text1"_ostr;
+            sSchemeType = bIsTheme ? "text1"_ostr : "tx1"_ostr;
         else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark2)
-            sSchemeType = "text2"_ostr;
+            sSchemeType = bIsTheme ? "text2"_ostr : "tx2"_ostr;
     }
     else if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Background)
     {
         if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light1)
-            sSchemeType = "background1"_ostr;
+            sSchemeType = bIsTheme ? "background1"_ostr : "bg1"_ostr;
         else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light2)
-            sSchemeType = "background2"_ostr;
+            sSchemeType = bIsTheme ? "background2"_ostr : "bg2"_ostr;
     }
     return sSchemeType;
+}
+
+// Returns colors as OOXML ST_ThemeColor type
+OString lclGetThemeType(model::ComplexColor const& rComplexColor)
+{
+    return lclGetThemeOrSchemeType(rComplexColor, true);
+}
+
+// Return colors as OOXML ST_SchemeColorVal type for Scheme Color element
+OString lclGetSchemeType(model::ComplexColor const& rComplexColor)
+{
+    return lclGetThemeOrSchemeType(rComplexColor, false);
 }
 
 void lclAddThemeValuesToCustomAttributes(
@@ -343,7 +362,7 @@ void lclAddThemeValuesToCustomAttributes(
 {
     if (rComplexColor.isValidThemeType())
     {
-        OString sSchemeType = lclGetSchemeType(rComplexColor);
+        OString sSchemeType = lclGetThemeType(rComplexColor);
 
         DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeAttrId), sSchemeType);
 
