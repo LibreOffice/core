@@ -671,6 +671,11 @@
                           <object class="GtkDrawingArea" id="preview">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="preview-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="positionpage|preview-atkobject">Preview</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
