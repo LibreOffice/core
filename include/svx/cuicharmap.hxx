@@ -41,7 +41,6 @@ private:
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     OUString m_sText;
     tools::Long mnY;
-    bool mbCenter;
     vcl::Font m_aFont;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
@@ -55,7 +54,6 @@ public:
     vcl::Font const& GetFont() const { return m_aFont; }
     void SetText(const OUString& rText);
     OUString const& GetText() const { return m_sText; }
-    void SetCentered(bool bCenter) { mbCenter = bCenter; }
 
     Size get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 };

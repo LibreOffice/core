@@ -77,7 +77,6 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window(u"searchscroll"_ustr, true), m_xVirDev))
     , m_xSearchSetArea(new weld::CustomWeld(*m_xBuilder, u"searchcharset"_ustr, *m_xSearchSet))
 {
-    m_aShowChar.SetCentered(true);
     m_xFontLB->make_sorted();
     //lock the size request of this widget to the width of all possible entries
     fillAllSubsets(*m_xSubsetLB);
@@ -759,7 +758,6 @@ IMPL_LINK(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, pCharSet, void)
 SvxShowText::SvxShowText(const VclPtr<VirtualDevice>& rVirDev)
     : m_xVirDev(rVirDev)
     , mnY(0)
-    , mbCenter(false)
 {
 }
 
@@ -809,8 +807,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             bGotBoundary = false;
             break;
         }
-        if (!mbCenter)
-            break;
+
         //only shrink in the single glyph large view mode
         tools::Long nTextWidth = aBoundRect.GetWidth();
         if (nAvailWidth > nTextWidth)
@@ -840,21 +837,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         else if( nYHDelta <= 0 )
             aPoint.AdjustY(nYHDelta - 1 );
 
-        if (mbCenter)
-        {
-            // move glyph to middle of cell
-            aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
-        }
-        else
-        {
-            // shift back horizontally if needed
-            int nXLDelta = aBoundRect.Left();
-            int nXHDelta = aSize.Width() - aBoundRect.Right();
-            if( nXLDelta <= 0 )
-                aPoint.AdjustX( -(nXLDelta - 1) );
-            else if( nXHDelta <= 0 )
-                aPoint.AdjustX(nXHDelta - 1 );
-        }
+        aPoint.setX(-aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2);
     }
 
     rRenderContext.SetLineColor(aShadowColor);
