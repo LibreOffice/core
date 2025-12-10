@@ -444,17 +444,12 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
             sal_uInt32 nToPageNum( 0 );
             bool bDummy( false );
-            bool bPageHasFlysAnchoredBelowThis(false);
             if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
 // TODO: what if this fly moved bc it's in table? does sth prevent that?
                                 *this, *GetPageFrame(),
-                                bAnchoredAtMaster, nToPageNum, bDummy,
-                                bPageHasFlysAnchoredBelowThis) )
+                                bAnchoredAtMaster, nToPageNum, bDummy))
             {
-                if (!bPageHasFlysAnchoredBelowThis)
-                {
-                    bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
-                }
+                bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
                 // mark anchor text frame
                 // directly, that it is moved forward by object positioning.
                 SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
@@ -465,21 +460,14 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     if ( nAnchorFrameToPageNum < nToPageNum )
                     {
-                        if (!bPageHasFlysAnchoredBelowThis)
-                        {
-                            SwLayouter::RemoveMovedFwdFrame(rDoc, *pAnchorTextFrame);
-                        }
+                        SwLayouter::RemoveMovedFwdFrame(rDoc, *pAnchorTextFrame);
                     }
                     else
                         bInsert = false;
                 }
                 if ( bInsert )
                 {
-                    if (!bPageHasFlysAnchoredBelowThis)
-                    {
-                        SwLayouter::InsertMovedFwdFrame(rDoc, *pAnchorTextFrame,
-                                                        nToPageNum);
-                    }
+                    SwLayouter::InsertMovedFwdFrame(rDoc, *pAnchorTextFrame, nToPageNum);
                 }
             }
         }
