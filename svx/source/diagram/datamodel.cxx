@@ -496,7 +496,7 @@ void DiagramData::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 
 bool DiagramData::TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl)
 {
-    // try to get the Point fo rthe associated ID
+    // try to get the Point for the associated ID
     const auto pDataNode = maPointNameMap.find(rDiagramDataModelID);
     if (pDataNode == maPointNameMap.end())
         return false;
