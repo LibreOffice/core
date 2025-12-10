@@ -52,11 +52,10 @@ Primitive2DSequence Test::parseSvg(std::u16string_view aSource)
 
     SvFileStream aFileStream(aUrl, StreamMode::READ);
     std::size_t nSize = aFileStream.remainingSize();
-    std::unique_ptr<sal_Int8[]> pBuffer(new sal_Int8[nSize + 1]);
+    std::unique_ptr<sal_Int8[]> pBuffer(new sal_Int8[nSize]);
     aFileStream.ReadBytes(pBuffer.get(), nSize);
-    pBuffer[nSize] = 0;
 
-    Sequence<sal_Int8> aData(pBuffer.get(), nSize + 1);
+    Sequence<sal_Int8> aData(pBuffer.get(), nSize);
     Reference<XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
     return xSvgParser->getDecomposition(aInputStream, aPath);
