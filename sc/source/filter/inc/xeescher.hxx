@@ -304,6 +304,7 @@ private:
     tools::Rectangle    maAreaFrom;
     tools::Rectangle    maAreaTo;
     XclExpObjectManager& mrRoot;
+    std::optional<::Color> moBackgroundFill;
 };
 
 //#endif
