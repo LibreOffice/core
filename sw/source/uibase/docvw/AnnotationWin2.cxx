@@ -402,8 +402,6 @@ void SwAnnotationWin::InitControls()
     mxMenuButton->set_accessible_name(SwResId(STR_ACCESS_ANNOTATION_BUTTON_NAME));
     mxMenuButton->set_accessible_description(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
     mxMenuButton->set_tooltip_text(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
-
-    mxMenuButton->connect_toggled(LINK(this, SwAnnotationWin, ToggleHdl));
     mxMenuButton->connect_selected(LINK(this, SwAnnotationWin, SelectHdl));
     mxMenuButton->connect_key_press(LINK(this, SwAnnotationWin, KeyInputHdl));
     mxMenuButton->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
@@ -411,6 +409,8 @@ void SwAnnotationWin::InitControls()
     GetOutlinerView()->StartSpeller(mxSidebarTextControl->GetDrawingArea());
     SetPostItText();
     mpOutliner->CompleteOnlineSpelling();
+
+    UpdateMenu();
 
     mxSidebarTextControl->Show();
     mxMetadataAuthor->show();

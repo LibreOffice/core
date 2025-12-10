@@ -385,6 +385,8 @@ void SwAnnotationWin::UpdateData()
         else
             mpFormatField->Broadcast(SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED));
         mrView.GetDocShell()->SetModified();
+
+        UpdateMenu();
     }
     mpOutliner->ClearModifyFlag();
     mpOutliner->GetUndoManager().Clear();
