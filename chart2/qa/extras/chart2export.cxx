@@ -988,9 +988,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
     */
     loadFromFile(u"docx/FDO74430.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 5
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
