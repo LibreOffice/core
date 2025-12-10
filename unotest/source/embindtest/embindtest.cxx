@@ -450,11 +450,7 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
         auto const val = test->getAnyInterface();
         verify(checkAnyInterface(val, test));
         bool const ok = test->isAnyInterface(val);
-        //TODO: Test.isAnyInterface in pyuno/qa/pytests/embindtest.py doesn't work as intended:
-        if (ok)
-        {
-            verify(ok);
-        }
+        verify(ok);
     }
     {
         auto const val = test->getSequenceBoolean();

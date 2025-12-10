@@ -226,7 +226,7 @@ class Test(unohelper.Base, XTest):
         return uno.Any('org.libreoffice.embindtest.XTest', self)
 
     def isAnyInterface(self, value):
-        return value == self #TODO: this doesn't work as intended
+        return value == self
 
     def getEnum(self):
         return E_2

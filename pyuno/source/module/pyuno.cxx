@@ -1518,6 +1518,22 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
                 }
             }
         }
+        else if (PyObject_IsInstance(
+                     that, getClass(u"com.sun.star.uno.XInterface"_ustr, runtime).get()))
+        {
+            // `self` could be an Adapter of `that`:
+            if (css::uno::Reference<css::lang::XUnoTunnel> tunnel;
+                reinterpret_cast<PyUNO *>(self)->members->wrappedObject >>= tunnel)
+            {
+                if (auto const adapter = comphelper::getFromUnoTunnel<Adapter>(tunnel)) {
+                    if (adapter->getWrappedObject().get() == that) {
+                        result = (op == Py_EQ ? Py_True : Py_False);
+                        Py_INCREF(result);
+                        return result;
+                    }
+                }
+            }
+        }
     }
     catch( const css::uno::RuntimeException & e)
     {
