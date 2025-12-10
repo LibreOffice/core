@@ -436,7 +436,7 @@ class SmSymDefineDialog final : public weld::GenericDialogController
     DECL_LINK(FontChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SubsetChangeHdl, weld::ComboBox&, void);
     DECL_LINK(StyleChangeHdl, weld::ComboBox&, void);
-    DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
+    DECL_LINK(CharHighlightHdl, SvxShowCharSet&, void);
     DECL_LINK(AddClickHdl, weld::Button&, void);
     DECL_LINK(ChangeClickHdl, weld::Button&, void);
     DECL_LINK(DeleteClickHdl, weld::Button&, void);

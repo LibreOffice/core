@@ -93,7 +93,7 @@ private:
     };
 
     // inserts the character that is currently selected in the given SvxShowCharSet
-    void insertSelectedCharacter(const SvxShowCharSet* pCharSet);
+    void insertSelectedCharacter(const SvxShowCharSet& rCharSet);
 
     static void fillAllSubsets(weld::ComboBox& rListBox);
 
@@ -109,13 +109,13 @@ private:
 
     DECL_DLLPRIVATE_LINK(FontSelectHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(SubsetSelectHdl, weld::ComboBox&, void);
-    DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(ReturnKeypressOnCharHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(FavClickHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(SearchCharHighlightHdl, SvxShowCharSet*, void);
+    DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(CharPreSelectHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(ReturnKeypressOnCharHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(FavClickHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(SearchCharHighlightHdl, SvxShowCharSet&, void);
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(HexCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);

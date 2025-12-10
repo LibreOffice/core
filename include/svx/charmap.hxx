@@ -67,12 +67,12 @@ public:
     virtual sal_UCS4        GetCharFromIndex(int index) const;
     void                    createContextMenu(const Point& rPosition);
 
-    void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { maDoubleClkHdl = rLink; }
-    void            SetReturnKeyPressHdl( const Link<SvxShowCharSet*,void>& rLink ) { m_aReturnKeypressHdl = rLink; }
-    void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maSelectHdl = rHdl; }
-    void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maHighHdl = rHdl; }
-    void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maPreSelectHdl = rHdl; }
-    void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maFavClickHdl = rHdl; }
+    void SetDoubleClickHdl(const Link<SvxShowCharSet&, void>& rLink) { maDoubleClkHdl = rLink; }
+    void SetReturnKeyPressHdl(const Link<SvxShowCharSet&, void>& rLink ) { m_aReturnKeypressHdl = rLink; }
+    void SetSelectHdl(const Link<SvxShowCharSet&, void>& rHdl ) { maSelectHdl = rHdl; }
+    void SetHighlightHdl(const Link<SvxShowCharSet&, void>& rHdl) { maHighHdl = rHdl; }
+    void SetPreSelectHdl(const Link<SvxShowCharSet&, void>& rHdl) { maPreSelectHdl = rHdl; }
+    void SetFavClickHdl(const Link<SvxShowCharSet&, void>& rHdl) { maFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     SVX_DLLPUBLIC void SetFont( const vcl::Font& rFont );
     vcl::Font const & GetFont() const { return maFont; }
@@ -118,12 +118,12 @@ private:
 protected:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
-    Link<SvxShowCharSet*,void>     maDoubleClkHdl;
-    Link<SvxShowCharSet*,void>     m_aReturnKeypressHdl;
-    Link<SvxShowCharSet*,void>     maSelectHdl;
-    Link<SvxShowCharSet*,void>     maFavClickHdl;
-    Link<SvxShowCharSet*,void>     maHighHdl;
-    Link<SvxShowCharSet*,void>     maPreSelectHdl;
+    Link<SvxShowCharSet&, void> maDoubleClkHdl;
+    Link<SvxShowCharSet&, void> m_aReturnKeypressHdl;
+    Link<SvxShowCharSet&, void> maSelectHdl;
+    Link<SvxShowCharSet&, void> maFavClickHdl;
+    Link<SvxShowCharSet&, void> maHighHdl;
+    Link<SvxShowCharSet&, void> maPreSelectHdl;
 
     std::deque<OUString>           maFavCharList;
     std::deque<OUString>           maFavCharFontList;

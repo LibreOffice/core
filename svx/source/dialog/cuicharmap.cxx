@@ -405,7 +405,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
         // tdf#137294 do this after modifying m_xSubsetLB sensitivity to
         // restore insensitive for the search case
         SearchUpdateHdl(*m_xSearchText);
-        SearchCharHighlightHdl(m_xSearchSet.get());
+        SearchCharHighlightHdl(*m_xSearchSet);
     }
 
     // tdf#118304 reselect current glyph to see if it's still there in new font
@@ -554,29 +554,28 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
     m_xOKBtn->set_sensitive(true);
 }
 
-void SvxCharacterMap::insertSelectedCharacter(const SvxShowCharSet* pCharSet)
+void SvxCharacterMap::insertSelectedCharacter(const SvxShowCharSet& rCharSet)
 {
-    assert(pCharSet);
-    sal_UCS4 cChar = pCharSet->GetSelectCharacter();
+    sal_UCS4 cChar = rCharSet.GetSelectCharacter();
     // using the new UCS4 constructor
     OUString aOUStr( &cChar, 1 );
     setFavButtonState(aOUStr, m_aFont.GetFamilyName());
     insertCharToDoc(aOUStr);
 }
 
-IMPL_LINK(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, pCharSet, void)
+IMPL_LINK(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet&, rCharSet, void)
 {
-    insertSelectedCharacter(pCharSet);
+    insertSelectedCharacter(rCharSet);
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet&, void)
 {
     m_xOKBtn->set_sensitive(true);
 }
 
-IMPL_LINK(SvxCharacterMap, ReturnKeypressOnCharHdl, SvxShowCharSet*, pCharSet, void)
+IMPL_LINK(SvxCharacterMap, ReturnKeypressOnCharHdl, SvxShowCharSet&, rCharSet, void)
 {
-    insertSelectedCharacter(pCharSet);
+    insertSelectedCharacter(rCharSet);
     m_xDialog->response(RET_OK);
 }
 
@@ -607,13 +606,13 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
     m_aCharmapContents.updateFavCharControl();
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, FavClickHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, FavClickHdl, SvxShowCharSet&, void)
 {
     m_aCharmapContents.getFavCharacterList();
     m_aCharmapContents.updateFavCharControl();
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet&, void)
 {
     OUString aText;
     sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
@@ -652,7 +651,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     setFavButtonState(aText, m_aFont.GetFamilyName());
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet&, void)
 {
     OUString aText;
     sal_UCS4 cChar = m_xSearchSet->GetSelectCharacter();
@@ -737,13 +736,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, HexCodeChangeHdl, weld::Entry&, void)
     selectCharByCode(Radix::hexadecimal);
 }
 
-IMPL_LINK(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, pCharSet, void)
+IMPL_LINK(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet&, rCharSet, void)
 {
-    assert(pCharSet);
     // adjust subset selection
     if( m_pSubsetMap )
     {
-        sal_UCS4 cChar = pCharSet->GetSelectCharacter();
+        sal_UCS4 cChar = rCharSet.GetSelectCharacter();
 
         setFavButtonState(OUString(&cChar, 1), m_aFont.GetFamilyName());
         const Subset* pSubset = m_pSubsetMap->GetSubsetByUnicode( cChar );

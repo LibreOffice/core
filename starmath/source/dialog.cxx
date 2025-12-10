@@ -1715,7 +1715,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, weld::ComboBox&, rComboBox, void )
     SelectStyle(m_xStyles->get_active_text());
 }
 
-IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet&, void)
 {
     sal_UCS4 cChar = m_xCharsetDisplay->GetSelectCharacter();
 

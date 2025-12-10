@@ -62,7 +62,7 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
         case KEY_RETURN:
             return SvxShowCharSet::KeyInput(rKEvt);
         case KEY_SPACE:
-            maDoubleClkHdl.Call(this);
+            maDoubleClkHdl.Call(*this);
             return true;
         case KEY_LEFT:
             --tmpSelected;
@@ -102,7 +102,7 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
     if ( tmpSelected >= 0 )
     {
         SelectIndex( tmpSelected, true );
-        maPreSelectHdl.Call( this );
+        maPreSelectHdl.Call(*this);
     }
 
     return bRet;
@@ -130,7 +130,7 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
         SelectIndex( 0 );
     else
         SelectIndex( nMapIndex );
-    maHighHdl.Call(this);
+    maHighHdl.Call(*this);
     // move selected item to top row if not in focus
     //TO.DO aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
     Invalidate();
@@ -269,9 +269,9 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
 #endif
-        maSelectHdl.Call(this);
+        maSelectHdl.Call(*this);
     }
-    maHighHdl.Call( this );
+    maHighHdl.Call(*this);
 }
 
 SvxSearchCharSet::~SvxSearchCharSet()
