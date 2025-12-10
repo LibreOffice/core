@@ -133,35 +133,27 @@ void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView*,void> &r
 
 void SfxCharmapContainer::getFavCharacterList()
 {
-    m_aFavCharList.clear();
-    m_aFavCharFontList.clear();
+    m_aFavChars.clear();
 
     //retrieve recent character list
     const css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
-    m_aFavCharList.insert( m_aFavCharList.end(), rFavCharList.begin(), rFavCharList.end() );
 
     //retrieve recent character font list
     const css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
-    m_aFavCharFontList.insert( m_aFavCharFontList.end(), rFavCharFontList.begin(), rFavCharFontList.end() );
 
-    // tdf#135997: make sure that the two lists are same length
-    const auto nCommonLength = std::min(m_aFavCharList.size(), m_aFavCharFontList.size());
-    m_aFavCharList.resize(nCommonLength);
-    m_aFavCharFontList.resize(nCommonLength);
+    const auto nCommonLength = std::min(rFavCharList.size(), rFavCharFontList.size());
+    for (sal_uInt32 i = 0; i < nCommonLength; i++)
+        m_aFavChars.emplace_back(rFavCharList[i], rFavCharFontList[i]);
 }
 
 void SfxCharmapContainer::updateFavCharControl()
 {
-    assert(m_aFavCharList.size() == m_aFavCharFontList.size());
-
     int i = 0;
-    for ( std::deque< OUString >::iterator it = m_aFavCharList.begin(), it2 = m_aFavCharFontList.begin();
-        it != m_aFavCharList.end() && it2 != m_aFavCharFontList.end();
-        ++it, ++it2, i++)
+    for (auto it = m_aFavChars.begin(); it != m_aFavChars.end(); ++it, i++)
     {
-        m_aFavCharView[i].SetText(*it);
+        m_aFavCharView[i].SetText(it->sChar);
         vcl::Font rFont = m_aFavCharView[i].GetFont();
-        rFont.SetFamilyName( *it2 );
+        rFont.SetFamilyName(it->sFont);
         m_aFavCharView[i].SetFont(rFont);
         m_aFavCharView[i].Show();
     }
@@ -177,21 +169,17 @@ void SfxCharmapContainer::updateFavCharControl()
 
 void SfxCharmapContainer::getRecentCharacterList()
 {
-    m_aRecentCharList.clear();
-    m_aRecentCharFontList.clear();
+    m_aRecentChars.clear();
 
     //retrieve recent character list
     const css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
-    m_aRecentCharList.insert( m_aRecentCharList.end(), rRecentCharList.begin(), rRecentCharList.end() );
 
     //retrieve recent character font list
     const css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
-    m_aRecentCharFontList.insert( m_aRecentCharFontList.end(), rRecentCharFontList.begin(), rRecentCharFontList.end() );
 
-    // tdf#135997: make sure that the two lists are same length
-    const auto nCommonLength = std::min(m_aRecentCharList.size(), m_aRecentCharFontList.size());
-    m_aRecentCharList.resize(nCommonLength);
-    m_aRecentCharFontList.resize(nCommonLength);
+    const sal_uInt32 nCommonLength = std::min(rRecentCharList.size(), rRecentCharFontList.size());
+    for (sal_uInt32 i = 0; i < nCommonLength; i++)
+        m_aRecentChars.emplace_back(rRecentCharList[i], rRecentCharFontList[i]);
 }
 
 void SfxCharmapContainer::GrabFocusToFirstFavorite()
@@ -199,46 +187,14 @@ void SfxCharmapContainer::GrabFocusToFirstFavorite()
     m_aFavCharView[0].GrabFocus();
 }
 
-static std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-findInPair(std::u16string_view str1, const std::deque<OUString>& rContainer1,
-           std::u16string_view str2, const std::deque<OUString>& rContainer2)
-{
-    assert(rContainer1.size() == rContainer2.size());
-
-    for (auto it1 = std::find(rContainer1.begin(), rContainer1.end(), str1);
-         it1 != rContainer1.end(); it1 = std::find(std::next(it1), rContainer1.end(), str1))
-    {
-        auto it2 = rContainer2.begin() + (it1 - rContainer1.begin());
-        if (*it2 == str2)
-            return { it1, it2 };
-    }
-    return { rContainer1.end(), rContainer2.end() };
-}
-
-std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-SfxCharmapContainer::getRecentChar(std::u16string_view sTitle, std::u16string_view rFont) const
-{
-    return findInPair(sTitle, m_aRecentCharList, rFont, m_aRecentCharFontList);
-}
-
-std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-SfxCharmapContainer::getFavChar(std::u16string_view sTitle, std::u16string_view rFont) const
-{
-    return findInPair(sTitle, m_aFavCharList, rFont, m_aFavCharFontList);
-}
-
 void SfxCharmapContainer::updateRecentCharControl()
 {
-    assert(m_aRecentCharList.size() == m_aRecentCharFontList.size());
-
     int i = 0;
-    for ( std::deque< OUString >::iterator it = m_aRecentCharList.begin(), it2 = m_aRecentCharFontList.begin();
-        it != m_aRecentCharList.end() && it2 != m_aRecentCharFontList.end();
-        ++it, ++it2, i++)
+    for (auto it = m_aRecentChars.begin(); it != m_aRecentChars.end(); ++it, i++)
     {
-        m_aRecentCharView[i].SetText(*it);
+        m_aRecentCharView[i].SetText(it->sChar);
         vcl::Font rFont = m_aRecentCharView[i].GetFont();
-        rFont.SetFamilyName( *it2 );
+        rFont.SetFamilyName(it->sFont);
         m_aRecentCharView[i].SetFont(rFont);
         m_aRecentCharView[i].Show();
     }
@@ -255,31 +211,24 @@ void SfxCharmapContainer::updateRecentCharControl()
 void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
 {
     // if recent char to be added is already in list, remove it
-    if( const auto [itChar, itChar2] = getRecentChar(sTitle, rFont);
-        itChar != m_aRecentCharList.end() &&  itChar2 != m_aRecentCharFontList.end() )
-    {
-        m_aRecentCharList.erase( itChar );
-        m_aRecentCharFontList.erase( itChar2);
-    }
+    auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(sTitle, rFont));
+    if (itChar != m_aRecentChars.end())
+        m_aRecentChars.erase(itChar);
 
-    if (m_aRecentCharList.size() == 16)
-    {
-        m_aRecentCharList.pop_back();
-        m_aRecentCharFontList.pop_back();
-    }
+    if (m_aRecentChars.size() == 16)
+        m_aRecentChars.pop_back();
 
-    m_aRecentCharList.push_front(sTitle);
-    m_aRecentCharFontList.push_front(rFont);
+    m_aRecentChars.emplace_front(sTitle, rFont);
 
-    css::uno::Sequence< OUString > aRecentCharList(m_aRecentCharList.size());
+    css::uno::Sequence<OUString> aRecentCharList(m_aRecentChars.size());
     auto aRecentCharListRange = asNonConstRange(aRecentCharList);
-    css::uno::Sequence< OUString > aRecentCharFontList(m_aRecentCharFontList.size());
+    css::uno::Sequence<OUString> aRecentCharFontList(m_aRecentChars.size());
     auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
 
-    for (size_t i = 0; i < m_aRecentCharList.size(); ++i)
+    for (size_t i = 0; i < m_aRecentChars.size(); ++i)
     {
-        aRecentCharListRange[i] = m_aRecentCharList[i];
-        aRecentCharFontListRange[i] = m_aRecentCharFontList[i];
+        aRecentCharListRange[i] = m_aRecentChars[i].sChar;
+        aRecentCharFontListRange[i] = m_aRecentChars[i].sFont;
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -293,31 +242,24 @@ void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, cons
 void SfxCharmapContainer::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
 {
     // if Fav char to be added is already in list, remove it
-    if( const auto [itChar, itChar2] = getFavChar(sTitle, rFont);
-        itChar != m_aFavCharList.end() &&  itChar2 != m_aFavCharFontList.end() )
-    {
-        m_aFavCharList.erase( itChar );
-        m_aFavCharFontList.erase( itChar2);
-    }
+    auto itChar = std::ranges::find(m_aFavChars, CharAndFont(sTitle, rFont));
+    if (itChar != m_aFavChars.end())
+        m_aFavChars.erase(itChar);
 
-    if (m_aFavCharList.size() == 16)
-    {
-        m_aFavCharList.pop_back();
-        m_aFavCharFontList.pop_back();
-    }
+    if (m_aFavChars.size() == 16)
+        m_aFavChars.pop_back();
 
-    m_aFavCharList.push_back(sTitle);
-    m_aFavCharFontList.push_back(rFont);
+    m_aFavChars.emplace_back(sTitle, rFont);
 
-    css::uno::Sequence< OUString > aFavCharList(m_aFavCharList.size());
+    css::uno::Sequence<OUString> aFavCharList(m_aFavChars.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(m_aFavCharFontList.size());
+    css::uno::Sequence<OUString> aFavCharFontList(m_aFavChars.size());
     auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
-    for (size_t i = 0; i < m_aFavCharList.size(); ++i)
+    for (size_t i = 0; i < m_aFavChars.size(); ++i)
     {
-        aFavCharListRange[i] = m_aFavCharList[i];
-        aFavCharFontListRange[i] = m_aFavCharFontList[i];
+        aFavCharListRange[i] = m_aFavChars[i].sChar;
+        aFavCharFontListRange[i] = m_aFavChars[i].sFont;
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -326,25 +268,22 @@ void SfxCharmapContainer::updateFavCharacterList(const OUString& sTitle, const O
     batch->commit();
 }
 
-void SfxCharmapContainer::deleteFavCharacterFromList(std::u16string_view sTitle, std::u16string_view rFont)
+void SfxCharmapContainer::deleteFavCharacterFromList(const OUString& rTitle, const OUString& rFont)
 {
     // if Fav char is found, remove it
-    if( const auto [itChar, itChar2] = getFavChar(sTitle, rFont);
-        itChar != m_aFavCharList.end() &&  itChar2 != m_aFavCharFontList.end() )
-    {
-        m_aFavCharList.erase( itChar );
-        m_aFavCharFontList.erase( itChar2);
-    }
+    auto itChar = std::ranges::find(m_aFavChars, CharAndFont(rTitle, rFont));
+    if (itChar != m_aFavChars.end())
+        m_aFavChars.erase(itChar);
 
-    css::uno::Sequence< OUString > aFavCharList(m_aFavCharList.size());
+    css::uno::Sequence<OUString> aFavCharList(m_aFavChars.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(m_aFavCharFontList.size());
+    css::uno::Sequence<OUString> aFavCharFontList(m_aFavChars.size());
     auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
-    for (size_t i = 0; i < m_aFavCharList.size(); ++i)
+    for (size_t i = 0; i < m_aFavChars.size(); ++i)
     {
-        aFavCharListRange[i] = m_aFavCharList[i];
-        aFavCharFontListRange[i] = m_aFavCharFontList[i];
+        aFavCharListRange[i] = m_aFavChars[i].sChar;
+        aFavCharFontListRange[i] = m_aFavChars[i].sFont;
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -353,10 +292,9 @@ void SfxCharmapContainer::deleteFavCharacterFromList(std::u16string_view sTitle,
     batch->commit();
 }
 
-bool SfxCharmapContainer::isFavChar(std::u16string_view sTitle, std::u16string_view rFont)
+bool SfxCharmapContainer::isFavChar(const OUString& rTitle, const OUString& rFont)
 {
-    const auto [itChar, itFont] = getFavChar(sTitle, rFont);
-    return itChar != m_aFavCharList.end() && itFont != m_aFavCharFontList.end();
+    return std::ranges::find(m_aFavChars, CharAndFont(rTitle, rFont)) != m_aFavChars.end();
 }
 
 IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
@@ -365,22 +303,19 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
     OUString sFont = rView->GetFont().GetFamilyName();
 
     // if recent char to be added is already in list, remove it
-    if( const auto [itChar, itChar2] = getRecentChar(sTitle, sFont);
-        itChar != m_aRecentCharList.end() &&  itChar2 != m_aRecentCharFontList.end() )
-    {
-        m_aRecentCharList.erase( itChar );
-        m_aRecentCharFontList.erase( itChar2);
-    }
+    auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(sTitle, sFont));
+    if (itChar != m_aRecentChars.end())
+        m_aRecentChars.erase(itChar);
 
-    css::uno::Sequence< OUString > aRecentCharList(m_aRecentCharList.size());
+    css::uno::Sequence<OUString> aRecentCharList(m_aRecentChars.size());
     auto aRecentCharListRange = asNonConstRange(aRecentCharList);
-    css::uno::Sequence< OUString > aRecentCharFontList(m_aRecentCharFontList.size());
+    css::uno::Sequence<OUString> aRecentCharFontList(m_aRecentChars.size());
     auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
 
-    for (size_t i = 0; i < m_aRecentCharList.size(); ++i)
+    for (size_t i = 0; i < m_aRecentChars.size(); ++i)
     {
-        aRecentCharListRange[i] = m_aRecentCharList[i];
-        aRecentCharFontListRange[i] = m_aRecentCharFontList[i];
+        aRecentCharListRange[i] = m_aRecentChars[i].sChar;
+        aRecentCharFontListRange[i] = m_aRecentChars[i].sFont;
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -393,8 +328,7 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
 
 IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView*, void)
 {
-    m_aRecentCharList.clear();
-    m_aRecentCharFontList.clear();
+    m_aRecentChars.clear();
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::RecentCharacters::RecentCharacterList::set({ }, batch);
@@ -412,8 +346,7 @@ IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, SvxCharView*, rView, void)
 
 IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView*, void)
 {
-    m_aFavCharList.clear();
-    m_aFavCharFontList.clear();
+    m_aFavChars.clear();
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set({ }, batch);
@@ -425,12 +358,12 @@ IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView*, void)
 
 bool SfxCharmapContainer::FavCharListIsFull() const
 {
-    return m_aFavCharList.size() == 16;
+    return m_aFavChars.size() == 16;
 }
 
 bool SfxCharmapContainer::hasRecentChars() const
 {
-    return !m_aRecentCharList.empty();
+    return !m_aRecentChars.empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

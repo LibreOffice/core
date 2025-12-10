@@ -101,7 +101,7 @@ private:
 
     void insertCharToDoc(const OUString& sChar);
 
-    void setFavButtonState(std::u16string_view sTitle, std::u16string_view rFont);
+    void setFavButtonState(const OUString& sTitle, const OUString& rFont);
 
     void setCharName(sal_UCS4 nDecimalValue);
 

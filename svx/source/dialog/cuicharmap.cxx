@@ -121,7 +121,7 @@ void SvxCharacterMap::prepForRun()
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
         m_xOKBtn->set_sensitive(false);
-        setFavButtonState(u"", u"");
+        setFavButtonState(u""_ustr, u""_ustr);
     }
     else
     {
@@ -274,9 +274,9 @@ void SvxCharacterMap::init()
     m_xSearchText->connect_changed(LINK(this, SvxCharacterMap, SearchUpdateHdl));
 }
 
-void SvxCharacterMap::setFavButtonState(std::u16string_view sTitle, std::u16string_view rFont)
+void SvxCharacterMap::setFavButtonState(const OUString& sTitle, const OUString& rFont)
 {
-    if(sTitle.empty() || rFont.empty())
+    if (sTitle.isEmpty() || rFont.isEmpty())
     {
         m_xFavouritesBtn->set_sensitive(false);
         return;
