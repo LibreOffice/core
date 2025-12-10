@@ -288,22 +288,24 @@ void ThumbnailView::ImplInit()
     mbAllowMultiSelection = true;
     maFilterFunc = ViewFilterAll();
 
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    mpStartSelRange = mFilteredItemList.end();
+
+    mfHighlightTransparence = SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01;
+    mpItemAttrs->nMaxTextLength = 0;
+
+    UpdateColors(Application::GetSettings().GetStyleSettings());
+    updateItemAttrsFromColors();
+}
+
+void ThumbnailView::UpdateColors(const StyleSettings& rSettings)
+{
     maFillColor = rSettings.GetFieldColor();
     maTextColor = rSettings.GetWindowTextColor();
     maHighlightColor = rSettings.GetHighlightColor();
     maHighlightTextColor = rSettings.GetHighlightTextColor();
-
-    mfHighlightTransparence = SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01;
-
-    mpStartSelRange = mFilteredItemList.end();
-
-    UpdateColors();
-
-    mpItemAttrs->nMaxTextLength = 0;
 }
 
-void ThumbnailView::UpdateColors()
+void ThumbnailView::updateItemAttrsFromColors()
 {
     mpItemAttrs->aFillColor = maFillColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
@@ -951,6 +953,10 @@ void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(vcl::PushFlags::ALL);
+
+    // Re-read settings colors to handle system theme changes on-the-fly
+    UpdateColors(rRenderContext.GetSettings().GetStyleSettings());
+    updateItemAttrsFromColors();
 
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);

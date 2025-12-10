@@ -17,6 +17,7 @@
 #include <vector>
 
 #include <vcl/customweld.hxx>
+#include <vcl/settings.hxx>
 
 class BitmapEx;
 class ThumbnailViewItem;
@@ -260,8 +261,8 @@ protected:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
-    // Set Item colors from the ThumbnailView colors
-    SAL_DLLPRIVATE void UpdateColors();
+    // Update internal colors from system color scheme or other sources
+    SAL_DLLPRIVATE void UpdateColors(const StyleSettings& rSettings);
 
 protected:
 
@@ -281,6 +282,10 @@ protected:
     SAL_DLLPRIVATE void ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SAL_DLLPRIVATE bool ImplHasAccessibleListeners() const;
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
+
+private:
+    // Update Item colors from internal colors
+    void updateItemAttrsFromColors();
 
 protected:
 
