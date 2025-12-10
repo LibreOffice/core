@@ -73,9 +73,9 @@ public:
     {
         m_xTreeView->connect_selection_changed(rLink);
     }
-    void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink)
+    void connect_command(const Link<const CommandEvent&, bool>& rLink)
     {
-        m_xTreeView->connect_popup_menu(rLink);
+        m_xTreeView->connect_command(rLink);
     }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink)
     {

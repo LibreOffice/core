@@ -240,7 +240,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     rTreeView.set_selection_mode(SelectionMode::Multiple);
 
     rTreeView.connect_selection_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
-    rTreeView.connect_popup_menu(LINK(this, SwRedlineAcceptDlg, CommandHdl));
+    rTreeView.connect_command(LINK(this, SwRedlineAcceptDlg, CommandHdl));
 
     // avoid multiple selection of the same texts:
     m_aSelectTimer.SetTimeout(100);

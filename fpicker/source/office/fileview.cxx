@@ -451,7 +451,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
 
     mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
-    mxTreeView->connect_popup_menu(LINK(this, ViewTabListBox_Impl, CommandHdl));
+    mxTreeView->connect_command(LINK(this, ViewTabListBox_Impl, CommandHdl));
     mxTreeView->connect_key_press(LINK(this, ViewTabListBox_Impl, KeyInputHdl));
 }
 

@@ -782,7 +782,7 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     m_xTreeView->connect_mouse_release(LINK(this, SdPageObjsTLV, MouseReleaseHdl));
     m_xTreeView->connect_editing(LINK(this, SdPageObjsTLV, EditingEntryHdl),
                                  LINK(this, SdPageObjsTLV, EditedEntryHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, SdPageObjsTLV, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, SdPageObjsTLV, CommandHdl));
 
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 28,
                                   m_xTreeView->get_text_height() * 8);

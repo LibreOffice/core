@@ -245,7 +245,10 @@ public:
 
     virtual void set_cursor_data(void* pData) = 0;
 
-    void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_aCommandHdl = rLink; }
+    virtual void connect_command(const Link<const CommandEvent&, bool>& rLink)
+    {
+        m_aCommandHdl = rLink;
+    }
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)
     {
@@ -1039,9 +1042,6 @@ public:
 private:
     OUString m_sSavedValue;
 
-    // if handler returns true, then menu has been shown and event is consumed
-    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
-
 protected:
     Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
@@ -1106,8 +1106,6 @@ protected:
     {
         return m_aEditingDoneHdl.Call(rIterText);
     }
-
-    bool signal_popup_menu(const CommandEvent& rCommand) { return m_aPopupMenuHdl.Call(rCommand); }
 
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
 
@@ -1531,11 +1529,6 @@ public:
     {
         assert(!m_aVisibleRangeChangedHdl.IsSet() || !rLink.IsSet());
         m_aVisibleRangeChangedHdl = rLink;
-    }
-
-    virtual void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink)
-    {
-        m_aPopupMenuHdl = rLink;
     }
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferable,

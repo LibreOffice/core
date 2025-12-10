@@ -138,7 +138,7 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     m_xTreeView->connect_row_activated(LINK(this, ScContentTree, ContentDoubleClickHdl));
     m_xTreeView->connect_mouse_release(LINK(this, ScContentTree, MouseReleaseHdl));
     m_xTreeView->connect_key_press(LINK(this, ScContentTree, KeyInputHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, ScContentTree, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, ScContentTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, ScContentTree, QueryTooltipHdl));
 
     rtl::Reference<TransferDataContainer> xHelper(m_xTransferObj);

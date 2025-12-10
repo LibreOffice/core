@@ -938,7 +938,7 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpMethodsTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerMethods));
 
-    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_popup_menu(
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_command(
         LINK(this, ObjectInspectorTreeHandler, PopupMenuHandler));
 
     mpObjectInspectorWidgets->mpInterfacesTreeView->connect_selection_changed(

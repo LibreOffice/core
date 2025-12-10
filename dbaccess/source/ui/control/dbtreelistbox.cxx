@@ -115,7 +115,7 @@ TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLTyp
     m_xTreeView->connect_key_press(LINK(this, TreeListBox, KeyInputHdl));
     m_xTreeView->connect_selection_changed(LINK(this, TreeListBox, SelectHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, TreeListBox, QueryTooltipHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, TreeListBox, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, TreeListBox, CommandHdl));
 
     if (bSQLType)
         m_xHelper.set(new ODataClipboard);

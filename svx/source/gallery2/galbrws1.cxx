@@ -151,7 +151,7 @@ GalleryBrowser::GalleryBrowser(
 
     mxThemes->make_sorted();
     mxThemes->connect_selection_changed(LINK(this, GalleryBrowser, SelectThemeHdl));
-    mxThemes->connect_popup_menu(LINK(this, GalleryBrowser, PopupMenuHdl1));
+    mxThemes->connect_command(LINK(this, GalleryBrowser, PopupMenuHdl1));
     mxThemes->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl1));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
 
@@ -184,7 +184,7 @@ GalleryBrowser::GalleryBrowser(
     mxListView->connect_visible_range_changed(LINK(this, GalleryBrowser, VisRowsScrolledHdl));
     mxListView->connect_size_allocate(LINK(this, GalleryBrowser, SizeAllocHdl));
     mxListView->connect_selection_changed(LINK(this, GalleryBrowser, SelectObjectHdl));
-    mxListView->connect_popup_menu(LINK(this, GalleryBrowser, PopupMenuHdl2));
+    mxListView->connect_command(LINK(this, GalleryBrowser, PopupMenuHdl2));
     mxListView->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl2));
     mxListView->connect_row_activated(LINK(this, GalleryBrowser, RowActivatedHdl));
     mxDragDropTargetHelper.reset(new GalleryDragDrop(this, mxListView->get_drop_target()));

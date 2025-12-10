@@ -54,7 +54,7 @@ public:
 
     static void trigger_popup_menu(weld::TreeView& rTreeView, const CommandEvent& rCommand)
     {
-        rTreeView.signal_popup_menu(rCommand);
+        rTreeView.signal_command(rCommand);
     }
 
     static void trigger_activated(weld::Menu& rMenu, const OUString& rIdent)

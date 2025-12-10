@@ -1116,7 +1116,7 @@ bool QtInstanceTreeView::eventFilter(QObject* pObject, QEvent* pEvent)
         QContextMenuEvent* pContextMenuEvent = static_cast<QContextMenuEvent*>(pEvent);
         CommandEvent aCEvt(toPoint(pContextMenuEvent->pos()), CommandEventId::ContextMenu,
                            pContextMenuEvent->reason() == QContextMenuEvent::Mouse);
-        return signal_popup_menu(aCEvt);
+        return signal_command(aCEvt);
     }
 
     return QtInstanceWidget::eventFilter(pObject, pEvent);

@@ -127,7 +127,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     weld::TreeView& rTreeView = pTheView->GetWidget();
     rTreeView.connect_expanding(LINK(this, ScAcceptChgDlg, ExpandingHandle));
     rTreeView.connect_selection_changed(LINK(this, ScAcceptChgDlg, SelectHandle));
-    rTreeView.connect_popup_menu(LINK(this, ScAcceptChgDlg, CommandHdl));
+    rTreeView.connect_command(LINK(this, ScAcceptChgDlg, CommandHdl));
     rTreeView.set_sort_func([this](const weld::TreeIter& rLeft, const weld::TreeIter& rRight){
         return ColCompareHdl(rLeft, rRight);
     });

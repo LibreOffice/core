@@ -5236,7 +5236,7 @@ bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
 
 IMPL_LINK(SalInstanceTreeView, PopupMenuHdl, const CommandEvent&, rEvent, bool)
 {
-    return signal_popup_menu(rEvent);
+    return signal_command(rEvent);
 }
 
 IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)

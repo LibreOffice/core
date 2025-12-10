@@ -158,7 +158,7 @@ namespace svxform
         m_aSynchronizeTimer.SetInvokeHandler(LINK(this, NavigatorTree, OnSynchronizeTimer));
         m_xTreeView->connect_selection_changed(LINK(this, NavigatorTree, OnEntrySelDesel));
         m_xTreeView->connect_key_press(LINK(this, NavigatorTree, KeyInputHdl));
-        m_xTreeView->connect_popup_menu(LINK(this, NavigatorTree, PopupMenuHdl));
+        m_xTreeView->connect_command(LINK(this, NavigatorTree, PopupMenuHdl));
         m_xTreeView->connect_editing(LINK(this, NavigatorTree, EditingEntryHdl),
                                      LINK(this, NavigatorTree, EditedEntryHdl));
         m_xTreeView->connect_drag_begin(LINK(this, NavigatorTree, DragBeginHdl));

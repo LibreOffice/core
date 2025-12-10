@@ -149,7 +149,7 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
     m_xTreeView->connect_selection_changed(LINK(this, SwGlobalTree, SelectHdl));
     m_xTreeView->connect_focus_in(LINK(this, SwGlobalTree, FocusInHdl));
     m_xTreeView->connect_key_press(LINK(this, SwGlobalTree, KeyInputHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, SwGlobalTree, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, SwGlobalTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, SwGlobalTree, QueryTooltipHdl));
 }
 

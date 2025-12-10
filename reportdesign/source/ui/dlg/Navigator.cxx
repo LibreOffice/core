@@ -221,7 +221,7 @@ NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportC
     m_xTreeView->set_selection_mode(SelectionMode::Multiple);
 
     m_xTreeView->connect_selection_changed(LINK(this, NavigatorTree, OnEntrySelDesel));
-    m_xTreeView->connect_popup_menu(LINK(this, NavigatorTree, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, NavigatorTree, CommandHdl));
 }
 
 NavigatorTree::~NavigatorTree()

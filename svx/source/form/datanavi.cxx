@@ -237,7 +237,7 @@ namespace svxform
 
         m_xItemList->connect_selection_changed(LINK(this, XFormsPage, ItemSelectHdl));
         m_xItemList->connect_key_press(LINK(this, XFormsPage, KeyInputHdl));
-        m_xItemList->connect_popup_menu(LINK(this, XFormsPage, PopupMenuHdl));
+        m_xItemList->connect_command(LINK(this, XFormsPage, PopupMenuHdl));
         ItemSelectHdl(*m_xItemList);
     }
 

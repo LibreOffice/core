@@ -13981,7 +13981,7 @@ private:
 
     virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
     {
-        return weld::TreeView::signal_popup_menu(rCEvt);
+        return weld::TreeView::signal_command(rCEvt);
     }
 
     void insert_row(GtkTreeIter& iter, const GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
@@ -16256,10 +16256,10 @@ public:
         g_signal_handler_unblock(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
     }
 
-    virtual void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink) override
+    virtual void connect_command(const Link<const CommandEvent&, bool>& rLink) override
     {
         ensureButtonPressSignal();
-        weld::TreeView::connect_popup_menu(rLink);
+        weld::TreeView::connect_command(rLink);
     }
 
     virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bDnDMode, bool bAutoScroll) override

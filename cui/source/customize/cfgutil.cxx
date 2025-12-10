@@ -1173,7 +1173,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     m_xCommands->connect_changed( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     m_xCommands->connect_row_activated( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
-    m_xCommands->connect_popup_menu( LINK( this, SvxScriptSelectorDialog, ContextMenuHdl ) );
+    m_xCommands->connect_command( LINK( this, SvxScriptSelectorDialog, ContextMenuHdl ) );
 
     m_xOKButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
     m_xCancelButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );

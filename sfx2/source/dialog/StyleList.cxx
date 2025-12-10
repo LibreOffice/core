@@ -369,14 +369,14 @@ void StyleList::Initialize()
     m_xFmtLb->connect_mouse_press(LINK(this, StyleList, MousePressHdl));
     m_xFmtLb->connect_query_tooltip(LINK(this, StyleList, QueryTooltipHdl));
     m_xFmtLb->connect_selection_changed(LINK(this, StyleList, FmtSelectHdl));
-    m_xFmtLb->connect_popup_menu(LINK(this, StyleList, PopupFlatMenuHdl));
+    m_xFmtLb->connect_command(LINK(this, StyleList, PopupFlatMenuHdl));
     m_xFmtLb->connect_key_press(LINK(this, StyleList, KeyInputHdl));
     m_xFmtLb->set_selection_mode(SelectionMode::Multiple);
     m_xTreeBox->connect_selection_changed(LINK(this, StyleList, FmtSelectHdl));
     m_xTreeBox->connect_row_activated(LINK(this, StyleList, TreeListApplyHdl));
     m_xTreeBox->connect_mouse_press(LINK(this, StyleList, MousePressHdl));
     m_xTreeBox->connect_query_tooltip(LINK(this, StyleList, QueryTooltipHdl));
-    m_xTreeBox->connect_popup_menu(LINK(this, StyleList, PopupTreeMenuHdl));
+    m_xTreeBox->connect_command(LINK(this, StyleList, PopupTreeMenuHdl));
     m_xTreeBox->connect_key_press(LINK(this, StyleList, KeyInputHdl));
     m_xTreeBox->connect_drag_begin(LINK(this, StyleList, DragBeginHdl));
     m_xTreeView1DropTargetHelper.reset(new TreeViewDropTarget(*this, *m_xFmtLb));

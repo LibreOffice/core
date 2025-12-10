@@ -588,8 +588,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     mxEdSearch->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxListChecks->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxTreeChecks->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
-    mxListChecks->connect_popup_menu(LINK(this, ScCheckListMenuControl, CommandHdl));
-    mxTreeChecks->connect_popup_menu(LINK(this, ScCheckListMenuControl, CommandHdl));
+    mxListChecks->connect_command(LINK(this, ScCheckListMenuControl, CommandHdl));
+    mxTreeChecks->connect_command(LINK(this, ScCheckListMenuControl, CommandHdl));
     mxChkToggleAll->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxChkLockChecked->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxBtnSelectSingle->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));

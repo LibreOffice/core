@@ -1193,7 +1193,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     m_xTreeView->connect_selection_changed(LINK(this, SwContentTree, SelectHdl));
     m_xTreeView->connect_focus_in(LINK(this, SwContentTree, FocusInHdl));
     m_xTreeView->connect_key_press(LINK(this, SwContentTree, KeyInputHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, SwContentTree, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, SwContentTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, SwContentTree, QueryTooltipHdl));
     m_xTreeView->connect_drag_begin(LINK(this, SwContentTree, DragBeginHdl));
     m_xTreeView->connect_mouse_move(LINK(this, SwContentTree, MouseMoveHdl));
