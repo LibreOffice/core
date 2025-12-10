@@ -2534,7 +2534,16 @@ void SfxViewShell::Activate( bool bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame().GetObjectShell();
         if (const auto xModel = pSh->GetModel())
-            xModel->setCurrentController(GetController());
+        {
+            try
+            {
+                xModel->setCurrentController(GetController());
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("sfx.view", "SfxViewShell::Activate: failed to set current controller");
+            }
+        }
 
         SetCurrentDocument();
     }
