@@ -665,7 +665,7 @@ void DocxAttributeOutput::TableRowRedline(
             = bRemovePersonalInfo
               || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
                   && aDateTime.GetDay() == 1)
-              // The officeotron validator does not think year 0 is valid, so just dont put anything,
+              // The officeotron validator does not think year 0 is valid, so just don't put anything,
               // a zero year is not useful anyway.
               || (aDateTime.GetYear() == 0 && aDateTime.GetMonth() == 0 && aDateTime.GetDay() == 0);
 
@@ -740,7 +740,7 @@ void DocxAttributeOutput::TableCellRedline(
             = bRemovePersonalInfo
               || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
                   && aDateTime.GetDay() == 1)
-              // The officeotron validator does not think year 0 is valid, so just dont put anything,
+              // The officeotron validator does not think year 0 is valid, so just don't put anything,
               // a zero year is not useful anyway.
               || (aDateTime.GetYear() == 0 && aDateTime.GetMonth() == 0 && aDateTime.GetDay() == 0);
 
