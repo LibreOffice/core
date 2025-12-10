@@ -74,16 +74,9 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
     setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
 
-    maFillColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
-    maTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    maHighlightColor = rSettings.GetHighlightColor();
-    maHighlightTextColor = rSettings.GetHighlightTextColor();
-
     mfHighlightTransparence = 0.75;
 
-    UpdateColors();
+    UpdateColors(Application::GetSettings().GetStyleSettings());
 }
 
 RecentDocsView::~RecentDocsView()
@@ -95,6 +88,17 @@ RecentDocsView::~RecentDocsView()
         mpLoadRecentFile->pView = nullptr;
         mpLoadRecentFile = nullptr;
     }
+}
+
+void RecentDocsView::UpdateColors(const StyleSettings& rSettings)
+{
+    ThumbnailView::UpdateColors(rSettings);
+
+    maFillColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
+    maTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
+
+    maHighlightColor = rSettings.GetHighlightColor();
+    maHighlightTextColor = rSettings.GetHighlightTextColor();
 }
 
 bool RecentDocsView::typeMatchesExtension(ApplicationType type, std::u16string_view rExt)

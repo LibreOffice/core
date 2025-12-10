@@ -31,17 +31,21 @@ TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> x
     ThumbnailView::setItemDimensions( nItemMaxSize, nItemMaxSize, gnTextHeight, gnItemPadding );
     updateThumbnailDimensions(nItemMaxSize);
 
+    mfHighlightTransparence = 0.75;
+
+    UpdateColors(Application::GetSettings().GetStyleSettings());
+}
+
+void TemplateDefaultView::UpdateColors(const StyleSettings& rSettings)
+{
+    TemplateLocalView::UpdateColors(rSettings);
+
     // startcenter specific settings
     maFillColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
     maTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
 
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     maHighlightColor = rSettings.GetHighlightColor();
     maHighlightTextColor = rSettings.GetHighlightTextColor();
-
-    mfHighlightTransparence = 0.75;
-
-    UpdateColors();
 }
 
 void TemplateDefaultView::showAllTemplates()

@@ -24,6 +24,9 @@ public:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void createContextMenu();
+
+protected:
+    void UpdateColors(const StyleSettings& rSettings);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
