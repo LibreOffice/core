@@ -8,9 +8,7 @@
     <text systemLanguage="en">Hello!</text>
     <text systemLanguage="es">Hola!</text>
     <text systemLanguage="fr">Bonjour!</text>
-    <text systemLanguage="ja">こんにちは</text>
     <text systemLanguage="ru">Привет!</text>
     <text>☺</text>
   </switch>
 </svg>
-
