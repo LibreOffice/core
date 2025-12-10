@@ -188,6 +188,7 @@ class SfxDocumentPage final : public SfxTabPage
 private:
     OUString                    m_aUnknownSize;
     OUString                    m_aMultiSignedStr;
+    OUString                    m_sFileURL;
 
     bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
@@ -197,7 +198,8 @@ private:
     std::unique_ptr<weld::Button> m_xChangePassBtn;
 
     std::unique_ptr<weld::Label> m_xShowTypeFT;
-    std::unique_ptr<weld::LinkButton> m_xFileValEd;
+    std::unique_ptr<weld::Label> m_xFileValEd;
+    std::unique_ptr<weld::Button> m_xFileValBtn;
     std::unique_ptr<weld::Label> m_xShowSizeFT;
 
     std::unique_ptr<weld::Label> m_xCreateValFt;
@@ -217,6 +219,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xImagePreferredDpiCheckButton;
     std::unique_ptr<weld::ComboBox> m_xImagePreferredDpiComboBox;
 
+    DECL_LINK(FileValHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
     DECL_LINK(SignatureHdl, weld::Button&, void);
     DECL_LINK(ChangePassHdl, weld::Button&, void);
