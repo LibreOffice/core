@@ -10,6 +10,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
+#include <unordered_set>
 #include <vector>
 #include "epptooxml.hxx"
 #include "pptx-animations-cond.hxx"
@@ -30,6 +31,7 @@ class NodeContext
     // if the node has valid target or contains at least one valid target.
     bool mbValid;
     // Required to check if the associated shape is present in export or not
+    const std::unordered_set<sal_Int32>& mrSlideShapeIDs;
     PowerPointExport& mrPowerPointExport;
 
     // if the node should be on SubTnLst or ChildTnLst
@@ -55,7 +57,8 @@ class NodeContext
 
 public:
     NodeContext(const css::uno::Reference<css::animations::XAnimationNode>& xNode,
-                PowerPointExport& rExport, bool bMainSeqChild, bool bIsIterateChild);
+                const std::unordered_set<sal_Int32>& rSlideShapeIDs, PowerPointExport& rExport,
+                bool bMainSeqChild, bool bIsIterateChild);
     const css::uno::Reference<css::animations::XAnimationNode>& getNode() const { return mxNode; }
     sal_Int16 getEffectNodeType() const { return mnEffectNodeType; }
     sal_Int16 getEffectPresetClass() const { return mnEffectPresetClass; }
