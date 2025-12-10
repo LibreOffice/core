@@ -97,9 +97,6 @@ public: // TODO: make data members private
 
     inline hb_font_t* GetHbFont();
     SAL_DLLPRIVATE bool IsGraphiteFont();
-    // NeedOffsetCorrection: Return if the font need offset correction in TTB direction.
-    // nYOffset is the original offset. It is used to check if the correction is necessary.
-    SAL_DLLPRIVATE bool NeedOffsetCorrection(sal_Int32 nYOffset);
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
@@ -151,15 +148,6 @@ private:
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
-
-    enum class FontFamilyEnum
-    {
-        Unclassified,
-        DFKaiSB
-    };
-
-    // The value is initialized and used in NeedOffsetCorrection().
-    std::optional<FontFamilyEnum> m_xeFontFamilyEnum;
 
     mutable hb_draw_funcs_t* m_pHbDrawFuncs = nullptr;
     basegfx::B2DPolygon m_aDrawPolygon;

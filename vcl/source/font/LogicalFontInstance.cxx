@@ -243,36 +243,6 @@ bool LogicalFontInstance::IsGraphiteFont()
     return *m_xbIsGraphiteFont;
 }
 
-bool LogicalFontInstance::NeedOffsetCorrection(sal_Int32 nYOffset)
-{
-    if (!m_xeFontFamilyEnum)
-    {
-        m_xeFontFamilyEnum = FontFamilyEnum::Unclassified;
-
-        // DFKai-SB (ukai.ttf) is a built-in font under traditional Chinese
-        // Windows. It has wrong extent values in glyf table. The problem results
-        // in wrong positioning of glyphs in vertical writing.
-        // Check https://github.com/harfbuzz/harfbuzz/issues/3521 for reference.
-        if (GetFontFace()->GetName(vcl::font::NAME_ID_FONT_FAMILY) == "DFKai-SB")
-            m_xeFontFamilyEnum = FontFamilyEnum::DFKaiSB;
-    }
-
-    bool bRet = true;
-
-    switch (*m_xeFontFamilyEnum)
-    {
-        case FontFamilyEnum::DFKaiSB:
-            // -839: optimization for one third of ukai.ttf
-            if (nYOffset == -839)
-                bRet = false;
-            break;
-        default:
-            bRet = false;
-    }
-
-    return bRet;
-}
-
 bool LogicalFontInstance::NeedsArtificialBold() const
 {
     return m_aFontSelData.GetWeight() > WEIGHT_MEDIUM && m_pFontFace->GetWeight() <= WEIGHT_MEDIUM;
