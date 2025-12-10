@@ -1476,56 +1476,56 @@ void DocxAttributeOutput::StartParagraphProperties()
     }
 }
 
+// Write the elements in the spec order
+const sal_Int32 aParagraphPropertiesOrder[] =
+{
+    FSNS( XML_w, XML_pStyle ),
+    FSNS( XML_w, XML_keepNext ),
+    FSNS( XML_w, XML_keepLines ),
+    FSNS( XML_w, XML_pageBreakBefore ),
+    FSNS( XML_w, XML_framePr ),
+    FSNS( XML_w, XML_widowControl ),
+    FSNS( XML_w, XML_numPr ),
+    FSNS( XML_w, XML_suppressLineNumbers ),
+    FSNS( XML_w, XML_pBdr ),
+    FSNS( XML_w, XML_shd ),
+    FSNS( XML_w, XML_tabs ),
+    FSNS( XML_w, XML_suppressAutoHyphens ),
+    FSNS( XML_w, XML_kinsoku ),
+    FSNS( XML_w, XML_wordWrap ),
+    FSNS( XML_w, XML_overflowPunct ),
+    FSNS( XML_w, XML_topLinePunct ),
+    FSNS( XML_w, XML_autoSpaceDE ),
+    FSNS( XML_w, XML_autoSpaceDN ),
+    FSNS( XML_w, XML_bidi ),
+    FSNS( XML_w, XML_adjustRightInd ),
+    FSNS( XML_w, XML_snapToGrid ),
+    FSNS( XML_w, XML_spacing ),
+    FSNS( XML_w, XML_ind ),
+    FSNS( XML_w, XML_contextualSpacing ),
+    FSNS( XML_w, XML_mirrorIndents ),
+    FSNS( XML_w, XML_suppressOverlap ),
+    FSNS( XML_w, XML_jc ),
+    FSNS( XML_w, XML_textDirection ),
+    FSNS( XML_w, XML_textAlignment ),
+    FSNS( XML_w, XML_textboxTightWrap ),
+    FSNS( XML_w, XML_outlineLvl ),
+    FSNS( XML_w, XML_divId ),
+    FSNS( XML_w, XML_cnfStyle ),
+    FSNS( XML_w, XML_rPr ),
+    FSNS( XML_w, XML_sectPr ),
+    FSNS( XML_w, XML_pPrChange )
+};
+
 void DocxAttributeOutput::InitCollectedParagraphProperties()
 {
     m_pLRSpaceAttrList.clear();
     m_pParagraphSpacingAttrList.clear();
 
-    // Write the elements in the spec order
-    static const sal_Int32 aOrder[] =
-    {
-        FSNS( XML_w, XML_pStyle ),
-        FSNS( XML_w, XML_keepNext ),
-        FSNS( XML_w, XML_keepLines ),
-        FSNS( XML_w, XML_pageBreakBefore ),
-        FSNS( XML_w, XML_framePr ),
-        FSNS( XML_w, XML_widowControl ),
-        FSNS( XML_w, XML_numPr ),
-        FSNS( XML_w, XML_suppressLineNumbers ),
-        FSNS( XML_w, XML_pBdr ),
-        FSNS( XML_w, XML_shd ),
-        FSNS( XML_w, XML_tabs ),
-        FSNS( XML_w, XML_suppressAutoHyphens ),
-        FSNS( XML_w, XML_kinsoku ),
-        FSNS( XML_w, XML_wordWrap ),
-        FSNS( XML_w, XML_overflowPunct ),
-        FSNS( XML_w, XML_topLinePunct ),
-        FSNS( XML_w, XML_autoSpaceDE ),
-        FSNS( XML_w, XML_autoSpaceDN ),
-        FSNS( XML_w, XML_bidi ),
-        FSNS( XML_w, XML_adjustRightInd ),
-        FSNS( XML_w, XML_snapToGrid ),
-        FSNS( XML_w, XML_spacing ),
-        FSNS( XML_w, XML_ind ),
-        FSNS( XML_w, XML_contextualSpacing ),
-        FSNS( XML_w, XML_mirrorIndents ),
-        FSNS( XML_w, XML_suppressOverlap ),
-        FSNS( XML_w, XML_jc ),
-        FSNS( XML_w, XML_textDirection ),
-        FSNS( XML_w, XML_textAlignment ),
-        FSNS( XML_w, XML_textboxTightWrap ),
-        FSNS( XML_w, XML_outlineLvl ),
-        FSNS( XML_w, XML_divId ),
-        FSNS( XML_w, XML_cnfStyle ),
-        FSNS( XML_w, XML_rPr ),
-        FSNS( XML_w, XML_sectPr ),
-        FSNS( XML_w, XML_pPrChange )
-    };
-
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
     // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
-    m_pSerializer->mark(Tag_InitCollectedParagraphProperties, comphelper::containerToSequence(aOrder));
+    m_pSerializer->mark(Tag_InitCollectedParagraphProperties, comphelper::containerToSequence(aParagraphPropertiesOrder));
 }
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
@@ -4306,9 +4306,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                 const OUString & sParaStyleName = pFormattingChanges->GetFormatName();
                 if (pChangesSet || !sParaStyleName.isEmpty())
                 {
-                    m_pSerializer->mark(Tag_Redline_2);
-
                     m_pSerializer->startElementNS(XML_w, XML_pPr);
+
+                    m_pSerializer->mark(Tag_Redline_2, comphelper::containerToSequence(aParagraphPropertiesOrder));
 
                     if (!sParaStyleName.isEmpty())
                     {
@@ -4346,9 +4346,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     m_pLRSpaceAttrList = std::move(pLRSpaceAttrList_Original);
                     m_pParagraphSpacingAttrList = std::move(pParagraphSpacingAttrList_Original);
 
-                    m_pSerializer->endElementNS( XML_w, XML_pPr );
+                    m_pSerializer->mergeTopMarks(Tag_Redline_2);
 
-                    m_pSerializer->mergeTopMarks(Tag_Redline_2, sax_fastparser::MergeMarks::PREPEND);
+                    m_pSerializer->endElementNS( XML_w, XML_pPr );
                 }
             }
         }
