@@ -1124,6 +1124,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf114969XLSX)
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "location", u"'1.1.1.1'!C1");
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", u"'1.1.1.1'!C2");
+
+    // tdf#165180: should be recognizable as a 2007 XLSX format when saved
+    save(TestFilter::XLSX_2007);
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    // lowestEdited = 4 needs to be output in order to be detected as a 2007 ECMA_376_1ST_EDITION
+    assertXPath(pWorkbook, "/x:workbook/x:fileVersion", "lowestEdited", u"4");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115192XLSX)

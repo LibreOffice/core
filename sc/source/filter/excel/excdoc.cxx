@@ -857,6 +857,11 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pAttrListFileVersion->add(XML_appName, "Calc");
     std::optional<sal_Int16> oLow = GetExtDocOptions().GetDocSettings().moLowestEdited;
+    if (rStrm.getVersion() == oox::core::ECMA_376_1ST_EDITION
+        && (!oLow.has_value() || oLow > 4))
+    {
+        oLow = 4; // when saving as MS Excel 2007, set the corresponding lowestEdited-by version
+    }
     if (oLow.has_value())
         pAttrListFileVersion->add(XML_lowestEdited, OString::number(*oLow));
             // OOXTODO: XML_codeName
