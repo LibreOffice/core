@@ -16722,11 +16722,6 @@ private:
 
     DECL_LINK(async_signal_selection_changed, void*, void);
 
-    bool signal_command(const CommandEvent& rCEvt)
-    {
-        return m_aCommandHdl.Call(rCEvt);
-    }
-
     virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
     {
         return signal_command(rCEvt);

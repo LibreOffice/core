@@ -5629,7 +5629,7 @@ IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
 
 IMPL_LINK(SalInstanceIconView, CommandHdl, const CommandEvent&, rEvent, bool)
 {
-    return m_aCommandHdl.Call(rEvent);
+    return signal_command(rEvent);
 }
 
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
