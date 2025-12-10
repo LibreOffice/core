@@ -575,7 +575,7 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
 
     const OUString& aName = rFilter.GetFilterName();
     // We can handle all Excel variants natively.
-    return aName.startsWith("MS Excel");
+    return aName.startsWith("MS Excel") || aName.startsWith("Calc Office Open XML");
 }
 
 }
