@@ -683,9 +683,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79668)
 {
     createSwDoc("fdo79668.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 12
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     // fdo#79668: Document was Crashing on DebugUtil build while Saving
     // because of repeated attribute value in same element.
