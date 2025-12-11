@@ -2571,7 +2571,7 @@ protected:
         Point aPos(gtk_widget_get_allocated_width(pWidget) / 2,
                    gtk_widget_get_allocated_height(pWidget) / 2);
         CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, false);
-        return pThis->signal_popup_menu(aCEvt);
+        return pThis->signal_command(aCEvt);
     }
 #endif
 
@@ -2812,11 +2812,6 @@ private:
     }
 #endif
 
-    virtual bool signal_popup_menu(const CommandEvent&)
-    {
-        return false;
-    }
-
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void signalButtonPress(GtkGestureClick* pGesture, int n_press, gdouble x, gdouble y, gpointer widget)
     {
@@ -2848,7 +2843,7 @@ private:
             {
                 //if handled for context menu, stop processing
                 CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
-                if (signal_popup_menu(aCEvt))
+                if (signal_command(aCEvt))
                 {
                     gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
                     return;
@@ -2914,7 +2909,7 @@ private:
         {
             //if handled for context menu, stop processing
             CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
-            if (signal_popup_menu(aCEvt))
+            if (signal_command(aCEvt))
                 return true;
         }
 
@@ -3371,6 +3366,12 @@ public:
 #endif
 
         localizeDecimalSeparator();
+    }
+
+    virtual void connect_command(const Link<const CommandEvent&, bool>& rLink) override
+    {
+        ensureButtonPressSignal();
+        weld::Widget::connect_command(rLink);
     }
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
@@ -13979,11 +13980,6 @@ private:
         pThis->handle_row_activated();
     }
 
-    virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
-    {
-        return weld::TreeView::signal_command(rCEvt);
-    }
-
     void insert_row(GtkTreeIter& iter, const GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
                     const OUString* pIconName, const VirtualDevice* pDevice)
     {
@@ -16256,12 +16252,6 @@ public:
         g_signal_handler_unblock(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
     }
 
-    virtual void connect_command(const Link<const CommandEvent&, bool>& rLink) override
-    {
-        ensureButtonPressSignal();
-        weld::TreeView::connect_command(rLink);
-    }
-
     virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bDnDMode, bool bAutoScroll) override
     {
         if (rPos.X() < 0 || rPos.Y() < 0)
@@ -16721,11 +16711,6 @@ private:
     ImplSVEvent* m_pSelectionChangeEvent;
 
     DECL_LINK(async_signal_selection_changed, void*, void);
-
-    virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
-    {
-        return signal_command(rCEvt);
-    }
 
     void launch_signal_selection_changed()
     {
@@ -18377,10 +18362,7 @@ private:
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
     }
-    virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
-    {
-        return signal_command(rCEvt);
-    }
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     bool signal_scroll(const GdkEventScroll* pEvent)
     {
