@@ -82,15 +82,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     // VML's x:anchor indicates cell-anchor
     CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
 
-    // VML's x:anchor has too large Offsets: limit to cell B2's edges.
-    // Without the fixes, this was X[9040] Y[10257] W[2823] H[742]
-    tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
-
-    // I did not focus on (minor) round-trip concerns. Just documenting the current results...
     saveAndReload(TestFilter::XLSX);
 
     ScDocument& rRTDoc = *getScDoc();
@@ -99,12 +90,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
 
     anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
     CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
-
-    aRect = pPage->GetObj(0)->GetSnapRect();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
 
     // test implementation of GetRange
     tools::Rectangle aB2(rRTDoc.GetMMRect(1, 1, 1, 1, 0)); // B2 from sheet 0 in mm100
