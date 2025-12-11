@@ -286,7 +286,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
         ScDocShellModificator aModificator( rDocShell );
 
         std::unique_ptr<ScDBData> pNewData(new ScDBData(rNew, **iterOld));
-
+        OUString aUndoName = rOld;
         std::unique_ptr<ScDBCollection> pUndoColl( new ScDBCollection( *pDocColl ) );
 
         rDoc.PreprocessDBDataUpdate();
@@ -304,7 +304,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             if (bUndo)
             {
                 rDocShell.GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoDBData>( rDocShell, rOld, std::move(pUndoColl),
+                                std::make_unique<ScUndoDBData>( rDocShell, aUndoName, std::move(pUndoColl),
                                     rNew, std::make_unique<ScDBCollection>( *pDocColl ) ) );
             }
             else
