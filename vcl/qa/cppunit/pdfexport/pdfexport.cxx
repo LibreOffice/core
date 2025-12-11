@@ -45,6 +45,17 @@ public:
 
     void saveAsPDF(std::u16string_view rFile);
     void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExportNoAssert()
+    {
+        SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+        maMemory.WriteStream(aFile);
+
+        std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+        if (!pPDFium)
+            return nullptr;
+        return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
+    }
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
@@ -361,7 +372,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExportNoAssert();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -636,7 +647,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExportNoAssert();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
