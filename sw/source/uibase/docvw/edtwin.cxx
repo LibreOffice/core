@@ -2152,7 +2152,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        rSh.InfoReadOnlyDialog(false);
+                        rSh.InfoReadOnlyDialog(true);
                         eKeyState = SwKeyState::End;
                     }
                     break;
