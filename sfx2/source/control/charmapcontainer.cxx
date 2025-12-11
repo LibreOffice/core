@@ -103,10 +103,10 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
     }
 }
 
-void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
+void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView&, void>& rMouseClickHdl,
                                const Link<void*, void>& rUpdateFavHdl,
                                const Link<void*, void>& rUpdateRecentHdl,
-                               const Link<SvxCharView*,void> &rFocusInHdl)
+                               const Link<SvxCharView&, void>& rFocusInHdl)
 {
     m_aUpdateFavHdl = rUpdateFavHdl;
     m_aUpdateRecentHdl = rUpdateRecentHdl;
@@ -297,10 +297,10 @@ bool SfxCharmapContainer::isFavChar(const OUString& rTitle, const OUString& rFon
     return std::ranges::find(m_aFavChars, CharAndFont(rTitle, rFont)) != m_aFavChars.end();
 }
 
-IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
+IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView&, rView, void)
 {
-    const OUString& sTitle = rView->GetText();
-    OUString sFont = rView->GetFont().GetFamilyName();
+    const OUString& sTitle = rView.GetText();
+    OUString sFont = rView.GetFont().GetFamilyName();
 
     // if recent char to be added is already in list, remove it
     auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(sTitle, sFont));
@@ -326,7 +326,7 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
     updateRecentCharControl();
 }
 
-IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView*, void)
+IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView&, void)
 {
     m_aRecentChars.clear();
 
@@ -338,13 +338,13 @@ IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView*, void)
     updateRecentCharControl();
 }
 
-IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, SvxCharView*, rView, void)
+IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, SvxCharView&, rView, void)
 {
-    deleteFavCharacterFromList(rView->GetText(), rView->GetFont().GetFamilyName());
+    deleteFavCharacterFromList(rView.GetText(), rView.GetFont().GetFamilyName());
     updateFavCharControl();
 }
 
-IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView*, void)
+IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView&, void)
 {
     m_aFavChars.clear();
 

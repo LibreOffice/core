@@ -61,7 +61,7 @@ void SvxCharView::GetFocus()
 {
     Invalidate();
     if (maFocusInHdl.IsSet())
-        maFocusInHdl.Call(this);
+        maFocusInHdl.Call(*this);
 }
 
 void SvxCharView::LoseFocus() { Invalidate(); }
@@ -117,7 +117,7 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
             InsertCharToDoc();
         }
 
-        maMouseClickHdl.Call(this);
+        maMouseClickHdl.Call(*this);
         return true;
     }
 
@@ -174,9 +174,9 @@ void SvxCharView::createContextMenu(const Point& rPosition)
     const OUString sMenuId
         = xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(rPosition, Size(1, 1)));
     if (sMenuId == u"clearchar")
-        maClearClickHdl.Call(this);
+        maClearClickHdl.Call(*this);
     else if (sMenuId == u"clearallchar")
-        maClearAllClickHdl.Call(this);
+        maClearAllClickHdl.Call(*this);
 
     Invalidate();
 }
@@ -271,19 +271,19 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         rRenderContext.SetFont(aOrigFont);
 }
 
-void SvxCharView::setFocusInHdl(const Link<SvxCharView*, void>& rLink) { maFocusInHdl = rLink; }
+void SvxCharView::setFocusInHdl(const Link<SvxCharView&, void>& rLink) { maFocusInHdl = rLink; }
 
-void SvxCharView::setMouseClickHdl(const Link<SvxCharView*, void>& rLink)
+void SvxCharView::setMouseClickHdl(const Link<SvxCharView&, void>& rLink)
 {
     maMouseClickHdl = rLink;
 }
 
-void SvxCharView::setClearClickHdl(const Link<SvxCharView*, void>& rLink)
+void SvxCharView::setClearClickHdl(const Link<SvxCharView&, void>& rLink)
 {
     maClearClickHdl = rLink;
 }
 
-void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*, void>& rLink)
+void SvxCharView::setClearAllClickHdl(const Link<SvxCharView&, void>& rLink)
 {
     maClearAllClickHdl = rLink;
 }

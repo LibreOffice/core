@@ -56,18 +56,18 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     Link<void*, void> m_aUpdateFavHdl;
     Link<void*, void> m_aUpdateRecentHdl;
 
-    DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, SvxCharView*, void);
+    DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView&, void);
+    DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView&, void);
+    DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, SvxCharView&, void);
+    DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, SvxCharView&, void);
 
 public:
     SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev,
                         bool bLockGridSizes);
 
-    void init(bool bHasInsert, const Link<SvxCharView*, void>& rMouseClickHdl,
+    void init(bool bHasInsert, const Link<SvxCharView&, void>& rMouseClickHdl,
               const Link<void*, void>& rUpdateFavHdl, const Link<void*, void>& rUpdateRecentHdl,
-              const Link<SvxCharView*, void>& rFocusInHdl = Link<SvxCharView*, void>());
+              const Link<SvxCharView&, void>& rFocusInHdl = Link<SvxCharView&, void>());
 
     void getFavCharacterList();
     void updateFavCharControl();

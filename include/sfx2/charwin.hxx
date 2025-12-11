@@ -34,10 +34,10 @@ private:
     bool            maHasInsert;
     OUString        m_sText;
 
-    Link<SvxCharView*, void> maFocusInHdl;
-    Link<SvxCharView*, void> maMouseClickHdl;
-    Link<SvxCharView*, void> maClearClickHdl;
-    Link<SvxCharView*, void> maClearAllClickHdl;
+    Link<SvxCharView&, void> maFocusInHdl;
+    Link<SvxCharView&, void> maMouseClickHdl;
+    Link<SvxCharView&, void> maClearClickHdl;
+    Link<SvxCharView&, void> maClearAllClickHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
@@ -65,10 +65,10 @@ public:
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
-    void setFocusInHdl(const Link<SvxCharView*,void> &rLink);
-    void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
-    void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
-    void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
+    void setFocusInHdl(const Link<SvxCharView&, void>& rLink);
+    void setMouseClickHdl(const Link<SvxCharView&, void>& rLink);
+    void setClearClickHdl(const Link<SvxCharView&, void>& rLink);
+    void setClearAllClickHdl(const Link<SvxCharView&, void>& rLink);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

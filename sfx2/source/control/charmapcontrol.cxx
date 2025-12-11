@@ -50,16 +50,16 @@ SfxCharmapCtrl::~SfxCharmapCtrl()
 {
 }
 
-IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, SvxCharView*, pView, void)
+IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, SvxCharView&, rView, void)
 {
-    m_xCharInfoLabel->set_label(pView->GetCharInfoText());
+    m_xCharInfoLabel->set_label(rView.GetCharInfoText());
 }
 
-IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView*, pView, void)
+IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView&, rView, void)
 {
     m_xControl->EndPopupMode();
 
-    pView->InsertCharToDoc();
+    rView.InsertCharToDoc();
 }
 
 IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, weld::Button&, void)

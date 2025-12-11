@@ -526,20 +526,19 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
     }
 }
 
-
-IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
+IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView&, rView, void)
 {
-    rView->GrabFocus();
+    rView.GrabFocus();
 
-    SetCharFont(rView->GetFont());
-    m_aShowChar.SetText( rView->GetText() );
-    m_aShowChar.SetFont(rView->GetFont());
+    SetCharFont(rView.GetFont());
+    m_aShowChar.SetText(rView.GetText());
+    m_aShowChar.SetFont(rView.GetFont());
     m_aShowChar.Invalidate();
 
-    setFavButtonState(rView->GetText(), rView->GetFont().GetFamilyName());//check state
+    setFavButtonState(rView.GetText(), rView.GetFont().GetFamilyName()); //check state
 
     // Get the hexadecimal code
-    OUString charValue = rView->GetText();
+    OUString charValue = rView.GetText();
     sal_UCS4 cChar = charValue.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
     OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
 
@@ -550,7 +549,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
     m_xDecimalCodeText->set_text(aDecimalText);
     setCharName(cChar);
 
-    rView->Invalidate();
+    rView.Invalidate();
     m_xOKBtn->set_sensitive(true);
 }
 
