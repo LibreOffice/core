@@ -41,7 +41,6 @@ PrinterInfoManager& PrinterInfoManager::get()
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
-    m_pQueueInfo( nullptr ),
     m_eType( eType ),
     m_aSystemDefaultPaper( "A4" )
 {
