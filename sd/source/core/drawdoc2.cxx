@@ -65,6 +65,7 @@
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
 
 #include "PageListWatcher.hxx"
 #include <strings.hxx>
@@ -514,7 +515,14 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     auto pSdPage = static_cast<SdPage*>(pPage.get());
     if (pSdPage->IsCanvasPage())
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
+            pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
+        }
         mpCanvasPage = nullptr;
+    }
     pSdPage->DisconnectLink();
     ReplacePageInCustomShows( pSdPage, nullptr );
     UpdatePageObjectsInNotes(nPgNum);
