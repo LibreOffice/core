@@ -298,7 +298,8 @@ void StatusBarManager::CreateControllers()
         bool bInit( true );
         uno::Reference< frame::XStatusbarController > xController;
         AddonStatusbarItemData *pItemData = static_cast< AddonStatusbarItemData *>( m_pStatusBar->GetItemData( nId ) );
-        uno::Reference< ui::XStatusbarItem > xStatusbarItem = new StatusbarItem( m_pStatusBar, nId, aCommandURL );
+        rtl::Reference<StatusbarItem> pStatusbarItem
+            = new StatusbarItem(m_pStatusBar, nId, aCommandURL);
 
         std::vector< uno::Any > aPropVector
         {
@@ -311,7 +312,8 @@ void StatusBarManager::CreateControllers()
 
             uno::Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, xStatusbarWindow)),
             uno::Any(comphelper::makePropertyValue(u"Identifier"_ustr, nId)),
-            uno::Any(comphelper::makePropertyValue(u"StatusbarItem"_ustr, xStatusbarItem))
+            uno::Any(comphelper::makePropertyValue(
+                u"StatusbarItem"_ustr, uno::Reference<ui::XStatusbarItem>(pStatusbarItem)))
         };
 
         uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
@@ -335,10 +337,8 @@ void StatusBarManager::CreateControllers()
                 // 3) Is Add-on? Generic statusbar controller
                 if ( pItemData )
                 {
-                    xController = new GenericStatusbarController( m_xContext,
-                                                                  m_xFrame,
-                                                                  xStatusbarItem,
-                                                                  pItemData );
+                    xController = new GenericStatusbarController(m_xContext, m_xFrame,
+                                                                 pStatusbarItem, pItemData);
                 }
                 else
                 {
