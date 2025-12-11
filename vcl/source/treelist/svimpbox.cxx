@@ -873,6 +873,10 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     tools::Long nRectHeight = rRect.GetHeight();
     tools::Long nEntryHeight = m_pView->GetEntryHeight();
 
+    assert(nEntryHeight);
+    if (!nEntryHeight)
+        return;
+
     // calculate area for the entries we want to draw
     sal_uInt16 nStartLine = static_cast<sal_uInt16>(rRect.Top() / nEntryHeight);
     sal_uInt16 nCount = static_cast<sal_uInt16>(nRectHeight / nEntryHeight);
