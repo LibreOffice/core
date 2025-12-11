@@ -43,7 +43,7 @@ class VCL_DLLPUBLIC MetafileXmlDump final
 {
     o3tl::enumarray<MetaActionType, bool> maFilter;
 
-    void writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter);
+    void writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter) const;
 
 public:
     MetafileXmlDump();
@@ -53,7 +53,7 @@ public:
 
     /** The actual result that will be used for testing.
     */
-    void dump(const GDIMetaFile& rMetaFile, SvStream& rStream);
+    void dump(const GDIMetaFile& rMetaFile, SvStream& rStream) const;
 };
 
 #endif
