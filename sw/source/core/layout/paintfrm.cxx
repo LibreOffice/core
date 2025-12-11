@@ -6264,9 +6264,8 @@ void SwPageFrame::PaintBaselineGrid(OutputDevice& rOututDevice) const
     // Grid area starts at the first baseline position of the page.
     aGridArea.AddTop(nLineOffset);
 
-    const Color aGridColor(COL_BLACK);
     const Color aOriginalLineColor(rOututDevice.GetLineColor());
-    rOututDevice.SetLineColor(aGridColor);
+    rOututDevice.SetLineColor(pViewOption->GetBaselineGridColor());
 
     const tools::Long nLineWidth = aGridArea.Right() - aGridArea.Left();
     rOututDevice.DrawGrid(aGridArea.SVRect(), Size(nLineWidth, nLineHeight),

@@ -234,6 +234,7 @@ struct SwViewColors
             && m_aLinksColor == rOther.m_aLinksColor
             && m_aVisitedLinksColor == rOther.m_aVisitedLinksColor
             && m_aTextGridColor == rOther.m_aTextGridColor
+            && m_aBaselineGridColor == rOther.m_aBaselineGridColor
             && m_aSpellColor == rOther.m_aSpellColor
             && m_aGrammarColor == rOther.m_aGrammarColor
             && m_aSmarttagColor == rOther.m_aSmarttagColor
@@ -254,6 +255,7 @@ struct SwViewColors
     Color m_aLinksColor;
     Color m_aVisitedLinksColor;
     Color m_aTextGridColor;
+    Color m_aBaselineGridColor;
     Color m_aSpellColor;     // mark color of online spell checking
     Color m_aGrammarColor;
     Color m_aSmarttagColor;
@@ -906,6 +908,7 @@ public:
     const Color& GetLinksColor() const;
     const Color& GetVisitedLinksColor() const;
     const Color& GetTextGridColor() const;
+    const Color& GetBaselineGridColor() const;
     const Color& GetSpellColor() const;
     const Color& GetGrammarColor() const;
     const Color& GetSmarttagColor() const;

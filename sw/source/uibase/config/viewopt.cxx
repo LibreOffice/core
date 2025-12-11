@@ -53,6 +53,7 @@ SwViewColors::SwViewColors() :
     m_aLinksColor(COL_BLUE),
     m_aVisitedLinksColor(COL_RED),
     m_aTextGridColor(COL_LIGHTGRAY),
+    m_aBaselineGridColor(COL_GRAY7),
     m_aSpellColor(COL_LIGHTRED),
     m_aGrammarColor(COL_LIGHTBLUE),
     m_aSmarttagColor(COL_LIGHTMAGENTA),
@@ -97,6 +98,7 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
         m_nAppearanceFlags |= ViewOptFlags::Shadow;
 
     m_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
+    m_aBaselineGridColor = rConfig.GetColorValue(svtools::WRITERBASELINEGRID).nColor;
 
     m_aSpellColor = rConfig.GetColorValue(svtools::SPELL).nColor;
     m_aGrammarColor = rConfig.GetColorValue(svtools::GRAMMAR).nColor;
@@ -475,6 +477,11 @@ const Color& SwViewOption::GetVisitedLinksColor() const
 const Color& SwViewOption::GetTextGridColor() const
 {
     return m_aColorConfig.m_aTextGridColor;
+}
+
+const Color& SwViewOption::GetBaselineGridColor() const
+{
+    return m_aColorConfig.m_aBaselineGridColor;
 }
 
 const Color& SwViewOption::GetSpellColor() const

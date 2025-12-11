@@ -184,6 +184,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="WriterBaselineGrid">
+        <info>
+          <desc>Specifies the settings for the baseline grid in Writer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color for the baseline grid in Writer.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="WriterFieldShadings">
         <info>
           <desc>Specifies the settings for field shadings in Writer.</desc>

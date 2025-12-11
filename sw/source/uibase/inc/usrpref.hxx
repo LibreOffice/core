@@ -178,7 +178,7 @@ class SwMasterUsrPref : public SwViewOption
     SwCursorConfig      m_aCursorConfig;
     std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
     SwFmtAidsAutoComplConfig m_aFmtAidsAutoComplConfig;
-    std::optional<SwBaselineGridConfig> m_aBaselineGridConfig; // Not available in web view
+    std::optional<SwBaselineGridConfig> m_aBaselineGridConfig; // Not available in web mode
 
 public:
     SwMasterUsrPref(bool bWeb);

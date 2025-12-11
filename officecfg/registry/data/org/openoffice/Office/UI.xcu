@@ -208,6 +208,11 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="WriterBaselineGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="WriterFieldShadings">
           <prop oor:name="IsVisible">
             <value>true</value>
@@ -694,6 +699,11 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="WriterBaselineGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="WriterFieldShadings">
           <prop oor:name="IsVisible">
             <value>true</value>
@@ -1176,6 +1186,11 @@
           </prop>
         </node>
         <node oor:name="WriterTextGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterBaselineGrid">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>

@@ -537,6 +537,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_LIGHTMAGENTA, Color(0x780373) }, // SMARTTAGS
         { COL_GRAY,         Color(0x1C1C1C) }, // SHADOWCOLOR
         { COL_GRAY7,        COL_GRAY7       }, // WRITERTEXTGRID
+        { COL_GRAY7,        COL_GRAY7       }, // WRITERBASELINEGRID
         { COL_LIGHTGRAY,    COL_LIGHTGRAY   }, // WRITERFIELDSHADING
         { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // WRITERIDXSHADINGS
         { COL_BLACK,        COL_BLACK       }, // WRITERDIRECTCURSOR
