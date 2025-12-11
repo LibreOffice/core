@@ -1192,8 +1192,13 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     for (const auto& rRedLine : aRedlines)
     {
         SwRedlineTable::size_type nPosition = GetRedlinePos( *rRedLine );
+
+        // bSelect is false for "accept/reject all", true when only accepting/rejecting one or more
+        // selected changes. Only use direct accept/reject for explicitly selected changes.
+        bool bDirect = bSelect;
+
         if( nPosition != SwRedlineTable::npos )
-            (pSh->*FnAccRej)( nPosition, /*bDirect=*/true );
+            (pSh->*FnAccRej)( nPosition, bDirect );
 
         // handle redlines of table rows, stored as children of the item associated
         // to the deleted/inserted table row(s)
@@ -1208,7 +1213,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
                 {
                     nPosition = GetRedlinePos( *xChild );
                     if( nPosition != SwRedlineTable::npos )
-                        (pSh->*FnAccRej)( nPosition, /*bDirect=*/true );
+                        (pSh->*FnAccRej)( nPosition, bDirect );
                 }
                 while ( rTreeView.iter_next_sibling(*xChild) );
             }
