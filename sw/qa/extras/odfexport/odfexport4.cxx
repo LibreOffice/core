@@ -763,69 +763,70 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds", "right", u"9359");
     }
 
-        // now check the positions where text is actually painted -
-        // wonder how fragile this is...
-        // FIXME some platform difference, 1st one is 2306 on Linux, 3087 on WNT ?
-        // some Mac has 3110
-#if !defined(_WIN32) && !defined(MACOSX)
+    // now check the positions where text is actually painted
     {
         std::shared_ptr<GDIMetaFile> pMetaFile = getSwDocShell()->GetPreviewMetaFile();
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *pMetaFile);
 
+        auto x_value = [ this, &pXmlDoc,
+                         dx = getXPath(pXmlDoc, "//mapmode", "x").toInt32() ](const char* xPath)
+        {
+            return static_cast<int>(getXPath(pXmlDoc, xPath, "x").toInt32() + dx);
+        };
+
         // 1: inherited from paragraph style and overridden by list
         // bullet char is extra
 
-        assertXPath(pXmlDoc, "//textarray[1]", "x", u"2306");
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[1]"));
         // text is after a tab from list - haven't checked if that is correct?
-        assertXPath(pXmlDoc, "//textarray[2]", "x", u"2873");
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[2]"));
         // second line
-        assertXPath(pXmlDoc, "//textarray[3]", "x", u"2873");
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[3]"));
         // 2: as 1 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[4]", "x", u"3440");
-        assertXPath(pXmlDoc, "//textarray[5]", "x", u"3593");
-        assertXPath(pXmlDoc, "//textarray[6]", "x", u"2873");
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[4]"));
+        CPPUNIT_ASSERT_EQUAL(3309, x_value("//textarray[5]"));
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[6]"));
         // 3: as 1 + paragraph sets textleft
-        assertXPath(pXmlDoc, "//textarray[7]", "x", u"2873");
-        assertXPath(pXmlDoc, "//textarray[8]", "x", u"3440");
-        assertXPath(pXmlDoc, "//textarray[9]", "x", u"3440");
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[7]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[8]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[9]"));
         // 4: as 1 + paragraph sets firstline, textleft
-        assertXPath(pXmlDoc, "//textarray[10]", "x", u"2306");
-        assertXPath(pXmlDoc, "//textarray[11]", "x", u"3440");
-        assertXPath(pXmlDoc, "//textarray[12]", "x", u"3440");
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[10]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[11]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[12]"));
         // 5: as 1 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[13]", "x", u"1739");
-        assertXPath(pXmlDoc, "//textarray[14]", "x", u"2873");
-        assertXPath(pXmlDoc, "//textarray[15]", "x", u"2873");
+        CPPUNIT_ASSERT_EQUAL(1455, x_value("//textarray[13]"));
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[14]"));
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[15]"));
         // 6: as 1
-        assertXPath(pXmlDoc, "//textarray[16]", "x", u"2306");
-        assertXPath(pXmlDoc, "//textarray[17]", "x", u"2873");
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[16]"));
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[17]"));
 
         // 8: inherited from paragraph style and overridden by list
-        assertXPath(pXmlDoc, "//textarray[18]", "x", u"2873");
-        assertXPath(pXmlDoc, "//textarray[19]", "x", u"3746");
-        assertXPath(pXmlDoc, "//textarray[20]", "x", u"2306");
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[18]"));
+        CPPUNIT_ASSERT_EQUAL(3462, x_value("//textarray[19]"));
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[20]"));
         // 9: as 8 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[21]", "x", u"3440");
-        assertXPath(pXmlDoc, "//textarray[22]", "x", u"3746");
-        assertXPath(pXmlDoc, "//textarray[23]", "x", u"2306");
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[21]"));
+        CPPUNIT_ASSERT_EQUAL(3462, x_value("//textarray[22]"));
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[23]"));
         // 10: as 8 + paragraph sets textleft
-        assertXPath(pXmlDoc, "//textarray[24]", "x", u"4007");
-        assertXPath(pXmlDoc, "//textarray[25]", "x", u"4880");
-        assertXPath(pXmlDoc, "//textarray[26]", "x", u"3440");
+        CPPUNIT_ASSERT_EQUAL(3723, x_value("//textarray[24]"));
+        CPPUNIT_ASSERT_EQUAL(4596, x_value("//textarray[25]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[26]"));
         // 11: as 8 + paragraph sets firstline, textleft
-        assertXPath(pXmlDoc, "//textarray[27]", "x", u"2306");
-        assertXPath(pXmlDoc, "//textarray[28]", "x", u"3440");
-        assertXPath(pXmlDoc, "//textarray[29]", "x", u"3440");
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[27]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[28]"));
+        CPPUNIT_ASSERT_EQUAL(3156, x_value("//textarray[29]"));
         // 12: as 8 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[30]", "x", u"1172");
-        assertXPath(pXmlDoc, "//textarray[31]", "x", u"1739");
-        assertXPath(pXmlDoc, "//textarray[32]", "x", u"2306");
+        CPPUNIT_ASSERT_EQUAL(888, x_value("//textarray[30]"));
+        CPPUNIT_ASSERT_EQUAL(1455, x_value("//textarray[31]"));
+        CPPUNIT_ASSERT_EQUAL(2022, x_value("//textarray[32]"));
         // 13: as 8
-        assertXPath(pXmlDoc, "//textarray[33]", "x", u"2873");
-        assertXPath(pXmlDoc, "//textarray[34]", "x", u"3746");
+        CPPUNIT_ASSERT_EQUAL(2589, x_value("//textarray[33]"));
+        CPPUNIT_ASSERT_EQUAL(3462, x_value("//textarray[34]"));
     }
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
