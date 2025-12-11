@@ -213,7 +213,6 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/bulletsandnumbering.ui" },
         { u"modules/swriter/ui/captionoptions.ui" },
         { u"modules/swriter/ui/characterproperties.ui" },
-        { u"modules/swriter/ui/charurlpage.ui" },
         { u"modules/swriter/ui/columndialog.ui" },
         { u"modules/swriter/ui/columnpage.ui" },
         { u"modules/swriter/ui/contentcontroldlg.ui" },
