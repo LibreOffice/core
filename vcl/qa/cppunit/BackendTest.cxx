@@ -16,6 +16,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
+#include <config_cairo_rgba.h>
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
@@ -500,6 +501,7 @@ public:
 
     void testDrawMask24bpp()
     {
+#if !ENABLE_CAIRO_RGBA
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
@@ -508,6 +510,7 @@ public:
         exportImage(u"08-05_mask_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
     }
 
     void testDrawBlend24bpp()
