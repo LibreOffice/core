@@ -87,25 +87,25 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
         }
     }
 
-    rtl::Reference<SfxStatusBarControl> pController;
+    rtl::Reference<SfxStatusBarControl> pControl;
     if ( m_aCommandURL == ".uno:ZoomSlider" )
     {
         m_nSlotId = SID_ATTR_ZOOMSLIDER;
-        pController = new SvxZoomSliderControl(m_nSlotId,m_nId,*pStatusBar);
+        pControl = new SvxZoomSliderControl(m_nSlotId, m_nId, *pStatusBar);
     }
     else if ( m_aCommandURL == ".uno:Zoom" )
     {
         m_nSlotId = SID_ATTR_ZOOM;
-        pController = new SvxZoomStatusBarControl(m_nSlotId,m_nId,*pStatusBar);
+        pControl = new SvxZoomStatusBarControl(m_nSlotId, m_nId, *pStatusBar);
     }
 
-    if ( pController )
+    if (pControl)
     {
-        m_rController.set( pController );
-        if ( m_rController.is() )
+        m_pControl = pControl;
+        if (m_pControl.is())
         {
-            m_rController->initialize(_rArguments);
-            m_rController->update();
+            m_pControl->initialize(_rArguments);
+            m_pControl->update();
         }
     }
 
@@ -117,7 +117,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 {
     SolarMutexGuard aSolarGuard;
 
-    if ( !m_rController.is() )
+    if (!m_pControl.is())
         return;
 
     if ( m_aCommandURL == ".uno:ZoomSlider" )
@@ -127,7 +127,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
         {
             SvxZoomSliderItem aZoomSlider(100,20,400);
             aZoomSlider.PutValue(_aEvent.State, 0);
-            static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChangedAtStatusBarControl(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider);
+            static_cast<SvxZoomSliderControl*>(m_pControl.get())->StateChangedAtStatusBarControl(m_nSlotId, SfxItemState::DEFAULT, &aZoomSlider);
         }
     }
     else if ( m_aCommandURL == ".uno:Zoom" )
@@ -137,7 +137,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
         {
             SvxZoomItem aZoom;
             aZoom.PutValue(_aEvent.State, 0 );
-            static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChangedAtStatusBarControl(m_nSlotId,SfxItemState::DEFAULT,&aZoom);
+            static_cast<SvxZoomStatusBarControl*>(m_pControl.get())->StateChangedAtStatusBarControl(m_nSlotId, SfxItemState::DEFAULT, &aZoom);
         }
     }
 }
@@ -145,17 +145,17 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 // XStatusbarController
 sal_Bool SAL_CALL OStatusbarController::mouseButtonDown(const css::awt::MouseEvent& _aEvent)
 {
-    return m_rController.is() && m_rController->mouseButtonDown(_aEvent);
+    return m_pControl.is() && m_pControl->mouseButtonDown(_aEvent);
 }
 
 sal_Bool SAL_CALL OStatusbarController::mouseMove(    const css::awt::MouseEvent& _aEvent)
 {
-    return m_rController.is() && m_rController->mouseMove(_aEvent);
+    return m_pControl.is() && m_pControl->mouseMove(_aEvent);
 }
 
 sal_Bool SAL_CALL OStatusbarController::mouseButtonUp(    const css::awt::MouseEvent& _aEvent)
 {
-    return m_rController.is() && m_rController->mouseButtonUp(_aEvent);
+    return m_pControl.is() && m_pControl->mouseButtonUp(_aEvent);
 }
 
 void SAL_CALL OStatusbarController::command(
@@ -164,8 +164,8 @@ void SAL_CALL OStatusbarController::command(
     sal_Bool bMouseEvent,
     const css::uno::Any& aData )
 {
-    if ( m_rController.is() )
-        m_rController->command( aPos, nCommand, bMouseEvent, aData );
+    if (m_pControl.is())
+        m_pControl->command(aPos, nCommand, bMouseEvent, aData);
 }
 
 void SAL_CALL OStatusbarController::paint(
@@ -173,36 +173,39 @@ void SAL_CALL OStatusbarController::paint(
     const css::awt::Rectangle& rOutputRectangle,
     ::sal_Int32 nStyle )
 {
-    if ( m_rController.is() )
-        m_rController->paint( xGraphics, rOutputRectangle, nStyle );
+    if (m_pControl.is())
+        m_pControl->paint(xGraphics, rOutputRectangle, nStyle);
 }
 
 void SAL_CALL OStatusbarController::click(
     const css::awt::Point& aPos )
 {
-    if ( m_rController.is() )
-        m_rController->click( aPos );
+    if (m_pControl.is())
+        m_pControl->click(aPos);
 }
 
 void SAL_CALL OStatusbarController::doubleClick(
     const css::awt::Point& aPos )
 {
-    if ( m_rController.is() )
-        m_rController->doubleClick( aPos );
+    if (m_pControl.is())
+        m_pControl->doubleClick(aPos);
 }
 
 void SAL_CALL OStatusbarController::update()
 {
     ::svt::StatusbarController::update();
-    if ( m_rController.is() )
-        m_rController->update();
+    if (m_pControl.is())
+        m_pControl->update();
 }
 
 // XComponent
 void SAL_CALL OStatusbarController::dispose()
 {
-    if ( m_rController.is() )
-        ::comphelper::disposeComponent( m_rController );
+    if (m_pControl.is())
+    {
+        m_pControl->dispose();
+        m_pControl.clear();
+    }
 
     svt::StatusbarController::dispose();
 }
