@@ -68,7 +68,6 @@ modules/swriter/ui/captionoptions.ui
 modules/swriter/ui/cardmediumpage.ui
 modules/swriter/ui/ccdialog.ui
 modules/swriter/ui/characterproperties.ui
-modules/swriter/ui/charurlpage.ui
 modules/swriter/ui/columndialog.ui
 modules/swriter/ui/columnpage.ui
 modules/swriter/ui/columnwidth.ui

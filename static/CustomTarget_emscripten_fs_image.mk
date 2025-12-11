@@ -592,7 +592,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/cardmediumpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/ccdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/characterproperties.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/charurlpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/checkbox.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/columndialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/columnpage.ui \
