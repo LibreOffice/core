@@ -662,7 +662,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
     return true;
 }
 
-Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
+Any Runtime::pyObject2Any(const PyRef & source) const
 {
     if (!impl || !impl->cargo->valid)
     {
@@ -726,7 +726,7 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
         auto sRange = asNonConstRange(s);
         for (Py_ssize_t i = 0; i < PyTuple_Size (o); i++)
         {
-            sRange[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
+            sRange[i] = pyObject2Any (PyTuple_GetItem (o, i) );
         }
         a <<= s;
     }
@@ -737,7 +737,7 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
         auto sRange = asNonConstRange(s);
         for (Py_ssize_t i = 0; i < l; i++)
         {
-            sRange[i] = pyObject2Any (PyList_GetItem (o, i), mode );
+            sRange[i] = pyObject2Any (PyList_GetItem (o, i) );
         }
         a <<= s;
     }
@@ -797,13 +797,6 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
         }
         else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
         {
-            if( ACCEPT_UNO_ANY != mode )
-            {
-                throw RuntimeException(
-                    u"uno.Any instance not accepted during method call, "
-                    "use uno.invoke instead"_ustr );
-            }
-
             a = pyObject2Any( PyRef( PyObject_GetAttrString( o , "value" ), SAL_NO_ACQUIRE) );
             Type t;
             pyObject2Any( PyRef( PyObject_GetAttrString( o, "type" ), SAL_NO_ACQUIRE ) ) >>= t;

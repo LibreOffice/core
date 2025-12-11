@@ -177,8 +177,7 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 
 PyRef PyUNO_callable_new (
     const css::uno::Reference<css::script::XInvocation2> &xInv,
-    const OUString &methodName,
-    ConversionMode mode = REJECT_UNO_ANY );
+    const OUString &methodName );
 
 PyObject* PyUNO_Type_new (const char *typeName , css::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );

@@ -392,10 +392,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
             {
                 throw RuntimeException( "Attribute " + attrName + " unknown" );
             }
-            callable = PyUNO_callable_new (
-                me->members->xInvocation,
-                attrName,
-                ACCEPT_UNO_ANY);
+            callable = PyUNO_callable_new ( me->members->xInvocation, attrName );
             paras = args;
         }
         else
@@ -1446,7 +1443,7 @@ static int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     try
     {
         Runtime runtime;
-        Any val= runtime.pyObject2Any(value, ACCEPT_UNO_ANY);
+        Any val= runtime.pyObject2Any(value);
 
         OUString attrName( OUString::createFromAscii( name ) );
         {

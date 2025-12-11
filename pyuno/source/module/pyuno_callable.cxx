@@ -37,7 +37,6 @@ struct PyUNO_callable_Internals
 {
     Reference<XInvocation2> xInvocation;
     OUString methodName;
-    ConversionMode mode;
 };
 
 struct PyUNO_callable
@@ -75,7 +74,7 @@ static PyObject* PyUNO_callable_call(
     {
         Runtime runtime;
         cargo = runtime.getImpl()->cargo;
-        any_params = runtime.pyObject2Any (args, me->members->mode);
+        any_params = runtime.pyObject2Any (args);
 
         if (any_params.getValueTypeClass () == css::uno::TypeClass_SEQUENCE)
         {
@@ -256,8 +255,7 @@ static PyTypeObject PyUNO_callable_Type =
 
 PyRef PyUNO_callable_new (
     const Reference<XInvocation2> &my_inv,
-    const OUString & methodName,
-    enum ConversionMode mode )
+    const OUString & methodName )
 {
     PyUNO_callable* self;
 
@@ -270,7 +268,6 @@ PyRef PyUNO_callable_new (
     self->members = new PyUNO_callable_Internals;
     self->members->xInvocation = my_inv;
     self->members->methodName = methodName;
-    self->members->mode = mode;
 
     return PyRef( reinterpret_cast<PyObject*>(self), SAL_NO_ACQUIRE );
 }
