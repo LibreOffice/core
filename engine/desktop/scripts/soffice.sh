@@ -37,8 +37,6 @@ export SAL_ENABLE_FILE_LOCKING
 # uncomment line below if you encounter problems starting soffice on your system
 # SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
-#@JITC_PROCESSOR_TYPE_EXPORT@
-
 # resolve installation directory
 sd_cwd=$(pwd)
 sd_res="$0"
