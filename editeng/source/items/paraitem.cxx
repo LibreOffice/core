@@ -553,7 +553,7 @@ bool SvxWidowsItem::GetPresentation
 
         case SfxItemPresentation::Complete:
         {
-            rText = EditResId(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EditResId(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_WIDOWS_COMPLETE);
             break;
         }
 
@@ -597,7 +597,7 @@ bool SvxOrphansItem::GetPresentation
 
         case SfxItemPresentation::Complete:
         {
-            rText = EditResId(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EditResId(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_ORPHANS_COMPLETE);
             break;
         }
 

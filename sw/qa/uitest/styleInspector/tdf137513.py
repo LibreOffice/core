@@ -40,10 +40,10 @@ class tdf137513(UITestCase):
             xTableContent = xListBox.getChild('0').getChild('1')
             self.assertEqual(5, len(xTableContent.getChildren()))
             self.assertEqual("Follow Style\tTable Contents", get_state_as_dict(xTableContent.getChild('0'))['Text'])
-            self.assertEqual("Para Line Number Count\tFalse", get_state_as_dict(xTableContent.getChild('1'))['Text'])
-            self.assertEqual("Para Line Number Start Value\t0", get_state_as_dict(xTableContent.getChild('2'))['Text'])
-            self.assertEqual("Para Orphans\t0", get_state_as_dict(xTableContent.getChild('3'))['Text'])
-            self.assertEqual("Para Widows\t0", get_state_as_dict(xTableContent.getChild('4'))['Text'])
+            self.assertEqual("Para Don’t split at beginning (lines)\t0", get_state_as_dict(xTableContent.getChild('1'))['Text'])
+            self.assertEqual("Para Don’t split at end (lines)\t0", get_state_as_dict(xTableContent.getChild('2'))['Text'])
+            self.assertEqual("Para Line Number Count\tFalse", get_state_as_dict(xTableContent.getChild('3'))['Text'])
+            self.assertEqual("Para Line Number Start Value\t0", get_state_as_dict(xTableContent.getChild('4'))['Text'])
 
             xParDirFormatting = xListBox.getChild('1')
 
