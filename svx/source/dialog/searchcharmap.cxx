@@ -53,10 +53,6 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
     if (aCode.GetModifier())
         return false;
 
-    int tmpSelected = mnSelectedIndex;
-
-    bool bRet = true;
-
     switch (aCode.GetCode())
     {
         case KEY_RETURN:
@@ -68,25 +64,13 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
         case KEY_PAGEUP:
         case KEY_PAGEDOWN:
         case KEY_HOME:
+        case KEY_END:
         case KEY_TAB:
         case KEY_ESCAPE:
             return SvxShowCharSet::KeyInput(rKEvt);
-        case KEY_END:
-            tmpSelected = getMaxCharCount() - 1;
-            break;
         default:
-            tmpSelected = -1;
-            bRet = false;
-            break;
+            return false;
     }
-
-    if ( tmpSelected >= 0 )
-    {
-        SelectIndex( tmpSelected, true );
-        maPreSelectHdl.Call(*this);
-    }
-
-    return bRet;
 }
 
 void SvxSearchCharSet::SelectCharacter( const Subset* sub )

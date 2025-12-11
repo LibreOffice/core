@@ -422,7 +422,7 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
             tmpSelected = 0;
             break;
         case KEY_END:
-            tmpSelected = mxFontCharMap->GetCharCount() - 1;
+            tmpSelected = getMaxCharCount() - 1;
             break;
         case KEY_TAB:   // some fonts have a character at these unicode control codes
         case KEY_ESCAPE:
