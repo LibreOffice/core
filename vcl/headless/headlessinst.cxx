@@ -9,6 +9,7 @@
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
 #include <headless/svpdata.hxx>
+#include <staticsalinstance.hxx>
 #include <unistd.h>
 
 class HeadlessSalInstance : public SvpSalInstance

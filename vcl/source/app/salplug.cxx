@@ -51,7 +51,7 @@
 
 #if defined(DISABLE_DYNLOADING) || !HAVE_FEATURE_UI
 #define STATIC_SAL_INSTANCE 1
-extern "C" SalInstance* create_SalInstance();
+#include <staticsalinstance.hxx>
 #else
 #define STATIC_SAL_INSTANCE 0
 #include <osl/module.hxx>
