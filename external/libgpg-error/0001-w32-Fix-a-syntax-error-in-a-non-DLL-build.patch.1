@@ -1,0 +1,25 @@
+From 421e101cf9760a4bc4f296d12ce25a7c3fe5b7b2 Mon Sep 17 00:00:00 2001
+From: Werner Koch <wk@gnupg.org>
+Date: Fri, 12 Dec 2025 11:34:00 +0100
+Subject: [PATCH] w32: Fix a syntax error in a non-DLL build
+
+* src/w32-utils.c (_gpgrt_w32__init_utils): Fix syntax error.
+---
+ src/w32-utils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/w32-utils.c b/src/w32-utils.c
+index d8f4896..5cf4fbd 100644
+--- a/src/w32-utils.c
++++ b/src/w32-utils.c
+@@ -159,6 +159,6 @@ w32_utils_init (void)
+ void
+ _gpgrt_w32__init_utils (void)
+ {
+-  w32_utils_init ().
++  w32_utils_init ();
+ }
+ #endif
+--
+2.39.5
+
