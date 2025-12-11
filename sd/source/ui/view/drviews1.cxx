@@ -1118,8 +1118,12 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                 }
                 if (GetDoc()->HasCanvasPage() && getCurrentPage()->IsCanvasPage() && bAllowChangeFocus)
                 {
+                    bool bShowCenter = maCanvasPageVisArea.IsEmpty();
                     ::tools::JsonWriter aJsonWriter;
-                    aJsonWriter.put("commandName", "CanvasPageVisArea");
+                    if (bShowCenter)
+                        aJsonWriter.put("commandName", "CanvasPageCenter");
+                    else
+                        aJsonWriter.put("commandName", "CanvasPageVisArea");
                     {
                         auto jsonState = aJsonWriter.startNode("state");
                         aJsonWriter.put("x", maCanvasPageVisArea.Left());
