@@ -1860,6 +1860,12 @@ void Window::LoseFocus()
     CompatNotify( aNEvt );
 }
 
+void Window::SetCommandHdl(const Link<const CommandEvent&, bool>& rLink)
+{
+    if (mpWindowImpl)
+        mpWindowImpl->maCommandHdl = rLink;
+}
+
 void Window::SetHelpHdl(const Link<vcl::Window&, bool>& rLink)
 {
     if (mpWindowImpl) // may be called after dispose
@@ -1924,6 +1930,9 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
+    if (mpWindowImpl && mpWindowImpl->maCommandHdl.Call(rCEvt))
+        return;
+
     CallEventListeners( VclEventId::WindowCommand, const_cast<CommandEvent *>(&rCEvt) );
 
     NotifyEvent aNEvt( NotifyEventType::COMMAND, this, &rCEvt );

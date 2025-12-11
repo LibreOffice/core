@@ -192,6 +192,7 @@ protected:
 
 private:
     DECL_LINK(EventListener, VclWindowEvent&, void);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
     DECL_LINK(MouseEventListener, VclWindowEvent&, void);
     DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
@@ -1508,7 +1509,6 @@ protected:
     DECL_LINK(EditedEntryHdl, const IterString&, bool);
     DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
-    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
     DECL_LINK(CustomRenderHdl, svtree_render_args, void);
     DECL_LINK(CustomMeasureHdl, svtree_measure_args, Size);
@@ -1893,7 +1893,6 @@ private:
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
-    DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
     DECL_LINK(DumpImageHdl, const ::IconView::encoded_image_query&, bool);
 

@@ -368,6 +368,7 @@ SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* p
     , m_bMouseEventListener(false)
     , m_nFreezeCount(0)
 {
+    m_xWidget->SetCommandHdl(LINK(this, SalInstanceWidget, CommandHdl));
 }
 
 void SalInstanceWidget::set_sensitive(bool sensitive) { m_xWidget->Enable(sensitive); }
@@ -635,6 +636,7 @@ void SalInstanceWidget::queue_resize() { m_xWidget->queue_resize(); }
 
 SalInstanceWidget::~SalInstanceWidget()
 {
+    m_xWidget->SetCommandHdl(Link<const CommandEvent&, bool>());
     if (m_aStyleUpdatedHdl.IsSet())
         m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, SettingsChangedHdl));
     if (m_aMnemonicActivateHdl.IsSet())
@@ -809,6 +811,11 @@ bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
 IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 {
     HandleEventListener(rEvent);
+}
+
+IMPL_LINK(SalInstanceWidget, CommandHdl, const CommandEvent&, rEvent, bool)
+{
+    return signal_command(rEvent);
 }
 
 IMPL_LINK(SalInstanceWidget, KeyEventListener, VclWindowEvent&, rEvent, bool)
@@ -3744,7 +3751,6 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     m_xTreeView->SetDeselectHdl(LINK(this, SalInstanceTreeView, DeSelectHdl));
     m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
     m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
-    m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
     m_xTreeView->SetCustomRenderHdl(LINK(this, SalInstanceTreeView, CustomRenderHdl));
     m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
     const std::vector<tools::Long> aTabPositions{ 0 };
@@ -5018,7 +5024,6 @@ SalInstanceTreeView::~SalInstanceTreeView()
     }
     if (g_DragSource == this)
         g_DragSource = nullptr;
-    m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
     m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
     m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
     m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
@@ -5234,11 +5239,6 @@ bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
     return bRet;
 }
 
-IMPL_LINK(SalInstanceTreeView, PopupMenuHdl, const CommandEvent&, rEvent, bool)
-{
-    return signal_command(rEvent);
-}
-
 IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)
 {
     return signal_editing_started(SalInstanceTreeIter(pEntry));
@@ -5258,7 +5258,6 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
     m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
     m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
     m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
-    m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
 }
 
 int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
@@ -5625,11 +5624,6 @@ IMPL_LINK_NOARG(SalInstanceIconView, DeSelectHdl, SvTreeListBox*, void)
 IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
 {
     return !signal_item_activated();
-}
-
-IMPL_LINK(SalInstanceIconView, CommandHdl, const CommandEvent&, rEvent, bool)
-{
-    return signal_command(rEvent);
 }
 
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
@@ -6083,7 +6077,6 @@ SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea,
     m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
     m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
     m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
-    m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
     m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     m_xDrawingArea->SetGetSurroundingHdl(LINK(this, SalInstanceDrawingArea, GetSurroundingHdl));
     m_xDrawingArea->SetDeleteSurroundingHdl(
@@ -6194,7 +6187,6 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
     m_xDrawingArea->SetDeleteSurroundingHdl(Link<const Selection&, bool>());
     m_xDrawingArea->SetGetSurroundingHdl(Link<OUString&, int>());
     m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
-    m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
     m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
     m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
     m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
@@ -6294,11 +6286,6 @@ IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
 {
     m_aStyleUpdatedHdl.Call(*this);
-}
-
-IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
-{
-    return signal_command(rEvent);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, GetSurroundingHdl, OUString&, rSurrounding, int)
