@@ -1067,12 +1067,17 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
 
     bool bMissingJustBullet = false;
+    bool bMissingIdeographicComma = false;
 
     // Add required Unicode characters, if any
     if ( !rMissingCodes.isEmpty() )
     {
         FcCharSet *codePoints = FcCharSetCreate();
-        bMissingJustBullet = rMissingCodes.getLength() == 1 && rMissingCodes[0] == 0xb7;
+        if (rMissingCodes.getLength() == 1)
+        {
+            bMissingJustBullet = rMissingCodes[0] == 0xb7;
+            bMissingIdeographicComma = rMissingCodes[0] == 0x3001;
+        }
         for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
         {
             // also handle unicode surrogates
@@ -1262,11 +1267,13 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     }();
     if (bAbortOnFontSubstitute && rPattern.maTargetName != rPattern.maSearchName)
     {
-        if (bMissingJustBullet)
+        if (bMissingJustBullet || bMissingIdeographicComma)
         {
-            // Some fonts exist in "more_fonts", but have no U+00B7 MIDDLE DOT
-            // so will always glyph fallback on measuring mnBulletOffset in
-            // FontMetricData::ImplInitTextLineSize
+            // Some fonts exist in "more_fonts", but:
+            // a) have no U+00B7 MIDDLE DOT so will always glyph fallback on
+            // measuring mnBulletOffset in FontMetricData::ImplInitTextLineSize
+            // b) have no U+3001 IDEOGRAPHIC COMMA so will always glyph fallback on
+            // measuring its width in FontMetricData::ImplInitFlags for CJK text
             return;
         }
         if (rPattern.maTargetName == "Linux Libertine G" && rPattern.maSearchName == "Linux Libertine O")
