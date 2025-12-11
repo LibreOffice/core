@@ -301,7 +301,7 @@ void StatusBarManager::CreateControllers()
         rtl::Reference<StatusbarItem> pStatusbarItem
             = new StatusbarItem(m_pStatusBar, nId, aCommandURL);
 
-        std::vector< uno::Any > aPropVector
+        uno::Sequence<uno::Any> aArgs
         {
             uno::Any(comphelper::makePropertyValue(u"CommandURL"_ustr, aCommandURL)),
             uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, u""_ustr)),
@@ -315,8 +315,6 @@ void StatusBarManager::CreateControllers()
             uno::Any(comphelper::makePropertyValue(
                 u"StatusbarItem"_ustr, uno::Reference<ui::XStatusbarItem>(pStatusbarItem)))
         };
-
-        uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
         // 1) UNO Statusbar controllers, registered in Controllers.xcu
         if ( m_xStatusbarControllerFactory.is() &&
