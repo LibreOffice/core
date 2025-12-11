@@ -197,13 +197,21 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
     auto resultNode = rJson.startNode("result");
 
     const auto& entries = ImplGetSVData()->mpDefInst->getUsedUIList();
+    if (!entries.empty())
     {
         auto childrenNode = rJson.startArray("used");
         for (const auto& entry : entries)
             rJson.putSimpleValue(entry);
     }
 
-    rJson.put("CompleteWriterDialogCoverage", jsdialog::completeWriterDialogList(entries));
+    std::vector<OUString> missingWriterDialogUIs = jsdialog::completeWriterDialogList(entries);
+    rJson.put("CompleteWriterDialogCoverage", missingWriterDialogUIs.empty());
+    if (!missingWriterDialogUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingWriterDialogCoverage");
+        for (const auto& entry : missingWriterDialogUIs)
+            rJson.putSimpleValue(entry);
+    }
 }
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
