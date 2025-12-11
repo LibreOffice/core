@@ -107,7 +107,6 @@
 #include <vcl/abstdlg.hxx>
 
 #ifdef _WIN32
-#include <o3tl/char16_t2wchar_t.hxx>
 #include <Shlobj.h>
 #ifdef GetTempPath
 #undef GetTempPath
