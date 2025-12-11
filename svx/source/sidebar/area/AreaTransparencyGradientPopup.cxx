@@ -133,23 +133,13 @@ void AreaTransparencyGradientPopup::ExecuteValueModify()
     mxMtrTrgrAngle->set_value(nVal, FieldUnit::DEGREE);
     //End of new code
 
-    basegfx::BColorStops aColorStops;
     basegfx::BColor aStartBColor(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT) / 100.0);
     aStartBColor.clamp();
     basegfx::BColor aEndBColor(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT) / 100.0);
     aEndBColor.clamp();
 
-    if (maColorStops.size() >= 2)
-    {
-        aColorStops = maColorStops;
-        aColorStops.front()  = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), aEndBColor);
-    }
-    else
-    {
-        aColorStops.addStop(0.0, aStartBColor);
-        aColorStops.addStop(1.0, aEndBColor);
-    }
+    basegfx::BColorStops aColorStops = maColorStops; // copy
+    aColorStops.changeStartAndEnd(aStartBColor, aEndBColor);
 
     basegfx::BGradient aTmpGradient(
         aColorStops,

@@ -512,24 +512,13 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
 
 basegfx::BColorStops SvxTransparenceTabPage::createColorStops()
 {
-    basegfx::BColorStops aColorStops;
     basegfx::BColor aStartBColor(m_xMtrTrgrStartValue->get_value(FieldUnit::PERCENT) / 100.0);
     aStartBColor.clamp();
     basegfx::BColor aEndBColor(m_xMtrTrgrEndValue->get_value(FieldUnit::PERCENT) / 100.0);
     aEndBColor.clamp();
 
-    if(maColorStops.size() >= 2)
-    {
-        aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), aEndBColor);
-    }
-    else
-    {
-        aColorStops.addStop(0.0, aStartBColor);
-        aColorStops.addStop(1.0, aEndBColor);
-    }
-
+    basegfx::BColorStops aColorStops = maColorStops;
+    aColorStops.changeStartAndEnd(aStartBColor, aEndBColor);
     return aColorStops;
 }
 

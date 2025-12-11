@@ -103,7 +103,6 @@ private:
 
 public:
     typedef typename std::vector<BColorStop>::size_type size_type;
-    typedef typename std::vector<BColorStop>::iterator iterator;
     typedef typename std::vector<BColorStop>::const_iterator const_iterator;
     typedef typename std::vector<BColorStop>::const_reverse_iterator const_reverse_iterator;
 
@@ -124,7 +123,7 @@ public:
 
     // constructor with two colors to explicitly create a
     // BColorStops for StartColor @0.0 & EndColor @1.0
-    BColorStops(const BColor& rStart, const BColor& rEnd);
+    BColorStops(BColor const& rStart, BColor const& rEnd);
 
     BColorStops& operator=(const BColorStops& rOther)
     {
@@ -143,7 +142,10 @@ public:
 
     BColorStop const& getStop(size_t i) const { return maStops[i]; }
     double getStopOffset(size_t i) const { return maStops[i].getStopOffset(); }
-    BColor const& getStopColor(size_t i) const { return maStops[i].getStopColor(); }
+
+    void changeStartAndEnd(BColor const& rStart, BColor const& rEnd);
+
+    BColor getStopColor(size_t i) const { return maStops[i].getStopColor(); }
 
     void removeLastStop() { return maStops.pop_back(); }
 
@@ -151,16 +153,12 @@ public:
     void clear() { maStops.clear(); }
     bool empty() const { return maStops.empty(); }
     size_type size() const { return maStops.size(); }
-    iterator begin() { return maStops.begin(); }
-    iterator end() { return maStops.end(); }
     const_iterator begin() const { return maStops.begin(); }
     const_iterator end() const { return maStops.end(); }
     const_reverse_iterator rbegin() const { return maStops.rbegin(); }
     const_reverse_iterator rend() const { return maStops.rend(); }
     const BColorStop& front() const { return maStops.front(); }
     const BColorStop& back() const { return maStops.back(); }
-    BColorStop& front() { return maStops.front(); }
-    BColorStop& back() { return maStops.back(); }
     bool operator==(BColorStops const& rOther) const { return maStops == rOther.maStops; }
 
     // helper data struct to support buffering entries in
