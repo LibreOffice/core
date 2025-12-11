@@ -153,7 +153,6 @@ protected:
     Point           MapIndexToPixel( int) const;
     DECL_LINK(VscrollHdl, weld::ScrolledWindow&, void);
 
-    void            init();
     tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize) const;
 };
 

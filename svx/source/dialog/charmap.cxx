@@ -69,12 +69,18 @@ SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWi
     , mxScrollArea(std::move(pScrolledWindow))
     , mnX(0)
     , mnY(0)
+    , m_nXGap(0)
+    , m_nYGap(0)
+    , mbDrag(false)
+    , mnSelectedIndex(-1)
     , maFontSize(0, 0)
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
 {
-    init();
+    mxScrollArea->connect_vadjustment_value_changed(LINK(this, SvxShowCharSet, VscrollHdl));
+    getFavCharacterList();
+    // other settings depend on selected font => see RecalculateFont
 }
 
 void SvxShowCharSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -90,19 +96,6 @@ void SvxShowCharSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // tdf#121232 set a size request that will result in a 0 m_nXGap by default
     mxScrollArea->set_size_request(COLUMN_COUNT * mnX + mxScrollArea->get_scroll_thickness() + 2,
                                    ROW_COUNT * mnY);
-}
-
-void SvxShowCharSet::init()
-{
-    mnSelectedIndex = -1;    // TODO: move into init list when it is no longer static
-    m_nXGap = 0;
-    m_nYGap = 0;
-
-    mxScrollArea->connect_vadjustment_value_changed(LINK(this, SvxShowCharSet, VscrollHdl));
-    getFavCharacterList();
-    // other settings depend on selected font => see RecalculateFont
-
-    mbDrag = false;
 }
 
 void SvxShowCharSet::Resize()
