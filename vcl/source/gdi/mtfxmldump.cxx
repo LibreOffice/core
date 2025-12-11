@@ -658,7 +658,7 @@ void MetafileXmlDump::filterAllActionTypes()
     maFilter.fill(true);
 }
 
-void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
+void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream) const
 {
     tools::XmlWriter aWriter(&rStream);
     aWriter.startDocument();
@@ -670,7 +670,7 @@ void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
     aWriter.endDocument();
 }
 
-void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter)
+void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter) const
 {
     const MapMode& aMtfMapMode = rMetaFile.GetPrefMapMode();
     rWriter.attribute("mapunit", convertMapUnitToString(aMtfMapMode.GetMapUnit()));
