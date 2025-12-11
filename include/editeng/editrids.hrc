@@ -237,8 +237,8 @@
 #define RID_SVXITEMS_LINESPACING_FIXED          NC_("RID_SVXITEMS_LINESPACING_FIXED", "Fixed")
 // To translators: %1 == will be replaced by the number of lines
 #define RID_SVXITEMS_LINES                      NC_("RID_SVXITEMS_LINES", "%1 Lines")
-#define RID_SVXITEMS_WIDOWS_COMPLETE            NC_("RID_SVXITEMS_WIDOWS_COMPLETE", "Widow control")
-#define RID_SVXITEMS_ORPHANS_COMPLETE           NC_("RID_SVXITEMS_ORPHANS_COMPLETE", "Orphan control")
+#define RID_SVXITEMS_WIDOWS_COMPLETE            NC_("RID_SVXITEMS_WIDOWS_COMPLETE", "Don’t split at end of paragraph: %1 lines")
+#define RID_SVXITEMS_ORPHANS_COMPLETE           NC_("RID_SVXITEMS_ORPHANS_COMPLETE", "Don’t split at beginning of paragraph: %1 lines")
 #define RID_SVXITEMS_HYPHEN_MINLEAD             NC_("RID_SVXITEMS_HYPHEN_MINLEAD", "%1 characters at end of line")
 #define RID_SVXITEMS_HYPHEN_MINTRAIL            NC_("RID_SVXITEMS_HYPHEN_MINTRAIL", "%1 characters at beginning of line")
 #define RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD    NC_("RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD", "%1 compound word characters at end of line")
