@@ -48,12 +48,7 @@ int SvxSearchCharSet::LastInView() const
 
 bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
 {
-    vcl::KeyCode aCode = rKEvt.GetKeyCode();
-
-    if (aCode.GetModifier())
-        return false;
-
-    switch (aCode.GetCode())
+    switch (rKEvt.GetKeyCode().GetCode())
     {
         case KEY_RETURN:
         case KEY_SPACE:
