@@ -16,6 +16,8 @@
 #include <sal/log.hxx>
 #ifdef _WIN32
 #include <tools/UnixWrappers.h>
+#else
+#include <limits.h>
 #endif
 
 #include <iostream>
