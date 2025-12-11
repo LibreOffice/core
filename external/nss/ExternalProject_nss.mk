@@ -55,7 +55,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(SRCDIR)/external/nss/nsinstall.py
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
+		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1 CPU_ARCH=x86_64)) \
 		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 		$(if $(filter POWERPC64,$(CPUNAME)),USE_64=1 CPU_ARCH=ppc64le) \
 		$(if $(filter MACOSX,$(OS)),\
@@ -66,8 +66,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(if $(filter ARM,$(CPUNAME)),NSS_DISABLE_ARM32_NEON=1) \
 		NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
 		$(if $(CROSS_COMPILING),CROSS_COMPILE=1) \
-		$(if $(filter MACOSX-X86_64-arm64,$(OS)-$(CPUNAME)-$(shell uname -m)), \
-			CPU_ARCH=x86_64) \
 		NSDISTMODE=copy \
 		$(MAKE) \
 			AR="$(AR)" \
