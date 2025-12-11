@@ -74,26 +74,31 @@
  #  define S_IWGRP S_IWUSR
 --- src/Makefile.am	2022-08-19 17:39:54.000000000 +0900
 +++ src/Makefile.am~	2023-08-30 15:41:10.371855465 +0900
-@@ -208,8 +208,8 @@
+@@ -214,9 +214,9 @@
  # libgpg_error_la_DEPENDENCIES = \
  #        $(srcdir)/gpg-error.vers
  
--libgpg_error_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
+-libgpg_error_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" \
+-                           -DSYSCONFDIR=\"$(sysconfdir)\"
 -libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) $(LIBTHREAD)
-+libgpg_error_la_CPPFLAGS = -DLOCALEDIR=$(localelidir)
++libgpg_error_la_CPPFLAGS = -DLOCALEDIR=$(localelidir) \
++                           -DSYSCONFDIR=$(sysconfdir)
 +libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) -ladvapi32 $(LIBTHREAD)
  
  gpg_error_SOURCES = strsource-sym.c strerror-sym.c gpg-error.c
  gpg_error_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\" \
 --- src/Makefile.in	2023-08-30 14:44:01.102310369 +0900
 +++ src/Makefile.in~	2023-08-30 15:54:38.371855157 +0900
-@@ -662,8 +662,8 @@
+@@ -681,10 +681,10 @@
  
  # libgpg_error_la_DEPENDENCIES = \
  #        $(srcdir)/gpg-error.vers
--libgpg_error_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
+-libgpg_error_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" \
+-                           -DSYSCONFDIR=\"$(sysconfdir)\"
++libgpg_error_la_CPPFLAGS = -DLOCALEDIR=$(localedir) \
++                           -DSYSCONFDIR=$(sysconfdir)
+ 
 -libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) $(LIBTHREAD)
-+libgpg_error_la_CPPFLAGS = -DLOCALEDIR=$(localedir)
 +libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) -ladvapi32 $(LIBTHREAD)
  gpg_error_SOURCES = strsource-sym.c strerror-sym.c gpg-error.c
  gpg_error_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\" \
