@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
 		$(SRCDIR)/external/nss/nsinstall.py
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
+		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1 CPU_ARCH=x86_64)) \
 		$(if $(filter iOS,$(OS)),\
 			$(if $(filter arm64,$(CC)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),\
