@@ -51,20 +51,20 @@ class CheckNamedPropertyValues(unittest.TestCase):
 
         self.assertFalse(xCont.hasElements(),  "Initial container is not empty")
 
-        uno.invoke(xCont, "insertByName", ("prop1", prop1))
+        xCont.insertByName("prop1", prop1)
         ret = xCont["prop1"]
         self.assertEqual(p1.Name, ret[0].Name)
         self.assertEqual(p1.Value, ret[0].Value)
 
-        uno.invoke(xCont, "replaceByName", ("prop1", prop2))
+        xCont.replaceByName("prop1", prop2)
         ret = xCont["prop1"]
         self.assertEqual(p2.Name, ret[0].Name)
         self.assertEqual(p2.Value, ret[0].Value)
 
         xCont.removeByName("prop1")
         self.assertFalse(xCont.hasElements(), "Could not remove PropertyValue.")
-        uno.invoke(xCont, "insertByName", ("prop1", prop1))
-        uno.invoke(xCont, "insertByName", ("prop2", prop2))
+        xCont.insertByName("prop1", prop1)
+        xCont.insertByName("prop2", prop2)
         self.assertTrue(xCont.hasElements(), "Did not insert PropertyValue")
         names = xCont.getElementNames()
         self.assertEqual(2, len(names), "Not all element names were returned")
@@ -73,10 +73,10 @@ class CheckNamedPropertyValues(unittest.TestCase):
             self.assertIn(names[i], ["prop1", "prop2"], "Got a wrong element name")
 
         with self.assertRaises(ElementExistException):
-            uno.invoke(xCont, "insertByName", ("prop2", prop1))
+            xCont.insertByName("prop2", prop1)
 
         with self.assertRaises(IllegalArgumentException):
-            uno.invoke(xCont, "insertByName", ("prop3", "Example String"))
+            xCont.insertByName("prop3", "Example String")
 
         with self.assertRaises(NoSuchElementException):
             xCont.removeByName("prop3")

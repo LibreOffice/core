@@ -30,7 +30,7 @@ class TestXIndexContainer(CollectionsTestBase):
         values = sm.createInstanceWithContext("com.sun.star.document.IndexedPropertyValues", self.context)
         for i in range(count):
             properties = (PropertyValue(Name='n'+str(i), Value='v'+str(i)),)
-            uno.invoke(values, "insertByIndex", (i, uno.Any("[]com.sun.star.beans.PropertyValue", properties)))
+            values.insertByIndex(i, uno.Any("[]com.sun.star.beans.PropertyValue", properties))
         return values
 
     def generateTestTuple(self, values):

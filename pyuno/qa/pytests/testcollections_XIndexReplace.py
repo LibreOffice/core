@@ -28,7 +28,7 @@ class TestXIndexReplace(CollectionsTestBase):
         index = getContentIndexInstance(doc)
         for i in range(10):
             styles = ('n'+str(i),)
-            uno.invoke(index.LevelParagraphStyles, "replaceByIndex", (i, uno.Any("[]string", styles)))
+            index.LevelParagraphStyles.replaceByIndex(i, uno.Any("[]string", styles))
         return index
 
     def generateTestTuple(self, values):
