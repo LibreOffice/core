@@ -751,6 +751,25 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
             sTarget = "slide" + OUString::number(i + 1) + ".xml";
             break;
         }
+        else // If URL is linked to a shape, assign it's slide as target
+        {
+            Reference<XShapes> xShapes = xDrawPage;
+            sal_uInt32 nShapes = xShapes->getCount();
+            for (sal_uInt32 j = 0; j < nShapes; j++)
+            {
+                Reference<XShape> xShape;
+                xShapes->getByIndex(j) >>= xShape;
+                Reference<container::XNamed> xName(xShape, UNO_QUERY);
+                if (!xName)
+                    continue;
+                OUString sShapeName = "#" + xName->getName();
+                if (rURL == sShapeName)
+                {
+                    sTarget = "slide" + OUString::number(i + 1) + ".xml";
+                    break;
+                }
+            }
+        }
     }
 
     return sTarget;
