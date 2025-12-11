@@ -1371,19 +1371,11 @@ sal_Int32 AreaPropertyPanelBase::GetSelectedTransparencyTypeIndex() const
 
 basegfx::BColorStops AreaPropertyPanelBase::createColorStops()
 {
-    basegfx::BColorStops aColorStops;
+    basegfx::BColorStops aColorStops = maColorStops;
 
-    if (maColorStops.size() >= 2)
-    {
-        aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), mxLbFillGradFrom->GetSelectEntryColor().getBColor());
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), mxLbFillGradTo->GetSelectEntryColor().getBColor());
-    }
-    else
-    {
-        aColorStops.addStop(0.0, mxLbFillGradFrom->GetSelectEntryColor().getBColor());
-        aColorStops.addStop(1.0, mxLbFillGradTo->GetSelectEntryColor().getBColor());
-    }
+    aColorStops.changeStartAndEnd(
+        mxLbFillGradFrom->GetSelectEntryColor().getBColor(),
+        mxLbFillGradTo->GetSelectEntryColor().getBColor());
 
     return aColorStops;
 }
