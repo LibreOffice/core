@@ -2742,6 +2742,7 @@ private:
     GtkCssProvider* m_pBgCssProvider;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDragAction m_eDragAction;
+    gulong m_nPopupMenuSignalId;
 #endif
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
@@ -3318,6 +3319,7 @@ public:
         , m_pBgCssProvider(nullptr)
 #if !GTK_CHECK_VERSION(4, 0, 0)
         , m_eDragAction(GdkDragAction(0))
+        , m_nPopupMenuSignalId(0)
 #endif
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
@@ -3370,6 +3372,10 @@ public:
 
     virtual void connect_command(const Link<const CommandEvent&, bool>& rLink) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (!m_nPopupMenuSignalId)
+            m_nPopupMenuSignalId = g_signal_connect(m_pWidget, "popup-menu", G_CALLBACK(signalPopupMenu), this);
+#endif
         ensureButtonPressSignal();
         weld::Widget::connect_command(rLink);
     }
@@ -4141,6 +4147,10 @@ public:
 
         if (m_pDragCancelEvent)
             Application::RemoveUserEvent(m_pDragCancelEvent);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (m_nPopupMenuSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nPopupMenuSignalId);
+#endif
         if (m_nDragMotionSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragMotionSignalId);
         if (m_nDragDropSignalId)
@@ -13923,7 +13933,6 @@ private:
     gulong m_nRowDeletedSignalId;
     gulong m_nRowInsertedSignalId;
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gulong m_nPopupMenuSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nCrossingSignalid;
 #endif
@@ -14632,7 +14641,6 @@ public:
         , m_nTestCollapseRowSignalId(g_signal_connect(pTreeView, "test-collapse-row", G_CALLBACK(signalTestCollapseRow), this))
         , m_nVAdjustmentChangedSignalId(0)
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
         , m_nCrossingSignalid(g_signal_connect(pTreeView, "enter-notify-event", G_CALLBACK(signalCrossing), this))
 #endif
@@ -16634,7 +16642,6 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pTreeView, m_nCrossingSignalid);
         g_signal_handler_disconnect(m_pTreeView, m_nKeyPressSignalId);
-        g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
 #endif
         g_signal_handler_disconnect(m_pTreeModel, m_nRowDeletedSignalId);
         g_signal_handler_disconnect(m_pTreeModel, m_nRowInsertedSignalId);
@@ -16704,9 +16711,6 @@ private:
     gint m_nIdCol;
     gulong m_nSelectionChangedSignalId;
     gulong m_nItemActivatedSignalId;
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gulong m_nPopupMenu;
-#endif
     gulong m_nQueryTooltipSignalId = 0;
     ImplSVEvent* m_pSelectionChangeEvent;
 
@@ -16951,9 +16955,6 @@ public:
         , m_nSelectionChangedSignalId(g_signal_connect(pIconView, "selection-changed",
                                       G_CALLBACK(signalSelectionChanged), this))
         , m_nItemActivatedSignalId(g_signal_connect(pIconView, "item-activated", G_CALLBACK(signalItemActivated), this))
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        , m_nPopupMenu(g_signal_connect(pIconView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
-#endif
         , m_pSelectionChangeEvent(nullptr)
     {
         m_nIdCol = std::max(m_nTextCol, m_nImageCol) + 1;
@@ -17275,9 +17276,6 @@ public:
 
         g_signal_handler_disconnect(m_pIconView, m_nItemActivatedSignalId);
         g_signal_handler_disconnect(m_pIconView, m_nSelectionChangedSignalId);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        g_signal_handler_disconnect(m_pIconView, m_nPopupMenu);
-#endif
     }
 };
 
@@ -18274,7 +18272,6 @@ private:
 #endif
     gulong m_nQueryTooltip;
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gulong m_nPopupMenu;
     gulong m_nScrollEvent;
 #endif
     GtkGesture *m_pZoomGesture;
@@ -18452,7 +18449,6 @@ public:
         , m_pSurface(nullptr)
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nScrollEvent(g_signal_connect(m_pDrawingArea, "scroll-event", G_CALLBACK(signalScroll), this))
 #endif
     {
@@ -18709,9 +18705,6 @@ public:
             m_xAccessible->dispose();
 #if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pDrawingArea, m_nScrollEvent);
-#endif
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
 #endif
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
 #if GTK_CHECK_VERSION(4, 0, 0)
