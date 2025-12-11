@@ -35,11 +35,7 @@ $(gb_CustomTarget_workdir)/desktop/soffice/soffice.sh : \
 		| $(gb_CustomTarget_workdir)/desktop/soffice/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
-ifneq ($(JITC_PROCESSOR_TYPE),)
-	sed -e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/export JITC_PROCESSOR_TYPE=$(JITC_PROCESSOR_TYPE)/" $< > $@
-else
 	cp $< $@
-endif
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
 endif

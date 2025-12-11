@@ -9069,14 +9069,6 @@ AC_SUBST(LD_PLUGIN)
 AC_CHECK_FUNCS(posix_fallocate, HAVE_POSIX_FALLOCATE=YES, [HAVE_POSIX_FALLOCATE=NO])
 AC_SUBST(HAVE_POSIX_FALLOCATE)
 
-JITC_PROCESSOR_TYPE=""
-if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
-    # IBMs JDK needs this...
-    JITC_PROCESSOR_TYPE=6
-    export JITC_PROCESSOR_TYPE
-fi
-AC_SUBST([JITC_PROCESSOR_TYPE])
-
 if test $_os = "WINNT"; then
     for i in $PKGFORMAT; do
         if test "$i" = msi; then
