@@ -60,38 +60,19 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
     switch (aCode.GetCode())
     {
         case KEY_RETURN:
-            return SvxShowCharSet::KeyInput(rKEvt);
         case KEY_SPACE:
-            maDoubleClkHdl.Call(*this);
-            return true;
         case KEY_LEFT:
-            --tmpSelected;
-            break;
         case KEY_RIGHT:
-            ++tmpSelected;
-            break;
         case KEY_UP:
-            tmpSelected -= COLUMN_COUNT;
-            break;
         case KEY_DOWN:
-            tmpSelected += COLUMN_COUNT;
-            break;
         case KEY_PAGEUP:
-            tmpSelected -= ROW_COUNT * COLUMN_COUNT;
-            break;
         case KEY_PAGEDOWN:
-            tmpSelected += ROW_COUNT * COLUMN_COUNT;
-            break;
         case KEY_HOME:
-            tmpSelected = 0;
-            break;
+        case KEY_TAB:
+        case KEY_ESCAPE:
+            return SvxShowCharSet::KeyInput(rKEvt);
         case KEY_END:
             tmpSelected = getMaxCharCount() - 1;
-            break;
-        case KEY_TAB:   // some fonts have a character at these unicode control codes
-        case KEY_ESCAPE:
-            bRet = false;
-            tmpSelected = - 1;  // mark as invalid
             break;
         default:
             tmpSelected = -1;
