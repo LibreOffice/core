@@ -272,6 +272,162 @@ class Test(unohelper.Base, XTest):
     def isSequenceBoolean(self, value):
         return value == (True, True, False)
 
+    def getSequenceByte(self):
+        return (-12, 1, 12)
+
+    def isSequenceByte(self, value):
+        return value == b'\xF4\x01\x0C'
+
+    def getSequenceShort(self):
+        return (-1234, 1, 1234)
+
+    def isSequenceShort(self, value):
+        return value == (-1234, 1, 1234)
+
+    def getSequenceUnsignedShort(self):
+        return (1, 10, 54321)
+
+    def isSequenceUnsignedShort(self, value):
+        return value == (1, 10, 54321)
+
+    def getSequenceLong(self):
+        return (-123456, 1, 123456)
+
+    def isSequenceLong(self, value):
+        return value == (-123456, 1, 123456)
+
+    def getSequenceUnsignedLong(self):
+        return (1, 10, 3456789012)
+
+    def isSequenceUnsignedLong(self, value):
+        return value == (1, 10, 3456789012)
+
+    def getSequenceHyper(self):
+        return (-123456789, 1, 123456789)
+
+    def isSequenceHyper(self, value):
+        return value == (-123456789, 1, 123456789)
+
+    def getSequenceUnsignedHyper(self):
+        return (1, 10, 9876543210)
+
+    def isSequenceUnsignedHyper(self, value):
+        return value == (1, 10, 9876543210)
+
+    def getSequenceFloat(self):
+        return (-10.25, 1.5, 10.75)
+
+    def isSequenceFloat(self, value):
+        return value == (-10.25, 1.5, 10.75)
+
+    def getSequenceDouble(self):
+        return (-100.5, 1.25, 100.75)
+
+    def isSequenceDouble(self, value):
+        return value == (-100.5, 1.25, 100.75)
+
+    def getSequenceChar(self):
+        return ('a', 'B', 'Ö')
+
+    def isSequenceChar(self, value):
+        return value == ('a', 'B', 'Ö')
+
+    def getSequenceString(self):
+        return ('foo', 'barr', 'bazzz')
+
+    def isSequenceString(self, value):
+        return value == ('foo', 'barr', 'bazzz')
+
+    def getSequenceType(self):
+        return (
+            uno.getTypeByName('long'), uno.getTypeByName('void'),
+            uno.getTypeByName('[]org.libreoffice.embindtest.Enum'))
+
+    def isSequenceType(self, value):
+        return value == (
+            uno.getTypeByName('long'), uno.getTypeByName('void'),
+            uno.getTypeByName('[]org.libreoffice.embindtest.Enum'))
+
+    def getSequenceAny(self):
+        return (-123456, None, uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)))
+
+    def isSequenceAny(self, value):
+        return value == (-123456, None, (E_2, E3, E_10))
+
+    def getSequenceSequenceString(self):
+        return ((), ('foo', 'barr'), ('baz',))
+
+    def isSequenceSequenceString(self, value):
+        return value == ((), ('foo', 'barr'), ('baz',))
+
+    def getSequenceEnum(self):
+        return (E_2, E3, E_10)
+
+    def isSequenceEnum(self, value):
+        return value == (E_2, E3, E_10)
+
+    def getSequenceStruct(self):
+        return (
+            Struct(
+                True, -12, -1234, 1, -123456, 1, -123456789, 1, -10.25, -100.5, 'a', 'hä',
+                uno.getTypeByName('long'), -123456, (), E_2, StructLong(-123456),
+                uno.createUnoStruct(
+                    'org.libreoffice.embindtest.Template<'
+                        'any,org.libreoffice.embindtest.StructString>',
+                    StructString('foo'), -123456, -123456, StructString('barr')),
+                self),
+            Struct(
+                True, 1, 1, 10, 1, 10, 1, 10, 1.5, 1.25, 'B', 'barr', uno.getTypeByName('void'),
+                None, ('foo', 'barr'), E3, StructLong(1),
+                uno.createUnoStruct(
+                    'org.libreoffice.embindtest.Template<'
+                        'any,org.libreoffice.embindtest.StructString>',
+                    StructString('baz'), 1, None, StructString('foo')),
+                None),
+            Struct(
+                False, 12, 1234, 54321, 123456, 3456789012, 123456789, 9876543210, 10.75, 100.75,
+                'Ö', 'bazzz', uno.getTypeByName('[]org.libreoffice.embindtest.Enum'),
+                uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)), ('baz',), E_10,
+                StructLong(123456),
+                uno.createUnoStruct(
+                    'org.libreoffice.embindtest.Template<'
+                        'any,org.libreoffice.embindtest.StructString>',
+                    StructString('barr'), 123456,
+                    uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)),
+                    StructString('bazz')),
+                self))
+
+    def isSequenceStruct(self, value):
+        return value == (
+            Struct(
+                True, -12, -1234, 1, -123456, 1, -123456789, 1, -10.25, -100.5, 'a', 'hä',
+                uno.getTypeByName('long'), -123456, (), E_2, StructLong(-123456),
+                uno.createUnoStruct(
+                    'org.libreoffice.embindtest.Template<'
+                        'any,org.libreoffice.embindtest.StructString>',
+                    StructString('foo'), -123456, -123456, StructString('barr')),
+                self),
+            Struct(
+                True, 1, 1, 10, 1, 10, 1, 10, 1.5, 1.25, 'B', 'barr', uno.getTypeByName('void'),
+                None, ('foo', 'barr'), E3, StructLong(1),
+                uno.createUnoStruct(
+                    'org.libreoffice.embindtest.Template<'
+                        'any,org.libreoffice.embindtest.StructString>',
+                    StructString('baz'), 1, None, StructString('foo')),
+                None),
+            Struct(
+                False, 12, 1234, 54321, 123456, 3456789012, 123456789, 9876543210, 10.75, 100.75,
+                'Ö', 'bazzz', uno.getTypeByName('[]org.libreoffice.embindtest.Enum'),
+                uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)), ('baz',), E_10,
+                StructLong(123456),
+                uno.createUnoStruct(
+                    'org.libreoffice.embindtest.Template<'
+                        'any,org.libreoffice.embindtest.StructString>',
+                    StructString('barr'), 123456,
+                    uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)),
+                    StructString('bazz')),
+                self))
+
     def getNull(self):
         return None
 

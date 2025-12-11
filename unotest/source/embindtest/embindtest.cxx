@@ -463,6 +463,188 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
         verify(ok);
     }
     {
+        auto const val = test->getSequenceByte();
+        verify(val == css::uno::Sequence<sal_Int8>{ -12, 1, 12 });
+        bool const ok = test->isSequenceByte(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceShort();
+        verify(val == css::uno::Sequence<sal_Int16>{ -1234, 1, 1234 });
+        bool const ok = test->isSequenceShort(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceUnsignedShort();
+        verify(val == css::uno::Sequence<sal_uInt16>{ 1, 10, 54321 });
+        bool const ok = test->isSequenceUnsignedShort(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceLong();
+        verify(val == css::uno::Sequence<sal_Int32>{ -123456, 1, 123456 });
+        bool const ok = test->isSequenceLong(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceUnsignedLong();
+        verify(val == css::uno::Sequence<sal_uInt32>{ 1, 10, 3456789012 });
+        bool const ok = test->isSequenceUnsignedLong(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceHyper();
+        verify(val == css::uno::Sequence<sal_Int64>{ -123456789, 1, 123456789 });
+        bool const ok = test->isSequenceHyper(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceUnsignedHyper();
+        verify(val == css::uno::Sequence<sal_uInt64>{ 1, 10, 9876543210 });
+        bool const ok = test->isSequenceUnsignedHyper(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceFloat();
+        verify(val == css::uno::Sequence<float>{ -10.25, 1.5, 10.75 });
+        bool const ok = test->isSequenceFloat(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceDouble();
+        verify(val == css::uno::Sequence<double>{ -100.5, 1.25, 100.75 });
+        bool const ok = test->isSequenceDouble(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceChar();
+        verify(val == css::uno::Sequence<sal_Unicode>{ 'a', 'B', u'Ö' });
+        bool const ok = test->isSequenceChar(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceString();
+        verify(val == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr });
+        bool const ok = test->isSequenceString(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceType();
+        verify(
+            val
+            == css::uno::Sequence<css::uno::Type>{
+                   cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
+                   cppu::UnoType<css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get() });
+        bool const ok = test->isSequenceType(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceAny();
+        verify(val
+               == css::uno::Sequence<css::uno::Any>{
+                      css::uno::Any(-123456), css::uno::Any(),
+                      css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                          org::libreoffice::embindtest::Enum_E_2,
+                          org::libreoffice::embindtest::Enum_E3,
+                          org::libreoffice::embindtest::Enum_E_10 }) });
+        bool const ok = test->isSequenceAny(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceSequenceString();
+        verify(val
+               == css::uno::Sequence<css::uno::Sequence<OUString>>{
+                      {}, { u"foo"_ustr, u"barr"_ustr }, { u"baz"_ustr } });
+        bool const ok = test->isSequenceSequenceString(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceEnum();
+        verify(val
+               == css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                      org::libreoffice::embindtest::Enum_E_2, org::libreoffice::embindtest::Enum_E3,
+                      org::libreoffice::embindtest::Enum_E_10 });
+        bool const ok = test->isSequenceEnum(val);
+        verify(ok);
+    }
+    {
+        auto const val = test->getSequenceStruct();
+        verify(
+            val
+            == css::uno::Sequence<org::libreoffice::embindtest::Struct>{
+                   { true,
+                     -12,
+                     -1234,
+                     1,
+                     -123456,
+                     1,
+                     -123456789,
+                     1,
+                     -10.25,
+                     -100.5,
+                     'a',
+                     u"hä"_ustr,
+                     cppu::UnoType<sal_Int32>::get(),
+                     css::uno::Any(sal_Int32(-123456)),
+                     {},
+                     org::libreoffice::embindtest::Enum_E_2,
+                     { -123456 },
+                     { { u"foo"_ustr },
+                       -123456,
+                       css::uno::Any(sal_Int32(-123456)),
+                       { u"barr"_ustr } },
+                     test },
+                   { true,
+                     1,
+                     1,
+                     10,
+                     1,
+                     10,
+                     1,
+                     10,
+                     1.5,
+                     1.25,
+                     'B',
+                     u"barr"_ustr,
+                     cppu::UnoType<void>::get(),
+                     css::uno::Any(),
+                     { u"foo"_ustr, u"barr"_ustr },
+                     org::libreoffice::embindtest::Enum_E3,
+                     { 1 },
+                     { { u"baz"_ustr }, 1, css::uno::Any(), { u"foo"_ustr } },
+                     nullptr },
+                   { false,
+                     12,
+                     1234,
+                     54321,
+                     123456,
+                     3456789012,
+                     123456789,
+                     9876543210,
+                     10.75,
+                     100.75,
+                     u'Ö',
+                     u"bazzz"_ustr,
+                     cppu::UnoType<css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get(),
+                     css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                         org::libreoffice::embindtest::Enum_E_2,
+                         org::libreoffice::embindtest::Enum_E3,
+                         org::libreoffice::embindtest::Enum_E_10 }),
+                     { u"baz"_ustr },
+                     org::libreoffice::embindtest::Enum_E_10,
+                     { 123456 },
+                     { { u"barr"_ustr },
+                       123456,
+                       css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                           org::libreoffice::embindtest::Enum_E_2,
+                           org::libreoffice::embindtest::Enum_E3,
+                           org::libreoffice::embindtest::Enum_E_10 }),
+                       { u"bazz"_ustr } },
+                     test } });
+        bool const ok = test->isSequenceStruct(val);
+        verify(ok);
+    }
+    {
         auto const val = test->getNull();
         verify(val == css::uno::Reference<org::libreoffice::embindtest::XTest>());
         bool const ok = test->isNull(val);
