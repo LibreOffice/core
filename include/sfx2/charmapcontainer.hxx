@@ -56,10 +56,18 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     Link<void*, void> m_aUpdateFavHdl;
     Link<void*, void> m_aUpdateRecentHdl;
 
+    DECL_DLLPRIVATE_LINK(RecentContextMenuHdl, const CommandEvent&, void);
+    DECL_DLLPRIVATE_LINK(FavContextMenuHdl, const CommandEvent&, void);
+
     DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView&, void);
     DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView&, void);
     DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, SvxCharView&, void);
     DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, SvxCharView&, void);
+
+    static void HandleContextMenu(std::span<SvxCharView> aCharViews,
+                                  const Link<SvxCharView&, void>& rClearHdl,
+                                  const Link<SvxCharView&, void>& rClearAllHdl,
+                                  const CommandEvent& rCmdEvent);
 
 public:
     SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev,

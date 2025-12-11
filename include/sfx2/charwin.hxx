@@ -36,8 +36,7 @@ private:
 
     Link<SvxCharView&, void> maFocusInHdl;
     Link<SvxCharView&, void> maMouseClickHdl;
-    Link<SvxCharView&, void> maClearClickHdl;
-    Link<SvxCharView&, void> maClearAllClickHdl;
+    Link<const CommandEvent&, void> maContextMenuHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
@@ -61,14 +60,11 @@ public:
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
-    void            createContextMenu(const Point& rPosition);
-
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
     void setFocusInHdl(const Link<SvxCharView&, void>& rLink);
     void setMouseClickHdl(const Link<SvxCharView&, void>& rLink);
-    void setClearClickHdl(const Link<SvxCharView&, void>& rLink);
-    void setClearAllClickHdl(const Link<SvxCharView&, void>& rLink);
+    void setContextMenuHdl(const Link<const CommandEvent&, void>& rLink);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
