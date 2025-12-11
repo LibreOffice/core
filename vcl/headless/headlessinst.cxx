@@ -12,6 +12,8 @@
 #include <staticsalinstance.hxx>
 #include <unistd.h>
 
+namespace {
+
 class HeadlessSalInstance : public SvpSalInstance
 {
 public:
@@ -43,6 +45,8 @@ public:
 SalSystem *HeadlessSalInstance::CreateSalSystem()
 {
     return new HeadlessSalSystem();
+}
+
 }
 
 extern "C" SalInstance *create_SalInstance()
