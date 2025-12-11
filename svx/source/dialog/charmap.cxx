@@ -252,25 +252,19 @@ void SvxShowCharSet::createContextMenu(const Point& rPosition)
     else
         xItemMenu->set_visible(u"remove"_ustr, false);
 
-    ContextMenuSelect(xItemMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPosition, Size(1,1))));
-    GrabFocus();
-    Invalidate();
-}
-
-void SvxShowCharSet::ContextMenuSelect(std::u16string_view rIdent)
-{
-    sal_UCS4 cChar = GetSelectCharacter();
-    OUString aOUStr(&cChar, 1);
-
-    if (rIdent == u"insert")
+    const OUString sIdent = xItemMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPosition, Size(1,1)));
+    if (sIdent == u"insert")
         maDoubleClkHdl.Call(*this);
-    else if (rIdent == u"add" || rIdent == u"remove")
+    else if (sIdent == u"add" || sIdent == u"remove")
     {
         updateFavCharacterList(aOUStr, mxVirDev->GetFont().GetFamilyName());
         maFavClickHdl.Call(*this);
     }
-    else if (rIdent == u"copy")
+    else if (sIdent == u"copy")
         CopyToClipboard(aOUStr);
+
+    GrabFocus();
+    Invalidate();
 }
 
 void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
