@@ -13253,7 +13253,8 @@ module com {
      STOP = 0,
      WARNING = 1,
      INFO = 2,
-     MACRO = 3
+     MACRO = 3,
+     NONE = 4
     };
     published enum ValidationType {
      ANY = 0,

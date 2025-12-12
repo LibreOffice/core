@@ -12,7 +12,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="tsbshow">
-        <property name="label" translatable="yes" context="erroralerttabpage|tsbshow">Show error _message when invalid values are entered</property>
+        <property name="label" translatable="yes" context="erroralerttabpage|tsbshow">Handle invalid values</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">False</property>
@@ -153,6 +153,7 @@
               <item translatable="yes" context="erroralerttabpage|actionCB">Warning</item>
               <item translatable="yes" context="erroralerttabpage|actionCB">Information</item>
               <item translatable="yes" context="erroralerttabpage|actionCB">Macro</item>
+              <item translatable="yes" context="erroralerttabpage|actionCB">Reject silently</item>
             </items>
             <child internal-child="accessible">
               <object class="AtkObject" id="actionCB-atkobject">

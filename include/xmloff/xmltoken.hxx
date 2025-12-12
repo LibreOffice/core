@@ -2297,6 +2297,7 @@ namespace xmloff::token {
         XML_NOTIFY_ON_UPDATE_OF_RANGES,
         XML_BYTE,
         XML_MACRO,
+        XML_REJECT,
         XML_LOCATION,
         XML_APPLICATION,
         XML_SYMBOL_IMAGE,

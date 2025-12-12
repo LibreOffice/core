@@ -760,6 +760,7 @@ ScValidErrorStyle validAlertToValidError( const sheet::ValidationAlertStyle eVAl
         case sheet::ValidationAlertStyle_STOP:          eVErrStyle = SC_VALERR_STOP;      break;
         case sheet::ValidationAlertStyle_WARNING:       eVErrStyle = SC_VALERR_WARNING;   break;
         case sheet::ValidationAlertStyle_MACRO:         eVErrStyle = SC_VALERR_MACRO;     break;
+        case sheet::ValidationAlertStyle_NONE:          eVErrStyle = SC_VALERR_NONE;      break;
         default:                                        eVErrStyle = SC_VALERR_INFO;      break;
         //should INFO be the default?  seems to be the most unobtrusive choice.
     }

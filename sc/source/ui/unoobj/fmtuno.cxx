@@ -820,6 +820,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             case sheet::ValidationAlertStyle_WARNING: nErrorStyle = SC_VALERR_WARNING; break;
             case sheet::ValidationAlertStyle_INFO:    nErrorStyle = SC_VALERR_INFO;    break;
             case sheet::ValidationAlertStyle_MACRO:   nErrorStyle = SC_VALERR_MACRO;   break;
+            case sheet::ValidationAlertStyle_NONE:    nErrorStyle = SC_VALERR_NONE;    break;
             default:
             {
                 // added to avoid warnings
@@ -907,6 +908,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
             case SC_VALERR_WARNING: eStyle = sheet::ValidationAlertStyle_WARNING; break;
             case SC_VALERR_INFO:    eStyle = sheet::ValidationAlertStyle_INFO;    break;
             case SC_VALERR_MACRO:   eStyle = sheet::ValidationAlertStyle_MACRO;   break;
+            case SC_VALERR_NONE:    eStyle = sheet::ValidationAlertStyle_NONE;    break;
         }
         aRet <<= eStyle;
     }

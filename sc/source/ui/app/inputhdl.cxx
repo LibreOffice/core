@@ -3165,7 +3165,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     {
         ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
         const ScValidationData* pData = rDoc.GetValidationEntry( nValidation );
-        if (pData)
+        if (pData && pData->HasErrMsg())
         {
             // #i67990# don't use pLastPattern in EnterHandler
             const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );

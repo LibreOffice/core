@@ -382,7 +382,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
         return;
     }
 
-    if (!bShowError) {
+    if (eErrorStyle == SC_VALERR_NONE) {
         callback(true);
         return;
     }

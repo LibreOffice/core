@@ -402,6 +402,12 @@ void ScMyValidationsContainer::WriteValidations(ScDocument& rDoc, ScXMLExport& r
                     }
                 }
                 break;
+                case sheet::ValidationAlertStyle_NONE :
+                {
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_REJECT);
+                    WriteMessage(rExport, "", "", rValidation.bShowErrorMessage, false);
+                }
+                break;
                 default:
                 {
                     // added to avoid warnings

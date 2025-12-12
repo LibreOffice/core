@@ -54,7 +54,8 @@ enum ScValidErrorStyle
     SC_VALERR_STOP,
     SC_VALERR_WARNING,
     SC_VALERR_INFO,
-    SC_VALERR_MACRO
+    SC_VALERR_MACRO,
+    SC_VALERR_NONE
 };
 
 // Entry for validation (only one condition exists)
@@ -114,6 +115,7 @@ public:
     SC_DLLPUBLIC bool GetErrMsg( OUString& rTitle, OUString& rMsg, ScValidErrorStyle& rStyle ) const;
 
     ScValidationMode GetDataMode() const    { return eDataMode; }
+    bool            HasErrMsg() const       { return bShowError; }
 
     sal_Int16 GetListType() const                { return mnListType; }
     void     SetListType( sal_Int16 nListType )  { mnListType = nListType; }
