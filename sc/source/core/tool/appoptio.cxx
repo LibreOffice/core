@@ -83,7 +83,6 @@ void ScAppOptions::SetDefaults()
 
     meKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
     mbLinksInsertedLikeMSExcel = false;
-    mbAllowInvalidData = false;
 }
 
 ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
@@ -108,7 +107,6 @@ ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     bClickChangeRotation = rCpy.bClickChangeRotation;
     meKeyBindingType  = rCpy.meKeyBindingType;
     mbLinksInsertedLikeMSExcel = rCpy.mbLinksInsertedLikeMSExcel;
-    mbAllowInvalidData = rCpy.mbAllowInvalidData;
     return *this;
 }
 
@@ -203,8 +201,6 @@ constexpr OUStringLiteral CFGPATH_COMPAT = u"Office.Calc/Compatibility";
 
 #define SCCOMPATOPT_KEY_BINDING     0
 #define SCCOMPATOPT_LINK_LIKE_MS    1
-#define SCCOMPATOPT_ALLOWINVALIDDATA 2
-
 
 // Default value of Layout/Other/StatusbarMultiFunction
 #define SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL         514
@@ -274,8 +270,7 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 {
     return {u"KeyBindings/BaseGroup"_ustr,    // SCCOMPATOPT_KEY_BINDING
-            u"Links"_ustr,                    // SCCOMPATOPT_LINK_LIKE_MS
-            u"AcceptInvalidData"_ustr};       // SCCOMPATOPT_ALLOWINVALIDDATA
+            u"Links"_ustr };                  // SCCOMPATOPT_LINK_LIKE_MS
 }
 
 ScAppCfg::ScAppCfg() :
@@ -492,10 +487,6 @@ void ScAppCfg::ReadCompatCfg()
     if (aValues.getLength() > SCCOMPATOPT_LINK_LIKE_MS)
         SetLinksInsertedLikeMSExcel(
             ScUnoHelpFunctions::GetBoolFromAny(aValues[SCCOMPATOPT_LINK_LIKE_MS]));
-
-    if (aValues.getLength() > SCCOMPATOPT_ALLOWINVALIDDATA)
-        SetAllowInvalidData(
-            ScUnoHelpFunctions::GetBoolFromAny(aValues[SCCOMPATOPT_ALLOWINVALIDDATA]));
 }
 
 IMPL_LINK_NOARG(ScAppCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
@@ -675,9 +666,6 @@ IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl, ScLinkConfigItem&, void)
             break;
             case SCCOMPATOPT_LINK_LIKE_MS:
                 pValues[nProp] <<= GetLinksInsertedLikeMSExcel();
-                break;
-            case SCCOMPATOPT_ALLOWINVALIDDATA:
-                pValues[nProp] <<= GetAllowInvalidData();
                 break;
         }
     }

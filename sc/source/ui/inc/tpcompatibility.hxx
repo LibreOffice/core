@@ -29,8 +29,6 @@ private:
     std::unique_ptr<weld::Widget> m_xLbKeyBindingsImg;
     std::unique_ptr<weld::CheckButton> m_xBtnLink;
     std::unique_ptr<weld::Widget> m_xBtnLinkImg;
-    std::unique_ptr<weld::CheckButton> m_xBtnAcceptInvalidData;
-    std::unique_ptr<weld::Widget> m_xBtnAcceptInvalidDataImg;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

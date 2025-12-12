@@ -1971,13 +1971,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="AcceptInvalidData" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>If set, data are accepted regardless of being invalid (as known from Excel and LibreOffice before tdf#159595)</desc>
-          <label>Data Validity like Excel</label>
-        </info>
-        <value>false</value>
-      </prop>
     </group>
     <group oor:name="Defaults">
       <info>
