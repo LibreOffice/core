@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_check_targets,sw,\
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sw_uwriter) \
+    CppunitTest_sw_cjk \
     CppunitTest_sw_rtfexport \
     CppunitTest_sw_rtfexport2 \
     CppunitTest_sw_rtfexport3 \

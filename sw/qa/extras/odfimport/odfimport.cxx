@@ -621,13 +621,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128737)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
-CPPUNIT_TEST_FIXTURE(Test, tdf167455)
-{
-    // crashes at import time on macOS
-    createSwDoc("tdf167455.odt");
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testCalcFootnoteContent)
 {
     createSwDoc("ooo32780-1.odt");
@@ -966,18 +959,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75221)
     CPPUNIT_ASSERT(top.toInt32() > 0);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf101729)
-{
-    createSwDoc("tdf101729.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 l = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "left").toInt32();
-    sal_Int32 w = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
-    sal_Int32 x = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/infos/bounds", "left").toInt32();
-    // Make sure the text does not go outside and verify it is centered roughly
-    CPPUNIT_ASSERT( l + w / 4 < x  );
-    CPPUNIT_ASSERT( x < l + 3 * w / 4);
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf107392)
 {
     createSwDoc("tdf107392.odt");
@@ -1089,12 +1070,6 @@ CPPUNIT_TEST_FIXTURE(Test, testBlankBeforeFirstPage)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 1 pages output",
         u"1"_ustr, getXPathContent(pXmlDoc, "count(/root/page)")
     );
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf115079)
-{
-    createSwDoc("tdf115079.odt");
-    // This document caused segfault when layouting
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108482)
