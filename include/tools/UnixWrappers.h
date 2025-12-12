@@ -44,6 +44,7 @@ extern "C" {
 #ifdef _WIN32
 #include <io.h>
 #include <string.h>
+#include <cassert>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 /* Undo the mapping in <Windows.h> of CreateFont => CreateFontW etc, as vcl also uses these
@@ -87,6 +88,7 @@ extern "C" {
     }
 
     wchar_t* result = (wchar_t*)malloc(wlen * 2 + 2);
+    assert(result);
     MultiByteToWideChar(CP_UTF8, 0, string, len, result, wlen);
     result[wlen] = L'\0';
 
