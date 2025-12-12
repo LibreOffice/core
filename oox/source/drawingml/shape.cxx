@@ -161,7 +161,6 @@ Shape::Shape()
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , mbHasCustomPrompt( false )
-, maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
     setDefaults(/*bDefaultHeight*/true);
@@ -195,7 +194,6 @@ Shape::Shape( const OUString& rServiceName, bool bDefaultHeight )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , mbHasCustomPrompt( false )
-, maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
     msServiceName = rServiceName;
@@ -240,7 +238,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbTextBox( pSourceShape->mbTextBox )
 , mbHasLinkedTxbx(false)
 , mbHasCustomPrompt( pSourceShape->mbHasCustomPrompt )
-, maDiagramDoms( pSourceShape->maDiagramDoms )
 , mnZOrder(pSourceShape->mnZOrder)
 , mnZOrderOff(pSourceShape->mnZOrderOff)
 , mnDataNodeType(pSourceShape->mnDataNodeType)
@@ -492,8 +489,6 @@ void Shape::addShape(
 
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
-                keepDiagramCompatibilityInfo();
-
                 // set DiagramHelper at SdrObjGroup
                 propagateDiagramHelper();
 
@@ -2412,9 +2407,9 @@ Reference< XShape > const & Shape::createAndInsert(
 
 void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFragmentPath)
 {
-
-    sal_Int32 length = maDiagramDoms.getLength();
-    maDiagramDoms.realloc(length + 1);
+    AdvancedDiagramHelper* pAdvancedDiagramHelper(getDiagramHelper());
+    if (nullptr == pAdvancedDiagramHelper)
+        return;
 
     // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
     uno::Sequence<uno::Any> diagramDrawing{
@@ -2422,40 +2417,10 @@ void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFrag
         uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image"))
     };
 
-    beans::PropertyValue* pValue = maDiagramDoms.getArray();
-    pValue[length].Name = "OOXDrawing";
-    pValue[length].Value <<= diagramDrawing;
-}
-
-void Shape::keepDiagramCompatibilityInfo()
-{
-    try
-    {
-        if( !maDiagramDoms.hasElements() )
-            return;
-
-        Reference < XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
-        Reference < XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
-        if ( !xSetInfo.is() )
-            return;
-
-        const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-        if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )
-            return;
-
-        Sequence < PropertyValue > aGrabBag;
-        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-
-        // We keep the previous items, if present
-        if ( aGrabBag.hasElements() )
-            xSet->setPropertyValue( aGrabBagPropName, Any( comphelper::concatSequences(aGrabBag, maDiagramDoms) ) );
-        else
-            xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
-    }
-    catch( const Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo" );
-    }
+    beans::PropertyValue aValue;
+    aValue.Name = "OOXDrawing";
+    aValue.Value <<= diagramDrawing;
+    pAdvancedDiagramHelper->addDomPropertyValue(aValue);
 }
 
 void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
@@ -2494,7 +2459,8 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
 
     try
     {
-        if( !maDiagramDoms.hasElements() )
+        if( nullptr != getDiagramHelper() )
+        // if( !maDiagramDoms.hasElements() )
             return xShape;
 
         // Stream in which to place the rendered shape

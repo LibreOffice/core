@@ -421,8 +421,6 @@ void IDiagramHelper::disconnectFromSdrObjGroup()
 {
     if (nullptr != mpAssociatedSdrObjGroup)
     {
-        // if change was done, reset GrabBagItem to delete buffered DiagramData which is no longer valid
-        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
         auto const p = mpAssociatedSdrObjGroup;
         mpAssociatedSdrObjGroup = nullptr;
         p->mp_DiagramHelper.reset();

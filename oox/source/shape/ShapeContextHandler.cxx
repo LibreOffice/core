@@ -474,8 +474,6 @@ ShapeContextHandler::getShape()
                     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
                     pShapePtr->setDiagramType();
                     mxShapeFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxShapeFilterBase, aFragmentPath, pShapePtr));
-                    pShapePtr->setDiagramDoms(mpShape->getDiagramDoms());
-                    pShapePtr->keepDiagramDrawing(*mxShapeFilterBase, aFragmentPath);
 
                     if (mpShape->getFontRefColorForNodes().isUsed())
                         applyFontRefColor(pShapePtr, mpShape->getFontRefColorForNodes());
@@ -483,6 +481,9 @@ ShapeContextHandler::getShape()
                     // migrate IDiagramHelper to new oox::Shape (from mpShape which was loaded
                     // to pShapePtr where the geometry is now constructed)
                     mpShape->migrateDiagramHelperToNewShape(pShapePtr);
+
+                    // use now migrated AdvancedDiagramHelper
+                    pShapePtr->keepDiagramDrawing(*mxShapeFilterBase, aFragmentPath);
 
                     if (!mpShape->getChildren().empty())
                     {

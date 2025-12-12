@@ -40,7 +40,6 @@ class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 class LayoutAtom;
 typedef std::shared_ptr< LayoutAtom > LayoutAtomPtr;
-typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
 typedef std::map< OUString, LayoutAtomPtr > LayoutAtomMap;
 typedef std::map< const svx::diagram::Point*, ShapePtr > PresPointShapeMap;
 
@@ -124,6 +123,7 @@ struct DiagramColor
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
+typedef std::map<OUString,css::beans::PropertyValue> DiagramPRDomMap;
 
 class Diagram
 {
@@ -142,13 +142,15 @@ public:
     const DiagramQStyleMap& getStyles() const { return maStyles; }
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
-    DiagramDomMap & getDomMap() { return maMainDomMap; }
-    css::uno::Sequence< css::uno::Sequence< css::uno::Any > > & getDataRelsMap() { return maDataRelsMap; }
+    DiagramPRDomMap & getRPDomMap() { return maDiagramPRDomMap; }
     void addTo( const ShapePtr & pShape, bool bCreate );
 
-    css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
     void syncDiagramFontHeights();
+
+    void addDomPropertyValue(css::beans::PropertyValue& aValue);
+    css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const;
+    void resetDomPropertyValues() { maDiagramPRDomMap.clear(); }
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.
@@ -158,8 +160,7 @@ private:
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;
     DiagramColorMap                maColors;
-    DiagramDomMap                  maMainDomMap;
-    css::uno::Sequence< css::uno::Sequence< css::uno::Any > > maDataRelsMap;
+    DiagramPRDomMap                maDiagramPRDomMap;
 };
 
 typedef std::shared_ptr< Diagram > DiagramPtr;

@@ -34,6 +34,7 @@
 #include <svx/svdview.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
+#include <svx/svdogrp.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
@@ -257,11 +258,20 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xGroupShape(xShape, uno::UNO_QUERY);
 
-    // get the GrabBag. After import is *has* to be set, check that
+    // get the GrabBag. After import there may be values, but none anymore
+    // starting with 'OOX.*', these are now at the DiagramHelper
     uno::Sequence<beans::PropertyValue> aGrabBag;
     uno::Reference<beans::XPropertySet> xGroupProps(xGroupShape, uno::UNO_QUERY);
     xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-    CPPUNIT_ASSERT(aGrabBag.hasElements());
+
+    if (aGrabBag.hasElements())
+    {
+        for (sal_Int32 i = 0; i < aGrabBag.getLength(); ++i)
+        {
+            if (aGrabBag[i].Name.startsWith("OOX"))
+                CPPUNIT_ASSERT(false);
+        }
+    }
 
     // get the 1st text shape (containing 'A'). There is a BGShape and an Arrow
     // in indices before
@@ -277,15 +287,14 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
     rEditView.InsertText(u"X"_ustr);
     pSdrView->SdrEndTextEdit();
 
-    // Then make sure that grab-bag is empty to avoid losing the new text.
+    // make sure the grab-bag is empty after change
     xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // assertion failed
-    // - Expression: !aGrabBag.hasElements()
-    // i.e. the grab-bag was still around after modifying the shape, and that grab-bag contained the
-    // old text.
     CPPUNIT_ASSERT(!aGrabBag.hasElements());
+
+    // get SdrObjGroup and check, it should still be a Diagram
+    SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(nullptr != pGroup);
+    CPPUNIT_ASSERT(pGroup->isDiagram());
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)

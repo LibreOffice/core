@@ -149,30 +149,14 @@ Diagram::Diagram()
 {
 }
 
-uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
+beans::PropertyValue Diagram::getDomPropertyValue(const OUString& rName) const
 {
-    sal_Int32 length = maMainDomMap.size();
+    const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(rName);
 
-    if (maDataRelsMap.hasElements())
-        ++length;
+    if (aHit != maDiagramPRDomMap.end())
+        return aHit->second;
 
-    uno::Sequence<beans::PropertyValue> aValue(length);
-    beans::PropertyValue* pValue = aValue.getArray();
-    for (auto const& mainDom : maMainDomMap)
-    {
-        pValue->Name = mainDom.first;
-        pValue->Value <<= mainDom.second;
-        ++pValue;
-    }
-
-    if (maDataRelsMap.hasElements())
-    {
-        pValue->Name = "OOXDiagramDataRels";
-        pValue->Value <<= maDataRelsMap;
-        ++pValue;
-    }
-
-    return aValue;
+    return beans::PropertyValue();
 }
 
 using ShapePairs
@@ -226,6 +210,12 @@ void Diagram::syncDiagramFontHeights()
     maDiagramFontHeights.clear();
 }
 
+void Diagram::addDomPropertyValue(beans::PropertyValue& aValue)
+{
+    if (!aValue.Name.isEmpty())
+        maDiagramPRDomMap[aValue.Name] = aValue;
+}
+
 static uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const OUString& rFragmentPath )
@@ -248,8 +238,10 @@ static void importFragment( core::XmlFilterBase& rFilter,
                      const DiagramPtr& pDiagram,
                      const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
-    DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
-    rMainDomMap[rDocName] = rXDom;
+    beans::PropertyValue aValue;
+    aValue.Name = rDocName;
+    aValue.Value <<= rXDom;
+    pDiagram->addDomPropertyValue(aValue);
 
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);
@@ -335,8 +327,13 @@ void loadDiagram( ShapePtr const & pShape,
                            pDiagram,
                            xRefDataModel);
 
-            pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
-                    xRefDataModel->getFragmentPath(), u"image" );
+            uno::Sequence< uno::Sequence< uno::Any > > aDataRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter, xRefDataModel->getFragmentPath(), u"image" ));
+
+            beans::PropertyValue aValue;
+            aValue.Name = "OOXDiagramDataRels";
+            aValue.Value <<= aDataRelsMap;
+            pDiagram->addDomPropertyValue(aValue);
 
             // Pass the info to pShape
             for (auto const& extDrawing : pData->getExtDrawings())
@@ -431,7 +428,6 @@ void loadDiagram( ShapePtr const & pShape,
         // up
         const bool bCreate(pShape->getExtDrawings().empty());
         pDiagram->addTo(pShape, bCreate);
-        pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
 
         // Get the oox::Theme definition and - if available - move/secure the
         // original ImportData directly to the Diagram ModelData

@@ -318,9 +318,13 @@ void DrawingFragment::onEndElement()
                     // initial diagram import produces a background shape with zero size and no
                     // diagram shapes at all. Here the size has been determined from the anchor and
                     // thus repeating the import of diagram.xml gives the diagram shapes.
-                    if (mxShape->getDiagramDoms().getLength() > 0
+                    //
+                    // I have checked that mpDiagramHelper at mxShape is *not* resetted here
+                    // which is crucial to keep that stuff working. Also added a isDiagram
+                    // method to avoid indirect test for Diagram using former getDiagramDoms()
+                    if (nullptr != mxShape->getDiagramHelper()
                         && mxShape->getChildren().size() == 1
-                        && mxShape->getExtDrawings().size() == 1)
+                        && mxShape->getExtDrawings().size() != 0)
                     {
                         mxShape->getChildren()[0]->setSize(mxShape->getSize());
                         OUString sFragmentPath(

@@ -139,6 +139,7 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -6680,28 +6681,24 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
     uno::Sequence<uno::Any> diagramDrawing;
 
-    // retrieve the doms from the GrabBag
-    uno::Sequence<beans::PropertyValue> propList;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
-    for (const auto& rProp : propList)
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
+
+    if (nullptr != pObj && pObj->isDiagram())
     {
-        OUString propName = rProp.Name;
-        if (propName == "OOXData")
-            rProp.Value >>= dataDom;
-        else if (propName == "OOXLayout")
-            rProp.Value >>= layoutDom;
-        else if (propName == "OOXStyle")
-            rProp.Value >>= styleDom;
-        else if (propName == "OOXColor")
-            rProp.Value >>= colorDom;
-        else if (propName == "OOXDrawing")
+        const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+
+        if (rIDiagramHelper)
         {
-            rProp.Value >>= diagramDrawing;
-            diagramDrawing[0]
-                >>= drawingDom; // if there is OOXDrawing property then set drawingDom here only.
+            rIDiagramHelper->getDomPropertyValue("OOXData").Value >>= dataDom;
+            rIDiagramHelper->getDomPropertyValue("OOXLayout").Value >>= layoutDom;
+            rIDiagramHelper->getDomPropertyValue("OOXStyle").Value >>= styleDom;
+            rIDiagramHelper->getDomPropertyValue("OOXColor").Value >>= colorDom;
+            rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value >>= diagramDrawing;
+            if (diagramDrawing.hasElements())
+                // if there is OOXDrawing property then set drawingDom here only.
+                diagramDrawing[0] >>= drawingDom;
+            rIDiagramHelper->getDomPropertyValue("OOXDiagramDataRels").Value >>= xDataRelSeq;
         }
-        else if (propName == "OOXDiagramDataRels")
-            rProp.Value >>= xDataRelSeq;
     }
 
     // check that we have the 4 mandatory XDocuments
