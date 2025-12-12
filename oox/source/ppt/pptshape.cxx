@@ -607,11 +607,6 @@ void PPTShape::addShape(
                 }
             }
 
-            if (meFrameType == FRAMETYPE_DIAGRAM)
-            {
-                keepDiagramCompatibilityInfo();
-            }
-
             // Support advanced DiagramHelper
             if (FRAMETYPE_DIAGRAM == meFrameType)
             {

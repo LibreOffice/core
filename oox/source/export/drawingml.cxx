@@ -141,6 +141,7 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -6793,34 +6794,27 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     uno::Reference<xml::dom::XDocument> styleDom;
     uno::Reference<xml::dom::XDocument> colorDom;
     uno::Reference<xml::dom::XDocument> drawingDom;
-    uno::Sequence<uno::Sequence<uno::Any>> xDataImageRelSeq;
-    uno::Sequence<uno::Sequence<uno::Any>> xDataHlinkRelSeq;
+    uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
     uno::Sequence<uno::Any> diagramDrawing;
 
-    // retrieve the doms from the GrabBag
-    uno::Sequence<beans::PropertyValue> propList;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
-    for (const auto& rProp : propList)
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
+
+    if (nullptr != pObj && pObj->isDiagram())
     {
-        OUString propName = rProp.Name;
-        if (propName == "OOXData")
-            rProp.Value >>= dataDom;
-        else if (propName == "OOXLayout")
-            rProp.Value >>= layoutDom;
-        else if (propName == "OOXStyle")
-            rProp.Value >>= styleDom;
-        else if (propName == "OOXColor")
-            rProp.Value >>= colorDom;
-        else if (propName == "OOXDrawing")
+        const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+
+        if (rIDiagramHelper)
         {
-            rProp.Value >>= diagramDrawing;
-            diagramDrawing[0]
-                >>= drawingDom; // if there is OOXDrawing property then set drawingDom here only.
+            rIDiagramHelper->getDomPropertyValue("OOXData").Value >>= dataDom;
+            rIDiagramHelper->getDomPropertyValue("OOXLayout").Value >>= layoutDom;
+            rIDiagramHelper->getDomPropertyValue("OOXStyle").Value >>= styleDom;
+            rIDiagramHelper->getDomPropertyValue("OOXColor").Value >>= colorDom;
+            rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value >>= diagramDrawing;
+            if (diagramDrawing.hasElements())
+                // if there is OOXDrawing property then set drawingDom here only.
+                diagramDrawing[0] >>= drawingDom;
+            rIDiagramHelper->getDomPropertyValue("OOXDiagramDataRels").Value >>= xDataRelSeq;
         }
-        else if (propName == "OOXDiagramDataImageRels")
-            rProp.Value >>= xDataImageRelSeq;
-        else if (propName == "OOXDiagramDataHlinkRels")
-            rProp.Value >>= xDataHlinkRelSeq;
     }
 
     // check that we have the 4 mandatory XDocuments
@@ -6965,8 +6959,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
                           uno::Sequence<beans::StringPair>());
 
     // write the associated Images and rels for data file
-    writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
-    writeDiagramHlinkRels(xDataHlinkRelSeq, xDataOutputStream);
+    writeDiagramRels(xDataRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -7007,12 +7000,12 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write the associated Images and rels for drawing file
     uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
     diagramDrawing[1] >>= xDrawingRelSeq;
-    writeDiagramImageRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
+    writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
 }
 
-void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
-                                      const uno::Reference<io::XOutputStream>& xOutStream,
-                                      std::u16string_view sGrabBagProperyName, int nDiagramId)
+void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+                                 const uno::Reference<io::XOutputStream>& xOutStream,
+                                 std::u16string_view sGrabBagProperyName, int nDiagramId)
 {
     // add image relationships of OOXData, OOXDiagram
     OUString sType(oox::getRelationship(Relationship::IMAGE));
@@ -7067,45 +7060,6 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any
             TOOLS_WARN_EXCEPTION("oox.drawingml", "DrawingML::writeDiagramRels Failed to copy grabbaged Image");
         }
         dataImagebin->closeInput();
-    }
-}
-
-void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
-                                      const uno::Reference<io::XOutputStream>& xOutStream)
-{
-    uno::Reference<xml::sax::XWriter> xWriter
-        = xml::sax::Writer::create(comphelper::getProcessComponentContext());
-    xWriter->setOutputStream(xOutStream);
-
-    // retrieve the relationships from Sequence
-    for (sal_Int32 j = 0; j < xRelSeq.getLength(); j++)
-    {
-        // diagramDataRelTuple[0] => RID,
-        // diagramDataRelTuple[1] => Target
-        // diagramDataRelTuple[2] => Type
-        const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
-
-        OUString sRelId;
-        OUString sTarget;
-        OUString sType;
-        diagramDataRelTuple[0] >>= sRelId;
-        sRelId = sRelId.copy(3);
-        diagramDataRelTuple[1] >>= sTarget;
-        diagramDataRelTuple[2] >>= sType;
-
-        OUString sRelType;
-        bool bExtURL = true;
-        if (sType == u"slide")
-        {
-            sRelType = oox::getRelationship(Relationship::SLIDE);
-            bExtURL = false;
-        }
-        else
-            sRelType = oox::getRelationship(Relationship::HYPERLINK);
-
-        PropertySet aProps(xOutStream);
-        aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
-        mpFB->addRelation(xOutStream, sRelType, sTarget, bExtURL);
     }
 }
 

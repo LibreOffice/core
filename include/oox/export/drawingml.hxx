@@ -517,11 +517,9 @@ public:
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
-    void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
-                               const css::uno::Reference<css::io::XOutputStream>& xOutStream,
-                               std::u16string_view sGrabBagProperyName, int nDiagramId);
-    void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
-                               const css::uno::Reference<css::io::XOutputStream>& xOutStream);
+    void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+                          const css::uno::Reference<css::io::XOutputStream>& xOutStream,
+                          std::u16string_view sGrabBagProperyName, int nDiagramId);
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
                             const sax_fastparser::FSHelperPtr& pDrawing);
 

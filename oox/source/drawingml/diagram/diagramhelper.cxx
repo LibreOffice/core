@@ -244,9 +244,13 @@ void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataMo
     // try text change for model part in DiagramData
     const bool bChanged(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
 
-    if(bChanged && nullptr != mpAssociatedSdrObjGroup)
+    if(bChanged)
     {
-        // if change was done, reset GrabBagItem to delete buffered DiagramData which is no longer valid
+        // reset Dom properties at DiagramData
+        mpDiagramPtr->resetDomPropertyValues();
+
+        // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
+        // entries anymore, but others like "mso-rotation-angle" and others
         mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
 
         // also set self to modified to get correct exports
@@ -300,6 +304,20 @@ const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCr
     }
 
     return mpThemePtr;
+}
+
+void AdvancedDiagramHelper::addDomPropertyValue(beans::PropertyValue& aValue)
+{
+    if (mpDiagramPtr)
+        mpDiagramPtr->addDomPropertyValue(aValue);
+}
+
+beans::PropertyValue AdvancedDiagramHelper::getDomPropertyValue(const OUString& rName) const
+{
+    if (mpDiagramPtr)
+        return mpDiagramPtr->getDomPropertyValue(rName);
+
+    return beans::PropertyValue();
 }
 
 }

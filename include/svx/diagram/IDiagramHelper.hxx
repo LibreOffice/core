@@ -136,6 +136,9 @@ public:
     virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) = 0;
 
     static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);
+
+    // access to PropertyValues
+    virtual css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const = 0;
 };
 
 }} // end of namespace
