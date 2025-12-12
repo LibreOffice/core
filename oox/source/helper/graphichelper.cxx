@@ -288,7 +288,9 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
             // we are using MapUnit::MapPixel, but in case of cropped images we are using MapUnit::Map100thMM
             // and the crop values are relative to original bitmap size.
             auto xStream = mxStorage->openInputStream(rStreamName);
-            xGraphic = importGraphic(xStream, pExtHeader, !rStreamName.endsWith(".tiff"));
+            bool bLazyLoad = !rStreamName.endsWithIgnoreAsciiCase(".tiff")
+                             && !rStreamName.endsWithIgnoreAsciiCase(".tif");
+            xGraphic = importGraphic(xStream, pExtHeader, bLazyLoad);
             if (xGraphic.is())
                 mxGraphicMapper->putGraphic(rStreamName, xGraphic);
         }
