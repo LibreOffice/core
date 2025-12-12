@@ -2219,6 +2219,7 @@ horizontal-checkerboard
 notify-on-update-of-ranges
 byte
 macro
+reject
 location
 application
 symbol-image
