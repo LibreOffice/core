@@ -1642,7 +1642,8 @@ Reference< XShape > const & Shape::createAndInsert(
         }
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
-        if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
+        if ((getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill) ||
+            aFillProperties.maFillColor.isPlaceHolder() )
             getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic && !bIs3DGraphic)
             aFillProperties.pushToPropMap(aShapeProps, rGraphicHelper, mnRotation, nFillPhClr,
