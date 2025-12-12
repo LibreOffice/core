@@ -1764,6 +1764,7 @@ void SdDrawDocument::updatePagePreviewsGrid(SdPage* pPage)
 
         mpCanvasPage->CreatePresObj(PresObjKind::PagePreview, true, ::tools::Rectangle(Point(nX,nY), Size(nPreviewWidth, nPreviewHeight)), OUString(), nPageNum);
     }
+    connectPagePreviews();
 }
 
 void SdDrawDocument::connectPagePreviews()
@@ -1776,7 +1777,12 @@ void SdDrawDocument::connectPagePreviews()
     SdrObjListIter aIter(pObjList, SdrIterMode::Flat);
     for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
     {
-        if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+        //remove the existing connectors
+        if (pObj->GetObjIdentifier() == SdrObjKind::Edge)
+        {
+            pObjList->NbcRemoveObject(pObj->GetOrdNum());
+        }
+        else if (pObj->GetObjIdentifier() == SdrObjKind::Page)
         {
             SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
             SdPage* pPage = static_cast<SdPage*>(pPageObj->GetReferencedPage());
@@ -1789,6 +1795,9 @@ void SdDrawDocument::connectPagePreviews()
     {
         SdrPageObj* pPageObj1 = aPageOrder[i];
         SdrPageObj* pPageObj2 = aPageOrder[i + 1];
+
+        if (!pPageObj1 || !pPageObj2)
+            continue;
 
         ::tools::Rectangle aRect1 = pPageObj1->GetSnapRect();
         ::tools::Rectangle aRect2 = pPageObj2->GetSnapRect();
