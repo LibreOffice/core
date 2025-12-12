@@ -109,12 +109,12 @@ CalcSettingsModel::CalcSettingsModel() :
 WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
-    if (getScDocument().GetExtDocOptions())
-        maExtDocOptions = *getScDocument().GetExtDocOptions();
 }
 
 WorkbookSettings::~WorkbookSettings()
 {
+    assert(!getScDocument().GetExtDocOptions()
+        && "applying maExtDocOptions needs a redesign if this is ever set earlier during import");
     getScDocument().SetExtDocOptions(std::make_unique<ScExtDocOptions>(maExtDocOptions));
 }
 
