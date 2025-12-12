@@ -18,6 +18,10 @@ $(eval $(call gb_CppunitTest_use_external,sc_$(1),boost_headers))
 
 $(eval $(call gb_Library_use_common_precompiled_header,sc_$(1)))
 
+$(eval $(call gb_CppunitTest_add_defs,sc_$(1),\
+	$(if $(ENABLE_LPSOLVE), -DENABLE_LPSOLVE) \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_$(1), \
     sc/qa/extras/sc$(1) \
 ))
