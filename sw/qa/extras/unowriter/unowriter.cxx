@@ -1368,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
 {
     createSwDoc();
     uno::Reference<beans::XPropertySet> xParaProps(getParagraph(1), uno::UNO_QUERY);
-    xParaProps->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"Noto Sans"_ustr));
+    xParaProps->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"DejaVu Sans"_ustr));
     auto xTextDocument(mxComponent.queryThrow<css::text::XTextDocument>());
     auto xText(xTextDocument->getText());
     xText->setString(u"123"_ustr);
@@ -1376,11 +1376,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
     auto xCursor = xText->createTextCursorByRange(xText->getEnd());
     xCursor->goLeft(1, true);
     CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xCursor->getString());
-    // Insert an SMP character U+1df1e (so it's two UTF-16 code units, 0xd837 0xdf1e):
-    xCursor->setString(u"𝼞"_ustr);
+    // Insert an SMP character U+1f431 (so it's two UTF-16 code units, 0xd83d 0xdc31):
+    xCursor->setString(u"🐱"_ustr);
     // Without the fix, the replacement would expand the cursor one too many characters to the left,
-    // and the cursor text would become "2𝼞", failing the next test:
-    CPPUNIT_ASSERT_EQUAL(u"𝼞"_ustr, xCursor->getString());
+    // and the cursor text would become "2🐱", failing the next test:
+    CPPUNIT_ASSERT_EQUAL(u"🐱"_ustr, xCursor->getString());
     xCursor->setString(u"test"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xCursor->getString());
     // This test would fail, too; the text would be "1test":
