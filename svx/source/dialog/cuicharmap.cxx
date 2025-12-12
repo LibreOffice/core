@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <stdio.h>
-
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>

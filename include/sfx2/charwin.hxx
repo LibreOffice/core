@@ -23,7 +23,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
-#include <deque>
 
 class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
 {
