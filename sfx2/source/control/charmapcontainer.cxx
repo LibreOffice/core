@@ -152,9 +152,7 @@ void SfxCharmapContainer::updateFavCharControl()
     for (auto it = m_aFavChars.begin(); it != m_aFavChars.end(); ++it, i++)
     {
         m_aFavCharView[i].SetText(it->sChar);
-        vcl::Font rFont = m_aFavCharView[i].GetFont();
-        rFont.SetFamilyName(it->sFont);
-        m_aFavCharView[i].SetFont(rFont);
+        m_aFavCharView[i].UpdateFont(it->sFont);
         m_aFavCharView[i].Show();
     }
 
@@ -193,9 +191,7 @@ void SfxCharmapContainer::updateRecentCharControl()
     for (auto it = m_aRecentChars.begin(); it != m_aRecentChars.end(); ++it, i++)
     {
         m_aRecentCharView[i].SetText(it->sChar);
-        vcl::Font rFont = m_aRecentCharView[i].GetFont();
-        rFont.SetFamilyName(it->sFont);
-        m_aRecentCharView[i].SetFont(rFont);
+        m_aRecentCharView[i].UpdateFont(it->sFont);
         m_aRecentCharView[i].Show();
     }
 

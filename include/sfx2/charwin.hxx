@@ -52,7 +52,7 @@ public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
     SFX2_DLLPUBLIC virtual ~SvxCharView() override;
 
-    void            SetFont( const vcl::Font& rFont );
+    void UpdateFont(const OUString& rFontFamilyName);
     vcl::Font const & GetFont() const { return maFont; }
     void            SetText( const OUString& rText );
     OUString const & GetText() const { return m_sText; }

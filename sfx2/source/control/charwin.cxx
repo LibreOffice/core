@@ -267,10 +267,10 @@ void SvxCharView::setContextMenuHdl(const Link<const CommandEvent&, void>& rLink
     maContextMenuHdl = rLink;
 }
 
-void SvxCharView::SetFont(const vcl::Font& rFont)
+void SvxCharView::UpdateFont(const OUString& rFontFamilyName)
 {
     tools::Long nWinHeight = GetOutputSizePixel().Height();
-    maFont = rFont;
+    maFont.SetFamilyName(rFontFamilyName);
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);
     maFont.SetFontSize(mxVirDev->PixelToLogic(Size(0, nWinHeight / 2)));
@@ -286,7 +286,8 @@ void SvxCharView::SetFont(const vcl::Font& rFont)
 
 void SvxCharView::Resize()
 {
-    SetFont(GetFont()); //force recalculation of size
+    // force recalculation of size
+    UpdateFont(maFont.GetFamilyName());
 }
 
 void SvxCharView::SetText(const OUString& rText)
