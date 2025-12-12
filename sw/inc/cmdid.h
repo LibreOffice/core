@@ -211,6 +211,8 @@ class SwUINumRuleItem;
 #define FN_TRACK_CHANGES_IN_THIS_VIEW          (FN_VIEW + 72)  /* Record track changes only in this view */
 #define FN_TRACK_CHANGES_IN_ALL_VIEWS          (FN_VIEW + 73)  /* Record track changes only in all views */
 
+#define FN_VIEW_BASELINE_GRID_VISIBLE (FN_VIEW + 74)  /* Menu for displaying baseline grid */
+
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
 // FN_INSERT + 3 is FN_INSERT_BREAK

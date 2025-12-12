@@ -206,11 +206,12 @@
           <menu:menuitem menu:id=".uno:VScroll" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:GridMenu">
+      <menu:menu menu:id=".uno:GridsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible"/>
           <menu:menuitem menu:id=".uno:GridUse"/>
           <menu:menuitem menu:id=".uno:HelplinesMove"/>
+          <menu:menuitem menu:id=".uno:BaselineGridVisible"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

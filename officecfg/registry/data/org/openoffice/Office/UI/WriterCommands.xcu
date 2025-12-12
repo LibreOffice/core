@@ -3575,6 +3575,28 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:GridsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Gr~ids and Helplines</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:GridMenu</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:BaselineGridVisible" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Display ~Baseline Grid</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Display the baseline grid for page line-spacing</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:CharacterMenu" oor:op="replace">

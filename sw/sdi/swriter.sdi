@@ -9051,3 +9051,19 @@ SfxVoidItem CopyFieldDialog FN_COPY_FIELD
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Edit;
 ]
+
+SfxBoolItem BaselineGridVisible FN_VIEW_BASELINE_GRID_VISIBLE
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]

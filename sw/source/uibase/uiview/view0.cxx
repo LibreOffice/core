@@ -386,6 +386,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case SID_CLICK_CHANGE_ROTATION:
                 aBool.SetValue( pOpt->IsClickChangeRotation());
             break;
+            case FN_VIEW_BASELINE_GRID_VISIBLE:
+                aBool.SetValue(pOpt->IsBaselineGridVisible());
+            break;
         }
 
         if( nWhich )
@@ -820,6 +823,11 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsClickChangeRotation();
         pOpt->SetClickChangeRotation(bFlag);
     break;
+    case FN_VIEW_BASELINE_GRID_VISIBLE:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsBaselineGridVisible();
+        pOpt->SetBaselineGridVisible( bFlag );
+        break;
 
     default:
         OSL_FAIL("wrong request method");

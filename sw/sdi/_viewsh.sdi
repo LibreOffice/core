@@ -1105,4 +1105,10 @@ interface BaseTextEditView
         ExecMethod = Execute ;
     ]
 
+    FN_VIEW_BASELINE_GRID_VISIBLE
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
 }

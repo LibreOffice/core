@@ -380,6 +380,10 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( const SfxBoolItem* pItem = rSet.GetItemIfSet( FN_PARAM_BASELINE_GRID_VISIBLE, false ))
     {
         aViewOpt.SetBaselineGridVisible(pItem->GetValue());
+        if(pBindings)
+        {
+            pBindings->Invalidate(FN_VIEW_BASELINE_GRID_VISIBLE);
+        }
     }
 
     // Interpret Writer Printer Options
