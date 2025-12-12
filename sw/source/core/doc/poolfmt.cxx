@@ -147,7 +147,7 @@ const OUString* SwDoc::GetDocPattern(size_t const nPos) const
 }
 
 // Look for the style name's position. If it doesn't exist,
-// insert an anew
+// insert new
 size_t SwDoc::SetDocPattern(const OUString& rPatternName)
 {
     OSL_ENSURE( !rPatternName.isEmpty(), "no Document style name" );
