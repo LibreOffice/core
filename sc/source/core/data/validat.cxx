@@ -37,7 +37,6 @@
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
-#include <appoptio.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <formulacell.hxx>
@@ -52,7 +51,6 @@
 #include <scmatrix.hxx>
 #include <cellvalue.hxx>
 #include <simpleformulacalc.hxx>
-#include <scmod.hxx>
 
 #include <math.h>
 #include <memory>
@@ -385,9 +383,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
     }
 
     if (!bShowError) {
-        const bool bAcceptInvalidData = ScModule::get()->GetAppOptions().GetAllowInvalidData();
-        if (!bAcceptInvalidData)
-            callback(true);
+        callback(true);
         return;
     }
 

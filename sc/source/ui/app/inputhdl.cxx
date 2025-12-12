@@ -3233,10 +3233,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
                     pActiveViewSh->GetFrameWeld(), aString, aCursorPos,
                     [this, nBlockMode, aString, aPreAutoCorrectString](bool bForget)
                     { EnterHandler2(nBlockMode, bForget, aString, aPreAutoCorrectString); });
-
-                const bool bAcceptInvalidData = ScModule::get()->GetAppOptions().GetAllowInvalidData();
-                if (!bAcceptInvalidData)
-                    return;
+                return;
             }
         }
     }
