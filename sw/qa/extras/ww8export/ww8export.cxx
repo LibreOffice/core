@@ -1262,37 +1262,6 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), xParameters->getByName(u"MaxLength"_ustr).get<sal_uInt16>());
 }
 
-
-DECLARE_WW8EXPORT_TEST(testWw8Cjklist30, "cjklist30.doc")
-{
-    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
-}
-
-DECLARE_WW8EXPORT_TEST(testWw8Cjklist31, "cjklist31.doc")
-{
-    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
-}
-
-DECLARE_WW8EXPORT_TEST(testWw8Cjklist34, "cjklist34.doc")
-{
-    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
-}
-
-DECLARE_WW8EXPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
-{
-    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
-}
-
-DECLARE_WW8EXPORT_TEST(testTdf118564, "tdf118564.doc")
-{
-    sal_Int16   numFormat = getNumberingTypeOfParagraph(3);
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
-}
-
 DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
 {
         uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);

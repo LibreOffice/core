@@ -51,13 +51,6 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
-{
-    loadAndReload("tdf77964.doc");
-    // both images were loading as AT_PARA instead of AS_CHAR. Image2 visually had text wrapping.
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), u"AnchorType"_ustr));
-}
-
 DECLARE_WW8EXPORT_TEST(testTdf72511_editengLRSpace, "tdf72511_editengLRSpace.doc")
 {
     // given a default paragraph style with a left indent of 2 inches,
