@@ -2328,6 +2328,7 @@ namespace xmloff::token {
 
         TOKEN( "byte",                             XML_BYTE ),
         TOKEN( "macro",                            XML_MACRO ),
+        TOKEN( "reject",                          XML_REJECT ),
         TOKEN( "location",                        XML_LOCATION ),
         TOKEN( "application",                     XML_APPLICATION ),
 

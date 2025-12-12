@@ -45,8 +45,13 @@ published enum ValidationAlertStyle
 
     /** macro is executed.
      */
-    MACRO
+    MACRO,
 
+    /** silently reject
+
+        @since LibreOffice 26.2
+     */
+    NONE
 };
 
 
