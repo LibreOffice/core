@@ -5,4 +5,5 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 com.sun.star.datatransfer.VCLGenericClipboard
 com.sun.star.frame.VCLSessionManagerClient
+org.libreoffice.uitest.UITest
 vcl::FontIdentificator
