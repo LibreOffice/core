@@ -74,6 +74,7 @@ void ScSolverSettingsObj::testCellRangeAddress(const uno::Any& rExpected, const 
 // Creates a model using the XSolverSettings API checks if it is accessible via the API
 void ScSolverSettingsObj::testXSolverSettings()
 {
+#ifdef ENABLE_LPSOLVE
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -203,6 +204,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps2[4].Value);
     CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps2[5].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps2[5].Value);
+#endif
 }
 
 void ScSolverSettingsObj::setUp()
