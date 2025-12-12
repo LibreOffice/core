@@ -9,8 +9,6 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,desktop/soffice))
 
-ifeq ($(OS), MACOSX)
-
 ifeq (,$(ENABLE_RELEASE_BUILD))
 
 # Add entitlements if this is a non-release build. Just to be safe,
@@ -21,22 +19,6 @@ ifeq (,$(ENABLE_RELEASE_BUILD))
 $(call gb_CustomTarget_get_target,desktop/soffice) : \
 	$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice
 	-MACOSX_CODESIGNING_IDENTITY= $(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $(INSTROOTBASE)
-
-endif
-
-else
-
-$(call gb_CustomTarget_get_target,desktop/soffice) : \
-	$(gb_CustomTarget_workdir)/desktop/soffice/soffice.sh
-
-$(gb_CustomTarget_workdir)/desktop/soffice/soffice.sh : \
-		$(SRCDIR)/desktop/scripts/soffice.sh \
-		$(BUILDDIR)/config_host.mk \
-		| $(gb_CustomTarget_workdir)/desktop/soffice/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
-	cp $< $@
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
 endif
 
