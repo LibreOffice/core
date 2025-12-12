@@ -60,6 +60,8 @@
 #include <vcl/filter/PngImageWriter.hxx>
 #include <sfx2/lokhelper.hxx>
 
+#include <config_cairo_rgba.h>
+
 #include <chrono>
 #include <cstdlib>
 #include <string_view>
@@ -3130,7 +3132,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
 
         // bottom-right corner
-        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), aBitmapEx.GetPixelColor(nRight, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nRight, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x40, 0xd0, 0xff), nColor);
+#endif
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -3155,7 +3162,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
         Bitmap aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
 
         // top-left corner
-        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), aBitmapEx.GetPixelColor(nLeft, nTop));
+        ::Color nColor = aBitmapEx.GetPixelColor(nLeft, nTop);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x50, 0x00), nColor);
+#endif
 
         // bottom-left corner
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
@@ -3244,7 +3256,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nTop));
 
         // bottom-left corner
-        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x80, 0xff), aBitmapEx.GetPixelColor(nLeft, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nLeft, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x80, 0xff), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0x80, 0x90), nColor);
+#endif
 
         // bottom-right corner
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nRight, nBottom));
@@ -3279,7 +3296,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nRight, nBottom));
 
         // bottom-center
-        CPPUNIT_ASSERT_EQUAL(Color(0x20, 0xaa, 0x00), aBitmapEx.GetPixelColor(nCenterX, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nCenterX, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x20, 0xaa, 0x00), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xaa, 0x20), nColor);
+#endif
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -3308,7 +3330,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
 
         // bottom-right corner
-        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), aBitmapEx.GetPixelColor(nRight, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nRight, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x40, 0xd0, 0xff), nColor);
+#endif
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -3368,7 +3395,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         Bitmap aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
 
         // top-left corner
-        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), aBitmapEx.GetPixelColor(nLeft, nTop));
+        ::Color nColor = aBitmapEx.GetPixelColor(nLeft, nTop);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x50, 0x00), nColor);
+#endif
 
         // bottom-left corner
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
