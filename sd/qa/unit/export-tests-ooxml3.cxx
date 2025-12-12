@@ -52,6 +52,19 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165670)
                 u"*/ 802433 h 1884784");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169694_import_OLE_animation)
+{
+    createSdImpressDoc("pptx/tdf169694.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/"
+                "p:par[1]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/"
+                "p:childTnLst[1]/p:set/p:cBhvr/p:tgtEl/p:spTgt",
+                1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165262)
 {
     createSdImpressDoc("ppt/tdf165262.ppt");
