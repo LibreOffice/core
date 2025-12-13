@@ -179,7 +179,7 @@ void FilterDetectDocHandler::parseWorkbook(const AttributeList& rAttribs)
 
     // tdf#165180 Remember filter when opening file as 'Office Open XML Spreadsheet'
     // (fileVersion can only exist once, and lowestEdited can only be defined once - else corrupt)
-    // lowestEdited: 4 is 2007, 5 is 2010, 6 is 201?, 7 is 201?-2024
+    // lowestEdited: 4 is 2007, 5 is 2010, 6 is 2013 and 2016, 7 is 2019-2024
     const sal_Int32 nDefaultValue = rAttribs.getInteger(XML_lastEdited, 99);
     if (rAttribs.getInteger(XML_lowestEdited, nDefaultValue) > 4)
         maOOXMLVariant = OOXMLVariant::ISO_Transitional; // Excel 2010+
