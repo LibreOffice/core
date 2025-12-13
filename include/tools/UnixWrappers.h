@@ -32,10 +32,12 @@
  * All functions behave like the wrapped ones, set errno on errors.
  */
 
-#include <wchar.h>
-#include <stdio.h>
 #include <fcntl.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/stat.h>
+#include <wchar.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +46,7 @@ extern "C" {
 #ifdef _WIN32
 #include <io.h>
 #include <string.h>
-#include <cassert>
+#include <assert.h>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 /* Undo the mapping in <Windows.h> of CreateFont => CreateFontW etc, as vcl also uses these
@@ -72,16 +74,33 @@ extern "C" {
 
 #endif
 
+#ifdef __cplusplus
+#define UNIXWRAPPERS_H_MAYBE_UNUSED [[maybe_unused]]
+#else
+#define UNIXWRAPPERS_H_MAYBE_UNUSED
+#endif
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 #ifdef _WIN32
-[[maybe_unused]] static wchar_t* string_to_wide_string(const char* string)
+static wchar_t* string_to_wide_string(const char* string)
 {
-    const int len = strlen(string);
+    const size_t len = strlen(string);
     if (len == 0)
     {
         return _wcsdup(L"");
     }
 
-    const int wlen = MultiByteToWideChar(CP_UTF8, 0, string, len, NULL, 0);
+    if (len > INT_MAX)
+    {
+        /* Trying to be funny, eh? */
+        return _wcsdup(L"");
+    }
+
+    const int wlen = MultiByteToWideChar(CP_UTF8, 0, string, (int)len, NULL, 0);
     if (wlen <= 0)
     {
         return NULL;
@@ -89,16 +108,15 @@ extern "C" {
 
     wchar_t* result = (wchar_t*)malloc(wlen * 2 + 2);
     assert(result);
-    MultiByteToWideChar(CP_UTF8, 0, string, len, result, wlen);
+    MultiByteToWideChar(CP_UTF8, 0, string, (int)len, result, wlen);
     result[wlen] = L'\0';
 
     return result;
 }
-
 #endif
 
 /* Pass in UTF-8 filename */
-[[maybe_unused]] static int wrap_open(const char* path, int flags, int mode)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_open(const char* path, int flags, int mode)
 {
 #ifdef _WIN32
     wchar_t* wpath = string_to_wide_string(path);
@@ -113,7 +131,7 @@ extern "C" {
 #if 0
 
 /* Pass in UTF-16 filename */
-[[maybe_unused]] static int wrap_wopen(const wchar_t* path, int flags, int mode)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_wopen(const wchar_t* path, int flags, int mode)
 {
 #ifdef _WIN32
     return _wopen(path, flags, mode);
@@ -144,7 +162,7 @@ extern "C" {
 
 #endif
 
-[[maybe_unused]] static int wrap_read(int fd, void* buf, int nbytes)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_read(int fd, void* buf, int nbytes)
 {
 #ifdef _WIN32
     return _read(fd, buf, nbytes);
@@ -153,7 +171,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_write(int fd, const void* buf, int nbytes)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_write(int fd, const void* buf, int nbytes)
 {
 #ifdef _WIN32
     return _write(fd, buf, nbytes);
@@ -162,7 +180,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_fstat(int fd, struct stat* st)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_fstat(int fd, struct stat* st)
 {
 #ifdef _WIN32
     /* Sadly just "struct stat" in the Microsoft C library means a legacy one with 32-bit size,
@@ -190,7 +208,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static void* wrap_mmap(int64_t size, int fd, intptr_t* handle)
+UNIXWRAPPERS_H_MAYBE_UNUSED static void* wrap_mmap(int64_t size, int fd, intptr_t* handle)
 {
 #ifdef _WIN32
     *handle = (intptr_t)CreateFileMappingW((HANDLE)_get_osfhandle(fd), NULL,
@@ -203,7 +221,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_munmap(void* pointer, int64_t size, intptr_t handle)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_munmap(void* pointer, int64_t size, intptr_t handle)
 {
 #ifdef _WIN32
     (void)size;
@@ -220,7 +238,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_dup(int fd)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_dup(int fd)
 {
 #ifdef _WIN32
     return _dup(fd);
@@ -229,7 +247,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_close(int fd)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_close(int fd)
 {
 #ifdef _WIN32
     return _close(fd);
@@ -242,7 +260,7 @@ extern "C" {
  * anyway.
  */
 
-[[maybe_unused]] static FILE* wrap_fopen(const char* path, const char* mode)
+UNIXWRAPPERS_H_MAYBE_UNUSED static FILE* wrap_fopen(const char* path, const char* mode)
 {
 #ifdef _WIN32
     wchar_t* wpath = string_to_wide_string(path);
@@ -256,7 +274,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_stat(const char* path, struct stat* st)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_stat(const char* path, struct stat* st)
 {
 #ifdef _WIN32
     struct _stat32 st32;
@@ -283,7 +301,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static int wrap_access(const char* path, int mode)
+UNIXWRAPPERS_H_MAYBE_UNUSED static int wrap_access(const char* path, int mode)
 {
 #ifdef _WIN32
     wchar_t* wpath = string_to_wide_string(path);
@@ -295,7 +313,7 @@ extern "C" {
 #endif
 }
 
-[[maybe_unused]] static const char* wrap_realpath(const char* path, char* resolved_path)
+UNIXWRAPPERS_H_MAYBE_UNUSED static const char* wrap_realpath(const char* path, char* resolved_path)
 {
 #ifdef _WIN32
     strcpy(resolved_path, path);
@@ -305,8 +323,14 @@ extern "C" {
 #endif
 }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
 #ifdef __cplusplus
 }
 #endif
+
+#undef UNIXWRAPPERS_H_MAYBE_UNUSED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
