@@ -1118,9 +1118,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
 	$(if $(and $(filter-out EMSCRIPTEN HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
-		$(if $(DISABLE_GUI),, \
-			desktop_soffice_sh \
-		) \
+		desktop_soffice_sh \
 	) \
 	readlicense_oo_files \
 	readlicense_oo_license \
