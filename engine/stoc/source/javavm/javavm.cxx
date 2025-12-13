@@ -393,36 +393,6 @@ void getJavaPropsFromJavaSettings(
             }
         }
     }
-    if (xConfigAccess->hasByName(u"NetAccess"_ustr))
-    {
-        sal_Int32 val = 0;
-        if (xConfigAccess->getByName(u"NetAccess"_ustr) >>= val)
-        {
-            OUString sVal;
-            switch( val)
-            {
-            case 0: sVal = "host";
-                break;
-            case 1: sVal = "unrestricted";
-                break;
-            case 3: sVal = "none";
-                break;
-            }
-            OUString sProperty = "appletviewer.security.mode=" + sVal;
-            pjvm->pushProp(sProperty);
-        }
-    }
-    if (xConfigAccess->hasByName(u"Security"_ustr))
-    {
-        bool val = true;
-        xConfigAccess->getByName(u"Security"_ustr) >>= val;
-        OUString sProperty(u"stardiv.security.disableSecurity="_ustr);
-        if( val)
-            sProperty += "false";
-        else
-            sProperty += "true";
-        pjvm->pushProp(sProperty);
-    }
 }
 
 void setTimeZone(stoc_javavm::JVM * pjvm) noexcept {
@@ -923,8 +893,6 @@ JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
     osl::MutexGuard aGuard(m_aMutex);
     if (rSource.Source == m_xInetConfiguration)
         m_xInetConfiguration.clear();
-    if (rSource.Source == m_xJavaConfiguration)
-        m_xJavaConfiguration.clear();
 }
 
 void SAL_CALL JavaVirtualMachine::elementInserted(
@@ -953,7 +921,6 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     rEvent.Accessor >>= aAccessor;
     OUString aPropertyName;
     OUString aPropertyValue;
-    bool bSecurityChanged = false;
     if ( aAccessor == "ooInetProxyType" )
     {
         // Proxy none, manually
@@ -991,40 +958,6 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         aPropertyName = "http.nonProxyHosts";
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
-    }
-    else if ( aAccessor == "NetAccess" )
-    {
-        aPropertyName = "appletviewer.security.mode";
-        sal_Int32 n = 0;
-        if (rEvent.Element >>= n)
-            switch (n)
-            {
-            case 0:
-                aPropertyValue = "host";
-                break;
-            case 1:
-                aPropertyValue = "unrestricted";
-                break;
-            case 3:
-                aPropertyValue = "none";
-                break;
-            }
-        else
-            return;
-        bSecurityChanged = true;
-    }
-    else if ( aAccessor == "Security" )
-    {
-        aPropertyName = "stardiv.security.disableSecurity";
-        bool b;
-        if (rEvent.Element >>= b)
-            if (b)
-                aPropertyValue = "false";
-            else
-                aPropertyValue = "true";
-        else
-            return;
-        bSecurityChanged = true;
     }
     else
         return;
@@ -1082,47 +1015,6 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
             if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(u"JNI:CallStaticObjectMethod java.lang.System.setProperty"_ustr, nullptr);
         }
-
-        // If the settings for Security and NetAccess changed then we have to notify the SandboxSecurity
-        // SecurityManager
-        // call System.getSecurityManager()
-        if (bSecurityChanged)
-        {
-            jmethodID jmGetSecur= pJNIEnv->GetStaticMethodID( jcSystem,"getSecurityManager","()Ljava/lang/SecurityManager;");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(u"JNI:GetStaticMethodID java.lang.System.getSecurityManager"_ustr, nullptr);
-            jobject joSecur= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetSecur);
-            if (joSecur != nullptr)
-            {
-                // Make sure the SecurityManager is our SandboxSecurity
-                // FindClass("com.sun.star.lib.sandbox.SandboxSecurityManager" only worked at the first time
-                // this code was executed. Maybe it is a security feature. However, all attempts to debug the
-                // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
-//                  jclass jcSandboxSec= pJNIEnv->FindClass("com.sun.star.lib.sandbox.SandboxSecurity");
-//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity");
-//                  jboolean bIsSand= pJNIEnv->IsInstanceOf( joSecur, jcSandboxSec);
-                // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
-                jclass jcSec= pJNIEnv->GetObjectClass( joSecur);
-                jclass jcClass= pJNIEnv->FindClass("java/lang/Class");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(u"JNI:FindClass java.lang.Class"_ustr, nullptr);
-                jmethodID jmName= pJNIEnv->GetMethodID( jcClass,"getName","()Ljava/lang/String;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(u"JNI:GetMethodID java.lang.Class.getName"_ustr, nullptr);
-                jstring jsClass= static_cast<jstring>(pJNIEnv->CallObjectMethod( jcSec, jmName));
-                const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, nullptr);
-                OUString sName(reinterpret_cast<sal_Unicode const *>(jcharName));
-                bool bIsSandbox;
-                bIsSandbox = sName == "com.sun.star.lib.sandbox.SandboxSecurity";
-                pJNIEnv->ReleaseStringChars( jsClass, jcharName);
-
-                if (bIsSandbox)
-                {
-                    // call SandboxSecurity.reset
-                    jmethodID jmReset= pJNIEnv->GetMethodID( jcSec,"reset","()V");
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(u"JNI:GetMethodID com.sun.star.lib.sandbox.SandboxSecurity.reset"_ustr, nullptr);
-                    pJNIEnv->CallVoidMethod( joSecur, jmReset);
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(u"JNI:CallVoidMethod com.sun.star.lib.sandbox.SandboxSecurity.reset"_ustr, nullptr);
-                }
-            }
-        }
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
@@ -1145,34 +1037,19 @@ JavaVirtualMachine::~JavaVirtualMachine()
         {
             OSL_FAIL("com.sun.star.uno.Exception caught");
         }
-    if (m_xJavaConfiguration.is())
-        // We should never get here, but just in case...
-        try
-        {
-            m_xJavaConfiguration->removeContainerListener(this);
-        }
-        catch (css::uno::Exception &)
-        {
-            OSL_FAIL("com.sun.star.uno.Exception caught");
-        }
 }
 
 void SAL_CALL JavaVirtualMachine::disposing()
 {
     css::uno::Reference< css::container::XContainer > xContainer1;
-    css::uno::Reference< css::container::XContainer > xContainer2;
     {
         osl::MutexGuard aGuard(m_aMutex);
         m_bDisposed = true;
         xContainer1 = m_xInetConfiguration;
         m_xInetConfiguration.clear();
-        xContainer2 = m_xJavaConfiguration;
-        m_xJavaConfiguration.clear();
     }
     if (xContainer1.is())
         xContainer1->removeContainerListener(this);
-    if (xContainer2.is())
-        xContainer2->removeContainerListener(this);
 }
 
 /*We listen to changes in the configuration. For example, the user changes the proxy
@@ -1208,20 +1085,6 @@ void JavaVirtualMachine::registerConfigChangesListener()
             if (m_xInetConfiguration.is())
                 m_xInetConfiguration->addContainerListener(this);
 
-            // now register as listener to changes in org.openoffice.Java/VirtualMachine
-            css::uno::Sequence<css::uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
-            {
-                {"nodepath", css::uno::Any(u"org.openoffice.Office.Java/VirtualMachine"_ustr)},
-                {"depth", css::uno::Any(sal_Int32(-1))} // depth: -1 means unlimited
-            }));
-            m_xJavaConfiguration.set(
-                    xConfigProvider->createInstanceWithArguments(
-                        u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                        aArguments2),
-                    css::uno::UNO_QUERY);
-
-            if (m_xJavaConfiguration.is())
-                m_xJavaConfiguration->addContainerListener(this);
         }
     }catch(const css::uno::Exception & e)
     {

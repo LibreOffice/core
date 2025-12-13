@@ -134,8 +134,6 @@ private:
         // the second attempt to create Java might cause a crash.
     css::uno::Reference< css::container::XContainer >
         m_xInetConfiguration;
-    css::uno::Reference< css::container::XContainer >
-        m_xJavaConfiguration; // for Java settings
 
     osl::ThreadData m_aAttachGuards;
 };
