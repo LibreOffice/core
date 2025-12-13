@@ -37,38 +37,6 @@
       <info>
         <desc>Provides information used to initialize a Java Virtual Machine. </desc>
       </info>
-      <prop oor:name="Security" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
-        <info>
-          <desc>Determines if security checks are performed for applets.</desc>
-          <label>Enable security checks</label>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="NetAccess" oor:type="xs:int">
-        <!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
-        <info>
-          <desc>Determines if and to what extent Java applets are allowed to access the network.</desc>
-          <label>Net access</label>
-        </info>
-        <constraints>
-          <enumeration oor:value="0">
-            <info>
-              <desc>Host - connect to origin</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="1">
-            <info>
-              <desc>Unrestricted - connect to all</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="3">
-            <info>
-              <desc>None - no connection allowed</desc>
-            </info>
-          </enumeration>
-        </constraints>
-      </prop>
       <prop oor:name="RunUnoComponentsOutOfProcess" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies whether JVM based UNO components are run via uno command outside the LibreOffice process.</desc>
