@@ -532,30 +532,59 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_TOGGLE_REL:
             {
-                /* TODO: MLFORMULA: this should work also with multi-line formulas. */
-                if (rEngine.GetParagraphCount() == 1)
+                auto PaMToStringIndex = [](const OUString& s, EPaM pam)
                 {
-                    OUString aText = rEngine.GetText();
-                    ESelection aSel = pEditView->GetSelection();    // current View
-
-                    ScDocument& rDoc = rViewData.GetDocument();
-                    ScRefFinder aFinder(aText, rViewData.GetCurPos(), rDoc, rDoc.GetAddressConvention());
-                    aFinder.ToggleRel(aSel.start.nIndex, aSel.end.nIndex);
-                    if (aFinder.GetFound())
+                    sal_Int32 index = 0;
+                    for (; pam.nPara > 0; --pam.nPara)
                     {
-                        const OUString& aNew = aFinder.GetText();
-                        ESelection aNewSel( 0,aFinder.GetSelStart(), 0,aFinder.GetSelEnd() );
-                        rEngine.SetText( aNew );
-                        pTableView->SetSelection( aNewSel );
-                        if ( pTopView )
-                        {
-                            pTopView->getEditEngine().SetText( aNew );
-                            pTopView->SetSelection( aNewSel );
-                        }
-
-                        // reference is being selected -> do not overwrite when typing
-                        bSetSelIsRef = true;
+                        index = s.indexOf('\n', index) + 1; // becomes 0 on "not found"
+                        if (index <= 0)
+                            return s.getLength();
                     }
+                    index += pam.nIndex;
+                    return std::min(index, s.getLength());
+                };
+                auto StringIndexToPaM = [](const OUString& s, sal_Int32 index)
+                {
+                    EPaM pam;
+                    for (sal_Int32 i = 0; i < index; ++i)
+                    {
+                        if (s[i] == '\n')
+                        {
+                            ++pam.nPara;
+                            pam.nIndex = 0;
+                        }
+                        else
+                        {
+                            ++pam.nIndex;
+                        }
+                    }
+                    return pam;
+                };
+
+                OUString aText = rEngine.GetText(LINEEND_LF);
+                ESelection aSel = pEditView->GetSelection(); // current View
+                sal_Int32 nStart = PaMToStringIndex(aText, aSel.start);
+                sal_Int32 nEnd = PaMToStringIndex(aText, aSel.end);
+
+                ScDocument& rDoc = rViewData.GetDocument();
+                ScRefFinder aFinder(aText, rViewData.GetCurPos(), rDoc, rDoc.GetAddressConvention());
+                aFinder.ToggleRel(nStart, nEnd);
+                if (aFinder.GetFound())
+                {
+                    const OUString& aNew = aFinder.GetText();
+                    ESelection aNewSel(StringIndexToPaM(aNew, aFinder.GetSelStart()));
+                    aNewSel.end = StringIndexToPaM(aNew, aFinder.GetSelEnd());
+                    rEngine.SetText( aNew );
+                    pTableView->SetSelection( aNewSel );
+                    if ( pTopView )
+                    {
+                        pTopView->getEditEngine().SetText( aNew );
+                        pTopView->SetSelection( aNewSel );
+                    }
+
+                    // reference is being selected -> do not overwrite when typing
+                    bSetSelIsRef = true;
                 }
             }
             break;
