@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,tools,\
     CustomTarget_reversemap \
     Library_tl \
     StaticLibrary_ooopathutils \
+    StaticLibrary_UseUnixWrappers \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,tools,\
