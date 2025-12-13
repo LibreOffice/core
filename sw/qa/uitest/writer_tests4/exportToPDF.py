@@ -13,7 +13,7 @@ from uitest.uihelper.common import type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from org.libreoffice.unotest import systemPathToFileUrl
 from tempfile import TemporaryDirectory
-import os.path
+import os
 
 class exportToPDF(UITestCase):
 
@@ -74,6 +74,7 @@ class exportToPDF(UITestCase):
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                self.assertEqual("Hello World", document.DrawPages[0][0].String)
+                if os.getenv('ENABLE_POPPLER') == 'TRUE':
+                    self.assertEqual("Hello World", document.DrawPages[0][0].String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
