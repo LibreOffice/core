@@ -316,12 +316,12 @@ AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirecti
 
 namespace {
 
-enum XMLActionKind
+enum class XMLActionKind
 {
-    XMLE_SHOW,
-    XMLE_HIDE,
-    XMLE_DIM,
-    XMLE_PLAY
+    SHOW,
+    HIDE,
+    DIM,
+    PLAY
 };
 
 class XMLAnimationsEffectContext : public SvXMLImportContext
@@ -393,31 +393,31 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,
     XMLAnimationsContext& rAnimationsContext )
 :   SvXMLImportContext(rImport),
     mxAnimationsContext( &rAnimationsContext ),
-    meKind( XMLE_SHOW ), mbTextEffect( false ),
+    meKind( XMLActionKind::SHOW ), mbTextEffect( false ),
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), maDimColor(0), mbPlayFull( false )
 {
     switch(nElement & TOKEN_MASK)
     {
         case XML_SHOW_SHAPE:
-            meKind = XMLE_SHOW;
+            meKind = XMLActionKind::SHOW;
             break;
         case XML_SHOW_TEXT:
-            meKind = XMLE_SHOW;
+            meKind = XMLActionKind::SHOW;
             mbTextEffect = true;
             break;
         case XML_HIDE_SHAPE:
-            meKind = XMLE_HIDE;
+            meKind = XMLActionKind::HIDE;
             break;
         case XML_HIDE_TEXT:
-            meKind = XMLE_HIDE;
+            meKind = XMLActionKind::HIDE;
             mbTextEffect = true;
             break;
         case XML_DIM:
-            meKind = XMLE_DIM;
+            meKind = XMLActionKind::DIM;
             break;
         case XML_PLAY:
-            meKind = XMLE_PLAY;
+            meKind = XMLActionKind::PLAY;
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
@@ -500,13 +500,13 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
 
             if( xSet.is() )
             {
-                if( meKind == XMLE_DIM )
+                if( meKind == XMLActionKind::DIM )
                 {
                     xSet->setPropertyValue( u"DimPrevious"_ustr, Any(true) );
 
                     xSet->setPropertyValue( u"DimColor"_ustr, Any(maDimColor) );
                 }
-                else if( meKind == XMLE_PLAY )
+                else if( meKind == XMLActionKind::PLAY )
                 {
                     xSet->setPropertyValue( u"IsAnimation"_ustr, Any(true) );
 
@@ -516,13 +516,13 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
                 }
                 else
                 {
-                    if( meKind == XMLE_HIDE && !mbTextEffect && meEffect == EK_none )
+                    if( meKind == XMLActionKind::HIDE && !mbTextEffect && meEffect == EK_none )
                     {
                         xSet->setPropertyValue( u"DimHide"_ustr, Any(true) );
                     }
                     else
                     {
-                        const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
+                        const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLActionKind::SHOW );
 
                         if (mbTextEffect)
                             xSet->setPropertyValue( u"TextEffect"_ustr, Any( eEffect ) );
