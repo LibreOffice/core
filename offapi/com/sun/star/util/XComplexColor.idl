@@ -25,6 +25,12 @@ interface XComplexColor
 
     /** resolve the color */
     Color resolveColor([in] com::sun::star::util::XTheme xTheme);
+
+    /** String representation of the complex color.
+
+        @since LibreOffice 26.2
+    */
+    string getRepresentation();
 };
 
 }; }; }; };
