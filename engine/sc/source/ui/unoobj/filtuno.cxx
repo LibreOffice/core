@@ -177,7 +177,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-    if ( !bExport && aFilterString == ScDocShell::GetAsciiFilterName() )
+    if (!bExport && aFilterString == SC_TEXT_CSV_FILTER_NAME)
     {
         //  ascii import is special...
 
@@ -206,7 +206,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
     }
-    else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
+    else if (aFilterString == SC_HTML_WEBQ_FILTER_NAME || aFilterString == SC_HTML_FILTER_NAME)
     {
         if (bExport)
             nRet = ui::dialogs::ExecutableDialogResults::OK;    // export HTML without dialog
@@ -244,7 +244,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         OUString aTitle;
         bool bIncludeBOM = false;
 
-        if ( aFilterString == ScDocShell::GetAsciiFilterName() )
+        if (aFilterString == SC_TEXT_CSV_FILTER_NAME)
         {
             //  ascii export (import is handled above)
 
@@ -262,7 +262,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             aOptions.ReadFromString(aFilterOptions);
             bIncludeBOM = aOptions.GetIncludeBOM();
         }
-        else if ( aFilterString == ScDocShell::GetLotusFilterName() )
+        else if (aFilterString == SC_LOTUS_FILTER_NAME)
         {
             //  lotus is only imported
             OSL_ENSURE( !bExport, "Filter Options for Lotus Export is not implemented" );
@@ -270,7 +270,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             aTitle = ScResId( STR_IMPORT_LOTUS );
             eEncoding = RTL_TEXTENCODING_IBM_437;
         }
-        else if ( aFilterString == ScDocShell::GetDBaseFilterName() )
+        else if (aFilterString == SC_DBASE_FILTER_NAME)
         {
             if ( bExport )
             {
@@ -298,7 +298,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             bDBEnc = true;
             // pInStream goes out of scope, the stream is automatically closed
         }
-        else if ( aFilterString == ScDocShell::GetDifFilterName() )
+        else if (aFilterString == SC_DIF_FILTER_NAME)
         {
             if ( bExport )
             {

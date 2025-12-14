@@ -20,6 +20,8 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <global.hxx>
+
 using namespace com::sun::star;
 
 ScExcelBiffDetect::ScExcelBiffDetect() {}
@@ -149,7 +151,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
             // BIFF8 is expected to contain a stream named "Workbook".
             return OUString();
 
-        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 97 Vorlage/Template"_ustr : u"MS Excel 97"_ustr;
+        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? SC_XL97TMPL_FILTER_NAME : SC_XL97_FILTER_NAME;
     }
 
     else if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
@@ -158,7 +160,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
         if (!hasStream(xInStream, u"Book"_ustr))
             return OUString();
 
-        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 95 Vorlage/Template"_ustr : u"MS Excel 95"_ustr;
+        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? SC_XL95TMPL_FILTER_NAME : SC_XL95_FILTER_NAME;
     }
 
     else if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
@@ -167,7 +169,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
         if (!hasStream(xInStream, u"Book"_ustr))
             return OUString();
 
-        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 5.0/95 Vorlage/Template"_ustr : u"MS Excel 5.0/95"_ustr;
+        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? SC_XL5TMPL_FILTER_NAME : SC_XL5_FILTER_NAME;
     }
 
     else if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
@@ -176,7 +178,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
         if (!isExcel40(xInStream))
             return OUString();
 
-        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 4.0 Vorlage/Template"_ustr : u"MS Excel 4.0"_ustr;
+        aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? SC_XL4TMPL_FILTER_NAME : SC_XL4_FILTER_NAME;
     }
 
     else
