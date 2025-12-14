@@ -9,6 +9,7 @@
  */
 
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
 
 using namespace css;
 
@@ -16,9 +17,14 @@ sal_Int32 UnoComplexColor::getType() { return sal_Int32(maColor.getType()); }
 
 sal_Int32 UnoComplexColor::getThemeColorType() { return sal_Int32(maColor.getThemeColorType()); }
 
+OUString UnoComplexColor::getRepresentation()
+{
+    return OStringToOUString(model::color::convertToJSON(maColor), RTL_TEXTENCODING_UTF8);
+}
+
 util::Color UnoComplexColor::resolveColor(uno::Reference<util::XTheme> const& /*xTheme*/)
 {
-    return util::Color(maColor.getRGBColor());
+    return util::Color(maColor.getFinalColor());
 }
 
 namespace model::color
