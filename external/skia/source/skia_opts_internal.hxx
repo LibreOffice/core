@@ -3,8 +3,7 @@
  * found in the LICENSE file.
  */
 
-#ifndef SKIA_OPTS_INTERNAL_H
-#define SKIA_OPTS_INTERNAL_H
+#pragma once
 
 #if SK_CPU_SSE_LEVEL >= SK_CPU_SSE_LEVEL_SSSE3
     #include <immintrin.h>
@@ -77,5 +76,3 @@ inline void RGB1_to_R(uint8_t dst[], const uint32_t* src, int count) {
 #endif
 
 } // namespace
-
-#endif

@@ -3,8 +3,7 @@
  * found in the LICENSE file.
  */
 
-#ifndef SKIA_OPTS_H
-#define SKIA_OPTS_H
+#pragma once
 
 #include <include/core/SkTypes.h>
 
@@ -24,5 +23,3 @@ typedef void (*Swizzle_u8_8888)(uint8_t*, const uint32_t*, int);
 extern Swizzle_u8_8888 RGB1_to_RGB,     // i.e. remove an (opaque) alpha
                        RGB1_to_R;       // i.e. copy one channel to the result
 }
-
-#endif
