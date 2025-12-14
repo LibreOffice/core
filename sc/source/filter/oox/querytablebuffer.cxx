@@ -250,13 +250,12 @@ void QueryTable::finalizeImport()
         PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
         Reference< XAreaLinks > xAreaLinks( aDocProps.getAnyProperty( PROP_AreaLinks ), UNO_QUERY_THROW );
         CellAddress aDestPos( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row() );
-        static constexpr OUString aFilterName = u"calc_HTML_WebQuery"_ustr;
-        xAreaLinks->insertAtPosition( aDestPos, aFileUrl, aTables, aFilterName, /*aFilterOptions*/u""_ustr );
+        xAreaLinks->insertAtPosition( aDestPos, aFileUrl, aTables, SC_HTML_WEBQ_FILTER_NAME, /*aFilterOptions*/u""_ustr );
         // set refresh interval (convert minutes to seconds)
         sal_Int32 nRefreshPeriod = xConnection->getModel().mnInterval * 60;
         if( nRefreshPeriod > 0 )
         {
-            PropertySet aPropSet( lclFindAreaLink( xAreaLinks, aDestRange.aStart, aFileUrl, aTables, aFilterName, /*aFilterOptions*/u"" ) );
+            PropertySet aPropSet( lclFindAreaLink( xAreaLinks, aDestRange.aStart, aFileUrl, aTables, SC_HTML_WEBQ_FILTER_NAME, /*aFilterOptions*/u"" ) );
             aPropSet.setProperty( PROP_RefreshPeriod, nRefreshPeriod );
         }
     }

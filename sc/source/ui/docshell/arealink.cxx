@@ -261,7 +261,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     // correct source range name list for web query import
     OUString aTempArea;
 
-    if( rNewFilter == ScDocShell::GetWebQueryFilterName() )
+    if (rNewFilter == SC_HTML_WEBQ_FILTER_NAME)
         aTempArea = ScFormatFilter::Get().GetHTMLRangeNameList( rSrcDoc, rNewArea );
     else
         aTempArea = rNewArea;

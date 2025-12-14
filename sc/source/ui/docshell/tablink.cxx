@@ -441,7 +441,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
         if ( pSfxFilter )
             rFilter = pSfxFilter->GetFilterName();
         else
-            rFilter = ScDocShell::GetOwnFilterName();       //  otherwise Calc file
+            rFilter = SC_SC50_FILTER_NAME; // otherwise Calc file
         bOK = !rFilter.isEmpty();
     }
 

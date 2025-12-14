@@ -63,6 +63,24 @@ inline constexpr OUString STRING_STANDARD = u"Standard"_ustr;
 
 // Have the dreaded programmatic filter name defined in one place.
 inline constexpr OUString SC_TEXT_CSV_FILTER_NAME = u"Text - txt - csv (StarCalc)"_ustr;
+inline constexpr OUString SC_HTML_FILTER_NAME = u"HTML (StarCalc)"_ustr;
+inline constexpr OUString SC_HTML_WEBQ_FILTER_NAME = u"calc_HTML_WebQuery"_ustr;
+inline constexpr OUString SC_LOTUS_FILTER_NAME = u"Lotus"_ustr;
+inline constexpr OUString SC_DBASE_FILTER_NAME = u"dBase"_ustr;
+inline constexpr OUString SC_DIF_FILTER_NAME = u"DIF"_ustr;
+inline constexpr OUString SC_SC50_FILTER_NAME = u"StarCalc 5.0"_ustr;
+inline constexpr OUString SC_SOXML_FILTER_NAME = u"StarOffice XML (Calc)"_ustr;
+inline constexpr OUString SC_QPRO6_FILTER_NAME = u"Quattro Pro 6.0"_ustr;
+inline constexpr OUString SC_XL4_FILTER_NAME = u"MS Excel 4.0"_ustr;
+inline constexpr OUString SC_XL4TMPL_FILTER_NAME = u"MS Excel 4.0 Vorlage/Template"_ustr;
+inline constexpr OUString SC_XL5_FILTER_NAME = u"MS Excel 5.0/95"_ustr;
+inline constexpr OUString SC_XL5TMPL_FILTER_NAME = u"MS Excel 5.0/95 Vorlage/Template"_ustr;
+inline constexpr OUString SC_XL95_FILTER_NAME = u"MS Excel 95"_ustr;
+inline constexpr OUString SC_XL95TMPL_FILTER_NAME = u"MS Excel 95 Vorlage/Template"_ustr;
+inline constexpr OUString SC_XL97_FILTER_NAME = u"MS Excel 97"_ustr;
+inline constexpr OUString SC_XL97TMPL_FILTER_NAME = u"MS Excel 97 Vorlage/Template"_ustr;
+inline constexpr OUString SC_SYLK_FILTER_NAME = u"SYLK"_ustr;
+inline constexpr OUString SC_RTF_FILTER_NAME = u"Rich Text Format (StarCalc)"_ustr;
 
 // characters
 

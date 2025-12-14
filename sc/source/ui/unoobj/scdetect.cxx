@@ -31,6 +31,8 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 
+#include <global.hxx>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -277,47 +279,47 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         // No stream, no detection.
         return OUString();
 
-    const char* pSearchFilterName = nullptr;
+    OUString aSearchFilterName;
     if (aTypeName == "calc_Lotus")
     {
         if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))
             return OUString();
 
-        pSearchFilterName = "Lotus";
+        aSearchFilterName = SC_LOTUS_FILTER_NAME;
     }
     else if (aTypeName == "calc_QPro")
     {
         if (!detectThisFormat(*pStream, pQPro))
             return OUString();
 
-        pSearchFilterName = "Quattro Pro 6.0";
+        aSearchFilterName = SC_QPRO6_FILTER_NAME;
     }
     else if (aTypeName == "calc_SYLK")
     {
         if (!detectThisFormat(*pStream, pSylk))
             return OUString();
 
-        pSearchFilterName = "SYLK";
+        aSearchFilterName = SC_SYLK_FILTER_NAME;
     }
     else if (aTypeName == "calc_DIF")
     {
         if (!detectThisFormat(*pStream, pDIF1) && !detectThisFormat(*pStream, pDIF2))
             return OUString();
 
-        pSearchFilterName = "DIF";
+        aSearchFilterName = SC_DIF_FILTER_NAME;
     }
     else if (aTypeName == "calc_dBase")
     {
         if (!lcl_MayBeDBase(*pStream))
             return OUString();
 
-        pSearchFilterName = "dBase";
+        aSearchFilterName = SC_DBASE_FILTER_NAME;
     }
     else
         return OUString();
 
     SfxFilterMatcher aMatcher(u"scalc"_ustr);
-    std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
+    std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4FilterName(aSearchFilterName);
 
     if (!pFilter)
         return OUString();

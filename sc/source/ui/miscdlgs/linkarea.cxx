@@ -61,9 +61,6 @@ ScLinkedAreaDlg::~ScLinkedAreaDlg()
 {
 }
 
-constexpr OUString FILTERNAME_HTML = u"HTML (StarCalc)"_ustr;
-constexpr OUString FILTERNAME_QUERY = u"calc_HTML_WebQuery"_ustr;
-
 IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl, weld::Button&, void)
 {
     m_xDocInserter.reset( new sfx2::DocumentInserter(m_xDialog.get(), ScDocShell::Factory().GetFactoryName()) );
@@ -91,8 +88,8 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, bool)
         return true;
 
     // #i53241# replace HTML filter with DataQuery filter
-    if (aFilter == FILTERNAME_HTML)
-        aFilter = FILTERNAME_QUERY;
+    if (aFilter == SC_HTML_FILTER_NAME)
+        aFilter = SC_HTML_WEBQ_FILTER_NAME;
 
     LoadDocument( aEntered, aFilter, aOptions );
 
@@ -188,10 +185,10 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
 
         // replace HTML filter with DataQuery filter
         std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
-        if (pFilter && FILTERNAME_HTML == pFilter->GetFilterName())
+        if (pFilter && SC_HTML_FILTER_NAME == pFilter->GetFilterName())
         {
             std::shared_ptr<const SfxFilter> pNewFilter =
-                ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( FILTERNAME_QUERY );
+                ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( SC_HTML_WEBQ_FILTER_NAME );
             if( pNewFilter )
                 pMed->SetFilter( pNewFilter );
         }

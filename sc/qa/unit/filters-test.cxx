@@ -129,7 +129,7 @@ void ScFiltersTest::testTdf90299()
     aReferencingFileURL = aTmpDirectory1URL + "/tdf90299.xls";
     aReferencedFileURL = aTmpDirectory1URL + "/dummy.xls";
 
-    ScDocShellRef xShell = loadDoc(aReferencingFileURL, u"MS Excel 97"_ustr, OUString(), OUString(),
+    ScDocShellRef xShell = loadDoc(aReferencingFileURL, SC_XL97_FILTER_NAME, OUString(), OUString(),
             XLS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -140,7 +140,7 @@ void ScFiltersTest::testTdf90299()
     SfxMedium aStoreMedium(aReferencingFileURL, StreamMode::STD_WRITE);
 
     auto pExportFilter = std::make_shared<SfxFilter>(
-        "MS Excel 97", OUString(), XLS_FORMAT_TYPE, SotClipboardFormatId::NONE, OUString(),
+        SC_XL97_FILTER_NAME, OUString(), XLS_FORMAT_TYPE, SotClipboardFormatId::NONE, OUString(),
         OUString(), OUString(), "private:factory/scalc*");
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
@@ -155,7 +155,7 @@ void ScFiltersTest::testTdf90299()
     aReferencingFileURL = aTmpDirectory2URL + "/tdf90299.xls";
     aReferencedFileURL = aTmpDirectory2URL + "/dummy.xls";
 
-    xShell = loadDoc(aReferencingFileURL, u"MS Excel 97"_ustr, OUString(), OUString(),
+    xShell = loadDoc(aReferencingFileURL, SC_XL97_FILTER_NAME, OUString(), OUString(),
             XLS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
     ScDocument& rDoc2 = xShell->GetDocument();
     CPPUNIT_ASSERT_EQUAL(OUString("='" + aReferencedFileURL + "'#$Sheet1.A1"), rDoc2.GetFormula(0, 0, 0));

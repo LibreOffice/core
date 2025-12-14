@@ -403,13 +403,6 @@ public:
     SC_DLLPUBLIC static SCTAB       GetCurTab();
 
     SAL_RET_MAYBENULL static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
-    static OUString   GetOwnFilterName();
-    static const OUString & GetHtmlFilterName();
-    static const OUString & GetWebQueryFilterName();
-    static const OUString & GetAsciiFilterName();
-    static const OUString & GetLotusFilterName();
-    static const OUString & GetDBaseFilterName();
-    static const OUString & GetDifFilterName();
     static bool       HasAutomaticTableName( std::u16string_view rFilter );
     static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
