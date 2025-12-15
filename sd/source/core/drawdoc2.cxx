@@ -1776,7 +1776,8 @@ void SdDrawDocument::connectPagePreviews()
     if (!HasCanvasPage())
         return;
     SdrObjList* pObjList = mpCanvasPage.get();
-    std::vector<SdrPageObj*> aPageOrder(GetSdPageCount(PageKind::Standard) - 1, nullptr);
+    sal_uInt16 nPageCount = GetSdPageCount(PageKind::Standard);
+    std::vector<SdrPageObj*> aPageOrder(nPageCount - 1, nullptr);
 
     SdrObjListIter aIter(pObjList, SdrIterMode::Flat);
     for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
@@ -1794,6 +1795,10 @@ void SdDrawDocument::connectPagePreviews()
             aPageOrder[nIndex] = pPageObj;
         }
     }
+
+    // return if the document has only one non-canvas page
+    if (nPageCount == 2)
+        return;
 
     for (size_t i = 0; i < aPageOrder.size() - 1; i++)
     {
