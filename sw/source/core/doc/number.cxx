@@ -475,6 +475,9 @@ SwNumRule::SwNumRule( UIName aNm,
         {
             pFormat = new SwNumFormat;
             pFormat->SetNumberingType(SVX_NUM_NUMBER_NONE);
+            // SVX_NUM_NUMBER_NONE with the default SvxNumberFormat::LISTTAB would lead to an
+            // unexpected leading tab for the DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY case.
+            pFormat->SetLabelFollowedBy(SvxNumberFormat::NOTHING);
             pFormat->SetIncludeUpperLevels( MAXLEVEL );
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
