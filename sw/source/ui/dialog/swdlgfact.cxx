@@ -458,10 +458,11 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptio
 namespace
 {
 class AbstractDropDownFieldDialog_Impl
-    : public vcl::AbstractDialogImpl_Sync<AbstractDropDownFieldDialog, sw::DropDownFieldDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractDropDownFieldDialog, sw::DropDownFieldDialog>
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    void Apply() override { m_pDlg->Apply(); }
     bool PrevButtonPressed() const override { return m_pDlg->PrevButtonPressed(); }
     bool NextButtonPressed() const override { return m_pDlg->NextButtonPressed(); }
 };
