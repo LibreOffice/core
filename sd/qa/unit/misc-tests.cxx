@@ -95,6 +95,7 @@ public:
     void testEncodedTableStyles();
     void testTdf157117();
     void testPageBackgroundImages();
+    void testCanvasSlideExportODP();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(testEncodedTableStyles);
     CPPUNIT_TEST(testTdf157117);
     CPPUNIT_TEST(testPageBackgroundImages);
+    CPPUNIT_TEST(testCanvasSlideExportODP);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1234,6 +1236,37 @@ void SdMiscTest::testPageBackgroundImages()
     // Check none of the graphic names is empty
     for (OUString const& rName : aGraphicNames)
         CPPUNIT_ASSERT(!rName.isEmpty());
+}
+
+void SdMiscTest::testCanvasSlideExportODP()
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    // insert canvas page to make a total of 2 pages
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    // assert the document has 2 standard pages
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // saving with config items in settings.xml
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
+    pBatch->commit();
+    save(TestFilter::ODP);
+
+    // Verify if the "HasCanvasPage" item is true
+    xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
+    static constexpr OString sPathStart("/office:document-settings/office:settings/"
+                                        "config:config-item-set[@config:name='ooo:view-settings']/"
+                                        "config:config-item-map-indexed[@config:name='Views']/"
+                                        "config:config-item-map-entry"_ostr);
+    assertXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='HasCanvasPage']",
+                       u"true");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
