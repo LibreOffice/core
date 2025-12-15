@@ -300,6 +300,7 @@ protected:
 public:
     virtual bool          PrevButtonPressed() const = 0;
     virtual bool          NextButtonPressed() const = 0;
+    virtual void Apply() = 0;
 };
 
 class AbstractSwLabDlg  : public SfxAbstractTabDialog

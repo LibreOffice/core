@@ -377,13 +377,15 @@ public:
 
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
 {
-    std::unique_ptr<sw::DropDownFieldDialog> m_xDlg;
+    std::shared_ptr<sw::DropDownFieldDialog> m_xDlg;
 public:
     explicit AbstractDropDownFieldDialog_Impl(std::unique_ptr<sw::DropDownFieldDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override { m_xDlg->Apply(); }
     virtual bool          PrevButtonPressed() const override;
     virtual bool          NextButtonPressed() const override;
 };

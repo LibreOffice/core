@@ -293,6 +293,26 @@ bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNex
     return bRet;
 }
 
+void SwWrtShell::EditDropDownFieldDlg(SwField* pField, weld::Widget* pParentWin)
+{
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    VclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, false, false));
+
+    pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nRet) {
+        if (nRet == RET_OK)
+            pDlg->Apply();
+
+        pDlg->disposeOnce();
+
+        GetWin()->PaintImmediately();
+
+        if (nRet == RET_YES)
+        {
+            GetView().GetViewFrame().GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);
+        }
+    });
+}
+
 bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
                                        weld::Widget* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
@@ -500,7 +520,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
             StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
         break;
     case SwFieldIds::Dropdown :
-        StartDropDownFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
+        EditDropDownFieldDlg(const_cast<SwField*>(&rField), GetView().GetFrameWeld());
     break;
     default:
         SAL_WARN_IF(rField.IsClickable(), "sw", "unhandled clickable field!");

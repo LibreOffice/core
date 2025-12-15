@@ -242,6 +242,11 @@ short AbstractDropDownFieldDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractDropDownFieldDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractDropDownFormFieldDialog_Impl::Execute()
 {
     assert(false);

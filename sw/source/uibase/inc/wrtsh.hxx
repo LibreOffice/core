@@ -418,6 +418,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
     // update DropDown fields
     bool    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
+    // update single DropDown field
+    void    EditDropDownFieldDlg(SwField*, weld::Widget* pParentWin);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) override;
