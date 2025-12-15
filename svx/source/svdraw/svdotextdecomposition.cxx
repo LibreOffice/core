@@ -989,7 +989,6 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(rOutlinerParaObject);
 
-    setupAutoFitText(rOutliner, aAnchorTextSize);
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
@@ -999,6 +998,9 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // SetFixedCellHeight *is* used/done in ::BegTextEdit the error is that it is *not*
     // done here (in contrast to BlockText and StretchText)
     rOutliner.SetFixedCellHeight(rSdrAutofitTextPrimitive.isFixedCellHeight());
+
+    // do auto text scaling
+    setupAutoFitText(rOutliner, aAnchorTextSize);
 
     // now get back the layouted text size from outliner
     const Size aOutlinerTextSize(rOutliner.GetPaperSize());
