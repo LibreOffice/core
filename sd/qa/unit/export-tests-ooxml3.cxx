@@ -65,6 +65,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169694_import_OLE_animation)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169705_invalidValuesAOff)
+{
+    createSdImpressDoc("ppt/tdf169705.ppt");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2147483647
+    // - Actual  : 2147484240
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:pic[5]/p:spPr/a:xfrm/a:off", "x",
+                OUString::number(std::numeric_limits<sal_Int32>::max()));
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:pic[5]/p:spPr/a:xfrm/a:off", "y",
+                OUString::number(std::numeric_limits<sal_Int32>::max()));
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165262)
 {
     createSdImpressDoc("ppt/tdf165262.ppt");
