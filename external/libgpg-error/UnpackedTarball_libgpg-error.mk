@@ -27,7 +27,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
 	external/libgpg-error/clang-cl.patch \
 	external/libgpg-error/undeclared-environ-macOS.patch \
 	external/libgpg-error/0001-const-up-handle_metacmd.cmds-array.patch.1 \
-	external/libgpg-error/0001-w32-Fix-a-syntax-error-in-a-non-DLL-build.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
