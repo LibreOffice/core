@@ -1618,6 +1618,9 @@ void SdDrawDocument::ReshufflePages()
         MovePage(nCurrentPageNum + 1, nTargetPageNum + 1); // Notes page
     }
     mbSkipCanvasPreviewUpdates = false;
+
+    // update connectors
+    connectPagePreviews();
 }
 
 sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
