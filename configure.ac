@@ -1271,8 +1271,6 @@ if test "$using_freetype_fontconfig" = yes; then
         # We build them, don't do any pkg-config checks
         test_fontconfig=no
         test_freetype=no
-        ENBALE_FONTCONFIG=TRUE
-        ENBALE_FREETYPE=TRUE
         BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     fi
 else
