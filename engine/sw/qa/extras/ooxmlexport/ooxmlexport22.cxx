@@ -628,8 +628,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
     uno::Sequence<beans::PropertyValue> aFilterOptions = {
         comphelper::makePropertyValue("Hidden", true),
     };
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/ooxmlexport/data/")
-                                      + "formula-result.fodt",
+    mxComponent = loadFromDesktop(createFileURL(u"formula-result.fodt"),
                                   "com.sun.star.text.TextDocument", aFilterOptions);
 
     // When saving to DOCX:
