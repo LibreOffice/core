@@ -1945,7 +1945,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         // to the last paragraph before the section page break
         // so that the consolidation/collapse of this section's 1st paragraph's aboveSpacing
         // works correctly (since below spacing before a page break otherwise has no relevance).
-        if (pPrevSection && pPrevSection->GetBelowSpacing().has_value() && m_xPreStartingRange.is())
+        if (pPrevSection && pPrevSection->GetBelowSpacing().has_value() && m_xPreStartingRange.is()
+            && !rDM_Impl.IsInFootOrEndnote())
         {
             try
             {
