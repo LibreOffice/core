@@ -8,6 +8,7 @@
  */
 
 #include "sdmodeltestbase.hxx"
+#include <test/unoapi_test.hxx>
 #include <tools/color.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/eeitem.hxx>
@@ -1890,6 +1891,28 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169559)
         pXmlDoc,
         "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr/a:spcAft/a:spcPts",
         "val", u"1701");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOmitCanvasSlideExport)
+{
+    createSdImpressDoc("odp/canvas-slide.odp");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
+
+    // the document has 2 pages - one canvas page, and one normal page
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(pDoc->HasCanvasPage());
+
+    save(TestFilter::PPTX);
+
+    // Verify that the canvas slide was omitted from the export
+    // It should have one master slide, and one slide
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId", 1);
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldIdLst/p:sldId", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
