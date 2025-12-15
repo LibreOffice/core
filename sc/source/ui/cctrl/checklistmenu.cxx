@@ -639,7 +639,11 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
         mxFieldsComboLabel->hide();
         mxFieldsCombo->hide();
     }
-    mxEdSearch->show();
+    if (!comphelper::LibreOfficeKit::isActive()) {
+        // In LOK (read: under JSDialog), it is preferable to run this search on
+        // the client side rather than in core for positioning/interference/etc. reasons
+        mxEdSearch->show();
+    }
     mxButtonBox->show();
 
     mxMenu->connect_row_activated(LINK(this, ScCheckListMenuControl, RowActivatedHdl));
