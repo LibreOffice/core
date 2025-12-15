@@ -180,7 +180,7 @@ bool SwEditShell::Delete(bool const isArtificialSelection, bool goLeft)
         bRet = RemoveParagraphMetadataFieldAtCursor();
         if (!bRet)
         {
-            InfoReadOnlyDialog(false);
+            InfoReadOnlyDialog(true);
         }
     }
 
