@@ -28,7 +28,6 @@ class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
 {
 private:
     VclPtr<VirtualDevice> mxVirDev;
-    tools::Long            mnY;
     vcl::Font       maFont;
     bool            maHasInsert;
     OUString        m_sText;

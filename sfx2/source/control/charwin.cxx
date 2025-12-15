@@ -37,7 +37,6 @@ using namespace com::sun::star;
 
 SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
-    , mnY(0)
     , maHasInsert(true)
 {
 }
@@ -189,6 +188,11 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     Size aFontSize(aOrigFont.GetFontSize());
     ::tools::Rectangle aBoundRect;
 
+    mxVirDev->Push(PUSH_ALLFONT);
+    mxVirDev->SetFont(maFont);
+    tools::Long nY = (nWinHeight - mxVirDev->GetTextHeight()) / 2;
+    mxVirDev->Pop();
+
     for (tools::Long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 1)
     {
         if (!rRenderContext.GetTextBoundRect(aBoundRect, aText) || aBoundRect.IsEmpty())
@@ -205,11 +209,11 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         aFontSize.setHeight(nFontHeight);
         aFont.SetFontSize(aFontSize);
         rRenderContext.SetFont(aFont);
-        mnY = (nWinHeight - rRenderContext.GetTextHeight()) / 2;
+        nY = (nWinHeight - rRenderContext.GetTextHeight()) / 2;
         bShrankFont = true;
     }
 
-    Point aPoint(2, mnY);
+    Point aPoint(2, nY);
 
     if (!bGotBoundary)
         aPoint.setX((aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2);
@@ -275,11 +279,6 @@ void SvxCharView::UpdateFont(const OUString& rFontFamilyName)
     maFont.SetAlignment(ALIGN_TOP);
     maFont.SetFontSize(mxVirDev->PixelToLogic(Size(0, nWinHeight / 2)));
     maFont.SetTransparent(true);
-
-    mxVirDev->Push(PUSH_ALLFONT);
-    mxVirDev->SetFont(maFont);
-    mnY = (nWinHeight - mxVirDev->GetTextHeight()) / 2;
-    mxVirDev->Pop();
 
     Invalidate();
 }
