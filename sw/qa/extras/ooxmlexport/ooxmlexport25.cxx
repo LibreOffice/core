@@ -55,6 +55,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_b
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4253), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf169986_bottomSpacing, "tdf169986_bottomSpacing.docx")
+{
+    // given with a continuous section break with a lot of below spacing, and several footnotes...
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    auto pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_bottomSpacing.docx")
 {
     // given with a continuous break sectPr with no belowSpacing
