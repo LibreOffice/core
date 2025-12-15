@@ -28,7 +28,7 @@ class SvStream;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 /// *Of course* Writer needs its own rectangles.
-/// This is half-open so m_Point.X() + m_Size.getWidth() is *not* included.
+/// This is half-open so m_Point.X() + m_Size.Width() is *not* included.
 /// Note the tools Rectangle is (usually? sometimes?) closed so there's a
 /// SVRect() to subtract 1 for the conversion.
 class SAL_WARN_UNUSED SwRect
@@ -196,21 +196,21 @@ inline void SwRect::Height( tools::Long nNew )
 }
 inline void SwRect::Left( const tools::Long nLeft )
 {
-    m_Size.AdjustWidth( m_Point.getX() - nLeft );
+    m_Size.AdjustWidth( m_Point.X() - nLeft );
     m_Point.setX(nLeft);
 }
 inline void SwRect::Right( const tools::Long nRight )
 {
-    m_Size.setWidth(nRight - m_Point.getX() + 1);
+    m_Size.setWidth(nRight - m_Point.X() + 1);
 }
 inline void SwRect::Top( const tools::Long nTop )
 {
-    m_Size.AdjustHeight( m_Point.getY() - nTop );
+    m_Size.AdjustHeight( m_Point.Y() - nTop );
     m_Point.setY(nTop);
 }
 inline void SwRect::Bottom( const tools::Long nBottom )
 {
-    m_Size.setHeight(nBottom - m_Point.getY() + 1);
+    m_Size.setHeight(nBottom - m_Point.Y() + 1);
 }
 
 // Get-Methods
@@ -240,7 +240,7 @@ inline tools::Long SwRect::Left()   const
 }
 inline tools::Long SwRect::Right()  const
 {
-    return m_Size.getWidth() ? m_Point.getX() + m_Size.getWidth() - 1 : m_Point.getX();
+    return m_Size.Width() ? m_Point.X() + m_Size.Width() - 1 : m_Point.X();
 }
 inline tools::Long SwRect::Top()    const
 {
@@ -248,7 +248,7 @@ inline tools::Long SwRect::Top()    const
 }
 inline tools::Long SwRect::Bottom() const
 {
-    return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
+    return m_Size.Height() ? m_Point.Y() + m_Size.Height() - 1 : m_Point.Y();
 }
 
 inline Point SwRect::TopLeft() const
@@ -292,9 +292,9 @@ inline SwRect &SwRect::operator-=( const Point &rPt )
 inline tools::Rectangle SwRect::SVRect() const
 {
     SAL_INFO_IF( IsEmpty(), "sw.core", "SVRect() without Width or Height" );
-    return tools::Rectangle( m_Point.getX(), m_Point.getY(),
-        m_Point.getX() + m_Size.getWidth() - 1,         //Right()
-        m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
+    return tools::Rectangle( m_Point.X(), m_Point.Y(),
+        m_Point.X() + m_Size.Width() - 1,         //Right()
+        m_Point.Y() + m_Size.Height() - 1 );      //Bottom()
 }
 
 inline bool SwRect::HasArea() const
@@ -303,7 +303,7 @@ inline bool SwRect::HasArea() const
 }
 inline bool SwRect::IsEmpty() const
 {
-    return !(m_Size.getHeight() && m_Size.getWidth());
+    return !(m_Size.Height() && m_Size.Width());
 }
 inline void SwRect::Clear()
 {
