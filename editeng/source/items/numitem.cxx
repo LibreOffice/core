@@ -585,6 +585,11 @@ void SvxNumberFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(OString::number(mePositionAndSpaceMode).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("label-followed-by"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(meLabelFollowedBy).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("first-line-offset"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                       BAD_CAST(OString::number(nFirstLineOffset).getStr()));
