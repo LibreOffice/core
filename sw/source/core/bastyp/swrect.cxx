@@ -106,18 +106,18 @@ void SwRect::Justify()
 }
 
 // Similar to the inline methods, but we need the function pointers
-void SwRect::Width_( const tools::Long nNew ) { m_Size.setWidth(nNew); }
-void SwRect::Height_( const tools::Long nNew ) { m_Size.setHeight(nNew); }
-void SwRect::Left_( const tools::Long nLeft ){ m_Size.AdjustWidth(m_Point.X() - nLeft ); m_Point.setX(nLeft); }
+void SwRect::Width_( const tools::Long nNew ) { Width(nNew); }
+void SwRect::Height_( const tools::Long nNew ) { Height(nNew); }
+void SwRect::Left_( const tools::Long nLeft ) { Left(nLeft); }
 void SwRect::Right_( const tools::Long nRight ){ m_Size.setWidth(nRight - m_Point.X()); }
-void SwRect::Top_( const tools::Long nTop ){ m_Size.AdjustHeight(m_Point.Y() - nTop ); m_Point.setY(nTop); }
+void SwRect::Top_( const tools::Long nTop ) { Top(nTop); }
 void SwRect::Bottom_( const tools::Long nBottom ){ m_Size.setHeight(nBottom - m_Point.Y()); }
 
-tools::Long SwRect::Width_() const{ return m_Size.Width(); }
-tools::Long SwRect::Height_() const{ return m_Size.Height(); }
-tools::Long SwRect::Left_() const{ return m_Point.X(); }
+tools::Long SwRect::Width_() const{ return Width(); }
+tools::Long SwRect::Height_() const{ return Height(); }
+tools::Long SwRect::Left_() const{ return Left(); }
 tools::Long SwRect::Right_() const{ return m_Point.X() + m_Size.Width(); }
-tools::Long SwRect::Top_() const{ return m_Point.Y(); }
+tools::Long SwRect::Top_() const{ return Top(); }
 tools::Long SwRect::Bottom_() const{ return m_Point.Y() + m_Size.Height(); }
 
 void SwRect::AddWidth( const tools::Long nAdd ) { m_Size.AdjustWidth(nAdd ); }
