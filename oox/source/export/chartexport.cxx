@@ -3349,13 +3349,15 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
         // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
         aSplitDataSeries.push_back({});
     }
+
+    sal_uInt32 nIdx = 0;
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
         pFS->startElement(FSNS(XML_c, XML_stockChart));
 
         bool bPrimaryAxes = true;
         if (splitDataSeries.hasElements())
-            exportCandleStickSeries(splitDataSeries, bPrimaryAxes);
+            exportCandleStickSeries(splitDataSeries, bPrimaryAxes, nIdx);
 
         // export stock properties
         Reference< css::chart::XStatisticDisplay > xStockPropProvider(mxDiagram, uno::UNO_QUERY);
@@ -3757,8 +3759,7 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
 }
 
 void ChartExport::exportCandleStickSeries(
-    const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
-    bool& rPrimaryAxes)
+    const Sequence<Reference<chart2::XDataSeries>>& aSeriesSeq, bool& rPrimaryAxes, sal_uInt32& nIdx)
 {
     for( const Reference< chart2::XDataSeries >& xSeries : aSeriesSeq )
     {
@@ -3773,12 +3774,13 @@ void ChartExport::exportCandleStickSeries(
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
 
-            const char* sSeries[] = {"values-first","values-max","values-min","values-last",nullptr};
+            const char* sSeries[] = {"values-first","values-max","values-min","values-last"};
 
-            for( sal_Int32 idx = 0; sSeries[idx] != nullptr ; idx++ )
+            for (const char* series : sSeries)
             {
-                Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii(sSeries[idx]) ) );
-                if( xLabeledSeq.is())
+                Reference<chart2::data::XLabeledDataSequence> xLabeledSeq(
+                    lcl_getDataSequenceByRole(aSeqCnt, OUString::createFromAscii(series)));
+                if (xLabeledSeq.is())
                 {
                     Reference< chart2::data::XDataSequence > xLabelSeq( xLabeledSeq->getLabel());
                     Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues());
@@ -3786,12 +3788,8 @@ void ChartExport::exportCandleStickSeries(
                         FSHelperPtr pFS = GetFS();
                         pFS->startElement(FSNS(XML_c, XML_ser));
 
-                        // TODO: idx and order
-                        // idx attribute should start from 1 and not from 0.
-                        pFS->singleElement( FSNS( XML_c, XML_idx ),
-                                XML_val, OString::number(idx+1) );
-                        pFS->singleElement( FSNS( XML_c, XML_order ),
-                                XML_val, OString::number(idx+1) );
+                        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(++nIdx));
+                        pFS->singleElement(FSNS(XML_c, XML_order), XML_val, OString::number(nIdx));
 
                         // export label
                         if( xLabelSeq.is() )
