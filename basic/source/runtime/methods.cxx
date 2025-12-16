@@ -312,7 +312,7 @@ void SbRtl_Asc(StarBASIC *, SbxArray & rPar, bool)
 
 static void implChr( SbxArray& rPar, bool bChrW )
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     SbxVariableRef pArg = rPar.Get(1);
