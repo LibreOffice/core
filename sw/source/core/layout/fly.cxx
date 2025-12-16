@@ -242,8 +242,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 
     // Put it somewhere outside so that out document is not formatted unnecessarily often
     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-    aFrm.Pos().setX(FAR_AWAY);
-    aFrm.Pos().setY(FAR_AWAY);
+    aFrm.Pos(FAR_AWAY, FAR_AWAY);
 }
 
 void SwFlyFrame::Chain( SwFrame* _pAnch )
@@ -1496,8 +1495,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             // Remove safety switch (see SwFrame::CTor)
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aFrm.Pos().setX(0);
-                aFrm.Pos().setY(0);
+                aFrm.Pos(0, 0);
             }
 
             // #i68520#
@@ -2066,7 +2064,7 @@ void SwFlyFrame::MakeObjPos()
         SwRectFnSet aRectFnSet(*GetAnchorFrame());
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Pos( aObjPositioning.GetRelPos() );
-        aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->getFrameArea());
+        aFrm += aRectFnSet.GetPos(GetAnchorFrame()->getFrameArea());
     }
 
     // #i69335#
@@ -3363,7 +3361,7 @@ bool SwFlyFrame::SetObjTop_( const SwTwips _nTop )
 {
     const bool bChanged( getFrameArea().Pos().getY() != _nTop );
     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-    aFrm.Pos().setY(_nTop);
+    aFrm.SetPosY(_nTop);
 
     return bChanged;
 }
@@ -3371,7 +3369,7 @@ bool SwFlyFrame::SetObjLeft_( const SwTwips _nLeft )
 {
     const bool bChanged( getFrameArea().Pos().getX() != _nLeft );
     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-    aFrm.Pos().setX(_nLeft);
+    aFrm.SetPosX(_nLeft);
 
     return bChanged;
 }

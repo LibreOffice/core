@@ -892,7 +892,7 @@ const SwFrameFormat* SwFEShell::SelFlyGrabCursor()
 
                 SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
                 rChrRect = pFly->getFramePrintArea();
-                rChrRect.Pos() += pFly->getFrameArea().Pos();
+                rChrRect += pFly->getFrameArea().Pos();
                 GetCursorDocPos() = rChrRect.Pos();
             }
             return pFly->GetFormat();
@@ -928,7 +928,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                 bCheckNeighbours = true;
                 pFly->InvalidatePos();
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFly);
-                aFrm.Pos().AdjustY(1 );
+                aFrm.SetPosY(aFrm.Pos().Y() + 1);
             }
 
             pPage = pFly->FindPageFrame();
@@ -979,7 +979,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                 {
                     pAct->InvalidatePos();
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pAct);
-                    aFrm.Pos().AdjustY(1 );
+                    aFrm.SetPosY(aFrm.Pos().Y() + 1);
                 }
             }
         }
@@ -2655,7 +2655,7 @@ bool SwFEShell::GotoFly( const UIName& rName, FlyCntType eType, bool bSelFrame )
 
                     SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
                     rChrRect = pFrame->getFramePrintArea();
-                    rChrRect.Pos() += pFrame->getFrameArea().Pos();
+                    rChrRect += pFrame->getFrameArea().Pos();
                     GetCursorDocPos() = rChrRect.Pos();
                 }
             }
@@ -2843,7 +2843,7 @@ void SwFEShell::CheckUnboundObjects()
                 : *static_cast<SwNoTextFrame const*>(pAnch)->GetNode() );
             aAnch.SetType( RndStdIds::FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );
-            const_cast<SwRect&>(GetCharRect()).Pos() = aPt;
+            const_cast<SwRect&>(GetCharRect()).Pos(aPt);
             }
 
             // First the action here, to assure GetCharRect delivers current values.

@@ -938,7 +938,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             if ( _bFollowTextFlow )
             {
                 aVertEnvironRect = rVertEnvironLayFrame.getFramePrintArea();
-                aVertEnvironRect.Pos() += rVertEnvironLayFrame.getFrameArea().Pos();
+                aVertEnvironRect += rVertEnvironLayFrame.getFrameArea().Pos();
                 // #i18732# - adjust vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.

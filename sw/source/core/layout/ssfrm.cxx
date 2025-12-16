@@ -107,17 +107,17 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustY(pPrv->getFrameArea().Height() );
+        aFrm.SetPosY(aFrm.Pos().Y() + pPrv->getFrameArea().Height());
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
+        aFrm += pUp->getFramePrintArea().Pos();
     }
 
     if( bNotify )
     {
-        aFrm.Pos().AdjustY(1 );
+        aFrm.SetPosY(aFrm.Pos().Y() + 1);
     }
 }
 
@@ -128,18 +128,18 @@ void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustX( -(aFrm.Width()) );
+        aFrm.SetPosX(aFrm.Pos().X() - aFrm.Width());
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
-        aFrm.Pos().AdjustX(pUp->getFramePrintArea().Width() - aFrm.Width() );
+        aFrm += pUp->getFramePrintArea().Pos();
+        aFrm.SetPosX(aFrm.Pos().X() + pUp->getFramePrintArea().Width() - aFrm.Width());
     }
 
     if( bNotify )
     {
-        aFrm.Pos().AdjustX( -1 );
+        aFrm.SetPosX(aFrm.Pos().X() - 1);
     }
 }
 
@@ -150,17 +150,17 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustX(pPrv->getFrameArea().Width() );
+        aFrm.SetPosX(aFrm.Pos().X() + pPrv->getFrameArea().Width());
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
+        aFrm += pUp->getFramePrintArea().Pos();
     }
 
     if( bNotify )
     {
-        aFrm.Pos().AdjustX(1 );
+        aFrm.SetPosX(aFrm.Pos().X() + 1);
     }
 }
 

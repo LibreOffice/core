@@ -1494,11 +1494,11 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
     // notifications for a new calculated position after its formatting.
     if ( aRectFnSet.IsVert() )
     {
-        aFrm.Pos().AdjustX( -1 );
+        aFrm.SetPosX(aFrm.Pos().X() - 1);
     }
     else
     {
-        aFrm.Pos().AdjustY(1 );
+        aFrm.SetPosY(aFrm.Pos().Y() + 1);
     }
 }
 
@@ -3384,7 +3384,7 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
 
     auto pTextFrame = static_cast<SwTextFrame*>(pCnt);
     SwRect aCntPrt( pCnt->getFramePrintArea() );
-    aCntPrt.Pos() += pCnt->getFrameArea().Pos();
+    aCntPrt += pCnt->getFrameArea().Pos();
 
     if (eHint == PrepareHint::FlyFrameArrive)
     {
@@ -4006,7 +4006,7 @@ bool IsExtraData( const SwDoc& rDoc )
 SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
 {
     SwRect aPrtWithoutHeaderFooter( getFramePrintArea() );
-    aPrtWithoutHeaderFooter.Pos() += getFrameArea().Pos();
+    aPrtWithoutHeaderFooter += getFrameArea().Pos();
 
     const SwFrame* pLowerFrame = Lower();
     while ( pLowerFrame )

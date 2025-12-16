@@ -425,29 +425,29 @@ void SwTextFrame::SwapWidthAndHeight()
         if ( ! mbIsSwapped )
         {
             const tools::Long nPrtOfstX = aPrt.Pos().X();
-            aPrt.Pos().setX( aPrt.Pos().Y() );
+            aPrt.SetPosX(aPrt.Pos().Y());
 
             if( IsVertLR() )
             {
-                aPrt.Pos().setY( nPrtOfstX );
+                aPrt.SetPosY(nPrtOfstX);
             }
             else
             {
-                aPrt.Pos().setY( getFrameArea().Width() - ( nPrtOfstX + aPrt.Width() ) );
+                aPrt.SetPosY(getFrameArea().Width() - (nPrtOfstX + aPrt.Width()));
             }
         }
         else
         {
             const tools::Long nPrtOfstY = aPrt.Pos().Y();
-            aPrt.Pos().setY( aPrt.Pos().X() );
+            aPrt.SetPosY(aPrt.Pos().X());
 
             if( IsVertLR() )
             {
-                aPrt.Pos().setX( nPrtOfstY );
+                aPrt.SetPosX(nPrtOfstY);
             }
             else
             {
-                aPrt.Pos().setX( getFrameArea().Height() - ( nPrtOfstY + aPrt.Height() ) );
+                aPrt.SetPosX(getFrameArea().Height() - (nPrtOfstY + aPrt.Height()));
             }
         }
 
@@ -3692,7 +3692,7 @@ SwTwips SwTextFrame::CalcFitToContent()
     if ( IsRightToLeft() )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Pos().AdjustX(nOldFrameWidth - nPageWidth );
+        aFrm.SetPosX(aFrm.Pos().X() + nOldFrameWidth - nPageWidth);
     }
 
     TextFrameLockGuard aLock( this );
@@ -3712,7 +3712,7 @@ SwTwips SwTextFrame::CalcFitToContent()
         // i#25422 objects anchored as character in RTL
         if ( IsRightToLeft() )
         {
-            aFrm.Pos() = aOldFramePos;
+            aFrm.Pos(aOldFramePos);
         }
     }
 

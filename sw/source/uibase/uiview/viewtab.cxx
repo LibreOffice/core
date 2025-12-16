@@ -365,7 +365,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 //at first determine the changes
                 SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
                 const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
-                aSectRect.Pos() += aTmpRect.Pos();
+                aSectRect += aTmpRect.Pos();
                 tools::Long nLeftDiff = aLongLR.GetLeft() - static_cast<tools::Long>(aSectRect.Left() - rPageRect.Left() );
                 tools::Long nRightDiff = aLongLR.GetRight() - static_cast<tools::Long>( rPageRect.Right() - aSectRect.Right());
                 //change the LRSpaceItem of the section accordingly
@@ -477,7 +477,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 //at first determine the changes
                 SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
                 const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
-                aSectRect.Pos() += aTmpRect.Pos();
+                aSectRect += aTmpRect.Pos();
                 const tools::Long nLeftDiff = aLongULSpace.GetUpper() - static_cast<tools::Long>(aSectRect.Top() - rPageRect.Top());
                 const tools::Long nRightDiff = aLongULSpace.GetLower() - static_cast<tools::Long>(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
                 //change the LRSpaceItem of the section accordingly
@@ -1496,7 +1496,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 if( pFormat )// #i80890# if rDesc is not the one belonging to the current page is might crash
                 {
                     SwRect aRect( rSh.GetAnyCurRect( CurRectType::HeaderFooter, pPt));
-                    aRect.Pos() -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
+                    aRect -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
                     const SvxLRSpaceItem& aLR = pFormat->GetLRSpace();
                     aLongLR.SetLeft(aLR.ResolveLeft({}) + aRect.Left());
                     aLongLR.SetRight(nPageWidth - aRect.Right() + aLR.ResolveRight({}));
@@ -1509,7 +1509,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     aRect = rSh.GetAnyCurRect(CurRectType::SectionPrt, pPt);
                     const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section, pPt);
-                    aRect.Pos() += aTmpRect.Pos();
+                    aRect += aTmpRect.Pos();
                 }
 
                 else if ( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
@@ -1557,7 +1557,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             else if ( nFrameType & FrameTypeFlags::HEADER || nFrameType & FrameTypeFlags::FOOTER )
             {
                 SwRect aRect( rSh.GetAnyCurRect( CurRectType::HeaderFooter, pPt));
-                aRect.Pos() -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
+                aRect -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
                 aLongUL.SetUpper( aRect.Top() );
                 aLongUL.SetLower( nPageHeight - aRect.Bottom() );
             }
@@ -2009,14 +2009,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                         if(bVerticalWriting)
                         {
-                            aRect.Pos() += Point(aTmpRect.Left(), aTmpRect.Top());
-                            aRect.Pos().AdjustY( -(rPageRect.Top()) );
+                            aRect += Point(aTmpRect.Left(), aTmpRect.Top());
+                            aRect.SetPosY(aRect.Pos().Y() - (rPageRect.Top()));
                             aColItem.SetLeft(aRect.Top());
                             aColItem.SetRight(nPageHeight - aRect.Bottom());
                         }
                         else
                         {
-                            aRect.Pos() += aTmpRect.Pos();
+                            aRect += aTmpRect.Pos();
 
                             // make relative to page position:
                             aColItem.SetLeft (o3tl::narrowing<sal_uInt16>( aRect.Left() - rPageRect.Left() ));
@@ -2328,8 +2328,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         SwRect aRect( rSh.GetAnyCurRect(
                                             CurRectType::FlyEmbeddedPrt, pPt ) );
-                        aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
-                                                                pPt ).Pos();
+                        aRect += rSh.GetAnyCurRect(CurRectType::FlyEmbedded, pPt).Pos();
 
                         aRectangle.SetLeft( aRect.Left() - rPageRect.Left() );
                         aRectangle.SetRight( rPageRect.Right() - aRect.Right() );
@@ -2385,8 +2384,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     SwRect aRect( rSh.GetAnyCurRect( eRecType, pPt ) );
                     if(CurRectType::FlyEmbeddedPrt == eRecType)
-                        aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
-                                                                pPt ).Pos();
+                        aRect += rSh.GetAnyCurRect(CurRectType::FlyEmbedded, pPt).Pos();
 
                     const sal_uInt16 nTotalWidth = o3tl::narrowing<sal_uInt16>(aRect.Width());
                     // Initialize nStart and nEnd for nNum == 0

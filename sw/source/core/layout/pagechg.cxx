@@ -113,7 +113,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
         if( IsVertical() && !IsVertLR() && nWidth != aFrm.Width() )
         {
-            aFrm.Pos().setX(aFrm.Pos().getX() + aFrm.Width() - nWidth);
+            aFrm.SetPosX(aFrm.Pos().getX() + aFrm.Width() - nWidth);
         }
 
         aFrm.Width( nWidth );
@@ -172,8 +172,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     if( bNoGrid )
     {
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-        aPrt.Pos().setX(0);
-        aPrt.Pos().setY(0);
+        aPrt.Pos(0, 0);
         aPrt.Height( getFrameArea().Height() );
         aPrt.Width( getFrameArea().Width() );
     }
@@ -1952,16 +1951,14 @@ void SwRootFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     {
         setFrameAreaPositionValid(true);
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Pos().setX(DOCUMENTBORDER);
-        aFrm.Pos().setY(DOCUMENTBORDER);
+        aFrm.Pos(DOCUMENTBORDER, DOCUMENTBORDER);
     }
 
     if ( !isFramePrintAreaValid() )
     {
         setFramePrintAreaValid(true);
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-        aPrt.Pos().setX(0);
-        aPrt.Pos().setY(0);
+        aPrt.Pos(0, 0);
         aPrt.SSize( getFrameArea().SSize() );
     }
 

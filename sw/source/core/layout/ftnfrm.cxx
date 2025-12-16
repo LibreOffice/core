@@ -453,7 +453,7 @@ SwTwips SwFootnoteContFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reaso
 
         if( IsVertical() && !IsVertLR() )
         {
-            aFrm.Pos().AdjustX( -nDist );
+            aFrm.SetPosX(aFrm.Pos().X() - nDist);
         }
     }
     tools::Long nGrow = nDist - nAvail,
@@ -500,7 +500,7 @@ SwTwips SwFootnoteContFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reaso
 
             if( IsVertical() && !IsVertLR() )
             {
-                aFrm.Pos().AdjustX(nDist );
+                aFrm.SetPosX(aFrm.Pos().X() + nDist);
             }
         }
 
@@ -2987,8 +2987,8 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
 
                     {
                         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pNewUp);
-                        aFrm.Pos() = pTmpFootnote->getFrameArea().Pos();
-                        aFrm.Pos().AdjustY(1 ); // for notifications
+                        aFrm.Pos(pTmpFootnote->getFrameArea().Pos());
+                        aFrm.SetPosY(aFrm.Pos().Y() + 1); // for notifications
                     }
 
                     // If the section frame has a successor then the latter needs

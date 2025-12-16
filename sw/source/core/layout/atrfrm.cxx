@@ -2884,7 +2884,7 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
                 else
                 {
                     aRet = pFrame->getFrameArea();
-                    aRet.Pos().AdjustY( -1 );
+                    aRet.SetPosY(aRet.Pos().Y() - 1);
                 }
                 pFrame = nullptr;       // the rect is finished by now
             }

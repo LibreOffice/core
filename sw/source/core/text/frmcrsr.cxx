@@ -430,7 +430,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY );
         if( aTmpState.m_aRealHeight.X() >= 0 )
         {
-            rOrig.Pos().AdjustY(aTmpState.m_aRealHeight.X() );
+            rOrig.SetPosY(rOrig.Pos().Y() + aTmpState.m_aRealHeight.X());
             rOrig.Height( aTmpState.m_aRealHeight.Y() );
         }
 
@@ -869,7 +869,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             if ( bPrevLine || bSecondOfDouble )
             {
                 aCharBox.Width( aCharBox.SSize().Width() / 2 );
-                aCharBox.Pos().setX( aCharBox.Pos().X() - 150 );
+                aCharBox.SetPosX(aCharBox.Pos().X() - 150);
 
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
 #if OSL_DEBUG_LEVEL > 0
@@ -927,7 +927,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             }
             if ( !pPrevPrev )
                 return pTmpPrev->SwContentFrame::UnitUp( pPam, nOffset, bSetInReadOnly );
-            aCharBox.Pos().setY( pPrevPrev->getFrameArea().Bottom() - 1 );
+            aCharBox.SetPosY(pPrevPrev->getFrameArea().Bottom() - 1);
             return pPrevPrev->GetKeyCursorOfst( pPam->GetPoint(), aCharBox.Pos() );
         }
     }
@@ -1306,7 +1306,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
     // We take a shortcut for follows
     if( pTmpFollow )
     {
-        aCharBox.Pos().setY( pTmpFollow->getFrameArea().Top() + 1 );
+        aCharBox.SetPosY(pTmpFollow->getFrameArea().Top() + 1);
         return static_cast<const SwTextFrame*>(pTmpFollow)->GetKeyCursorOfst( pPam->GetPoint(),
                                                      aCharBox.Pos() );
     }

@@ -4328,7 +4328,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
                 if( !bMoveAnyway )
                 {
                     SwRect aRect( pNewUpper->getFramePrintArea() );
-                    aRect.Pos() += pNewUpper->getFrameArea().Pos();
+                    aRect += pNewUpper->getFrameArea().Pos();
                     const SwFrame *pPrevFrame = pNewUpper->Lower();
                     while ( pPrevFrame && pPrevFrame != this )
                     {
@@ -5672,7 +5672,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             if( IsVertical() && !IsVertLR() )
             {
-                aFrm.Pos().AdjustX(nReal );
+                aFrm.SetPosX(aFrm.Pos().X() + nReal);
             }
         }
 
@@ -5691,7 +5691,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
                 if( IsVertical() && !IsVertLR() )
                 {
-                    aFrm.Pos().AdjustX( -nReal );
+                    aFrm.SetPosX(aFrm.Pos().X() - nReal);
                 }
             }
             nReal = nTmp;

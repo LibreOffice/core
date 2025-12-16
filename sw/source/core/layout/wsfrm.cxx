@@ -155,12 +155,12 @@ void SwFrameAreaDefinition::transform_translate(const Point& rOffset)
 
     if (aFrm.Pos().X() != FAR_AWAY)
     {
-        aFrm.Pos().AdjustX(rOffset.X() );
+        aFrm.SetPosX(aFrm.Pos().X() + rOffset.X());
     }
 
     if (aFrm.Pos().Y() != FAR_AWAY)
     {
-        aFrm.Pos().AdjustY(rOffset.Y() );
+        aFrm.SetPosY(aFrm.Pos().Y() + rOffset.Y());
     }
 }
 
@@ -1695,7 +1695,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         SwRect aInva( pUp->getFrameArea() );
         if ( pViewShell )
         {
-            aInva.Pos().setX( pViewShell->VisArea().Left() );
+            aInva.SetPosX(pViewShell->VisArea().Left());
             aInva.Width( pViewShell->VisArea().Width() );
         }
         if ( nDiff > 0 )
@@ -1922,7 +1922,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
                         if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() )
                         {
-                            aFrm.Pos().AdjustX(nAdd );
+                            aFrm.SetPosX(aFrm.Pos().X() + nAdd);
                         }
                     }
 
@@ -1947,7 +1947,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
             if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() )
             {
-                aFrm.Pos().AdjustX(nReal );
+                aFrm.SetPosX(aFrm.Pos().X() + nReal);
             }
         }
 
@@ -2181,7 +2181,7 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
 
                 if( IsVertical() && !IsVertLR() )
                 {
-                    aFrm.Pos().AdjustX( -nDist );
+                    aFrm.SetPosX(aFrm.Pos().X() - nDist);
                 }
             }
 
@@ -2227,7 +2227,7 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
 
             if( IsVertical()&& !IsVertLR() )
             {
-                aFrm.Pos().AdjustX( -nDist );
+                aFrm.SetPosX(aFrm.Pos().X() - nDist);
             }
         }
 
@@ -2326,7 +2326,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             if( IsVertical() && !IsVertLR() )
             {
-                aFrm.Pos().AdjustX(nDist );
+                aFrm.SetPosX(aFrm.Pos().X() + nDist);
             }
         }
 
@@ -2772,7 +2772,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
 
         if( bChgPos && !IsVertLR() )
         {
-            aFrm.Pos().AdjustX( -nDist );
+            aFrm.SetPosX(aFrm.Pos().X() - nDist);
         }
 
         bMoveAccFrame = true;
@@ -2866,7 +2866,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
 
             if( bChgPos && !IsVertLR() )
             {
-                aFrm.Pos().setX( nFramePos - nReal );
+                aFrm.SetPosX(nFramePos - nReal);
             }
 
             bMoveAccFrame = true;
@@ -3001,7 +3001,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         if( bChgPos && !IsVertLR() )
         {
-            aFrm.Pos().AdjustX(nReal );
+            aFrm.SetPosX(aFrm.Pos().X() + nReal);
         }
 
         bMoveAccFrame = true;
@@ -3026,7 +3026,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
                 if( bChgPos && !IsVertLR() )
                 {
-                    aFrm.Pos().AdjustX(nRealDist - nReal );
+                    aFrm.SetPosX(aFrm.Pos().X() + nRealDist - nReal);
                 }
 
                 OSL_ENSURE( !IsAccessibleFrame(), "bMoveAccFrame has to be set!" );
@@ -3043,7 +3043,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             if( bChgPos && !IsVertLR() )
             {
-                aFrm.Pos().AdjustX(nTmp - nReal );
+                aFrm.SetPosX(aFrm.Pos().X() + nTmp - nReal);
             }
 
             OSL_ENSURE( !IsAccessibleFrame(), "bMoveAccFrame has to be set!" );

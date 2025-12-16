@@ -498,7 +498,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
                 {
                     SwRect aArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() );
-                    aArea.Pos() += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
+                    aArea += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
                     MapMode aMapMode( MapUnit::MapTwip );
                     Size aSize = xObj.GetSize( &aMapMode );
                     aArea.Width( aSize.Width() );
@@ -921,7 +921,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     else
     {
         aArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() );
-        aArea.Pos() += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
+        aArea += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
     }
 
     if ( bUseObjectSize )
