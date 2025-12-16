@@ -126,7 +126,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkPaned">
+              <object class="GtkPaned" id="paned1">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>
