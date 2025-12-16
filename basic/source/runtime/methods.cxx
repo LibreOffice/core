@@ -186,7 +186,7 @@ static uno::Reference< ucb::XSimpleFileAccess3 > const & getFileAccess()
 
 void SbRtl_CreateObject(StarBASIC * pBasic, SbxArray & rPar, bool)
 {
-    if( rPar.Count() < 2 )
+    if( rPar.Count() != 2 )
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     OUString aClass(rPar.Get(1)->GetOUString());
