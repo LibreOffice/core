@@ -1425,10 +1425,10 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             if( VisArea().Overlaps( aPrevArea ) && !mnLockPaint )
             {
                 bScrolled = true;
-                maVisArea.Pos() = aPrevArea.Pos();
+                maVisArea.Pos(aPrevArea.Pos());
                 if ( SmoothScroll( nXDiff, nYDiff, &aRect ) )
                     return;
-                maVisArea.Pos() = rRect.Pos();
+                maVisArea.Pos(rRect.Pos());
             }
             else if (!comphelper::COKit::isActive())
                 GetWin()->Invalidate( aRect );
@@ -1438,10 +1438,10 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             if( VisArea().Overlaps( aPrevArea ) )
             {
                 bScrolled = true;
-                maVisArea.Pos() = aPrevArea.Pos();
+                maVisArea.Pos(aPrevArea.Pos());
                 if ( SmoothScroll( nXDiff, nYDiff, nullptr ) )
                     return;
-                maVisArea.Pos() = rRect.Pos();
+                maVisArea.Pos(rRect.Pos());
             }
             else
                 GetWin()->Invalidate();
@@ -1535,15 +1535,15 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
             aRect.Height( aSize.Height() );
             if ( pRect )
             {
-                aRect.Pos().setX( std::max(aRect.Left(),pRect->Left()-aPixSz.Width()) );
+                aRect.SetPosX(std::max(aRect.Left(), pRect->Left() - aPixSz.Width()));
                 aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
             }
             else
                 aRect.AddWidth(2*aPixSz.Width() );
-            aRect.Pos().setY( lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
+            aRect.SetPosY(lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
                                          : aRect.Top() - aSize.Height() + aPixSz.Height() );
-            aRect.Pos().setX( std::max( tools::Long(0), aRect.Left()-aPixSz.Width() ) );
-            aRect.Pos()  = GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.Pos()));
+            aRect.SetPosX(std::max(tools::Long(0), aRect.Left() - aPixSz.Width()));
+            aRect.Pos(GetWin()->PixelToLogic(GetWin()->LogicToPixel(aRect.Pos())));
             aRect.SSize( GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize())) );
             maVisArea = aRect;
             const Point aPt( -aRect.Left(), -aRect.Top() );
@@ -1620,8 +1620,8 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                 }
 
                 const SwRect aTmpOldVis = VisArea();
-                maVisArea.Pos().AdjustY( -lScroll );
-                maVisArea.Pos() = GetWin()->PixelToLogic( GetWin()->LogicToPixel( VisArea().Pos()));
+                maVisArea.SetPosY(maVisArea.Pos().Y() - lScroll);
+                maVisArea.Pos(GetWin()->PixelToLogic(GetWin()->LogicToPixel(VisArea().Pos())));
                 lScroll = aTmpOldVis.Top() - VisArea().Top();
                 if ( pRect )
                 {
@@ -1706,8 +1706,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
     }
 #endif
 
-    maVisArea.Pos().AdjustX( -lXDiff );
-    maVisArea.Pos().AdjustY( -lYDiff );
+    maVisArea -= { lXDiff, lYDiff };
     if ( pRect )
         GetWin()->Scroll( lXDiff, lYDiff, *pRect, ScrollFlags::Children);
     else
@@ -1786,7 +1785,8 @@ void SwViewShell::PaintDesktop(const vcl::RenderContext& rRenderContext, const S
 
             const bool bSidebarRight =
                 static_cast<const SwPageFrame*>(pPage)->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT;
-            aPageRect.Pos().AdjustX( -(bSidebarRight ? 0 : nSidebarWidth) );
+            if (!bSidebarRight)
+                aPageRect.SetPosX(aPageRect.Pos().X() - nSidebarWidth);
             aPageRect.AddWidth(nSidebarWidth );
 
             if ( aPageRect.Overlaps( rRect ) )
@@ -2902,7 +2902,7 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
 
     // #i40059# Position out of bounds:
     SwRect aRect( rRect );
-    aRect.Pos().setX( std::max( aRect.Left(), GetLayout()->getFrameArea().Left() ) );
+    aRect.SetPosX(std::max(aRect.Left(), GetLayout()->getFrameArea().Left()));
 
     const SwPageFrame* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     if ( pPage )

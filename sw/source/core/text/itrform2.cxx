@@ -2809,7 +2809,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
         // We now check every portion that could have lowered for overlapping
         // with the fly.
         const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
-        aLine.Pos().setY( Y() + GetCurr()->GetRealHeight() - GetCurr()->Height() );
+        aLine.SetPosY(Y() + GetCurr()->GetRealHeight() - GetCurr()->Height());
         aLine.Height( GetCurr()->Height() );
 
         while( pPos )
@@ -3061,7 +3061,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     }
 
     // aInter becomes frame-local
-    aInter.Pos().AdjustX( -nLeftMar );
+    aInter.SetPosX(aInter.Pos().X() - nLeftMar);
     SwFlyPortion *pFly = new SwFlyPortion( aInter );
     if( bForced )
     {

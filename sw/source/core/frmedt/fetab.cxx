@@ -1693,7 +1693,7 @@ static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay
                     const bool bRTL = pFrame->IsRightToLeft();
 
                     SwRect aTabRect = pFrame->getFramePrintArea();
-                    aTabRect.Pos() += pFrame->getFrameArea().Pos();
+                    aTabRect += pFrame->getFrameArea().Pos();
 
                     const SwTwips nLeft = bRTL ?
                                           aRectFnSet.GetRight(aTabRect) :
@@ -1715,7 +1715,7 @@ static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay
                         if ( pPrev )
                         {
                             SwRect aPrevRect = pPrev->getFramePrintArea();
-                            aPrevRect.Pos() += pPrev->getFrameArea().Pos();
+                            aPrevRect += pPrev->getFrameArea().Pos();
 
                             if( aPrevRect.Contains( rPt ) )
                             {
@@ -1801,7 +1801,7 @@ static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay
                     // used for mouse move of columns/rows
                     const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
                     SwRect aTabRect = pTabFrame->getFramePrintArea();
-                    aTabRect.Pos() += pTabFrame->getFrameArea().Pos();
+                    aTabRect += pTabFrame->getFrameArea().Pos();
 
                     SwRectFnSet aRectFnSet(*pTabFrame);
 

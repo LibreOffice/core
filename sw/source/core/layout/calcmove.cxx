@@ -108,7 +108,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
             const IDocumentSettingAccess& rIDSA = pNewPage->GetFormat()->getIDocumentSettingAccess();
             SwTwips nSpace = 0;
             SwRect aRect( pNewUpper->getFramePrintArea() );
-            aRect.Pos() += pNewUpper->getFrameArea().Pos();
+            aRect += pNewUpper->getFrameArea().Pos();
             const SwFrame *pPrevFrame = pNewUpper->Lower();
             while ( pPrevFrame )
             {
@@ -602,23 +602,23 @@ void SwFrame::MakePos()
             // cells may now leave their uppers
             if( aRectFnSet.IsVert() && SwFrameType::Cell & nMyType )
             {
-                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + pPrv->getFrameArea().Width());
+                aFrm.SetPosX(aFrm.Pos().getX() - aFrm.Width() + pPrv->getFrameArea().Width());
             }
         }
         else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
         {
             if ( aRectFnSet.IsVertL2R() )
             {
-                aFrm.Pos().setX(aFrm.Pos().getX() + pPrv->getFrameArea().Width());
+                aFrm.SetPosX(aFrm.Pos().getX() + pPrv->getFrameArea().Width());
             }
             else
             {
-                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
+                aFrm.SetPosX(aFrm.Pos().getX() - aFrm.Width());
             }
         }
         else
         {
-            aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
+            aFrm.SetPosY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
         }
     }
     else if ( GetUpper() )
@@ -663,16 +663,16 @@ void SwFrame::MakePos()
                 // cells may now leave their uppers
                 if( aRectFnSet.IsVert() && SwFrameType::Cell & nMyType )
                 {
-                    aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + pPrv->getFrameArea().Width());
+                    aFrm.SetPosX(aFrm.Pos().getX() - aFrm.Width() + pPrv->getFrameArea().Width());
                 }
             }
             else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
             {
-                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
+                aFrm.SetPosX(aFrm.Pos().getX() - aFrm.Width());
             }
             else
             {
-                aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
+                aFrm.SetPosY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
             }
         }
         else
@@ -682,41 +682,40 @@ void SwFrame::MakePos()
 
             if( GetUpper()->IsFlyFrame() )
             {
-                aFrm.Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
+                aFrm += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
             }
             else
             {
-                aFrm.Pos() += GetUpper()->getFramePrintArea().Pos();
+                aFrm += GetUpper()->getFramePrintArea().Pos();
             }
 
             if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
             {
                 if( aRectFnSet.IsVert() )
                 {
-                    aFrm.Pos().setY(aFrm.Pos().getY() + GetUpper()->getFramePrintArea().Height() - aFrm.Height());
+                    aFrm.SetPosY(aFrm.Pos().getY() + GetUpper()->getFramePrintArea().Height() - aFrm.Height());
                 }
                 else
                 {
-                    aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
+                    aFrm.SetPosX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
                 }
             }
             else if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && FRM_NOTE_VERT & nMyType )
             {
-                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + GetUpper()->getFramePrintArea().Width());
+                aFrm.SetPosX(aFrm.Pos().getX() - aFrm.Width() + GetUpper()->getFramePrintArea().Width());
             }
         }
     }
     else
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Pos().setX(0);
-        aFrm.Pos().setY(0);
+        aFrm.Pos(0, 0);
     }
 
     if( IsBodyFrame() && aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && GetUpper() )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
+        aFrm.SetPosX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
     }
 
     setFrameAreaPositionValid(true);
@@ -1176,8 +1175,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 
         {
             SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-            aPrt.Pos().setX(0);
-            aPrt.Pos().setY(0);
+            aPrt.Pos(0, 0);
             aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(getFrameArea()) );
             aRectFnSet.SetHeight( aPrt, 0 );
         }

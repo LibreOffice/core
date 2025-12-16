@@ -173,7 +173,7 @@ SwTwips SwAnchoredObject::GetRelCharY( const SwFrame* pFrame ) const
 
 void SwAnchoredObject::AddLastCharY( tools::Long nDiff )
 {
-    maLastCharRect.Pos().AdjustY(nDiff );
+    maLastCharRect.SetPosY(maLastCharRect.Pos().Y() + nDiff);
 }
 
 void SwAnchoredObject::ResetLastCharRectHeight()

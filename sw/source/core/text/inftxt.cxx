@@ -1170,8 +1170,7 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     sal_Unicode cChar;
     if( static_cast<const SwArrowPortion&>(rPor).IsLeft() )
     {
-        aRect.Pos().AdjustY(20 - GetAscent() );
-        aRect.Pos().AdjustX(20 );
+        aRect += { 20, 20 - GetAscent() };
         if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
         cChar = CHAR_LEFT_ARROW;
@@ -1180,8 +1179,7 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     {
         if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
-        aRect.Pos().AdjustY( -(aRect.Height() + 20) );
-        aRect.Pos().AdjustX( -(aRect.Width() + 20) );
+        aRect -= { aRect.Width() + 20, aRect.Height() + 20 };
         cChar = CHAR_RIGHT_ARROW;
     }
 

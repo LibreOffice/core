@@ -3326,7 +3326,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
         // Add offset to current page:
         const SwPageFrame* pPageFrame = pTmpFrame->FindPageFrame();
         SwRect aHFLinkRect( rLinkRect );
-        aHFLinkRect.Pos() = pPageFrame->getFrameArea().Pos() + aOffset;
+        aHFLinkRect.Pos(pPageFrame->getFrameArea().Pos() + aOffset);
 
         // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
         // fool it by comparing the position only (the width and height are the

@@ -152,16 +152,16 @@ SwRect SwVisibleCursor::SetPos()
         m_aTextCursor.SetOrientation( 900_deg10 );
         aRect = SwRect( m_rState.m_aCharRect.Pos(),
            Size( m_rState.m_aCharRect.Height(), nTmpY ) );
-        aRect.Pos().setX(aRect.Pos().getX() + m_rState.m_aCursorHeight.getX());
+        aRect.SetPosX(aRect.Pos().getX() + m_rState.m_aCursorHeight.getX());
         if (m_rState.IsOverwriteCursor())
-            aRect.Pos().setY(aRect.Pos().getY() + aRect.Width());
+            aRect.SetPosY(aRect.Pos().getY() + aRect.Width());
     }
     else
     {
         m_aTextCursor.SetOrientation();
         aRect = SwRect( m_rState.m_aCharRect.Pos(),
            Size( m_rState.m_aCharRect.Width(), nTmpY ) );
-        aRect.Pos().setY(aRect.Pos().getY() + m_rState.m_aCursorHeight.getX());
+        aRect.SetPosY(aRect.Pos().getY() + m_rState.m_aCursorHeight.getX());
     }
 
     // check if cursor should show the current cursor bidi level

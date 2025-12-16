@@ -1248,14 +1248,14 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
     if( pFrame->IsSctFrame() )
     {
         rRect = pFrame->getFramePrintArea();
-        rRect.Pos() += pFrame->getFrameArea().Pos();
+        rRect += pFrame->getFrameArea().Pos();
     }
     else if ( pFrame->IsCellFrame() )
         rRect = pFrame->getFrameArea();
     else
     {
         rRect = pFrame->getFramePrintArea();
-        rRect.Pos() += pFrame->getFrameArea().Pos();
+        rRect += pFrame->getFrameArea().Pos();
 
         SwRectFnSet fnRect(*pFrame);
 
@@ -1826,47 +1826,42 @@ void DrawGraphic(
     switch ( ePos )
     {
     case GPOS_LT:
-        aGrf.Pos() = rOrg.Pos();
+        aGrf.Pos(rOrg.Pos());
         break;
 
     case GPOS_MT:
-        aGrf.Pos().setY( rOrg.Top() );
-        aGrf.Pos().setX( rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2 );
+        aGrf.Pos(rOrg.Left() + rOrg.Width() / 2 - aGrfSize.Width() / 2, rOrg.Top());
         break;
 
     case GPOS_RT:
-        aGrf.Pos().setY( rOrg.Top() );
-        aGrf.Pos().setX( rOrg.Right() - aGrfSize.Width() );
+        aGrf.Pos(rOrg.Right() - aGrfSize.Width(), rOrg.Top());
         break;
 
     case GPOS_LM:
-        aGrf.Pos().setY( rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2 );
-        aGrf.Pos().setX( rOrg.Left() );
+        aGrf.Pos(rOrg.Left(), rOrg.Top() + rOrg.Height() / 2 - aGrfSize.Height() / 2);
         break;
 
     case GPOS_MM:
-        aGrf.Pos().setY( rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2 );
-        aGrf.Pos().setX( rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2 );
+        aGrf.Pos(rOrg.Left() + rOrg.Width() / 2 - aGrfSize.Width() / 2,
+                 rOrg.Top() + rOrg.Height() / 2 - aGrfSize.Height() / 2);
         break;
 
     case GPOS_RM:
-        aGrf.Pos().setY( rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2 );
-        aGrf.Pos().setX( rOrg.Right() - aGrfSize.Width() );
+        aGrf.Pos(rOrg.Right() - aGrfSize.Width(),
+                 rOrg.Top() + rOrg.Height() / 2 - aGrfSize.Height() / 2);
         break;
 
     case GPOS_LB:
-        aGrf.Pos().setY( rOrg.Bottom() - aGrfSize.Height() );
-        aGrf.Pos().setX( rOrg.Left() );
+        aGrf.Pos(rOrg.Left(), rOrg.Bottom() - aGrfSize.Height());
         break;
 
     case GPOS_MB:
-        aGrf.Pos().setY( rOrg.Bottom() - aGrfSize.Height() );
-        aGrf.Pos().setX( rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2 );
+        aGrf.Pos(rOrg.Left() + rOrg.Width() / 2 - aGrfSize.Width() / 2,
+                 rOrg.Bottom() - aGrfSize.Height());
         break;
 
     case GPOS_RB:
-        aGrf.Pos().setY( rOrg.Bottom() - aGrfSize.Height() );
-        aGrf.Pos().setX( rOrg.Right() - aGrfSize.Width() );
+        aGrf.Pos(rOrg.Right() - aGrfSize.Width(), rOrg.Bottom() - aGrfSize.Height());
         break;
 
     case GPOS_AREA:
@@ -1894,7 +1889,7 @@ void DrawGraphic(
 
             // set left-top-corner of background graphic to left-top-corner of the
             // area, from which the background brush is determined.
-            aGrf.Pos() = rOrg.Pos();
+            aGrf.Pos(rOrg.Pos());
             // setup clipping at output device
             auto popIt = rOutDev.ScopedPush(vcl::PushFlags::CLIPREGION);
             rOutDev.IntersectClipRegion( rOut.SVRect() );
@@ -2445,7 +2440,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
     const SwFrame* pUpper = mrTabFrame.GetUpper();
     SwRect aUpper( pUpper->getFramePrintArea() );
-    aUpper.Pos() += pUpper->getFrameArea().Pos();
+    aUpper += pUpper->getFrameArea().Pos();
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
 
@@ -2500,7 +2495,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             if ( bHori )
             {
                 aRepaintRect.Height( 2 * nRepaintRectSize );
-                aRepaintRect.Pos().AdjustY( -nRepaintRectSize );
+                aRepaintRect.SetPosY(aRepaintRect.Pos().Y() - nRepaintRectSize);
 
                 // To decide on visibility it is also necessary to expand the RepaintRect
                 // to left/right according existing BorderLine overlap matchings, else there
@@ -2511,13 +2506,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     const double fLineWidthMaxLeft(std::max(aStyles[1].GetWidth(), aStyles[3].GetWidth()));
                     const double fLineWidthMaxRight(std::max(aStyles[4].GetWidth(), aStyles[6].GetWidth()));
                     aRepaintRect.Width(aRepaintRect.Width() + (fLineWidthMaxLeft + fLineWidthMaxRight));
-                    aRepaintRect.Pos().AdjustX( -fLineWidthMaxLeft );
+                    aRepaintRect.SetPosX(aRepaintRect.Pos().X() - fLineWidthMaxLeft);
                 }
             }
             else
             {
                 aRepaintRect.Width( 2 * nRepaintRectSize );
-                aRepaintRect.Pos().AdjustX( -nRepaintRectSize );
+                aRepaintRect.SetPosX(aRepaintRect.Pos().X() - nRepaintRectSize);
 
                 // Accordingly to horizontal case, but for top/bottom
                 // aStyles[3] == aTFromR, aStyles[1] == aTFromL, aStyles[6] == aBFromR, aStyles[4] == aBFromL
@@ -2526,7 +2521,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     const double fLineWidthMaxTop(std::max(aStyles[3].GetWidth(), aStyles[1].GetWidth()));
                     const double fLineWidthMaxBottom(std::max(aStyles[6].GetWidth(), aStyles[4].GetWidth()));
                     aRepaintRect.Height(aRepaintRect.Height() + (fLineWidthMaxTop + fLineWidthMaxBottom));
-                    aRepaintRect.Pos().AdjustY( -fLineWidthMaxTop );
+                    aRepaintRect.SetPosY(aRepaintRect.Pos().Y() - fLineWidthMaxTop);
                 }
             }
 
@@ -3907,7 +3902,7 @@ void SwColumnFrame::PaintBreak( ) const
         return;
 
     SwRect aRect( pCnt->getFramePrintArea() );
-    aRect.Pos() += pCnt->getFrameArea().Pos();
+    aRect += pCnt->getFrameArea().Pos();
 
     // Draw the line
     basegfx::B2DPoint aStart( double( aRect.Left() ), aRect.Top() );
@@ -4664,7 +4659,7 @@ void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     {
         //  #i6467# - intersect output rectangle with table frame
         SwRect aTabRect( getFramePrintArea() );
-        aTabRect.Pos() += getFrameArea().Pos();
+        aTabRect += getFrameArea().Pos();
         SwRect aTabOutRect( rRect );
         aTabOutRect.Intersection( aTabRect );
         SwViewOption::DrawRect( &rRenderContext, aTabOutRect, COL_LIGHTGRAY );
@@ -5767,7 +5762,7 @@ void SwFootnoteContFrame::PaintSwFrameShadowAndBorder(
     //If the rectangle is completely inside the PrtArea, no border needs to
     //be painted.
     SwRect aRect( getFramePrintArea() );
-    aRect.Pos() += getFrameArea().Pos();
+    aRect += getFrameArea().Pos();
     if ( !aRect.Contains( rRect ) )
         PaintLine( rRect, pPage );
 }
@@ -5959,7 +5954,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
         bool bBorder = bLeft || bRight;
         while( nY > nRight )
         {
-            aTmp.Pos().setX( nY );
+            aTmp.SetPosX(nY);
             if( bGrid )
             {
                 nY -= nGrid;
@@ -5974,7 +5969,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                         while( aVert.Top() <= nBottom )
                         {
                             PaintBorderLine(rRect,aVert,this,pCol);
-                            aVert.Pos().AdjustY(nGrid );
+                            aVert.SetPosY(aVert.Pos().Y() + nGrid);
                         }
                     }
                     else if( bBorder )
@@ -5985,7 +5980,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setY( nGridBottom );
+                            aVert.SetPosY(nGridBottom);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6006,7 +6001,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setY( nGridBottom );
+                            aVert.SetPosY(nGridBottom);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6016,7 +6011,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
         }
         while( nY >= aInter.Left() )
         {
-            aTmp.Pos().setX( nY );
+            aTmp.SetPosX(nY);
             PaintBorderLine( rRect, aTmp, this, pCol);
             if( bGrid )
             {
@@ -6032,7 +6027,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                         while( aVert.Top() <= nBottom )
                         {
                             PaintBorderLine(rRect,aVert,this,pCol);
-                            aVert.Pos().AdjustY(nGrid );
+                            aVert.SetPosY(aVert.Pos().Y() + nGrid);
                         }
                     }
                     else if( bBorder )
@@ -6043,7 +6038,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setY( nGridBottom );
+                            aVert.SetPosY(nGridBottom);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6064,7 +6059,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setY( nGridBottom );
+                            aVert.SetPosY(nGridBottom);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6090,7 +6085,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
         bool bBorder = bLeft || bRight;
         while( nY < aInter.Top() )
         {
-            aTmp.Pos().setY(nY);
+            aTmp.SetPosY(nY);
             if( bGrid )
             {
                 nY += nGrid;
@@ -6105,7 +6100,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                         while( aVert.Left() <= nRight )
                         {
                             PaintBorderLine(rRect,aVert,this,pCol);
-                            aVert.Pos().AdjustX(nGridWidth );  //for textgrid refactor
+                            aVert.SetPosX(aVert.Pos().X() + nGridWidth); //for textgrid refactor
                         }
                     }
                     else if ( bBorder )
@@ -6116,7 +6111,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setX( nGridRight );
+                            aVert.SetPosX(nGridRight);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6137,7 +6132,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setX(nGridRight);
+                            aVert.SetPosX(nGridRight);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6147,7 +6142,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
         }
         while( nY <= nBottom )
         {
-            aTmp.Pos().setY(nY);
+            aTmp.SetPosY(nY);
             PaintBorderLine( rRect, aTmp, this, pCol);
             if( bGrid )
             {
@@ -6162,7 +6157,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                         while( aVert.Left() <= nRight )
                         {
                             PaintBorderLine( rRect, aVert, this, pCol);
-                            aVert.Pos().setX(aVert.Pos().getX() + nGridWidth);  //for textgrid refactor
+                            aVert.SetPosX(aVert.Pos().getX() + nGridWidth); //for textgrid refactor
                         }
                     }
                     else if( bBorder )
@@ -6173,7 +6168,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setX(nGridRight);
+                            aVert.SetPosX(nGridRight);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -6194,7 +6189,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             PaintBorderLine(rRect,aVert,this,pCol);
                         if( bRight )
                         {
-                            aVert.Pos().setX(nGridRight);
+                            aVert.SetPosX(nGridRight);
                             PaintBorderLine(rRect,aVert,this,pCol);
                         }
                     }
@@ -7485,7 +7480,7 @@ std::vector<basegfx::B2DPolygon> SwHeadFootFrame::GetSubsidiaryLinesPolygons(con
         return aPolygons;
 
     SwRect aArea( getFramePrintArea() );
-    aArea.Pos() += getFrameArea().Pos();
+    aArea += getFrameArea().Pos();
     if (!rViewShell.GetViewOptions()->IsTextBoundariesFull( ))
         aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea, true /* header/footer*/);
     else
@@ -7566,7 +7561,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     const bool bUseFrameArea = bCell || IsSctFrame();
     SwRect aOriginal( bUseFrameArea ? getFrameArea() : getFramePrintArea() );
     if ( !bUseFrameArea )
-        aOriginal.Pos() += getFrameArea().Pos();
+        aOriginal += getFrameArea().Pos();
 
     ::SwAlignRect( aOriginal, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
 
