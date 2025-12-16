@@ -402,11 +402,15 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
     {
         case SC_VALERR_INFO:
             eType = VclMessageType::Info;
-            eStyle = VclButtonsType::OkCancel;
+            eStyle = VclButtonsType::Ok;
             break;
         case SC_VALERR_WARNING:
             eType = VclMessageType::Warning;
             eStyle = VclButtonsType::OkCancel;
+            break;
+        case SC_VALERR_STOP:
+            eType = VclMessageType::Error;
+            eStyle = VclButtonsType::Cancel;
             break;
         default:
             break;
@@ -419,9 +423,6 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
 
     switch (eErrorStyle)
     {
-        case SC_VALERR_INFO:
-            xBox->set_default_response(RET_OK);
-            break;
         case SC_VALERR_WARNING:
             xBox->set_default_response(RET_CANCEL);
             break;
@@ -429,8 +430,8 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
             break;
     }
 
-    xBox->runAsync(xBox, [this, callback](sal_Int32 result)
-                   { callback(eErrorStyle == SC_VALERR_STOP || result == RET_CANCEL); });
+    xBox->runAsync(xBox, [callback](sal_Int32 result)
+                   { callback(result == RET_CANCEL); });
 }
 
 bool ScValidationData::IsDataValidCustom(
