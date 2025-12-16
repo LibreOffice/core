@@ -69,6 +69,9 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
                                   const Link<SvxCharView&, void>& rClearAllHdl,
                                   const CommandEvent& rCmdEvent);
 
+    static void updateCharControl(std::span<SvxCharView> aCharViews,
+                                  const std::deque<CharAndFont>& rChars);
+
 public:
     SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev,
                         bool bLockGridSizes);

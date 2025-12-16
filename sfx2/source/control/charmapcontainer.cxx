@@ -148,19 +148,7 @@ void SfxCharmapContainer::getFavCharacterList()
 
 void SfxCharmapContainer::updateFavCharControl()
 {
-    int i = 0;
-    for (auto it = m_aFavChars.begin(); it != m_aFavChars.end(); ++it, i++)
-    {
-        m_aFavCharView[i].SetText(it->sChar);
-        m_aFavCharView[i].UpdateFont(it->sFont);
-        m_aFavCharView[i].Show();
-    }
-
-    for(; i < 16 ; i++)
-    {
-        m_aFavCharView[i].SetText(OUString());
-        m_aFavCharView[i].Hide();
-    }
+    updateCharControl(m_aFavCharView, m_aFavChars);
 
     m_aUpdateFavHdl.Call(nullptr);
 }
@@ -187,19 +175,7 @@ void SfxCharmapContainer::GrabFocusToFirstFavorite()
 
 void SfxCharmapContainer::updateRecentCharControl()
 {
-    int i = 0;
-    for (auto it = m_aRecentChars.begin(); it != m_aRecentChars.end(); ++it, i++)
-    {
-        m_aRecentCharView[i].SetText(it->sChar);
-        m_aRecentCharView[i].UpdateFont(it->sFont);
-        m_aRecentCharView[i].Show();
-    }
-
-    for(; i < 16 ; i++)
-    {
-        m_aRecentCharView[i].SetText(OUString());
-        m_aRecentCharView[i].Hide();
-    }
+    updateCharControl(m_aRecentCharView, m_aRecentChars);
 
     m_aUpdateRecentHdl.Call(nullptr);
 }
@@ -319,6 +295,26 @@ void SfxCharmapContainer::HandleContextMenu(std::span<SvxCharView> aCharViews,
 
         rView.Invalidate();
         return;
+    }
+}
+
+void SfxCharmapContainer::updateCharControl(std::span<SvxCharView> aCharViews,
+                                            const std::deque<CharAndFont>& rChars)
+{
+    assert(rChars.size() <= aCharViews.size());
+
+    int i = 0;
+    for (auto it = rChars.begin(); it != rChars.end(); ++it, i++)
+    {
+        aCharViews[i].SetText(it->sChar);
+        aCharViews[i].UpdateFont(it->sFont);
+        aCharViews[i].Show();
+    }
+
+    for (; i < 16; i++)
+    {
+        aCharViews[i].SetText(OUString());
+        aCharViews[i].Hide();
     }
 }
 
