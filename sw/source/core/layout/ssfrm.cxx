@@ -41,22 +41,16 @@
 #include <osl/diagnose.h>
 
     // No inline cause we need the function pointers
-tools::Long SwFrame::GetTopMargin() const
-    { return getFramePrintArea().Top(); }
-tools::Long SwFrame::GetBottomMargin() const
-    { return getFrameArea().Height() -getFramePrintArea().Height() -getFramePrintArea().Top(); }
-tools::Long SwFrame::GetLeftMargin() const
-    { return getFramePrintArea().Left(); }
+tools::Long SwFrame::GetLeftMargin() const { return getFramePrintArea().Left(); }
 tools::Long SwFrame::GetRightMargin() const
-    { return getFrameArea().Width() - getFramePrintArea().Width() - getFramePrintArea().Left(); }
-tools::Long SwFrame::GetPrtLeft() const
-    { return getFrameArea().Left() + getFramePrintArea().Left(); }
-tools::Long SwFrame::GetPrtBottom() const
-    { return getFrameArea().Top() + getFramePrintArea().Height() + getFramePrintArea().Top(); }
-tools::Long SwFrame::GetPrtRight() const
-    { return getFrameArea().Left() + getFramePrintArea().Width() + getFramePrintArea().Left(); }
-tools::Long SwFrame::GetPrtTop() const
-    { return getFrameArea().Top() + getFramePrintArea().Top(); }
+    { return getFrameArea().Width() - getFramePrintArea().Width() - GetLeftMargin(); }
+tools::Long SwFrame::GetPrtLeft() const { return getFrameArea().Left() + GetLeftMargin(); }
+tools::Long SwFrame::GetPrtRight() const { return GetPrtLeft() + getFramePrintArea().Width(); }
+tools::Long SwFrame::GetTopMargin() const { return getFramePrintArea().Top(); }
+tools::Long SwFrame::GetBottomMargin() const
+    { return getFrameArea().Height() - getFramePrintArea().Height() - GetTopMargin(); }
+tools::Long SwFrame::GetPrtTop() const { return getFrameArea().Top() + GetTopMargin(); }
+tools::Long SwFrame::GetPrtBottom() const { return GetPrtTop() + getFramePrintArea().Height(); }
 
 bool SwFrame::SetMinLeft( tools::Long nDeadline )
 {
