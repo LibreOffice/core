@@ -492,8 +492,8 @@ MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.4.8-src.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MDDS_SHA256SUM := ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c
-MDDS_TARBALL := mdds-3.1.0.tar.xz
+MDDS_SHA256SUM := 16defab556c53f94b463460ea2a1faab96e58bad2a95d7981300d2956534abbb
+MDDS_TARBALL := mdds-3.2.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

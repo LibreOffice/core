@@ -1,0 +1,39 @@
+diff --git a/src/liborcus/gnumeric_types.cpp b/src/liborcus/gnumeric_types.cpp
+index fdfdb3fc..a07700e5 100644
+--- a/src/liborcus/gnumeric_types.cpp
++++ b/src/liborcus/gnumeric_types.cpp
+@@ -83,11 +83,19 @@ gnumeric_value_format_type to_gnumeric_value_format_type(std::string_view s)
+     return value_format_type::get().find(s);
+ }
+ 
+-bool gnumeric_value_format_segment::operator==(const gnumeric_value_format_segment& other) const
++bool gnumeric_value_format_segment::operator==(const gnumeric_value_format_segment& other) const noexcept
+ {
+     return type == other.type && value == other.value;
+ }
+ 
++bool gnumeric_value_format_segment::operator<(const gnumeric_value_format_segment& other) const noexcept
++{
++    if (type != other.type)
++        return type < other.type;
++
++    return value < other.value;
++}
++
+ void gnumeric_named_exp::reset()
+ {
+     name = std::string_view{};
+diff --git a/src/liborcus/gnumeric_types.hpp b/src/liborcus/gnumeric_types.hpp
+index a2c75deb..4389ad9f 100644
+--- a/src/liborcus/gnumeric_types.hpp
++++ b/src/liborcus/gnumeric_types.hpp
+@@ -81,7 +81,8 @@ struct gnumeric_value_format_segment
+     gnumeric_value_format_type type = gnumeric_value_format_type::unknown;
+     std::string_view value;
+ 
+-    bool operator==(const gnumeric_value_format_segment& other) const;
++    bool operator==(const gnumeric_value_format_segment& other) const noexcept;
++    bool operator<(const gnumeric_value_format_segment& other) const noexcept;
+ };
+ 
+ using value_format_segments_type = mdds::segment_tree<std::size_t, gnumeric_value_format_segment>;
