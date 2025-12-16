@@ -359,6 +359,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 // Destructor
 SdDrawDocument::~SdDrawDocument()
 {
+    mbDestroying = true;
     s_pLast = nullptr;
 
     Broadcast(SdrHint(SdrHintKind::ModelCleared));
@@ -396,6 +397,7 @@ SdDrawDocument::~SdDrawDocument()
     mpOutliner.reset();
     mpInternalOutliner.reset();
     moCharClass.reset();
+    mbDestroying = false;
 }
 
 void SdDrawDocument::adaptSizeAndBorderForAllPages(
