@@ -3420,6 +3420,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuView-BaselineGridVisible">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:BaselineGridVisible</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuView-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
