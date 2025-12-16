@@ -171,7 +171,7 @@ class SwAutoFormat
     SwTextFrame * EnsureFormatted(SwTextFrame const&) const;
 
     void BuildIndent();
-    void BuildText();
+    void BuildText(bool isReplaceStyles);
     void BuildTextIndent();
     void BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel );
     void BuildNegIndent( SwTwips nSpaces );
@@ -1438,7 +1438,7 @@ void SwAutoFormat::BuildTextIndent()
     AutoCorrect();
 }
 
-void SwAutoFormat::BuildText()
+void SwAutoFormat::BuildText(bool const isReplaceStyles)
 {
     SetRedlineText( STR_AUTOFMTREDL_SET_TMPL_TEXT );
     // read all succeeding paragraphs that belong to this text without indentation
@@ -1449,7 +1449,10 @@ void SwAutoFormat::BuildText()
         bBreak = !IsFastFullLine(*m_pCurTextFrame)
                 || IsBlanksInString(*m_pCurTextFrame)
                 || IsSentenceAtEnd(*m_pCurTextFrame);
-    SetColl( RES_POOLCOLL_TEXT, true );
+    if (isReplaceStyles)
+    {
+        SetColl( RES_POOLCOLL_TEXT, true );
+    }
     if( !bBreak )
     {
         SetRedlineText( STR_AUTOFMTREDL_DEL_MORELINES );
@@ -2564,7 +2567,10 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                 else
                 {
                     eStat = READ_NEXT_PARA;
-                    BuildText();
+                    if (!m_aFlags.bAFormatByInput)
+                    {
+                        BuildText(false);
+                    }
                 }
             }
             break;
@@ -2605,7 +2611,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     else if( 0 > nSz )      // negative 1st line indentation
                         BuildNegIndent( aFInfo.GetLineStart() );
                     else                    // is _no_ indentation
-                        BuildText();
+                        BuildText(true);
                     eStat = READ_NEXT_PARA;
                 }
                 else if (!nLevel && pNextFrame &&
@@ -2633,12 +2639,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     else if( nLevel )       // is indentation
                         BuildTextIndent();
                     else
-                        BuildText();
+                        BuildText(true);
                 }
                 else if( nLevel )
                     BuildTextIndent();
                 else
-                    BuildText();
+                    BuildText(true);
                 eStat = READ_NEXT_PARA;
             }
             break;
@@ -2674,7 +2680,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                         else if( pLRSpace->GetTextLeft() )   // is indentation
                             BuildTextIndent();
                         else
-                            BuildText();
+                            BuildText(true);
                     }
                 }
             }
