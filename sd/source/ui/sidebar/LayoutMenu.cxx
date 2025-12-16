@@ -153,7 +153,6 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
     mxLayoutIconView->connect_item_activated(LINK(this, LayoutMenu, LayoutSelected));
     mxLayoutIconView->connect_mouse_press(LINK(this, LayoutMenu, MousePressHdl));
-    mxLayoutIconView->connect_query_tooltip(LINK(this, LayoutMenu, QueryTooltipHdl));
     InvalidateContent();
 
     Link<::sdtools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
@@ -245,29 +244,6 @@ IMPL_LINK(LayoutMenu, MousePressHdl, const MouseEvent&, rMEvet, bool)
         }
     }
     return false;
-}
-
-IMPL_LINK(LayoutMenu, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
-{
-    const OUString sId = mxLayoutIconView->get_id(iter);
-
-    if (!sId.isEmpty())
-    {
-        AutoLayout aLayout = static_cast<AutoLayout>(sId.toInt32());
-        auto aResId = GetStringResourceIdForLayout(aLayout);
-        return aResId ? SdResId(aResId) : OUString();
-    }
-
-    return OUString();
-}
-
-TranslateId LayoutMenu::GetStringResourceIdForLayout(AutoLayout aLayout) const
-{
-    auto it = maLayoutToStringMap.find(aLayout);
-    if (it != maLayoutToStringMap.end())
-        return it->second;
-
-    return TranslateId();
 }
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
@@ -531,8 +507,8 @@ void LayoutMenu::Fill()
                 {
                     Bitmap aPreviewBitmap = GetPreviewAsBitmap(aImg);
                     mxLayoutIconView->insert(id, &sLayoutName, &sId, &aPreviewBitmap, nullptr);
+                    mxLayoutIconView->set_item_tooltip_text(id, sLayoutName);
                 }
-                maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;
 
                 if (maPreviewSize.Width() == 0)
                     maPreviewSize = aImg.GetSizePixel();
@@ -547,7 +523,6 @@ void LayoutMenu::Fill()
 void LayoutMenu::Clear()
 {
     mxLayoutIconView->clear();
-    maLayoutToStringMap.clear();
 }
 
 IMPL_LINK(LayoutMenu, OnPopupEnd, const OUString&, sCommand, void)
