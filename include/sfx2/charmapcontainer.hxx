@@ -72,6 +72,9 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     static void updateCharControl(std::span<SvxCharView> aCharViews,
                                   const std::deque<CharAndFont>& rChars);
 
+    static bool GetDecimalValueAndCharName(std::u16string_view sCharText, sal_UCS4& rDecimalValue,
+                                           OUString& rCharName);
+
 public:
     SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev,
                         bool bLockGridSizes);
@@ -96,6 +99,8 @@ public:
     bool FavCharListIsFull() const;
 
     void GrabFocusToFirstFavorite();
+
+    static OUString GetCharInfoText(std::u16string_view sCharText);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

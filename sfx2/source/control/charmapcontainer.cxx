@@ -21,10 +21,15 @@
 #include <officecfg/Office/Common.hxx>
 #include <charmapcontrol.hxx>
 #include <charmappopup.hxx>
+#include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/commandevent.hxx>
+
+#include <unicode/uchar.h>
+#include <unicode/utypes.h>
 
 using namespace css;
 
@@ -307,6 +312,14 @@ void SfxCharmapContainer::updateCharControl(std::span<SvxCharView> aCharViews,
     for (auto it = rChars.begin(); it != rChars.end(); ++it, i++)
     {
         aCharViews[i].SetText(it->sChar);
+
+        OUString sAccName;
+        if (GetDecimalValueAndCharName(it->sChar, o3tl::temporary(sal_UCS4()), sAccName))
+            aCharViews[i].SetAccessibleName(sAccName);
+        else
+            aCharViews[i].SetAccessibleName(OUString());
+        aCharViews[i].SetToolTip(GetCharInfoText(it->sChar));
+
         aCharViews[i].UpdateFont(it->sFont);
         aCharViews[i].Show();
     }
@@ -314,6 +327,8 @@ void SfxCharmapContainer::updateCharControl(std::span<SvxCharView> aCharViews,
     for (; i < 16; i++)
     {
         aCharViews[i].SetText(OUString());
+        aCharViews[i].SetAccessibleName(OUString());
+        aCharViews[i].SetToolTip(OUString());
         aCharViews[i].Hide();
     }
 }
@@ -397,6 +412,41 @@ bool SfxCharmapContainer::FavCharListIsFull() const
 bool SfxCharmapContainer::hasRecentChars() const
 {
     return !m_aRecentChars.empty();
+}
+
+bool SfxCharmapContainer::GetDecimalValueAndCharName(std::u16string_view sCharText,
+                                                     sal_UCS4& rDecimalValue, OUString& rCharName)
+{
+    if (sCharText.empty())
+        return false;
+
+    sal_UCS4 nDecimalValue = o3tl::iterateCodePoints(sCharText, &o3tl::temporary(sal_Int32(1)), -1);
+    /* get the character name */
+    UErrorCode errorCode = U_ZERO_ERROR;
+    // icu has a private uprv_getMaxCharNameLength function which returns the max possible
+    // length of this property. Unicode 3.2 max char name length was 83
+    char buffer[100];
+    u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+    if (U_SUCCESS(errorCode))
+    {
+        rDecimalValue = nDecimalValue;
+        rCharName = OUString::createFromAscii(buffer);
+        return true;
+    }
+    return false;
+}
+
+OUString SfxCharmapContainer::GetCharInfoText(std::u16string_view sCharText)
+{
+    sal_UCS4 nDecimalValue = 0;
+    OUString sCharName;
+    const bool bSuccess = GetDecimalValueAndCharName(sCharText, nDecimalValue, sCharName);
+    if (bSuccess)
+    {
+        auto aHexText = OUString::number(nDecimalValue, 16).toAsciiUpperCase();
+        return sCharText + u" "_ustr + sCharName + u" U+" + aHexText;
+    }
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

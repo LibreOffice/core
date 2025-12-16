@@ -52,7 +52,7 @@ SfxCharmapCtrl::~SfxCharmapCtrl()
 
 IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, SvxCharView&, rView, void)
 {
-    m_xCharInfoLabel->set_label(rView.GetCharInfoText());
+    m_xCharInfoLabel->set_label(SfxCharmapContainer::GetCharInfoText(rView.GetText()));
 }
 
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView&, rView, void)

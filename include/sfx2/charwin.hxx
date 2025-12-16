@@ -31,6 +31,7 @@ private:
     vcl::Font       maFont;
     bool            maHasInsert;
     OUString        m_sText;
+    OUString        m_sToolTip;
 
     Link<SvxCharView&, void> maFocusInHdl;
     Link<SvxCharView&, void> maMouseClickHdl;
@@ -45,7 +46,7 @@ private:
     virtual bool KeyInput(const KeyEvent&) override;
     virtual bool Command(const CommandEvent&) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    bool GetDecimalValueAndCharName(sal_UCS4& rDecimalValue, OUString& rCharName);
+
 public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
     SFX2_DLLPUBLIC virtual ~SvxCharView() override;
@@ -54,7 +55,7 @@ public:
     vcl::Font const & GetFont() const { return maFont; }
     void            SetText( const OUString& rText );
     OUString const & GetText() const { return m_sText; }
-    OUString GetCharInfoText();
+    void SetToolTip(const OUString& rToolTip) { m_sToolTip = rToolTip; };
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
