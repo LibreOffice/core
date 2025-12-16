@@ -507,6 +507,7 @@ void LayoutMenu::Fill()
                 {
                     Bitmap aPreviewBitmap = GetPreviewAsBitmap(aImg);
                     mxLayoutIconView->insert(id, &sLayoutName, &sId, &aPreviewBitmap, nullptr);
+                    mxLayoutIconView->set_item_accessible_name(id, sLayoutName);
                     mxLayoutIconView->set_item_tooltip_text(id, sLayoutName);
                 }
 
