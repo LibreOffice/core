@@ -26,10 +26,10 @@
 #endif
 
 SwRect::SwRect( const tools::Rectangle &rRect ) :
-    m_Point( rRect.Left(), rRect.Top() )
+    m_Point( rRect.Left(), rRect.Top() ),
+    m_Size( rRect.IsWidthEmpty() ? 0 : rRect.Right() - rRect.Left() + 1,
+            rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top() + 1 )
 {
-    m_Size.setWidth( rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left() + 1);
-    m_Size.setHeight(rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top()  + 1);
 }
 
 SwRect& SwRect::Union( const SwRect& rRect )
@@ -45,11 +45,9 @@ SwRect& SwRect::Union( const SwRect& rRect )
         Top( rRect.Top() );
     if ( Left() > rRect.Left() )
         Left( rRect.Left() );
-    tools::Long n = rRect.Right();
-    if ( Right() < n )
+    if ( tools::Long n = rRect.Right(); Right() < n )
         Right( n );
-    n = rRect.Bottom();
-    if ( Bottom() < n )
+    if ( tools::Long n = rRect.Bottom(); Bottom() < n )
         Bottom( n );
     return *this;
 }
@@ -81,27 +79,25 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
 SwRect& SwRect::Intersection_( const SwRect& rOther )
 {
     // get smaller right and lower, and greater left and upper edge
-    auto left   = std::max( m_Point.X(), rOther.m_Point.X() );
-    auto top    = std::max( m_Point.Y(), rOther.m_Point.Y() );
-    tools::Long right  = std::min( m_Point.X() + m_Size.Width(), rOther.m_Point.X() + rOther.m_Size.Width() );
-    auto bottom = std::min( m_Point.Y() + m_Size.Height(), rOther.m_Point.Y() + rOther.m_Size.Height() );
+    auto left   = std::max( Left(), rOther.Left() );
+    auto top    = std::max( Top(), rOther.Top() );
+    auto right  = std::min( Left() + Width(), rOther.Left() + rOther.Width() );
+    auto bottom = std::min( Top() + Height(), rOther.Top() + rOther.Height() );
 
-    *this = SwRect( left, top, right - left, bottom - top );
+    Chg({ left, top }, { right - left, bottom - top });
 
     return *this;
 }
 
 void SwRect::Justify()
 {
-    if ( m_Size.Height() < 0 )
+    if ( Height() < 0 )
     {
-        m_Point.setY(m_Point.Y() + m_Size.Height() + 1);
-        m_Size.setHeight(-m_Size.Height());
+        SetTopAndHeight(Top() + Height() + 1, -Height());
     }
-    if ( m_Size.Width() < 0 )
+    if ( Width() < 0 )
     {
-        m_Point.setX(m_Point.X() + m_Size.Width() + 1);
-        m_Size.setWidth(-m_Size.Width());
+        SetLeftAndWidth(Left() + Width() + 1, -Width());
     }
 }
 
@@ -109,71 +105,64 @@ void SwRect::Justify()
 void SwRect::Width_( const tools::Long nNew ) { Width(nNew); }
 void SwRect::Height_( const tools::Long nNew ) { Height(nNew); }
 void SwRect::Left_( const tools::Long nLeft ) { Left(nLeft); }
-void SwRect::Right_( const tools::Long nRight ){ m_Size.setWidth(nRight - m_Point.X()); }
+void SwRect::Right_( const tools::Long nRight ) { Width(nRight - Left()); }
 void SwRect::Top_( const tools::Long nTop ) { Top(nTop); }
-void SwRect::Bottom_( const tools::Long nBottom ){ m_Size.setHeight(nBottom - m_Point.Y()); }
+void SwRect::Bottom_( const tools::Long nBottom ) { Height(nBottom - Top()); }
 
 tools::Long SwRect::Width_() const{ return Width(); }
 tools::Long SwRect::Height_() const{ return Height(); }
 tools::Long SwRect::Left_() const{ return Left(); }
-tools::Long SwRect::Right_() const{ return m_Point.X() + m_Size.Width(); }
+tools::Long SwRect::Right_() const{ return Left() + Width(); }
 tools::Long SwRect::Top_() const{ return Top(); }
-tools::Long SwRect::Bottom_() const{ return m_Point.Y() + m_Size.Height(); }
+tools::Long SwRect::Bottom_() const{ return Top() + Height(); }
 
 void SwRect::AddWidth( const tools::Long nAdd ) { m_Size.AdjustWidth(nAdd ); }
 void SwRect::AddHeight( const tools::Long nAdd ) { m_Size.AdjustHeight(nAdd ); }
-void SwRect::AddLeft( const tools::Long nAdd ){ m_Size.AdjustWidth(-nAdd ); m_Point.setX(m_Point.X() + nAdd); }
-void SwRect::SubLeft( const tools::Long nSub ){ m_Size.AdjustWidth(nSub ); m_Point.setX(m_Point.X() - nSub); }
-void SwRect::AddRight( const tools::Long nAdd ){ m_Size.AdjustWidth(nAdd ); }
-void SwRect::AddTop( const tools::Long nAdd ){ m_Size.AdjustHeight(-nAdd ); m_Point.setY(m_Point.Y() + nAdd); }
-void SwRect::SubTop( const tools::Long nSub ){ m_Size.AdjustHeight(nSub ); m_Point.setY(m_Point.Y() - nSub); }
-void SwRect::AddBottom( const tools::Long nAdd ){ m_Size.AdjustHeight(nAdd ); }
+void SwRect::AddLeft( const tools::Long nAdd ) { SubLeft(-nAdd); }
+void SwRect::SubLeft( const tools::Long nSub ) { AddWidth(nSub); SetPosX(Left() - nSub); }
+void SwRect::AddRight( const tools::Long nAdd ) { AddWidth(nAdd); }
+void SwRect::AddTop( const tools::Long nAdd ) { SubTop(-nAdd); }
+void SwRect::SubTop( const tools::Long nSub ) { AddHeight(nSub); SetPosY(Top() - nSub); }
+void SwRect::AddBottom( const tools::Long nAdd ) { AddHeight(nAdd); }
 void SwRect::SetPosX( const tools::Long nNew ){ m_Point.setX(nNew); }
 void SwRect::SetPosY( const tools::Long nNew ){ m_Point.setY(nNew); }
 
 Size  SwRect::Size_() const { return SSize(); }
-Size  SwRect::SwappedSize() const { return Size( m_Size.Height(), m_Size.Width() ); }
+Size SwRect::SwappedSize() const { return Size(Height(), Width()); }
 
-tools::Long SwRect::GetLeftDistance( tools::Long nLimit ) const { return m_Point.X() - nLimit; }
-tools::Long SwRect::GetBottomDistance( tools::Long nLim ) const { return nLim - m_Point.Y() - m_Size.Height();}
-tools::Long SwRect::GetTopDistance( tools::Long nLimit ) const { return m_Point.Y() - nLimit; }
-tools::Long SwRect::GetRightDistance( tools::Long nLim ) const { return nLim - m_Point.X() - m_Size.Width(); }
+tools::Long SwRect::GetLeftDistance(tools::Long nLimit) const { return Left() - nLimit; }
+tools::Long SwRect::GetTopDistance(tools::Long nLimit) const { return Top() - nLimit; }
+tools::Long SwRect::GetRightDistance(tools::Long nLim) const { return nLim - Left() - Width(); }
+tools::Long SwRect::GetBottomDistance(tools::Long nLim) const { return nLim - Top() - Height(); }
 
 bool SwRect::OverStepLeft( tools::Long nLimit ) const
-    { return nLimit > m_Point.X() && m_Point.X() + m_Size.Width() > nLimit; }
-bool SwRect::OverStepBottom( tools::Long nLimit ) const
-    { return nLimit > m_Point.Y() && m_Point.Y() + m_Size.Height() > nLimit; }
+    { return nLimit > Left() && Left() + Width() > nLimit; }
+bool SwRect::OverStepRight( tools::Long nLimit ) const { return OverStepLeft(nLimit); }
 bool SwRect::OverStepTop( tools::Long nLimit ) const
-    { return nLimit > m_Point.Y() && m_Point.Y() + m_Size.Height() > nLimit; }
-bool SwRect::OverStepRight( tools::Long nLimit ) const
-    { return nLimit > m_Point.X() && m_Point.X() + m_Size.Width() > nLimit; }
+    { return nLimit > Top() && Top() + Height() > nLimit; }
+bool SwRect::OverStepBottom( tools::Long nLimit ) const { return OverStepTop(nLimit); }
 
 void SwRect::SetLeftAndWidth( tools::Long nLeft, tools::Long nNew )
 {
-    m_Point.setX(nLeft);
-    m_Size.setWidth(nNew);
+    SetPosX(nLeft);
+    Width(nNew);
 }
 void SwRect::SetTopAndHeight( tools::Long nTop, tools::Long nNew )
 {
-    m_Point.setY(nTop);
-    m_Size.setHeight(nNew);
+    SetPosY(nTop);
+    Height(nNew);
 }
 void SwRect::SetRightAndWidth( tools::Long nRight, tools::Long nNew )
 {
-    m_Point.setX(nRight - nNew);
-    m_Size.setWidth(nNew);
+    SetLeftAndWidth(nRight - nNew, nNew);
 }
 void SwRect::SetBottomAndHeight( tools::Long nBottom, tools::Long nNew )
 {
-    m_Point.setY(nBottom - nNew);
-    m_Size.setHeight(nNew);
+    SetTopAndHeight(nBottom - nNew, nNew);
 }
-void SwRect::SetUpperLeftCorner(  const Point& rNew )
-    { m_Point = rNew; }
-void SwRect::SetUpperRightCorner(  const Point& rNew )
-    { m_Point = Point(rNew.X() - m_Size.Width(), rNew.Y()); }
-void SwRect::SetLowerLeftCorner(  const Point& rNew )
-    { m_Point = Point(rNew.X(), rNew.Y() - m_Size.Height()); }
+void SwRect::SetUpperLeftCorner(const Point& rNew) { Pos(rNew); }
+void SwRect::SetUpperRightCorner(const Point& rNew) { Pos(rNew.X() - Width(), rNew.Y()); }
+void SwRect::SetLowerLeftCorner(const Point& rNew) { Pos(rNew.X(), rNew.Y() - Height()); }
 
 void SwRect::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
 {
