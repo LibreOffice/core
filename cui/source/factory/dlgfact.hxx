@@ -230,6 +230,11 @@ public:
         const OUString& sTitle, const OUString& sText, const OUString& sQuestion,
         bool bShowAgain) override;
 
+    virtual VclPtr<AbstractNewStyleDialog> CreateNewStyleDialog(
+        weld::Container* pParent,
+        SfxStyleSheetBasePool& rPool,
+        SfxStyleFamily nFamily) override;
+
 #ifdef _WIN32
     virtual VclPtr<VclAbstractDialog> CreateFileExtCheckDialog(weld::Window* pParent,
                                                                const OUString& sTitle,

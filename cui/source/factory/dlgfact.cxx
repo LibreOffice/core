@@ -30,6 +30,7 @@
 #include <securityoptions.hxx>
 #include <AdditionsDialog.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/newstyle.hxx>
 #include <sfx2/pageids.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
@@ -1600,6 +1601,26 @@ AbstractDialogFactory_Impl::CreateDiagramDialog(
     using AbstractDiagramDialog_Impl
         = vcl::AbstractDialogImpl_Async<AbstractDiagramDialog, DiagramDialog>;
     return VclPtr<AbstractDiagramDialog_Impl>::Create(pParent, rDiagram);
+}
+
+namespace
+{
+class AbstractNewStyleDialog_Impl final
+    : public vcl::AbstractDialogImpl_Async<AbstractNewStyleDialog, SfxNewStyleDlg>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    OUString GetName() const override { return m_pDlg->GetName(); }
+};
+}
+
+VclPtr<AbstractNewStyleDialog>
+AbstractDialogFactory_Impl::CreateNewStyleDialog(
+    weld::Container* pParent,
+    SfxStyleSheetBasePool& rPool,
+    SfxStyleFamily nFamily)
+{
+    return VclPtr<AbstractNewStyleDialog_Impl>::Create(pParent, rPool, nFamily);
 }
 
 #ifdef _WIN32
