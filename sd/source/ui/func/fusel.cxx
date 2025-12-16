@@ -446,6 +446,27 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             pHdl=mpView->PickHandle(aMDPos);
                             if ( ! rMEvt.IsRight())
                                 mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
+
+                            if (comphelper::LibreOfficeKit::isActive())
+                            {
+                                if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+                                {
+                                    SdPage* pPage = mpViewShell->GetActualPage();
+                                    if (pPage->IsCanvasPage())
+                                    {
+                                        ::tools::JsonWriter jsonWriter;
+                                        jsonWriter.put("commandName", "ReshufflePagePopup");
+                                        {
+                                            auto jsonState = jsonWriter.startNode("state");
+                                        }
+
+                                        OString aPayload = jsonWriter.finishAndGetAsOString();
+                                        if (pViewShell)
+                                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+
+                                    }
+                                }
+                            }
                         }
                         else
                         {
