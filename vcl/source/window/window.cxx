@@ -3405,18 +3405,24 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (pAccLabelledBy)
         rJsonWriter.put("labelledBy", pAccLabelledBy->get_id());
 
-    if(!pAccLabelFor && !pAccLabelledBy)
-    {
-        OUString sAccName = GetAccessibleName();
-        OUString sAccDesc = GetAccessibleDescription();
+    OUString sAccName = GetAccessibleName();
+    OUString sAccDesc = GetAccessibleDescription();
 
-        if (!sAccName.isEmpty() || !sAccDesc.isEmpty())
+    if (!sAccName.isEmpty() || !sAccDesc.isEmpty())
+    {
+        auto aAria = rJsonWriter.startNode("aria");
+
+        if (!sAccDesc.isEmpty())
         {
-            auto aAria = rJsonWriter.startNode("aria");
+            rJsonWriter.put("description", sAccDesc);
+        }
+
+        if(!pAccLabelFor && !pAccLabelledBy)
+        {
             if (!sAccName.isEmpty())
+            {
                 rJsonWriter.put("label", sAccName);
-            if (!sAccDesc.isEmpty())
-                rJsonWriter.put("description", sAccDesc);
+            }
         }
     }
 
