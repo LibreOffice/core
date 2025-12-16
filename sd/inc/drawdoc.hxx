@@ -371,6 +371,8 @@ private:
 
     bool                mbNewOrLoadCompleted;
 
+    bool                mbDestroying = false;
+
     bool                mbOnlineSpell;
     bool                mbSummationOfParagraphs;
     sal_uInt16          mnStartWithPresentation; ///< 1-based starting slide# when presenting via command line parameter --show

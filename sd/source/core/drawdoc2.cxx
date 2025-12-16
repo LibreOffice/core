@@ -507,7 +507,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 {
     // Do not remove the only non-canvas page
     if (HasCanvasPage() && GetSdPageCount(PageKind::Standard) == 2
-        && nPgNum == 3)
+        && nPgNum == 3 && !mbDestroying)
         return nullptr;
     rtl::Reference<SdrPage> pPage = FmFormModel::RemovePage(nPgNum);
 
@@ -536,8 +536,10 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
-    if (HasCanvasPage())
+    if (HasCanvasPage() && !mbDestroying)
+    {
         updatePagePreviewsGrid(pSdPage);
+    }
 
     return pPage;
 }
