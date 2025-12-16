@@ -41,6 +41,8 @@
       <column type="GdkPixbuf"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="shadows_liststore">
@@ -48,6 +50,8 @@
       <!-- column-name pixbuf -->
       <column type="GdkPixbuf"/>
       <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -97,6 +101,7 @@
                 <property name="model">presets_liststore</property>
                 <property name="pixbuf-column">0</property>
                 <property name="columns">5</property>
+                <property name="tooltip-column">2</property>
                 <property name="activate-on-single-click">True</property>
               </object>
               <packing>
@@ -563,6 +568,7 @@
                 <property name="model">shadows_liststore</property>
                 <property name="pixbuf-column">0</property>
                 <property name="columns">5</property>
+                <property name="tooltip-column">2</property>
                 <property name="activate-on-single-click">True</property>
               </object>
               <packing>

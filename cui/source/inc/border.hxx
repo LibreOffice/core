@@ -168,8 +168,6 @@ private:
     DECL_LINK(ModifyWidthMFHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(SyncHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::Toggleable&, void);
-    DECL_LINK(QueryTooltipPreHdl, const weld::TreeIter&, OUString);
-    DECL_LINK(QueryTooltipSdwHdl, const weld::TreeIter&, OUString);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nIconViewIdx) const;
     OUString            GetPresetName(sal_uInt16 nIconViewIdx) const;
