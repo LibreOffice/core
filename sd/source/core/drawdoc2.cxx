@@ -536,7 +536,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
-    if (HasCanvasPage() && !mbDestroying)
+    if (HasCanvasPage() && pSdPage->GetPageKind() == PageKind::Standard && !mbDestroying)
     {
         updatePagePreviewsGrid(pSdPage);
     }
