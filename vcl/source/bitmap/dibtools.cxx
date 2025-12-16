@@ -133,7 +133,7 @@ struct DIBV5Header : public DIBInfoHeader
     {}
 };
 
-vcl::PixelFormat convertToBPP(sal_uInt16 nCount)
+vcl::PixelFormat lcl_convertToBPP(sal_uInt16 nCount)
 {
     return (nCount <= 8) ? vcl::PixelFormat::N8_BPP :
                            vcl::PixelFormat::N24_BPP;
@@ -988,7 +988,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
         pAccAlpha = aNewBmpAlpha;
     }
 
-    vcl::PixelFormat ePixelFormat(convertToBPP(aHeader.nBitCount));
+    vcl::PixelFormat ePixelFormat(lcl_convertToBPP(aHeader.nBitCount));
     const BitmapPalette* pPal = &aPalette;
     //ofz#948 match the surrounding logic of case TransparentType::Bitmap of
     //ReadDIBBitmapEx but do it while reading for performance
@@ -1275,7 +1275,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, sal_uLong 
         // bitmaps is relatively recent.
         // #i59239# discretize bitcount for aligned width to 1,8,24
         // (other cases are not written below)
-        const auto ePixelFormat(convertToBPP(rAcc.GetBitCount()));
+        const auto ePixelFormat(lcl_convertToBPP(rAcc.GetBitCount()));
         const sal_uLong nAlignedWidth(AlignedWidth4Bytes(rAcc.Width() * sal_Int32(ePixelFormat)));
         bool bNative(false);
 
@@ -1389,7 +1389,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
     // recent.
     // #i59239# discretize bitcount to 1,8,24 (other cases
     // are not written below)
-    const auto ePixelFormat(convertToBPP(rAcc.GetBitCount()));
+    const auto ePixelFormat(lcl_convertToBPP(rAcc.GetBitCount()));
     aHeader.nBitCount = sal_uInt16(ePixelFormat);
     aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
 
