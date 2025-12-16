@@ -1077,7 +1077,10 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
                 {
                     if ( !pNew->GetAnchorFrame() )
                     {
-                        pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( nullptr )) );
+                        SwAnchoredObject& rAnchorObj = *(pNew->GetAnchoredObj(nullptr));
+                        pFrame->AppendDrawObj(rAnchorObj);
+                        if (rAnchorObj.GetDrawObj()->IsVisible())
+                            pNew->MoveObjToVisibleLayer(rAnchorObj.DrawObj());
                     }
                     // OD 19.06.2003 #108784# - add 'virtual' drawing object,
                     // if necessary. But control objects have to be excluded.
