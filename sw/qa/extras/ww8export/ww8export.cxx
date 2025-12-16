@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <iterator>
 #include <string_view>
 
 #include <swmodeltestbase.hxx>
@@ -1384,7 +1385,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
 
     OUString sNames[6];
 
-    const int nNumberOfTextPortions = SAL_N_ELEMENTS(aTextPortions);
+    const int nNumberOfTextPortions = std::size(aTextPortions);
 
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
 

@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/style/BreakType.hpp>
@@ -512,7 +514,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf49073, "tdf49073.docx")
 {
     // test case for Asian phontic guide (ruby text.)
     sal_Unicode aRuby[3] = {0x304D,0x3082,0x3093};
-    OUString sRuby(aRuby, SAL_N_ELEMENTS(aRuby));
+    OUString sRuby(aRuby, std::size(aRuby));
     CPPUNIT_ASSERT_EQUAL(sRuby,getProperty<OUString>(getParagraph(1)->getStart(), u"RubyText"_ustr));
     OUString sStyle = getProperty<OUString>( getParagraph(1)->getStart(), u"RubyCharStyleName"_ustr);
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"CharacterStyles"_ustr)->getByName(sStyle), uno::UNO_QUERY );

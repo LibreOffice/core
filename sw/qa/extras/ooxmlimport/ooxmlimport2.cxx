@@ -14,6 +14,8 @@
 #include <postmac.h>
 #endif
 
+#include <iterator>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
@@ -962,7 +964,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
     static constexpr OUString pLabel5 = u"\uF0D1\uF031\uF032b"_ustr;
     const OUString sFootnoteLabels[]
         = { OUString(u'\xF0A7'), u"1"_ustr, u"2"_ustr, OUString(u'\xF020'), pLabel5 };
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(SAL_N_ELEMENTS(sFootnoteLabels)), nCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(std::size(sFootnoteLabels)), nCount);
 
     pWrtShell->GotoPrevFootnoteAnchor();
     nCount--;

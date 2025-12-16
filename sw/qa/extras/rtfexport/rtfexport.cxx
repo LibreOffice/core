@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/Gradient2.hpp>
@@ -440,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf49073)
     auto verify = [this]() {
         // test case for Asian phontic guide (ruby text.)
         sal_Unicode aRuby[3] = { 0x304D, 0x3082, 0x3093 };
-        OUString sRuby(aRuby, SAL_N_ELEMENTS(aRuby));
+        OUString sRuby(aRuby, std::size(aRuby));
         CPPUNIT_ASSERT_EQUAL(sRuby,
                              getProperty<OUString>(getParagraph(1)->getStart(), u"RubyText"_ustr));
         OUString sStyle

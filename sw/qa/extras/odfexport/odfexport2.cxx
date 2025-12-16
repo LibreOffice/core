@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/drawing/BarCode.hpp>
@@ -432,7 +434,7 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    for (size_t i = 0; i < std::size(aFieldTexts); i++)
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
