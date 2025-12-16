@@ -71,6 +71,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListEntry
     SvTLEntryFlags      nEntryFlags;
     std::optional<Color> mxTextColor;
     OUString m_sAccessibleName;
+    OUString m_sToolTip;
 
 private:
     void ClearChildren();
@@ -120,6 +121,10 @@ public:
     void SetTextColor( std::optional<Color> xColor ) { mxTextColor = xColor; }
     OUString GetAccessibleName() { return m_sAccessibleName; }
     void SetAccessibleName(const OUString& rName) { m_sAccessibleName = rName; };
+
+    OUString GetToolTip() { return m_sToolTip; };
+    void SetToolTip(const OUString& rToolTip) { m_sToolTip = rToolTip; };
+
     std::optional<Color> const & GetTextColor() const { return mxTextColor; }
 
     void SetExtraIndent(sal_uInt32 nExtraIndent) { mnExtraIndent = nExtraIndent; }

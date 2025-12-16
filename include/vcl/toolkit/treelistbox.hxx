@@ -394,7 +394,7 @@ public:
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
     const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
-    OUString GetEntryTooltip(SvTreeListEntry* pEntry) const { return aTooltipHdl.Call(pEntry); }
+    OUString GetEntryTooltip(SvTreeListEntry* pEntry) const;
 
     VclPtr<Edit> GetEditWidget() const; // for UITest
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }

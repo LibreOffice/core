@@ -5587,6 +5587,13 @@ void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rNam
     pEntry->SetAccessibleName(rName);
 }
 
+void SalInstanceIconView::set_item_tooltip_text(int pos, const OUString& rToolTip)
+{
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(pos);
+    assert(pEntry);
+    pEntry->SetToolTip(rToolTip);
+}
+
 tools::Rectangle SalInstanceIconView::get_rect(int pos) const
 {
     SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);

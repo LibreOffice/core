@@ -209,6 +209,16 @@ void QtInstanceIconView::set_item_accessible_name(int nPos, const OUString& rNam
     });
 }
 
+void QtInstanceIconView::set_item_tooltip_text(int nPos, const OUString& rToolTip)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nPos);
+        m_pModel->setData(aIndex, toQString(rToolTip), Qt::ToolTipRole);
+    });
+}
+
 void QtInstanceIconView::do_remove(int) { assert(false && "Not implemented yet"); }
 
 tools::Rectangle QtInstanceIconView::get_rect(int) const

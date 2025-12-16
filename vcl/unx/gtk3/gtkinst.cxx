@@ -16914,6 +16914,18 @@ private:
 #endif
     }
 
+    virtual void set_item_tooltip_text(int pos, const OUString& rToolTip) override
+    {
+        const int nToolTipCol = gtk_icon_view_get_tooltip_column(m_pIconView);
+        assert(nToolTipCol >= 0
+               && "Invalid tooltip column. Is GtkIconView::tooltip-column set in the .ui file?");
+
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            gtk_tree_store_set(m_pTreeStore, &iter, nToolTipCol, rToolTip.toUtf8().getStr(), -1);
+    }
+
     virtual void do_remove(int pos) override
     {
         disable_notify_events();
