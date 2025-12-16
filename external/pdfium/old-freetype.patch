@@ -1,0 +1,11 @@
+--- core/fxge/cfx_face.cpp
++++ core/fxge/cfx_face.cpp
+@@ -789,7 +789,7 @@
+ }
+ 
+ int CFX_Face::GetNameIndex(const char* name) {
+-  return FT_Get_Name_Index(GetRec(), name);
++  return FT_Get_Name_Index(GetRec(), const_cast<char*>(name));
+ }
+ 
+ int CFX_Face::LoadGlyph(uint32_t glyph_index, bool scale) {

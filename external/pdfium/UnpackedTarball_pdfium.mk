@@ -13,6 +13,8 @@ pdfium_patches += build.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
+# FreeType < 2.10 compatibility (RHEL 8 baseline)
+pdfium_patches += old-freetype.patch
 
 pdfium_patches += freebsd.patch
 

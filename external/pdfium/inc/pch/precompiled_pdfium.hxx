@@ -162,6 +162,7 @@
 #include <core/fpdfapi/page/cpdf_transferfunc.h>
 #include <core/fpdfapi/page/cpdf_transferfuncdib.h>
 #include <core/fpdfapi/page/cpdf_transparency.h>
+#include <core/fpdfapi/page/jpx_decode_conversion.h>
 #include <core/fpdfapi/parser/cfdf_document.h>
 #include <core/fpdfapi/parser/cpdf_array.h>
 #include <core/fpdfapi/parser/cpdf_boolean.h>
@@ -481,7 +482,6 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
-#include <third_party/abseil-cpp/absl/container/flat_hash_set.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>
@@ -491,7 +491,6 @@
 #include <third_party/agg23/agg_rasterizer_scanline_aa.h>
 #include <third_party/agg23/agg_renderer_scanline.h>
 #include <third_party/agg23/agg_scanline_u.h>
-#include <third_party/fast_float/src/include/fast_float/fast_float.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4
