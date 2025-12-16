@@ -812,13 +812,20 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     // shown/hidden in SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
     m_xActionTbR->set_item_help_id(u"new"_ustr, HID_TEMPLDLG_NEWBYEXAMPLE);
     m_xActionTbR->set_item_help_id(u"newmenu"_ustr, HID_TEMPLDLG_NEWBYEXAMPLE);
-    m_xActionTbR->set_item_menu(u"newmenu"_ustr, m_xToolMenu.get());
-    m_xToolMenu->connect_activate(LINK(this, SfxTemplateDialog_Impl, ToolMenuSelectHdl));
     m_xActionTbR->set_item_help_id(u"update"_ustr, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     // Features not working in LOK yet
     if (comphelper::LibreOfficeKit::isActive())
-        m_xActionTbR->hide();
+    {
+        m_xActionTbR->set_item_visible(u"watercan"_ustr, false);
+        m_xActionTbR->set_item_visible(u"newmenu"_ustr, false);
+        m_xActionTbR->set_item_visible(u"update"_ustr, false);
+    }
+    else
+    {
+        m_xActionTbR->set_item_menu(u"newmenu"_ustr, m_xToolMenu.get());
+        m_xToolMenu->connect_activate(LINK(this, SfxTemplateDialog_Impl, ToolMenuSelectHdl));
+    }
 
     Initialize();
 }
@@ -865,6 +872,10 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
 
 void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
+    // in LOK we don't support all options yet
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     m_xActionTbR->set_item_visible(u"update"_ustr, false);
     m_xActionTbR->set_item_visible(u"new"_ustr, false);
     m_xActionTbR->set_item_visible(u"newmenu"_ustr, true);
