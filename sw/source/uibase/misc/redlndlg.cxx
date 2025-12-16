@@ -1100,7 +1100,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
 
-    auto lambda = [this, pSh, bSelect, bAccept, &rTreeView, &nPos, &aRedlines](weld::TreeIter& rEntry) {
+    auto lambda = [bSelect, &rTreeView, &nPos, &aRedlines](weld::TreeIter& rEntry) {
         if (!rTreeView.get_iter_depth(rEntry))
         {
             if (bSelect && nPos == -1)
@@ -1108,25 +1108,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 
             RedlinData *pData = weld::fromId<RedlinData*>(rTreeView.get_id(rEntry));
 
-            bool bIsNotFormatted = true;
-
-            // first remove only changes with insertion/deletion, if they exist
-            // (format-only changes haven't had real rejection yet, only an
-            // approximation: clear direct formatting, so try to warn
-            // with the extended button label "Reject All/Clear formatting")
-            if ( !bSelect && !bAccept && !m_bOnlyFormatedRedlines )
-            {
-                SwRedlineTable::size_type nPosition = GetRedlinePos(rEntry);
-                if (nPosition != SwRedlineTable::npos)
-                {
-                    const SwRangeRedline& rRedln = pSh->GetRedline(nPosition);
-
-                    if (RedlineType::Format == rRedln.GetType())
-                        bIsNotFormatted = false;
-                }
-            }
-
-            if (!pData->bDisabled && bIsNotFormatted)
+            if (!pData->bDisabled)
                 aRedlines.emplace_back(rTreeView.make_iterator(&rEntry));
         }
         return false;
