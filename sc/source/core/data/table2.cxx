@@ -4488,6 +4488,7 @@ SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeig
         nSumPx += nCommonPixels;
         nRow = nLastCommon;
     }
+    rStartRowHeightPx = nSumPx;
     return -1;
 }
 
