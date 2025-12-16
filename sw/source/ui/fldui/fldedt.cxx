@@ -302,6 +302,10 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
     SwFieldPage* pTabPage = static_cast<SwFieldPage*>(GetTabPage());
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
     SwField *pCurField = rMgr.GetCurField();
+    if (!pCurField)
+    {
+        return;
+    }
 
     if (pCurField->GetTypeId() == SwFieldTypesEnum::DocumentInfo)
         comphelper::dispatchCommand(u".uno:SetDocumentProperties"_ustr, {});
