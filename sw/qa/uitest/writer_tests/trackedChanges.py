@@ -625,6 +625,23 @@ class trackedchanges(UITestCase):
             # i.e. a change was not accepted.
             self.assertEqual(document.Redlines.Count, 0)
 
+    def test_reject_all_deletes_all_redlines(self):
+        # Given a document with overlapping changes:
+        with self.ui_test.load_file(get_url_for_data_file("reject-all-overlap.docx")) as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            # When rejecting all changes using the manage changes dialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                xAccBtn = xTrackDlg.getChild("rejectall")
+                xAccBtn.executeAction("CLICK", tuple())
+
+            # Then make sure all changes are rejected:
+            # Without the accompanying fix in place, this failed with:
+            # AssertionError: 1 != 0
+            # i.e. a change was not rejected.
+            self.assertEqual(document.Redlines.Count, 0)
+
     def test_tdf155847_multiple_tracked_columns_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
 
