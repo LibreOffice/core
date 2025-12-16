@@ -147,6 +147,7 @@ IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractTabController,SfxTabDialogController)
 IMPL_ABSTDLG_CLASS(CuiAbstractController)
 IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractSingleTabController, SfxSingleTabDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractWidgetTestControllerAsync,weld::GenericDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractNewStyleDialog, SfxNewStyleDlg)
 
 short AbstractHyphenWordDialog_Impl::Execute()
 {
@@ -1603,6 +1604,15 @@ AbstractDialogFactory_Impl::CreateDiagramDialog(
 {
     return VclPtr<AbstractDiagramDialog_Impl>::Create(
         std::make_unique<DiagramDialog>(pParent, rDiagram));
+}
+
+VclPtr<AbstractNewStyleDialog>
+AbstractDialogFactory_Impl::CreateNewStyleDialog(
+    weld::Container* pParent,
+    SfxStyleSheetBasePool& rPool,
+    SfxStyleFamily nFamily)
+{
+    return VclPtr<AbstractNewStyleDialog_Impl>::Create(std::make_shared<SfxNewStyleDlg>(pParent, rPool, nFamily));
 }
 
 #ifdef _WIN32

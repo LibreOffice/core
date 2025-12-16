@@ -26,6 +26,7 @@
 
 #include <sot/formats.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 class SfxItemSet;
@@ -122,6 +123,15 @@ public:
     virtual void LoadLastUsedMacro() const = 0;
 };
 
+class AbstractNewStyleDialog : virtual public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractNewStyleDialog() override = default;
+
+public:
+    virtual OUString GetName() const = 0;
+};
+
 namespace com::sun::star::frame { class XFrame; }
 
 class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
@@ -167,6 +177,10 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* _pParent) = 0;
+
+    virtual VclPtr<AbstractNewStyleDialog>     CreateNewStyleDialog(weld::Container* pParent,
+                                                                    SfxStyleSheetBasePool& rPool,
+                                                                    SfxStyleFamily nFamily) = 0;
 };
 
 #endif

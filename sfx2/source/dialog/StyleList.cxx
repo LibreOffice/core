@@ -43,10 +43,10 @@
 #include <sfx2/bindings.hxx>
 #include <templdgi.hxx>
 #include <tplcitem.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/newstyle.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxresid.hxx>
 
@@ -580,17 +580,22 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
         nFilter = m_nAppFilter;
 
     // why? : FloatingWindow must not be parent of a modal dialog
-    SfxNewStyleDlg aDlg(m_pContainer, *m_pStyleSheetPool, eFam);
-    auto nResult = aDlg.run();
-    if (nResult == RET_OK)
-    {
-        const OUString aTemplName(aDlg.GetName());
-        m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, u""_ustr,
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this,
-                                      nFilter);
-        UpdateFamily();
-        m_aUpdateFamily.Call(*this);
-    }
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    VclPtr<AbstractNewStyleDialog> pDlg(
+        pFact->CreateNewStyleDialog(m_pContainer, *m_pStyleSheetPool, eFam));
+
+    pDlg->StartExecuteAsync([this, pDlg, eFam, nFilter](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            const OUString aTemplName(pDlg->GetName());
+            m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, u""_ustr,
+                                          static_cast<sal_uInt16>(eFam), *this, nFilter);
+            UpdateFamily();
+            m_aUpdateFamily.Call(*this);
+        }
+
+        pDlg->disposeOnce();
+    });
 }
 
 void StyleList::DropHdl(const OUString& rStyle, const OUString& rParent)

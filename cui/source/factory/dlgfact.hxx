@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <cfgutil.hxx>
+#include <sfx2/newstyle.hxx>
 #include <svx/cuicharmap.hxx>
 #include <dlgname.hxx>
 #include <cuifmsearch.hxx>
@@ -439,6 +440,11 @@ DECL_ABSTDLG_CLASS_ASYNC(AbstractAdditionsDialog,weld::GenericDialogController)
 DECL_ABSTDLG_CLASS_ASYNC(AbstractDiagramDialog,DiagramDialog)
 };
 
+// AbstractNewStyleDialog_Impl
+DECL_ABSTDLG_CLASS_SHARED_ASYNC(AbstractNewStyleDialog,AbstractNewStyleDialog,SfxNewStyleDlg)
+    virtual OUString GetName() const override { return m_xDlg->GetName(); }
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -641,6 +647,11 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         SdrObjGroup& rDiagram) override;
+
+    virtual VclPtr<AbstractNewStyleDialog> CreateNewStyleDialog(
+        weld::Container* pParent,
+        SfxStyleSheetBasePool& rPool,
+        SfxStyleFamily nFamily) override;
 
 #ifdef _WIN32
     virtual VclPtr<VclAbstractDialog> CreateFileExtCheckDialog(weld::Window* pParent,
