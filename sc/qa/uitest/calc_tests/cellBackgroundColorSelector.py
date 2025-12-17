@@ -27,8 +27,8 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "6")  #tab Numbers
                 # click on color btn
-                xbtncolor = xDialog.getChild("btncolor")
-                xbtncolor.executeAction("CLICK",tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
                 xpaletteselector = xDialog.getChild("paletteselector")
 
                 # Now we have the ColorPage that we can get the color selector from it
@@ -152,8 +152,8 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "6")  #tab Numbers
                 # click on color btn
-                xbtncolor = xDialog.getChild("btncolor")
-                xbtncolor.executeAction("CLICK",tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
                 # we will select color for cell A5 to be able to predict the latest color in
                 # recent color selector
@@ -166,11 +166,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 # Select Color with id 1
                 color_element2 = color_selector.getChild("1")
                 color_element2.executeAction("SELECT", mkPropertyValues({}))
-                print("Available properties:", list(get_state_as_dict(color_selector).keys()))
                 recent_state = get_state_as_dict(color_selector)
-                print("Parth see the following:")
-                for key, value in recent_state.items():
-                    print(f"{key}: {value}")
                 self.assertEqual(get_state_as_dict(color_selector)["SelectedItemId"], "1")
                 self.assertEqual(get_state_as_dict(color_selector)["SelectedItemPos"], "1")
                 self.assertEqual(get_state_as_dict(color_selector)["VisibleCount"], "12")
@@ -185,8 +181,8 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "6")  #tab Numbers
                 # click on color btn
-                xbtncolor = xDialog.getChild("btncolor")
-                xbtncolor.executeAction("CLICK",tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
                 xColorpage = xDialog.getChild("ColorPage")
                 recent_color_selector = xColorpage.getChild("iconview_recent_colors")

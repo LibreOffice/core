@@ -52,8 +52,8 @@ class Test(UITestCase):
                 # Area
                 select_pos(tabControl, "0")
                 # Color
-                btnColor = xDialog.getChild("btncolor")
-                btnColor.executeAction("CLICK", tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
                 paletteSelector = xDialog.getChild("paletteselector")
                 select_by_text(paletteSelector, "Theme colors")
                 colorSelector = xDialog.getChild("iconview_colors")

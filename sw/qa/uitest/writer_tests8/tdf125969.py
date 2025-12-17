@@ -54,8 +54,8 @@ class tdf125969(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="ok") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "2") # area tab
-                xButton = xDialog.getChild('btnbitmap')
-                xButton.executeAction("CLICK", tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "4") # bitmap tab
 
             backgroundType = xWriterEdit.getChild('bgselect')
             imageCollection = xWriterEdit.getChild("lbbitmap")

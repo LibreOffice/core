@@ -28,8 +28,8 @@ class TestTdf149787(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FormatArea", close_button="cancel") as xDialog:
                 tabControl = xDialog.getChild("tabcontrol")
                 select_pos(tabControl, "0")
-                btnColor = xDialog.getChild("btncolor")
-                btnColor.executeAction("CLICK", tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
                 btnMoreColors = xDialog.getChild("btnMoreColors")
 
                 with self.ui_test.execute_blocking_action(btnMoreColors.executeAction, args=('CLICK', ()), close_button="buttonClose") as dialog:

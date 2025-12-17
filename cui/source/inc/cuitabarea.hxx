@@ -32,59 +32,6 @@ class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
 
-enum class FillType
-{
-    TRANSPARENT,
-    SOLID,
-    GRADIENT,
-    HATCH,
-    BITMAP,
-    PATTERN,
-    USE_BACKGROUND_FILL,
-    // fallback value if no fill type has been set
-    INVALID,
-};
-
-class ButtonBox
-{
-    private:
-        weld::Toggleable* mpCurrentButton;
-        std::map<weld::Toggleable*, FillType > maButtonToFillType;
-    public:
-        ButtonBox()
-            : mpCurrentButton(nullptr) {};
-
-        void AddButton(weld::ToggleButton* pButton, FillType eFillType)
-        {
-            maButtonToFillType.insert( std::make_pair(pButton, eFillType) );
-        }
-
-        FillType GetCurrentFillType() const
-        {
-            if (mpCurrentButton)
-                return GetFillType(*mpCurrentButton);
-            return FillType::INVALID;
-        }
-
-        FillType GetFillType(weld::Toggleable& rButton) const
-        {
-            auto aIt = maButtonToFillType.find(&rButton);
-            assert(aIt != maButtonToFillType.end() && "Unknown button");
-            return aIt->second;
-        }
-
-        void SelectButton(weld::Toggleable& rButton)
-        {
-            weld::Toggleable* pPreviousButton = mpCurrentButton;
-
-            mpCurrentButton = &rButton;
-            rButton.set_active(true);
-
-            if (pPreviousButton)
-                pPreviousButton->set_active(false);
-        }
-};
-
 enum class PageType
 {
     Area,
@@ -220,12 +167,30 @@ public:
 
 /************************************************************************/
 
+enum class FillType
+{
+    TRANSPARENT_FILL,
+    SOLID_FILL,
+    GRADIENT_FILL,
+    HATCH_FILL,
+    BITMAP_FILL,
+    PATTERN_FILL,
+    USE_BACKGROUND_FILL
+};
+
+inline constexpr OUString TABID_NONE = u"lbnone"_ustr;
+inline constexpr OUString TABID_COLOR = u"lbcolor"_ustr;
+inline constexpr OUString TABID_GRADIENT = u"lbgradient"_ustr;
+inline constexpr OUString TABID_HATCH = u"lbhatch"_ustr;
+inline constexpr OUString TABID_BITMAP = u"lbbitmap"_ustr;
+inline constexpr OUString TABID_PATTERN = u"lbpattern"_ustr;
+inline constexpr OUString TABID_USE_BACKGROUND = u"lbusebackground"_ustr;
+
 class SvxAreaTabPage : public SfxTabPage
 {
     static const WhichRangesContainer pAreaRanges;
 private:
     std::unique_ptr<SfxTabPage> m_xFillTabPage;
-    ButtonBox                  maBox;
 
     XColorListRef         m_pColorList;
     XGradientListRef      m_pGradientList;
@@ -247,23 +212,22 @@ private:
     bool m_bBtnClicked = false;
 
 protected:
-    std::unique_ptr<weld::Container> m_xFillTab;
-    std::unique_ptr<weld::ToggleButton> m_xBtnNone;
-    std::unique_ptr<weld::ToggleButton> m_xBtnColor;
-    std::unique_ptr<weld::ToggleButton> m_xBtnGradient;
-    std::unique_ptr<weld::ToggleButton> m_xBtnHatch;
-    std::unique_ptr<weld::ToggleButton> m_xBtnBitmap;
-    std::unique_ptr<weld::ToggleButton> m_xBtnPattern;
-    std::unique_ptr<weld::ToggleButton> m_xBtnUseBackground;
+    std::unique_ptr<weld::Notebook> m_xNotebook;
+    std::map<OUString, FillType> maFillTypeMap;
 
-    void SetOptimalSize(weld::DialogController* pController);
+    void SetOptimalSize();
 
-    void SelectFillType( weld::Toggleable& rButton, const SfxItemSet* _pSet = nullptr );
+    void SelectFillType(FillType eFillType, const SfxItemSet* _pSet = nullptr);
 
     bool IsBtnClicked() const { return m_bBtnClicked; }
 
 private:
-    DECL_LINK(SelectFillTypeHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(SwitchPageHdl_Impl, const OUString&, void);
+
+    std::unique_ptr<SfxTabPage> CreateFillStyleTabPage(FillType eFillType);
+    void SelectFillTypeByPage(FillType eFillType, const SfxItemSet* _pSet = nullptr);
+
+    OUString getPageId(FillType eFillType);
 
     template< typename TabPage >
     bool FillItemSet_Impl( SfxItemSet* );
@@ -272,8 +236,7 @@ private:
     template< typename TabPage >
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
-    std::unique_ptr<SfxTabPage> CreateFillStyleTabPage(FillType eFillType);
-    std::unique_ptr<SfxTabPage> CreatePage(FillType eFillType);
+    void CreatePage(FillType nId, SfxTabPage& rTab);
 
 public:
     SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController,

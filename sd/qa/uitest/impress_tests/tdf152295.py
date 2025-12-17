@@ -22,28 +22,28 @@ class tdf152295(UITestCase):
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
                     xTabs = DrawPageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "1")
-                    btnbitmap = DrawPageDialog.getChild("btnbitmap")
-                    btnbitmap.executeAction("CLICK",tuple())
-                    width = DrawPageDialog.getChild("width")
+                    xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "4")
+                    width = xFillTypeTabs.getChild("width")
                     for _ in range(50):
                         width.executeAction("UP",tuple())
-                    height = DrawPageDialog.getChild("height")
+                    height = xFillTypeTabs.getChild("height")
                     for _ in range(50):
                         height.executeAction("UP",tuple())
 
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
                     xTabs = DrawPageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "1")
-                    btnbitmap = DrawPageDialog.getChild("btnbitmap")
-                    btnbitmap.executeAction("CLICK",tuple())
+                    xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "4")
 
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
                     xTabs = DrawPageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "1")
-                    btnbitmap = DrawPageDialog.getChild("btnbitmap")
-                    btnbitmap.executeAction("CLICK",tuple())
-                    width = DrawPageDialog.getChild("width")
-                    height = DrawPageDialog.getChild("height")
+                    xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "4")
+                    width = xFillTypeTabs.getChild("width")
+                    height = xFillTypeTabs.getChild("height")
 
                     # Without the fix in place, this test would have failed with
                     # AssertionError: '6.00 cm' != '13.55 cm'
