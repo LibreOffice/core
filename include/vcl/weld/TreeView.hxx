@@ -143,7 +143,6 @@ protected:
     virtual void do_unselect(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
-    virtual void do_clear() = 0;
     virtual void do_remove_selection() = 0;
 
 public:
@@ -556,13 +555,6 @@ public:
     set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func)
     {
         m_aCustomSort = func;
-    }
-
-    void clear()
-    {
-        disable_notify_events();
-        do_clear();
-        enable_notify_events();
     }
 
     virtual int get_height_rows(int nRows) const = 0;

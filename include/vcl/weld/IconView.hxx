@@ -58,7 +58,6 @@ protected:
         = 0;
     virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
-    virtual void do_clear() = 0;
     virtual void do_remove(int pos) = 0;
     virtual void do_set_cursor(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_item(const TreeIter& rIter) = 0;
@@ -122,13 +121,6 @@ public:
     }
 
     virtual OUString get_selected_id() const = 0;
-
-    void clear()
-    {
-        disable_notify_events();
-        do_clear();
-        enable_notify_events();
-    }
 
     virtual int count_selected_items() const = 0;
 
