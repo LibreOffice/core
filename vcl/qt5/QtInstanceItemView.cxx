@@ -31,6 +31,18 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
     return {};
 }
 
+void QtInstanceItemView::select_all()
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { getItemView().selectAll(); });
+}
+
+void QtInstanceItemView::unselect_all()
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { getItemView().clearSelection(); });
+}
+
 void QtInstanceItemView::do_clear()
 {
     SolarMutexGuard g;
@@ -53,6 +65,13 @@ QModelIndex QtInstanceItemView::modelIndex(const weld::TreeIter& rIter, int nCol
 QtInstanceTreeIter QtInstanceItemView::treeIter(int nRow, const QModelIndex& rParentIndex) const
 {
     return QtInstanceTreeIter(m_rModel.index(nRow, 0, rParentIndex));
+}
+
+QAbstractItemView& QtInstanceItemView::getItemView()
+{
+    QAbstractItemView* pView = qobject_cast<QAbstractItemView*>(getQWidget());
+    assert(pView);
+    return *pView;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

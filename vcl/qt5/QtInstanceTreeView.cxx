@@ -840,18 +840,6 @@ void QtInstanceTreeView::enable_drag_source(rtl::Reference<TransferDataContainer
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::select_all()
-{
-    SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pTreeView->selectAll(); });
-}
-
-void QtInstanceTreeView::unselect_all()
-{
-    SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pTreeView->clearSelection(); });
-}
-
 int QtInstanceTreeView::n_children() const
 {
     SolarMutexGuard g;

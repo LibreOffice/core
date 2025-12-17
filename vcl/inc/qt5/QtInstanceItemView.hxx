@@ -34,11 +34,17 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
+    virtual void select_all() override;
+    virtual void unselect_all() override;
+
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
     QtInstanceTreeIter treeIter(int nRow, const QModelIndex& rParentIndex = QModelIndex()) const;
+
+private:
+    QAbstractItemView& getItemView();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
