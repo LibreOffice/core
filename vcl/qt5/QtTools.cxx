@@ -40,6 +40,22 @@
 
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
 
+Qt::Alignment toQtAlignment(TxtAlign eAlign)
+{
+    switch (eAlign)
+    {
+        case TxtAlign::Left:
+            return Qt::AlignLeft;
+        case TxtAlign::Center:
+            return Qt::AlignHCenter;
+        case TxtAlign::Right:
+            return Qt::AlignRight;
+        default:
+            assert(false && "unhandled TxtAlign value");
+            return Qt::AlignLeft;
+    }
+}
+
 Qt::CheckState toQtCheckState(TriState eTristate)
 {
     switch (eTristate)

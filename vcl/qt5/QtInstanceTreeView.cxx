@@ -600,9 +600,15 @@ bool QtInstanceTreeView::get_text_emphasis(const weld::TreeIter&, int) const
     return false;
 }
 
-void QtInstanceTreeView::set_text_align(const weld::TreeIter&, TxtAlign, int)
+void QtInstanceTreeView::set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int nCol)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QStandardItem* pItem = itemFromIndex(modelIndex(rIter, nCol));
+        if (pItem)
+            pItem->setTextAlignment(toQtAlignment(eAlign));
+    });
 }
 
 void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol)

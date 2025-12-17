@@ -96,6 +96,8 @@ inline QDate toQDate(const Date& rDate)
 
 inline Date toDate(const QDate& rDate) { return Date(rDate.day(), rDate.month(), rDate.year()); }
 
+Qt::Alignment toQtAlignment(TxtAlign eAlign);
+
 Qt::CheckState toQtCheckState(TriState eTristate);
 TriState toVclTriState(Qt::CheckState eTristate);
 
