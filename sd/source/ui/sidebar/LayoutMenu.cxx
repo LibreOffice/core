@@ -152,7 +152,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     (void) rDocumentShell;
 
     mxLayoutIconView->connect_item_activated(LINK(this, LayoutMenu, LayoutSelected));
-    mxLayoutIconView->connect_mouse_press(LINK(this, LayoutMenu, MousePressHdl));
+    mxLayoutIconView->connect_command(LINK(this, LayoutMenu, CommandHdl));
     InvalidateContent();
 
     Link<::sdtools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
@@ -225,25 +225,42 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return css::ui::LayoutSize(nPreferredHeight, nPreferredHeight, nPreferredHeight);
 }
 
-IMPL_LINK(LayoutMenu, MousePressHdl, const MouseEvent&, rMEvet, bool)
+IMPL_LINK(LayoutMenu, CommandHdl, const CommandEvent&, rEvent, bool)
 {
-    if (!rMEvet.IsRight())
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    const Point& pPos = rMEvet.GetPosPixel();
-    for (int i = 0; i < mxLayoutIconView->n_children(); i++)
+    Point aPos;
+    if (rEvent.IsMouseEvent())
     {
-        const ::tools::Rectangle aRect = mxLayoutIconView->get_rect(i);
-        if (aRect.Contains(pPos))
+        aPos = rEvent.GetMousePosPixel();
+        bool bFound = false;
+        for (int i = 0; i < mxLayoutIconView->n_children(); i++)
         {
-            bInContextMenuOperation = true;
-            mxLayoutIconView->select(i);
-            ShowContextMenu(pPos);
-            bInContextMenuOperation = false;
-            break;
+            const ::tools::Rectangle aRect = mxLayoutIconView->get_rect(i);
+            if (aRect.Contains(aPos))
+            {
+                mxLayoutIconView->select(i);
+                bFound = true;
+                break;
+            }
         }
+        if (!bFound)
+            return false;
     }
-    return false;
+    else
+    {
+        std::unique_ptr<weld::TreeIter> pSelected = mxLayoutIconView->make_iterator();
+        if (!mxLayoutIconView->get_selected(pSelected.get()))
+            return false;
+        aPos = mxLayoutIconView->get_rect(*pSelected).Center();
+    }
+
+    bInContextMenuOperation = true;
+    ShowContextMenu(aPos);
+    bInContextMenuOperation = false;
+
+    return true;
 }
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)

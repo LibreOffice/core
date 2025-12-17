@@ -162,7 +162,8 @@ private:
     /** When clicked then set the current page of the view in the center pane.
     */
     DECL_LINK(LayoutSelected, weld::IconView&, bool);
-    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+
     DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(MenuSelectAsyncHdl, void*, void);
