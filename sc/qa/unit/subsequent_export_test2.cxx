@@ -105,6 +105,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     CPPUNIT_ASSERT_EQUAL(SCROW(1), aFoundCell.aStart.Row());
 };
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170012_cellAnchor)
+{
+    // Reuse the test document from the previous test
+    // A clean re-load is need (because the first load triggers an adjustment for autoRowHeight)
+    createScDoc("xlsx/tdf166724_cellAnchor.xlsx");
+
+    const SdrPage* pPage = getScDoc()->GetDrawLayer()->GetPage(0);
+    ScAnchorType anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
+
+    // round-trip cell-anchored controls in ODS format
+    //  - this was looping forever, and creating infinite /tmp files - triggered by autoRowHeight
+    saveAndReload(TestFilter::ODS);
+
+    pPage = getScDoc()->GetDrawLayer()->GetPage(0);
+    anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
+    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, anchorType); // fallback to page anchor when invalid cell anchor
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)
 {
     // given a hand-mangled document with a newly-invalid topLeftCell for the active pane
