@@ -46,13 +46,9 @@ if __name__ == '__main__':
 
     for k,v in sorted(subDirDict.items()):
         print()
-        if k == "Lib/msilib":
-            print("ifeq (WNT,$(OS))")
         print("$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/{},\\".format(k.replace("Lib", "lib", 3)))
         for fileName in sorted(v):
             print("\t{} \\".format(fileName))
         print("))")
-        if k == "Lib/msilib":
-            print("endif")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
