@@ -1054,11 +1054,20 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
                 {
                     Point aPageOrg(nNewWidth, nNewHeight / 2);
                     Size aViewSize(nNewWidth * 3, nNewHeight * 2);
+                    Point aVisAreaPos;
 
                     GetDoc()->SetMaxObjSize(aViewSize);
 
                     InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 
+                    if ( GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
+                    {
+                        aVisAreaPos = GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft();
+                    }
+                    if (mpDrawView)
+                    {
+                        mpDrawView->SetWorkArea(::tools::Rectangle(Point() - aVisAreaPos - aPageOrg, aViewSize));
+                    }
                     // pSelectedPage->SetBackgroundFullSize(true);
 
                     UpdateScrollBars();
