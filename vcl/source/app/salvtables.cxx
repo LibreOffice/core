@@ -3532,6 +3532,15 @@ std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) cons
     return {};
 }
 
+void SalInstanceItemView::select_all() { unselect(-1); }
+
+void SalInstanceItemView::unselect_all() { select(-1); }
+
+int SalInstanceItemView::n_children() const
+{
+    return m_pTreeListBox->GetModel()->GetChildList(nullptr).size();
+}
+
 void SalInstanceItemView::do_select(int pos)
 {
     assert(m_pTreeListBox->IsUpdateMode()
@@ -4091,15 +4100,6 @@ void SalInstanceTreeView::swap(int pos1, int pos2)
     SvTreeListEntry* pEntry1 = pModel->GetEntry(nullptr, min);
     SvTreeListEntry* pEntry2 = pModel->GetEntry(nullptr, max);
     pModel->Move(pEntry1, pEntry2);
-}
-
-void SalInstanceTreeView::select_all() { unselect(-1); }
-
-void SalInstanceTreeView::unselect_all() { select(-1); }
-
-int SalInstanceTreeView::n_children() const
-{
-    return m_xTreeView->GetModel()->GetChildList(nullptr).size();
 }
 
 int SalInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
@@ -5406,15 +5406,6 @@ OUString SalInstanceIconView::get_selected_text() const
 }
 
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
-
-void SalInstanceIconView::select_all() { unselect(-1); }
-
-void SalInstanceIconView::unselect_all() { select(-1); }
-
-int SalInstanceIconView::n_children() const
-{
-    return m_xIconView->GetModel()->GetChildList(nullptr).size();
-}
 
 bool SalInstanceIconView::get_selected(weld::TreeIter* pIter) const
 {

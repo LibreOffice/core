@@ -1502,6 +1502,11 @@ public:
                                                           = nullptr) const override;
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
+
+    virtual void select_all() override;
+    virtual void unselect_all() override;
+
+    virtual int n_children() const override;
 };
 
 class SalInstanceTreeView : public SalInstanceItemView, public virtual weld::TreeView
@@ -1629,11 +1634,6 @@ public:
     virtual int find_id(const OUString& rId) const override;
 
     virtual void swap(int pos1, int pos2) override;
-
-    virtual void select_all() override;
-    virtual void unselect_all() override;
-
-    virtual int n_children() const override;
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
 
@@ -1940,11 +1940,6 @@ public:
     virtual OUString get_selected_text() const override;
 
     virtual int count_selected_items() const override;
-
-    virtual void select_all() override;
-    virtual void unselect_all() override;
-
-    virtual int n_children() const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
 
