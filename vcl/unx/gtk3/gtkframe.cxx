@@ -330,6 +330,36 @@ guint GtkSalFrame::GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, gu
         GdkModifierType(0), group, &updated_keyval, nullptr, nullptr, nullptr);
     return updated_keyval;
 }
+
+
+guint8 GtkSalFrame::GetBestAccelKeyGroup(GdkKeymap* keymap, guint8 group)
+{
+    gint best_group = SAL_MAX_INT32;
+
+    // Try and find Latin layout
+    GdkKeymapKey *keys;
+    gint n_keys;
+    if (gdk_keymap_get_entries_for_keyval(keymap, GDK_KEY_A, &keys, &n_keys))
+    {
+        // Find the lowest group that supports Latin layout
+        for (gint i = 0; i < n_keys; ++i)
+        {
+            if (keys[i].level != 0 && keys[i].level != 1)
+                continue;
+            best_group = std::min(best_group, keys[i].group);
+            if (best_group == 0)
+                break;
+        }
+        g_free(keys);
+    }
+
+    //Unavailable, go with original group then I suppose
+    if (best_group == SAL_MAX_INT32)
+        best_group = group;
+
+    return best_group;
+}
+
 #endif
 
 namespace {
@@ -425,30 +455,9 @@ bool GtkSalFrame::doKeyCallback( guint state,
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if( aEvent.mnCode == 0 )
     {
-        gint best_group = SAL_MAX_INT32;
-
         // Try and find Latin layout
         GdkKeymap* keymap = gdk_keymap_get_default();
-        GdkKeymapKey *keys;
-        gint n_keys;
-        if (gdk_keymap_get_entries_for_keyval(keymap, GDK_KEY_A, &keys, &n_keys))
-        {
-            // Find the lowest group that supports Latin layout
-            for (gint i = 0; i < n_keys; ++i)
-            {
-                if (keys[i].level != 0 && keys[i].level != 1)
-                    continue;
-                best_group = std::min(best_group, keys[i].group);
-                if (best_group == 0)
-                    break;
-            }
-            g_free(keys);
-        }
-
-        //Unavailable, go with original group then I suppose
-        if (best_group == SAL_MAX_INT32)
-            best_group = group;
-
+        guint8 best_group = GetBestAccelKeyGroup(keymap, group);
         guint updated_keyval = GetKeyValFor(keymap, hardware_keycode, best_group);
         aEvent.mnCode = GetKeyCode(updated_keyval);
     }
