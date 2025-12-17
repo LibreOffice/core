@@ -1482,11 +1482,23 @@ struct SalInstanceTreeIter final : public weld::TreeIter
     SvTreeListEntry* iter;
 };
 
-class SalInstanceTreeView : public SalInstanceWidget, public virtual weld::TreeView
+class SalInstanceItemView : public SalInstanceWidget, public virtual weld::ItemView
 {
+    VclPtr<SvTreeListBox> m_pTreeListBox;
+
 protected:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
+
+    SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanceBuilder* pBuilder,
+                        bool bTakeOwnership);
+
+    virtual void do_clear() override;
+};
+
+class SalInstanceTreeView : public SalInstanceItemView, public virtual weld::TreeView
+{
+protected:
     VclPtr<SvTabListBox> m_xTreeView;
     SvLBoxButtonData m_aCheckButtonData;
     SvLBoxButtonData m_aRadioButtonData;
@@ -1609,8 +1621,6 @@ public:
     virtual int find_id(const OUString& rId) const override;
 
     virtual void swap(int pos1, int pos2) override;
-
-    virtual void do_clear() override;
 
     virtual void select_all() override;
     virtual void unselect_all() override;
@@ -1882,16 +1892,13 @@ public:
     virtual ~SalInstanceExpander() override;
 };
 
-class SalInstanceIconView : public SalInstanceWidget, public virtual weld::IconView
+class SalInstanceIconView : public SalInstanceItemView, public virtual weld::IconView
 {
 protected:
     VclPtr<::IconView> m_xIconView;
 
 private:
     bool m_bFixedItemWidth = false;
-
-    // owner for UserData
-    std::vector<std::unique_ptr<OUString>> m_aUserData;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
@@ -1978,8 +1985,6 @@ public:
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
 
     virtual tools::Rectangle get_rect(int pos) const override;
-
-    virtual void do_clear() override;
 
     virtual ~SalInstanceIconView() override;
 };

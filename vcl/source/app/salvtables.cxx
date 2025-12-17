@@ -3510,6 +3510,19 @@ public:
 };
 }
 
+SalInstanceItemView::SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanceBuilder* pBuilder,
+                                         bool bTakeOwnership)
+    : SalInstanceWidget(pTreeListBox, pBuilder, bTakeOwnership)
+    , m_pTreeListBox(pTreeListBox)
+{
+}
+
+void SalInstanceItemView::do_clear()
+{
+    m_pTreeListBox->Clear();
+    m_aUserData.clear();
+}
+
 // Each row has a cell for the expander image, (and an optional cell for a
 // checkbutton if enable_toggle_buttons has been called) which precede
 // index 0
@@ -3738,7 +3751,7 @@ void SalInstanceTreeView::set_header_item_width(const std::vector<int>& rWidths)
 
 SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceWidget(pTreeView, pBuilder, bTakeOwnership)
+    : SalInstanceItemView(pTreeView, pBuilder, bTakeOwnership)
     , m_xTreeView(pTreeView)
     , m_aCheckButtonData(*pTreeView, false)
     , m_aRadioButtonData(*pTreeView, true)
@@ -4033,12 +4046,6 @@ void SalInstanceTreeView::swap(int pos1, int pos2)
     SvTreeListEntry* pEntry1 = pModel->GetEntry(nullptr, min);
     SvTreeListEntry* pEntry2 = pModel->GetEntry(nullptr, max);
     pModel->Move(pEntry1, pEntry2);
-}
-
-void SalInstanceTreeView::do_clear()
-{
-    m_xTreeView->Clear();
-    m_aUserData.clear();
 }
 
 void SalInstanceTreeView::select_all() { unselect(-1); }
@@ -5252,7 +5259,7 @@ IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, const IterString&, rIterString, b
 
 SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceWidget(pIconView, pBuilder, bTakeOwnership)
+    : SalInstanceItemView(pIconView, pBuilder, bTakeOwnership)
     , m_xIconView(pIconView)
 {
     m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
@@ -5601,12 +5608,6 @@ tools::Rectangle SalInstanceIconView::get_rect(int pos) const
         return tools::Rectangle();
 
     return m_xIconView->GetBoundingRect(aEntry);
-}
-
-void SalInstanceIconView::do_clear()
-{
-    m_xIconView->Clear();
-    m_aUserData.clear();
 }
 
 SalInstanceIconView::~SalInstanceIconView()
