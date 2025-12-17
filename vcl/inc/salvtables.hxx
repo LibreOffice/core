@@ -1984,7 +1984,7 @@ public:
 
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
 
-    virtual tools::Rectangle get_rect(int pos) const override;
+    virtual tools::Rectangle get_rect(const weld::TreeIter& rIter) const override;
 
     virtual ~SalInstanceIconView() override;
 };

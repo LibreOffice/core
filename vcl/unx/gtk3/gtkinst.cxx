@@ -16842,14 +16842,10 @@ private:
         return sRet;
     }
 
-    tools::Rectangle get_rect(int pos) const override
+    tools::Rectangle get_rect(const weld::TreeIter& rIter) const override
     {
-        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreeIter rIter;
-        if (!gtk_tree_model_iter_nth_child(pModel, &rIter, nullptr, pos))
-            return tools::Rectangle();
-
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path
             = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
 

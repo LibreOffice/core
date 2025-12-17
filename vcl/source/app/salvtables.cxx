@@ -5602,13 +5602,10 @@ void SalInstanceIconView::set_item_tooltip_text(int pos, const OUString& rToolTi
     pEntry->SetToolTip(rToolTip);
 }
 
-tools::Rectangle SalInstanceIconView::get_rect(int pos) const
+tools::Rectangle SalInstanceIconView::get_rect(const weld::TreeIter& rIter) const
 {
-    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
-    if (aEntry == nullptr)
-        return tools::Rectangle();
-
-    return m_xIconView->GetBoundingRect(aEntry);
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return m_xIconView->GetBoundingRect(rVclIter.iter);
 }
 
 SalInstanceIconView::~SalInstanceIconView()

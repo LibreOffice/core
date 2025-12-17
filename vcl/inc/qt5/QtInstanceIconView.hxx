@@ -53,7 +53,7 @@ public:
     virtual void set_item_accessible_name(int nPos, const OUString& rName) override;
     virtual void set_item_tooltip_text(int nPos, const OUString& rToolTip) override;
     virtual void do_remove(int pos) override;
-    virtual tools::Rectangle get_rect(int pos) const override;
+    virtual tools::Rectangle get_rect(const weld::TreeIter& rIter) const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
     virtual bool get_cursor(weld::TreeIter* pIter) const override;

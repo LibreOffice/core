@@ -156,9 +156,11 @@ public:
         enable_notify_events();
     }
 
-    virtual tools::Rectangle get_rect(int pos) const = 0;
+    tools::Rectangle get_rect(int pos) const;
 
     //via iter
+    virtual tools::Rectangle get_rect(const TreeIter& rIter) const = 0;
+
     void set_cursor(const TreeIter& rIter)
     {
         disable_notify_events();
