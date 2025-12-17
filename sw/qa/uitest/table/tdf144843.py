@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import select_pos
 
 class tdf144843(UITestCase):
 
@@ -23,8 +24,8 @@ class tdf144843(UITestCase):
 
             # Without the fix in place, this test would have crashed here
             with self.ui_test.execute_dialog_through_command(".uno:BackgroundDialog") as xDialog:
-                btncolor = xDialog.getChild("btncolor")
-                btncolor.executeAction("CLICK", tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
                 hex_custom = xDialog.getChild("hex_custom")
                 hex_custom.executeAction("TYPE", mkPropertyValues({"TEXT":"101010"}))

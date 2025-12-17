@@ -50,8 +50,8 @@ class tdf109083(UITestCase):
                 with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")   #tab Background
-                    btncolor = xDialog.getChild("btncolor")
-                    btncolor.executeAction("CLICK", tuple())
+                    xFillTypeTabs = xDialog.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "1")
                     hex_custom = xDialog.getChild("hex_custom")
                     if i >= 2:
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffff00")

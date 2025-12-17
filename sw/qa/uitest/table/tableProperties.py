@@ -160,8 +160,8 @@ class tableProperties(UITestCase):
                     tabcontrol = xDialog.getChild("tabcontrol")
                     select_pos(tabcontrol, "4")
 
-                    btncolor = xDialog.getChild("btncolor")
-                    btncolor.executeAction("CLICK", tuple())
+                    xFillTypeTabs = xDialog.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "1")
                     R_custom = xDialog.getChild("R_custom")
                     G_custom = xDialog.getChild("G_custom")
                     B_custom = xDialog.getChild("B_custom")
@@ -181,8 +181,8 @@ class tableProperties(UITestCase):
                 with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                     tabcontrol = xDialog.getChild("tabcontrol")
                     select_pos(tabcontrol, "4")
-                    btncolor = xDialog.getChild("btncolor")
-                    btncolor.executeAction("CLICK", tuple())
+                    xFillTypeTabs = xDialog.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "1")
                     R_custom = xDialog.getChild("R_custom")
                     G_custom = xDialog.getChild("G_custom")
                     B_custom = xDialog.getChild("B_custom")
