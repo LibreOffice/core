@@ -2094,7 +2094,9 @@ class GtkInstanceBuilder;
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (nKeyCode == 0)
         {
-            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), hardware_keycode, group);
+            GdkKeymap* keymap = gdk_keymap_get_default();
+            guint8 best_group = GtkSalFrame::GetBestAccelKeyGroup(keymap, group);
+            guint updated_keyval = GtkSalFrame::GetKeyValFor(keymap, hardware_keycode, best_group);
             nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
         }
 #else
