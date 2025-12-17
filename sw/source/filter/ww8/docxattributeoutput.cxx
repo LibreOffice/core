@@ -7008,7 +7008,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed);
-    // by default we use old quess, if user marks style as non-favourite -> do not export qFormat
+    // by default we use old guess, if user marks style as non-favourite -> do not export qFormat
     if (bRealQFormat && (bQFormat || lcl_guessQFormat(rName, nWwId)))
         m_pSerializer->singleElementNS(XML_w, XML_qFormat);
     if (bLocked)
