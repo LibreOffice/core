@@ -35,8 +35,8 @@ class TestClass(UITestCase):
                     spinMargBot.executeAction("UP",tuple())
                 xTabs = DrawPageDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
-                btncolor = DrawPageDialog.getChild("btncolor")
-                btncolor.executeAction("CLICK",tuple())
+                xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
             xStyle = document.StyleFamilies["PageStyles"]["Standard"]
 

@@ -22,19 +22,23 @@ class WriterPageDialog(UITestCase):
         xButton = dialog.getChild(button)
         xButton.executeAction("CLICK", tuple())
 
-    def check_default_area(self, btn):
+    def click_tab(self, dialog, index):
+        xFillTypeTabs = dialog.getChild("nbFillType")
+        select_pos(xFillTypeTabs, index)
+
+    def check_default_area(self, tab):
         document = self.ui_test.get_component()
-        if btn == 'btnnone':
+        if tab == 'lbnone':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.BackColor, -1)
-        elif btn == 'btncolor':
+        elif tab == 'lbcolor':
             self.assertEqual(
                 hex(document.StyleFamilies.PageStyles.Standard.BackColor), '0x729fcf')
             self.assertEqual(
                 hex(document.StyleFamilies.PageStyles.Standard.FillColor), '0x729fcf')
             self.assertEqual(
                 hex(document.StyleFamilies.PageStyles.Standard.FillColor), '0x729fcf')
-        elif btn == 'btngradient':
+        elif tab == 'lbgradient':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.Style, LINEAR)
             self.assertEqual(
@@ -53,7 +57,7 @@ class WriterPageDialog(UITestCase):
                 document.StyleFamilies.PageStyles.Standard.FillGradient.EndIntensity, 100)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Pastel Bouquet')
-        elif btn == 'btnhatch':
+        elif tab == 'lbhatch':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillHatch.Style, SINGLE )
             self.assertEqual(
@@ -64,7 +68,7 @@ class WriterPageDialog(UITestCase):
                 document.StyleFamilies.PageStyles.Standard.FillHatch.Angle, 0)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillHatchName, 'Black 0 Degrees')
-        elif btn == 'btnbitmap':
+        elif tab == 'lbbitmap':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapMode, REPEAT)
             self.assertEqual(
@@ -89,7 +93,7 @@ class WriterPageDialog(UITestCase):
                 document.StyleFamilies.PageStyles.Standard.FillBitmapSizeY, 1000)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapName, 'Painted White')
-        elif btn == 'btnpattern':
+        elif tab == 'lbpattern':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapMode, REPEAT)
             self.assertEqual(
@@ -121,23 +125,29 @@ class WriterPageDialog(UITestCase):
 
             with change_measurement_unit(self, "Centimeter"):
 
-                buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
-                for index, button in enumerate(buttons):
+                tab_mapping = {
+                    'lbbitmap' : "4",
+                    'lbcolor' : "1",
+                    'lbgradient' : "2",
+                    'lbhatch' : "3",
+                    'lbpattern' : "5"
+                }
+                for tab, index in tab_mapping.items():
 
                     with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                         tabcontrol = xDialog.getChild("tabcontrol")
                         select_pos(tabcontrol, "2")
-                        self.click_button(xDialog, button)
+                        self.click_tab(xDialog, index)
 
-                    self.check_default_area(button)
+                    self.check_default_area(tab)
 
                     with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                         tabcontrol = xDialog.getChild("tabcontrol")
                         select_pos(tabcontrol, "2")
 
-                        self.click_button(xDialog, 'btnnone')
+                        self.click_tab(xDialog, "0")
 
-                    self.check_default_area('btnnone')
+                    self.check_default_area('lbnone')
 
 
     def test_paper_format(self):

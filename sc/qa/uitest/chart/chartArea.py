@@ -70,8 +70,8 @@ class chartArea(UITestCase):
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
-                btncolor = xDialog.getChild("btncolor")
-                btncolor.executeAction("CLICK", tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
                 rCustom = xDialog.getChild("R_custom")
                 gCustom = xDialog.getChild("G_custom")

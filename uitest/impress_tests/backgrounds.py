@@ -16,16 +16,16 @@ from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
 class ImpressBackgrounds(UITestCase):
 
-    def checkDefaultBackground(self, btn):
+    def checkDefaultBackground(self, tab):
         document = self.ui_test.get_component()
-        if btn == 'btnnone':
+        if tab == 'lbnone':
             self.assertEqual(document.DrawPages[0].Background, None)
-        elif btn == 'btncolor':
+        elif tab == 'lbcolor':
             self.assertEqual(
               hex(document.DrawPages[0].Background.FillColor), '0x729fcf')
             self.assertEqual(
               hex(document.DrawPages[0].Background.FillColor), '0x729fcf')
-        elif btn == 'btngradient':
+        elif tab == 'lbgradient':
             self.assertEqual(
               document.DrawPages[0].Background.FillGradient.Style, LINEAR)
             self.assertEqual(
@@ -44,7 +44,7 @@ class ImpressBackgrounds(UITestCase):
               document.DrawPages[0].Background.FillGradient.EndIntensity, 100)
             self.assertEqual(
               document.DrawPages[0].Background.FillGradientName, 'Pastel Bouquet')
-        elif btn == 'btnhatch':
+        elif tab == 'lbhatch':
             self.assertEqual(
               document.DrawPages[0].Background.FillHatch.Style, SINGLE )
             self.assertEqual(
@@ -55,7 +55,7 @@ class ImpressBackgrounds(UITestCase):
               document.DrawPages[0].Background.FillHatch.Angle, 0)
             self.assertEqual(
               document.DrawPages[0].Background.FillHatchName, 'Black 0 Degrees')
-        elif btn == 'btnbitmap':
+        elif tab == 'lbbitmap':
             self.assertEqual(
               document.DrawPages[0].Background.FillBitmapMode, REPEAT)
             self.assertEqual(
@@ -79,7 +79,7 @@ class ImpressBackgrounds(UITestCase):
             self.assertEqual(
               document.DrawPages[0].Background.FillBitmapSizeY, 2540)
             self.assertEqual(document.DrawPages[0].Background.FillBitmapName, 'Painted White')
-        elif btn == 'btnpattern':
+        elif tab == 'lbpattern':
             self.assertEqual(
               document.DrawPages[0].Background.FillBitmapMode, REPEAT)
             self.assertEqual(
@@ -114,31 +114,37 @@ class ImpressBackgrounds(UITestCase):
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
-            for index, button in enumerate(buttons):
+            tab_mapping = {
+                'lbbitmap' : "4",
+                'lbcolor' : "1",
+                'lbgradient' : "2",
+                'lbhatch' : "3",
+                'lbpattern' : "5"
+            }
+            for tab, index in tab_mapping.items():
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
                     tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                     select_pos(tabcontrol, "1")
 
-                    xBtn = xPageSetupDlg.getChild(button)
-                    xBtn.executeAction("CLICK", tuple())
+                    xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, index)
 
                     # tdf#100024: Without the fix in place, this test would have crashed here
                     # changing the background to bitmap
 
-                self.checkDefaultBackground(button)
+                self.checkDefaultBackground(tab)
 
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
                     tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                     select_pos(tabcontrol, "1")
 
-                    xBtn = xPageSetupDlg.getChild('btnnone')
-                    xBtn.executeAction("CLICK", tuple())
+                    xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
+                    select_pos(xFillTypeTabs, "0")
 
 
-                self.checkDefaultBackground('btnnone')
+                self.checkDefaultBackground('lbnone')
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

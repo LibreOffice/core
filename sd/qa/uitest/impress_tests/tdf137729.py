@@ -26,8 +26,8 @@ class tdf137729(UITestCase):
                 tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
-                xBtn = xPageSetupDlg.getChild('btnhatch')
-                xBtn.executeAction("CLICK", tuple())
+                xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "3")
 
                 xDistance = xPageSetupDlg.getChild('distancemtr')
                 xDistance.executeAction("UP", tuple())

@@ -30,8 +30,8 @@ class tdf116737(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "4")   #tab Background
 
-                btncolor = xDialog.getChild("btncolor")
-                btncolor.executeAction("CLICK", tuple())
+                xFillTypeTabs = xDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
                 R_custom = xDialog.getChild("R_custom")
                 G_custom = xDialog.getChild("G_custom")

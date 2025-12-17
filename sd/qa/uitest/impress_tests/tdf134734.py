@@ -39,8 +39,8 @@ class TestClass(UITestCase):
                     spinMargBot.executeAction("UP",tuple())
                 xTabs = DrawPageDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
-                btncolor = DrawPageDialog.getChild("btncolor")
-                btncolor.executeAction("CLICK",tuple())
+                xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "1")
 
             self.assertEqual(document.DrawPages[0].Background.FillStyle, SOLID)
             self.assertEqual(document.DrawPages[0].BorderLeft, 1016)

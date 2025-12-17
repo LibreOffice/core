@@ -26,8 +26,8 @@ class tdf125449(UITestCase):
                 tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
-                xBtn = xPageSetupDlg.getChild('btngradient')
-                xBtn.executeAction("CLICK", tuple())
+                xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
+                select_pos(xFillTypeTabs, "2")
 
                 xAngle = xPageSetupDlg.getChild('anglemtr')
                 xAngle.executeAction("UP", tuple())

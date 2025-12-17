@@ -451,17 +451,13 @@ class formatParagraph(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "8")
 
-                xColor = xDialog.getChild("btncolor")
-                xGradient = xDialog.getChild("btngradient")
-                xBitmap = xDialog.getChild("btnbitmap")
-                xPattern = xDialog.getChild("btnpattern")
-                xHatch = xDialog.getChild("btnhatch")
+                xFillTypeTabs = xDialog.getChild("nbFillType")
 
-                xColor.executeAction("CLICK", tuple())
-                xGradient.executeAction("CLICK", tuple())
-                xBitmap.executeAction("CLICK", tuple())
-                xPattern.executeAction("CLICK", tuple())
-                xHatch.executeAction("CLICK", tuple())
+                select_pos(xFillTypeTabs, "1")
+                select_pos(xFillTypeTabs, "2")
+                select_pos(xFillTypeTabs, "3")
+                select_pos(xFillTypeTabs, "4")
+                select_pos(xFillTypeTabs, "5")
 
    def test_format_paragraph_transparency(self):
         with self.ui_test.create_doc_in_start_center("writer"):

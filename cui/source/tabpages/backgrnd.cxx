@@ -28,6 +28,7 @@
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 #include <svx/unobrushitemhelper.hxx>
+#include <cuitabarea.hxx>
 
 using namespace css;
 
@@ -66,10 +67,14 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
     m_aAttrSet(*rInAttrs.GetPool(),
                rInAttrs.GetRanges().MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST))
 {
-    m_xBtnGradient->hide();
-    m_xBtnHatch->hide();
-    m_xBtnBitmap->hide();
-    m_xBtnPattern->hide();
+    if (m_xNotebook->get_page_index(TABID_GRADIENT) != -1)
+        m_xNotebook->remove_page(TABID_GRADIENT);
+    if (m_xNotebook->get_page_index(TABID_HATCH) != -1)
+        m_xNotebook->remove_page(TABID_HATCH);
+    if (m_xNotebook->get_page_index(TABID_BITMAP) != -1)
+        m_xNotebook->remove_page(TABID_BITMAP);
+    if (m_xNotebook->get_page_index(TABID_PATTERN) != -1)
+        m_xNotebook->remove_page(TABID_PATTERN);
 }
 
 SvxBkgTabPage::~SvxBkgTabPage()
@@ -224,7 +229,7 @@ bool SvxBkgTabPage::FillItemSet(SfxItemSet* pCoreSet)
 std::unique_ptr<SfxTabPage> SvxBkgTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
     auto xRet = std::make_unique<SvxBkgTabPage>(pPage, pController, *rAttrs);
-    xRet->SetOptimalSize(pController);
+    xRet->SetOptimalSize();
     return xRet;
 }
 
@@ -236,7 +241,6 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
         if ( nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
         {
-            m_xBtnBitmap->show();
             m_xTblLBox = m_xBuilder->weld_combo_box(u"tablelb"_ustr);
             m_xTblLBox->connect_changed(LINK(this, SvxBkgTabPage, TblDestinationHdl_Impl));
             m_xTblLBox->show();
@@ -247,9 +251,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
             m_bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
             m_bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
         }
-        if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
-            m_xBtnBitmap->show();
-        SetOptimalSize(GetDialogController());
+        SetOptimalSize();
     }
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
@@ -267,7 +269,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
     SetColorList(xColorTable);
 
     // sometimes we have the bitmap page
-    if (m_xBtnBitmap->get_visible())
+    if (m_xNotebook->get_n_pages() > 4)
     {
         XBitmapListRef xBitmapList;
         if (pObjSh)
@@ -306,7 +308,7 @@ void SvxBkgTabPage::SetActiveTableDestinationBrushItem()
     }
     else
     {
-        SelectFillType(*m_xBtnNone, &m_aAttrSet);
+        SelectFillType(FillType::TRANSPARENT_FILL, &m_aAttrSet);
         return;
     }
 
@@ -317,17 +319,17 @@ void SvxBkgTabPage::SetActiveTableDestinationBrushItem()
         default:
         case drawing::FillStyle_NONE:
         {
-            SelectFillType(*m_xBtnNone, &m_aAttrSet);
+            SelectFillType(FillType::TRANSPARENT_FILL, &m_aAttrSet);
             break;
         }
         case drawing::FillStyle_SOLID:
         {
-            SelectFillType(*m_xBtnColor, &m_aAttrSet);
+            SelectFillType(FillType::SOLID_FILL, &m_aAttrSet);
             break;
         }
         case drawing::FillStyle_BITMAP:
         {
-            SelectFillType(*m_xBtnBitmap, &m_aAttrSet);
+            SelectFillType(FillType::BITMAP_FILL, &m_aAttrSet);
             break;
         }
     }
