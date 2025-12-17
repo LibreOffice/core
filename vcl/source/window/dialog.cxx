@@ -570,15 +570,6 @@ void Dialog::ImplDeferredInit(vcl::Window* pParent, WinBits nBits)
     ImplInitDialog(pParent, nBits | WB_BORDER, mnInitFlag);
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
-    : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle", true)
-    , mnInitFlag(InitFlag::Default)
-{
-    ImplLOKNotifier(pParent);
-    ImplInitDialogData();
-    loadUI(pParent, rID, rUIXMLDescription);
-}
-
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle", true)
     , mnInitFlag(eFlag)
