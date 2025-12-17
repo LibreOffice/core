@@ -24,6 +24,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
@@ -947,10 +948,19 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
             case SID_BACKGROUND_COLOR:
                 {
+                    Color aColor(COL_TRANSPARENT);
+                    if (auto pObjectShell = pTabViewShell->GetObjectShell())
+                    {
+                        const std::optional<NamedColor> oColor
+                            = pObjectShell->GetRecentColor(SID_BACKGROUND_COLOR);
+                        if (oColor.has_value())
+                            aColor = (*oColor).getComplexColor().getFinalColor();
+                    }
+
                     SvxBrushItem aBrushItem(
-                                     pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );
-                    aBrushItem.SetColor( COL_TRANSPARENT );
-                    pTabViewShell->ApplyAttr( aBrushItem, false );
+                        pTabViewShell->GetSelectionPattern()->GetItem(ATTR_BACKGROUND));
+                    aBrushItem.SetColor(aColor);
+                    pTabViewShell->ApplyAttr(aBrushItem, false);
                 }
                 break;
 
