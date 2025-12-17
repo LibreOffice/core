@@ -544,7 +544,8 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
             if (!pSdrObj)
                 continue;
 
-            if (ScDrawObjData *pAnchor = ScDrawLayer::GetNonRotatedObjData(pSdrObj))
+            ScDrawObjData* pAnchor = ScDrawLayer::GetNonRotatedObjData(pSdrObj);
+            if (pAnchor && pAnchor->maStart.IsValid())
             {
                 ScMyShape aMyShape;
                 aMyShape.aAddress = pAnchor->maStart;
