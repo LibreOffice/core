@@ -13865,7 +13865,23 @@ int promote_arg(bool bArg)
     return static_cast<int>(bArg);
 }
 
-class GtkInstanceTreeView : public GtkInstanceWidget, public virtual weld::TreeView
+class GtkInstanceItemView : public GtkInstanceWidget, public virtual weld::ItemView
+{
+public:
+    GtkInstanceItemView(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWidget(pWidget, pBuilder, bTakeOwnership)
+    {
+    }
+
+    virtual std::unique_ptr<weld::TreeIter>
+    make_iterator(const weld::TreeIter* pOrig) const override
+    {
+        return std::unique_ptr<weld::TreeIter>(
+            new GtkInstanceTreeIter(static_cast<const GtkInstanceTreeIter*>(pOrig)));
+    }
+};
+
+class GtkInstanceTreeView : public GtkInstanceItemView, public virtual weld::TreeView
 {
 private:
     GtkTreeView* m_pTreeView;
@@ -14624,7 +14640,7 @@ private:
 
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceWidget(GTK_WIDGET(pTreeView), pBuilder, bTakeOwnership)
+        : GtkInstanceItemView(GTK_WIDGET(pTreeView), pBuilder, bTakeOwnership)
         , m_pTreeView(pTreeView)
         , m_pTreeModel(gtk_tree_view_get_model(m_pTreeView))
         , m_bWorkAroundBadDragRegion(false)
@@ -15753,11 +15769,6 @@ public:
         return OUString();
     }
 
-    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
-    {
-        return std::unique_ptr<weld::TreeIter>(new GtkInstanceTreeIter(static_cast<const GtkInstanceTreeIter*>(pOrig)));
-    }
-
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override
     {
         const GtkInstanceTreeIter& rGtkSource(static_cast<const GtkInstanceTreeIter&>(rSource));
@@ -16703,7 +16714,7 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
 
 namespace {
 
-class GtkInstanceIconView : public GtkInstanceWidget, public virtual weld::IconView
+class GtkInstanceIconView : public GtkInstanceItemView, public virtual weld::IconView
 {
 private:
     GtkIconView* m_pIconView;
@@ -16961,7 +16972,7 @@ private:
 
 public:
     GtkInstanceIconView(GtkIconView* pIconView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceWidget(GTK_WIDGET(pIconView), pBuilder, bTakeOwnership)
+        : GtkInstanceItemView(GTK_WIDGET(pIconView), pBuilder, bTakeOwnership)
         , m_pIconView(pIconView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_icon_view_get_model(m_pIconView)))
         , m_nTextCol(gtk_icon_view_get_text_column(m_pIconView)) // May be -1
@@ -17218,11 +17229,6 @@ public:
         gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
         gtk_tree_path_free(path);
         enable_notify_events();
-    }
-
-    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
-    {
-        return std::unique_ptr<weld::TreeIter>(new GtkInstanceTreeIter(static_cast<const GtkInstanceTreeIter*>(pOrig)));
     }
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
