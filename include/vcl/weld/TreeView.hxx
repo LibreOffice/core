@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/ItemView.hxx>
 
 namespace weld
 {
@@ -25,7 +25,7 @@ enum class ColumnToggleType
    button column when enable_toggle_buttons is used). Column index -1 is
    reserved to access those columns.
 */
-class VCL_DLLPUBLIC TreeView : virtual public Widget
+class VCL_DLLPUBLIC TreeView : virtual public ItemView
 {
     friend class ::LOKTrigger;
 
@@ -327,10 +327,7 @@ public:
     void remove_id(const OUString& rText) { remove(find_id(rText)); }
 
     //via iter
-    virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
     virtual void copy_iterator(const TreeIter& rSource, TreeIter& rDest) const = 0;
-    virtual bool get_selected(TreeIter* pIter) const = 0;
-    virtual bool get_cursor(TreeIter* pIter) const = 0;
 
     void set_cursor(const TreeIter& rIter)
     {

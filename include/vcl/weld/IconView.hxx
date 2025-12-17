@@ -10,13 +10,13 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/ItemView.hxx>
 
 namespace weld
 {
 typedef std::tuple<OUString&, const TreeIter&> encoded_image_query;
 
-class VCL_DLLPUBLIC IconView : virtual public Widget
+class VCL_DLLPUBLIC IconView : virtual public ItemView
 {
     friend class ::LOKTrigger;
 
@@ -167,10 +167,6 @@ public:
     virtual tools::Rectangle get_rect(int pos) const = 0;
 
     //via iter
-    virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
-    virtual bool get_selected(TreeIter* pIter) const = 0;
-    virtual bool get_cursor(TreeIter* pIter) const = 0;
-
     void set_cursor(const TreeIter& rIter)
     {
         disable_notify_events();
