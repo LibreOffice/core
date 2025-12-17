@@ -11,6 +11,8 @@
 
 #include <sal/config.h>
 
+#include <o3tl/intcmp.hxx>
+
 #include <algorithm>
 #include <cassert>
 #include <concepts>
@@ -211,13 +213,11 @@ template <std::signed_integral T> constexpr std::make_unsigned_t<T> make_unsigne
 
 template <std::unsigned_integral T1, std::integral T2> constexpr T1 clamp_to_unsigned(T2 value)
 {
-    if constexpr (std::is_unsigned_v<T2>) {
-        // coverity[dead_error_line] - suppress warning for template
-        return value <= std::numeric_limits<T1>::max() ? value : std::numeric_limits<T1>::max();
-    } else {
-        static_assert(std::is_signed_v<T2>);
-        return value < 0 ? 0 : clamp_to_unsigned<T1>(make_unsigned(value));
-    }
+    if (IntCmp(value) < IntCmp(std::numeric_limits<T1>::min()))
+        return std::numeric_limits<T1>::min();
+    if (IntCmp(value) > IntCmp(std::numeric_limits<T1>::max()))
+        return std::numeric_limits<T1>::max();
+    return value;
 }
 
 // An implicit conversion from T2 to T1, useful in places where an explicit conversion from T2 to
@@ -232,31 +232,14 @@ template <std::integral I, I Min = std::template numeric_limits<I>::min(),
     requires(Min <= 0 && Max > 0)
 struct ValidRange
 {
-    using SI = std::make_signed_t<I>;
-    using UI = std::make_unsigned_t<I>;
-
     template <std::integral I2> static constexpr bool isAbove(I2 n)
     {
-        using UI2 = std::make_unsigned_t<I2>;
-        if constexpr (static_cast<UI2>(std::numeric_limits<I2>::max()) <= static_cast<UI>(Max))
-            return false;
-        else if constexpr (std::is_signed_v<I> == std::is_signed_v<I2>)
-            return n > Max;
-        else if constexpr (std::is_signed_v<I>) // I2 is unsigned
-            return n > static_cast<UI>(Max);
-        else // I is unsigned, I2 is signed
-            return n > 0 && static_cast<UI2>(n) > Max;
+        return IntCmp(n) > IntCmp(Max);
     }
 
     template <std::integral I2> static constexpr bool isBelow(I2 n)
     {
-        using SI2 = std::make_signed_t<I2>;
-        if constexpr (static_cast<SI2>(std::numeric_limits<I2>::min()) >= static_cast<SI>(Min))
-            return false; // Covers all I2 unsigned
-        else if constexpr (std::is_signed_v<I> == std::is_signed_v<I2>)
-            return n < Min;
-        else // I is unsigned, I2 is signed
-            return n < 0;
+        return IntCmp(n) < IntCmp(Min);
     }
 
     template <std::integral I2> static constexpr bool isOutside(I2 n)
