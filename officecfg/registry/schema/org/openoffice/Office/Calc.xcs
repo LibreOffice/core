@@ -121,6 +121,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="NoteTransparency" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Indicates whether temporary comments on hover are transparent.</desc>
+            <label>Comment transparency</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="FormulaMark" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>
