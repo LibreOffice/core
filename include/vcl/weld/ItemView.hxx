@@ -30,8 +30,14 @@ public:
     virtual bool get_selected(TreeIter* pIter) const = 0;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
 
+    // Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select(int pos);
     void unselect(int pos);
+    virtual void select_all() = 0;
+    virtual void unselect_all() = 0;
+
+    // return the number of toplevel nodes
+    virtual int n_children() const = 0;
 
     void clear();
 };

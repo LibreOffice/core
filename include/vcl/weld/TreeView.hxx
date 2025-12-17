@@ -519,13 +519,6 @@ public:
 
     void connect_drag_begin(const Link<bool&, bool>& rLink) { m_aDragBeginHdl = rLink; }
 
-    //all of them. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    virtual void select_all() = 0;
-    virtual void unselect_all() = 0;
-
-    // return the number of toplevel nodes
-    virtual int n_children() const = 0;
-
     // afterwards, entries will be in default ascending sort order
     virtual void make_sorted() = 0;
     virtual void make_unsorted() = 0;

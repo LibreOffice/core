@@ -167,13 +167,6 @@ public:
     // call func on each selected element until func returns true or we run out of elements
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
 
-    //all of them. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    virtual void select_all() = 0;
-    virtual void unselect_all() = 0;
-
-    // return the number of toplevel nodes
-    virtual int n_children() const = 0;
-
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
