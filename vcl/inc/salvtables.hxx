@@ -1503,6 +1503,9 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
+    virtual OUString get_selected_id() const override;
+    virtual OUString get_selected_text() const override;
+
     virtual void select_all() override;
     virtual void unselect_all() override;
 
@@ -1735,10 +1738,6 @@ public:
 
     virtual int get_selected_index() const override;
 
-    virtual OUString get_selected_text() const override;
-
-    virtual OUString get_selected_id() const override;
-
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
@@ -1934,10 +1933,6 @@ public:
 
     virtual void
     connect_get_image(const Link<const weld::encoded_image_query&, bool>& rLink) override;
-
-    virtual OUString get_selected_id() const override;
-
-    virtual OUString get_selected_text() const override;
 
     virtual int count_selected_items() const override;
 

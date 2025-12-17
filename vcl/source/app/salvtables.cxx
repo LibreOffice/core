@@ -3532,6 +3532,25 @@ std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) cons
     return {};
 }
 
+OUString SalInstanceItemView::get_selected_id() const
+{
+    assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected())
+    {
+        if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
+            return *pStr;
+    }
+    return OUString();
+}
+
+OUString SalInstanceItemView::get_selected_text() const
+{
+    assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected())
+        return SvTabListBox::GetEntryText(pEntry, 0);
+    return OUString();
+}
+
 void SalInstanceItemView::select_all() { unselect(-1); }
 
 void SalInstanceItemView::unselect_all() { select(-1); }
@@ -4525,25 +4544,6 @@ int SalInstanceTreeView::get_selected_index() const
     return SvTreeList::GetRelPos(pEntry);
 }
 
-OUString SalInstanceTreeView::get_selected_text() const
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
-        return SvTabListBox::GetEntryText(pEntry, 0);
-    return OUString();
-}
-
-OUString SalInstanceTreeView::get_selected_id() const
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
-    {
-        if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
-            return *pStr;
-    }
-    return OUString();
-}
-
 void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
     const SalInstanceTreeIter& rVclSource(static_cast<const SalInstanceTreeIter&>(rSource));
@@ -5384,25 +5384,6 @@ void SalInstanceIconView::connect_get_image(
 {
     weld::IconView::connect_get_image(rLink);
     m_xIconView->SetDumpImageHdl(LINK(this, SalInstanceIconView, DumpImageHdl));
-}
-
-OUString SalInstanceIconView::get_selected_id() const
-{
-    assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
-    {
-        if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
-            return *pStr;
-    }
-    return OUString();
-}
-
-OUString SalInstanceIconView::get_selected_text() const
-{
-    assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
-        return m_xIconView->GetEntryText(pEntry);
-    return OUString();
 }
 
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
