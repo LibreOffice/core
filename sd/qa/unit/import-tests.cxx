@@ -33,6 +33,10 @@
 #include <svx/sdmetitm.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
+#include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
+#include <o3tl/environment.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
@@ -123,12 +127,19 @@ the test, and re-running; it should break.
 */
 CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
 {
-    static const struct
+    // Use fallback document theme, which uses previous default
+    // fill and line colors as accent colors.
+    o3tl::setEnvironment(u"LO_FORCE_FALLBACK_DOCUMENT_THEME"_ustr, u"1"_ustr);
+
+    struct TestDumpInfo
     {
-        std::u16string_view sInput, sDump;
+        std::u16string_view sInput;
+        std::u16string_view sDump;
         TestFilter sExportType;
-    } aFilesToCompare[]
-        = { { u"odp/shapes-test.odp", u"xml/shapes-test_page", TestFilter::NONE },
+    };
+
+    auto aFilesToCompare = std::to_array<TestDumpInfo>({
+        { u"odp/shapes-test.odp", u"xml/shapes-test_page", TestFilter::NONE },
             { u"fdo47434.pptx", u"xml/fdo47434_", TestFilter::NONE },
             { u"n758621.ppt", u"xml/n758621_", TestFilter::NONE },
             { u"fdo64586.ppt", u"xml/fdo64586_", TestFilter::NONE },
@@ -155,17 +166,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
             { u"tdf100491.pptx", u"xml/tdf100491_", TestFilter::NONE },
 #endif
             { u"tdf109317.pptx", u"xml/tdf109317_", TestFilter::ODP },
-            // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", TestFilter::PPTX }, // Example
-          };
+        // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", TestFilter::PPTX }, // Example
+    });
 
-    for (int i = 0; i < static_cast<int>(SAL_N_ELEMENTS(aFilesToCompare)); ++i)
+    for (size_t i = 0; i < aFilesToCompare.size(); ++i)
     {
-        int const nUpdateMe
-            = -1; // index of test we want to update; supposedly only when the test is created
+        size_t const nUpdateMe
+            = SAL_MAX_UINT32; // index of test we want to update; supposedly only when the test is created
 
         loadFromFile(aFilesToCompare[i].sInput);
         if (aFilesToCompare[i].sExportType != TestFilter::NONE)
             saveAndReload(aFilesToCompare[i].sExportType);
+
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
@@ -174,9 +186,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
         sal_Int32 nLength = xDrawPages->getCount();
         for (sal_Int32 j = 0; j < nLength; ++j)
         {
-            uno::Reference<drawing::XDrawPage> xDrawPage;
-            uno::Any aAny = xDrawPages->getByIndex(j);
-            aAny >>= xDrawPage;
+            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(j), uno::UNO_QUERY);
+            CPPUNIT_ASSERT(xDrawPage.is());
             uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
             OUString aString = XShapeDumper::dump(xShapes);
 
