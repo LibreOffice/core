@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SwTOXMgr;

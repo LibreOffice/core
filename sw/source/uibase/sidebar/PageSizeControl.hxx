@@ -22,6 +22,7 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 #include <vector>
 

@@ -29,6 +29,7 @@
 #include <vcl/customweld.hxx>
 #include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 #include <set>
 

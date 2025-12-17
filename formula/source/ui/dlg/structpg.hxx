@@ -20,6 +20,7 @@
 #pragma once
 
 #include <formula/formula.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace formula

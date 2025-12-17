@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SdSelectLayerDlg final : public weld::GenericDialogController

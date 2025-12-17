@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_SELECTDBTABLEDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 namespace com::sun::star::sdbc { class XConnection; }
 

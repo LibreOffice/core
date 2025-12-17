@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/timer.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>

@@ -22,6 +22,7 @@
 #include "adminpages.hxx"
 #include <tabletree.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <vcl/weld/TreeView.hxx>
 
 namespace dbaui
 {

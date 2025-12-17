@@ -27,6 +27,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <unotools/compatibility.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 class SwWrtShell;
 

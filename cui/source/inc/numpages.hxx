@@ -27,6 +27,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/numberingpreview.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/timer.hxx>
 #include <svx/dlgutil.hxx>
 

@@ -30,6 +30,7 @@
 #include <svx/dbaexchange.hxx>
 #include <cppuhelper/basemutex.hxx>
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <rtl/ref.hxx>

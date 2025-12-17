@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 #include <unordered_map>
 

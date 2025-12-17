@@ -24,6 +24,7 @@
 #include <svx/xtable.hxx>
 #include <svx/PaletteManager.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 #include "cfgchart.hxx"
 

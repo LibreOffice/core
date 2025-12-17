@@ -17,6 +17,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 namespace sw::sidebar
 {

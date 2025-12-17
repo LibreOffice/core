@@ -12,6 +12,8 @@
 #include "QtInstanceTreeIter.hxx"
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/TreeView.hxx>
+
 #include <QtCore/QSortFilterProxyModel>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QTreeView>

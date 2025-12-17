@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include "tabletree.hxx"
 

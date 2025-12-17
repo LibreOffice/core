@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
 
 #include <utility>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <unotools/configitem.hxx>

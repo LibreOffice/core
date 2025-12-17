@@ -10,6 +10,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com :: sun :: star :: ucb { class XCommandEnvironment; }

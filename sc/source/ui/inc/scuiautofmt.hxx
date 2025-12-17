@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/customweld.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <autoform.hxx>
 #include "autofmt.hxx"
 

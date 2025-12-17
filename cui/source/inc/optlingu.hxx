@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
+#include <vcl/weld/TreeView.hxx>
 
 namespace com::sun::star{
     namespace linguistic2{

@@ -12,6 +12,7 @@
 
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>

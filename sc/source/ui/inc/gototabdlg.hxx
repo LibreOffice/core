@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class ScGoToTabDlg : public weld::GenericDialogController

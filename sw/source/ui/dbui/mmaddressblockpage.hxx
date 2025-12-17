@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMADDRESSBLOCKPAGE_HXX
 
 #include <svx/weldeditview.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
 #include <sfx2/basedlgs.hxx>

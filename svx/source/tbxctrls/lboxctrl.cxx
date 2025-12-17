@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
 #include <lboxctrl.hxx>

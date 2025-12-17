@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SvxMultiPathDialog : public weld::GenericDialogController

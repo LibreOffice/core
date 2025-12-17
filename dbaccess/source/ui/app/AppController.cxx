@@ -70,6 +70,7 @@
 #include <comphelper/interaction.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <unotools/closeveto.hxx>

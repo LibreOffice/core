@@ -13,6 +13,8 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/TreeView.hxx>
+
 class ToolbarTabPage : public SfxTabPage
 {
 private:

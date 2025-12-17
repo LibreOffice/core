@@ -17,6 +17,7 @@
  */
 #pragma once
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace svx

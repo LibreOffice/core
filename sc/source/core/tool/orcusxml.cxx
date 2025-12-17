@@ -10,6 +10,7 @@
 #include <orcusxml.hxx>
 
 #include <utility>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)

@@ -12,6 +12,8 @@
 #include "anyrefdg.hxx"
 #include <orcusxml.hxx>
 
+#include <vcl/weld/TreeView.hxx>
+
 #include <set>
 #include <memory>
 

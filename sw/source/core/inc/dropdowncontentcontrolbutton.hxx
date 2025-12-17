@@ -11,6 +11,8 @@
 
 #include "contentcontrolbutton.hxx"
 
+#include <vcl/weld/TreeView.hxx>
+
 class SwEditWin;
 class SwContentControl;
 

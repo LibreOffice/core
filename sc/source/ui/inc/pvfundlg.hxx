@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <pivot.hxx>
 

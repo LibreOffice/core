@@ -24,6 +24,7 @@
 #include <sfx2/dllapi.h>
 #include <svl/style.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SFX2_DLLPUBLIC SfxNewStyleDlg final : public weld::GenericDialogController
