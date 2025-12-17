@@ -1493,6 +1493,8 @@ protected:
     SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
 
+    virtual void do_select(int pos) override;
+    virtual void do_unselect(int pos) override;
     virtual void do_clear() override;
 
 public:
@@ -1635,8 +1637,6 @@ public:
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
 
-    virtual void do_select(int pos) override;
-
     virtual int get_cursor_index() const override;
 
     virtual void do_set_cursor(int pos) override;
@@ -1644,8 +1644,6 @@ public:
     virtual void do_scroll_to_row(int pos) override;
 
     virtual bool is_selected(int pos) const override;
-
-    virtual void do_unselect(int pos) override;
 
     virtual std::vector<int> get_selected_rows() const override;
 
@@ -1767,10 +1765,12 @@ public:
 
     virtual void do_remove(const weld::TreeIter& rIter) override;
 
+    using SalInstanceItemView::do_select;
     virtual void do_select(const weld::TreeIter& rIter) override;
 
     virtual void do_scroll_to_row(const weld::TreeIter& rIter) override;
 
+    using SalInstanceItemView::do_unselect;
     virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
@@ -1940,10 +1940,6 @@ public:
     virtual OUString get_selected_text() const override;
 
     virtual int count_selected_items() const override;
-
-    virtual void do_select(int pos) override;
-
-    virtual void do_unselect(int pos) override;
 
     virtual void select_all() override;
     virtual void unselect_all() override;

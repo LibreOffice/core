@@ -3532,6 +3532,36 @@ std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) cons
     return {};
 }
 
+void SalInstanceItemView::do_select(int pos)
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+    if (pos == -1 || (pos == 0 && n_children() == 0))
+        m_pTreeListBox->SelectAll(false);
+    else
+    {
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
+        assert(pEntry && "bad pos?");
+        m_pTreeListBox->Select(pEntry, true);
+        m_pTreeListBox->MakeVisible(pEntry);
+    }
+}
+
+void SalInstanceItemView::do_unselect(int pos)
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+    if (pos == -1)
+        m_pTreeListBox->SelectAll(true);
+    else
+    {
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
+        m_pTreeListBox->Select(pEntry, false);
+    }
+}
+
 void SalInstanceItemView::do_clear()
 {
     m_pTreeListBox->Clear();
@@ -4078,22 +4108,6 @@ int SalInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
     return m_xTreeView->GetModel()->GetChildList(rVclIter.iter).size();
 }
 
-void SalInstanceTreeView::do_select(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-        m_xTreeView->SelectAll(false);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        assert(pEntry && "bad pos?");
-        m_xTreeView->Select(pEntry, true);
-        m_xTreeView->MakeVisible(pEntry);
-    }
-}
-
 int SalInstanceTreeView::get_cursor_index() const
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
@@ -4126,20 +4140,6 @@ bool SalInstanceTreeView::is_selected(int pos) const
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
     return m_xTreeView->IsSelected(pEntry);
-}
-
-void SalInstanceTreeView::do_unselect(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1)
-        m_xTreeView->SelectAll(true);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        m_xTreeView->Select(pEntry, false);
-    }
 }
 
 std::vector<int> SalInstanceTreeView::get_selected_rows() const
@@ -5406,35 +5406,6 @@ OUString SalInstanceIconView::get_selected_text() const
 }
 
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
-
-void SalInstanceIconView::do_select(int pos)
-{
-    assert(m_xIconView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-        m_xIconView->SelectAll(false);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-        m_xIconView->Select(pEntry, true);
-        m_xIconView->MakeVisible(pEntry);
-    }
-}
-
-void SalInstanceIconView::do_unselect(int pos)
-{
-    assert(m_xIconView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1)
-        m_xIconView->SelectAll(true);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-        m_xIconView->Select(pEntry, false);
-    }
-}
 
 void SalInstanceIconView::select_all() { unselect(-1); }
 
