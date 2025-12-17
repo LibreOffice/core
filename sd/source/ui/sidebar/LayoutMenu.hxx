@@ -25,6 +25,7 @@
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <map>
 
 #include <unotools/resmgr.hxx>

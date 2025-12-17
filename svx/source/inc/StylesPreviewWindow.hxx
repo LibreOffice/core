@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/sfxstatuslistener.hxx>
+#include <vcl/weld/IconView.hxx>
 
 // pair of id and name, name can be translated to other language
 typedef std::pair<OUString, OUString> StylePreviewDescriptor;

@@ -14,6 +14,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/ColorSets.hxx>
+#include <vcl/weld/IconView.hxx>
 
 namespace sw::sidebar
 {

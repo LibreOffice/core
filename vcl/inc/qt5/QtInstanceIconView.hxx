@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/IconView.hxx>
+
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QListView>
 

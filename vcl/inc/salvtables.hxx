@@ -28,6 +28,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include "calendar.hxx"
 #include "colorpicker.hxx"
