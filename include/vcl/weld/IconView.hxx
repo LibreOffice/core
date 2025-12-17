@@ -20,9 +20,6 @@ class VCL_DLLPUBLIC IconView : virtual public ItemView
 {
     friend class ::LOKTrigger;
 
-private:
-    OUString m_sSavedValue;
-
 protected:
     Link<IconView&, void> m_aSelectionChangeHdl;
     Link<IconView&, bool> m_aItemActivatedHdl;
@@ -118,11 +115,7 @@ public:
         m_aGetPropertyTreeElemHdl = rLink;
     }
 
-    virtual OUString get_selected_id() const = 0;
-
     virtual int count_selected_items() const = 0;
-
-    virtual OUString get_selected_text() const = 0;
 
     //by index. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual OUString get_id(int pos) const = 0;
@@ -166,10 +159,6 @@ public:
 
     // call func on each selected element until func returns true or we run out of elements
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
-
-    void save_value() { m_sSavedValue = get_selected_text(); }
-    OUString const& get_saved_value() const { return m_sSavedValue; }
-    bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 };
 }
 

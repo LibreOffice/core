@@ -37,9 +37,6 @@ public:
     typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
         render_args;
 
-private:
-    OUString m_sSavedValue;
-
 protected:
     Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
@@ -222,9 +219,6 @@ public:
 
     void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
     void connect_model_changed(const Link<TreeView&, void>& rLink) { m_aModelChangedHdl = rLink; }
-
-    virtual OUString get_selected_text() const = 0;
-    virtual OUString get_selected_id() const = 0;
 
     // call before inserting any content and connecting to toggle signals,
     // an pre-inserted checkbutton column will exist at the start of every row
@@ -567,10 +561,6 @@ public:
 
     virtual void vadjustment_set_value(int value) = 0;
     virtual int vadjustment_get_value() const = 0;
-
-    void save_value() { m_sSavedValue = get_selected_text(); }
-    OUString const& get_saved_value() const { return m_sSavedValue; }
-    bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 
     // for custom rendering a cell
     void connect_custom_get_size(const Link<get_size_args, Size>& rLink) { m_aGetSizeHdl = rLink; }

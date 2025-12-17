@@ -17,6 +17,8 @@ namespace weld
 /* Abstract base class for TreeView and IconView. */
 class VCL_DLLPUBLIC ItemView : virtual public Widget
 {
+    OUString m_sSavedValue;
+
 protected:
     virtual void do_select(int pos) = 0;
     virtual void do_unselect(int pos) = 0;
@@ -26,6 +28,9 @@ public:
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
 
     virtual std::unique_ptr<TreeIter> get_iterator(int nPos) const = 0;
+
+    virtual OUString get_selected_id() const = 0;
+    virtual OUString get_selected_text() const = 0;
 
     virtual bool get_selected(TreeIter* pIter) const = 0;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
@@ -40,6 +45,10 @@ public:
     virtual int n_children() const = 0;
 
     void clear();
+
+    void save_value() { m_sSavedValue = get_selected_text(); }
+    OUString const& get_saved_value() const { return m_sSavedValue; }
+    bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 };
 }
 
