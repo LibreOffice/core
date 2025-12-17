@@ -21,7 +21,7 @@
 constexpr int ROLE_ID = Qt::UserRole + 1000;
 
 QtInstanceIconView::QtInstanceIconView(QListView* pListView)
-    : QtInstanceWidget(pListView)
+    : QtInstanceItemView(pListView, *pListView->model())
     , m_pListView(pListView)
 {
     assert(m_pListView);
@@ -117,13 +117,6 @@ OUString QtInstanceIconView::get_selected_id() const
     });
 
     return sId;
-}
-
-void QtInstanceIconView::do_clear()
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] { m_pModel->clear(); });
 }
 
 int QtInstanceIconView::count_selected_items() const

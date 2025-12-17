@@ -9,14 +9,14 @@
 
 #pragma once
 
-#include "QtInstanceWidget.hxx"
+#include "QtInstanceItemView.hxx"
 
 #include <vcl/weld/IconView.hxx>
 
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QListView>
 
-class QtInstanceIconView : public QtInstanceWidget, public virtual weld::IconView
+class QtInstanceIconView : public QtInstanceItemView, public virtual weld::IconView
 {
     Q_OBJECT
 
@@ -39,8 +39,6 @@ public:
     virtual void insert_separator(int pos, const OUString* pId) override;
 
     virtual OUString get_selected_id() const override;
-
-    virtual void do_clear() override;
 
     virtual int count_selected_items() const override;
 

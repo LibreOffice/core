@@ -22,7 +22,7 @@ constexpr int ROLE_ID = Qt::UserRole + 1000;
 const char* const PROPERTY_COLUMN_ROLES = "column-roles";
 
 QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
-    : QtInstanceWidget(pTreeView)
+    : QtInstanceItemView(pTreeView, *pTreeView->model())
     , m_pTreeView(pTreeView)
 {
     assert(m_pTreeView);
@@ -939,16 +939,6 @@ void QtInstanceTreeView::set_sort_column(int nColumn)
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] { m_pModel->sort(nColumn); });
-}
-
-void QtInstanceTreeView::do_clear()
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        // don't use QStandardItemModel::clear, as that would remove header data as well
-        m_pModel->removeRows(0, m_pModel->rowCount());
-    });
 }
 
 int QtInstanceTreeView::get_height_rows(int) const
