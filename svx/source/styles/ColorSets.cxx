@@ -25,6 +25,7 @@
 #include <vcl/UserResourceScanner.hxx>
 #include <unotools/pathoptions.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/environment.hxx>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
@@ -143,16 +144,47 @@ ColorSets::ColorSets()
     init();
 }
 
+model::ColorSet const* ColorSets::getDefault()
+{
+    bool bForceDefault = !o3tl::getEnvironment(u"LO_FORCE_FALLBACK_DOCUMENT_THEME"_ustr).isEmpty();
+    ColorSets& rSets = ColorSets::get();
+    auto const* pColorSet = rSets.getColorSet(u"LibreOffice");
+    if (pColorSet && !bForceDefault)
+    {
+        return pColorSet;
+    }
+    else
+    {
+        SAL_INFO("svx", "No theme found. Returning a fallback Color Set.");
+        static model::ColorSet aColorSet(u"Fallback Color Theme"_ustr);
+        aColorSet.add(model::ThemeColorType::Dark1, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light1, 0xffffff);
+        aColorSet.add(model::ThemeColorType::Dark2, 0x000000);
+        aColorSet.add(model::ThemeColorType::Light2, 0xffffff);
+        aColorSet.add(model::ThemeColorType::Accent1, 0x729fcf);
+        aColorSet.add(model::ThemeColorType::Accent2, 0x729fcf);
+        aColorSet.add(model::ThemeColorType::Accent3, 0x729fcf);
+        aColorSet.add(model::ThemeColorType::Accent4, 0x3465a4);
+        aColorSet.add(model::ThemeColorType::Accent5, 0x3465a4);
+        aColorSet.add(model::ThemeColorType::Accent6, 0x3465a4);
+        aColorSet.add(model::ThemeColorType::Hyperlink, 0x0000ee);
+        aColorSet.add(model::ThemeColorType::FollowedHyperlink, 0x551a8b);
+        return &aColorSet;
+    }
+}
+
 ColorSets& ColorSets::get()
 {
-    static std::optional<ColorSets> sColorSet;
-    if (!sColorSet)
-        sColorSet = ColorSets();
-    return *sColorSet;
+    static std::optional<ColorSets> sColorSets;
+    if (!sColorSets)
+        sColorSets = ColorSets();
+    return *sColorSets;
 }
 
 void ColorSets::init()
 {
+    SAL_INFO("svx", "Initializing Color Sets.");
+
     DocumentThemeScanner aScanner(maColorSets);
 
     if (!comphelper::IsFuzzing())

@@ -68,6 +68,7 @@
 #include <DrawViewShell.hxx>
 #include <editeng/unoprnms.hxx>
 #include "unoobj.hxx"
+#include <theme/ThemeColorChanger.hxx>
 
 #include <strings.hxx>
 #include <bitmaps.hlst>
@@ -79,6 +80,7 @@
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <o3tl/string_view.hxx>
+
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -284,7 +286,7 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"BackgroundFullSize"_ustr,           WID_PAGE_BACKFULL,  cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},
         { u"IsBackgroundDark"_ustr,             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
-        { u"Theme"_ustr, WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), 0,  0},
+        { sUNO_Prop_Theme, WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), 0,  0},
         // backwards compatible view of the theme for use in tests
         { u"ThemeUnoRepresentation"_ustr, WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0,  0},
         { u"SlideLayout"_ustr,            WID_PAGE_SLIDE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0}
@@ -990,7 +992,19 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if (uno::Reference<util::XTheme> xTheme; aValue >>= xTheme)
             {
                 auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
-                GetPage()->getSdrPageProperties().setTheme(rUnoTheme.getTheme());
+                auto pTheme = rUnoTheme.getTheme();
+                auto* pPage = GetPage();
+                pPage->getSdrPageProperties().setTheme(pTheme);
+                SdrPage* pMasterPage = nullptr;
+                if (pPage->IsMasterPage())
+                    pMasterPage = pPage;
+                else
+                {
+                    if (pPage->TRG_HasMasterPage())
+                        pMasterPage = &pPage->TRG_GetMasterPage();
+                }
+                sd::ThemeColorChanger aChanger(pMasterPage, GetModel()->GetDocShell());
+                aChanger.apply(pTheme->getColorSet());
             }
             break;
 

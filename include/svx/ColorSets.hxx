@@ -25,13 +25,14 @@ private:
     void init();
 public:
     static ColorSets& get();
+    static model::ColorSet const* getDefault();
 
     const std::vector<model::ColorSet>& getColorSetVector() const
     {
         return maColorSets;
     }
 
-    const model::ColorSet& getColorSet(sal_uInt32 nIndex) const
+    model::ColorSet const& getColorSet(sal_uInt32 nIndex) const
     {
         return maColorSets[nIndex];
     }

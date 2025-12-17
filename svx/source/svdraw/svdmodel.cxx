@@ -106,12 +106,10 @@ struct SdrModelImpl
 
     void initTheme()
     {
-        auto const* pColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
-        if (pColorSet)
-        {
-            std::shared_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
-            mpTheme->setColorSet(pDefaultColorSet);
-        }
+        auto const* pColorSet = svx::ColorSets::getDefault();
+        assert(pColorSet);
+        std::shared_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
+        mpTheme->setColorSet(pDefaultColorSet);
     }
 };
 
