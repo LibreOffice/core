@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "QtInstanceTreeIter.hxx"
 #include "QtInstanceWidget.hxx"
 
 #include <vcl/weld/ItemView.hxx>
@@ -27,6 +28,12 @@ protected:
 
 public:
     QtInstanceItemView(QAbstractItemView* pItemView, QAbstractItemModel& rModel);
+
+protected:
+    QModelIndex modelIndex(int nRow, int nCol = 0,
+                           const QModelIndex& rParentIndex = QModelIndex()) const;
+    QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
+    QtInstanceTreeIter treeIter(int nRow, const QModelIndex& rParentIndex = QModelIndex()) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

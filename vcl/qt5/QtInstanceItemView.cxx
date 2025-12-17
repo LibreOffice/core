@@ -23,4 +23,21 @@ void QtInstanceItemView::do_clear()
     GetQtInstance().RunInMainThread([&] { m_rModel.removeRows(0, m_rModel.rowCount()); });
 }
 
+QModelIndex QtInstanceItemView::modelIndex(int nRow, int nCol,
+                                           const QModelIndex& rParentIndex) const
+{
+    return modelIndex(treeIter(nRow, rParentIndex), nCol);
+}
+
+QModelIndex QtInstanceItemView::modelIndex(const weld::TreeIter& rIter, int nCol) const
+{
+    QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
+    return m_rModel.index(aModelIndex.row(), nCol, aModelIndex.parent());
+}
+
+QtInstanceTreeIter QtInstanceItemView::treeIter(int nRow, const QModelIndex& rParentIndex) const
+{
+    return QtInstanceTreeIter(m_rModel.index(nRow, 0, rParentIndex));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -131,19 +131,7 @@ OUString QtInstanceIconView::get_selected_text() const
     return OUString();
 }
 
-OUString QtInstanceIconView::get_id(int nPos) const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(modelIndex(nPos), ROLE_ID);
-        if (aRoleData.canConvert<QString>())
-            sId = toOUString(aRoleData.toString());
-    });
-
-    return sId;
-}
+OUString QtInstanceIconView::get_id(int nPos) const { return get_id(treeIter(nPos)); }
 
 void QtInstanceIconView::do_select(int nPos)
 {
@@ -255,7 +243,16 @@ bool QtInstanceIconView::get_iter_first(weld::TreeIter&) const
 
 OUString QtInstanceIconView::get_id(const weld::TreeIter& rIter) const
 {
-    return get_id(position(rIter));
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aRoleData = m_pModel->data(modelIndex(rIter), ROLE_ID);
+        if (aRoleData.canConvert<QString>())
+            sId = toOUString(aRoleData.toString());
+    });
+
+    return sId;
 }
 
 OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
@@ -310,19 +307,6 @@ int QtInstanceIconView::n_children() const
     GetQtInstance().RunInMainThread([&] { nChildren = m_pModel->rowCount(); });
 
     return nChildren;
-}
-
-QModelIndex QtInstanceIconView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
-
-QModelIndex QtInstanceIconView::modelIndex(const weld::TreeIter& rIter) const
-{
-    return modelIndex(position(rIter));
-}
-
-int QtInstanceIconView::position(const weld::TreeIter& rIter)
-{
-    QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
-    return aModelIndex.row();
 }
 
 bool QtInstanceIconView::handleToolTipEvent(const QHelpEvent& rHelpEvent)

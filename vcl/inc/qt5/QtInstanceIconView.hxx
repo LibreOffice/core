@@ -80,10 +80,6 @@ private:
     void do_insert(int nPos, const OUString* pStr, const OUString* pId, const QPixmap* pIcon,
                    weld::TreeIter* pRet);
 
-    QModelIndex modelIndex(int nPos) const;
-    QModelIndex modelIndex(const weld::TreeIter& rIter) const;
-    static int position(const weld::TreeIter& rIter);
-
 private Q_SLOTS:
     void handleActivated();
     void handleSelectionChanged();

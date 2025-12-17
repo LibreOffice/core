@@ -213,10 +213,6 @@ public:
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 
 private:
-    QModelIndex modelIndex(int nRow, int nCol = 0,
-                           const QModelIndex& rParentIndex = QModelIndex()) const;
-    QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
-    QtInstanceTreeIter treeIter(int nRow, const QModelIndex& rParentIndex = QModelIndex()) const;
     QStandardItem* itemFromIndex(const QModelIndex& rIndex) const;
     QModelIndex toggleButtonModelIndex(const weld::TreeIter& rIter) const;
     QModelIndex firstTextColumnModelIndex(const weld::TreeIter& rIter) const;

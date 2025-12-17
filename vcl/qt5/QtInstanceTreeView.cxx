@@ -1103,23 +1103,6 @@ bool QtInstanceTreeView::eventFilter(QObject* pObject, QEvent* pEvent)
     return QtInstanceWidget::eventFilter(pObject, pEvent);
 }
 
-QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
-                                           const QModelIndex& rParentIndex) const
-{
-    return modelIndex(treeIter(nRow, rParentIndex), nCol);
-}
-
-QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter, int nCol) const
-{
-    QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
-    return m_pModel->index(aModelIndex.row(), nCol, aModelIndex.parent());
-}
-
-QtInstanceTreeIter QtInstanceTreeView::treeIter(int nRow, const QModelIndex& rParentIndex) const
-{
-    return QtInstanceTreeIter(m_pModel->index(nRow, 0, rParentIndex));
-}
-
 QStandardItem* QtInstanceTreeView::itemFromIndex(const QModelIndex& rIndex) const
 {
     const QModelIndex aSourceIndex = m_pModel->mapToSource(rIndex);
