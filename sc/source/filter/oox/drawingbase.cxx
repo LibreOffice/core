@@ -266,19 +266,9 @@ css::awt::Rectangle ShapeAnchor::calcAnchorRectHmm( const css::awt::Size& rPageS
 
 EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 {
-    const UnitConverter& rUnitConv = getUnitConverter();
-
     // calculate position of top-left edge of the cell
     css::awt::Point aPoint = getCellPosition( rModel.mnCol, rModel.mnRow );
-    css::awt::Point aNextCell = getCellPosition(rModel.mnCol + 1, rModel.mnRow + 1);
     EmuPoint aEmuPoint( lclHmmToEmu( aPoint.X ), lclHmmToEmu( aPoint.Y ) );
-    // It is easily possible that the provided Offset is invalid (too large).
-    // Excel seems to limit the offsets to the bottom/left edge of the cell.
-    // Because most calculations are rounded down to TWIPs, reduce cell's right edge by a full twip.
-    // Reduce by another twip because of the way GetRange calculates which cell this point is in...
-    sal_Int64 n2TwipInEmu = std::ceil(rUnitConv.scaleValue(2, Unit::Twip, Unit::Emu));
-    EmuPoint aEmuMaxOffset(
-        lclHmmToEmu(aNextCell.X) - n2TwipInEmu, lclHmmToEmu(aNextCell.Y) - n2TwipInEmu);
 
     // add the offset inside the cell
     switch( meCellAnchorType )
@@ -290,14 +280,12 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 
         case CellAnchorType::Pixel:
         {
+            const UnitConverter& rUnitConv = getUnitConverter();
             aEmuPoint.X += std::round( rUnitConv.scaleValue( rModel.mnColOffset, Unit::ScreenX, Unit::Emu ) );
             aEmuPoint.Y += std::round( rUnitConv.scaleValue( rModel.mnRowOffset, Unit::ScreenY, Unit::Emu ) );
         }
         break;
     }
-
-    aEmuPoint.X = std::min(aEmuPoint.X, aEmuMaxOffset.X);
-    aEmuPoint.Y = std::min(aEmuPoint.Y, aEmuMaxOffset.Y);
 
     return aEmuPoint;
 }

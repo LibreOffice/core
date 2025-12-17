@@ -23,8 +23,6 @@
 #include <formula/grammar.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svdpage.hxx>
 
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 
@@ -51,52 +49,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
-
-CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
-{
-    // given a hand-modified document where the checkbox position was changed to not match anchor
-    // and the anchor was changed to some absurd values,
-    // and row 2 was given a much larger height than what optimal-height needs
-    // (which means that all imported row heights and positions are meaningless)...
-
-    // vmlDrawing1.vml: <x:Anchor> 1, 11, 1, 904, 3, 41, 3, 1</x:Anchor>
-    // From: Col B pixel offset 11, Row 2 offset 904
-    // To: Col D offset 41, Row 4 offset 1
-
-    createScDoc("xlsx/tdf166724_cellAnchor.xlsx");
-
-    ScDocument& rDoc = *getScDoc();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-
-    ScAnchorType anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    // VML's x:anchor indicates cell-anchor
-    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
-
-    // VML's x:anchor has too large Offsets: limit to cell B2's edges.
-    // Without the fixes, this was X[9040] Y[10257] W[2823] H[742]
-    tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
-
-    // I did not focus on (minor) round-trip concerns. Just documenting the current results...
-    saveAndReload(TestFilter::XLSX);
-
-    ScDocument& rRTDoc = *getScDoc();
-    pDrawLayer = rRTDoc.GetDrawLayer();
-    pPage = pDrawLayer->GetPage(0);
-
-    anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
-
-    aRect = pPage->GetObj(0)->GetSnapRect();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
-};
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)
 {
