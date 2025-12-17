@@ -60,10 +60,10 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr ) override;
+                                         sal_uInt32 nPos=TREELIST_APPEND, OUString* pUserData = nullptr ) override;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData = nullptr );
+                                 sal_uInt32 nPos, sal_uInt16 nCol, OUString* pUserData = nullptr );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );
@@ -113,7 +113,7 @@ public:
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
+                                 sal_uInt32 nPos, sal_uInt16 nCol, OUString* pUserData = nullptr ) override;
     virtual sal_uInt32 Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uInt32 nPos=TREELIST_APPEND) override;
     virtual sal_uInt32 Insert( SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND ) override;
 

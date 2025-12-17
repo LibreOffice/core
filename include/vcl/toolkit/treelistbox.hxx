@@ -551,7 +551,7 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr);
+                                         sal_uInt32 nPos=TREELIST_APPEND, OUString* pUserData = nullptr);
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;

@@ -1579,7 +1579,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     const OUString& rText,
     SvTreeListEntry* pParent,
     bool bChildrenOnDemand, sal_uInt32 nPos,
-    void* pUser
+    OUString* pUser
 )
 {
     nTreeFlags |= SvTreeFlags::MANINS;

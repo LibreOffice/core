@@ -302,13 +302,13 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions, MapUni
 
 SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                         bool /*bChildrenOnDemand*/,
-                                        sal_uInt32 nPos, void* pUserData )
+                                        sal_uInt32 nPos, OUString* pUserData )
 {
     return InsertEntryToColumn( rText, pParent, nPos, 0xffff, pUserData );
 }
 
 SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeListEntry* pParent,sal_uInt32 nPos,sal_uInt16 nCol,
-    void* pUser )
+    OUString* pUser )
 {
     OUString aStr;
     if( nCol != 0xffff )
@@ -584,7 +584,7 @@ bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol
 }
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const OUString& rStr, SvTreeListEntry* pParent, sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData )
+    const OUString& rStr, SvTreeListEntry* pParent, sal_uInt32 nPos, sal_uInt16 nCol, OUString* pUserData )
 {
     SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, pParent, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();
