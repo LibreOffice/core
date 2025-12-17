@@ -16,6 +16,7 @@
 #include <QtWidgets/QWidget>
 
 #include <rtl/ustring.hxx>
+#include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class QtInstanceBuilder : public weld::Builder

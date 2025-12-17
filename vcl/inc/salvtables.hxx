@@ -9,6 +9,7 @@
 #pragma once
 
 #include <vcl/builder.hxx>
+#include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include "breakpoint.hxx"
 
