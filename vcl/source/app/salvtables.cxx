@@ -3517,6 +3517,13 @@ SalInstanceItemView::SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanc
 {
 }
 
+std::unique_ptr<weld::TreeIter>
+SalInstanceItemView::make_iterator(const weld::TreeIter* pOrig) const
+{
+    return std::unique_ptr<weld::TreeIter>(
+        new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
+}
+
 void SalInstanceItemView::do_clear()
 {
     m_pTreeListBox->Clear();
@@ -4529,13 +4536,6 @@ OUString SalInstanceTreeView::get_selected_id() const
     return OUString();
 }
 
-std::unique_ptr<weld::TreeIter>
-SalInstanceTreeView::make_iterator(const weld::TreeIter* pOrig) const
-{
-    return std::unique_ptr<weld::TreeIter>(
-        new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
-}
-
 void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
     const SalInstanceTreeIter& rVclSource(static_cast<const SalInstanceTreeIter&>(rSource));
@@ -5435,13 +5435,6 @@ void SalInstanceIconView::unselect_all() { select(-1); }
 int SalInstanceIconView::n_children() const
 {
     return m_xIconView->GetModel()->GetChildList(nullptr).size();
-}
-
-std::unique_ptr<weld::TreeIter>
-SalInstanceIconView::make_iterator(const weld::TreeIter* pOrig) const
-{
-    return std::unique_ptr<weld::TreeIter>(
-        new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
 }
 
 bool SalInstanceIconView::get_selected(weld::TreeIter* pIter) const

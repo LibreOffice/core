@@ -1494,6 +1494,10 @@ protected:
                         bool bTakeOwnership);
 
     virtual void do_clear() override;
+
+public:
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
+                                                          = nullptr) const override;
 };
 
 class SalInstanceTreeView : public SalInstanceItemView, public virtual weld::TreeView
@@ -1735,9 +1739,6 @@ public:
 
     virtual OUString get_selected_id() const override;
 
-    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
-                                                          = nullptr) const override;
-
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
@@ -1946,9 +1947,6 @@ public:
     virtual void unselect_all() override;
 
     virtual int n_children() const override;
-
-    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
-                                                          = nullptr) const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
 
