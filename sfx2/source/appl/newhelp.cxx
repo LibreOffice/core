@@ -81,7 +81,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>

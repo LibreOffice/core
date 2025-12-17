@@ -25,7 +25,7 @@
 #include <vcl/image.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 

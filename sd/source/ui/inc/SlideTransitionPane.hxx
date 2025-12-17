@@ -23,7 +23,7 @@
 #include <svtools/valueset.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <vector>
 #include <map>

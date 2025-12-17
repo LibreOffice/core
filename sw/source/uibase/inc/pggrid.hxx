@@ -21,7 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include "colex.hxx"
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/colorbox.hxx>
 
 // TabPage Format/(Styles/)Page/Text grid

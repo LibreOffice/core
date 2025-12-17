@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

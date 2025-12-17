@@ -23,7 +23,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>

@@ -61,7 +61,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <config_emscripten.h>
 #include <oox/core/fastparser.hxx>

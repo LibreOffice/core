@@ -40,7 +40,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

@@ -29,7 +29,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>

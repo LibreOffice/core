@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <comphelper/string.hxx>
 

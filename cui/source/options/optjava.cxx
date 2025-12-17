@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/restartdialog.hxx>

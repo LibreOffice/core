@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ScDocument;
 class ScConditionalFormat;

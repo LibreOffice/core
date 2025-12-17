@@ -12,7 +12,7 @@
 #include <vector>
 #include <memory>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 struct ScSortKeyItem
 {

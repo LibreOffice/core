@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_CUSTOMIZEADDRESSLISTDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include "createaddresslistdialog.hxx"
 

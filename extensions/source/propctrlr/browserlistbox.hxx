@@ -24,7 +24,7 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>

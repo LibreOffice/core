@@ -19,7 +19,7 @@
 #pragma once
 
 #include "res_Titles.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 namespace chart

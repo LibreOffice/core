@@ -12,7 +12,7 @@
 #define INCLUDED_SVX_CLASSIFICATIONDIALOG_HXX
 
 #include <sal/config.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationField.hxx>

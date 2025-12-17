@@ -24,7 +24,7 @@
 #include <memory>
 
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <CustomAnimationEffect.hxx>
 
 namespace com::sun::star::drawing { class XShape; }

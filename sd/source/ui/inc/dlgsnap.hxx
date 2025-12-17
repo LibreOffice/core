@@ -20,7 +20,7 @@
 #pragma once
 
 #include <tools/fract.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 /************************************************************************/
 

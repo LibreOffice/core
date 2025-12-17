@@ -28,7 +28,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <browserids.hxx>
 #include "SelectionBrowseBox.hxx"
 #include <strings.hrc>

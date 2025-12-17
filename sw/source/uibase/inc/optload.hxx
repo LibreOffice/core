@@ -26,7 +26,7 @@
 #include <utility>
 #include <vcl/customweld.hxx>
 #include <vcl/textfilter.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 
 #include <SwCapObjType.hxx>

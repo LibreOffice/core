@@ -23,7 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <unotools/textsearch.hxx>
 

@@ -19,7 +19,7 @@
 
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
 #include <unotools/moduleoptions.hxx>

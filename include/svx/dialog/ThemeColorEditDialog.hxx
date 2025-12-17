@@ -12,7 +12,7 @@
 #include <config_options.h>
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 
 class ColorListBox;

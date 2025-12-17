@@ -46,7 +46,7 @@
 #include <vcl/specialchars.hxx>
 #include <vcl/event.hxx>
 #include <vcl/texteng.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include <SpellDialog.hxx>
 #include <optlingu.hxx>

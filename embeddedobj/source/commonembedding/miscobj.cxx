@@ -35,7 +35,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <strings.hrc>
 #include <osl/file.hxx>

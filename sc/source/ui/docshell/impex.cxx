@@ -60,7 +60,7 @@
 #include <tools/svlibrary.h>
 #include <comphelper/configuration.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>
 #include <rtl/character.hxx>

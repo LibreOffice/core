@@ -31,7 +31,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/configuration.hxx>

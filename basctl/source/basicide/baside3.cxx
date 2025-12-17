@@ -55,7 +55,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

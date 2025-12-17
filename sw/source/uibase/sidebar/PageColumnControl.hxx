@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
 
 #include <svtools/toolbarmenu.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class PageColumnPopup;
 

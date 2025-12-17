@@ -24,7 +24,7 @@
 #include <svtools/tabbar.hxx>
 #include <basic/sbdef.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <string_view>
 #include <unordered_map>

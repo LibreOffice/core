@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/securityoptions.hxx>
 
 namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }

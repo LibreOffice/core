@@ -23,7 +23,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ColorListBox;
 

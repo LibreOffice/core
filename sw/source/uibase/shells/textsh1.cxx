@@ -44,7 +44,7 @@
 #include <sfx2/namedcolor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/unohelp2.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>

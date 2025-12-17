@@ -24,7 +24,7 @@
 
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

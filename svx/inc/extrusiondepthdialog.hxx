@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX
 #define INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace svx
 {

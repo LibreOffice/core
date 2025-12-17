@@ -22,7 +22,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <sfx2/charwin.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>

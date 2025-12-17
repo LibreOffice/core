@@ -28,7 +28,7 @@
 #include <indexfieldscontrol.hxx>
 #include <indexcollection.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>

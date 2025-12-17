@@ -10,7 +10,7 @@
 #pragma once
 
 #include <QtGui/QStandardItemModel>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class QtInstanceTreeIter final : public weld::TreeIter
 {

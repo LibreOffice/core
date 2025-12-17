@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "indexes.hxx"
 
 namespace dbaui

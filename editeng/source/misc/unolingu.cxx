@@ -36,7 +36,7 @@
 #include <unotools/lingucfg.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <linguistic/misc.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>

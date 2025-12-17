@@ -37,7 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/windowstate.hxx>
 
 #include <bitmaps.hlst>

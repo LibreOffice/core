@@ -38,7 +38,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 #include <tools/json_writer.hxx>
 #include <strings.hrc>

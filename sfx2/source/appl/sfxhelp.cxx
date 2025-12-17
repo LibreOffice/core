@@ -64,7 +64,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/locktoplevels.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <openuriexternally.hxx>
 
 #include <comphelper/lok.hxx>

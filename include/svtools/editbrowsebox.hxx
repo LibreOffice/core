@@ -27,7 +27,7 @@
 #include <svtools/brwhead.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // EditBrowseBoxFlags (EBBF)

@@ -19,7 +19,7 @@
 
 #include <RangeSelectionListener.hxx>
 #include <ChartModel.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;

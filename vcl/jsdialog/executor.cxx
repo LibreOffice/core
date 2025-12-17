@@ -18,7 +18,7 @@
 #include <string_view>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 /// returns true if execution was successful
 using JSWidgetExecutor = bool (*)(weld::Widget&, const StringMap&);

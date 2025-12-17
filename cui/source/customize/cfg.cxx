@@ -32,7 +32,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/virdev.hxx>
 

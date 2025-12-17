@@ -20,7 +20,7 @@
 #pragma once
 
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <deque>
 
 namespace dbaui

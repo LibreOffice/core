@@ -16,7 +16,7 @@
 #include <tools/stream.hxx>
 #include <utility>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <salvtables.hxx>
 #include <vcl/toolkit/button.hxx>

@@ -32,7 +32,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/digitalsignatures.hxx>
 #include <sfx2/viewsh.hxx>
 

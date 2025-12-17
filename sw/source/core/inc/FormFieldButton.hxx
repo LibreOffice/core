@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/ctrl.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <swrect.hxx>
 
 class SwEditWin;

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <calcconfig.hxx>
 
 class ScCalcOptionsDialog : public weld::GenericDialogController

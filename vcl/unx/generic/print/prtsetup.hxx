@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <ppdparser.hxx>
 #include <printerinfomanager.hxx>
 

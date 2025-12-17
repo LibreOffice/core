@@ -36,7 +36,7 @@
 #include <svl/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <fuinsert.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>

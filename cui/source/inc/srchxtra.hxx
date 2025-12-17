@@ -21,7 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svx/srchdlg.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxSearchFormatDialog : public SfxTabDialogController
 {

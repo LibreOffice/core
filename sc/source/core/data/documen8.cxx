@@ -40,7 +40,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/TaskStopwatch.hxx>
 
 #include <inputopt.hxx>

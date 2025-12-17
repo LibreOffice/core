@@ -25,7 +25,7 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;

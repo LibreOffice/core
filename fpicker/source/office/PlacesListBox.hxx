@@ -11,7 +11,7 @@
 #include "iodlg.hxx"
 
 #include <svtools/place.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>

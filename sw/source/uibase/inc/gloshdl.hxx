@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <rtl/ustring.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <swdllapi.h>
 

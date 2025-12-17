@@ -75,7 +75,7 @@
 #include <svl/zforlist.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/XmlWriter.hxx>
 
 #include <vector>

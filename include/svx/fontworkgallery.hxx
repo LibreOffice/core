@@ -22,7 +22,7 @@
 #define INCLUDED_SVX_FONTWORKGALLERY_HXX
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <map>
 #include <vector>

@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>

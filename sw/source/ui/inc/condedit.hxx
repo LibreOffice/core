@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONDEDIT_HXX
 
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/dbaexchange.hxx>
 
 template <typename X> class ConditionEdit;

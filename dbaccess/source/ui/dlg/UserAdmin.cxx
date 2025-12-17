@@ -35,7 +35,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/passwd.hxx>
 
 using namespace ::com::sun::star::container;

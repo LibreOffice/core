@@ -40,8 +40,8 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>

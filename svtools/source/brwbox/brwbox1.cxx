@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>

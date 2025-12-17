@@ -20,7 +20,7 @@
 #pragma once
 
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star {
     namespace security { class XCertificate; }

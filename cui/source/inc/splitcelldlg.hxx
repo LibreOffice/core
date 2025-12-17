@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxSplitTableDlg : public weld::GenericDialogController
 {

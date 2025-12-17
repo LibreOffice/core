@@ -26,7 +26,7 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>

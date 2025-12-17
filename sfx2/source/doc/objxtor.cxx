@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>

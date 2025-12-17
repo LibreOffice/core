@@ -35,7 +35,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>

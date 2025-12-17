@@ -20,7 +20,7 @@
 #pragma once
 
 #include <formula/funcutl.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "ControlHelper.hxx"
 #include <vector>
 

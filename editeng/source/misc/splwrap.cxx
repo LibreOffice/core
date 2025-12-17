@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/langtab.hxx>
 
 #include <vcl/errinf.hxx>

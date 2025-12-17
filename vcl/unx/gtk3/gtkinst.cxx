@@ -96,7 +96,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include "customcellrenderer.hxx"
 #include <strings.hrc>

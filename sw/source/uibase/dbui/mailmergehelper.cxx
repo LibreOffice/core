@@ -36,7 +36,7 @@
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 

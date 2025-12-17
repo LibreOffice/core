@@ -30,7 +30,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/dlgutil.hxx>
 
 class SdrView;

@@ -19,7 +19,7 @@
 
 #include <sfx2/QuerySaveDocument.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 short ExecuteQuerySaveDocument(weld::Widget* _pParent, std::u16string_view _rTitle)
 {

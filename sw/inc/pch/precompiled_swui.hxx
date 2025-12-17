@@ -168,7 +168,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
 #include <vcl/wintypes.hxx>

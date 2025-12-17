@@ -31,7 +31,7 @@
 #include <bitmaps.hlst>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
 #include <dialmgr.hxx>

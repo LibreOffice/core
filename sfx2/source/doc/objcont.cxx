@@ -25,7 +25,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/fileurl.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/style.hxx>
 
 #include <svl/intitem.hxx>

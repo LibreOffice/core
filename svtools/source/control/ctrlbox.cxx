@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>

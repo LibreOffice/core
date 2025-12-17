@@ -20,7 +20,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 BuilderPage::BuilderPage(weld::Widget* pParent, weld::DialogController* pController,
                          const OUString& rUIXMLDescription, const OUString& rID, bool bIsMobile)

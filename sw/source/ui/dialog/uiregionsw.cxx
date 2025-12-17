@@ -22,7 +22,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/passwd.hxx>

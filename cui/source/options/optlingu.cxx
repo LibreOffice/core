@@ -19,7 +19,7 @@
 
 #include <utility>
 #include <vcl/settings.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/safeint.hxx>

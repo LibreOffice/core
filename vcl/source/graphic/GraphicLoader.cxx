@@ -13,7 +13,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 using namespace css;
 

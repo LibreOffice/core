@@ -30,7 +30,7 @@
 #include <com/sun/star/form/XForms.hpp>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 
 namespace svxform

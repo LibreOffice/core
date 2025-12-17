@@ -23,7 +23,7 @@
 #include <swtypes.hxx>
 #include <tabcol.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SwFrameFormat;
 class SwWrtShell;

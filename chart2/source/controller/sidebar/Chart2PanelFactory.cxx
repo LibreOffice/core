@@ -24,7 +24,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include "ChartElementsPanel.hxx"
 #include "ChartTypePanel.hxx"

@@ -10,7 +10,7 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SFX2_DLLPUBLIC AdditionsDialogHelper
 {

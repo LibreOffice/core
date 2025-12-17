@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 

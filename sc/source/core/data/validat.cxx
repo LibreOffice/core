@@ -33,7 +33,7 @@
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 

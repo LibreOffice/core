@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/timer.hxx>
 
 #include <com/sun/star/util/XNumberFormatter.hpp>

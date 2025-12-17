@@ -21,7 +21,7 @@
 
 #include <memory>
 #include "fupoor.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <stlsheet.hxx>
 
 class SfxItemSet;

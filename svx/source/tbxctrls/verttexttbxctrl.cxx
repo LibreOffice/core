@@ -22,7 +22,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 
 SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(

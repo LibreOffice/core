@@ -24,7 +24,7 @@
 #include <svx/langbox.hxx>
 #include <tools/color.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxNumberFormatShell;
 class SvxNumberInfoItem;

@@ -23,7 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <swtypes.hxx>
 #include <strings.hrc>

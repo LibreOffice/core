@@ -22,7 +22,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
 {

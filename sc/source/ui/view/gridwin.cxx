@@ -47,7 +47,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/scopeguard.hxx>

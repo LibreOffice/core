@@ -22,7 +22,7 @@
 #include <svl/numformat.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <scresid.hxx>
 #include <document.hxx>

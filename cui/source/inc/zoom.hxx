@@ -22,7 +22,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svl/itemset.hxx>
 #include <svx/zoom_def.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxZoomDialog : public SfxDialogController
 {

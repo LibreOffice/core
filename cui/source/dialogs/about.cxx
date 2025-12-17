@@ -29,7 +29,7 @@
 #include <vcl/graph.hxx> //Graphic
 #include <vcl/settings.hxx> //GetSettings
 #include <vcl/svapp.hxx> //Application::
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID

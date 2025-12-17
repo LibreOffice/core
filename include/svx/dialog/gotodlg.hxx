@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace svx
 {

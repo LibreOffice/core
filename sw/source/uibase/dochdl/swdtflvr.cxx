@@ -46,7 +46,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>

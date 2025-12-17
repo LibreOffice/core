@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"

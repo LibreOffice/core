@@ -22,7 +22,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <ndarr.hxx>
 #include "swcont.hxx"
 

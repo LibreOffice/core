@@ -68,7 +68,7 @@
 #include <tools/fldunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <core_resource.hxx>
 #include <stringarray.hrc>

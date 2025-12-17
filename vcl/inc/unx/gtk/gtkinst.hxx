@@ -34,8 +34,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <gtk/gtk.h>
 
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);

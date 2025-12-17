@@ -24,8 +24,8 @@
 #include <tools/urlobj.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>

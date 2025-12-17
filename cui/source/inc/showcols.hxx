@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 //  FmShowColsDialog
 

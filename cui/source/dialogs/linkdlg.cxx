@@ -26,8 +26,8 @@
 #include <tools/urlobj.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <strings.hrc>
 #include <sfx2/filedlghelper.hxx>

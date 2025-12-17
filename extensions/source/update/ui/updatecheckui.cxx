@@ -34,7 +34,7 @@
 #include <vcl/image.hxx>
 #include <vcl/menubarupdateicon.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/strings.hrc>
 
 #include <bitmaps.hlst>

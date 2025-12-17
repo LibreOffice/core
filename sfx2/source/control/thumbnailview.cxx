@@ -37,7 +37,7 @@
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

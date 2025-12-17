@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxMultiPathDialog : public weld::GenericDialogController
 {

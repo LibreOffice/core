@@ -52,7 +52,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <algorithm>

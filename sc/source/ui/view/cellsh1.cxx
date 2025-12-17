@@ -40,7 +40,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/chinese_translation_unodialog.hxx>
 #include <sot/formats.hxx>

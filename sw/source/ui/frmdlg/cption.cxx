@@ -37,7 +37,7 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <comphelper/string.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <unotxdoc.hxx>

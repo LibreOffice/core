@@ -29,7 +29,7 @@
 #include <svx/svxids.hrc>
 #include <svx/strarray.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <sdattr.hrc>

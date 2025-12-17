@@ -11,7 +11,7 @@
 #include <edtwin.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <bookmark.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/event.hxx>
 
 FormFieldButton::FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFieldmark)

@@ -62,7 +62,7 @@
 #include <sal/log.hxx>
 
 #include <fldmgr.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
 

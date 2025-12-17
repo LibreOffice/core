@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class MasterPasswordDialog : public weld::GenericDialogController
 {

@@ -10,7 +10,7 @@
 #include <contentcontrolbutton.hxx>
 
 #include <utility>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 

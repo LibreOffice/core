@@ -15,7 +15,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QMessageBox>
 #include "QtTools.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <string_view>
 #include <rtl/ustring.hxx>
 #include <vcl/sysdata.hxx>

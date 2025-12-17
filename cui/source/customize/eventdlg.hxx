@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <macropg.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>

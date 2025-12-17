@@ -20,7 +20,7 @@
 #pragma once
 
 #include "controlwizard.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 
 namespace dbp

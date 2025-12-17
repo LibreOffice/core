@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>

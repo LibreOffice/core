@@ -44,7 +44,7 @@
 #include <scmod.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>

@@ -37,7 +37,7 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/diagnose_ex.hxx>

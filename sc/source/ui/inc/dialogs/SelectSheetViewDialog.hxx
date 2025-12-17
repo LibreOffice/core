@@ -11,7 +11,7 @@
 
 #include <vector>
 #include <sal/types.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <SheetViewTypes.hxx>
 
 class ScViewData;

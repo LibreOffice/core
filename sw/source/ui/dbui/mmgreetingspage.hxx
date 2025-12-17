@@ -22,7 +22,7 @@
 #include <vcl/wizardmachine.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <mailmergewizard.hxx>
 

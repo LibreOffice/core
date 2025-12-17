@@ -23,7 +23,7 @@
 #include <svx/fntctrl.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 // forward ---------------------------------------------------------------

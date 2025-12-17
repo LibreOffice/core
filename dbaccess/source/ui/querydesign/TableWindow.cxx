@@ -32,7 +32,7 @@
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/container/XContainer.hpp>

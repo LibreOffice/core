@@ -36,7 +36,7 @@
 #include <redlndlg.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>

@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <jvmfwk/framework.hxx>
 
 #include <svtools/restartdialog.hxx>

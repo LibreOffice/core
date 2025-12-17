@@ -65,7 +65,7 @@
 #include <utility>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertysequence.hxx>

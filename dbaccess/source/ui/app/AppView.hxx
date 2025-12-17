@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <IClipBoardTest.hxx>
 #include <AppElementType.hxx>
 

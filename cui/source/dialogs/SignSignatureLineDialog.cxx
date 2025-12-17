@@ -23,7 +23,7 @@
 #include <svx/xoutbmp.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/signaturelinehelper.hxx>
 #include <tools/urlobj.hxx>
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }

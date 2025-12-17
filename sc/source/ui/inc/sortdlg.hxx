@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ScSortDlg : public SfxTabDialogController
 {

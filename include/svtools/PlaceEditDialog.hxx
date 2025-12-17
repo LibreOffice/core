@@ -11,7 +11,7 @@
 
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>

@@ -21,7 +21,7 @@
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 
 // class SvtFileView -----------------------------------------------------

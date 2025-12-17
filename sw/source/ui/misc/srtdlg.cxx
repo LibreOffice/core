@@ -21,7 +21,7 @@
 
 #include <editeng/editids.hrc>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <unotools/collatorwrapper.hxx>

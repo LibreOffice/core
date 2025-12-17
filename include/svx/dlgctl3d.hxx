@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_DLGCTL3D_HXX
 
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>

@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "tabletree.hxx"
 
 namespace dbaui

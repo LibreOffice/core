@@ -474,7 +474,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/unohelp \
     vcl/source/app/vclevent \
     vcl/source/app/watchdog \
-    vcl/source/app/weldutils \
     vcl/source/app/winscheduler \
     vcl/source/components/ColorPicker \
     vcl/source/components/dtranscomp \
@@ -583,6 +582,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/uitest/uitest \
     vcl/source/uitest/uno/uiobject_uno \
     vcl/source/uitest/uno/uitest_uno \
+    vcl/source/weld/weldutils \
     vcl/backendtest/outputdevice/bitmap \
     vcl/backendtest/outputdevice/clip \
     vcl/backendtest/outputdevice/common \

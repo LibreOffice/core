@@ -11,7 +11,7 @@
 #define INCLUDED_VCL_CUSTOMWELD_HXX
 
 #include <comphelper/OAccessible.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class InputContext;
 

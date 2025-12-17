@@ -53,8 +53,8 @@
 #include <svl/undo.hxx>
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #if !ENABLE_WASM_STRIP_PINGUSER
 #include <unotools/VersionConfig.hxx>
 #endif

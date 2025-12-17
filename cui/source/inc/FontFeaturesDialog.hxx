@@ -11,7 +11,7 @@
 #pragma once
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/font/Feature.hxx>
 #include <svx/fntctrl.hxx>
 #include <memory>

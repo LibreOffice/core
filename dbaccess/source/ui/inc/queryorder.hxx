@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #define DOG_ROWS    3
 

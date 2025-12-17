@@ -23,7 +23,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <multipat.hxx>
 #include <dialmgr.hxx>

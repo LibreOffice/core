@@ -38,7 +38,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>

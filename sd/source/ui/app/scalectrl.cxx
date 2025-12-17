@@ -21,7 +21,7 @@
 
 #include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>

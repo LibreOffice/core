@@ -22,7 +22,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include <svx/fmsearch.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 

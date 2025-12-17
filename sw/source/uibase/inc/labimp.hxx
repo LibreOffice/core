@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 inline int getfldval(const weld::MetricSpinButton& rField)
 {

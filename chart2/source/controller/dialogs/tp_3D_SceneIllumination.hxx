@@ -20,7 +20,7 @@
 
 #include <ModifyListenerCallBack.hxx>
 #include <TimerTriggeredControllerLock.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/dlgctl3d.hxx>
 #include <svx/float3d.hxx>
 

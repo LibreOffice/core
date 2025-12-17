@@ -32,7 +32,7 @@
 #include <vcl/toolkit/field.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <svdata.hxx>
 

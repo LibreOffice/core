@@ -19,7 +19,7 @@
 
 #include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

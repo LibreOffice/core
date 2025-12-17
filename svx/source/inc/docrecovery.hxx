@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 #define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cppuhelper/implbase.hxx>

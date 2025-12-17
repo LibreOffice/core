@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 class SdDrawDocument;
 class SdCustomShow;

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svtools/editbrowsebox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>

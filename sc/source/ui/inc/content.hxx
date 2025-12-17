@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <address.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>

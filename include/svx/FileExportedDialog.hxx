@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC FileExportedDialog final : public weld::GenericDialogController

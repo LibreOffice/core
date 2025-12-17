@@ -33,7 +33,7 @@
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <printdlg.hxx>
 #include <salinst.hxx>

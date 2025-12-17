@@ -43,7 +43,7 @@
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>

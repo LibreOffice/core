@@ -22,7 +22,7 @@
 #include <tools/mapunit.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <array>
 

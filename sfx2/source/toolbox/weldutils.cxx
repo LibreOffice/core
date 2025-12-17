@@ -13,7 +13,7 @@
 #include <sfx2/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 namespace
 {

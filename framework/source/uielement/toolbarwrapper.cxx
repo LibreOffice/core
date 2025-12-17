@@ -28,7 +28,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/wintypes.hxx>
 
 using namespace com::sun::star;

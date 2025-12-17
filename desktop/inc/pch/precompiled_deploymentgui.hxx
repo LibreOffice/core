@@ -60,7 +60,7 @@
 #include <sal/typesizes.h>
 #include <vcl/dllapi.h>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/beans/NamedValue.hpp>

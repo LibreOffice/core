@@ -59,7 +59,7 @@
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

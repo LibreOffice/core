@@ -23,7 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <deque>
 
 class SFX2_DLLPUBLIC SfxCharmapContainer

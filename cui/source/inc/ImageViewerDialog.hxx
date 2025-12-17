@@ -9,7 +9,7 @@
 #pragma once
 
 #include <vcl/bitmap.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ImageViewerDialog : public weld::GenericDialogController
 {

@@ -21,7 +21,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 

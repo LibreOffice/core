@@ -92,7 +92,7 @@
 #include <ucbhelper/content.hxx>
 #include <svtools/sfxecode.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>

@@ -20,7 +20,7 @@
 #pragma once
 
 #include "propertystorage.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 class SfxItemSet;

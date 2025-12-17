@@ -42,7 +42,7 @@
 #include <svl/urlbmk.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <osl/diagnose.h>
 

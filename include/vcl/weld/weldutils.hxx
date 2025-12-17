@@ -22,7 +22,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class CalendarWrapper;
 

@@ -44,7 +44,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>

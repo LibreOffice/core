@@ -21,7 +21,7 @@
 #include <svx/connctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 
 class SdrView;

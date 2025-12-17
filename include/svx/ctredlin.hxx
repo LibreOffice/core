@@ -27,7 +27,7 @@
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
 #include <tools/time.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 namespace utl {

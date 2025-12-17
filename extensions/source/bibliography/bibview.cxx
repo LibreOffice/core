@@ -28,7 +28,7 @@
 
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::form;

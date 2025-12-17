@@ -30,7 +30,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/uitest/formattedfielduiobject.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include "FieldFormatter.hxx"
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>

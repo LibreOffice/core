@@ -9,7 +9,7 @@
 #pragma once
 
 #include <vcl/bitmap.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/link.hxx>
 
 #include <vector>

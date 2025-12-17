@@ -24,7 +24,7 @@
 #include <string_view>
 
 #include <bastype2.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 class SvxPasswordDialog;

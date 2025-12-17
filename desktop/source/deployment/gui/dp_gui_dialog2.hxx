@@ -23,7 +23,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/locktoplevels.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <rtl/ustring.hxx>
 

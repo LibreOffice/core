@@ -19,7 +19,7 @@
 #pragma once
 
 #include <svtools/unitconv.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <swdllapi.h>
 
 class SW_DLLPUBLIC SwPercentField

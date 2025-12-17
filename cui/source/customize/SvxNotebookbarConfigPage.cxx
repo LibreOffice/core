@@ -21,7 +21,7 @@
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>

@@ -23,7 +23,7 @@
 #include <TimerTriggeredControllerLock.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>

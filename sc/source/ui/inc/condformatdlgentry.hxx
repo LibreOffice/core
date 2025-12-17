@@ -11,7 +11,7 @@
 
 #include <conditio.hxx>
 #include <formula/funcutl.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fntctrl.hxx>
 

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxHyperlinkTabPageBase;
 

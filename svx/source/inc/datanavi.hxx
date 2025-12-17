@@ -24,7 +24,7 @@
 #include <vcl/builderpage.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/inettbc.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/childwin.hxx>

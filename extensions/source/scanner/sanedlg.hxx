@@ -19,7 +19,7 @@
 #pragma once
 
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include "sane.hxx"
 

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <libxml/parser.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>

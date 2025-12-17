@@ -32,7 +32,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>

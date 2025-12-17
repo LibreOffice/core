@@ -24,7 +24,7 @@
 #include <svl/PasswordHelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <bitmaps.hlst>
 
 IMPL_LINK_NOARG(SfxPasswordDialog, EditModifyHdl, weld::Entry&, void)

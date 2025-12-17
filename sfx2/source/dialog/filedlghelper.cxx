@@ -60,7 +60,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <osl/file.hxx>

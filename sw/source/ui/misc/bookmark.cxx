@@ -22,7 +22,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>

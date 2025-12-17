@@ -24,7 +24,7 @@
 
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "View.hxx"
 #include <svx/numberingpreview.hxx>
 #include <svx/dlgutil.hxx>

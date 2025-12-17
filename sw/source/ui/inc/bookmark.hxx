@@ -19,7 +19,7 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <IMark.hxx>
 #include "condedit.hxx"
 

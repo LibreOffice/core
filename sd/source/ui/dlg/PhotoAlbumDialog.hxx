@@ -11,7 +11,7 @@
 
 #include <tools/link.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/graphctl.hxx>
 #include <xmloff/autolayout.hxx>
 

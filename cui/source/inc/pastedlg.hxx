@@ -23,7 +23,7 @@
 #include <sot/formats.hxx>
 #include <tools/globname.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class TransferableDataHelper;
 

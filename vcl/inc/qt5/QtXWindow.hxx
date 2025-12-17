@@ -11,7 +11,7 @@
 
 #include "QtInstanceWidget.hxx"
 
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 class QtXWindow final : public weld::TransportAsXWindow
 {

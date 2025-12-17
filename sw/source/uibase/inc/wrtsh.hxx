@@ -28,7 +28,7 @@
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
 
 #include <doc.hxx>

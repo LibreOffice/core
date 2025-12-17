@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_TXENCBOX_HXX
 #define INCLUDED_SVX_TXENCBOX_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/textenc.h>
 #include <svx/svxdllapi.h>
 

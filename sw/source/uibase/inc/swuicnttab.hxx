@@ -22,7 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/customweld.hxx>
 
 #include <tox.hxx>

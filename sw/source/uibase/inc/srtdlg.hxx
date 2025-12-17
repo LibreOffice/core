@@ -21,7 +21,7 @@
 
 #include <svtools/collatorres.hxx>
 #include <svx/langbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SwWrtShell;
 

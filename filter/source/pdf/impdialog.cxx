@@ -24,7 +24,7 @@
 #include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sfx2/objsh.hxx>

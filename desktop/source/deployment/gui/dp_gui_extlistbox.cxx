@@ -43,7 +43,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <algorithm>
 
 constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";

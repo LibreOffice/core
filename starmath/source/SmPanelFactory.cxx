@@ -27,7 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <view.hxx>
 
 #include "SmElementsPanel.hxx"

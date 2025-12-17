@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "IClipBoardTest.hxx"
 #include "QEnumTypes.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

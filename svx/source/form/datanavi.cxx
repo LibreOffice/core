@@ -42,7 +42,7 @@
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/frame/XController.hpp>

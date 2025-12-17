@@ -33,7 +33,7 @@
 #include <svtools/ctrlbox.hxx>
 
 #include <vcl/idle.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <sfx2/tabdlg.hxx>
 
