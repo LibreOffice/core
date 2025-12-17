@@ -208,12 +208,6 @@ tools::Rectangle QtInstanceIconView::get_rect(int) const
     return tools::Rectangle();
 }
 
-std::unique_ptr<weld::TreeIter> QtInstanceIconView::make_iterator(const weld::TreeIter*) const
-{
-    assert(false && "Not implemented yet");
-    return nullptr;
-}
-
 bool QtInstanceIconView::get_selected(weld::TreeIter*) const
 {
     assert(false && "Not implemented yet");

@@ -29,6 +29,9 @@ protected:
 public:
     QtInstanceItemView(QAbstractItemView* pItemView, QAbstractItemModel& rModel);
 
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
+                                                          = nullptr) const override;
+
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;

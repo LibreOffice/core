@@ -85,8 +85,6 @@ public:
     virtual OUString get_id(int nPos) const override;
     virtual int find_id(const OUString& rId) const override;
 
-    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
-                                                          = nullptr) const override;
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
     virtual bool get_selected(weld::TreeIter* pIter) const override;
     virtual bool get_cursor(weld::TreeIter* pIter) const override;

@@ -16,6 +16,12 @@ QtInstanceItemView::QtInstanceItemView(QAbstractItemView* pItemView, QAbstractIt
 {
 }
 
+std::unique_ptr<weld::TreeIter> QtInstanceItemView::make_iterator(const weld::TreeIter* pOrig) const
+{
+    const QModelIndex aIndex = pOrig ? modelIndex(*pOrig) : QModelIndex();
+    return std::make_unique<QtInstanceTreeIter>(aIndex);
+}
+
 void QtInstanceItemView::do_clear()
 {
     SolarMutexGuard g;

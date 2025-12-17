@@ -335,12 +335,6 @@ int QtInstanceTreeView::find_id(const OUString& rId) const
     return nIndex;
 }
 
-std::unique_ptr<weld::TreeIter> QtInstanceTreeView::make_iterator(const weld::TreeIter* pOrig) const
-{
-    const QModelIndex aIndex = pOrig ? modelIndex(*pOrig) : QModelIndex();
-    return std::make_unique<QtInstanceTreeIter>(aIndex);
-}
-
 void QtInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
     const QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rSource).modelIndex();

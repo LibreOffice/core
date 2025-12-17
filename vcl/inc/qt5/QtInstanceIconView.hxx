@@ -55,8 +55,6 @@ public:
     virtual void do_remove(int pos) override;
     virtual tools::Rectangle get_rect(int pos) const override;
 
-    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
-                                                          = nullptr) const override;
     virtual bool get_selected(weld::TreeIter* pIter) const override;
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
     virtual void do_set_cursor(const weld::TreeIter& rIter) override;
