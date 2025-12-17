@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_WELDUTILS_HXX
-#define INCLUDED_VCL_WELDUTILS_HXX
+#pragma once
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -464,7 +463,5 @@ VCL_DLLPUBLIC weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangl
 VCL_DLLPUBLIC void SetPointFont(OutputDevice& rDevice, const vcl::Font& rFont,
                                 bool bUseDeviceDPI = false);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
