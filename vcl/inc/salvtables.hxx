@@ -1498,6 +1498,8 @@ protected:
 public:
     virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
                                                           = nullptr) const override;
+
+    virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 };
 
 class SalInstanceTreeView : public SalInstanceItemView, public virtual weld::TreeView

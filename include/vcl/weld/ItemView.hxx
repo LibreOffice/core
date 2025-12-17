@@ -22,6 +22,9 @@ protected:
 
 public:
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
+
+    virtual std::unique_ptr<TreeIter> get_iterator(int nPos) const = 0;
+
     virtual bool get_selected(TreeIter* pIter) const = 0;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
 

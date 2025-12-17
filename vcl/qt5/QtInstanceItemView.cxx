@@ -22,6 +22,15 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::make_iterator(const weld::Tr
     return std::make_unique<QtInstanceTreeIter>(aIndex);
 }
 
+std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
+{
+    const QModelIndex aIndex = modelIndex(nPos);
+    if (aIndex.isValid())
+        return std::make_unique<QtInstanceTreeIter>(aIndex);
+
+    return {};
+}
+
 void QtInstanceItemView::do_clear()
 {
     SolarMutexGuard g;

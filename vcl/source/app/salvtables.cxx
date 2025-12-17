@@ -3524,6 +3524,14 @@ SalInstanceItemView::make_iterator(const weld::TreeIter* pOrig) const
         new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
 }
 
+std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) const
+{
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nPos))
+        return std::make_unique<SalInstanceTreeIter>(pEntry);
+
+    return {};
+}
+
 void SalInstanceItemView::do_clear()
 {
     m_pTreeListBox->Clear();
