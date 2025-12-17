@@ -543,11 +543,6 @@ void LayoutMenu::Clear()
     mxLayoutIconView->clear();
 }
 
-IMPL_LINK(LayoutMenu, OnPopupEnd, const OUString&, sCommand, void)
-{
-    MenuSelect(sCommand);
-}
-
 void LayoutMenu::ShowContextMenu(const Point& pPos)
 {
     if (SdModule::get()->GetWaterCan())
@@ -555,9 +550,9 @@ void LayoutMenu::ShowContextMenu(const Point& pPos)
 
     // Setup the menu.
     ::tools::Rectangle aRect(pPos, Size(1, 1));
-    mxMenu.reset();
-    mxMenuBuilder = Application::CreateBuilder(mxLayoutIconView.get(), u"modules/simpress/ui/layoutmenu.ui"_ustr);
-    mxMenu = mxMenuBuilder->weld_menu(u"menu"_ustr);
+    std::unique_ptr<weld::Builder> xMenuBuilder = Application::CreateBuilder(
+        mxLayoutIconView.get(), u"modules/simpress/ui/layoutmenu.ui"_ustr);
+    std::unique_ptr<weld::Menu> xMenu = xMenuBuilder->weld_menu(u"menu"_ustr);
 
     // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
     // the document is read-only.
@@ -565,10 +560,9 @@ void LayoutMenu::ShowContextMenu(const Point& pPos)
     const SfxItemState aState (
         mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, aResult));
     if (aState == SfxItemState::DISABLED)
-        mxMenu->set_sensitive(u"insert"_ustr, false);
+        xMenu->set_sensitive(u"insert"_ustr, false);
 
-    mxMenu->connect_activate(LINK(this, LayoutMenu, OnPopupEnd));
-    mxMenu->popup_at_rect(mxLayoutIconView.get(), aRect);
+    MenuSelect(xMenu->popup_at_rect(mxLayoutIconView.get(), aRect));
 }
 
 void LayoutMenu::MenuSelect(const OUString& rIdent)
@@ -607,8 +601,6 @@ void LayoutMenu::HandleMenuSelect(std::u16string_view rIdent)
         // shell.
         InsertPageWithLayout(GetSelectedAutoLayout());
     }
-    mxMenu.reset();
-    mxMenuBuilder.reset();
 }
 
 // Selects an appropriate layout of the slide inside control.
