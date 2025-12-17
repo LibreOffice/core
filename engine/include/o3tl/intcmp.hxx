@@ -11,6 +11,8 @@
 
 #include <sal/config.h>
 
+#include <cstdint>
+#include <type_traits>
 #include <utility>
 
 namespace o3tl
@@ -24,6 +26,20 @@ template <typename T> struct IntCmp
     }
 
     T value;
+};
+
+// Specializations for character types that can't be used with cmp_* directly, which is OK when
+// using the explicit IntCmp:
+
+template <>
+struct IntCmp<char> : IntCmp<std::conditional_t<std::is_signed_v<char>, signed char, unsigned char>>
+{
+    using IntCmp<std::conditional_t<std::is_signed_v<char>, signed char, unsigned char>>::IntCmp;
+};
+
+template <> struct IntCmp<char16_t> : IntCmp<std::uint_least16_t>
+{
+    using IntCmp<std::uint_least16_t>::IntCmp;
 };
 
 template <typename T1, typename T2> constexpr bool operator==(IntCmp<T1> value1, IntCmp<T2> value2)
