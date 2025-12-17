@@ -641,6 +641,7 @@ public:
     static sal_uInt16           GetKeyCode(guint nKeyVal);
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static guint                GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group);
+    static guint8               GetBestAccelKeyGroup(GdkKeymap* keymap, guint8 group);
 #endif
     static sal_uInt16           GetKeyModCode(guint nState);
     static GdkEvent*            makeFakeKeyPress(GtkWidget* pWidget);
