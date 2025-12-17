@@ -56,8 +56,6 @@ protected:
     virtual void do_insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
                            TreeIter* pRet)
         = 0;
-    virtual void do_select(int pos) = 0;
-    virtual void do_unselect(int pos) = 0;
     virtual void do_remove(int pos) = 0;
     virtual void do_set_cursor(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_item(const TreeIter& rIter) = 0;
@@ -128,20 +126,6 @@ public:
 
     //by index. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual OUString get_id(int pos) const = 0;
-
-    void select(int pos)
-    {
-        disable_notify_events();
-        do_select(pos);
-        enable_notify_events();
-    }
-
-    void unselect(int pos)
-    {
-        disable_notify_events();
-        do_unselect(pos);
-        enable_notify_events();
-    }
 
     virtual void set_image(int pos, VirtualDevice& rDevice) = 0;
     virtual void set_text(int pos, const OUString& rText) = 0;

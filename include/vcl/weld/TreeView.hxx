@@ -132,14 +132,14 @@ protected:
                            VirtualDevice* pImageSurface, bool bChildrenOnDemand, TreeIter* pRet)
         = 0;
     virtual void do_insert_separator(int pos, const OUString& rId) = 0;
-    virtual void do_select(int pos) = 0;
-    virtual void do_unselect(int pos) = 0;
     virtual void do_remove(int pos) = 0;
     virtual void do_scroll_to_row(int row) = 0;
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_set_cursor(const TreeIter& rIter) = 0;
     virtual void do_remove(const TreeIter& rIter) = 0;
+    using ItemView::do_select;
     virtual void do_select(const TreeIter& rIter) = 0;
+    using ItemView::do_unselect;
     virtual void do_unselect(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
@@ -235,20 +235,6 @@ public:
 
     //by index
     virtual int get_selected_index() const = 0;
-    //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    void select(int pos)
-    {
-        disable_notify_events();
-        do_select(pos);
-        enable_notify_events();
-    }
-
-    void unselect(int pos)
-    {
-        disable_notify_events();
-        do_unselect(pos);
-        enable_notify_events();
-    }
 
     void remove(int pos)
     {
@@ -379,6 +365,7 @@ public:
     }
 
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
+    using ItemView::select;
     void select(const TreeIter& rIter)
     {
         disable_notify_events();
@@ -386,6 +373,7 @@ public:
         enable_notify_events();
     }
 
+    using ItemView::unselect;
     void unselect(const TreeIter& rIter)
     {
         disable_notify_events();

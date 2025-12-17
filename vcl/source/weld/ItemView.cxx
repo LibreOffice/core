@@ -11,6 +11,20 @@
 
 namespace weld
 {
+void ItemView::select(int pos)
+{
+    disable_notify_events();
+    do_select(pos);
+    enable_notify_events();
+}
+
+void ItemView::unselect(int pos)
+{
+    disable_notify_events();
+    do_unselect(pos);
+    enable_notify_events();
+}
+
 void ItemView::clear()
 {
     disable_notify_events();

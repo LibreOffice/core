@@ -18,6 +18,8 @@ namespace weld
 class VCL_DLLPUBLIC ItemView : virtual public Widget
 {
 protected:
+    virtual void do_select(int pos) = 0;
+    virtual void do_unselect(int pos) = 0;
     virtual void do_clear() = 0;
 
 public:
@@ -27,6 +29,9 @@ public:
 
     virtual bool get_selected(TreeIter* pIter) const = 0;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
+
+    void select(int pos);
+    void unselect(int pos);
 
     void clear();
 };
