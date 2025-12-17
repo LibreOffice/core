@@ -299,16 +299,12 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
             attrConv++;
         }
 
+        pFS->startElementNS(XML_p, XML_attrName);
         if (pAttribute)
-        {
-            pFS->startElementNS(XML_p, XML_attrName);
             pFS->writeEscaped(pAttribute);
-            pFS->endElementNS(XML_p, XML_attrName);
-        }
         else
-        {
             SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
-        }
+        pFS->endElementNS(XML_p, XML_attrName);
     }
 
     pFS->endElementNS(XML_p, XML_attrNameLst);
