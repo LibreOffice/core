@@ -259,7 +259,7 @@ public:
         = 0;
     virtual void set_text_emphasis(int row, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(int row, int col) const = 0;
-    virtual void set_text_align(int row, double fAlign, int col) = 0;
+    virtual void set_text_align(int row, TxtAlign eAlign, int col) = 0;
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) = 0;
@@ -384,7 +384,7 @@ public:
     virtual bool get_sensitive(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
-    virtual void set_text_align(const TreeIter& rIter, double fAlign, int col) = 0;
+    virtual void set_text_align(const TreeIter& rIter, TxtAlign eAlign, int col) = 0;
     // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
     // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column

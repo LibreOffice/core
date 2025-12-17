@@ -227,9 +227,9 @@ bool QtInstanceTreeView::get_text_emphasis(int nRow, int nCol) const
     return get_text_emphasis(treeIter(nRow), nCol);
 }
 
-void QtInstanceTreeView::set_text_align(int nRow, double fAlign, int nCol)
+void QtInstanceTreeView::set_text_align(int nRow, TxtAlign eAlign, int nCol)
 {
-    return set_text_align(treeIter(nRow), fAlign, nCol);
+    return set_text_align(treeIter(nRow), eAlign, nCol);
 }
 
 void QtInstanceTreeView::swap(int nPos1, int nPos2)
@@ -600,7 +600,7 @@ bool QtInstanceTreeView::get_text_emphasis(const weld::TreeIter&, int) const
     return false;
 }
 
-void QtInstanceTreeView::set_text_align(const weld::TreeIter&, double, int)
+void QtInstanceTreeView::set_text_align(const weld::TreeIter&, TxtAlign, int)
 {
     assert(false && "Not implemented yet");
 }

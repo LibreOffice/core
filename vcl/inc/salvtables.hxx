@@ -1696,11 +1696,11 @@ public:
 
     virtual bool get_text_emphasis(int pos, int col) const override;
 
-    void set_text_align(SvTreeListEntry* pEntry, double fAlign, int col);
+    void set_text_align(SvTreeListEntry* pEntry, TxtAlign eAlign, int col);
 
-    virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override;
+    virtual void set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int col) override;
 
-    virtual void set_text_align(int pos, double fAlign, int col) override;
+    virtual void set_text_align(int pos, TxtAlign eAlign, int col) override;
 
     virtual void connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
                                  const Link<const iter_string&, bool>& rEndLink) override;

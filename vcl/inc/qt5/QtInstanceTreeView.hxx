@@ -72,7 +72,7 @@ public:
                            int nCol = -1) override;
     virtual void set_text_emphasis(int nRow, bool bOn, int nCol) override;
     virtual bool get_text_emphasis(int nRow, int nCol) const override;
-    virtual void set_text_align(int nRow, double fAlign, int nCol) override;
+    virtual void set_text_align(int nRow, TxtAlign eAlign, int nCol) override;
     virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;
     virtual void set_font_color(int nPos, const Color& rColor) override;
@@ -113,7 +113,7 @@ public:
     virtual bool get_sensitive(const weld::TreeIter& rIter, int nCol) const override;
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int nCol) override;
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int nCol) const override;
-    virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int nCol) override;
+    virtual void set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int nCol) override;
     virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol = -1) override;
     virtual TriState get_toggle(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;

@@ -4399,28 +4399,28 @@ bool SalInstanceTreeView::get_text_emphasis(int pos, int col) const
     return get_text_emphasis(pEntry, col);
 }
 
-void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, double fAlign, int col)
+void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, TxtAlign eAlign, int col)
 {
     col = to_internal_model(col);
 
     assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
     SvLBoxItem& rItem = pEntry->GetItem(col);
     assert(dynamic_cast<SvLBoxString*>(&rItem));
-    static_cast<SvLBoxString&>(rItem).Align(fAlign);
+    static_cast<SvLBoxString&>(rItem).Align(eAlign);
 
     InvalidateModelEntry(pEntry);
 }
 
-void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, double fAlign, int col)
+void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_text_align(rVclIter.iter, fAlign, col);
+    set_text_align(rVclIter.iter, eAlign, col);
 }
 
-void SalInstanceTreeView::set_text_align(int pos, double fAlign, int col)
+void SalInstanceTreeView::set_text_align(int pos, TxtAlign eAlign, int col)
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text_align(pEntry, fAlign, col);
+    set_text_align(pEntry, eAlign, col);
 }
 
 void SalInstanceTreeView::connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,

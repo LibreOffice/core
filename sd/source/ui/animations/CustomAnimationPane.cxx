@@ -2206,7 +2206,7 @@ namespace
         int nRow = rLBAnimation.n_children();
         rLBAnimation.append_text(rMotionPathLabel);
         rLBAnimation.set_text_emphasis(nRow, true, 0);
-        rLBAnimation.set_text_align(nRow, 0.5, 0);
+        rLBAnimation.set_text_align(nRow, TxtAlign::Center, 0);
     }
 }
 

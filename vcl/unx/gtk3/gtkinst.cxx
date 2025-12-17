@@ -4472,6 +4472,22 @@ namespace
         return aColor;
     }
 
+    double toGtkTextAlignValue(TxtAlign eAlign)
+    {
+        switch (eAlign)
+        {
+            case TxtAlign::Left:
+                return 0;
+            case TxtAlign::Center:
+                return 0.5;
+            case TxtAlign::Right:
+                return 1;
+            default:
+                assert(false && "Unhandled value for text alignment");
+                return 0;
+        }
+    }
+
     Color toVclColor(const GdkRGBA& rColor)
     {
         return Color(rColor.red * 255, rColor.green * 255, rColor.blue * 255);
@@ -15507,17 +15523,17 @@ public:
         return get_int(pos, iter->second) == PANGO_WEIGHT_BOLD;
     }
 
-    virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override
+    virtual void set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         col = to_internal_model(col);
-        set(rGtkIter.iter, m_aAlignMap[col], fAlign);
+        set(rGtkIter.iter, m_aAlignMap[col], toGtkTextAlignValue(eAlign));
     }
 
-    virtual void set_text_align(int pos, double fAlign, int col) override
+    virtual void set_text_align(int pos, TxtAlign eAlign, int col) override
     {
         col = to_internal_model(col);
-        set(pos, m_aAlignMap[col], fAlign);
+        set(pos, m_aAlignMap[col], toGtkTextAlignValue(eAlign));
     }
 
     using GtkInstanceWidget::set_sensitive;
