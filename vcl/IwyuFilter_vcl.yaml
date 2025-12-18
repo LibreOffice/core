@@ -5,6 +5,18 @@ customAssumeFilenames:
     vcl/inc/qt5: vcl/qt5/QtInstance.cxx
     # Needs -isystem /usr/include/x86_64-linux-gnu/qt6
     vcl/inc/qt6: vcl/qt6/QtInstance.cxx
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
+    vcl/unx/gtk3_kde5: vcl/qt5/QtInstance.cxx
+    # Needs -isystem /usr/include/gtk-3.0 -isystem /usr/include/gstreamer-1.0
+    vcl/inc/unx: vcl/unx/gtk3/gtkinst.cxx
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
+    vcl/unx/kf5: vcl/qt5/QtInstance.cxx
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
+    vcl/unx/kf6: vcl/qt5/QtInstance.cxx
+    # Needs -isystem /usr/include/atk-1.0
+    vcl/unx/gtk3/a11y: vcl/unx/gtk3/a11y/atkwrapper.cxx
+    # Needs -isystem /usr/include/gtk-4.0
+    vcl/unx/gtk4: vcl/unx/gtk4/gtkinst.cxx
 excludelist:
     vcl/inc/unx/saldisp.hxx:
     # Don't replace with generated header

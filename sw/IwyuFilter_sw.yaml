@@ -5,8 +5,12 @@ customAssumeFilenames:
     sw/source/writerfilter: sw/source/writerfilter/dmapper/DomainMapper.cxx
     # Need -I/.../workdir/UnpackedTarball/cppunit/include to work
     sw/qa/inc: sw/qa/core/test_ToxMiscTest.cxx
+    # Needs swmodeltestbase.hxx
+    sw/qa/extras/htmlexport: sw/qa/extras/htmlexport/htmlexport.cxx
     # Needs -I/...workdir/CustomTarget/oox/generated
     sw/source/filter/ww8: sw/source/filter/ww8/docxattributeoutput.cxx
+    # Needs -I/.../sw/source/ui/inc
+    sw/source/ui/: sw/source/ui/fldui/flddb.cxx
 excludelist:
     sw/sdi/swslots.hrc:
     # Needed for sdi files to compile

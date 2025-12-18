@@ -1,5 +1,14 @@
 ---
 assumeFilename: connectivity/source/commontools/dbtools.cxx
+customAssumeFilenames:
+    #  Needs  -isystem /usr/include/gtk-3.0
+    connectivity/source/drivers/evoab2: connectivity/source/drivers/evoab2/EApi.cxx
+    # Needs -I/.../workdir/UnpackedTarball/mariadb-connector-c/include
+    connectivity/source/drivers/mysqlc: connectivity/source/drivers/mysqlc/mysqlc_driver.cxx
+    # Needs -I/.../workdir/UnpackedTarball/postgresql/src/interfaces/libpq
+    connectivity/source/drivers/postgresql: connectivity/source/drivers/postgresql/pq_tools.cxx
+    # Needs -I/.../core/external/unixODBC/inc
+    connectivity/source/inc/odbc: connectivity/source/drivers/odbc/ODriver.cxx
 excludelist:
     connectivity/source/commontools/ConnectionWrapper.cxx:
     # Actually used

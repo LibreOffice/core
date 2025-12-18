@@ -1,5 +1,8 @@
 ---
 assumeFilename: sdext/source/pdfimport/pdfiadaptor.cxx
+customAssumeFilenames:
+    # Needs -I/.../workdir/UnpackedTarball/poppler
+    sdext/source/pdfimport/xpdfwrapper: sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx
 excludelist:
     sdext/source/pdfimport/odf/odfemitter.cxx:
     # Actually in use

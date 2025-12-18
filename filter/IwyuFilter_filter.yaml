@@ -1,5 +1,8 @@
 ---
 assumeFilename: filter/source/msfilter/msdffimp.cxx
+customAssumeFilenames:
+    # Needs libxml/parser.h
+    filter/source/xsltfilter: filter/source/xsltfilter/LibXSLTTransformer.cxx
 excludelist:
     filter/source/msfilter/mscodec.cxx:
     # Actually used

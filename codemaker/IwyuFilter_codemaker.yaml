@@ -1,2 +1,5 @@
 ---
 assumeFilename: codemaker/source/cppumaker/cppumaker.cxx
+customAssumeFilenames:
+    # Needs frozen/unordered_set.h to be available
+    codemaker/source/pythonmaker/pythontype.hxx: codemaker/source/pythonmaker/pythontype.cxx

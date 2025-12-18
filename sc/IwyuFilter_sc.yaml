@@ -1,5 +1,8 @@
 ---
 assumeFilename: sc/source/core/data/document.cxx
+customAssumeFilenames:
+    # Needs -I/...workdir/CustomTarget/oox/generated
+    sc/source/filter/inc/ : sc/source/filter/excel/excdoc.cxx
 excludelist:
     sc/sdi/scslots.hrc:
     # Needed for sdi files to compile
