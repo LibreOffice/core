@@ -271,6 +271,10 @@ void XclImpFont::ReadFont( XclImpStream& rStrm )
             DBG_ERROR_BIFF();
             return;
     }
+
+    constexpr sal_uInt16 MIN_FONT_HEIGHT_1_20th_PT = 20;
+    maData.mnHeight = std::max(maData.mnHeight, MIN_FONT_HEIGHT_1_20th_PT);
+
     GuessScriptType();
     SetAllUsedFlags( true );
 }
