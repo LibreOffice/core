@@ -18,6 +18,21 @@ tools::Rectangle IconView::get_rect(int pos) const
 
     return {};
 }
+
+std::unique_ptr<weld::TreeIter> IconView::get_item_at_pos(const Point& rPos)
+{
+    std::unique_ptr<weld::TreeIter> pIter = make_iterator();
+    bool bIterValid = get_iter_first(*pIter);
+    while (bIterValid)
+    {
+        if (get_rect(*pIter).Contains(rPos))
+            return pIter;
+
+        bIterValid = iter_next_sibling(*pIter);
+    }
+
+    return {};
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

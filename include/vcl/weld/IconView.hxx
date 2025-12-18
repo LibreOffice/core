@@ -134,9 +134,9 @@ public:
     }
 
     tools::Rectangle get_rect(int pos) const;
-
-    //via iter
     virtual tools::Rectangle get_rect(const TreeIter& rIter) const = 0;
+
+    std::unique_ptr<weld::TreeIter> get_item_at_pos(const Point& rPos);
 
     void set_cursor(const TreeIter& rIter)
     {

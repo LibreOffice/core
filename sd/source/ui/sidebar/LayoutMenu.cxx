@@ -234,19 +234,10 @@ IMPL_LINK(LayoutMenu, CommandHdl, const CommandEvent&, rEvent, bool)
     if (rEvent.IsMouseEvent())
     {
         aPos = rEvent.GetMousePosPixel();
-        bool bFound = false;
-        for (int i = 0; i < mxLayoutIconView->n_children(); i++)
-        {
-            const ::tools::Rectangle aRect = mxLayoutIconView->get_rect(i);
-            if (aRect.Contains(aPos))
-            {
-                mxLayoutIconView->select(i);
-                bFound = true;
-                break;
-            }
-        }
-        if (!bFound)
+        std::unique_ptr<weld::TreeIter> pIter = mxLayoutIconView->get_item_at_pos(aPos);
+        if (!pIter)
             return false;
+        mxLayoutIconView->select(*pIter);
     }
     else
     {
