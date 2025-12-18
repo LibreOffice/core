@@ -905,6 +905,11 @@
                 <property name="can-focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pageexample-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="tocdialog|example-atkobject">Preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -917,6 +922,11 @@
                 <property name="can-focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="frameexample-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="tocdialog|example-atkobject">Preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
