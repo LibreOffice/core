@@ -6671,8 +6671,6 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
 
 void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
-    uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY);
-
     uno::Reference<xml::dom::XDocument> dataDom;
     uno::Reference<xml::dom::XDocument> layoutDom;
     uno::Reference<xml::dom::XDocument> styleDom;
