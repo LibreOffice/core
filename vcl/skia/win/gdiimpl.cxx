@@ -110,13 +110,13 @@ void WinSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     {
         case RenderRaster:
             mWindowContext
-                = skwindow::MakeRasterForWin(mWinParent.gethWnd(), aDispParamBuilder.build());
+                = skwindow::MakeRasterForWin(mWinParent.gethWnd(), aDispParamBuilder.detach());
             if (mWindowContext)
                 mSurface = mWindowContext->getBackbufferSurface();
             break;
         case RenderVulkan:
             mWindowContext
-                = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), aDispParamBuilder.build());
+                = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), aDispParamBuilder.detach());
             // See flushSurfaceToWindowContext().
             if (mWindowContext)
                 mSurface = createSkSurface(GetWidth(), GetHeight());
@@ -439,7 +439,7 @@ std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool /*tempor
 {
     SkiaZone zone;
     skwindow::DisplayParamsBuilder displayParams;
-    return skwindow::MakeVulkanForWin(nullptr, displayParams.build());
+    return skwindow::MakeVulkanForWin(nullptr, displayParams.detach());
 }
 }
 

@@ -483,6 +483,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPaintPriv \
     UnpackedTarball/skia/src/core/SkPath \
     UnpackedTarball/skia/src/core/SkPathBuilder \
+    UnpackedTarball/skia/src/core/SkPathData \
+    UnpackedTarball/skia/src/core/SkPathDump \
     UnpackedTarball/skia/src/core/SkPathEffect \
     UnpackedTarball/skia/src/core/SkPathIter \
     UnpackedTarball/skia/src/core/SkPathMeasure \
@@ -491,6 +493,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPathRawShapes \
     UnpackedTarball/skia/src/core/SkPathRef \
     UnpackedTarball/skia/src/core/SkPathUtils \
+    UnpackedTarball/skia/src/core/SkPath_editing \
+    UnpackedTarball/skia/src/core/SkPath_pathref \
     UnpackedTarball/skia/src/core/SkPath_serial \
     UnpackedTarball/skia/src/core/SkPixelRef \
     UnpackedTarball/skia/src/core/SkPixmap \

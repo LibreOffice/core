@@ -57,27 +57,27 @@ diff -ur skia.org/tools/window/unix/RasterWindowContext_unix.cpp skia/tools/wind
 diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanWindowContext.cpp
 --- skia.org/tools/window/VulkanWindowContext.cpp	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/VulkanWindowContext.cpp	2024-10-05 18:19:23.074028410 +0200
-@@ -542,7 +542,7 @@
+@@ -588,7 +588,7 @@
      return sk_ref_sp(surface);
  }
-
+ 
 -void VulkanWindowContext::onSwapBuffers() {
 +void VulkanWindowContext::onSwapBuffers(const SkIRect*) {
-
-     BackbufferInfo* backbuffer = fBackbuffers + fCurrentBackbufferIndex;
-     SkSurface* surface = fSurfaces[backbuffer->fImageIndex].get();
+     // Submit the GPU work associated with the current backbuffer
+     this->submitToGpu();
+ 
 diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWindowContext.h
 --- skia.org/tools/window/VulkanWindowContext.h	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/VulkanWindowContext.h	2024-10-05 18:19:54.713202674 +0200
-@@ -68,7 +68,7 @@
-     bool createSwapchain(int width, int height);
-     bool createBuffers(VkFormat format, VkImageUsageFlags, SkColorType colorType, VkSharingMode);
-     void destroyBuffers();
+@@ -65,7 +65,7 @@
+     /**
+      * Swap backbuffers/frames, presenting the next available image.
+      */
 -    void onSwapBuffers() override;
 +    void onSwapBuffers(const SkIRect* rect = nullptr) override;
  
- 
-     // Create functions
+     /**
+      * Define private method to submit work to the GPU (rather than using Window::submitToGpu) in
 diff -ur skia.org/tools/window/win/RasterWindowContext_win.cpp skia/tools/window/win/RasterWindowContext_win.cpp
 --- skia.org/tools/window/win/RasterWindowContext_win.cpp	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/win/RasterWindowContext_win.cpp	2024-10-05 18:20:58.138561375 +0200
@@ -137,12 +137,12 @@ diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
 
      virtual bool isValid() = 0;
 
-@@ -57,7 +57,7 @@
+@@ -69,7 +69,7 @@
  protected:
      virtual bool isGpuContext() { return true;  }
-
+ 
 -    virtual void onSwapBuffers() = 0;
 +    virtual void onSwapBuffers(const SkIRect* rect = nullptr) = 0;
-
+ 
+ #if defined(SK_GANESH)
      sk_sp<GrDirectContext> fContext;
- #if defined(SK_GRAPHITE)
