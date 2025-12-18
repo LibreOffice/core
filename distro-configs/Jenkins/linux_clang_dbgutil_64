@@ -1,5 +1,6 @@
 --enable-dbgutil
 --enable-compiler-plugins
+--enable-embindtest-uno
 --enable-gtk4
 --enable-qt5
 --enable-qt6
