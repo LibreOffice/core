@@ -2070,9 +2070,9 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc& rDoc,
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
-void MakeFrames( SwDoc& rDoc, const SwNode &rSttIdx, const SwNode &rEndIdx )
+void MakeFrames(SwDoc& rDoc, const SwNode& rSttIdx, const SwNode& rEndIdx, const bool _bObjsDirect)
 {
-    bObjsDirect = false;
+    bObjsDirect = _bObjsDirect;
 
     SwNodeOffset nEndIdx = rEndIdx.GetIndex();
     // TODO for multiple layouts there should be a loop here

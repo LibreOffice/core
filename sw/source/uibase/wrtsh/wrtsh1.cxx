@@ -2550,7 +2550,7 @@ void SwWrtShell::MakeOutlineLevelsVisible(const int nLevel)
         {
             SwNodeIndex aIdx(*pNode, +1);
             // Make the outline paragraph frame
-            MakeFrames(*GetDoc(), *pNode, aIdx.GetNode());
+            ::MakeFrames(*GetDoc(), *pNode, aIdx.GetNode(), true);
             // Make the outline content visible but don't set the outline visible attribute and
             // don't make outline content made visible not visible that have outline visible
             // attribute false. Visibility will be taken care of when
@@ -2665,7 +2665,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
     {
         // reset the index marker and make frames
         aIdx.Assign(*pSttNd, +1);
-        MakeFrames(*GetDoc(), aIdx.GetNode(), *pEndNd);
+        ::MakeFrames(*GetDoc(), aIdx.GetNode(), *pEndNd, true);
 
         if (bSetAttrOutlineVisibility)
         {
