@@ -4933,6 +4933,10 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
 
 OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const OUString& sNewStr)
 {
+    // 'logheight' and `logwidth` are only used for calculating shape's rectangle
+    if (sEquation == "logheight" || sEquation == "logwidth")
+        return OUString();
+
     OUString sFormula = sEquation;
     size_t nPos = sFormula.indexOf(sReplace);
     if (nPos != std::string::npos)
@@ -4963,18 +4967,24 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
             {
                 Guide aGuideX;
                 aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
-                aGuideX.sFormula
-                    = (bIsOOXML && nIdx1 >= 0 && nIdx1 < aEquations.getLength())
-                          ? GetFormula(aEquations[nIdx1], "*logwidth/", " w ").toUtf8()
-                          : "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
+
+                if (bIsOOXML && nIdx1 >= 0 && nIdx1 < aEquations.getLength())
+                    aGuideX.sFormula = GetFormula(aEquations[nIdx1], "*logwidth/", " w ").toUtf8();
+                if (aGuideX.sFormula.isEmpty())
+                    aGuideX.sFormula
+                        = "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
+
                 rGuideList.push_back(aGuideX);
 
                 Guide aGuideY;
                 aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
-                aGuideY.sFormula
-                    = (bIsOOXML && nIdx2 >= 0 && nIdx2 < aEquations.getLength())
-                          ? GetFormula(aEquations[nIdx2], "*logheight/", " h ").toUtf8()
-                          : "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
+
+                if (bIsOOXML && nIdx2 >= 0 && nIdx2 < aEquations.getLength())
+                    aGuideY.sFormula = GetFormula(aEquations[nIdx2], "*logheight/", " h ").toUtf8();
+                if (aGuideY.sFormula.isEmpty())
+                    aGuideY.sFormula
+                        = "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
+
                 rGuideList.push_back(aGuideY);
             }
 
