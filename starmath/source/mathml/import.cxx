@@ -650,11 +650,11 @@ public:
         SAL_CALL createFastChildContext(sal_Int32 nElement,
                                         const uno::Reference<XFastAttributeList>& Attribs) override;
 
-    /** Inherits the style from it's parents
+    /** Inherits the style from its parents
     */
     void inheritStyle();
 
-    /** Inherits the style from it's parents on end
+    /** Inherits the style from its parents on end
     */
     void inheritStyleEnd();
 
