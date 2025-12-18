@@ -612,12 +612,6 @@ std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUSt
     return xRet;
 }
 
-std::unique_ptr<weld::MetricSpinButton>
-QtInstanceBuilder::weld_metric_spin_button(const OUString& rId, FieldUnit eUnit)
-{
-    return std::make_unique<weld::MetricSpinButton>(weld_spin_button(rId), eUnit);
-}
-
 std::unique_ptr<weld::FormattedSpinButton>
 QtInstanceBuilder::weld_formatted_spin_button(const OUString& rId)
 {

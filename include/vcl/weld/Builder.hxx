@@ -93,8 +93,7 @@ public:
     virtual std::unique_ptr<LinkButton> weld_link_button(const OUString& id) = 0;
     virtual std::unique_ptr<SpinButton> weld_spin_button(const OUString& id) = 0;
     virtual std::unique_ptr<MetricSpinButton> weld_metric_spin_button(const OUString& id,
-                                                                      FieldUnit eUnit)
-        = 0;
+                                                                      FieldUnit eUnit);
     virtual std::unique_ptr<FormattedSpinButton> weld_formatted_spin_button(const OUString& id) = 0;
     virtual std::unique_ptr<ComboBox> weld_combo_box(const OUString& id) = 0;
     virtual std::unique_ptr<TreeView> weld_tree_view(const OUString& id) = 0;

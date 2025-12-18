@@ -24455,11 +24455,6 @@ public:
         return std::make_unique<GtkInstanceSpinButton>(pSpinButton, this, false);
     }
 
-    virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OUString& id, FieldUnit eUnit) override
-    {
-        return std::make_unique<weld::MetricSpinButton>(weld_spin_button(id), eUnit);
-    }
-
     virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OUString &id) override
     {
         GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, OUStringToOString(id, RTL_TEXTENCODING_UTF8).getStr()));
