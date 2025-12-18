@@ -562,6 +562,20 @@ SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
     return pModel->FirstChild(pParent);
 }
 
+sal_uInt32 SvTreeListBox::GetEntryPos(const SvTreeListEntry* pEntry) const
+{
+    sal_uInt32 nPos = 0;
+    SvTreeListEntry* pTmpEntry = First();
+    while (pTmpEntry)
+    {
+        if (pTmpEntry == pEntry)
+            return nPos;
+        pTmpEntry = Next(pTmpEntry);
+        ++nPos;
+    }
+    return 0xffffffff;
+}
+
 // return: all entries copied
 bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
 {

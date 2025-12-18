@@ -70,7 +70,6 @@ public:
     OUString         GetEntryText( sal_uInt32 nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
     OUString         GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const;
-    sal_uInt32       GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
     void             SetTabAlignCenter(sal_uInt16 nTab);
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );

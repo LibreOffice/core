@@ -389,20 +389,6 @@ OUString SvTabListBox::GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const
     return aResult;
 }
 
-sal_uInt32 SvTabListBox::GetEntryPos( const SvTreeListEntry* pEntry ) const
-{
-    sal_uInt32 nPos = 0;
-    SvTreeListEntry* pTmpEntry = First();
-    while( pTmpEntry )
-    {
-        if ( pTmpEntry == pEntry )
-            return nPos;
-        pTmpEntry = Next( pTmpEntry );
-        ++nPos;
-    }
-    return 0xffffffff;
-}
-
 // static
 std::u16string_view SvTabListBox::GetToken( std::u16string_view sStr, sal_Int32& nIndex )
 {

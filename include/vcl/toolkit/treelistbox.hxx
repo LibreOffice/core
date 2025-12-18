@@ -365,6 +365,8 @@ public:
 
     SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
 
+    sal_uInt32 GetEntryPos(const SvTreeListEntry* pEntry) const;
+
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
     void            RemoveSelection();
