@@ -32,6 +32,15 @@
      for (i = 0; i < Py_SIZE(b); i++) {
          PyObject *v = src[i];
          dest[i] = Py_NewRef(v);
+@@ -1325,7 +1325,7 @@
+     Py_ssize_t setpos = 0;
+     Py_hash_t hash;
+     PyObject *key;
+-    PyObject **dest = self->ob_item + m;
++    PyObject **dest = m == 0 ? self->ob_item : self->ob_item + m;
+     while (_PySet_NextEntryRef((PyObject *)other, &setpos, &key, &hash)) {
+         FT_ATOMIC_STORE_PTR_RELEASE(*dest, key);
+         dest++;
 --- Parser/lexer/buffer.c
 +++ Parser/lexer/buffer.c
 @@ -27,8 +27,8 @@
