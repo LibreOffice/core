@@ -26,6 +26,7 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>

@@ -23,6 +23,7 @@
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace sc::sidebar {
 

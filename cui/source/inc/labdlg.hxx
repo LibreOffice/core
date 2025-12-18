@@ -24,6 +24,7 @@
 #include <svx/sxcecitm.hxx>
 #include <svx/anchorid.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class SdrView;
 

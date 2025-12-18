@@ -21,6 +21,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include "contwnd.hxx"
 #include <vcl/idle.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class SvxSuperContourDlg;
 

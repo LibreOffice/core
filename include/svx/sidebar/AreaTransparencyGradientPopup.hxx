@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 
 #include <basegfx/utils/bgradient.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svtools/toolbarmenu.hxx>
 

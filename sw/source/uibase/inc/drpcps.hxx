@@ -24,6 +24,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/print.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 
 /// Dedicated drop caps dialog, opened by the .uno:FormatDropcap UNO command, which is not in the

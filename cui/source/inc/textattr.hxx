@@ -20,6 +20,7 @@
 
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobjkind.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 /*************************************************************************
 |*

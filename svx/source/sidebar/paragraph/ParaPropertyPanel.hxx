@@ -30,6 +30,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class ToolbarUnoDispatcher;
 

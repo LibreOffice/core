@@ -59,6 +59,7 @@
 #include <utility>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 #include <editeng/sizeitem.hxx>
 #include <comphelper/lok.hxx>

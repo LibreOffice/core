@@ -10,6 +10,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>

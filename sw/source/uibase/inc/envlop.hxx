@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_ENVLOP_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include "envimg.hxx"

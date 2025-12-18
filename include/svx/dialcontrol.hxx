@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <svx/svxdllapi.h>
 

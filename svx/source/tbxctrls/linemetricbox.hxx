@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 class XLineWidthItem;

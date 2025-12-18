@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/swframetypes.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class SwWrtShell;
 

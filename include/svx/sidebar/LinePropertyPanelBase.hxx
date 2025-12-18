@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEPROPERTYPANELBASE_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEPROPERTYPANELBASE_HXX
 
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <memory>
 #include <svl/poolitem.hxx>

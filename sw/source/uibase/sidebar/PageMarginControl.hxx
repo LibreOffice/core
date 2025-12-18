@@ -23,6 +23,7 @@
 
 #include <o3tl/unit_conversion.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 #define SWPAGE_NARROW_VALUE    720
 #define SWPAGE_NORMAL_VALUE    1136

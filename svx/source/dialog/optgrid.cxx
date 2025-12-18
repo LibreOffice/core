@@ -28,6 +28,7 @@
 #include <officecfg/Office/Draw.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <svx/svxids.hrc>

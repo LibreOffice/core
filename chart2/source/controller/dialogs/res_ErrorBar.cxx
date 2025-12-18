@@ -22,6 +22,7 @@
 #include <RangeSelectionHelper.hxx>
 #include <helpids.h>
 #include <chartview/ChartSfxItemIds.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <ChartModel.hxx>
 

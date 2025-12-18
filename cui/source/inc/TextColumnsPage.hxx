@@ -12,6 +12,7 @@
 #include <sal/config.h>
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 #include <memory>
 

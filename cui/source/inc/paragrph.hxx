@@ -22,6 +22,7 @@
 #include <svx/relfld.hxx>
 #include <svx/paraprev.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class SvxLineSpacingItem;
 

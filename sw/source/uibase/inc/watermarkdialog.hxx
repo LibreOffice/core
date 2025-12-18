@@ -10,6 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WATERMARKDIALOG_HXX
 
 #include <sfx2/bindings.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/colorbox.hxx>
 #include <sfx2/basedlgs.hxx>

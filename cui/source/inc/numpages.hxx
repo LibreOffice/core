@@ -26,6 +26,7 @@
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/numberingpreview.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/timer.hxx>

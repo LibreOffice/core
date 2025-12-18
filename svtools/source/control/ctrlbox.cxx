@@ -32,6 +32,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <rtl/math.hxx>

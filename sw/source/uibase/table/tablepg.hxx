@@ -22,6 +22,7 @@
 #include <prcntfld.hxx>
 #include <swtypes.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class SwWrtShell;
 class SwTableRep;
