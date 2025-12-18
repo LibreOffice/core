@@ -75,7 +75,7 @@ public:
     template< typename FuncType >
     void                forEachMem( FuncType pFunc ) const
                         {
-                            forEach( [pFunc] ( auto& rObj ) {
+                            forEach( [&] (auto& rObj) {
                                 (rObj.*pFunc)();
                             } );
                         }
@@ -85,7 +85,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
-                            forEach( [pFunc, aParam1, aParam2] (auto& rObj) {
+                            forEach( [&] (auto& rObj) {
                                 (rObj.*pFunc)(aParam1, aParam2);
                             } );
                         }
@@ -95,7 +95,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
-                            forEach( [pFunc, aParam1, aParam2, aParam3] (auto& rObj) {
+                            forEach( [&] (auto& rObj) {
                                 (rObj.*pFunc)(aParam1, aParam2, aParam3);
                             } );
                         }
@@ -114,7 +114,7 @@ public:
     template< typename FuncType >
     void                forEachMemWithKey( FuncType pFunc ) const
                         {
-                            forEachWithKey( [pFunc] ( const auto& rKey, auto& rObj ) {
+                            forEachWithKey( [&] ( const auto& rKey, auto& rObj ) {
                                 (rObj.*pFunc)(rKey);
                             } );
                         }
