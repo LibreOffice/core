@@ -475,6 +475,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                     //Currently we've only got a start anchor, not an end-anchor, so generate that now
                                     ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, aAnchor, *pDoc, aAddress.Sheet);
                                     ScDrawLayer::SetCellAnchored(*pObj, aAnchor);
+                                    ScDrawLayer::SetNonRotatedAnchor(*pObj, aAnchor);
                                 }
                             }
                         }
@@ -501,6 +502,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
 
         aValue >>= pDrawObjData->mbResizeWithCell;
         ScDrawLayer::SetCellAnchored(*pObj, *pDrawObjData);
+        ScDrawLayer::SetNonRotatedAnchor(*pObj, *pDrawObjData);
     }
     else if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
