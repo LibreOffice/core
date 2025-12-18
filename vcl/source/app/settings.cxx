@@ -2736,6 +2736,13 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
     return mxData->maUILocale;
 }
 
+OUString AllSettings::GetUIRootDir()
+{
+    OUString sShareLayer(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/"_ustr);
+    rtl::Bootstrap::expandMacros(sShareLayer);
+    return sShareLayer;
+}
+
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mxData->mpLocaleDataWrapper )

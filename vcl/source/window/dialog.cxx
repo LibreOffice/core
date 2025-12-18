@@ -557,13 +557,6 @@ void VclBuilderContainer::disposeBuilder()
         m_pUIBuilder->disposeBuilder();
 }
 
-OUString AllSettings::GetUIRootDir()
-{
-    OUString sShareLayer(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/"_ustr);
-    rtl::Bootstrap::expandMacros(sShareLayer);
-    return sShareLayer;
-}
-
 //we can't change sizeable after the fact, so need to defer until we know and then do the init.
 void Dialog::ImplDeferredInit(vcl::Window* pParent, WinBits nBits)
 {
