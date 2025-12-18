@@ -603,8 +603,7 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyUnsignedShort()
         self.assertEqual(v, 54321)
         self.assertFalse(test.isAnyUnsignedShort(v)) # long
-        self.assertTrue(uno.invoke(test, 'isAnyUnsignedShort', (uno.Any('unsigned short', 54321),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyUnsignedShort(uno.Any('unsigned short', 54321)))
 
         v = test.getAnyLong()
         self.assertEqual(v, -123456)
@@ -614,28 +613,22 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyUnsignedLong()
         self.assertEqual(v, 3456789012)
         self.assertFalse(test.isAnyUnsignedLong(v)) # hyper
-        self.assertTrue(
-            uno.invoke(test, 'isAnyUnsignedLong', (uno.Any('unsigned long', 3456789012),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyUnsignedLong(uno.Any('unsigned long', 3456789012)))
 
         v = test.getAnyHyper()
         self.assertEqual(v, -123456789)
         self.assertFalse(test.isAnyHyper(v)) # long
-        self.assertTrue(uno.invoke(test, 'isAnyHyper', (uno.Any('hyper', -123456789),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyHyper(uno.Any('hyper', -123456789)))
 
         v = test.getAnyUnsignedHyper()
         self.assertEqual(v, 9876543210)
         self.assertFalse(test.isAnyUnsignedHyper(v)) # hyper
-        self.assertTrue(
-            uno.invoke(test, 'isAnyUnsignedHyper', (uno.Any('unsigned hyper', 9876543210),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyUnsignedHyper(uno.Any('unsigned hyper', 9876543210)))
 
         v = test.getAnyFloat()
         self.assertEqual(v, -10.25)
         self.assertFalse(test.isAnyFloat(v)) # double
-        self.assertTrue(uno.invoke(test, 'isAnyFloat', (uno.Any('float', -10.25),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyFloat(uno.Any('float', -10.25)))
 
         v = test.getAnyDouble()
         self.assertEqual(v, 100.5)
@@ -660,10 +653,7 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnySequence()
         self.assertEqual(v, ('foo', 'barr', 'bazzz'))
         self.assertFalse(test.isAnySequence(v)) # []any
-        self.assertTrue(
-            uno.invoke(
-                test, 'isAnySequence', (uno.Any('[]string', ('foo', 'barr', 'bazzz')),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnySequence(uno.Any('[]string', ('foo', 'barr', 'bazzz'))))
 
         v = test.getAnyEnum()
         self.assertEqual(v, E_2)
@@ -707,10 +697,7 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyInterface()
         self.assertEqual(v, test)
         self.assertTrue(test.isAnyInterface(v))
-        self.assertTrue(
-            uno.invoke(
-                test, 'isAnyInterface', (uno.Any('org.libreoffice.embindtest.XTest', test),)))
-            #TODO: direct call?
+        self.assertTrue(test.isAnyInterface(uno.Any('org.libreoffice.embindtest.XTest', test)))
 
         v = test.getSequenceBoolean()
         self.assertEqual(v, (True, True, False))
@@ -787,10 +774,8 @@ class EmbindTest(unittest.TestCase):
         self.assertEqual(v, (-123456, None, (E_2, E3, E_10)))
         self.assertFalse(test.isSequenceAny(v)) # (long, void, []any)
         self.assertTrue(
-            uno.invoke(
-                test, 'isSequenceAny',
-                ((-123456, None, uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10))),)))
-            #TODO: direct call?
+            test.isSequenceAny(
+                (-123456, None, uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)))))
 
         v = test.getSequenceSequenceString()
         self.assertEqual(v, ((), ('foo', 'barr'), ('baz',)))
