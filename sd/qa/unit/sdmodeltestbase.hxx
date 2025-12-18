@@ -34,6 +34,8 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/scheduler.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 
 using namespace ::com::sun::star;
@@ -183,6 +185,23 @@ public:
         CPPUNIT_ASSERT(pXmlDoc);
 
         return pXmlDoc;
+    }
+
+    void typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr)
+    {
+        for (const char16_t c : rStr)
+        {
+            rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+            rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+            Scheduler::ProcessEventsToIdle();
+        }
+    }
+
+    void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey)
+    {
+        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nKey);
+        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nKey);
+        Scheduler::ProcessEventsToIdle();
     }
 };
 
