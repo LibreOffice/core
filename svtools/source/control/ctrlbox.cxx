@@ -26,13 +26,13 @@
 #include <o3tl/untaint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>

@@ -21,9 +21,9 @@
 #define INCLUDED_SVX_GALCTRL_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/customweld.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <svx/svxdllapi.h>
 
 class GalleryDragDrop;

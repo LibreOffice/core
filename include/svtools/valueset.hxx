@@ -21,8 +21,8 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/wintypes.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 #include <vector>

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 namespace weld
 {

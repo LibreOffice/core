@@ -22,9 +22,9 @@
 #include <set>
 #include <vector>
 #include <memory>
-#include <vcl/customweld.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/stringtransfer.hxx>

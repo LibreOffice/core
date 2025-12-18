@@ -23,8 +23,8 @@
 #include <svtools/valueset.hxx>
 #include <svx/xtable.hxx>
 #include <svx/PaletteManager.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include "cfgchart.hxx"
 

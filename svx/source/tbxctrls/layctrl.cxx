@@ -18,11 +18,11 @@
  */
 
 #include <utility>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <svx/strings.hrc>
 #include <layctrl.hxx>

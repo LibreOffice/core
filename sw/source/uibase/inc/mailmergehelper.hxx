@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
 #include <utility>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <swdllapi.h>

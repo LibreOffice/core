@@ -84,7 +84,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>

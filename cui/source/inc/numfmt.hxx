@@ -23,8 +23,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <tools/color.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SvxNumberFormatShell;

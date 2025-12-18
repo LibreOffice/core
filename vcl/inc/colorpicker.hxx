@@ -20,9 +20,9 @@
 #pragma once
 
 #include <vcl/ColorDialog.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/hexcolorcontrol.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

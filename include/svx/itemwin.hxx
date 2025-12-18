@@ -22,7 +22,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class ValueSet;
 class SvxLineStyleToolBoxControl;

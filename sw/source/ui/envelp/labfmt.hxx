@@ -23,7 +23,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SwLabPreview : public weld::CustomWidgetController

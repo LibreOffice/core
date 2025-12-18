@@ -24,8 +24,8 @@
 #include <svl/lstner.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <ElementsDockingWindow.hxx>
 

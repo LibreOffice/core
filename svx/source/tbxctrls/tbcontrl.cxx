@@ -30,8 +30,8 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>

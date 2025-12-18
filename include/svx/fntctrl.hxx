@@ -23,7 +23,7 @@
 #include <editeng/svxfont.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class SfxItemSet;
 class FontPrevWin_Impl;

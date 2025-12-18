@@ -22,9 +22,9 @@
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>

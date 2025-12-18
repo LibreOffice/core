@@ -21,8 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/customweld.hxx>
 #include "symbol.hxx"
 
 class SubsetMap;

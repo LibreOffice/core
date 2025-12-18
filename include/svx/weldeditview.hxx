@@ -14,8 +14,8 @@
 #include <svx/svxdllapi.h>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class WeldEditAccessible;
 

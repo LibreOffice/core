@@ -23,7 +23,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/print.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <map>
 

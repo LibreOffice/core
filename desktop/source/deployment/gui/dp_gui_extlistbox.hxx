@@ -20,8 +20,8 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <cppuhelper/implbase.hxx>

@@ -116,7 +116,7 @@
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <comphelper/errcode.hxx>

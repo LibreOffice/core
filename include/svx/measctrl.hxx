@@ -19,9 +19,10 @@
 #ifndef INCLUDED_SVX_MEASCTRL_HXX
 #define INCLUDED_SVX_MEASCTRL_HXX
 
-#include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdobj.hxx>
+#include <vcl/weld/customweld.hxx>
+
 #include <memory>
 
 class SfxItemSet;

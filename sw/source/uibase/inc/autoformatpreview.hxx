@@ -24,8 +24,8 @@
 #include <svl/numformat.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/font.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include "wrtsh.hxx"
 #include <tblafmt.hxx>

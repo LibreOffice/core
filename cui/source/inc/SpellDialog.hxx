@@ -26,10 +26,10 @@
 #include <svx/langbox.hxx>
 #include <memory>
 #include <svl/undo.hxx>
-#include <vcl/customweld.hxx>
 #include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <set>
 

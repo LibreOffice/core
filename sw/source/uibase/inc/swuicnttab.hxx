@@ -23,8 +23,8 @@
 #include <svx/langbox.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
-#include <vcl/customweld.hxx>
 
 #include <tox.hxx>
 #include "toxmgr.hxx"

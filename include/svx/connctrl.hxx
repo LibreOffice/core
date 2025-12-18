@@ -21,8 +21,8 @@
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class SfxItemSet;
 class SdrEdgeObj;

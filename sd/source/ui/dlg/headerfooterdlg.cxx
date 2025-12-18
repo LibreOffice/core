@@ -38,9 +38,9 @@
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <undoheaderfooter.hxx>
 #include <sdundogr.hxx>

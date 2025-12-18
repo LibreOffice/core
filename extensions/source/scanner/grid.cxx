@@ -27,10 +27,10 @@
 
 #include "grid.hxx"
 #include <vcl/bitmap.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <algorithm>
 #include <limits>

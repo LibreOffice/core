@@ -18,8 +18,8 @@
  */
 #pragma once
 
-#include <vcl/customweld.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class GridWindow;
 

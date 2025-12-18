@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_GRAPHCTL_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/svdview.hxx>

@@ -24,7 +24,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include "postithelper.hxx"
 #include "swrect.hxx"

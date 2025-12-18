@@ -97,7 +97,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <comphelper/errcode.hxx>

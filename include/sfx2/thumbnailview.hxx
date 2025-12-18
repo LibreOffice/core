@@ -16,8 +16,8 @@
 #include <memory>
 #include <vector>
 
-#include <vcl/customweld.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class Bitmap;
 class ThumbnailViewItem;

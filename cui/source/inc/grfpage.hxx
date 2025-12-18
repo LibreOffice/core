@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <vcl/customweld.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class SvxCropExample : public weld::CustomWidgetController

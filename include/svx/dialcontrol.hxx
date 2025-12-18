@@ -21,8 +21,8 @@
 #define INCLUDED_SVX_DIALCONTROL_HXX
 
 #include <memory>
-#include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <svx/svxdllapi.h>
 
 namespace svx {

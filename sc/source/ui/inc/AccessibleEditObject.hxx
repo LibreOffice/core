@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <address.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <memory>
 

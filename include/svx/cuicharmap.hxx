@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/basedlgs.hxx>

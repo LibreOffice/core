@@ -23,7 +23,7 @@
 #include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class SfxItemSet;
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NUMPREVW_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMPREVW_HXX
 
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class SwNumRule;
 
