@@ -85,6 +85,9 @@ protected:
     // interface to allow derivates to set ViewInformation2D
     void setViewInformation2D2D(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D) { maViewInformation2D = rViewInformation2D; }
 
+    // Allow to set EditViewActive early at local ViewInformation2D from ObjectContactOfPageView
+    void setEditViewActiveEarly() { maViewInformation2D.setEditViewActive(true); }
+
 public:
     // basic constructor
     ObjectContact();
