@@ -20,6 +20,7 @@
 #pragma once
 
 #include <tools/fract.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 

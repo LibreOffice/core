@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_INSFNOTE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INSFNOTE_HXX
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SwWrtShell;

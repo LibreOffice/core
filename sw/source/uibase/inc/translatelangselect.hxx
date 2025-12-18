@@ -18,6 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <rtl/string.h>
 #include <vector>

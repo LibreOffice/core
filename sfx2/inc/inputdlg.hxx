@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 #define INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 class InputDialog final : public weld::GenericDialogController

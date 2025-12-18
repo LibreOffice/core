@@ -10,6 +10,7 @@
 #pragma once
 
 #include <comphelper/backupfilehelper.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SafeModeDialog : public weld::GenericDialogController

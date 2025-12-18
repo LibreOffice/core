@@ -30,6 +30,7 @@
 #include <sal/types.h>
 #include <sfx2/basedlgs.hxx>
 #include <tools/gen.hxx>
+#include <vcl/weld/DialogController.hxx>
 
 class SfxBindings;
 class SfxChildWindow;

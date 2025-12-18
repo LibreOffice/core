@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/DialogController.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/weld.hxx>
 

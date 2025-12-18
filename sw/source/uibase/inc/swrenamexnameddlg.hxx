@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/textfilter.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>

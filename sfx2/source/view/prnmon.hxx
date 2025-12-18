@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <sal/config.h>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 

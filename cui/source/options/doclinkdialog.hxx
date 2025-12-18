@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svtools/inettbc.hxx>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>

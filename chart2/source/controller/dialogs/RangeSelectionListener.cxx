@@ -19,6 +19,7 @@
 
 #include <RangeSelectionListener.hxx>
 #include <ChartModel.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <utility>
 

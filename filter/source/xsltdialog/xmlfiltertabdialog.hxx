@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 class filter_info_impl;

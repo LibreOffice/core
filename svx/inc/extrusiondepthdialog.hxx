@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX
 #define INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 

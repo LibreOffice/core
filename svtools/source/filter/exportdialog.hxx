@@ -21,6 +21,7 @@
 #pragma once
 
 #include <FltCallDialogParameter.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

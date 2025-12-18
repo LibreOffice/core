@@ -19,6 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PAGENUMBER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PAGENUMBER_HXX
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/report/XReportDefinition.hpp>
 

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_INC_SRCHDLG_HXX
 #define INCLUDED_SFX2_INC_SRCHDLG_HXX
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace sfx2 {

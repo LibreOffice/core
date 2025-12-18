@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DROPDOWNFIELDDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DROPDOWNFIELDDIALOG_HXX
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

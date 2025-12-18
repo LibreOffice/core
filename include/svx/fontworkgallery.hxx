@@ -22,6 +22,7 @@
 #define INCLUDED_SVX_FONTWORKGALLERY_HXX
 
 #include <svx/svxdllapi.h>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>

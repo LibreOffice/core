@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

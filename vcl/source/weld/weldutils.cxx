@@ -38,63 +38,6 @@ BuilderPage::~BuilderPage() {}
 
 namespace weld
 {
-bool DialogController::runAsync(const std::shared_ptr<DialogController>& rController,
-                                const std::function<void(sal_Int32)>& func)
-{
-    return rController->getDialog()->runAsync(rController, func);
-}
-
-DialogController::~DialogController() {}
-
-Dialog* GenericDialogController::getDialog() { return m_xDialog.get(); }
-
-GenericDialogController::GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                                                 const OUString& rDialogId, bool bMobile)
-    : m_xBuilder(Application::CreateBuilder(pParent, rUIFile, bMobile))
-    , m_xDialog(m_xBuilder->weld_dialog(rDialogId))
-{
-}
-
-GenericDialogController::~GenericDialogController() {}
-
-Dialog* MessageDialogController::getDialog() { return m_xDialog.get(); }
-
-MessageDialogController::MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                                                 const OUString& rDialogId,
-                                                 const OUString& rRelocateId)
-    : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
-    , m_xDialog(m_xBuilder->weld_message_dialog(rDialogId))
-    , m_xContentArea(m_xDialog->weld_message_area())
-{
-    if (!rRelocateId.isEmpty())
-    {
-        m_xRelocate = m_xBuilder->weld_container(rRelocateId);
-        m_xOrigParent = m_xRelocate->weld_parent();
-        //fdo#75121, a bit tricky because the widgets we want to align with
-        //don't actually exist in the ui description, they're implied
-        m_xOrigParent->move(m_xRelocate.get(), m_xContentArea.get());
-    }
-}
-
-MessageDialogController::~MessageDialogController()
-{
-    if (m_xRelocate)
-    {
-        m_xContentArea->move(m_xRelocate.get(), m_xOrigParent.get());
-    }
-}
-
-AssistantController::AssistantController(weld::Widget* pParent, const OUString& rUIFile,
-                                         const OUString& rDialogId)
-    : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
-    , m_xAssistant(m_xBuilder->weld_assistant(rDialogId))
-{
-}
-
-Dialog* AssistantController::getDialog() { return m_xAssistant.get(); }
-
-AssistantController::~AssistantController() {}
-
 void TriStateEnabled::CheckButtonToggled(weld::CheckButton& rToggle)
 {
     if (bTriStateEnabled)

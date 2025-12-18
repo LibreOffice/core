@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SfxCheckinDialog final : public weld::GenericDialogController

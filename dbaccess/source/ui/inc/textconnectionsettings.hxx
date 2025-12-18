@@ -20,6 +20,7 @@
 #pragma once
 
 #include "propertystorage.hxx"
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <memory>
 

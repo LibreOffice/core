@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>

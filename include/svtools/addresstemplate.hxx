@@ -22,6 +22,7 @@
 #include <config_options.h>
 #include <memory>
 #include <svtools/svtdllapi.h>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com :: sun :: star :: container { class XNameAccess; }

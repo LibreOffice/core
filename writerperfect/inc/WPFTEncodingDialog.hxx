@@ -12,6 +12,7 @@
 #pragma once
 
 #include <config_options.h>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include "writerperfectdllapi.h"

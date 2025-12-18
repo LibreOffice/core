@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/itemset.hxx>
 

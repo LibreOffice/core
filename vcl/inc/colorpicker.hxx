@@ -22,6 +22,7 @@
 #include <vcl/ColorDialog.hxx>
 #include <vcl/hexcolorcontrol.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>

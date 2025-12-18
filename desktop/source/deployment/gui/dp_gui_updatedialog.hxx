@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
