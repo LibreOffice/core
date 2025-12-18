@@ -33,13 +33,15 @@ namespace drawinglayer::primitive2d
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
-            attribute::SdrLineFillEffectsTextAttribute   maSdrLFSTAttribute;
+            attribute::SdrLineFillEffectsTextAttribute  maSdrLFSTAttribute;
             double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
             double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
             // flag which decides if the HitArea should be the filled geometry
             bool                                        mbForceFillForHitTest : 1;
 
+            // flag which decides if the presentation object has empty placeholder text or not
+            bool                                        mbPlaceholderText : 1;
             // local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -49,7 +51,8 @@ namespace drawinglayer::primitive2d
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
                 double fCornerRadiusX,
                 double fCornerRadiusY,
-                bool bForceFillForHitTest);
+                bool bForceFillForHitTest,
+                bool bPlaceholderText = false);
 
             // data access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -57,6 +60,8 @@ namespace drawinglayer::primitive2d
             double getCornerRadiusX() const { return mfCornerRadiusX; }
             double getCornerRadiusY() const { return mfCornerRadiusY; }
             bool getForceFillForHitTest() const { return mbForceFillForHitTest; }
+            bool getPlaceholderText() const { return mbPlaceholderText; }
+
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
