@@ -32,6 +32,7 @@
 
 #include <DrawController.hxx>
 #include <SlideSorterViewShell.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <ViewShellBase.hxx>
 #include <o3tl/safeint.hxx>
@@ -62,7 +63,7 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
     , mxSidebar(std::move(xSidebar))
 {
     mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
-    mxPreviewIconView->connect_mouse_press(LINK(this, MasterPagesSelector, MousePressHdl));
+    mxPreviewIconView->connect_command(LINK(this, MasterPagesSelector, CommandHdl));
     mxPreviewIconView->connect_query_tooltip(LINK(this, MasterPagesSelector, QueryTooltipHdl));
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
@@ -129,19 +130,30 @@ IMPL_LINK_NOARG(MasterPagesSelector, MasterPageSelected, weld::IconView&, bool)
     return true;
 }
 
-IMPL_LINK(MasterPagesSelector, MousePressHdl, const MouseEvent&, rMEvet, bool)
+IMPL_LINK(MasterPagesSelector, CommandHdl, const CommandEvent&, rEvent, bool)
 {
-    if (!rMEvet.IsRight())
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    const Point& rPos = rMEvet.GetPosPixel();
-    std::unique_ptr<weld::TreeIter> pIter = mxPreviewIconView->get_item_at_pos(rPos);
-    if (!pIter)
-        return false;
+    Point aPos;
+    if (rEvent.IsMouseEvent())
+    {
+        aPos = rEvent.GetMousePosPixel();
+        std::unique_ptr<weld::TreeIter> pIter = mxPreviewIconView->get_item_at_pos(aPos);
+        if (!pIter)
+            return false;
+        mxPreviewIconView->select(*pIter);
+    }
+    else
+    {
+        std::unique_ptr<weld::TreeIter> pSelected = mxPreviewIconView->make_iterator();
+        if (!mxPreviewIconView->get_selected(pSelected.get()))
+            return false;
+        aPos = mxPreviewIconView->get_rect(*pSelected).Center();
+    }
 
-    mxPreviewIconView->select(*pIter);
-    ShowContextMenu(rPos);
-    return false;
+    ShowContextMenu(aPos);
+    return true;
 }
 
 IMPL_LINK(MasterPagesSelector, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
