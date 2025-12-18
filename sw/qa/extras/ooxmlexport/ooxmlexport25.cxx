@@ -93,6 +93,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf169986_bottomSpacing, "tdf169986_bottomSpacing.d
 {
     // given with a continuous section break with a lot of below spacing, and several footnotes...
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    auto pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_bottomSpacing.docx")
