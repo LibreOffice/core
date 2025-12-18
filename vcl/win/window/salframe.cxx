@@ -1043,6 +1043,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
 
 void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
+    assert(mbGraphicsAcquired && "Can only call ReleaseGraphics when you own the graphics");
     if ( mpThreadGraphics == pGraphics )
     {
         SalData* pSalData = GetSalData();
@@ -1051,6 +1052,10 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
         mpThreadGraphics->setHDC(nullptr);
         pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC,
             reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
+    }
+    else
+    {
+        assert(mpLocalGraphics == pGraphics);
     }
     mbGraphicsAcquired = false;
 }
