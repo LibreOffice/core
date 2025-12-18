@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170012_cellAnchor)
 
     pPage = getScDoc()->GetDrawLayer()->GetPage(0);
     anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, anchorType); // fallback to page anchor when invalid cell anchor
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)
