@@ -303,43 +303,6 @@ namespace weld
             return (nValue - nHalf) / nFactor;
         return (nValue + nHalf) / nFactor;
     }
-
-    size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
-    {
-        size_t nAbsPos = 0;
-
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(&rIter));
-        if (!rTreeView.get_iter_first(*xEntry))
-            xEntry.reset();
-
-        while (xEntry && rTreeView.iter_compare(*xEntry, rIter) != 0)
-        {
-            if (!rTreeView.iter_next(*xEntry))
-                xEntry.reset();
-            nAbsPos++;
-        }
-
-        return nAbsPos;
-    }
-
-    bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
-    {
-        // short circuit for the common case
-        if (rTreeView.get_iter_depth(rIter) == 0)
-            return true;
-
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(&rIter));
-        bool bRetVal = false;
-        do
-        {
-            if (rTreeView.get_iter_depth(*xEntry) == 0)
-            {
-                bRetVal = true;
-                break;
-            }
-        }  while (rTreeView.iter_parent(*xEntry) && rTreeView.get_row_expanded(*xEntry));
-        return bRetVal;
-    }
 }
 
 // static
