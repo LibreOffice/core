@@ -23,6 +23,7 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <utility>
@@ -122,7 +123,20 @@ namespace drawinglayer::primitive2d
                     // add text glow
                     aTempContentText = createEmbeddedTextGlowPrimitive(std::move(aTempContentText), getSdrLFSTAttribute().getGlowText());
                 }
-                aRetval.append(std::move(aTempContentText));
+
+                if (mbPlaceholderText)
+                {
+                    // PlaceholderText is exclusive to e.g. EditView, so embed it
+                    // accordingly
+                    drawinglayer::primitive2d::Primitive2DReference aEmbedded(
+                        new drawinglayer::primitive2d::ExclusiveEditViewPrimitive2D(
+                            std::move(aTempContentText)));
+                    aRetval.append(std::move(aEmbedded));
+                }
+                else
+                {
+                    aRetval.append(std::move(aTempContentText));
+                }
             }
 
             // add shadow
@@ -141,12 +155,14 @@ namespace drawinglayer::primitive2d
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             double fCornerRadiusX,
             double fCornerRadiusY,
-            bool bForceFillForHitTest)
+            bool bForceFillForHitTest,
+            bool bPlaceholderText)
         :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
-            mbForceFillForHitTest(bForceFillForHitTest)
+            mbForceFillForHitTest(bForceFillForHitTest),
+            mbPlaceholderText(bPlaceholderText)
         {
         }
 
@@ -160,7 +176,8 @@ namespace drawinglayer::primitive2d
                     && getCornerRadiusY() == rCompare.getCornerRadiusY()
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
-                    && getForceFillForHitTest() == rCompare.getForceFillForHitTest());
+                    && getForceFillForHitTest() == rCompare.getForceFillForHitTest()
+                    && getPlaceholderText() == rCompare.getPlaceholderText());
             }
 
             return false;

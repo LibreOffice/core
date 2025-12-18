@@ -263,7 +263,6 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, numberedList)
 {
     const OUString sText[] = {
-        "Click to add Title",
         "1.",
         "Outer, one",
         "2.",
@@ -364,7 +363,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
     xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Make sure text box has the right size - without the fix it was 2759.
-    assertXPath(pXmlDoc, "/metafile/push/push/textarray[5]", "y", u"3183");
+    assertXPath(pXmlDoc, "/metafile/push/push/textarray[3]", "y", u"3183");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
