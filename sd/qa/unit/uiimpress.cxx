@@ -76,8 +76,6 @@ public:
     }
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
-    void typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr);
-    void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey);
     void insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
@@ -93,23 +91,6 @@ void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
     sal_uInt16 nPageNumber;
     xPropertySet->getPropertyValue(u"Number"_ustr) >>= nPageNumber;
     CPPUNIT_ASSERT_EQUAL(nNum, nPageNumber);
-}
-
-void SdUiImpressTest::typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey)
-{
-    rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nKey);
-    rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nKey);
-    Scheduler::ProcessEventsToIdle();
-}
-
-void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr)
-{
-    for (const char16_t c : rStr)
-    {
-        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
-        Scheduler::ProcessEventsToIdle();
-    }
 }
 
 void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr,
