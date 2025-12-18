@@ -162,10 +162,6 @@ int QtInstanceTreeView::get_selected_index() const
     return nIndex;
 }
 
-void QtInstanceTreeView::do_select(int nPos) { do_select(treeIter(nPos)); }
-
-void QtInstanceTreeView::do_unselect(int nPos) { do_unselect(treeIter(nPos)); }
-
 void QtInstanceTreeView::do_remove(int nPos) { do_remove(treeIter(nPos)); }
 
 OUString QtInstanceTreeView::get_text(int nRow, int nCol) const

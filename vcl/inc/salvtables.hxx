@@ -1496,10 +1496,7 @@ protected:
     SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
 
-    virtual void do_select(int pos) override;
     virtual void do_select(const weld::TreeIter& rIter) override;
-
-    virtual void do_unselect(int pos) override;
     virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     virtual void do_select_all() override;

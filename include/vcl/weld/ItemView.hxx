@@ -20,10 +20,7 @@ class VCL_DLLPUBLIC ItemView : virtual public Widget
     OUString m_sSavedValue;
 
 protected:
-    virtual void do_select(int pos) = 0;
     virtual void do_select(const TreeIter& rIter) = 0;
-
-    virtual void do_unselect(int pos) = 0;
     virtual void do_unselect(const TreeIter& rIter) = 0;
 
     virtual void do_select_all() = 0;

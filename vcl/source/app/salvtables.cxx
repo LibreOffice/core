@@ -3572,23 +3572,6 @@ int SalInstanceItemView::n_children() const
     return m_pTreeListBox->GetModel()->GetChildList(nullptr).size();
 }
 
-void SalInstanceItemView::do_select(int pos)
-{
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-    {
-        do_unselect_all();
-        return;
-    }
-
-    assert(m_pTreeListBox->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
-    assert(pEntry && "bad pos?");
-    m_pTreeListBox->Select(pEntry, true);
-    m_pTreeListBox->MakeVisible(pEntry);
-}
-
 void SalInstanceItemView::do_select(const weld::TreeIter& rIter)
 {
     assert(m_pTreeListBox->IsUpdateMode()
@@ -3598,21 +3581,6 @@ void SalInstanceItemView::do_select(const weld::TreeIter& rIter)
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_pTreeListBox->Select(rVclIter.iter, true);
     m_pTreeListBox->MakeVisible(rVclIter.iter);
-}
-
-void SalInstanceItemView::do_unselect(int pos)
-{
-    assert(m_pTreeListBox->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1)
-    {
-        do_select_all();
-        return;
-    }
-
-    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
-    m_pTreeListBox->Select(pEntry, false);
 }
 
 void SalInstanceItemView::do_unselect(const weld::TreeIter& rIter)

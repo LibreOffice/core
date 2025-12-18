@@ -1728,31 +1728,6 @@ void JSTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int
     sendUpdate();
 }
 
-void JSTreeView::do_select(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-        m_xTreeView->SelectAll(false);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
-
-        while (pEntry && pos--)
-            pEntry = m_xTreeView->Next(pEntry);
-
-        if (pEntry)
-        {
-            m_xTreeView->Select(pEntry, true);
-            m_xTreeView->MakeVisible(pEntry);
-        }
-    }
-
-    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "select";
-    (*pMap)["position"_ostr] = OUString::number(pos);
-    sendAction(std::move(pMap));
-}
-
 void JSTreeView::do_select(const weld::TreeIter& rIter)
 {
     SalInstanceTreeView::do_select(rIter);
@@ -1940,16 +1915,6 @@ void JSIconView::do_clear()
     sendUpdate();
 }
 
-void JSIconView::do_select(int pos)
-{
-    SalInstanceIconView::do_select(pos);
-
-    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "select";
-    (*pMap)["position"_ostr] = OUString::number(pos);
-    sendAction(std::move(pMap));
-}
-
 void JSIconView::do_select(const weld::TreeIter& rIter)
 {
     SalInstanceIconView::do_select(rIter);
@@ -1959,12 +1924,6 @@ void JSIconView::do_select(const weld::TreeIter& rIter)
     (*pMap)[ACTION_TYPE ""_ostr] = "select";
     (*pMap)["position"_ostr] = OUString::number(m_xIconView->GetEntryPos(rVclIter.iter));
     sendAction(std::move(pMap));
-}
-
-void JSIconView::do_unselect(int pos)
-{
-    SalInstanceIconView::do_unselect(pos);
-    sendUpdate();
 }
 
 void JSIconView::do_unselect(const weld::TreeIter& rIter)

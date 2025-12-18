@@ -15227,23 +15227,6 @@ public:
         return gtk_tree_model_iter_n_children(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
     }
 
-    virtual void do_select(int pos) override
-    {
-        if (pos == -1 || (pos == 0 && n_children() == 0))
-        {
-            do_unselect_all();
-            return;
-        }
-
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
-        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_tree_selection_select_path(gtk_tree_view_get_selection(m_pTreeView), path);
-        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
-        gtk_tree_path_free(path);
-        enable_notify_events();
-    }
-
     virtual void do_set_cursor(int pos) override
     {
         disable_notify_events();
@@ -15276,22 +15259,6 @@ public:
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
         return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), &iter);
-    }
-
-    virtual void do_unselect(int pos) override
-    {
-        if (pos == -1 || (pos == 0 && n_children() == 0))
-        {
-            do_select_all();
-            return;
-        }
-
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
-        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(m_pTreeView), path);
-        gtk_tree_path_free(path);
-        enable_notify_events();
     }
 
     virtual std::vector<int> get_selected_rows() const override
@@ -17184,23 +17151,6 @@ public:
         return nRet;
     }
 
-    virtual void do_select(int pos) override
-    {
-        if (pos == -1 || (pos == 0 && n_children() == 0))
-        {
-            do_unselect_all();
-            return;
-        }
-
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
-        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_icon_view_select_path(m_pIconView, path);
-        gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
-        gtk_tree_path_free(path);
-        enable_notify_events();
-    }
-
     virtual void do_select(const weld::TreeIter& rIter) override
     {
         disable_notify_events();
@@ -17210,22 +17160,6 @@ public:
             = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         gtk_icon_view_select_path(m_pIconView, path);
         gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
-        gtk_tree_path_free(path);
-        enable_notify_events();
-    }
-
-    virtual void do_unselect(int pos) override
-    {
-        if (pos == -1 || (pos == 0 && n_children() == 0))
-        {
-            do_select_all();
-            return;
-        }
-
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
-        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_icon_view_unselect_path(m_pIconView, path);
         gtk_tree_path_free(path);
         enable_notify_events();
     }
