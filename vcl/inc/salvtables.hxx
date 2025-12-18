@@ -1502,6 +1502,9 @@ protected:
     virtual void do_unselect(int pos) override;
     virtual void do_unselect(const weld::TreeIter& rIter) override;
 
+    virtual void do_select_all() override;
+    virtual void do_unselect_all() override;
+
     virtual void do_clear() override;
 
 public:
@@ -1512,9 +1515,6 @@ public:
 
     virtual OUString get_selected_id() const override;
     virtual OUString get_selected_text() const override;
-
-    virtual void select_all() override;
-    virtual void unselect_all() override;
 
     virtual int n_children() const override;
 };

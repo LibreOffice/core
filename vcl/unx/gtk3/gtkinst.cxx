@@ -15200,9 +15200,9 @@ public:
         gtk_tree_sortable_sort_column_changed(pSortable);
     }
 
-    virtual void select_all() override { unselect(-1); }
+    virtual void do_select_all() override { do_unselect(-1); }
 
-    virtual void unselect_all() override { select(-1); }
+    virtual void do_unselect_all() override { do_select(-1); }
 
     virtual int n_children() const override
     {
@@ -17307,9 +17307,9 @@ public:
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
     }
 
-    virtual void select_all() override { unselect(-1); }
+    virtual void do_select_all() override { do_unselect(-1); }
 
-    virtual void unselect_all() override { select(-1); }
+    virtual void do_unselect_all() override { do_select(-1); }
 
     virtual int n_children() const override
     {

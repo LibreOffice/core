@@ -26,6 +26,9 @@ protected:
     virtual void do_unselect(int pos) = 0;
     virtual void do_unselect(const TreeIter& rIter) = 0;
 
+    virtual void do_select_all() = 0;
+    virtual void do_unselect_all() = 0;
+
     virtual void do_clear() = 0;
 
 public:
@@ -46,8 +49,8 @@ public:
     void unselect(int pos);
     void unselect(const TreeIter& rIter);
 
-    virtual void select_all() = 0;
-    virtual void unselect_all() = 0;
+    void select_all();
+    void unselect_all();
 
     // return the number of toplevel nodes
     virtual int n_children() const = 0;

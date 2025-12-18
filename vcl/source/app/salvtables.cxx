@@ -3551,9 +3551,9 @@ OUString SalInstanceItemView::get_selected_text() const
     return OUString();
 }
 
-void SalInstanceItemView::select_all() { unselect(-1); }
+void SalInstanceItemView::do_select_all() { do_unselect(-1); }
 
-void SalInstanceItemView::unselect_all() { select(-1); }
+void SalInstanceItemView::do_unselect_all() { do_select(-1); }
 
 int SalInstanceItemView::n_children() const
 {

@@ -39,6 +39,20 @@ void ItemView::unselect(const TreeIter& rIter)
     enable_notify_events();
 }
 
+void ItemView::select_all()
+{
+    disable_notify_events();
+    do_select_all();
+    enable_notify_events();
+}
+
+void ItemView::unselect_all()
+{
+    disable_notify_events();
+    do_unselect_all();
+    enable_notify_events();
+}
+
 void ItemView::clear()
 {
     disable_notify_events();

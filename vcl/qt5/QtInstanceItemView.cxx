@@ -31,13 +31,13 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
     return {};
 }
 
-void QtInstanceItemView::select_all()
+void QtInstanceItemView::do_select_all()
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { getItemView().selectAll(); });
 }
 
-void QtInstanceItemView::unselect_all()
+void QtInstanceItemView::do_unselect_all()
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { getItemView().clearSelection(); });

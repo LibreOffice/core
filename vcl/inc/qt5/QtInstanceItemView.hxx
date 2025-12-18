@@ -24,6 +24,9 @@ class QtInstanceItemView : public QtInstanceWidget, public virtual weld::ItemVie
     QAbstractItemModel& m_rModel;
 
 protected:
+    virtual void do_select_all() override;
+    virtual void do_unselect_all() override;
+
     void do_clear() override;
 
 public:
@@ -33,9 +36,6 @@ public:
                                                           = nullptr) const override;
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
-
-    virtual void select_all() override;
-    virtual void unselect_all() override;
 
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,
