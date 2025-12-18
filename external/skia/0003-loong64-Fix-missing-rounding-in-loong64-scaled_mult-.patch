@@ -25,22 +25,9 @@ reference scalar semantics and unblocks testing of debug builds.
 Change-Id: I45e43a7a7e6d50b4c32c5e69a6d1d7de341eccf1
 Signed-off-by: Bingwu Zhang <xtex@aosc.io>
 ---
- AUTHORS                          |  1 +
  src/opts/SkRasterPipeline_opts.h | 16 ++++++++++++----
  2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/AUTHORS b/AUTHORS
-index 03d0ac82a412..ef0fdfa550d7 100755
---- a/AUTHORS
-+++ b/AUTHORS
-@@ -104,6 +104,7 @@ Sylvestre Ledru <sylvestre.ledru@gmail.com>
- The Chromium Authors <*@chromium.org>
- Thiago Fransosi Farina <thiago.farina@gmail.com>
- Vibe Inc <*@vibe.us>
-+WANG Xuerui <git@xen0n.name>
- William Candillon <wcandillon@gmail.com>
- Wonmin Park <satcom1600@hanmail.net>
- Yandex LLC <*@yandex-team.ru>
 diff --git a/src/opts/SkRasterPipeline_opts.h b/src/opts/SkRasterPipeline_opts.h
 index 27a00474e07b..42e9cd8aa229 100644
 --- a/src/opts/SkRasterPipeline_opts.h

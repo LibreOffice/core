@@ -652,8 +652,8 @@ RHINO_TARBALL := rhino-1.7.15.1.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-SKIA_SHA256SUM := 49792e2b37869180e3ed3f0291ad72d2b556c0e0655b8b59aa3bdf53d75c6ffb
-SKIA_TARBALL := skia-m143-da51f0d60ea2b14e845a823dc11b405dbeef42d8.tar.xz
+SKIA_SHA256SUM := 31ad00946dd858f4d069173e411162cd81e72646e274fb2cba0a55ca7872be78
+SKIA_TARBALL := skia-m144-ee20d565acb08dece4a32e3f209cdd41119015ca.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
