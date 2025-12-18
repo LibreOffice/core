@@ -20,6 +20,7 @@
 
 #include <svl/itemset.hxx>
 #include <svx/dialcontrol.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <TextDirectionListBox.hxx>
 

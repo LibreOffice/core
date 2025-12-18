@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include <jvmfwk/framework.hxx>
 

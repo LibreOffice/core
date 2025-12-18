@@ -24,6 +24,7 @@
 #include <memory>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>

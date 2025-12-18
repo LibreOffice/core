@@ -21,6 +21,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

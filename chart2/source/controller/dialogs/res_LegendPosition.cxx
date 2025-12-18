@@ -32,6 +32,7 @@
 #include <svl/eitem.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace chart

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com::sun::star::inspection::PropertyLineElement

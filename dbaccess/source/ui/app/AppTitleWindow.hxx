@@ -19,6 +19,7 @@
 #pragma once
 
 #include <ChildWindow.hxx>
+
 #include <unotools/resmgr.hxx>
 
 namespace dbaui

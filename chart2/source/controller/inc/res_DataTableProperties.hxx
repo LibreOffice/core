@@ -10,6 +10,7 @@
 #pragma once
 
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace chart

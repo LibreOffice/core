@@ -19,6 +19,7 @@
 
 #include <res_Titles.hxx>
 #include <TitleDialogData.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace chart

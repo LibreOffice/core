@@ -26,7 +26,7 @@
 
 #include <svx/colorwindow.hxx>
 #include <svx/fntctrl.hxx>
-
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 

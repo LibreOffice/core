@@ -24,6 +24,7 @@
 #include <editeng/borderline.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <memory>

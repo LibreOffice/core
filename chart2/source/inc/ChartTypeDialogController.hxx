@@ -27,6 +27,7 @@
 #include "ThreeDHelper.hxx"
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com::sun::star::beans

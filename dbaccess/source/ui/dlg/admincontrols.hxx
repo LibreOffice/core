@@ -21,6 +21,7 @@
 
 #include "adminpages.hxx"
 
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace dbaui

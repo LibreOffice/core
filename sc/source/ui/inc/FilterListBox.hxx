@@ -22,6 +22,7 @@
 #include <types.hxx>
 
 #include <tools/solar.h>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <functional>
 

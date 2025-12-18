@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_BUILDERPAGE_HXX
 #define INCLUDED_VCL_BUILDERPAGE_HXX
 
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 class VCL_DLLPUBLIC BuilderPage

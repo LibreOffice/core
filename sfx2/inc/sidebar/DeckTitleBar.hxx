@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sidebar/TitleBar.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/customweld.hxx>
 
 namespace sfx2::sidebar

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include "JoinTableView.hxx"
 

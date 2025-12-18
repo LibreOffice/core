@@ -10,6 +10,7 @@
 #pragma once
 
 #include <comphelper/OAccessible.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 class InputContext;
