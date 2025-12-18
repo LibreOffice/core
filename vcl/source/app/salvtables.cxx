@@ -3576,6 +3576,17 @@ void SalInstanceItemView::do_select(int pos)
     }
 }
 
+void SalInstanceItemView::do_select(const weld::TreeIter& rIter)
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->Select(rVclIter.iter, true);
+    m_pTreeListBox->MakeVisible(rVclIter.iter);
+}
+
 void SalInstanceItemView::do_unselect(int pos)
 {
     assert(m_pTreeListBox->IsUpdateMode()
@@ -3588,6 +3599,16 @@ void SalInstanceItemView::do_unselect(int pos)
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
         m_pTreeListBox->Select(pEntry, false);
     }
+}
+
+void SalInstanceItemView::do_unselect(const weld::TreeIter& rIter)
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->Select(rVclIter.iter, false);
 }
 
 void SalInstanceItemView::do_clear()

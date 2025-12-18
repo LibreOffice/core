@@ -18,10 +18,24 @@ void ItemView::select(int pos)
     enable_notify_events();
 }
 
+void ItemView::select(const TreeIter& rIter)
+{
+    disable_notify_events();
+    do_select(rIter);
+    enable_notify_events();
+}
+
 void ItemView::unselect(int pos)
 {
     disable_notify_events();
     do_unselect(pos);
+    enable_notify_events();
+}
+
+void ItemView::unselect(const TreeIter& rIter)
+{
+    disable_notify_events();
+    do_unselect(rIter);
     enable_notify_events();
 }
 

@@ -787,7 +787,9 @@ public:
 
     virtual void do_clear() override;
     virtual void do_select(int pos) override;
+    virtual void do_select(const weld::TreeIter& rIter) override;
     virtual void do_unselect(int pos) override;
+    virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     // OnDemandRenderingHandler
     virtual void render_entry(int pos, int dpix, int dpiy) override;

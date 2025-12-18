@@ -21,7 +21,11 @@ class VCL_DLLPUBLIC ItemView : virtual public Widget
 
 protected:
     virtual void do_select(int pos) = 0;
+    virtual void do_select(const TreeIter& rIter) = 0;
+
     virtual void do_unselect(int pos) = 0;
+    virtual void do_unselect(const TreeIter& rIter) = 0;
+
     virtual void do_clear() = 0;
 
 public:
@@ -37,7 +41,11 @@ public:
 
     // Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select(int pos);
+    void select(const TreeIter& rIter);
+
     void unselect(int pos);
+    void unselect(const TreeIter& rIter);
+
     virtual void select_all() = 0;
     virtual void unselect_all() = 0;
 

@@ -133,20 +133,23 @@ OUString QtInstanceIconView::get_selected_text() const
 
 OUString QtInstanceIconView::get_id(int nPos) const { return get_id(treeIter(nPos)); }
 
-void QtInstanceIconView::do_select(int nPos)
+void QtInstanceIconView::do_select(int nPos) { do_select(treeIter(nPos)); }
+
+void QtInstanceIconView::do_select(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread(
-        [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
+        [&] { m_pSelectionModel->select(modelIndex(rIter), QItemSelectionModel::Select); });
 }
 
-void QtInstanceIconView::do_unselect(int nPos)
+void QtInstanceIconView::do_unselect(int nPos) { do_unselect(treeIter(nPos)); }
+
+void QtInstanceIconView::do_unselect(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Deselect);
-    });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pSelectionModel->select(modelIndex(rIter), QItemSelectionModel::Deselect); });
 }
 
 void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)

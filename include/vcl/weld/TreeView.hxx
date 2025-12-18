@@ -134,10 +134,6 @@ protected:
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_set_cursor(const TreeIter& rIter) = 0;
     virtual void do_remove(const TreeIter& rIter) = 0;
-    using ItemView::do_select;
-    virtual void do_select(const TreeIter& rIter) = 0;
-    using ItemView::do_unselect;
-    virtual void do_unselect(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
@@ -355,23 +351,6 @@ public:
     {
         disable_notify_events();
         do_remove(rIter);
-        enable_notify_events();
-    }
-
-    //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    using ItemView::select;
-    void select(const TreeIter& rIter)
-    {
-        disable_notify_events();
-        do_select(rIter);
-        enable_notify_events();
-    }
-
-    using ItemView::unselect;
-    void unselect(const TreeIter& rIter)
-    {
-        disable_notify_events();
-        do_unselect(rIter);
         enable_notify_events();
     }
 

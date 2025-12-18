@@ -1950,9 +1950,26 @@ void JSIconView::do_select(int pos)
     sendAction(std::move(pMap));
 }
 
+void JSIconView::do_select(const weld::TreeIter& rIter)
+{
+    SalInstanceIconView::do_select(rIter);
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)["position"_ostr] = OUString::number(m_xIconView->GetEntryPos(rVclIter.iter));
+    sendAction(std::move(pMap));
+}
+
 void JSIconView::do_unselect(int pos)
 {
     SalInstanceIconView::do_unselect(pos);
+    sendUpdate();
+}
+
+void JSIconView::do_unselect(const weld::TreeIter& rIter)
+{
+    SalInstanceIconView::do_unselect(rIter);
     sendUpdate();
 }
 
