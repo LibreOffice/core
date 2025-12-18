@@ -15200,9 +15200,21 @@ public:
         gtk_tree_sortable_sort_column_changed(pSortable);
     }
 
-    virtual void do_select_all() override { do_unselect(-1); }
+    virtual void do_select_all() override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        gtk_tree_selection_select_all(gtk_tree_view_get_selection(m_pTreeView));
+        enable_notify_events();
+    }
 
-    virtual void do_unselect_all() override { do_select(-1); }
+    virtual void do_unselect_all() override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
+        enable_notify_events();
+    }
 
     virtual int n_children() const override
     {
@@ -15217,19 +15229,18 @@ public:
 
     virtual void do_select(int pos) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
-            gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
+            do_unselect_all();
+            return;
         }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_tree_selection_select_path(gtk_tree_view_get_selection(m_pTreeView), path);
-            gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
-            gtk_tree_path_free(path);
-        }
+
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_tree_selection_select_path(gtk_tree_view_get_selection(m_pTreeView), path);
+        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
+        gtk_tree_path_free(path);
         enable_notify_events();
     }
 
@@ -15269,18 +15280,17 @@ public:
 
     virtual void do_unselect(int pos) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
-            gtk_tree_selection_select_all(gtk_tree_view_get_selection(m_pTreeView));
+            do_select_all();
+            return;
         }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(m_pTreeView), path);
-            gtk_tree_path_free(path);
-        }
+
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(m_pTreeView), path);
+        gtk_tree_path_free(path);
         enable_notify_events();
     }
 
@@ -17176,19 +17186,18 @@ public:
 
     virtual void do_select(int pos) override
     {
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
-            gtk_icon_view_unselect_all(m_pIconView);
+            do_unselect_all();
+            return;
         }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_icon_view_select_path(m_pIconView, path);
-            gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
-            gtk_tree_path_free(path);
-        }
+
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_icon_view_select_path(m_pIconView, path);
+        gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
+        gtk_tree_path_free(path);
         enable_notify_events();
     }
 
@@ -17207,18 +17216,17 @@ public:
 
     virtual void do_unselect(int pos) override
     {
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
-            gtk_icon_view_select_all(m_pIconView);
+            do_select_all();
+            return;
         }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_icon_view_unselect_path(m_pIconView, path);
-            gtk_tree_path_free(path);
-        }
+
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_icon_view_unselect_path(m_pIconView, path);
+        gtk_tree_path_free(path);
         enable_notify_events();
     }
 
@@ -17307,9 +17315,21 @@ public:
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
     }
 
-    virtual void do_select_all() override { do_unselect(-1); }
+    virtual void do_select_all() override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        gtk_icon_view_select_all(m_pIconView);
+        enable_notify_events();
+    }
 
-    virtual void do_unselect_all() override { do_select(-1); }
+    virtual void do_unselect_all() override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        disable_notify_events();
+        gtk_icon_view_unselect_all(m_pIconView);
+        enable_notify_events();
+    }
 
     virtual int n_children() const override
     {
