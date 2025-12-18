@@ -134,17 +134,13 @@ IMPL_LINK(MasterPagesSelector, MousePressHdl, const MouseEvent&, rMEvet, bool)
     if (!rMEvet.IsRight())
         return false;
 
-    const Point& pPos = rMEvet.GetPosPixel();
-    for (int i = 0; i < mxPreviewIconView->n_children(); i++)
-    {
-        const ::tools::Rectangle aRect = mxPreviewIconView->get_rect(i);
-        if (aRect.Contains(pPos))
-        {
-            mxPreviewIconView->select(i);
-            ShowContextMenu(pPos);
-            break;
-        }
-    }
+    const Point& rPos = rMEvet.GetPosPixel();
+    std::unique_ptr<weld::TreeIter> pIter = mxPreviewIconView->get_item_at_pos(rPos);
+    if (!pIter)
+        return false;
+
+    mxPreviewIconView->select(*pIter);
+    ShowContextMenu(rPos);
     return false;
 }
 
