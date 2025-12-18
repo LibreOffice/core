@@ -17203,7 +17203,7 @@ public:
         else
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_icon_view_select_path(m_pIconView, path);
+            gtk_icon_view_unselect_path(m_pIconView, path);
             gtk_tree_path_free(path);
         }
         enable_notify_events();
