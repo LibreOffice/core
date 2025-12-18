@@ -283,7 +283,7 @@ namespace offapp
             m_xDriversLabel->set_sensitive(bGloballyEnabled);
             m_xDriverList->set_sensitive(bGloballyEnabled);
             if (!bGloballyEnabled)
-                m_xDriverList->select(-1);
+                m_xDriverList->unselect_all();
             m_xDriverLabel->set_sensitive(bGloballyEnabled);
             m_xDriver->set_sensitive(bGloballyEnabled);
             m_xDriverPoolingEnabled->set_sensitive(bGloballyEnabled && !m_xDriverPoolingEnabledImg->get_visible());

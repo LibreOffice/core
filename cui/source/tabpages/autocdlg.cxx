@@ -1172,7 +1172,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
             });
             if( !bFound )
             {
-                m_xReplaceTLB->select(-1);
+                m_xReplaceTLB->unselect_all();
                 bFirstSelIterSet = false;
                 m_xNewReplacePB->set_label(sNew);
                 if( bReplaceEditChanged )

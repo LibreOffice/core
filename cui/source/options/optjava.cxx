@@ -771,7 +771,7 @@ void SvxJavaParameterDlg::EditParameter()
 short SvxJavaParameterDlg::run()
 {
     m_xParameterEdit->grab_focus();
-    m_xAssignedList->select(-1);
+    m_xAssignedList->unselect_all();
     return GenericDialogController::run();
 }
 

@@ -543,7 +543,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 #************************************************************************/
 void SvxNumberFormatTabPage::Obstructing()
 {
-    m_xLbFormat->select(-1);
+    m_xLbFormat->unselect_all();
     m_xLbLocale->set_active(-1);
     m_xFtLocale->set_sensitive(false);
     m_xLbLocale->set_sensitive(false);
@@ -862,7 +862,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         sal_uInt32 nCurEntryKey=NUMKEY_UNDEFINED;
         if(!pNumFmtShell->FindEntry( m_xEdFormat->get_text(),&nCurEntryKey))
         {
-            m_xLbFormat->select(-1);
+            m_xLbFormat->unselect_all();
         }
     }
     if(bOneAreaFlag)
@@ -1037,7 +1037,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         }
         else
         {
-            m_xLbFormat->select(-1);
+            m_xLbFormat->unselect_all();
         }
 
         if ( bUpdateEdit )
@@ -1565,7 +1565,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl(const weld::Widget* pOptCtrl)
     else
     {
         EditHdl_Impl( nullptr );
-        m_xLbFormat->select(-1);
+        m_xLbFormat->unselect_all();
     }
 }
 

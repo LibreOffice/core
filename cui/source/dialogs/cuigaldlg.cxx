@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
 
     std::unique_ptr<weld::WaitObject> xWait(new weld::WaitObject(m_pParent));
 
-    m_pTabPage->m_xLbxFound->select(-1);
+    m_pTabPage->m_xLbxFound->unselect_all();
     m_pTabPage->m_xLbxFound->freeze();
 
     // mark all taken positions in aRemoveEntries

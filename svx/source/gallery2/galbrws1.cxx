@@ -475,7 +475,7 @@ void GalleryBrowser::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 else if( nCurSelectPos )
                     mxThemes->select( nCurSelectPos - 1 );
                 else
-                    mxThemes->select(-1);
+                    mxThemes->unselect_all();
 
                 SelectThemeHdl( *mxThemes );
             }
