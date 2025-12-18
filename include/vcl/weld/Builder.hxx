@@ -9,11 +9,63 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/uitest/factory.hxx>
+
+#include <memory>
+
+namespace comphelper
+{
+class OAccessible;
+}
 
 namespace weld
 {
+class Assistant;
+class Box;
+class Button;
+class Calendar;
+class CheckButton;
+class ComboBox;
+class Container;
+class Dialog;
+class DrawingArea;
+class Entry;
+class EntryTreeView;
+class Expander;
+class FormattedSpinButton;
+class Frame;
+class Grid;
+class IconView;
+class Image;
+class Label;
+class LevelBar;
+class LinkButton;
+class Menu;
+class MenuButton;
+class MessageDialog;
+class MetricSpinButton;
+class Notebook;
+class Paned;
+class Popover;
+class ProgressBar;
+class RadioButton;
+class Scale;
+class Scrollbar;
+class ScrolledWindow;
+class SizeGroup;
+class SpinButton;
+class Spinner;
+class TextView;
+class ToggleButton;
+class Toolbar;
+class TreeView;
+class Widget;
+class Window;
+
 class VCL_DLLPUBLIC Builder
 {
 public:

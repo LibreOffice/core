@@ -9,14 +9,27 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace weld
 {
+short DialogController::run() { return getDialog()->run(); }
+
 bool DialogController::runAsync(const std::shared_ptr<DialogController>& rController,
                                 const std::function<void(sal_Int32)>& func)
 {
     return rController->getDialog()->runAsync(rController, func);
 }
+
+void DialogController::set_title(const OUString& rTitle) { getDialog()->set_title(rTitle); }
+
+OUString DialogController::get_title() const { return getConstDialog()->get_title(); }
+
+void DialogController::set_help_id(const OUString& rHelpId) { getDialog()->set_help_id(rHelpId); }
+
+OUString DialogController::get_help_id() const { return getConstDialog()->get_help_id(); }
+
+void DialogController::response(int nResponse) { getDialog()->response(nResponse); }
 
 DialogController::~DialogController() {}
 
@@ -48,6 +61,28 @@ MessageDialogController::MessageDialogController(weld::Widget* pParent, const OU
         //don't actually exist in the ui description, they're implied
         m_xOrigParent->move(m_xRelocate.get(), m_xContentArea.get());
     }
+}
+
+void MessageDialogController::set_primary_text(const OUString& rText)
+{
+    m_xDialog->set_primary_text(rText);
+}
+
+OUString MessageDialogController::get_primary_text() const { return m_xDialog->get_primary_text(); }
+
+void MessageDialogController::set_secondary_text(const OUString& rText)
+{
+    m_xDialog->set_secondary_text(rText);
+}
+
+OUString MessageDialogController::get_secondary_text() const
+{
+    return m_xDialog->get_secondary_text();
+}
+
+void MessageDialogController::set_default_response(int nResponse)
+{
+    m_xDialog->set_default_response(nResponse);
 }
 
 MessageDialogController::~MessageDialogController()

@@ -9,12 +9,20 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
+
+#include <functional>
 
 namespace weld
 {
+class Assistant;
+class Container;
+class Dialog;
+class MessageDialog;
+class Widget;
+
 class VCL_DLLPUBLIC DialogController : public std::enable_shared_from_this<DialogController>
 {
 public:
@@ -23,14 +31,14 @@ public:
     {
         return const_cast<DialogController*>(this)->getDialog();
     }
-    virtual short run() { return getDialog()->run(); }
+    virtual short run();
     static bool runAsync(const std::shared_ptr<DialogController>& rController,
                          const std::function<void(sal_Int32)>&);
-    void set_title(const OUString& rTitle) { getDialog()->set_title(rTitle); }
-    OUString get_title() const { return getConstDialog()->get_title(); }
-    void set_help_id(const OUString& rHelpId) { getDialog()->set_help_id(rHelpId); }
-    OUString get_help_id() const { return getConstDialog()->get_help_id(); }
-    void response(int nResponse) { getDialog()->response(nResponse); }
+    void set_title(const OUString& rTitle);
+    OUString get_title() const;
+    void set_help_id(const OUString& rHelpId);
+    OUString get_help_id() const;
+    void response(int nResponse);
     virtual ~DialogController();
 };
 
@@ -71,11 +79,11 @@ public:
                             const OUString& rDialogId, const OUString& rRelocateId = {});
     virtual Dialog* getDialog() override;
     virtual ~MessageDialogController() override;
-    void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
-    OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
-    void set_secondary_text(const OUString& rText) { m_xDialog->set_secondary_text(rText); }
-    OUString get_secondary_text() const { return m_xDialog->get_secondary_text(); }
-    void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
+    void set_primary_text(const OUString& rText);
+    OUString get_primary_text() const;
+    void set_secondary_text(const OUString& rText);
+    OUString get_secondary_text() const;
+    void set_default_response(int nResponse);
 };
 
 class VCL_DLLPUBLIC AssistantController : public DialogController
