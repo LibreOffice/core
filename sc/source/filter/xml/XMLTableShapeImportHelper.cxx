@@ -139,7 +139,10 @@ void XMLTableShapeImportHelper::finishShape(
             if (SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(rShape))
             {
                 if (!bOnTable)
+                {
                     ScDrawLayer::SetCellAnchored(*pSdrObj, aAnchor);
+                    ScDrawLayer::SetNonRotatedAnchor(*pSdrObj, aAnchor);
+                }
                 else
                     ScDrawLayer::SetPageAnchored(*pSdrObj);
             }
