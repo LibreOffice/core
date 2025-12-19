@@ -262,9 +262,10 @@ void SvxCharacterMap::init()
     }
 
     m_aCharmapContents.init(m_xFrame.is(),
-                            LINK(this, SvxCharacterMap, CharClickHdl),
+                            Link<const CharAndFont&, void>(),
                             LINK(this, SvxCharacterMap, UpdateFavHdl),
-                            Link<void*, void>());
+                            Link<void*, void>(),
+                            LINK(this, SvxCharacterMap, CharFocusHdl));
 
     setCharName(90);
 
@@ -524,7 +525,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
     }
 }
 
-IMPL_LINK(SvxCharacterMap, CharClickHdl, const CharAndFont&, rView, void)
+IMPL_LINK(SvxCharacterMap, CharFocusHdl, const CharAndFont&, rView, void)
 {
     vcl::Font aCharFont = GetCharFont();
     aCharFont.SetFamilyName(rView.sFont);
