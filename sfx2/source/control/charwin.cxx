@@ -76,6 +76,8 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
             InsertCharToDoc();
         }
 
+        GrabFocus();
+        Invalidate();
         maMouseClickHdl.Call(*this);
         return true;
     }

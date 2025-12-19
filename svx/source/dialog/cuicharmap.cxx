@@ -526,8 +526,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView&, rView, void)
 {
-    rView.GrabFocus();
-
     SetCharFont(rView.GetFont());
     m_aShowChar.SetText(rView.GetText());
     m_aShowChar.SetFont(rView.GetFont());
@@ -547,7 +545,6 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView&, rView, void)
     m_xDecimalCodeText->set_text(aDecimalText);
     setCharName(cChar);
 
-    rView.Invalidate();
     m_xOKBtn->set_sensitive(true);
 }
 
