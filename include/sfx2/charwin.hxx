@@ -61,6 +61,8 @@ private:
     virtual bool Command(const CommandEvent&) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
+    void InsertCharToDoc();
+
 public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
     SFX2_DLLPUBLIC virtual ~SvxCharView() override;
@@ -69,9 +71,9 @@ public:
     vcl::Font const & GetFont() const { return maFont; }
     void            SetText( const OUString& rText );
     OUString const & GetText() const { return m_sText; }
+    CharAndFont GetCharAndFont() const;
     void SetToolTip(const OUString& rToolTip) { m_sToolTip = rToolTip; };
     void            SetHasInsert( bool bInsert );
-    void            InsertCharToDoc();
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 

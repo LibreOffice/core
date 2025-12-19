@@ -59,7 +59,7 @@ IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView&, rView, void)
 {
     m_xControl->EndPopupMode();
 
-    rView.InsertCharToDoc();
+    SfxCharmapContainer::InsertCharToDoc(rView.GetCharAndFont());
 }
 
 IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, weld::Button&, void)

@@ -24,8 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <sfx2/charwin.hxx>
-#include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertyvalue.hxx>
+#include <sfx2/charmapcontainer.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -112,18 +111,7 @@ bool SvxCharView::Command(const CommandEvent& rCommandEvent)
     return weld::CustomWidgetController::Command(rCommandEvent);
 }
 
-void SvxCharView::InsertCharToDoc()
-{
-    if (GetText().isEmpty())
-        return;
-
-    uno::Sequence<beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue(u"Symbols"_ustr, GetText()),
-        comphelper::makePropertyValue(u"FontName"_ustr, maFont.GetFamilyName())
-    };
-
-    comphelper::dispatchCommand(u".uno:InsertSymbol"_ustr, aArgs);
-}
+void SvxCharView::InsertCharToDoc() { SfxCharmapContainer::InsertCharToDoc(GetCharAndFont()); }
 
 void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
@@ -257,6 +245,11 @@ void SvxCharView::SetText(const OUString& rText)
 {
     m_sText = rText;
     Invalidate();
+}
+
+CharAndFont SvxCharView::GetCharAndFont() const
+{
+    return CharAndFont(GetText(), GetFont().GetFamilyName());
 }
 
 void SvxCharView::SetHasInsert(bool bInsert) { maHasInsert = bInsert; }

@@ -88,6 +88,7 @@ public:
     void GrabFocusToFirstFavorite();
 
     static OUString GetCharInfoText(std::u16string_view sCharText);
+    static void InsertCharToDoc(const CharAndFont& rChar);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

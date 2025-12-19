@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <charmapcontrol.hxx>
 #include <charmappopup.hxx>
@@ -447,6 +448,19 @@ OUString SfxCharmapContainer::GetCharInfoText(std::u16string_view sCharText)
         return sCharText + u" "_ustr + sCharName + u" U+" + aHexText;
     }
     return OUString();
+}
+
+void SfxCharmapContainer::InsertCharToDoc(const CharAndFont& rChar)
+{
+    if (rChar.sChar.isEmpty())
+        return;
+
+    uno::Sequence<beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue(u"Symbols"_ustr, rChar.sChar),
+        comphelper::makePropertyValue(u"FontName"_ustr, rChar.sFont)
+    };
+
+    comphelper::dispatchCommand(u".uno:InsertSymbol"_ustr, aArgs);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
