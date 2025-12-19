@@ -14,8 +14,7 @@ $(eval $(call gb_Library_set_warnings_disabled,skia))
 $(eval $(call gb_Library_use_unpacked,skia,skia))
 
 $(eval $(call gb_Library_use_clang,skia))
-#This currently results in all sorts of compile complaints
-#$(eval $(call gb_Library_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
+$(eval $(call gb_Library_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
 
 $(eval $(call gb_Library_add_defs,skia,\
     -DSKIA_IMPLEMENTATION=1 \
@@ -126,6 +125,7 @@ $(eval $(call gb_Library_set_include,skia,\
     $$(INCLUDE) \
     -I$(gb_UnpackedTarball_workdir)/skia \
     -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/src/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/include/ \
     -I$(gb_UnpackedTarball_workdir)/skia/src/gpu/vk/vulkanmemoryallocator/ \

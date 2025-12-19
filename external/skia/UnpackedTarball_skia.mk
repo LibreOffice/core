@@ -44,6 +44,7 @@ skia_patches := \
 	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
     msvc-unknown-attributes.patch.1 \
 	fix-semaphore-include.patch.1 \
+	pch-duplicate-definition.patch.1 \
 
 ifneq ($(MSYSTEM),)
 # use binary flag so patch from git-bash won't choke on mixed line-endings in patches

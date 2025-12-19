@@ -1,0 +1,41 @@
+diff -ur skia.org/src/base/SkCubics.cpp skia/src/base/SkCubics.cpp
+--- skia.org/src/base/SkCubics.cpp	2025-12-19 10:21:59.576434800 +0200
++++ skia/src/base/SkCubics.cpp	2025-12-19 10:25:13.020232200 +0200
+@@ -148,7 +148,7 @@
+     return foundRoots;
+ }
+ 
+-static bool approximately_zero(double x) {
++bool lcl_approximately_zero(double x) {
+     // This cutoff for our binary search hopefully strikes a good balance between
+     // performance and accuracy.
+     return std::abs(x) < 0.00000001;
+@@ -174,7 +174,7 @@
+ static double binary_search(double A, double B, double C, double D, double start, double stop) {
+     SkASSERT(start <= stop);
+     double left = SkCubics::EvalAt(A, B, C, D, start);
+-    if (approximately_zero(left)) {
++    if (lcl_approximately_zero(left)) {
+         return start;
+     }
+     double right = SkCubics::EvalAt(A, B, C, D, stop);
+@@ -189,7 +189,7 @@
+     for (int i = 0; i < maxIterations; i++) {
+         double step = (start + stop) / 2;
+         double curr = SkCubics::EvalAt(A, B, C, D, step);
+-        if (approximately_zero(curr)) {
++        if (lcl_approximately_zero(curr)) {
+             return step;
+         }
+         if ((curr < 0 && left < 0) || (curr > 0 && left > 0)) {
+@@ -229,8 +229,8 @@
+         double root = binary_search(A, B, C, D, regions[startIndex], regions[startIndex + 1]);
+         if (root >= 0) {
+             // Check for duplicates
+-            if ((foundRoots < 1 || !approximately_zero(solution[0] - root)) &&
+-                (foundRoots < 2 || !approximately_zero(solution[1] - root))) {
++            if ((foundRoots < 1 || !lcl_approximately_zero(solution[0] - root)) &&
++                (foundRoots < 2 || !lcl_approximately_zero(solution[1] - root))) {
+                 solution[foundRoots++] = root;
+             }
+         }
