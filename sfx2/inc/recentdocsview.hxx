@@ -86,7 +86,7 @@ public:
     void setFilter(ApplicationType aFilter);
 
 protected:
-    void UpdateColors(const StyleSettings& rSettings);
+    void UpdateColors(const StyleSettings& rSettings) override;
 
 private:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;

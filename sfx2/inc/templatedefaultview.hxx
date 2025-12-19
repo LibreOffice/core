@@ -26,7 +26,7 @@ public:
     void createContextMenu();
 
 protected:
-    void UpdateColors(const StyleSettings& rSettings);
+    void UpdateColors(const StyleSettings& rSettings) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
