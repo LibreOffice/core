@@ -41,6 +41,15 @@
      while (_PySet_NextEntryRef((PyObject *)other, &setpos, &key, &hash)) {
          FT_ATOMIC_STORE_PTR_RELEASE(*dest, key);
          dest++;
+@@ -1367,7 +1367,7 @@
+         return -1;
+     }
+ 
+-    PyObject **dest = self->ob_item + m;
++    PyObject **dest = m == 0 ? self->ob_item : self->ob_item + m;
+     Py_ssize_t pos = 0;
+     Py_ssize_t i = 0;
+     PyObject *key, *value;
 --- Parser/lexer/buffer.c
 +++ Parser/lexer/buffer.c
 @@ -27,8 +27,8 @@
