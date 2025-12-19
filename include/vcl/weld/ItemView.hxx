@@ -35,6 +35,8 @@ public:
     // set iter to point to next node at the current level
     virtual bool iter_next_sibling(TreeIter& rIter) const = 0;
 
+    virtual int get_iter_index_in_parent(const TreeIter& rIter) const = 0;
+
     virtual std::unique_ptr<TreeIter> get_iterator(int nPos) const = 0;
 
     virtual OUString get_selected_id() const = 0;

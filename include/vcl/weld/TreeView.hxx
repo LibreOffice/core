@@ -334,7 +334,6 @@ public:
     }
     virtual bool iter_parent(TreeIter& rIter) const = 0;
     virtual int get_iter_depth(const TreeIter& rIter) const = 0;
-    virtual int get_iter_index_in_parent(const TreeIter& rIter) const = 0;
     /* Compares two paths. If a appears before b in a tree, then -1 is returned.
        If b appears before a , then 1 is returned. If the two nodes are equal,
        then 0 is returned.

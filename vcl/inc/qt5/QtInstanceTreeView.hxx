@@ -93,7 +93,6 @@ public:
     virtual bool iter_children(weld::TreeIter& rIter) const override;
     virtual bool iter_parent(weld::TreeIter& rIter) const override;
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
-    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override;
 
     virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override;
     virtual bool iter_has_child(const weld::TreeIter& rIter) const override;

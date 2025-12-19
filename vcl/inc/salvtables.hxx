@@ -1511,6 +1511,8 @@ public:
     virtual bool get_iter_first(weld::TreeIter& rIter) const override;
     virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
 
+    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override;
+
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
     virtual OUString get_selected_id() const override;
@@ -1815,8 +1817,6 @@ public:
     virtual void do_remove_selection() override;
 
     virtual bool is_selected(const weld::TreeIter& rIter) const override;
-
-    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override;
 
     virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override;
 

@@ -40,6 +40,19 @@ bool QtInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
     return aSiblingIndex.isValid();
 }
 
+int QtInstanceItemView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
+{
+    SolarMutexGuard g;
+
+    int nIndex;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = modelIndex(rIter);
+        nIndex = aIndex.row();
+    });
+
+    return nIndex;
+}
+
 std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
 {
     const QModelIndex aIndex = modelIndex(nPos);

@@ -3538,6 +3538,12 @@ bool SalInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
+int SalInstanceItemView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return SvTreeList::GetRelPos(rVclIter.iter);
+}
+
 std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) const
 {
     if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nPos))
@@ -4831,12 +4837,6 @@ bool SalInstanceTreeView::is_selected(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return m_xTreeView->IsSelected(rVclIter.iter);
-}
-
-int SalInstanceTreeView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    return SvTreeList::GetRelPos(rVclIter.iter);
 }
 
 int SalInstanceTreeView::iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const
