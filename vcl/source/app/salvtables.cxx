@@ -3592,6 +3592,12 @@ int SalInstanceItemView::n_children() const
     return m_pTreeListBox->GetModel()->GetChildList(nullptr).size();
 }
 
+void SalInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->SetCurEntry(rVclIter.iter);
+}
+
 void SalInstanceItemView::do_select(const weld::TreeIter& rIter)
 {
     assert(m_pTreeListBox->IsUpdateMode()
@@ -4592,12 +4598,6 @@ bool SalInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
     return pEntry != nullptr;
 }
 
-void SalInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xTreeView->SetCurEntry(rVclIter.iter);
-}
-
 bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
@@ -5407,12 +5407,6 @@ bool SalInstanceIconView::get_cursor(weld::TreeIter* pIter) const
     if (pVclIter)
         pVclIter->iter = pEntry;
     return pEntry != nullptr;
-}
-
-void SalInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xIconView->SetCurEntry(rVclIter.iter);
 }
 
 void SalInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)

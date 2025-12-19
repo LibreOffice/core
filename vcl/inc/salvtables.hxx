@@ -1496,6 +1496,8 @@ protected:
     SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
 
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
+
     virtual void do_select(const weld::TreeIter& rIter) override;
     virtual void do_unselect(const weld::TreeIter& rIter) override;
 
@@ -1651,6 +1653,7 @@ public:
 
     virtual int get_cursor_index() const override;
 
+    using SalInstanceItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) override;
 
     virtual void do_scroll_to_row(int pos) override;
@@ -1752,8 +1755,6 @@ public:
     virtual bool get_selected(weld::TreeIter* pIter) const override;
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
-
-    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
 
     bool get_iter_abs_pos(weld::TreeIter& rIter, int nPos) const;
 
@@ -1942,8 +1943,6 @@ public:
     virtual bool get_selected(weld::TreeIter* pIter) const override;
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
-
-    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
 
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
