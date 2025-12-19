@@ -55,7 +55,7 @@ void SvxCharView::GetFocus()
 {
     Invalidate();
     if (maFocusInHdl.IsSet())
-        maFocusInHdl.Call(CharAndFont(GetText(), GetFont().GetFamilyName()));
+        maFocusInHdl.Call(CharAndFont(GetText(), GetFontFamilyName()));
 }
 
 void SvxCharView::LoseFocus() { Invalidate(); }
@@ -251,7 +251,7 @@ void SvxCharView::SetText(const OUString& rText)
 
 CharAndFont SvxCharView::GetCharAndFont() const
 {
-    return CharAndFont(GetText(), GetFont().GetFamilyName());
+    return CharAndFont(GetText(), GetFontFamilyName());
 }
 
 void SvxCharView::SetHasInsert(bool bInsert) { maHasInsert = bInsert; }

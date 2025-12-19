@@ -68,7 +68,7 @@ public:
     SFX2_DLLPUBLIC virtual ~SvxCharView() override;
 
     void UpdateFont(const OUString& rFontFamilyName);
-    vcl::Font const & GetFont() const { return maFont; }
+    OUString GetFontFamilyName() const { return maFont.GetFamilyName(); }
     void            SetText( const OUString& rText );
     OUString const & GetText() const { return m_sText; }
     CharAndFont GetCharAndFont() const;

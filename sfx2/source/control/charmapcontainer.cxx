@@ -349,7 +349,7 @@ IMPL_LINK(SfxCharmapContainer, FavContextMenuHdl, const CommandEvent&, rCmdEvent
 IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView&, rView, void)
 {
     const OUString& sTitle = rView.GetText();
-    OUString sFont = rView.GetFont().GetFamilyName();
+    OUString sFont = rView.GetFontFamilyName();
 
     // if recent char to be added is already in list, remove it
     auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(sTitle, sFont));
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView&, void)
 
 IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, SvxCharView&, rView, void)
 {
-    deleteFavCharacterFromList(rView.GetText(), rView.GetFont().GetFamilyName());
+    deleteFavCharacterFromList(rView.GetText(), rView.GetFontFamilyName());
     updateFavCharControl();
 }
 

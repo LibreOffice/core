@@ -526,12 +526,18 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView&, rView, void)
 {
-    SetCharFont(rView.GetFont());
+    const OUString sFontFamily = rView.GetFontFamilyName();
+    vcl::Font aCharFont = GetCharFont();
+    aCharFont.SetFamilyName(sFontFamily);
+    SetCharFont(aCharFont);
+
     m_aShowChar.SetText(rView.GetText());
-    m_aShowChar.SetFont(rView.GetFont());
+    vcl::Font aShowCharFont = m_aShowChar.GetFont();
+    aShowCharFont.SetFamilyName(sFontFamily);
+    m_aShowChar.SetFont(aShowCharFont);
     m_aShowChar.Invalidate();
 
-    setFavButtonState(rView.GetText(), rView.GetFont().GetFamilyName()); //check state
+    setFavButtonState(rView.GetText(), sFontFamily); //check state
 
     // Get the hexadecimal code
     OUString charValue = rView.GetText();
