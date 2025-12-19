@@ -38,7 +38,7 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
 {
     m_xCharInfoLabel->set_size_request(-1, m_xCharInfoLabel->get_text_height() * 2);
 
-    m_aCharmapContents.init(false, LINK(this, SfxCharmapCtrl, CharClickHdl),
+    m_aCharmapContents.init(true, LINK(this, SfxCharmapCtrl, CharActivateHdl),
                             Link<void*,void>(), LINK(this, SfxCharmapCtrl, UpdateRecentHdl),
                             LINK(this, SfxCharmapCtrl, CharFocusInHdl));
 
@@ -55,7 +55,7 @@ IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, const CharAndFont&, rChar, void)
     m_xCharInfoLabel->set_label(SfxCharmapContainer::GetCharInfoText(rChar.sChar));
 }
 
-IMPL_LINK(SfxCharmapCtrl, CharClickHdl, const CharAndFont&, rChar, void)
+IMPL_LINK(SfxCharmapCtrl, CharActivateHdl, const CharAndFont&, rChar, void)
 {
     m_xControl->EndPopupMode();
 

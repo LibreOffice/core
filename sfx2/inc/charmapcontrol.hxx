@@ -45,7 +45,7 @@ private:
     std::unique_ptr<weld::Label> m_xCharInfoLabel;
 
     DECL_LINK(CharFocusInHdl, const CharAndFont&, void);
-    DECL_LINK(CharClickHdl, const CharAndFont&, void);
+    DECL_LINK(CharActivateHdl, const CharAndFont&, void);
     DECL_LINK(OpenDlgHdl, weld::Button&, void);
     DECL_LINK(DlgBtnFocusInHdl, weld::Widget&, void);
     DECL_LINK(UpdateRecentHdl, void*, void);

@@ -110,7 +110,8 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
     }
 }
 
-void SfxCharmapContainer::init(bool bHasInsert, const Link<const CharAndFont&, void>& rMouseClickHdl,
+void SfxCharmapContainer::init(bool bActivateOnSingleClick,
+                               const Link<const CharAndFont&, void>& rActivateHdl,
                                const Link<void*, void>& rUpdateFavHdl,
                                const Link<void*, void>& rUpdateRecentHdl,
                                const Link<const CharAndFont&, void>& rFocusInHdl)
@@ -125,14 +126,14 @@ void SfxCharmapContainer::init(bool bHasInsert, const Link<const CharAndFont&, v
 
     for(int i = 0; i < 16; i++)
     {
-        m_aRecentCharView[i].SetHasInsert(bHasInsert);
+        m_aRecentCharView[i].SetActivateOnSingleClick(bActivateOnSingleClick);
         m_aRecentCharView[i].setFocusInHdl(rFocusInHdl);
-        m_aRecentCharView[i].setMouseClickHdl(rMouseClickHdl);
+        m_aRecentCharView[i].setActivateHdl(rActivateHdl);
         m_aRecentCharView[i].setContextMenuHdl(
             LINK(this, SfxCharmapContainer, RecentContextMenuHdl));
-        m_aFavCharView[i].SetHasInsert(bHasInsert);
+        m_aFavCharView[i].SetActivateOnSingleClick(bActivateOnSingleClick);
         m_aFavCharView[i].setFocusInHdl(rFocusInHdl);
-        m_aFavCharView[i].setMouseClickHdl(rMouseClickHdl);
+        m_aFavCharView[i].setActivateHdl(rActivateHdl);
         m_aFavCharView[i].setContextMenuHdl(LINK(this, SfxCharmapContainer, FavContextMenuHdl));
     }
 }

@@ -109,6 +109,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(FontSelectHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(SubsetSelectHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(CharActivateHdl, const CharAndFont&, void);
     DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, SvxShowCharSet&, void);
     DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet&, void);
     DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet&, void);

@@ -261,8 +261,8 @@ void SvxCharacterMap::init()
         m_xOKBtn->set_sensitive(true);
     }
 
-    m_aCharmapContents.init(m_xFrame.is(),
-                            Link<const CharAndFont&, void>(),
+    m_aCharmapContents.init(false,
+                            LINK(this, SvxCharacterMap, CharActivateHdl),
                             LINK(this, SvxCharacterMap, UpdateFavHdl),
                             Link<void*, void>(),
                             LINK(this, SvxCharacterMap, CharFocusHdl));
@@ -561,6 +561,12 @@ void SvxCharacterMap::insertSelectedCharacter(const SvxShowCharSet& rCharSet)
     OUString aOUStr( &cChar, 1 );
     setFavButtonState(aOUStr, m_aFont.GetFamilyName());
     insertCharToDoc(aOUStr);
+}
+
+IMPL_LINK(SvxCharacterMap, CharActivateHdl, const CharAndFont&, rChar, void)
+{
+    if (m_xFrame.is())
+        SfxCharmapContainer::InsertCharToDoc(rChar);
 }
 
 IMPL_LINK(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet&, rCharSet, void)

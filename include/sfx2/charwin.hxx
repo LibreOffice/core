@@ -43,12 +43,12 @@ class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
 private:
     VclPtr<VirtualDevice> mxVirDev;
     vcl::Font       maFont;
-    bool            maHasInsert;
+    bool            m_bActivateOnSingleClick;
     OUString        m_sText;
     OUString        m_sToolTip;
 
     Link<const CharAndFont&, void> maFocusInHdl;
-    Link<const CharAndFont&, void> maMouseClickHdl;
+    Link<const CharAndFont&, void> maActivateHdl;
     Link<const CommandEvent&, void> maContextMenuHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -61,8 +61,6 @@ private:
     virtual bool Command(const CommandEvent&) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void InsertCharToDoc();
-
 public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
     SFX2_DLLPUBLIC virtual ~SvxCharView() override;
@@ -73,12 +71,12 @@ public:
     OUString const & GetText() const { return m_sText; }
     CharAndFont GetCharAndFont() const;
     void SetToolTip(const OUString& rToolTip) { m_sToolTip = rToolTip; };
-    void            SetHasInsert( bool bInsert );
+    void SetActivateOnSingleClick(bool bActivate);
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
     void setFocusInHdl(const Link<const CharAndFont&, void>& rLink);
-    void setMouseClickHdl(const Link<const CharAndFont&, void>& rLink);
+    void setActivateHdl(const Link<const CharAndFont&, void>& rLink);
     void setContextMenuHdl(const Link<const CommandEvent&, void>& rLink);
 };
 

@@ -32,7 +32,7 @@ using namespace com::sun::star;
 
 SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
-    , maHasInsert(true)
+    , m_bActivateOnSingleClick(false)
 {
 }
 
@@ -71,13 +71,10 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft())
     {
-        if (!(rMEvt.GetClicks() % 2) && maHasInsert)
-        {
-            InsertCharToDoc();
-        }
         GrabFocus();
         Invalidate();
-        maMouseClickHdl.Call(GetCharAndFont());
+        if (rMEvt.GetClicks() == 2 || m_bActivateOnSingleClick)
+            maActivateHdl.Call(GetCharAndFont());
         return true;
     }
 
@@ -92,7 +89,7 @@ bool SvxCharView::KeyInput(const KeyEvent& rKEvt)
     {
         case KEY_SPACE:
         case KEY_RETURN:
-            InsertCharToDoc();
+            maActivateHdl.Call(GetCharAndFont());
             bRet = true;
             break;
     }
@@ -111,8 +108,6 @@ bool SvxCharView::Command(const CommandEvent& rCommandEvent)
 
     return weld::CustomWidgetController::Command(rCommandEvent);
 }
-
-void SvxCharView::InsertCharToDoc() { SfxCharmapContainer::InsertCharToDoc(GetCharAndFont()); }
 
 void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
@@ -214,9 +209,9 @@ void SvxCharView::setFocusInHdl(const Link<const CharAndFont&, void>& rLink)
     maFocusInHdl = rLink;
 }
 
-void SvxCharView::setMouseClickHdl(const Link<const CharAndFont&, void>& rLink)
+void SvxCharView::setActivateHdl(const Link<const CharAndFont&, void>& rLink)
 {
-    maMouseClickHdl = rLink;
+    maActivateHdl = rLink;
 }
 
 void SvxCharView::setContextMenuHdl(const Link<const CommandEvent&, void>& rLink)
@@ -253,6 +248,6 @@ CharAndFont SvxCharView::GetCharAndFont() const
     return CharAndFont(GetText(), GetFontFamilyName());
 }
 
-void SvxCharView::SetHasInsert(bool bInsert) { maHasInsert = bInsert; }
+void SvxCharView::SetActivateOnSingleClick(bool bActivate) { m_bActivateOnSingleClick = bActivate; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
