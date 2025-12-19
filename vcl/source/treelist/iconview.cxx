@@ -327,8 +327,13 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
         if (pIt)
         {
             const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
+            Size i = pBmpItem->GetBitmap1().GetSizePixel();
             if (pBmpItem)
+            {
                 rJsonWriter.put("ondemand", true);
+                rJsonWriter.put("width", i.getWidth());
+                rJsonWriter.put("height", i.getHeight());
+            }
         }
 
         if (const OUString tooltip = GetEntryTooltip(pEntry); !tooltip.isEmpty())
