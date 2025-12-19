@@ -254,6 +254,10 @@ enum PreferredAppMode
 
 }
 
+#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
+#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#endif
+
 static void UpdateDarkMode(HWND hWnd)
 {
     static bool bOSSupportsDarkMode = OSSupportsDarkMode();
@@ -294,7 +298,7 @@ static void UpdateDarkMode(HWND hWnd)
     if (!AllowDarkModeForWindow)
         return;
 
-    DwmSetWindowAttribute(hWnd, 20, &bDarkMode, sizeof(bDarkMode));
+    DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &bDarkMode, sizeof(bDarkMode));
 }
 
 static void UpdateAutoAccel()
