@@ -87,8 +87,6 @@ public:
     virtual bool get_selected(weld::TreeIter* pIter) const override;
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
     virtual void do_set_cursor(const weld::TreeIter& rIter) override;
-    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
-    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
     virtual bool iter_next(weld::TreeIter& rIter) const override;
     virtual bool iter_previous(weld::TreeIter& rIter) const override;

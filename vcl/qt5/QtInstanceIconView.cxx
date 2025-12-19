@@ -228,12 +228,6 @@ void QtInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
     });
 }
 
-bool QtInstanceIconView::get_iter_first(weld::TreeIter&) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
 OUString QtInstanceIconView::get_id(const weld::TreeIter& rIter) const
 {
     SolarMutexGuard g;
@@ -261,12 +255,6 @@ OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
     });
 
     return sText;
-}
-
-bool QtInstanceIconView::iter_next_sibling(weld::TreeIter&) const
-{
-    assert(false && "Not implemented yet");
-    return false;
 }
 
 void QtInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)

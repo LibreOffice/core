@@ -377,24 +377,6 @@ void QtInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
     GetQtInstance().RunInMainThread([&] { m_pTreeView->setCurrentIndex(modelIndex(rIter)); });
 }
 
-bool QtInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const
-{
-    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
-    const QModelIndex aIndex = modelIndex(0);
-    rQtIter.setModelIndex(aIndex);
-    return aIndex.isValid();
-}
-
-bool QtInstanceTreeView::iter_next_sibling(weld::TreeIter& rIter) const
-{
-    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
-    const QModelIndex aIndex = rQtIter.modelIndex();
-    const QModelIndex aSiblingIndex = m_pModel->sibling(aIndex.row() + 1, 0, aIndex);
-    rQtIter.setModelIndex(aSiblingIndex);
-
-    return aSiblingIndex.isValid();
-}
-
 bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);

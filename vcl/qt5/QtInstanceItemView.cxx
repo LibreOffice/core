@@ -22,6 +22,24 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::make_iterator(const weld::Tr
     return std::make_unique<QtInstanceTreeIter>(aIndex);
 }
 
+bool QtInstanceItemView::get_iter_first(weld::TreeIter& rIter) const
+{
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aIndex = modelIndex(0);
+    rQtIter.setModelIndex(aIndex);
+    return aIndex.isValid();
+}
+
+bool QtInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
+{
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aIndex = rQtIter.modelIndex();
+    const QModelIndex aSiblingIndex = m_rModel.sibling(aIndex.row() + 1, 0, aIndex);
+    rQtIter.setModelIndex(aSiblingIndex);
+
+    return aSiblingIndex.isValid();
+}
+
 std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
 {
     const QModelIndex aIndex = modelIndex(nPos);

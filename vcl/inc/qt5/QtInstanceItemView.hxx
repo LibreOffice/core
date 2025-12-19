@@ -35,6 +35,9 @@ public:
     virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
                                                           = nullptr) const override;
 
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
+
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
 protected:
