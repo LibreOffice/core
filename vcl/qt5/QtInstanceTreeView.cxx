@@ -370,13 +370,6 @@ bool QtInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
     return bRet;
 }
 
-void QtInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] { m_pTreeView->setCurrentIndex(modelIndex(rIter)); });
-}
-
 bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);

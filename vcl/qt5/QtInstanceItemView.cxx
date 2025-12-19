@@ -62,6 +62,13 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
     return {};
 }
 
+void QtInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getItemView().setCurrentIndex(modelIndex(rIter)); });
+}
+
 void QtInstanceItemView::do_select_all()
 {
     SolarMutexGuard g;

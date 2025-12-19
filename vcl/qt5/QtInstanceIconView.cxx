@@ -219,15 +219,6 @@ bool QtInstanceIconView::get_cursor(weld::TreeIter*) const
     return false;
 }
 
-void QtInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->setCurrentIndex(modelIndex(rIter), QItemSelectionModel::NoUpdate);
-    });
-}
-
 OUString QtInstanceIconView::get_id(const weld::TreeIter& rIter) const
 {
     SolarMutexGuard g;
