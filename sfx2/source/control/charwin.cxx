@@ -75,10 +75,9 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
         {
             InsertCharToDoc();
         }
-
         GrabFocus();
         Invalidate();
-        maMouseClickHdl.Call(*this);
+        maMouseClickHdl.Call(GetCharAndFont());
         return true;
     }
 
@@ -215,7 +214,7 @@ void SvxCharView::setFocusInHdl(const Link<const CharAndFont&, void>& rLink)
     maFocusInHdl = rLink;
 }
 
-void SvxCharView::setMouseClickHdl(const Link<SvxCharView&, void>& rLink)
+void SvxCharView::setMouseClickHdl(const Link<const CharAndFont&, void>& rLink)
 {
     maMouseClickHdl = rLink;
 }

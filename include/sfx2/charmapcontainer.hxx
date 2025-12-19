@@ -66,7 +66,7 @@ public:
     SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev,
                         bool bLockGridSizes);
 
-    void init(bool bHasInsert, const Link<SvxCharView&, void>& rMouseClickHdl,
+    void init(bool bHasInsert, const Link<const CharAndFont&, void>& rMouseClickHdl,
               const Link<void*, void>& rUpdateFavHdl, const Link<void*, void>& rUpdateRecentHdl,
               const Link<const CharAndFont&, void>& rFocusInHdl = Link<const CharAndFont&, void>());
 

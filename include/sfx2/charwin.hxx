@@ -48,7 +48,7 @@ private:
     OUString        m_sToolTip;
 
     Link<const CharAndFont&, void> maFocusInHdl;
-    Link<SvxCharView&, void> maMouseClickHdl;
+    Link<const CharAndFont&, void> maMouseClickHdl;
     Link<const CommandEvent&, void> maContextMenuHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -78,7 +78,7 @@ public:
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
     void setFocusInHdl(const Link<const CharAndFont&, void>& rLink);
-    void setMouseClickHdl(const Link<SvxCharView&, void>& rLink);
+    void setMouseClickHdl(const Link<const CharAndFont&, void>& rLink);
     void setContextMenuHdl(const Link<const CommandEvent&, void>& rLink);
 };
 

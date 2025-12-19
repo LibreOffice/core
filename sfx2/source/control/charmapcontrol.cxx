@@ -55,11 +55,11 @@ IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, const CharAndFont&, rChar, void)
     m_xCharInfoLabel->set_label(SfxCharmapContainer::GetCharInfoText(rChar.sChar));
 }
 
-IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView&, rView, void)
+IMPL_LINK(SfxCharmapCtrl, CharClickHdl, const CharAndFont&, rChar, void)
 {
     m_xControl->EndPopupMode();
 
-    SfxCharmapContainer::InsertCharToDoc(rView.GetCharAndFont());
+    SfxCharmapContainer::InsertCharToDoc(rChar);
 }
 
 IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, weld::Button&, void)

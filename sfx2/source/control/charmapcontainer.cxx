@@ -110,7 +110,7 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
     }
 }
 
-void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView&, void>& rMouseClickHdl,
+void SfxCharmapContainer::init(bool bHasInsert, const Link<const CharAndFont&, void>& rMouseClickHdl,
                                const Link<void*, void>& rUpdateFavHdl,
                                const Link<void*, void>& rUpdateRecentHdl,
                                const Link<const CharAndFont&, void>& rFocusInHdl)

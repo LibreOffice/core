@@ -524,23 +524,22 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
     }
 }
 
-IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView&, rView, void)
+IMPL_LINK(SvxCharacterMap, CharClickHdl, const CharAndFont&, rView, void)
 {
-    const OUString sFontFamily = rView.GetFontFamilyName();
     vcl::Font aCharFont = GetCharFont();
-    aCharFont.SetFamilyName(sFontFamily);
+    aCharFont.SetFamilyName(rView.sFont);
     SetCharFont(aCharFont);
 
-    m_aShowChar.SetText(rView.GetText());
+    m_aShowChar.SetText(rView.sChar);
     vcl::Font aShowCharFont = m_aShowChar.GetFont();
-    aShowCharFont.SetFamilyName(sFontFamily);
+    aShowCharFont.SetFamilyName(rView.sFont);
     m_aShowChar.SetFont(aShowCharFont);
     m_aShowChar.Invalidate();
 
-    setFavButtonState(rView.GetText(), sFontFamily); //check state
+    setFavButtonState(rView.sChar, rView.sFont); //check state
 
     // Get the hexadecimal code
-    OUString charValue = rView.GetText();
+    OUString charValue = rView.sChar;
     sal_UCS4 cChar = charValue.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
     OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
 
