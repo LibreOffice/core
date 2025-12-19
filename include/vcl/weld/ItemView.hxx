@@ -20,6 +20,8 @@ class VCL_DLLPUBLIC ItemView : virtual public Widget
     OUString m_sSavedValue;
 
 protected:
+    virtual void do_set_cursor(const TreeIter& rIter) = 0;
+
     virtual void do_select(const TreeIter& rIter) = 0;
     virtual void do_unselect(const TreeIter& rIter) = 0;
 
@@ -43,7 +45,9 @@ public:
     virtual OUString get_selected_text() const = 0;
 
     virtual bool get_selected(TreeIter* pIter) const = 0;
+
     virtual bool get_cursor(TreeIter* pIter) const = 0;
+    void set_cursor(const TreeIter& rIter);
 
     // Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select(int pos);

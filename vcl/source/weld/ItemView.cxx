@@ -11,6 +11,13 @@
 
 namespace weld
 {
+void ItemView::set_cursor(const TreeIter& rIter)
+{
+    disable_notify_events();
+    do_set_cursor(rIter);
+    enable_notify_events();
+}
+
 void ItemView::select(int pos)
 {
     if (pos == -1 || (pos == 0 && n_children() == 0))
