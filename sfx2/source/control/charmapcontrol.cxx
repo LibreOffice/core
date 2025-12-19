@@ -50,9 +50,9 @@ SfxCharmapCtrl::~SfxCharmapCtrl()
 {
 }
 
-IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, SvxCharView&, rView, void)
+IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, const CharAndFont&, rChar, void)
 {
-    m_xCharInfoLabel->set_label(SfxCharmapContainer::GetCharInfoText(rView.GetText()));
+    m_xCharInfoLabel->set_label(SfxCharmapContainer::GetCharInfoText(rChar.sChar));
 }
 
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView&, rView, void)

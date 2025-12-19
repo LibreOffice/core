@@ -29,20 +29,6 @@
 
 class SFX2_DLLPUBLIC SfxCharmapContainer
 {
-    struct CharAndFont
-    {
-        OUString sChar;
-        OUString sFont;
-
-        CharAndFont(const OUString& rChar, const OUString& rFont)
-            : sChar(rChar)
-            , sFont(rFont)
-        {
-        }
-
-        bool operator==(const CharAndFont& rOther) const = default;
-    };
-
     std::deque<CharAndFont> m_aRecentChars;
     std::deque<CharAndFont> m_aFavChars;
 
@@ -82,7 +68,7 @@ public:
 
     void init(bool bHasInsert, const Link<SvxCharView&, void>& rMouseClickHdl,
               const Link<void*, void>& rUpdateFavHdl, const Link<void*, void>& rUpdateRecentHdl,
-              const Link<SvxCharView&, void>& rFocusInHdl = Link<SvxCharView&, void>());
+              const Link<const CharAndFont&, void>& rFocusInHdl = Link<const CharAndFont&, void>());
 
     void getFavCharacterList();
     void updateFavCharControl();

@@ -56,7 +56,7 @@ void SvxCharView::GetFocus()
 {
     Invalidate();
     if (maFocusInHdl.IsSet())
-        maFocusInHdl.Call(*this);
+        maFocusInHdl.Call(CharAndFont(GetText(), GetFont().GetFamilyName()));
 }
 
 void SvxCharView::LoseFocus() { Invalidate(); }
@@ -220,7 +220,10 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         rRenderContext.SetFont(aOrigFont);
 }
 
-void SvxCharView::setFocusInHdl(const Link<SvxCharView&, void>& rLink) { maFocusInHdl = rLink; }
+void SvxCharView::setFocusInHdl(const Link<const CharAndFont&, void>& rLink)
+{
+    maFocusInHdl = rLink;
+}
 
 void SvxCharView::setMouseClickHdl(const Link<SvxCharView&, void>& rLink)
 {
