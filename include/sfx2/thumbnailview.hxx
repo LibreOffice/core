@@ -262,7 +262,7 @@ protected:
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
     // Update internal colors from system color scheme or other sources
-    SAL_DLLPRIVATE void UpdateColors(const StyleSettings& rSettings);
+    virtual void UpdateColors(const StyleSettings& rSettings);
 
 protected:
 
