@@ -31,6 +31,10 @@ protected:
 public:
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
 
+    virtual bool get_iter_first(TreeIter& rIter) const = 0;
+    // set iter to point to next node at the current level
+    virtual bool iter_next_sibling(TreeIter& rIter) const = 0;
+
     virtual std::unique_ptr<TreeIter> get_iterator(int nPos) const = 0;
 
     virtual OUString get_selected_id() const = 0;

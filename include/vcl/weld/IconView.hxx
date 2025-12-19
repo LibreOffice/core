@@ -145,10 +145,8 @@ public:
         enable_notify_events();
     }
 
-    virtual bool get_iter_first(TreeIter& rIter) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;
-    virtual bool iter_next_sibling(TreeIter& rIter) const = 0;
 
     void scroll_to_item(const TreeIter& rIter)
     {
