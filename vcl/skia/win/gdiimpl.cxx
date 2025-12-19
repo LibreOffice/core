@@ -30,7 +30,12 @@
 #include <SkTypeface_win.h>
 #include <SkFont.h>
 #include <SkFontMgr.h>
+
+#pragma warning(push)
+#pragma warning(disable : 4100) // "unreferenced formal parameter"
 #include <tools/window/win/WindowContextFactory_win.h>
+#pragma warning(pop)
+
 #include <tools/window/WindowContext.h>
 
 #include <windows.h>
