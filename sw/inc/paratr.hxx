@@ -64,7 +64,12 @@ namespace o3tl
     template<> struct typed_flags<sw::ListLevelIndents> : is_typed_flags<sw::ListLevelIndents, 0x03> {};
 }
 
-/** If SwFormatDrop is a Client, it is the CharFormat that describes the font for the
+/**
+   This pool item is in the item set of a text node, for the Drop Caps feature.
+
+   Format -> Paragraph -> Drop Caps on the UI.
+
+   If SwFormatDrop is a Client, it is the CharFormat that describes the font for the
    DropCaps. If it is not a Client, formatting uses the CharFormat of the paragraph.
    If the CharFormat is modified, this change is propagated to the paragraphs
    via the Modify of SwFormatDrop. */
