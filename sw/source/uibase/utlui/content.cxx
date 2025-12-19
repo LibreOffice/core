@@ -1005,7 +1005,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             // INetAttrs
             SwGetINetAttrs aArr;
 
-            // Fill aArr using a modified verision of SwEditShell::GetINetAttrs
+            // Fill aArr using a modified version of SwEditShell::GetINetAttrs
             const SwCharFormats* pFormats = m_pWrtShell->GetDoc()->GetCharFormats();
             for (auto n = pFormats->size(); 1 < n;)
             {
@@ -1044,7 +1044,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                                     INetURLObject::DecodeMechanism::Unambiguous),
                                                              &r.rINetAttr, 0));
 
-                    // visiblity
+                    // visibility
                     const SwTextNode* pNode = &(r.rINetAttr.GetTextNode());
                     lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
 
@@ -1111,7 +1111,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                                   INetURLObject::DecodeMechanism::Unambiguous),
                             &p->rINetAttr, ++n);
 
-                // visiblity
+                // visibility
                 const SwTextNode* pNode = &(p->rINetAttr.GetTextNode());
                 lcl_MaybeSetInvisible(m_pWrtShell, pCnt.get(), pNode);
 
@@ -1131,7 +1131,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 SwContent* pCnt = new SwTOXBaseContent(this, sTOXNm.toString(),
                                                        m_bAlphabeticSort ? 0 : nTox, *pBase);
 
-                // visiblity
+                // visibility
                 const SwContentNode* pNode = nullptr;
                 const SwSectionNode* pSectionNd
                     = static_cast<const SwTOXBaseSection*>(pBase)->GetFormat()->GetSectionNode();
