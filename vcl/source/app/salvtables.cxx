@@ -3524,6 +3524,20 @@ SalInstanceItemView::make_iterator(const weld::TreeIter* pOrig) const
         new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
 }
 
+bool SalInstanceItemView::get_iter_first(weld::TreeIter& rIter) const
+{
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+    rVclIter.iter = m_pTreeListBox->GetEntry(0);
+    return rVclIter.iter != nullptr;
+}
+
+bool SalInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
+{
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+    rVclIter.iter = rVclIter.iter->NextSibling();
+    return rVclIter.iter != nullptr;
+}
+
 std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) const
 {
     if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nPos))
@@ -4578,24 +4592,10 @@ void SalInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
     m_xTreeView->SetCurEntry(rVclIter.iter);
 }
 
-bool SalInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xTreeView->GetEntry(0);
-    return rVclIter.iter != nullptr;
-}
-
 bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
     rVclIter.iter = m_xTreeView->GetEntryAtAbsPos(nAbsPos);
-    return rVclIter.iter != nullptr;
-}
-
-bool SalInstanceTreeView::iter_next_sibling(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = rVclIter.iter->NextSibling();
     return rVclIter.iter != nullptr;
 }
 
@@ -5413,20 +5413,6 @@ void SalInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     m_xIconView->SetCurEntry(rVclIter.iter);
-}
-
-bool SalInstanceIconView::get_iter_first(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xIconView->GetEntry(0);
-    return rVclIter.iter != nullptr;
-}
-
-bool SalInstanceIconView::iter_next_sibling(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = rVclIter.iter->NextSibling();
-    return rVclIter.iter != nullptr;
 }
 
 void SalInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)

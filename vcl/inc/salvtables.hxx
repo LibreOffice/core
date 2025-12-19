@@ -1508,6 +1508,9 @@ public:
     virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
                                                           = nullptr) const override;
 
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
+
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
     virtual OUString get_selected_id() const override;
@@ -1750,11 +1753,7 @@ public:
 
     virtual void do_set_cursor(const weld::TreeIter& rIter) override;
 
-    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
-
     bool get_iter_abs_pos(weld::TreeIter& rIter, int nPos) const;
-
-    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
 
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
 
@@ -1945,10 +1944,6 @@ public:
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
 
     virtual void do_set_cursor(const weld::TreeIter& rIter) override;
-
-    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
-
-    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
 
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
