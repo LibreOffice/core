@@ -216,7 +216,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_LEFT">
-                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_LEFT">_Left</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_LEFT">_Start</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
@@ -257,7 +257,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_RIGHT">
-                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_RIGHT">Righ_t</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_RIGHT">_End</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
