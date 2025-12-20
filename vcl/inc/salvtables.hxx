@@ -1504,6 +1504,8 @@ protected:
     virtual void do_select_all() override;
     virtual void do_unselect_all() override;
 
+    virtual void do_remove(const weld::TreeIter& rIter) override;
+
     virtual void do_clear() override;
 
 public:
@@ -1764,8 +1766,6 @@ public:
 
     virtual bool iter_parent(weld::TreeIter& rIter) const override;
 
-    virtual void do_remove(const weld::TreeIter& rIter) override;
-
     using SalInstanceItemView::do_select;
     virtual void do_select(const weld::TreeIter& rIter) override;
 
@@ -1939,8 +1939,6 @@ public:
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
-
-    virtual void do_remove(const weld::TreeIter& rIter) override;
 
     virtual void set_image(int pos, VirtualDevice& rImage) override;
 

@@ -3641,6 +3641,12 @@ void SalInstanceItemView::do_unselect(const weld::TreeIter& rIter)
     m_pTreeListBox->Select(rVclIter.iter, false);
 }
 
+void SalInstanceItemView::do_remove(const weld::TreeIter& rIter)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->RemoveEntry(rVclIter.iter);
+}
+
 void SalInstanceItemView::do_clear()
 {
     m_pTreeListBox->Clear();
@@ -4631,12 +4637,6 @@ bool SalInstanceTreeView::iter_parent(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
-void SalInstanceTreeView::do_remove(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xTreeView->RemoveEntry(rVclIter.iter);
-}
-
 void SalInstanceTreeView::do_select(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode()
@@ -5416,12 +5416,6 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
             m_xIconView->UpdateEntrySize(aImage);
         m_xIconView->ModelHasEntryInvalidated(aEntry);
     }
-}
-
-void SalInstanceIconView::do_remove(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xIconView->RemoveEntry(rVclIter.iter);
 }
 
 OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const
