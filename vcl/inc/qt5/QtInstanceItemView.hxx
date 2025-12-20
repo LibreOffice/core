@@ -52,6 +52,8 @@ public:
     using weld::ItemView::set_id;
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
+    virtual bool get_cursor(weld::TreeIter* pIter) const override;
+
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;
@@ -59,7 +61,7 @@ protected:
     QtInstanceTreeIter treeIter(int nRow, const QModelIndex& rParentIndex = QModelIndex()) const;
 
 private:
-    QAbstractItemView& getItemView();
+    QAbstractItemView& getItemView() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

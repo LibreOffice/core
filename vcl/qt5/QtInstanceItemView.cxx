@@ -84,6 +84,22 @@ void QtInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId
         [&] { m_rModel.setData(modelIndex(rIter), toQString(rId), ROLE_ID); });
 }
 
+bool QtInstanceItemView::get_cursor(weld::TreeIter* pIter) const
+{
+    SolarMutexGuard g;
+
+    bool bRet = false;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aCurrentIndex = getItemView().currentIndex();
+        QtInstanceTreeIter* pQtIter = static_cast<QtInstanceTreeIter*>(pIter);
+        if (pQtIter)
+            pQtIter->setModelIndex(aCurrentIndex);
+        bRet = aCurrentIndex.isValid();
+    });
+
+    return bRet;
+}
+
 void QtInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
@@ -127,7 +143,7 @@ QtInstanceTreeIter QtInstanceItemView::treeIter(int nRow, const QModelIndex& rPa
     return QtInstanceTreeIter(m_rModel.index(nRow, 0, rParentIndex));
 }
 
-QAbstractItemView& QtInstanceItemView::getItemView()
+QAbstractItemView& QtInstanceItemView::getItemView() const
 {
     QAbstractItemView* pView = qobject_cast<QAbstractItemView*>(getQWidget());
     assert(pView);

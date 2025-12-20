@@ -198,12 +198,6 @@ bool QtInstanceIconView::get_selected(weld::TreeIter*) const
     return false;
 }
 
-bool QtInstanceIconView::get_cursor(weld::TreeIter*) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
 OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
 {
     SolarMutexGuard g;

@@ -83,7 +83,6 @@ public:
 
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
     virtual bool get_selected(weld::TreeIter* pIter) const override;
-    virtual bool get_cursor(weld::TreeIter* pIter) const override;
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
     virtual bool iter_next(weld::TreeIter& rIter) const override;
     virtual bool iter_previous(weld::TreeIter& rIter) const override;

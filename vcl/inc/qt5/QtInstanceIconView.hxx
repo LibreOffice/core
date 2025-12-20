@@ -55,7 +55,6 @@ public:
     virtual tools::Rectangle get_rect(const weld::TreeIter& rIter) const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
-    virtual bool get_cursor(weld::TreeIter* pIter) const override;
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
