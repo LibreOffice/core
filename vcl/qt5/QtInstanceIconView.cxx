@@ -149,11 +149,6 @@ void QtInstanceIconView::set_item_tooltip_text(int nPos, const OUString& rToolTi
     });
 }
 
-void QtInstanceIconView::do_remove(const weld::TreeIter&)
-{
-    assert(false && "Not implemented yet");
-}
-
 tools::Rectangle QtInstanceIconView::get_rect(const weld::TreeIter&) const
 {
     assert(false && "Not implemented yet");

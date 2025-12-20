@@ -192,6 +192,16 @@ void QtInstanceItemView::do_unselect_all()
     GetQtInstance().RunInMainThread([&] { getItemView().clearSelection(); });
 }
 
+void QtInstanceItemView::do_remove(const weld::TreeIter& rIter)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = modelIndex(rIter);
+        m_rModel.removeRow(aIndex.row(), aIndex.parent());
+    });
+}
+
 void QtInstanceItemView::do_clear()
 {
     SolarMutexGuard g;

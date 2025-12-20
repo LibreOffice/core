@@ -35,6 +35,8 @@ protected:
     virtual void do_select_all() override;
     virtual void do_unselect_all() override;
 
+    virtual void do_remove(const weld::TreeIter& rIter) override;
+
     void do_clear() override;
 
 public:

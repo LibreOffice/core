@@ -369,16 +369,6 @@ int QtInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
     return m_pModel->rowCount(rQtIter.modelIndex());
 }
 
-void QtInstanceTreeView::do_remove(const weld::TreeIter& rIter)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aIndex = modelIndex(rIter);
-        m_pModel->removeRow(aIndex.row(), aIndex.parent());
-    });
-}
-
 void QtInstanceTreeView::set_extra_row_indent(const weld::TreeIter&, int)
 {
     assert(false && "Not implemented yet");

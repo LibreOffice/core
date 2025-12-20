@@ -44,7 +44,6 @@ public:
     virtual void set_text(int nPos, const OUString& rText) override;
     virtual void set_item_accessible_name(int nPos, const OUString& rName) override;
     virtual void set_item_tooltip_text(int nPos, const OUString& rToolTip) override;
-    virtual void do_remove(const weld::TreeIter& rIter) override;
     virtual tools::Rectangle get_rect(const weld::TreeIter& rIter) const override;
 
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
