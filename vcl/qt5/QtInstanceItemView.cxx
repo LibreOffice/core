@@ -78,6 +78,16 @@ OUString QtInstanceItemView::get_id(const weld::TreeIter& rIter) const
     return sId;
 }
 
+void QtInstanceItemView::set_id(int nRow, const OUString& rId) { set_id(treeIter(nRow), rId); }
+
+void QtInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { m_rModel.setData(modelIndex(rIter), toQString(rId), ROLE_ID); });
+}
+
 void QtInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;

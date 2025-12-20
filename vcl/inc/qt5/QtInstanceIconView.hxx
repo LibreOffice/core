@@ -49,7 +49,6 @@ public:
 
     virtual void set_image(int nPos, VirtualDevice& rDevice) override;
     virtual void set_text(int nPos, const OUString& rText) override;
-    virtual void set_id(int nPos, const OUString& rId) override;
     virtual void set_item_accessible_name(int nPos, const OUString& rName) override;
     virtual void set_item_tooltip_text(int nPos, const OUString& rToolTip) override;
     virtual void do_remove(int pos) override;

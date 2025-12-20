@@ -44,6 +44,7 @@ public:
     virtual OUString get_id(int pos) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
+    virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
 
     virtual OUString get_selected_id() const = 0;
     virtual OUString get_selected_text() const = 0;

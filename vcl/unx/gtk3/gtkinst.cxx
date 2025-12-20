@@ -16899,6 +16899,13 @@ private:
         }
     }
 
+    virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&rGtkIter.iter), m_nIdCol,
+                           rId.toUtf8().getStr(), -1);
+    }
+
     virtual void set_item_accessible_name(int pos, const OUString& rName) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)

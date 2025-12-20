@@ -181,8 +181,6 @@ bool QtInstanceTreeView::get_sensitive(int nRow, int nCol) const
     return get_sensitive(treeIter(nRow), nCol);
 }
 
-void QtInstanceTreeView::set_id(int nRow, const OUString& rId) { set_id(treeIter(nRow), rId); }
-
 void QtInstanceTreeView::set_toggle(int nRow, TriState eState, int nCol)
 {
     set_toggle(treeIter(nRow), eState, nCol);
@@ -607,14 +605,6 @@ OUString QtInstanceTreeView::get_text(const weld::TreeIter& rIter, int nCol) con
     });
 
     return sText;
-}
-
-void QtInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread(
-        [&] { m_pModel->setData(modelIndex(rIter), toQString(rId), ROLE_ID); });
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int nCol)

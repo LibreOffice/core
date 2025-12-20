@@ -61,7 +61,6 @@ public:
     virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
     virtual void set_sensitive(int nRow, bool bSensitive, int nCol = -1) override;
     virtual bool get_sensitive(int nRow, int nCol) const override;
-    virtual void set_id(int row, const OUString& rId) override;
     virtual void set_toggle(int nRow, TriState eState, int nCol = -1) override;
     virtual TriState get_toggle(int nRow, int nCol = -1) const override;
     virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
@@ -111,7 +110,6 @@ public:
     virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol = -1) override;
     virtual TriState get_toggle(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;
-    virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
                            int nCol = -1) override;
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,

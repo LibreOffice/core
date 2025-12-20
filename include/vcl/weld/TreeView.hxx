@@ -359,9 +359,6 @@ public:
     // col index -1 gets the first text column
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
 
-    using weld::ItemView::set_id;
-    virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
-
     // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
     // col index -1 sets the expander image

@@ -49,6 +49,8 @@ public:
 
     virtual OUString get_id(int nPos) const override;
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
+    virtual void set_id(int pos, const OUString& rId) override;
+    virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,

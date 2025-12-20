@@ -1519,6 +1519,8 @@ public:
 
     virtual OUString get_id(int pos) const override;
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
+    virtual void set_id(int pos, const OUString& rId) override;
+    virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
     virtual OUString get_selected_id() const override;
     virtual OUString get_selected_text() const override;
@@ -1526,7 +1528,6 @@ public:
     virtual int n_children() const override;
 
 protected:
-    using weld::ItemView::set_id;
     void set_id(SvTreeListEntry* pEntry, const OUString& rId);
 
 private:
@@ -1750,9 +1751,6 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
                            int col = -1) override;
 
-    using SalInstanceItemView::set_id;
-    virtual void set_id(int pos, const OUString& rId) override;
-
     virtual int get_selected_index() const override;
 
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
@@ -1802,8 +1800,6 @@ public:
 
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rText,
                           int col = -1) override;
-
-    virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
                                     sal_uInt8 eDNDConstants) override;
@@ -1956,9 +1952,6 @@ public:
     virtual void set_image(int pos, VirtualDevice& rImage) override;
 
     virtual void set_text(int pos, const OUString& rText) override;
-
-    using SalInstanceItemView::set_id;
-    virtual void set_id(int pos, const OUString& rId) override;
 
     virtual void set_item_accessible_name(int pos, const OUString& rName) override;
 

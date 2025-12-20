@@ -3581,6 +3581,18 @@ void SalInstanceItemView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
     pEntry->SetUserData(m_aUserData.back().get());
 }
 
+void SalInstanceItemView::set_id(int pos, const OUString& rId)
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
+    set_id(pEntry, rId);
+}
+
+void SalInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    set_id(rVclIter.iter, rId);
+}
+
 OUString SalInstanceItemView::get_selected_id() const
 {
     assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
@@ -4567,12 +4579,6 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& 
     set_image(rVclIter.iter, createImage(rImage), col);
 }
 
-void SalInstanceTreeView::set_id(int pos, const OUString& rId)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_id(pEntry, rId);
-}
-
 int SalInstanceTreeView::get_selected_index() const
 {
     assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
@@ -4758,12 +4764,6 @@ void SalInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& 
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     set_text(rVclIter.iter, rText, col);
-}
-
-void SalInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_id(rVclIter.iter, rId);
 }
 
 void SalInstanceTreeView::enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
@@ -5482,12 +5482,6 @@ void SalInstanceIconView::set_text(int pos, const OUString& rText)
 
     if (!m_xIconView->GetModel()->IsEnableInvalidate())
         m_xIconView->ModelHasEntryInvalidated(aEntry);
-}
-
-void SalInstanceIconView::set_id(int pos, const OUString& rId)
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-    set_id(pEntry, rId);
 }
 
 void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rName)

@@ -164,16 +164,6 @@ void QtInstanceIconView::set_text(int nPos, const OUString& rText)
     });
 }
 
-void QtInstanceIconView::set_id(int nPos, const OUString& rId)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(nPos);
-        m_pModel->setData(aIndex, toQString(rId), ROLE_ID);
-    });
-}
-
 void QtInstanceIconView::set_item_accessible_name(int nPos, const OUString& rName)
 {
     SolarMutexGuard g;
