@@ -15,6 +15,8 @@
 
 #include <datamapper.hxx>
 #include <document.hxx>
+#include <dbdata.hxx>
+#include <datatransformation.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -233,16 +235,75 @@ ScXMLColumnSortContext::ScXMLColumnSortContext(
 {
 }
 
-ScXMLColumnSortContext::~ScXMLColumnSortContext() {}
+ScXMLColumnSortContext::~ScXMLColumnSortContext()
+{
+    ScDocument* pDoc = GetScImport().GetDocument();
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
+    if (!rDataSources.empty())
+    {
+        SCCOL nEndCol = 30; // ersatz if database range not found
+        SCROW nEndRow = 10000; // ersatz if database range not found
+        SCCOL nStartCol = 0;
+        SCROW nStartRow = 0;
+        SCTAB nTab = 0;
+        ScDBCollection::NamedDBs& rLocalDBs = pDoc->GetDBCollection()->getNamedDBs();
+        ScDBData* pDB = rLocalDBs.findByName(rDataSources.back().getDBName());
+        if (pDB)
+        {
+            // address of the to be sorted area is relative in sort transformation
+            pDB->GetArea(nTab, nStartCol, nStartRow, nEndCol, nEndRow);
+            nEndCol = nEndCol - nStartCol;
+            nEndRow = nEndRow - nStartRow;
+            maSortParam.bHasHeader = pDB->HasHeader();
+        }
+        maSortParam.nCol2 = nEndCol;
+        maSortParam.nRow2 = nEndRow;
+        // Since transformation is applied in a clipboard document before it is transferred to the
+        // actual destination, the default value of 0 for nCol1, nRow1 and nSourceTab is correct.
+        rDataSources.back().AddDataTransformation(
+            std::make_shared<sc::SortTransformation>(maSortParam));
+    }
+}
 
-/*
 uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnSortContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-
+    switch (nElement)
+    {
+        case XML_ELEMENT(TABLE, XML_SORT):
+        {
+            return this; // handle child directly here
+        }
+        break;
+        case XML_ELEMENT(TABLE, XML_SORT_BY):
+        {
+            ScSortKeyState aSortKeyState;
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+            {
+                switch (aIter.getToken())
+                {
+                    case XML_ELEMENT(TABLE, XML_FIELD_NUMBER):
+                    {
+                        aSortKeyState.nField = aIter.toInt32();
+                        aSortKeyState.bDoSort = true;
+                    }
+                    break;
+                    case XML_ELEMENT(TABLE, XML_ORDER):
+                    {
+                        aSortKeyState.bAscending = IsXMLToken(aIter.toString(), XML_ASCENDING);
+                    }
+                    break;
+                        // case XML_ELEMENT(TABLE, XML_DATA_TYPE), not used, always 'automatic'
+                }
+            }
+            // Currently no multi-level sort in sort transformation, thus write to index 0.
+            maSortParam.maKeyState[0] = aSortKeyState;
+        }
+        break;
+    }
+    return new SvXMLImportContext(GetImport());
 }
-*/
 
 ScXMLColumnTextContext::ScXMLColumnTextContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)

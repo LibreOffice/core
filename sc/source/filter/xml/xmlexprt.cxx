@@ -4257,14 +4257,8 @@ void ScXMLExport::WriteExternalDataTransformations(ScDocument& rDoc, const std::
                 // Sort Transformation
                 std::shared_ptr<sc::SortTransformation> aSortTransformation = std::dynamic_pointer_cast<sc::SortTransformation>(itr);
                 ScSortParam aSortParam = aSortTransformation->getSortParam();
-                const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
-                const sc::DataStream* pStrm = rMgr.getDataStream();
-                if (!pStrm)
-                    // No data stream.
-                    return;
-
-                // Streamed range
-                ScRange aRange = pStrm->GetRange();
+                ScRange aRange(aSortParam.nCol1, aSortParam.nRow1, aSortParam.nSourceTab,
+                               aSortParam.nCol2, aSortParam.nRow2, aSortParam.nSourceTab);
 
                 SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_SORT_TRANSFORMATION, true, true);
 
