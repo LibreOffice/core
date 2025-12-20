@@ -31,6 +31,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>

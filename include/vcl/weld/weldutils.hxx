@@ -22,7 +22,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class CalendarWrapper;
@@ -34,6 +33,8 @@ class Window;
 
 namespace weld
 {
+class TreeView;
+
 typedef comphelper::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
 
 class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base
