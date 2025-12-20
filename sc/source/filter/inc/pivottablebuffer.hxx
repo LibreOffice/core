@@ -143,11 +143,11 @@ public:
     void finalizeImport(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc);
     /** Finalizes the grouped date field after import. */
     void                finalizeDateGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             sal_Int32 nBaseFieldIdx );
     /** Finalizes the grouped field after import. */
     void                finalizeParentGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
     void finalizeImportBasedOnCache(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc);
@@ -168,7 +168,7 @@ public:
 
 private:
     /** Converts dimension and other settings for row, column, page, or hidden fields. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         convertRowColPageField( sal_Int32 nAxis );
 
 private:
@@ -323,22 +323,22 @@ public:
     void                finalizeFieldsImport();
     /** Creates all date group fields for the specified cache field after import. */
     void                finalizeDateGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             sal_Int32 nBaseFieldIdx );
     /** Creates all grouped fields for the specified cache field after import. */
     void                finalizeParentGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
 
     /** Returns the associated data pilot field for the specified pivot table field. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         getDataPilotField( const OUString& rFieldName ) const;
     /** Returns the associated data pilot field for the specified pivot table field. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         getDataPilotField( sal_Int32 nFieldIdx ) const;
     /** Returns the data layout field used to store all data fields in row/col dimension. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         getDataLayoutField() const;
 
     /** Returns the cache field with the specified index. */
