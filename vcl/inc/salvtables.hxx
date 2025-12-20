@@ -1517,9 +1517,9 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
-    virtual OUString get_id(int pos) const override;
+    using weld::ItemView::get_id;
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
-    virtual void set_id(int pos, const OUString& rId) override;
+    using weld::ItemView::set_id;
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
     virtual OUString get_selected_id() const override;

@@ -15616,16 +15616,6 @@ public:
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 
-    virtual OUString get_id(int pos) const override
-    {
-        return get(pos, m_nIdCol);
-    }
-
-    virtual void set_id(int pos, const OUString& rId) override
-    {
-        return set(pos, m_nIdCol, rId);
-    }
-
     virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
@@ -16828,16 +16818,6 @@ private:
         return sRet;
     }
 
-    OUString get(int pos, int col) const
-    {
-        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        OUString sRet;
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-            sRet = get(iter, col);
-        return sRet;
-    }
-
     tools::Rectangle get_rect(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
@@ -16884,18 +16864,6 @@ private:
         {
             OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
             gtk_tree_store_set(m_pTreeStore, &iter, m_nTextCol, aStr.getStr(), -1);
-        }
-    }
-
-    virtual void set_id(int pos, const OUString& rId) override
-    {
-        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreeIter iter;
-
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-        {
-            OString aStr(OUStringToOString(rId, RTL_TEXTENCODING_UTF8));
-            gtk_tree_store_set(m_pTreeStore, &iter, m_nIdCol, aStr.getStr(), -1);
         }
     }
 
@@ -17297,8 +17265,6 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return get(rGtkIter.iter, m_nIdCol);
     }
-
-    virtual OUString get_id(int pos) const override { return get(pos, m_nIdCol); }
 
     virtual OUString get_text(const weld::TreeIter& rIter) const override
     {

@@ -3558,14 +3558,6 @@ const OUString* SalInstanceItemView::getEntryData(int index) const
     return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
 }
 
-OUString SalInstanceItemView::get_id(int pos) const
-{
-    const OUString* pRet = getEntryData(pos);
-    if (!pRet)
-        return OUString();
-    return *pRet;
-}
-
 OUString SalInstanceItemView::get_id(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
@@ -3579,12 +3571,6 @@ void SalInstanceItemView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
 {
     m_aUserData.emplace_back(std::make_unique<OUString>(rId));
     pEntry->SetUserData(m_aUserData.back().get());
-}
-
-void SalInstanceItemView::set_id(int pos, const OUString& rId)
-{
-    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, pos);
-    set_id(pEntry, rId);
 }
 
 void SalInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId)

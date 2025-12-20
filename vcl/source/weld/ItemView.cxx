@@ -11,6 +11,20 @@
 
 namespace weld
 {
+OUString ItemView::get_id(int pos) const
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
+        return get_id(*pIter);
+
+    return OUString();
+}
+
+void ItemView::set_id(int pos, const OUString& rId)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
+        return set_id(*pIter, rId);
+}
+
 void ItemView::set_cursor(const TreeIter& rIter)
 {
     disable_notify_events();

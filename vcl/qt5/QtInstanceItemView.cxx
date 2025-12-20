@@ -62,8 +62,6 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
     return {};
 }
 
-OUString QtInstanceItemView::get_id(int nPos) const { return get_id(treeIter(nPos)); }
-
 OUString QtInstanceItemView::get_id(const weld::TreeIter& rIter) const
 {
     SolarMutexGuard g;
@@ -77,8 +75,6 @@ OUString QtInstanceItemView::get_id(const weld::TreeIter& rIter) const
 
     return sId;
 }
-
-void QtInstanceItemView::set_id(int nRow, const OUString& rId) { set_id(treeIter(nRow), rId); }
 
 void QtInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId)
 {

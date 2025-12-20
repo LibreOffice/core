@@ -41,9 +41,9 @@ public:
 
     virtual std::unique_ptr<TreeIter> get_iterator(int nPos) const = 0;
 
-    virtual OUString get_id(int pos) const = 0;
+    OUString get_id(int pos) const;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
-    virtual void set_id(int row, const OUString& rId) = 0;
+    void set_id(int pos, const OUString& rId);
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
 
     virtual OUString get_selected_id() const = 0;
