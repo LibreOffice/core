@@ -151,6 +151,21 @@ bool QtInstanceItemView::get_cursor(weld::TreeIter* pIter) const
     return bRet;
 }
 
+void QtInstanceItemView::selected_foreach(const std::function<bool(weld::TreeIter&)>& func)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndexList aSelectionIndexes = getSelectionModel().selectedRows();
+        for (QModelIndex& aIndex : aSelectionIndexes)
+        {
+            QtInstanceTreeIter aIter(aIndex);
+            if (func(aIter))
+                return;
+        }
+    });
+}
+
 void QtInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;

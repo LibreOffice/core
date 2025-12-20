@@ -64,6 +64,8 @@ public:
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
 
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
+
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;

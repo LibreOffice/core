@@ -181,11 +181,6 @@ void QtInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
     GetQtInstance().RunInMainThread([&] { m_pListView->scrollTo(modelIndex(rIter)); });
 }
 
-void QtInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIter&)>&)
-{
-    assert(false && "Not implemented yet");
-}
-
 int QtInstanceIconView::n_children() const
 {
     SolarMutexGuard g;

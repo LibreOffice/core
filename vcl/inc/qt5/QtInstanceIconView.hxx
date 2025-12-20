@@ -49,8 +49,6 @@ public:
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
-    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
-
     virtual int n_children() const override;
 
 protected:

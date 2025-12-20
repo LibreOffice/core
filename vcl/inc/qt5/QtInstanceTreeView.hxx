@@ -115,7 +115,6 @@ public:
                               int nIndexInNewParent) override;
 
     virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
-    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
     virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
     virtual void bulk_insert_for_each(
         int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
