@@ -2513,7 +2513,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
             {
                 SwFootnoteFrame* pFootnoteFrame = pCnt->FindFootnoteFrame();
                 if( pFootnoteFrame->GetRef()->FindFootnoteBossFrame(
-                    pFootnoteFrame->GetAttr()->GetFootnote().IsEndNote() ) != this )
+                    !pFootnoteFrame->GetAttr()->GetFootnote().IsEndNote() ) != this )
                     bMore = false;
             }
             else
