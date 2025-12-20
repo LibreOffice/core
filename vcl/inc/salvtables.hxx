@@ -1525,6 +1525,10 @@ public:
 
     virtual int n_children() const override;
 
+protected:
+    using weld::ItemView::set_id;
+    void set_id(SvTreeListEntry* pEntry, const OUString& rId);
+
 private:
     const OUString* getEntryData(int index) const;
 };
@@ -1746,8 +1750,7 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
                            int col = -1) override;
 
-    void set_id(SvTreeListEntry* pEntry, const OUString& rId);
-
+    using SalInstanceItemView::set_id;
     virtual void set_id(int pos, const OUString& rId) override;
 
     virtual int get_selected_index() const override;
@@ -1954,6 +1957,7 @@ public:
 
     virtual void set_text(int pos, const OUString& rText) override;
 
+    using SalInstanceItemView::set_id;
     virtual void set_id(int pos, const OUString& rId) override;
 
     virtual void set_item_accessible_name(int pos, const OUString& rName) override;

@@ -3575,6 +3575,12 @@ OUString SalInstanceItemView::get_id(const weld::TreeIter& rIter) const
     return OUString();
 }
 
+void SalInstanceItemView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
+{
+    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
+    pEntry->SetUserData(m_aUserData.back().get());
+}
+
 OUString SalInstanceItemView::get_selected_id() const
 {
     assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
@@ -4561,12 +4567,6 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& 
     set_image(rVclIter.iter, createImage(rImage), col);
 }
 
-void SalInstanceTreeView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
-{
-    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
-    pEntry->SetUserData(m_aUserData.back().get());
-}
-
 void SalInstanceTreeView::set_id(int pos, const OUString& rId)
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
@@ -5487,8 +5487,7 @@ void SalInstanceIconView::set_text(int pos, const OUString& rText)
 void SalInstanceIconView::set_id(int pos, const OUString& rId)
 {
     SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
-    pEntry->SetUserData(m_aUserData.back().get());
+    set_id(pEntry, rId);
 }
 
 void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rName)
