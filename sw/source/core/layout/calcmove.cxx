@@ -1390,7 +1390,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         if ( !static_cast<SwTextFrame*>(pFootnote->GetRef())->IsLocked() )
         {
             SwFootnoteBossFrame* pBoss = pFootnote->GetRef()->FindFootnoteBossFrame(
-                                    pFootnote->GetAttr()->GetFootnote().IsEndNote() );
+                                    !pFootnote->GetAttr()->GetFootnote().IsEndNote() );
             if( !pSct || pSct->IsColLocked() || !pSct->Growable() )
                 pSaveFootnote.reset( new SwSaveFootnoteHeight( pBoss,
                     static_cast<SwTextFrame*>(pFootnote->GetRef())->GetFootnoteLine( pFootnote->GetAttr() ) ) );
