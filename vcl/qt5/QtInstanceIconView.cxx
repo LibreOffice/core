@@ -192,12 +192,6 @@ tools::Rectangle QtInstanceIconView::get_rect(const weld::TreeIter&) const
     return tools::Rectangle();
 }
 
-bool QtInstanceIconView::get_selected(weld::TreeIter*) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
 OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
 {
     SolarMutexGuard g;

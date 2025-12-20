@@ -314,23 +314,6 @@ void QtInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::Tree
     static_cast<QtInstanceTreeIter&>(rDest).setModelIndex(aModelIndex);
 }
 
-bool QtInstanceTreeView::get_selected(weld::TreeIter* pIter) const
-{
-    SolarMutexGuard g;
-
-    bool bHasSelection = false;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        bHasSelection = true;
-        if (pIter)
-            static_cast<QtInstanceTreeIter*>(pIter)->setModelIndex(aSelectedIndexes.first());
-    });
-    return bHasSelection;
-}
-
 bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);

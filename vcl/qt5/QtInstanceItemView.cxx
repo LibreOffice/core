@@ -84,6 +84,23 @@ void QtInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId
         [&] { m_rModel.setData(modelIndex(rIter), toQString(rId), ROLE_ID); });
 }
 
+bool QtInstanceItemView::get_selected(weld::TreeIter* pIter) const
+{
+    SolarMutexGuard g;
+
+    bool bHasSelection = false;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndexList aSelectedIndexes = getSelectionModel().selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        bHasSelection = true;
+        if (pIter)
+            static_cast<QtInstanceTreeIter*>(pIter)->setModelIndex(aSelectedIndexes.first());
+    });
+    return bHasSelection;
+}
+
 bool QtInstanceItemView::get_cursor(weld::TreeIter* pIter) const
 {
     SolarMutexGuard g;
@@ -148,6 +165,13 @@ QAbstractItemView& QtInstanceItemView::getItemView() const
     QAbstractItemView* pView = qobject_cast<QAbstractItemView*>(getQWidget());
     assert(pView);
     return *pView;
+}
+
+QItemSelectionModel& QtInstanceItemView::getSelectionModel() const
+{
+    QItemSelectionModel* pSelectionModel = getItemView().selectionModel();
+    assert(pSelectionModel);
+    return *pSelectionModel;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
