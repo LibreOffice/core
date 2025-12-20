@@ -124,6 +124,20 @@ void QtInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
     GetQtInstance().RunInMainThread([&] { getItemView().setCurrentIndex(modelIndex(rIter)); });
 }
 
+void QtInstanceItemView::do_select(const weld::TreeIter& rIter)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QItemSelectionModel::SelectionFlags eFlags
+            = QItemSelectionModel::Select | QItemSelectionModel::Rows;
+        if (getItemView().selectionMode() == QAbstractItemView::SingleSelection)
+            eFlags |= QItemSelectionModel::Clear;
+
+        getSelectionModel().select(modelIndex(rIter), eFlags);
+    });
+}
+
 void QtInstanceItemView::do_select_all()
 {
     SolarMutexGuard g;
