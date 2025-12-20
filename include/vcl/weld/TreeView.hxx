@@ -240,7 +240,6 @@ public:
     // col index -1 sets all columns
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
     virtual bool get_sensitive(int row, int col) const = 0;
-    virtual void set_id(int row, const OUString& rId) = 0;
     // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual void set_toggle(int row, TriState eState, int col = -1) = 0;
     // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
@@ -359,7 +358,10 @@ public:
     virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
     // col index -1 gets the first text column
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
+
+    using weld::ItemView::set_id;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
+
     // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
