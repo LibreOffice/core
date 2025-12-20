@@ -47,6 +47,9 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
+    virtual OUString get_id(int nPos) const override;
+    virtual OUString get_id(const weld::TreeIter& rIter) const override;
+
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;

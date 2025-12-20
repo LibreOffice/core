@@ -128,8 +128,6 @@ OUString QtInstanceIconView::get_selected_text() const
     return OUString();
 }
 
-OUString QtInstanceIconView::get_id(int nPos) const { return get_id(treeIter(nPos)); }
-
 void QtInstanceIconView::do_select(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
@@ -214,20 +212,6 @@ bool QtInstanceIconView::get_cursor(weld::TreeIter*) const
 {
     assert(false && "Not implemented yet");
     return false;
-}
-
-OUString QtInstanceIconView::get_id(const weld::TreeIter& rIter) const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(modelIndex(rIter), ROLE_ID);
-        if (aRoleData.canConvert<QString>())
-            sId = toOUString(aRoleData.toString());
-    });
-
-    return sId;
 }
 
 OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const

@@ -62,6 +62,22 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_iterator(int nPos) const
     return {};
 }
 
+OUString QtInstanceItemView::get_id(int nPos) const { return get_id(treeIter(nPos)); }
+
+OUString QtInstanceItemView::get_id(const weld::TreeIter& rIter) const
+{
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aRoleData = m_rModel.data(modelIndex(rIter), ROLE_ID);
+        if (aRoleData.canConvert<QString>())
+            sId = toOUString(aRoleData.toString());
+    });
+
+    return sId;
+}
+
 void QtInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;

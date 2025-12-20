@@ -81,7 +81,6 @@ public:
     virtual void do_set_cursor(int pos) override;
 
     virtual int find_text(const OUString& rText) const override;
-    virtual OUString get_id(int nPos) const override;
     virtual int find_id(const OUString& rId) const override;
 
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
@@ -113,7 +112,6 @@ public:
     virtual TriState get_toggle(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
-    virtual OUString get_id(const weld::TreeIter& rIter) const override;
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
                            int nCol = -1) override;
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,

@@ -307,8 +307,6 @@ int QtInstanceTreeView::find_text(const OUString& rText) const
     return nIndex;
 }
 
-OUString QtInstanceTreeView::get_id(int nPos) const { return get_id(treeIter(nPos)); }
-
 int QtInstanceTreeView::find_id(const OUString& rId) const
 {
     SolarMutexGuard g;
@@ -617,20 +615,6 @@ void QtInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId
 
     GetQtInstance().RunInMainThread(
         [&] { m_pModel->setData(modelIndex(rIter), toQString(rId), ROLE_ID); });
-}
-
-OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(modelIndex(rIter), ROLE_ID);
-        if (aRoleData.canConvert<QString>())
-            sId = toOUString(aRoleData.toString());
-    });
-
-    return sId;
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int nCol)
