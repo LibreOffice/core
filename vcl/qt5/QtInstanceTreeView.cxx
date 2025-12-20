@@ -15,9 +15,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QToolTip>
 
-// role used for the ID in the QStandardItem
-constexpr int ROLE_ID = Qt::UserRole + 1000;
-
 // Property used to store the supported roles for each of the columns
 const char* const PROPERTY_COLUMN_ROLES = "column-roles";
 

@@ -17,9 +17,6 @@
 #include <QtGui/QHelpEvent>
 #include <QtWidgets/QToolTip>
 
-// role used for the ID in the QStandardItem
-constexpr int ROLE_ID = Qt::UserRole + 1000;
-
 QtInstanceIconView::QtInstanceIconView(QListView* pListView)
     : QtInstanceItemView(pListView, *pListView->model())
     , m_pListView(pListView)

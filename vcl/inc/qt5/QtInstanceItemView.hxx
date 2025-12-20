@@ -24,6 +24,9 @@ class QtInstanceItemView : public QtInstanceWidget, public virtual weld::ItemVie
     QAbstractItemModel& m_rModel;
 
 protected:
+    // role used for the ID in the QStandardItem
+    static constexpr int ROLE_ID = Qt::UserRole + 1000;
+
     virtual void do_set_cursor(const weld::TreeIter& rIter) override;
 
     virtual void do_select_all() override;
