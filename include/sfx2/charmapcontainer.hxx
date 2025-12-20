@@ -19,13 +19,26 @@
 
 #pragma once
 
-#include <sfx2/charwin.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <deque>
+
+struct CharAndFont
+{
+    OUString sChar;
+    OUString sFont;
+
+    CharAndFont(const OUString& rChar, const OUString& rFont)
+        : sChar(rChar)
+        , sFont(rFont)
+    {
+    }
+
+    bool operator==(const CharAndFont& rOther) const = default;
+};
 
 class SFX2_DLLPUBLIC SfxCharmapContainer
 {
