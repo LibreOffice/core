@@ -128,14 +128,6 @@ OUString QtInstanceIconView::get_selected_text() const
     return OUString();
 }
 
-void QtInstanceIconView::do_unselect(const weld::TreeIter& rIter)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread(
-        [&] { m_pSelectionModel->select(modelIndex(rIter), QItemSelectionModel::Deselect); });
-}
-
 void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)
 {
     SolarMutexGuard g;

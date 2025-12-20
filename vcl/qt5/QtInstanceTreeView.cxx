@@ -415,14 +415,6 @@ void QtInstanceTreeView::do_remove(const weld::TreeIter& rIter)
     });
 }
 
-void QtInstanceTreeView::do_unselect(const weld::TreeIter& rIter)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread(
-        [&] { m_pSelectionModel->select(modelIndex(rIter), QItemSelectionModel::Deselect); });
-}
-
 void QtInstanceTreeView::set_extra_row_indent(const weld::TreeIter&, int)
 {
     assert(false && "Not implemented yet");

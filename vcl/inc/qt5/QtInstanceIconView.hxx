@@ -44,8 +44,6 @@ public:
 
     virtual OUString get_selected_text() const override;
 
-    virtual void do_unselect(const weld::TreeIter& rIter) override;
-
     virtual void set_image(int nPos, VirtualDevice& rDevice) override;
     virtual void set_text(int nPos, const OUString& rText) override;
     virtual void set_item_accessible_name(int nPos, const OUString& rName) override;

@@ -30,6 +30,7 @@ protected:
     virtual void do_set_cursor(const weld::TreeIter& rIter) override;
 
     virtual void do_select(const weld::TreeIter& rIter) override;
+    virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     virtual void do_select_all() override;
     virtual void do_unselect_all() override;

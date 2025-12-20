@@ -138,6 +138,14 @@ void QtInstanceItemView::do_select(const weld::TreeIter& rIter)
     });
 }
 
+void QtInstanceItemView::do_unselect(const weld::TreeIter& rIter)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { getSelectionModel().select(modelIndex(rIter), QItemSelectionModel::Deselect); });
+}
+
 void QtInstanceItemView::do_select_all()
 {
     SolarMutexGuard g;
