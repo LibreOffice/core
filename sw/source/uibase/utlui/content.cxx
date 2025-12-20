@@ -7666,10 +7666,14 @@ void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat
     {
         if (!pFrameFormat)
             continue;
-        SwRect aFrameRect = pFrameFormat->FindLayoutRect();
-        if (!aFrameRect.IsEmpty())
-            aRanges.emplace_back(aFrameRect.Left(), aFrameRect.Top(), aFrameRect.Right(),
-                                 aFrameRect.Bottom());
+        SwIterator<SwFrame, SwFormat> aIter(*pFrameFormat);
+        for (const SwFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            const SwRect& rFrameRect = pFrame->getFrameArea();
+            if (!rFrameRect.IsEmpty())
+                aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(), rFrameRect.Right(),
+                                     rFrameRect.Bottom());
+        }
     }
     OverlayObject(std::move(aRanges));
 }
