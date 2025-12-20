@@ -3593,6 +3593,24 @@ OUString SalInstanceItemView::get_selected_text() const
     return OUString();
 }
 
+bool SalInstanceItemView::get_selected(weld::TreeIter* pIter) const
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected();
+    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+    if (pVclIter)
+        pVclIter->iter = pEntry;
+    return pEntry != nullptr;
+}
+
+bool SalInstanceItemView::get_cursor(weld::TreeIter* pIter) const
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetCurEntry();
+    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+    if (pVclIter)
+        pVclIter->iter = pEntry;
+    return pEntry != nullptr;
+}
+
 void SalInstanceItemView::do_select_all()
 {
     assert(m_pTreeListBox->IsUpdateMode()
@@ -4567,24 +4585,6 @@ void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::Tre
     rVclDest.iter = rVclSource.iter;
 }
 
-bool SalInstanceTreeView::get_selected(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
-bool SalInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
 bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
@@ -5356,24 +5356,6 @@ void SalInstanceIconView::connect_get_image(
 }
 
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
-
-bool SalInstanceIconView::get_selected(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xIconView->FirstSelected();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
-bool SalInstanceIconView::get_cursor(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetCurEntry();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
 
 void SalInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
 {

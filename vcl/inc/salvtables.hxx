@@ -1527,6 +1527,10 @@ public:
     virtual OUString get_selected_id() const override;
     virtual OUString get_selected_text() const override;
 
+    virtual bool get_selected(weld::TreeIter* pIter) const override;
+
+    virtual bool get_cursor(weld::TreeIter* pIter) const override;
+
     virtual int n_children() const override;
 
 private:
@@ -1750,10 +1754,6 @@ public:
 
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
 
-    virtual bool get_selected(weld::TreeIter* pIter) const override;
-
-    virtual bool get_cursor(weld::TreeIter* pIter) const override;
-
     bool get_iter_abs_pos(weld::TreeIter& rIter, int nPos) const;
 
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
@@ -1931,10 +1931,6 @@ public:
     connect_get_image(const Link<const weld::encoded_image_query&, bool>& rLink) override;
 
     virtual int count_selected_items() const override;
-
-    virtual bool get_selected(weld::TreeIter* pIter) const override;
-
-    virtual bool get_cursor(weld::TreeIter* pIter) const override;
 
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
