@@ -100,8 +100,12 @@ void QtInstanceIconView::insert_separator(int, const OUString*)
 
 int QtInstanceIconView::count_selected_items() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nSelected = 0;
+    GetQtInstance().RunInMainThread([&] { nSelected = m_pSelectionModel->selectedRows().count(); });
+
+    return nSelected;
 }
 
 void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)
