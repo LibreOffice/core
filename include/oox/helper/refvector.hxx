@@ -56,97 +56,43 @@ public:
 
     /** Calls the passed functor for every contained object, automatically
         skips all elements that are empty references. */
-    template< typename FunctorType >
-    void                forEach( FunctorType aFunctor ) const
+    template <typename FunctorType> void forEach(FunctorType aFunctor) const
     {
-        std::for_each(this->begin(), this->end(), ForEachFunctor<FunctorType>(std::move(aFunctor)));
+        forEachWithIndex([&aFunctor](size_type, ObjType& rObj) { aFunctor(rObj); });
     }
 
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
-    template< typename FuncType >
-    void                forEachMem( FuncType pFunc ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType >
-    void                forEachMem( FuncType pFunc, ParamType aParam ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2 >
-    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
-    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
-                        }
-
-    /** Calls the passed functor for every contained object. Passes the index as
-        first argument and the object reference as second argument to rFunctor. */
-    template< typename FunctorType >
-    void                forEachWithIndex( const FunctorType& rFunctor ) const
-                        {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctorWithIndex< FunctorType >( rFunctor ) );
-                        }
+    template <typename FuncType, typename... T> void forEachMem(FuncType pFunc, T&&... args) const
+    {
+        forEach([pFunc, &args...](ObjType& rObj) { (rObj.*pFunc)(args...); });
+    }
 
     /** Calls the passed member function of ObjType on every contained object.
         Passes the vector index as first argument to the member function. */
-    template< typename FuncType, typename ParamType1, typename ParamType2 >
-    void                forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
-                        {
-                            forEachWithIndex( ::std::bind( pFunc, std::placeholders::_2, std::placeholders::_1, aParam1, aParam2 ) );
-                        }
+    template <typename FuncType, typename... T>
+    void forEachMemWithIndex(FuncType pFunc, T&&... args) const
+    {
+        forEachWithIndex([pFunc, &args...](size_type i, ObjType& rObj)
+                         { (rObj.*pFunc)(i, args...); });
+    }
 
     /** Searches for an element by using the passed functor that takes a
         constant reference of the object type (const ObjType&). */
-    template< typename FunctorType >
-    value_type          findIf( const FunctorType& rFunctor ) const
-                        {
-                            typename container_type::const_iterator aIt = ::std::find_if( this->begin(), this->end(), FindFunctor< FunctorType >( rFunctor ) );
-                            return (aIt == this->end()) ? value_type() : *aIt;
-                        }
+    template <typename FunctorType> value_type findIf(const FunctorType& rFunctor) const
+    {
+        auto aIt = ::std::find_if(this->begin(), this->end(), [&rFunctor](const value_type& rValue)
+                                  { return rValue && rFunctor(*rValue); });
+        return (aIt == this->end()) ? value_type() : *aIt;
+    }
 
 private:
-    template< typename FunctorType >
-    struct ForEachFunctor
+    template <typename F> void forEachWithIndex(const F& f) const
     {
-        FunctorType         maFunctor;
-        explicit            ForEachFunctor( FunctorType aFunctor ) : maFunctor(std::move( aFunctor )) {}
-        void                operator()( const value_type& rxValue ) { if( rxValue.get() ) maFunctor( *rxValue ); }
-    };
-
-    template< typename FunctorType >
-    struct ForEachFunctorWithIndex
-    {
-        FunctorType         maFunctor;
-        sal_Int32           mnIndex;
-        explicit            ForEachFunctorWithIndex( FunctorType aFunctor ) : maFunctor(std::move( aFunctor )), mnIndex( 0 ) {}
-        void                operator()( const value_type& rxValue ) {
-            if( rxValue.get() ) maFunctor( mnIndex, *rxValue );
-            ++mnIndex;
-        }
-    };
-
-    template< typename FunctorType >
-    struct FindFunctor
-    {
-        FunctorType         maFunctor;
-        explicit            FindFunctor( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
-        bool                operator()( const value_type& rxValue ) { return rxValue.get() && maFunctor( *rxValue ); }
-    };
+        for (size_type i = 0; i < this->size(); ++i)
+            if (const value_type& rValue = (*this)[i])
+                f(i, *rValue);
+    }
 
     const value_type*   getRef( sal_Int32 nIndex ) const
                         {
