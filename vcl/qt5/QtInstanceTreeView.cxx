@@ -114,24 +114,6 @@ OUString QtInstanceTreeView::get_selected_text() const
     return sText;
 }
 
-OUString QtInstanceTreeView::get_selected_id() const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        QVariant aIdData = aSelectedIndexes.first().data(ROLE_ID);
-        if (aIdData.canConvert<QString>())
-            sId = toOUString(aIdData.toString());
-    });
-
-    return sId;
-}
-
 void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 {
     assert(m_pModel->rowCount() == 0 && "Must be called before inserting any data");

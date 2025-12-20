@@ -38,8 +38,6 @@ public:
 
     virtual void insert_separator(int pos, const OUString* pId) override;
 
-    virtual OUString get_selected_id() const override;
-
     virtual int count_selected_items() const override;
 
     virtual OUString get_selected_text() const override;

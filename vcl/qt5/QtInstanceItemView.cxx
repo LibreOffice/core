@@ -84,6 +84,24 @@ void QtInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId
         [&] { m_rModel.setData(modelIndex(rIter), toQString(rId), ROLE_ID); });
 }
 
+OUString QtInstanceItemView::get_selected_id() const
+{
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndexList aSelectedIndexes = getSelectionModel().selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        QVariant aIdData = aSelectedIndexes.first().data(ROLE_ID);
+        if (aIdData.canConvert<QString>())
+            sId = toOUString(aIdData.toString());
+    });
+
+    return sId;
+}
+
 bool QtInstanceItemView::get_selected(weld::TreeIter* pIter) const
 {
     SolarMutexGuard g;

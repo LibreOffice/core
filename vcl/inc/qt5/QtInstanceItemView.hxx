@@ -55,6 +55,8 @@ public:
     using weld::ItemView::set_id;
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
+    virtual OUString get_selected_id() const override;
+
     virtual bool get_selected(weld::TreeIter* pIter) const override;
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override;

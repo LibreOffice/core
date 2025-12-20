@@ -98,24 +98,6 @@ void QtInstanceIconView::insert_separator(int, const OUString*)
     assert(false && "Not implemented yet");
 }
 
-OUString QtInstanceIconView::get_selected_id() const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        QVariant aIdData = aSelectedIndexes.first().data(ROLE_ID);
-        if (aIdData.canConvert<QString>())
-            sId = toOUString(aIdData.toString());
-    });
-
-    return sId;
-}
-
 int QtInstanceIconView::count_selected_items() const
 {
     assert(false && "Not implemented yet");
