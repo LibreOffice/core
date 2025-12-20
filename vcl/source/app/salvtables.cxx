@@ -3552,6 +3552,29 @@ std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) cons
     return {};
 }
 
+const OUString* SalInstanceItemView::getEntryData(int index) const
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, index);
+    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
+}
+
+OUString SalInstanceItemView::get_id(int pos) const
+{
+    const OUString* pRet = getEntryData(pos);
+    if (!pRet)
+        return OUString();
+    return *pRet;
+}
+
+OUString SalInstanceItemView::get_id(const weld::TreeIter& rIter) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
+    if (pStr)
+        return *pStr;
+    return OUString();
+}
+
 OUString SalInstanceItemView::get_selected_id() const
 {
     assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
@@ -4538,20 +4561,6 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& 
     set_image(rVclIter.iter, createImage(rImage), col);
 }
 
-const OUString* SalInstanceTreeView::getEntryData(int index) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, index);
-    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
-}
-
-OUString SalInstanceTreeView::get_id(int pos) const
-{
-    const OUString* pRet = getEntryData(pos);
-    if (!pRet)
-        return OUString();
-    return *pRet;
-}
-
 void SalInstanceTreeView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
 {
     m_aUserData.emplace_back(std::make_unique<OUString>(rId));
@@ -4749,15 +4758,6 @@ void SalInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& 
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     set_text(rVclIter.iter, rText, col);
-}
-
-OUString SalInstanceTreeView::get_id(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
-    if (pStr)
-        return *pStr;
-    return OUString();
 }
 
 void SalInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)
@@ -5429,23 +5429,6 @@ void SalInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIt
     }
 }
 
-OUString SalInstanceIconView::get_id(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
-    if (pStr)
-        return *pStr;
-    return OUString();
-}
-
-OUString SalInstanceIconView::get_id(int pos) const
-{
-    const OUString* pRet = getEntryData(pos);
-    if (!pRet)
-        return OUString();
-    return *pRet;
-}
-
 void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
 {
     SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
@@ -5473,12 +5456,6 @@ void SalInstanceIconView::do_remove(int pos)
 {
     SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
     m_xIconView->RemoveEntry(pEntry);
-}
-
-const OUString* SalInstanceIconView::getEntryData(int index) const
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, index);
-    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
 }
 
 OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const

@@ -1517,10 +1517,16 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override;
 
+    virtual OUString get_id(int pos) const override;
+    virtual OUString get_id(const weld::TreeIter& rIter) const override;
+
     virtual OUString get_selected_id() const override;
     virtual OUString get_selected_text() const override;
 
     virtual int n_children() const override;
+
+private:
+    const OUString* getEntryData(int index) const;
 };
 
 class SalInstanceTreeView : public SalInstanceItemView, public virtual weld::TreeView
@@ -1740,10 +1746,6 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
                            int col = -1) override;
 
-    const OUString* getEntryData(int index) const;
-
-    virtual OUString get_id(int pos) const override;
-
     void set_id(SvTreeListEntry* pEntry, const OUString& rId);
 
     virtual void set_id(int pos, const OUString& rId) override;
@@ -1797,8 +1799,6 @@ public:
 
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rText,
                           int col = -1) override;
-
-    virtual OUString get_id(const weld::TreeIter& rIter) const override;
 
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
@@ -1948,13 +1948,7 @@ public:
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
-    virtual OUString get_id(const weld::TreeIter& rIter) const override;
-
-    virtual OUString get_id(int pos) const override;
-
     virtual void do_remove(int pos) override;
-
-    const OUString* getEntryData(int index) const;
 
     virtual void set_image(int pos, VirtualDevice& rImage) override;
 
