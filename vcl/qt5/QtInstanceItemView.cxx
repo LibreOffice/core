@@ -255,4 +255,10 @@ QItemSelectionModel& QtInstanceItemView::getSelectionModel() const
     return *pSelectionModel;
 }
 
+void QtInstanceItemView::enableActivateOnSingleClick(QAbstractItemView& rItemView)
+{
+    QObject::connect(&rItemView, &QAbstractItemView::clicked, &rItemView,
+                     &QAbstractItemView::activated);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
