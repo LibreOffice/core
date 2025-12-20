@@ -167,7 +167,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailview \
     sfx2/source/control/charmapcontainer \
     sfx2/source/control/charmapcontrol \
-    sfx2/source/control/charwin \
     sfx2/source/control/unoctitm \
     sfx2/source/devtools/DevelopmentToolChildWindow \
     sfx2/source/devtools/DevelopmentToolDockingWindow \

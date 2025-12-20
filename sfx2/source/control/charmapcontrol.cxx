@@ -31,14 +31,14 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"sfx/ui/charmapcontrol.ui"_ustr, u"charmapctrl"_ustr)
     , m_xControl(pControl)
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
-    , m_aCharmapContents(*m_xBuilder, m_xVirDev, false)
+    , m_aCharmapContents(*m_xBuilder)
     , m_xRecentLabel(m_xBuilder->weld_label(u"label2"_ustr))
     , m_xDlgBtn(m_xBuilder->weld_button(u"specialchardlg"_ustr))
     , m_xCharInfoLabel(m_xBuilder->weld_label(u"charinfolabel"_ustr))
 {
     m_xCharInfoLabel->set_size_request(-1, m_xCharInfoLabel->get_text_height() * 2);
 
-    m_aCharmapContents.init(true, LINK(this, SfxCharmapCtrl, CharActivateHdl),
+    m_aCharmapContents.init(LINK(this, SfxCharmapCtrl, CharActivateHdl),
                             Link<void*,void>(), LINK(this, SfxCharmapCtrl, UpdateRecentHdl),
                             LINK(this, SfxCharmapCtrl, CharFocusInHdl));
 

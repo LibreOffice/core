@@ -23,7 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <deque>
 
@@ -32,43 +32,47 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     std::deque<CharAndFont> m_aRecentChars;
     std::deque<CharAndFont> m_aFavChars;
 
-    SvxCharView m_aRecentCharView[16];
-    SvxCharView m_aFavCharView[16];
-    std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
-    std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];
+    std::unique_ptr<weld::IconView> m_xRecentIconView;
+    std::unique_ptr<weld::IconView> m_xFavIconView;
 
-    std::unique_ptr<weld::Widget> m_xRecentGrid;
-    std::unique_ptr<weld::Widget> m_xFavGrid;
+    Link<const CharAndFont&, void> m_aCharActivateHdl;
+    Link<const CharAndFont&, void> m_aCharSelectedHdl;
 
     Link<void*, void> m_aUpdateFavHdl;
     Link<void*, void> m_aUpdateRecentHdl;
 
-    DECL_DLLPRIVATE_LINK(RecentContextMenuHdl, const CommandEvent&, void);
-    DECL_DLLPRIVATE_LINK(FavContextMenuHdl, const CommandEvent&, void);
+    DECL_DLLPRIVATE_LINK(IconViewSelectionChangedHdl, weld::IconView&, void);
+    DECL_DLLPRIVATE_LINK(ItemActivatedHdl, weld::IconView&, bool);
+    DECL_DLLPRIVATE_LINK(ItemViewFocusInHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxCharmapContainer, ItemViewFocusOutHdl, weld::Widget&, void);
 
-    DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView&, void);
-    DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView&, void);
-    DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, SvxCharView&, void);
-    DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, SvxCharView&, void);
+    DECL_DLLPRIVATE_LINK(RecentContextMenuHdl, const CommandEvent&, bool);
+    DECL_DLLPRIVATE_LINK(FavContextMenuHdl, const CommandEvent&, bool);
 
-    static void HandleContextMenu(std::span<SvxCharView> aCharViews,
-                                  const Link<SvxCharView&, void>& rClearHdl,
-                                  const Link<SvxCharView&, void>& rClearAllHdl,
+    DECL_DLLPRIVATE_LINK(RecentClearClickHdl, const CharAndFont&, void);
+    DECL_DLLPRIVATE_LINK(FavClearClickHdl, const CharAndFont&, void);
+    DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, weld::IconView&, void);
+    DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, weld::IconView&, void);
+
+    static bool HandleContextMenu(weld::IconView& rIconView, std::deque<CharAndFont>& rChars,
+                                  const Link<const CharAndFont&, void>& rClearHdl,
+                                  const Link<weld::IconView&, void>& rClearAllHdl,
                                   const CommandEvent& rCmdEvent);
 
-    static void updateCharControl(std::span<SvxCharView> aCharViews,
-                                  const std::deque<CharAndFont>& rChars);
+    static void updateCharControl(weld::IconView& rIconView, const std::deque<CharAndFont>& rChars);
 
     static bool GetDecimalValueAndCharName(std::u16string_view sCharText, sal_UCS4& rDecimalValue,
                                            OUString& rCharName);
 
 public:
-    SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev,
-                        bool bLockGridSizes);
+    SfxCharmapContainer(weld::Builder& rBuilder);
 
-    void init(bool bActivateOnSingleClick, const Link<const CharAndFont&, void>& rActivateHdl,
+    void init(const Link<const CharAndFont&, void>& rActivateHdl,
               const Link<void*, void>& rUpdateFavHdl, const Link<void*, void>& rUpdateRecentHdl,
-              const Link<const CharAndFont&, void>& rFocusInHdl = Link<const CharAndFont&, void>());
+              const Link<const CharAndFont&, void>& rCharSelectedHdl);
+
+    static VclPtr<VirtualDevice> CreateIcon(weld::IconView& rIconView, const OUString& rFont,
+                                            const OUString& rText);
 
     void getFavCharacterList();
     void updateFavCharControl();

@@ -28,94 +28,26 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <unicode/uchar.h>
 #include <unicode/utypes.h>
 
 using namespace css;
 
-SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev, bool bLockGridSizes)
-    : m_aRecentCharView{SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev),
-                        SvxCharView(rVirDev)}
-    , m_aFavCharView{SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev),
-                     SvxCharView(rVirDev)}
-    , m_xRecentCharView{std::make_unique<weld::CustomWeld>(rBuilder, "viewchar1", m_aRecentCharView[0]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar2", m_aRecentCharView[1]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar3", m_aRecentCharView[2]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar4", m_aRecentCharView[3]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar5", m_aRecentCharView[4]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar6", m_aRecentCharView[5]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar7", m_aRecentCharView[6]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar8", m_aRecentCharView[7]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar9", m_aRecentCharView[8]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar10", m_aRecentCharView[9]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar11", m_aRecentCharView[10]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar12", m_aRecentCharView[11]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar13", m_aRecentCharView[12]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar14", m_aRecentCharView[13]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar15", m_aRecentCharView[14]),
-                        std::make_unique<weld::CustomWeld>(rBuilder, "viewchar16", m_aRecentCharView[15])}
-    , m_xFavCharView{std::make_unique<weld::CustomWeld>(rBuilder, "favchar1", m_aFavCharView[0]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar2", m_aFavCharView[1]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar3", m_aFavCharView[2]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar4", m_aFavCharView[3]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar5", m_aFavCharView[4]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar6", m_aFavCharView[5]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar7", m_aFavCharView[6]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar8", m_aFavCharView[7]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar9", m_aFavCharView[8]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar10", m_aFavCharView[9]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar11", m_aFavCharView[10]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar12", m_aFavCharView[11]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar13", m_aFavCharView[12]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar14", m_aFavCharView[13]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar15", m_aFavCharView[14]),
-                     std::make_unique<weld::CustomWeld>(rBuilder, "favchar16", m_aFavCharView[15])}
-    , m_xRecentGrid(rBuilder.weld_widget(u"viewgrid"_ustr))
-    , m_xFavGrid(rBuilder.weld_widget(u"favgrid"_ustr))
+SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder)
+    : m_xRecentIconView(rBuilder.weld_icon_view(u"recentchars_iconview"_ustr))
+    , m_xFavIconView(rBuilder.weld_icon_view(u"favchars_iconview"_ustr))
 {
-    if (bLockGridSizes)
-    {
-        //so things don't jump around if all the children are hidden
-        m_xRecentGrid->set_size_request(-1, m_aRecentCharView[0].get_preferred_size().Height());
-        m_xFavGrid->set_size_request(-1, m_aFavCharView[0].get_preferred_size().Height());
-    }
 }
 
-void SfxCharmapContainer::init(bool bActivateOnSingleClick,
-                               const Link<const CharAndFont&, void>& rActivateHdl,
+void SfxCharmapContainer::init(const Link<const CharAndFont&, void>& rActivateHdl,
                                const Link<void*, void>& rUpdateFavHdl,
                                const Link<void*, void>& rUpdateRecentHdl,
-                               const Link<const CharAndFont&, void>& rFocusInHdl)
+                               const Link<const CharAndFont&, void>& rCharSelectedHdl)
 {
+    m_aCharActivateHdl = rActivateHdl;
+    m_aCharSelectedHdl = rCharSelectedHdl;
     m_aUpdateFavHdl = rUpdateFavHdl;
     m_aUpdateRecentHdl = rUpdateRecentHdl;
 
@@ -124,18 +56,106 @@ void SfxCharmapContainer::init(bool bActivateOnSingleClick,
     getFavCharacterList();
     updateFavCharControl();
 
-    for(int i = 0; i < 16; i++)
+    m_xRecentIconView->connect_selection_changed(LINK(this, SfxCharmapContainer, IconViewSelectionChangedHdl));
+    m_xRecentIconView->connect_item_activated(LINK(this, SfxCharmapContainer, ItemActivatedHdl));
+    m_xRecentIconView->connect_focus_in(LINK(this, SfxCharmapContainer, ItemViewFocusInHdl));
+    m_xRecentIconView->connect_focus_out(LINK(this, SfxCharmapContainer, ItemViewFocusOutHdl));
+    m_xRecentIconView->connect_command(LINK(this, SfxCharmapContainer, RecentContextMenuHdl));
+
+    m_xFavIconView->connect_selection_changed(LINK(this, SfxCharmapContainer, IconViewSelectionChangedHdl));
+    m_xFavIconView->connect_item_activated(LINK(this, SfxCharmapContainer, ItemActivatedHdl));
+    m_xFavIconView->connect_focus_in(LINK(this, SfxCharmapContainer, ItemViewFocusInHdl));
+    m_xFavIconView->connect_focus_out(LINK(this, SfxCharmapContainer, ItemViewFocusOutHdl));
+    m_xFavIconView->connect_command(LINK(this, SfxCharmapContainer, FavContextMenuHdl));
+}
+
+VclPtr<VirtualDevice> SfxCharmapContainer::CreateIcon(weld::IconView& rIconView,
+                                                      const OUString& rFont, const OUString& rText)
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    vcl::Font aFont = rStyleSettings.GetLabelFont();
+    Size aFontSize = aFont.GetFontSize();
+    aFont.SetFontSize(Size(aFontSize.Width() * 2, aFontSize.Height() * 2));
+
+    VclPtr<VirtualDevice> pDev = rIconView.create_virtual_device();
+
+    Size aSize;
     {
-        m_aRecentCharView[i].SetActivateOnSingleClick(bActivateOnSingleClick);
-        m_aRecentCharView[i].setFocusInHdl(rFocusInHdl);
-        m_aRecentCharView[i].setActivateHdl(rActivateHdl);
-        m_aRecentCharView[i].setContextMenuHdl(
-            LINK(this, SfxCharmapContainer, RecentContextMenuHdl));
-        m_aFavCharView[i].SetActivateOnSingleClick(bActivateOnSingleClick);
-        m_aFavCharView[i].setFocusInHdl(rFocusInHdl);
-        m_aFavCharView[i].setActivateHdl(rActivateHdl);
-        m_aFavCharView[i].setContextMenuHdl(LINK(this, SfxCharmapContainer, FavContextMenuHdl));
+        auto popIt = pDev->ScopedPush(PUSH_ALLFONT);
+        weld::SetPointFont(*pDev, aFont);
+        aSize = Size(pDev->approximate_digit_width() * 2, pDev->GetTextHeight());
     }
+
+    tools::Long nWinHeight = aSize.Height();
+    aFont.SetFamilyName(rFont);
+    aFont.SetWeight(WEIGHT_NORMAL);
+    aFont.SetAlignment(ALIGN_TOP);
+    aFont.SetFontSize(pDev->PixelToLogic(Size(0, nWinHeight / 2)));
+    aFont.SetTransparent(true);
+
+    pDev->SetOutputSize(aSize);
+    pDev->SetFont(aFont);
+
+    const Color aWindowTextColor(rStyleSettings.GetFieldTextColor());
+    Color aFillColor(rStyleSettings.GetWindowColor());
+    Color aTextColor(rStyleSettings.GetWindowTextColor());
+    Color aShadowColor(rStyleSettings.GetShadowColor());
+
+    bool bGotBoundary = true;
+    tools::Rectangle aBoundRect;
+
+    tools::Long nY = (nWinHeight - pDev->GetTextHeight()) / 2;
+
+    for (tools::Long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 1)
+    {
+        if (!pDev->GetTextBoundRect(aBoundRect, rText) || aBoundRect.IsEmpty())
+        {
+            bGotBoundary = false;
+            break;
+        }
+
+        tools::Long nTextWidth = aBoundRect.GetWidth();
+        if (aSize.Width() > nTextWidth)
+            break;
+        vcl::Font aFont2(aFont);
+        aFontSize.setHeight(nFontHeight);
+        aFont2.SetFontSize(aFontSize);
+        pDev->SetFont(aFont2);
+        nY = (nWinHeight - pDev->GetTextHeight()) / 2;
+    }
+
+    Point aPoint(2, nY);
+
+    if (!bGotBoundary)
+        aPoint.setX((aSize.Width() - pDev->GetTextWidth(rText)) / 2);
+    else
+    {
+        // adjust position
+        aBoundRect += aPoint;
+
+        // vertical adjustment
+        int nYLDelta = aBoundRect.Top();
+        int nYHDelta = aSize.Height() - aBoundRect.Bottom();
+        if (nYLDelta <= 0)
+            aPoint.AdjustY(-(nYLDelta - 1));
+        else if (nYHDelta <= 0)
+            aPoint.AdjustY(nYHDelta - 1);
+
+        // centrally align glyph
+        aPoint.setX(-aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2);
+    }
+
+    pDev->SetFillColor(aFillColor);
+    pDev->SetLineColor(aShadowColor);
+    pDev->DrawRect(tools::Rectangle(Point(0, 0), aSize));
+
+    pDev->SetTextColor(aWindowTextColor);
+    pDev->DrawText(aPoint, rText);
+
+    pDev->SetFillColor(aFillColor);
+    pDev->SetTextColor(aTextColor);
+
+    return pDev;
 }
 
 void SfxCharmapContainer::getFavCharacterList()
@@ -155,7 +175,7 @@ void SfxCharmapContainer::getFavCharacterList()
 
 void SfxCharmapContainer::updateFavCharControl()
 {
-    updateCharControl(m_aFavCharView, m_aFavChars);
+    updateCharControl(*m_xFavIconView, m_aFavChars);
 
     m_aUpdateFavHdl.Call(nullptr);
 }
@@ -177,12 +197,17 @@ void SfxCharmapContainer::getRecentCharacterList()
 
 void SfxCharmapContainer::GrabFocusToFirstFavorite()
 {
-    m_aFavCharView[0].GrabFocus();
+    std::unique_ptr<weld::TreeIter> pIter = m_xFavIconView->make_iterator();
+    if (m_xFavIconView->get_iter_first(*pIter))
+    {
+        m_xFavIconView->select(*pIter);
+        m_xFavIconView->grab_focus();
+    }
 }
 
 void SfxCharmapContainer::updateRecentCharControl()
 {
-    updateCharControl(m_aRecentCharView, m_aRecentChars);
+    updateCharControl(*m_xRecentIconView, m_aRecentChars);
 
     m_aUpdateRecentHdl.Call(nullptr);
 }
@@ -276,84 +301,132 @@ bool SfxCharmapContainer::isFavChar(const OUString& rTitle, const OUString& rFon
     return std::ranges::find(m_aFavChars, CharAndFont(rTitle, rFont)) != m_aFavChars.end();
 }
 
-void SfxCharmapContainer::HandleContextMenu(std::span<SvxCharView> aCharViews,
-                                            const Link<SvxCharView&, void>& rClearHdl,
-                                            const Link<SvxCharView&, void>& rClearAllHdl,
+bool SfxCharmapContainer::HandleContextMenu(weld::IconView& rIconView,
+                                            std::deque<CharAndFont>& rChars,
+                                            const Link<const CharAndFont&, void>& rClearHdl,
+                                            const Link<weld::IconView&, void>& rClearAllHdl,
                                             const CommandEvent& rCmdEvent)
 {
-    assert(rCmdEvent.GetCommand() == CommandEventId::ContextMenu);
+    if (rCmdEvent.GetCommand() != CommandEventId::ContextMenu)
+        return false;
 
-    for (SvxCharView& rView : aCharViews)
+    Point aPos;
+    std::unique_ptr<weld::TreeIter> pItem;
+    if (rCmdEvent.IsMouseEvent())
     {
-        // the context menu is opened for the currently focused view
-        if (!rView.HasFocus())
-            continue;
-
-        weld::DrawingArea* pDrawingArea = rView.GetDrawingArea();
-        std::unique_ptr<weld::Builder> xBuilder(
-            Application::CreateBuilder(pDrawingArea, u"sfx/ui/charviewmenu.ui"_ustr));
-        std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu(u"charviewmenu"_ustr));
-        const OUString sMenuId = xItemMenu->popup_at_rect(
-            pDrawingArea, tools::Rectangle(rCmdEvent.GetMousePosPixel(), Size(1, 1)));
-        if (sMenuId == u"clearchar")
-            rClearHdl.Call(rView);
-        else if (sMenuId == u"clearallchar")
-            rClearAllHdl.Call(rView);
-
-        rView.Invalidate();
-        return;
+        aPos = rCmdEvent.GetMousePosPixel();
+        pItem = rIconView.get_item_at_pos(aPos);
+        if (!pItem)
+            return false;
+        rIconView.select(*pItem);
     }
+    else
+    {
+        pItem = rIconView.make_iterator();
+        if (!rIconView.get_selected(pItem.get()))
+            return false;
+        aPos = rIconView.get_rect(*pItem).Center();
+    }
+
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(&rIconView, u"sfx/ui/charviewmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu(u"charviewmenu"_ustr));
+    const OUString sMenuId
+        = xItemMenu->popup_at_rect(&rIconView, tools::Rectangle(aPos, Size(1, 1)));
+    if (sMenuId == u"clearchar")
+        rClearHdl.Call(rChars.at(rIconView.get_iter_index_in_parent(*pItem)));
+    else if (sMenuId == u"clearallchar")
+        rClearAllHdl.Call(rIconView);
+
+    return true;
 }
 
-void SfxCharmapContainer::updateCharControl(std::span<SvxCharView> aCharViews,
+void SfxCharmapContainer::updateCharControl(weld::IconView& rIconView,
                                             const std::deque<CharAndFont>& rChars)
 {
-    assert(rChars.size() <= aCharViews.size());
+    rIconView.clear();
 
     int i = 0;
     for (auto it = rChars.begin(); it != rChars.end(); ++it, i++)
     {
-        aCharViews[i].SetText(it->sChar);
-
+        const int nIndex = rIconView.n_children();
+        const OUString* pNullIconName = nullptr;
+        rIconView.insert(nIndex, nullptr, nullptr, pNullIconName, nullptr);
+        ScopedVclPtr<VirtualDevice> pDev = CreateIcon(rIconView, it->sFont, it->sChar);
+        rIconView.set_image(nIndex, *pDev);
         OUString sAccName;
         if (GetDecimalValueAndCharName(it->sChar, o3tl::temporary(sal_UCS4()), sAccName))
-            aCharViews[i].SetAccessibleName(sAccName);
-        else
-            aCharViews[i].SetAccessibleName(OUString());
-        aCharViews[i].SetToolTip(GetCharInfoText(it->sChar));
-
-        aCharViews[i].UpdateFont(it->sFont);
-        aCharViews[i].Show();
-    }
-
-    for (; i < 16; i++)
-    {
-        aCharViews[i].SetText(OUString());
-        aCharViews[i].SetAccessibleName(OUString());
-        aCharViews[i].SetToolTip(OUString());
-        aCharViews[i].Hide();
+            rIconView.set_item_accessible_name(nIndex, sAccName);
+        rIconView.set_item_tooltip_text(nIndex, GetCharInfoText(it->sChar));
     }
 }
 
-IMPL_LINK(SfxCharmapContainer, RecentContextMenuHdl, const CommandEvent&, rCmdEvent, void)
+IMPL_LINK(SfxCharmapContainer, IconViewSelectionChangedHdl, weld::IconView&, rIconView, void)
 {
-    HandleContextMenu(m_aRecentCharView, (LINK(this, SfxCharmapContainer, RecentClearClickHdl)),
-                      LINK(this, SfxCharmapContainer, RecentClearAllClickHdl), rCmdEvent);
+    std::unique_ptr<weld::TreeIter> pIter = rIconView.make_iterator();
+    if (!rIconView.get_selected(pIter.get()))
+        return;
+
+    const int nIndex = rIconView.get_iter_index_in_parent(*pIter);
+    if (&rIconView == m_xRecentIconView.get())
+        m_aCharSelectedHdl.Call(m_aRecentChars.at(nIndex));
+    else if (&rIconView == m_xFavIconView.get())
+        m_aCharSelectedHdl.Call(m_aFavChars.at(nIndex));
 }
 
-IMPL_LINK(SfxCharmapContainer, FavContextMenuHdl, const CommandEvent&, rCmdEvent, void)
+IMPL_LINK(SfxCharmapContainer, ItemViewFocusInHdl, weld::Widget&, rWidget, void)
 {
-    HandleContextMenu(m_aFavCharView, LINK(this, SfxCharmapContainer, FavClearClickHdl),
-                      LINK(this, SfxCharmapContainer, FavClearAllClickHdl), rCmdEvent);
+    weld::IconView& rIconView = dynamic_cast<weld::IconView&>(rWidget);
+    std::unique_ptr<weld::TreeIter> pIter = rIconView.make_iterator();
+    if (rIconView.get_cursor(pIter.get()))
+        rIconView.select(*pIter);
+    else if (rIconView.get_iter_first(*pIter))
+        rIconView.select(*pIter);
+    else
+        return;
+
+    IconViewSelectionChangedHdl(rIconView);
 }
 
-IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView&, rView, void)
+IMPL_STATIC_LINK(SfxCharmapContainer, ItemViewFocusOutHdl,  weld::Widget&, rWidget, void)
 {
-    const OUString& sTitle = rView.GetText();
-    OUString sFont = rView.GetFontFamilyName();
+    weld::IconView& rIconView = dynamic_cast<weld::IconView&>(rWidget);
+    rIconView.unselect_all();
+}
 
+IMPL_LINK(SfxCharmapContainer, ItemActivatedHdl, weld::IconView&, rIconView, bool)
+{
+    std::unique_ptr<weld::TreeIter> pIter = rIconView.make_iterator();
+    if (!rIconView.get_selected(pIter.get()))
+        return false;
+
+    const int nIndex = rIconView.get_iter_index_in_parent(*pIter);
+    if (&rIconView == m_xRecentIconView.get())
+        m_aCharActivateHdl.Call(m_aRecentChars.at(nIndex));
+    else if (&rIconView == m_xFavIconView.get())
+        m_aCharActivateHdl.Call(m_aFavChars.at(nIndex));
+
+    return true;
+}
+
+IMPL_LINK(SfxCharmapContainer, RecentContextMenuHdl, const CommandEvent&, rCmdEvent, bool)
+{
+    return HandleContextMenu(*m_xRecentIconView, m_aRecentChars,
+                             LINK(this, SfxCharmapContainer, RecentClearClickHdl),
+                             LINK(this, SfxCharmapContainer, RecentClearAllClickHdl), rCmdEvent);
+}
+
+IMPL_LINK(SfxCharmapContainer, FavContextMenuHdl, const CommandEvent&, rCmdEvent, bool)
+{
+    return HandleContextMenu(*m_xFavIconView, m_aFavChars,
+                             LINK(this, SfxCharmapContainer, FavClearClickHdl),
+                             LINK(this, SfxCharmapContainer, FavClearAllClickHdl), rCmdEvent);
+}
+
+IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, const CharAndFont&, rCharAndFont, void)
+{
     // if recent char to be added is already in list, remove it
-    auto itChar = std::ranges::find(m_aRecentChars, CharAndFont(sTitle, sFont));
+    auto itChar = std::ranges::find(m_aRecentChars, rCharAndFont);
     if (itChar != m_aRecentChars.end())
         m_aRecentChars.erase(itChar);
 
@@ -376,7 +449,7 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView&, rView, void)
     updateRecentCharControl();
 }
 
-IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView&, void)
+IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, weld::IconView&, void)
 {
     m_aRecentChars.clear();
 
@@ -388,13 +461,13 @@ IMPL_LINK_NOARG(SfxCharmapContainer, RecentClearAllClickHdl, SvxCharView&, void)
     updateRecentCharControl();
 }
 
-IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, SvxCharView&, rView, void)
+IMPL_LINK(SfxCharmapContainer, FavClearClickHdl, const CharAndFont&, rChar, void)
 {
-    deleteFavCharacterFromList(rView.GetText(), rView.GetFontFamilyName());
+    deleteFavCharacterFromList(rChar.sChar, rChar.sFont);
     updateFavCharControl();
 }
 
-IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, SvxCharView&, void)
+IMPL_LINK_NOARG(SfxCharmapContainer, FavClearAllClickHdl, weld::IconView&, void)
 {
     m_aFavChars.clear();
 

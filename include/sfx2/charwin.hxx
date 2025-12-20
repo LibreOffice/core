@@ -19,10 +19,7 @@
 
 #pragma once
 
-#include <sfx2/dllapi.h>
-#include <vcl/virdev.hxx>
-#include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
+#include <rtl/ustring.hxx>
 
 struct CharAndFont
 {
@@ -36,48 +33,6 @@ struct CharAndFont
     }
 
     bool operator==(const CharAndFont& rOther) const = default;
-};
-
-class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
-{
-private:
-    VclPtr<VirtualDevice> mxVirDev;
-    vcl::Font       maFont;
-    bool            m_bActivateOnSingleClick;
-    OUString        m_sText;
-    OUString        m_sToolTip;
-
-    Link<const CharAndFont&, void> maFocusInHdl;
-    Link<const CharAndFont&, void> maActivateHdl;
-    Link<const CommandEvent&, void> maContextMenuHdl;
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void Resize() override;
-    virtual bool MouseButtonDown(const MouseEvent&) override;
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
-    virtual OUString RequestHelp(tools::Rectangle&rHelpRect) override;
-    virtual bool KeyInput(const KeyEvent&) override;
-    virtual bool Command(const CommandEvent&) override;
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-
-public:
-    SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
-    SFX2_DLLPUBLIC virtual ~SvxCharView() override;
-
-    void UpdateFont(const OUString& rFontFamilyName);
-    OUString GetFontFamilyName() const { return maFont.GetFamilyName(); }
-    void            SetText( const OUString& rText );
-    OUString const & GetText() const { return m_sText; }
-    CharAndFont GetCharAndFont() const;
-    void SetToolTip(const OUString& rToolTip) { m_sToolTip = rToolTip; };
-    void SetActivateOnSingleClick(bool bActivate);
-
-    Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
-
-    void setFocusInHdl(const Link<const CharAndFont&, void>& rLink);
-    void setActivateHdl(const Link<const CharAndFont&, void>& rLink);
-    void setContextMenuHdl(const Link<const CommandEvent&, void>& rLink);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
