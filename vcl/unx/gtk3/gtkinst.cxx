@@ -15684,34 +15684,6 @@ public:
         move_subtree(rGtkIter.iter, pGtkParentIter ? const_cast<GtkTreeIter*>(&pGtkParentIter->iter) : nullptr, nIndexInNewParent);
     }
 
-    virtual int get_selected_index() const override
-    {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
-        int nRet = -1;
-        GtkTreeSelection *selection = gtk_tree_view_get_selection(m_pTreeView);
-        if (gtk_tree_selection_get_mode(selection) != GTK_SELECTION_MULTIPLE)
-        {
-            GtkTreeIter iter;
-            GtkTreeModel* pModel;
-            if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), &pModel, &iter))
-            {
-                GtkTreePath* path = gtk_tree_model_get_path(pModel, &iter);
-
-                gint depth;
-                gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
-                nRet = indices[depth-1];
-
-                gtk_tree_path_free(path);
-            }
-        }
-        else
-        {
-            auto vec = get_selected_rows();
-            return vec.empty() ? -1 : vec[0];
-        }
-        return nRet;
-    }
-
     bool get_selected_iterator(GtkTreeIter* pIter) const
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");

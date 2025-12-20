@@ -1748,8 +1748,6 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
                            int col = -1) override;
 
-    virtual int get_selected_index() const override;
-
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;

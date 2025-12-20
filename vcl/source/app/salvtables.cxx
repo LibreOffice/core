@@ -4560,15 +4560,6 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& 
     set_image(rVclIter.iter, createImage(rImage), col);
 }
 
-int SalInstanceTreeView::get_selected_index() const
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
-    SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
-    if (!pEntry)
-        return -1;
-    return SvTreeList::GetRelPos(pEntry);
-}
-
 void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
     const SalInstanceTreeIter& rVclSource(static_cast<const SalInstanceTreeIter&>(rSource));

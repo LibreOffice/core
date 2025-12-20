@@ -224,7 +224,7 @@ public:
     virtual void set_clicks_to_toggle(int nToggleBehavior) = 0;
 
     //by index
-    virtual int get_selected_index() const = 0;
+    int get_selected_index() const;
 
     void remove(int pos)
     {

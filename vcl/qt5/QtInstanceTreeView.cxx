@@ -143,22 +143,6 @@ void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
 
-int QtInstanceTreeView::get_selected_index() const
-{
-    SolarMutexGuard g;
-
-    int nIndex = -1;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        nIndex = aSelectedIndexes.first().row();
-    });
-
-    return nIndex;
-}
-
 void QtInstanceTreeView::do_remove(int nPos) { do_remove(treeIter(nPos)); }
 
 OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
