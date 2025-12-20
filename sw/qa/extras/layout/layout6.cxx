@@ -1756,6 +1756,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169399)
     assertXPath(pXmlDoc, "/root/page", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf155306)
+{
+    // Given a document defining footnotes counted per page, with a 2-column section containing
+    // a footnote:
+    createSwDoc("footnote-in-2-column-section.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The footnote must have the correct number. Without the fix, the following tests both failed,
+    // because the number was 0:
+    assertXPath(pXmlDoc, "//body/section/column[1]//SwFieldPortion[@type='PortionType::Footnote']",
+                "expand", u"2");
+    assertXPath(pXmlDoc, "//ftncont/ftn[2]//SwFieldPortion[@type='PortionType::FootnoteNum']",
+                "expand", u"2");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
