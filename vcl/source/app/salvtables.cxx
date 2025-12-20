@@ -4133,12 +4133,6 @@ void SalInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Colo
     set_font_color(rVclIter.iter, rColor);
 }
 
-void SalInstanceTreeView::do_remove(int pos)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    m_xTreeView->RemoveEntry(pEntry);
-}
-
 int SalInstanceTreeView::find_text(const OUString& rText) const
 {
     for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))

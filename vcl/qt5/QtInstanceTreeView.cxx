@@ -109,8 +109,6 @@ void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTreeView::do_remove(int nPos) { do_remove(treeIter(nPos)); }
-
 OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 {
     return get_text(treeIter(nRow), nCol);

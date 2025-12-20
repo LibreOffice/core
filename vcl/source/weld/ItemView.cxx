@@ -84,6 +84,19 @@ void ItemView::unselect_all()
     enable_notify_events();
 }
 
+void ItemView::remove(int pos)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
+        remove(*pIter);
+}
+
+void ItemView::remove(const TreeIter& rIter)
+{
+    disable_notify_events();
+    do_remove(rIter);
+    enable_notify_events();
+}
+
 void ItemView::clear()
 {
     disable_notify_events();

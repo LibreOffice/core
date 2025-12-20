@@ -745,8 +745,6 @@ public:
     void set_cursor_without_notify(const weld::TreeIter& rIter);
     virtual void do_set_cursor(int pos) override;
 
-    using SalInstanceTreeView::do_remove;
-    virtual void do_remove(int pos) override;
     virtual void do_remove(const weld::TreeIter& rIter) override;
 
     virtual void do_clear() override;

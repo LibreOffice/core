@@ -129,11 +129,9 @@ protected:
                            VirtualDevice* pImageSurface, bool bChildrenOnDemand, TreeIter* pRet)
         = 0;
     virtual void do_insert_separator(int pos, const OUString& rId) = 0;
-    virtual void do_remove(int pos) = 0;
     virtual void do_scroll_to_row(int row) = 0;
     using weld::ItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) = 0;
-    virtual void do_remove(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
@@ -225,13 +223,6 @@ public:
 
     //by index
     int get_selected_index() const;
-
-    void remove(int pos)
-    {
-        disable_notify_events();
-        do_remove(pos);
-        enable_notify_events();
-    }
 
     // col index -1 gets the first text column
     virtual OUString get_text(int row, int col = -1) const = 0;
@@ -334,13 +325,6 @@ public:
     virtual bool iter_has_child(const TreeIter& rIter) const = 0;
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
-
-    void remove(const TreeIter& rIter)
-    {
-        disable_notify_events();
-        do_remove(rIter);
-        enable_notify_events();
-    }
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;

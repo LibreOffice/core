@@ -53,7 +53,6 @@ protected:
     virtual void do_insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
                            TreeIter* pRet)
         = 0;
-    virtual void do_remove(const TreeIter& rIter) = 0;
     virtual void do_scroll_to_item(const TreeIter& rIter) = 0;
 
 public:
@@ -120,9 +119,6 @@ public:
     virtual void set_text(int pos, const OUString& rText) = 0;
     virtual void set_item_accessible_name(int pos, const OUString& rName) = 0;
     virtual void set_item_tooltip_text(int pos, const OUString& rToolTip) = 0;
-
-    void remove(int pos);
-    void remove(const TreeIter& rIter);
 
     tools::Rectangle get_rect(int pos) const;
     virtual tools::Rectangle get_rect(const TreeIter& rIter) const = 0;

@@ -15020,15 +15020,6 @@ public:
         set_font_color(rGtkIter.iter, rColor);
     }
 
-    virtual void do_remove(int pos) override
-    {
-        disable_notify_events();
-        GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
-        m_Remove(m_pTreeModel, &iter);
-        enable_notify_events();
-    }
-
     virtual int find_text(const OUString& rText) const override
     {
         Search aSearch(rText, m_nTextCol);

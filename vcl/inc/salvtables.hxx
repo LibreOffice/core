@@ -1649,8 +1649,6 @@ public:
 
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
 
-    virtual void do_remove(int pos) override;
-
     virtual int find_text(const OUString& rText) const override;
 
     virtual int find_id(const OUString& rId) const override;
