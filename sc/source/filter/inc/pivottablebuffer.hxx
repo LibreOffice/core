@@ -140,8 +140,7 @@ public:
     void                importPTReferenceItem( SequenceInputStream& rStrm );
 
     /** Finalizes the field after import, creates grouping and other settings. */
-    void                finalizeImport(
-                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc );
+    void finalizeImport(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc);
     /** Finalizes the grouped date field after import. */
     void                finalizeDateGroupingImport(
                             const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
@@ -151,8 +150,7 @@ public:
                             const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
-    void                finalizeImportBasedOnCache(
-                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc);
+    void finalizeImportBasedOnCache(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc);
 
     /** Returns the name of the DataPilot field in the fields collection. */
     const OUString& getDPFieldName() const { return maDPFieldName; }
