@@ -369,8 +369,6 @@ public:
 
     // call func on each element until func returns true or we run out of elements
     virtual void all_foreach(const std::function<bool(TreeIter&)>& func) = 0;
-    // call func on each selected element until func returns true or we run out of elements
-    virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
     // call func on each visible element until func returns true or we run out of elements
     virtual void visible_foreach(const std::function<bool(TreeIter&)>& func) = 0;
     // clear the children of pParent (whole tree if nullptr),

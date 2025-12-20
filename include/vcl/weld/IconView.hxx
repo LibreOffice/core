@@ -133,9 +133,6 @@ public:
         do_scroll_to_item(rIter);
         enable_notify_events();
     }
-
-    // call func on each selected element until func returns true or we run out of elements
-    virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
 };
 }
 

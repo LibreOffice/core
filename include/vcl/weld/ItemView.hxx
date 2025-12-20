@@ -74,6 +74,9 @@ public:
 
     void clear();
 
+    // call func on each selected element until func returns true or we run out of elements
+    virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
+
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
