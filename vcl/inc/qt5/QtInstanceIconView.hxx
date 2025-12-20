@@ -40,8 +40,6 @@ public:
 
     virtual int count_selected_items() const override;
 
-    virtual OUString get_selected_text() const override;
-
     virtual void set_image(int nPos, VirtualDevice& rDevice) override;
     virtual void set_text(int nPos, const OUString& rText) override;
     virtual void set_item_accessible_name(int nPos, const OUString& rName) override;

@@ -104,12 +104,6 @@ int QtInstanceIconView::count_selected_items() const
     return 0;
 }
 
-OUString QtInstanceIconView::get_selected_text() const
-{
-    assert(false && "Not implemented yet");
-    return OUString();
-}
-
 void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)
 {
     SolarMutexGuard g;

@@ -98,22 +98,6 @@ void QtInstanceTreeView::do_insert_separator(int, const OUString&)
     assert(false && "Not implemented yet");
 }
 
-OUString QtInstanceTreeView::get_selected_text() const
-{
-    SolarMutexGuard g;
-
-    OUString sText;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        sText = toOUString(itemFromIndex(aSelectedIndexes.first())->text());
-    });
-
-    return sText;
-}
-
 void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 {
     assert(m_pModel->rowCount() == 0 && "Must be called before inserting any data");

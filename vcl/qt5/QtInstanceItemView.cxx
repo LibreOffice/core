@@ -102,6 +102,22 @@ OUString QtInstanceItemView::get_selected_id() const
     return sId;
 }
 
+OUString QtInstanceItemView::get_selected_text() const
+{
+    SolarMutexGuard g;
+
+    OUString sText;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndexList aSelectedIndexes = getSelectionModel().selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        sText = toOUString(aSelectedIndexes.first().data(Qt::DisplayRole).toString());
+    });
+
+    return sText;
+}
+
 bool QtInstanceItemView::get_selected(weld::TreeIter* pIter) const
 {
     SolarMutexGuard g;

@@ -56,6 +56,7 @@ public:
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
 
     virtual OUString get_selected_id() const override;
+    virtual OUString get_selected_text() const override;
 
     virtual bool get_selected(weld::TreeIter* pIter) const override;
 
