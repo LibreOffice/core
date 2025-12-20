@@ -149,10 +149,15 @@ void QtInstanceIconView::set_item_tooltip_text(int nPos, const OUString& rToolTi
     });
 }
 
-tools::Rectangle QtInstanceIconView::get_rect(const weld::TreeIter&) const
+tools::Rectangle QtInstanceIconView::get_rect(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return tools::Rectangle();
+    SolarMutexGuard g;
+
+    tools::Rectangle aRect;
+    GetQtInstance().RunInMainThread(
+        [&] { aRect = toRectangle(m_pListView->visualRect(modelIndex(rIter))); });
+
+    return aRect;
 }
 
 OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
