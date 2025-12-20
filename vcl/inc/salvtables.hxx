@@ -1942,7 +1942,7 @@ public:
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
-    virtual void do_remove(int pos) override;
+    virtual void do_remove(const weld::TreeIter& rIter) override;
 
     virtual void set_image(int pos, VirtualDevice& rImage) override;
 

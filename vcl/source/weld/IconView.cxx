@@ -33,6 +33,19 @@ std::unique_ptr<weld::TreeIter> IconView::get_item_at_pos(const Point& rPos)
 
     return {};
 }
+
+void IconView::remove(int pos)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
+        remove(*pIter);
+}
+
+void IconView::remove(const TreeIter& rIter)
+{
+    disable_notify_events();
+    do_remove(rIter);
+    enable_notify_events();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

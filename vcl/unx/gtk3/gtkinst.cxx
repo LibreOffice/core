@@ -16887,13 +16887,12 @@ private:
             gtk_tree_store_set(m_pTreeStore, &iter, nToolTipCol, rToolTip.toUtf8().getStr(), -1);
     }
 
-    virtual void do_remove(int pos) override
+    virtual void do_remove(const weld::TreeIter& rIter) override
     {
         disable_notify_events();
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-            tree_store_remove(pModel, &iter);
+        tree_store_remove(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         enable_notify_events();
     }
 

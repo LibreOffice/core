@@ -5424,10 +5424,10 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
     }
 }
 
-void SalInstanceIconView::do_remove(int pos)
+void SalInstanceIconView::do_remove(const weld::TreeIter& rIter)
 {
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-    m_xIconView->RemoveEntry(pEntry);
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_xIconView->RemoveEntry(rVclIter.iter);
 }
 
 OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const
