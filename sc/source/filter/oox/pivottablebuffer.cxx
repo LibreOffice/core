@@ -383,7 +383,7 @@ void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
     maModel.mnSortRefItem = rStrm.readInt32();
 }
 
-void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& rxDPDesc )
+void PivotTableField::finalizeImport(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc)
 {
     /*  Process all fields based on source data, other fields (e.g. group
         fields) are processed from here. PivotCache::getCacheDatabaseIndex()
@@ -492,7 +492,8 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
         mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, orItemNames );
 }
 
-void PivotTableField::finalizeImportBasedOnCache( const Reference< XDataPilotDescriptor >& rxDPDesc)
+void PivotTableField::finalizeImportBasedOnCache(
+    const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc)
 {
     /*  Process all fields based on source data, other fields (e.g. group
         fields) are processed based on cache fields.*/
