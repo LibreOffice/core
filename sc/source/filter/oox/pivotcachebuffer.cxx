@@ -50,6 +50,7 @@
 #include <tools/datetime.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <dapiuno.hxx>
 
 namespace oox::xls {
 
@@ -598,10 +599,10 @@ const PivotCacheItemList& PivotCacheField::getCacheItems() const
     return maSharedItems;
 }
 
-void PivotCacheField::convertNumericGrouping( const Reference< XDataPilotField >& rxDPField ) const
+void PivotCacheField::convertNumericGrouping( const rtl::Reference< ScDataPilotFieldObj >& rxDPField ) const
 {
     OSL_ENSURE( hasGroupItems() && hasNumericGrouping(), "PivotCacheField::convertNumericGrouping - not a numeric group field" );
-    PropertySet aPropSet( rxDPField );
+    PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(rxDPField) ));
     if( hasGroupItems() && hasNumericGrouping() && aPropSet.is() )
     {
         DataPilotFieldGroupInfo aGroupInfo;
@@ -616,11 +617,11 @@ void PivotCacheField::convertNumericGrouping( const Reference< XDataPilotField >
     }
 }
 
-OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField >& rxBaseDPField ) const
+OUString PivotCacheField::createDateGroupField( const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField ) const
 {
     OSL_ENSURE( hasGroupItems() && hasDateGrouping(), "PivotCacheField::createDateGroupField - not a numeric group field" );
-    Reference< XDataPilotField > xDPGroupField;
-    PropertySet aPropSet( rxBaseDPField );
+    rtl::Reference< ScDataPilotFieldObj > xDPGroupField;
+    PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(rxBaseDPField) ));
     if( hasGroupItems() && hasDateGrouping() && aPropSet.is() )
     {
         bool bDayRanges = (maFieldGroupModel.mnGroupBy == XML_days) && (maFieldGroupModel.mfInterval >= 2.0);
@@ -648,24 +649,22 @@ OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField
 
         try
         {
-            Reference< XDataPilotFieldGrouping > xDPGrouping( rxBaseDPField, UNO_QUERY_THROW );
-            xDPGroupField = xDPGrouping->createDateGroup( aGroupInfo );
+            xDPGroupField = rxBaseDPField->createScDateGroup( aGroupInfo );
         }
         catch( Exception& )
         {
         }
     }
 
-    Reference< XNamed > xFieldName( xDPGroupField, UNO_QUERY );
-    return xFieldName.is() ? xFieldName->getName() : OUString();
+    return xDPGroupField.is() ? xDPGroupField->getName() : OUString();
 }
 
-OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotField >& rxBaseDPField, const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames ) const
+OUString PivotCacheField::createParentGroupField( const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField, const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames ) const
 {
     SAL_WARN_IF( !hasGroupItems() || maDiscreteItems.empty(), "sc", "PivotCacheField::createParentGroupField - not a group field" );
     SAL_WARN_IF( maDiscreteItems.size() != orItemNames.size(), "sc", "PivotCacheField::createParentGroupField - number of item names does not match grouping info" );
-    Reference< XDataPilotFieldGrouping > xDPGrouping( rxBaseDPField, UNO_QUERY );
-    if( !xDPGrouping.is() ) return OUString();
+    if( !rxBaseDPField.is() )
+        return OUString();
 
     // map the group item indexes from maGroupItems to all item indexes from maDiscreteItems
     std::vector< std::vector<sal_Int32> > aItemMap( maGroupItems.size() );
@@ -686,7 +685,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     }
 
     // process all groups
-    Reference< XDataPilotField > xDPGroupField;
+    rtl::Reference< ScDataPilotFieldObj > xDPGroupField;
     nIndex = 0;
     for( const auto& rItems : aItemMap )
     {
@@ -711,14 +710,14 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
             if( !aMembers.empty() ) try
             {
                 // only the first call of createNameGroup() returns the new field
-                Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( comphelper::containerToSequence( aMembers ) );
+                rtl::Reference< ScDataPilotFieldObj > xDPNewField = rxBaseDPField->createNameGroup( aMembers );
                 SAL_WARN_IF( xDPGroupField.is() == xDPNewField.is(), "sc", "PivotCacheField::createParentGroupField - missing group field" );
                 if( !xDPGroupField.is() )
                     xDPGroupField = std::move(xDPNewField);
 
                 // get current grouping info
                 DataPilotFieldGroupInfo aGroupInfo;
-                PropertySet aPropSet( xDPGroupField );
+                PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(xDPGroupField) ));
                 aPropSet.getProperty( aGroupInfo, PROP_GroupInfo );
 
                 /*  Find the group object and the auto-generated group name.
@@ -782,8 +781,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
         ++nIndex;
     }
 
-    Reference< XNamed > xFieldName( xDPGroupField, UNO_QUERY );
-    return xFieldName.is() ? xFieldName->getName() : OUString();
+    return xDPGroupField.is() ? xDPGroupField->getName() : OUString();
 }
 
 void PivotCacheField::writeSourceHeaderCell( const WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
