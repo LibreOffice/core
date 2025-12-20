@@ -116,9 +116,6 @@ public:
 
     virtual int count_selected_items() const = 0;
 
-    //by index. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    virtual OUString get_id(int pos) const = 0;
-
     virtual void set_image(int pos, VirtualDevice& rDevice) = 0;
     virtual void set_text(int pos, const OUString& rText) = 0;
     virtual void set_id(int pos, const OUString& rId) = 0;
@@ -137,7 +134,6 @@ public:
 
     std::unique_ptr<weld::TreeIter> get_item_at_pos(const Point& rPos);
 
-    virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;
 
     void scroll_to_item(const TreeIter& rIter)

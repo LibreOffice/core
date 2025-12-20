@@ -296,7 +296,6 @@ public:
     }
 
     //by id
-    virtual OUString get_id(int pos) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select_id(const OUString& rId) { select(find_id(rId)); }
@@ -361,7 +360,6 @@ public:
     // col index -1 gets the first text column
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
-    virtual OUString get_id(const TreeIter& rIter) const = 0;
     // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
