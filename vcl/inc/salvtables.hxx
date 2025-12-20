@@ -1527,9 +1527,6 @@ public:
 
     virtual int n_children() const override;
 
-protected:
-    void set_id(SvTreeListEntry* pEntry, const OUString& rId);
-
 private:
     const OUString* getEntryData(int index) const;
 };

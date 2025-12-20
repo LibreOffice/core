@@ -3567,16 +3567,11 @@ OUString SalInstanceItemView::get_id(const weld::TreeIter& rIter) const
     return OUString();
 }
 
-void SalInstanceItemView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
-{
-    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
-    pEntry->SetUserData(m_aUserData.back().get());
-}
-
 void SalInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_id(rVclIter.iter, rId);
+    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
+    rVclIter.iter->SetUserData(m_aUserData.back().get());
 }
 
 OUString SalInstanceItemView::get_selected_id() const
