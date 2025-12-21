@@ -71,7 +71,9 @@ IMPL_LINK_NOARG(ScCheckListMenuControl::SubMenuItemData, TimeoutHdl, Timer *, vo
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, RowActivatedHdl, weld::TreeView&, bool)
 {
-    executeMenuItem(mxMenu->get_selected_index());
+    int nSelectedIndex = mxMenu->get_selected_index();
+    assert(nSelectedIndex >= 0 && "nothing selected");
+    executeMenuItem(nSelectedIndex);
     return true;
 }
 
