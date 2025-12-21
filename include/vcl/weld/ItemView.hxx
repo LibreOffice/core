@@ -53,6 +53,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_selected() const = 0;
 
+    int get_cursor_index() const;
     virtual bool get_cursor(TreeIter* pIter) const = 0;
     void set_cursor(const TreeIter& rIter);
 

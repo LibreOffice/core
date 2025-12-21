@@ -1663,8 +1663,6 @@ public:
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
 
-    virtual int get_cursor_index() const override;
-
     using SalInstanceItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) override;
 

@@ -70,7 +70,6 @@ public:
     virtual void set_font_color(int nPos, const Color& rColor) override;
     virtual void do_scroll_to_row(int nRow) override;
     virtual bool is_selected(int nPos) const override;
-    virtual int get_cursor_index() const override;
     using QtInstanceItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) override;
 

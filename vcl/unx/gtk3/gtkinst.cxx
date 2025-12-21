@@ -15758,23 +15758,6 @@ public:
         return true;
     }
 
-    virtual int get_cursor_index() const override
-    {
-        int nRet = -1;
-
-        GtkTreePath* path;
-        gtk_tree_view_get_cursor(m_pTreeView, &path, nullptr);
-        if (path)
-        {
-            gint depth;
-            gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
-            nRet = indices[depth-1];
-            gtk_tree_path_free(path);
-        }
-
-        return nRet;
-    }
-
     virtual void do_set_cursor(const weld::TreeIter& rIter) override
     {
         disable_notify_events();

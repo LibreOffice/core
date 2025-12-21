@@ -25,6 +25,15 @@ void ItemView::set_id(int pos, const OUString& rId)
         return set_id(*pIter, rId);
 }
 
+int ItemView::get_cursor_index() const
+{
+    std::unique_ptr<weld::TreeIter> pIter = make_iterator();
+    if (get_cursor(pIter.get()))
+        return get_iter_index_in_parent(*pIter);
+
+    return -1;
+}
+
 void ItemView::set_cursor(const TreeIter& rIter)
 {
     disable_notify_events();

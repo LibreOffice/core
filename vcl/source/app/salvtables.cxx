@@ -4196,14 +4196,6 @@ int SalInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
     return m_xTreeView->GetModel()->GetChildList(rVclIter.iter).size();
 }
 
-int SalInstanceTreeView::get_cursor_index() const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
-    if (!pEntry)
-        return -1;
-    return SvTreeList::GetRelPos(pEntry);
-}
-
 void SalInstanceTreeView::do_set_cursor(int pos)
 {
     if (pos == -1)

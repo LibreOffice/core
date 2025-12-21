@@ -260,7 +260,6 @@ public:
     }
 
     virtual bool is_selected(int pos) const = 0;
-    virtual int get_cursor_index() const = 0;
 
     using weld::ItemView::set_cursor;
     void set_cursor(int pos)

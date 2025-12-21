@@ -221,21 +221,6 @@ void QtInstanceTreeView::do_scroll_to_row(int nRow) { scroll_to_row(treeIter(nRo
 
 bool QtInstanceTreeView::is_selected(int nPos) const { return is_selected(treeIter(nPos)); }
 
-int QtInstanceTreeView::get_cursor_index() const
-{
-    SolarMutexGuard g;
-
-    int nIndex = -1;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aCurrentIndex = m_pSelectionModel->currentIndex();
-        if (aCurrentIndex.isValid())
-            nIndex = aCurrentIndex.row();
-
-    });
-
-    return nIndex;
-}
-
 void QtInstanceTreeView::do_set_cursor(int nPos) { do_set_cursor(treeIter(nPos)); }
 
 int QtInstanceTreeView::find_text(const OUString& rText) const
