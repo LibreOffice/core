@@ -320,14 +320,13 @@ void SwGlobalTree::TbxMenuHdl(std::u16string_view rCommand, weld::Menu& rMenu)
 
 MenuEnableFlags SwGlobalTree::GetEnableFlags() const
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    bool bEntry = m_xTreeView->get_selected(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected();
 
     int nSelCount = m_xTreeView->count_selected_rows();
     size_t nEntryCount = m_xTreeView->n_children();
     std::unique_ptr<weld::TreeIter> xPrevEntry;
     bool bPrevEntry = false;
-    if (bEntry)
+    if (xEntry)
     {
         xPrevEntry = m_xTreeView->make_iterator(xEntry.get());
         bPrevEntry = m_xTreeView->iter_previous(*xPrevEntry);
@@ -339,10 +338,10 @@ MenuEnableFlags SwGlobalTree::GetEnableFlags() const
     if(nSelCount == 1)
     {
         nRet |= MenuEnableFlags::Edit;
-        if (bEntry && weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry))->GetType() != GLBLDOC_UNKNOWN &&
+        if (xEntry && weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry))->GetType() != GLBLDOC_UNKNOWN &&
                     (!bPrevEntry || weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xPrevEntry))->GetType() != GLBLDOC_UNKNOWN))
             nRet |= MenuEnableFlags::InsertText;
-        if (bEntry && GLBLDOC_SECTION == weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry))->GetType())
+        if (xEntry && GLBLDOC_SECTION == weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry))->GetType())
             nRet |= MenuEnableFlags::EditLink;
     }
     else if(!nEntryCount)

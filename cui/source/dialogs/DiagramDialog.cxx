@@ -98,10 +98,10 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
     if (!m_rDiagram.isDiagram())
         return;
 
-    std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
+    std::unique_ptr<weld::TreeIter> pEntry = mpTreeDiagram->get_selected();
     const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
-    if (pDiagramHelper && mpTreeDiagram->get_selected(pEntry.get()))
+    if (pDiagramHelper && pEntry)
     {
         SdrModel& rDrawModel(m_rDiagram.getSdrModelFromSdrObject());
         const bool bUndo(rDrawModel.IsUndoEnabled());

@@ -13,8 +13,7 @@ namespace weld
 {
 int weld::TreeView::get_selected_index() const
 {
-    std::unique_ptr<weld::TreeIter> pIter = make_iterator();
-    if (get_selected(pIter.get()))
+    if (std::unique_ptr<weld::TreeIter> pIter = get_selected())
         return get_iter_index_in_parent(*pIter);
 
     return -1;

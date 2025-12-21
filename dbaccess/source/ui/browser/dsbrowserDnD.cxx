@@ -179,8 +179,8 @@ namespace dbaui
     IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-        std::unique_ptr<weld::TreeIter> xSelected = rTreeView.make_iterator();
-        if (rTreeView.get_selected(xSelected.get()) && isEntryCopyAllowed(*xSelected))
+        std::unique_ptr<weld::TreeIter> xSelected = rTreeView.get_selected();
+        if (xSelected && isEntryCopyAllowed(*xSelected))
             copyEntry(*xSelected);
     }
 

@@ -303,8 +303,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
 OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable)
 {
     OUString sDBName;
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_selected())
     {
         if (m_xTreeView->get_iter_depth(*xIter) == 2)
         {

@@ -241,8 +241,8 @@ IMPL_LINK(LayoutMenu, CommandHdl, const CommandEvent&, rEvent, bool)
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> pSelected = mxLayoutIconView->make_iterator();
-        if (!mxLayoutIconView->get_selected(pSelected.get()))
+        std::unique_ptr<weld::TreeIter> pSelected = mxLayoutIconView->get_selected();
+        if (!pSelected)
             return false;
         aPos = mxLayoutIconView->get_rect(*pSelected).Center();
     }

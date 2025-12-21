@@ -3219,8 +3219,8 @@ sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop(const ExecuteDropEvent& rE
     {
         if (!m_aDropHdl.IsSet())
             return DND_ACTION_NONE;
-        std::unique_ptr<weld::TreeIter> xSource(m_rFunctions.make_iterator());
-        if (!m_rFunctions.get_selected(xSource.get()))
+        std::unique_ptr<weld::TreeIter> xSource = m_rFunctions.get_selected();
+        if (!xSource)
             return DND_ACTION_NONE;
         std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
         int nTargetPos = -1;

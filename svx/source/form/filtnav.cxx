@@ -1247,8 +1247,8 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 IMPL_LINK_NOARG(FmFilterNavigator, SelectHdl, weld::TreeView&, void)
 {
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_selected();
+    if (!xIter)
         return;
 
     FmFilterData* pData = weld::fromId<FmFilterData*>(m_xTreeView->get_id(*xIter));

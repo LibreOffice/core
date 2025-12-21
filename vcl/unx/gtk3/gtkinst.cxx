@@ -15734,10 +15734,13 @@ public:
         return {};
     }
 
-    virtual bool get_selected(weld::TreeIter* pIter) const override
+    virtual std::unique_ptr<weld::TreeIter> get_selected() const override
     {
-        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
-        return get_selected_iterator(pGtkIter ? &pGtkIter->iter : nullptr);
+        GtkTreeIter iter;
+        if (get_selected_iterator(&iter))
+            return std::make_unique<GtkInstanceTreeIter>(iter);
+
+        return {};
     }
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override
@@ -17114,10 +17117,13 @@ public:
         enable_notify_events();
     }
 
-    virtual bool get_selected(weld::TreeIter* pIter) const override
+    virtual std::unique_ptr<weld::TreeIter> get_selected() const override
     {
-        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
-        return get_selected_iterator(pGtkIter ? &pGtkIter->iter : nullptr);
+        GtkTreeIter iter;
+        if (get_selected_iterator(&iter))
+            return std::make_unique<GtkInstanceTreeIter>(iter);
+
+        return {};
     }
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override

@@ -60,8 +60,7 @@ public:
         m_xTreeView->connect_selection_changed(rLink);
     }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
-    std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
-    bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
+    std::unique_ptr<weld::TreeIter> get_selected() const { return m_xTreeView->get_selected(); }
     bool iter_parent(weld::TreeIter& rIter) const { return m_xTreeView->iter_parent(rIter); }
     int get_iter_depth(const weld::TreeIter& rIter) const { return m_xTreeView->get_iter_depth(rIter); }
     void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }

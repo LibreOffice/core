@@ -619,8 +619,8 @@ sal_Int8 ReorderingDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
     if (!pSource || pSource != &m_rTreeView)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_rTreeView.get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());

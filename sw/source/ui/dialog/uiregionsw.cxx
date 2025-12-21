@@ -406,7 +406,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     RecurseList( nullptr, nullptr );
 
     // if the cursor is not in a region the first one will always be selected
-    if (!m_xTree->get_selected(nullptr))
+    if (!m_xTree->get_selected())
     {
         std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
         if (m_xTree->get_iter_first(*xIter))
@@ -594,8 +594,7 @@ void SwEditRegionDlg::SelectSection(std::u16string_view rSectionName)
 IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
 {
     m_bDontCheckPasswd = true;
-    std::unique_ptr<weld::TreeIter> xIter(rBox.make_iterator());
-    bool bEntry = rBox.get_selected(xIter.get());
+    std::unique_ptr<weld::TreeIter> xIter = rBox.get_selected();
     m_xHideCB->set_sensitive(true);
     // edit in readonly sections
     m_xEditInReadonlyCB->set_sensitive(true);
@@ -686,7 +685,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         m_xPasswdPB->set_sensitive(bPasswdEnabled);
         if(!bPasswdValid)
         {
-            rBox.get_selected(xIter.get());
+            xIter = rBox.get_selected();
             rBox.unselect_all();
             rBox.select(*xIter);
             GetFirstEntryHdl(rBox);
@@ -695,7 +694,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         else
             m_xPasswdCB->set_active(aCurPasswd.hasElements());
     }
-    else if (bEntry )
+    else if (xIter)
     {
         m_xCurName->set_sensitive(true);
         m_xOptionsPB->set_sensitive(true);
@@ -893,8 +892,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
         return false;
     });
 
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTree->make_iterator());
-    bool bEntry(m_xTree->get_selected(xEntry.get()));
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTree->get_selected();
+    bool bEntry = bool(xEntry);
     // then delete
     while (bEntry)
     {
@@ -932,7 +931,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
             m_xTree->remove(*xRemove);
     }
 
-    if (m_xTree->get_selected(nullptr))
+    if (m_xTree->get_selected())
         return;
 
     m_xConditionFT->set_sensitive(false);
@@ -961,7 +960,7 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::Toggleable&, rButton, void)
         return;
     bool bMulti = 1 < m_xTree->count_selected_rows();
     bool bFile = rButton.get_active();
-    if (m_xTree->get_selected(nullptr))
+    if (m_xTree->get_selected())
     {
         m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
             SectRepr* const pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
@@ -1280,8 +1279,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl, weld::Entry&, void)
 {
     if(!CheckPasswd())
         return;
-    std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
-    if (m_xTree->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xTree->get_selected())
     {
         const OUString aName = m_xCurName->get_text();
         m_xTree->set_text(*xIter, aName);

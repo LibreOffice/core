@@ -709,9 +709,7 @@ namespace svxform
         TransferableDataHelper aClipboardContent(TransferableDataHelper::CreateFromClipboard(m_xTreeView->get_clipboard()));
 
         sal_Int8 nAction = m_aControlExchange.isClipboardOwner() && doingKeyboardCut( ) ? DND_ACTION_MOVE : DND_ACTION_COPY;
-        std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
-        if (!m_xTreeView->get_selected(xSelected.get()))
-            xSelected.reset();
+        std::unique_ptr<weld::TreeIter> xSelected = m_xTreeView->get_selected();
         return nAction == implAcceptDataTransfer(aClipboardContent.GetDataFlavorExVector(), nAction, xSelected.get(), false);
     }
 
@@ -1150,10 +1148,7 @@ namespace svxform
 
     void NavigatorTree::doPaste()
     {
-        std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
-        if (!m_xTreeView->get_selected(xSelected.get()))
-            xSelected.reset();
-
+        std::unique_ptr<weld::TreeIter> xSelected = m_xTreeView->get_selected();
         try
         {
             if ( m_aControlExchange.isClipboardOwner() )
@@ -1894,9 +1889,7 @@ namespace svxform
         if ((m_arrCurrentSelection.size() != 1) || (m_nFormsSelected != 1))
             return;
 
-        std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
-        if (!m_xTreeView->get_selected(xSelected.get()))
-            xSelected.reset();
+        std::unique_ptr<weld::TreeIter> xSelected = m_xTreeView->get_selected();
         FmFormData* pSingleSelectionData = xSelected ? dynamic_cast<FmFormData*>(weld::fromId<FmEntryData*>(m_xTreeView->get_id(*xSelected)))
                                                      : nullptr;
         DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );

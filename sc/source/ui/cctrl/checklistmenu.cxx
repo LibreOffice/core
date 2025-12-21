@@ -104,7 +104,8 @@ IMPL_LINK(ScCheckListMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
 IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
 {
     sal_uInt32 nSelectedMenu = MENU_NOT_SELECTED;
-    if (!mxMenu->get_selected(mxScratchIter.get()))
+    std::unique_ptr<weld::TreeIter> pSelected = mxMenu->get_selected();
+    if (!pSelected)
     {
         // reselect current item if its submenu is up and the launching item
         // became unselected by mouse moving out of the top level menu
@@ -117,7 +118,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
         }
     }
     else
-        nSelectedMenu = mxMenu->get_iter_index_in_parent(*mxScratchIter);
+        nSelectedMenu = mxMenu->get_iter_index_in_parent(*pSelected);
 
     setSelectedMenuItem(nSelectedMenu);
 }
@@ -318,9 +319,10 @@ void ScCheckListMenuControl::queueCloseSubMenu()
 
 tools::Rectangle ScCheckListMenuControl::GetSubMenuParentRect()
 {
-    if (!mxMenu->get_selected(mxScratchIter.get()))
+    std::unique_ptr<weld::TreeIter> pSelected = mxMenu->get_selected();
+    if (!pSelected)
         return tools::Rectangle();
-    return mxMenu->get_row_area(*mxScratchIter);
+    return mxMenu->get_row_area(*pSelected);
 }
 
 void ScCheckListMenuControl::launchSubMenu()
@@ -329,7 +331,8 @@ void ScCheckListMenuControl::launchSubMenu()
     if (!pSubMenu)
         return;
 
-    if (!mxMenu->get_selected(mxScratchIter.get()))
+    std::unique_ptr<weld::TreeIter> pSelected = mxMenu->get_selected();
+    if (!pSelected)
         return;
 
     meRestoreFocus = DetermineRestoreFocus();
@@ -337,7 +340,7 @@ void ScCheckListMenuControl::launchSubMenu()
     tools::Rectangle aRect = GetSubMenuParentRect();
     pSubMenu->StartPopupMode(mxMenu.get(), aRect);
 
-    mxMenu->select(*mxScratchIter);
+    mxMenu->select(*pSelected);
 
     pSubMenu->GrabFocus();
 }
@@ -548,7 +551,6 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     , mxPopover(mxBuilder->weld_popover(u"FilterDropDown"_ustr))
     , mxContainer(mxBuilder->weld_container(u"container"_ustr))
     , mxMenu(mxBuilder->weld_tree_view(u"menu"_ustr))
-    , mxScratchIter(mxMenu->make_iterator())
     , mxNonMenu(mxBuilder->weld_widget(u"nonmenu"_ustr))
     , mxFieldsComboLabel(mxBuilder->weld_label(u"select_field_label"_ustr))
     , mxFieldsCombo(mxBuilder->weld_combo_box(u"multi_field_combo"_ustr))

@@ -162,7 +162,7 @@ public:
     void set_cursor(const weld::TreeIter& rIter) { mxTreeView->set_cursor(rIter); }
     bool get_cursor(weld::TreeIter* pIter) const { return mxTreeView->get_cursor(pIter); }
     bool get_iter_first(weld::TreeIter& rIter) const { return mxTreeView->get_iter_first(rIter); }
-    bool get_selected(weld::TreeIter* pIter) const { return mxTreeView->get_selected(pIter); }
+    std::unique_ptr<weld::TreeIter> get_selected() const { return mxTreeView->get_selected(); }
 
     OUString get_selected_text() const
     {
@@ -586,8 +586,7 @@ void ViewTabListBox_Impl::ExecuteContextMenuAction(std::u16string_view rSelected
         DeleteEntries();
     else if (rSelectedPopupEntry == u"rename")
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-        if (mxTreeView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_selected())
         {
             mbEditing = true;
 
@@ -849,14 +848,12 @@ OUString SvtFileView::GetCurrentURL() const
     OUString aURL;
     if (mpImpl->mxView->get_visible())
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
-        if (mpImpl->mxView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->get_selected())
             pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry));
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
-        if (mpImpl->mxIconView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->get_selected())
             pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry));
     }
     if (pEntry)
@@ -1008,15 +1005,13 @@ SvtContentEntry* SvtFileView::FirstSelected() const
     if (mpImpl->mxView->get_visible())
     {
         SvtContentEntry* pRet = nullptr;
-        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
-        if (mpImpl->mxView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->get_selected())
             pRet = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry));
         return pRet;
     }
 
     SvtContentEntry* pRet = nullptr;
-    std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
-    if (mpImpl->mxIconView->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->get_selected())
         pRet = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry));
     return pRet;
 }

@@ -1527,7 +1527,7 @@ public:
     virtual OUString get_selected_id() const override;
     virtual OUString get_selected_text() const override;
 
-    virtual bool get_selected(weld::TreeIter* pIter) const override;
+    virtual std::unique_ptr<weld::TreeIter> get_selected() const override;
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override;
 

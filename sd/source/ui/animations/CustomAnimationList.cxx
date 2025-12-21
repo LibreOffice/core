@@ -1015,8 +1015,7 @@ void CustomAnimationList::Select()
 
 IMPL_LINK_NOARG(CustomAnimationList, PostExpandHdl, void*, void)
 {
-    std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-    if (mxTreeView->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_selected())
     {
         for (bool bChild = mxTreeView->iter_children(*xEntry); bChild; bChild = mxTreeView->iter_next_sibling(*xEntry))
         {
@@ -1180,7 +1179,7 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
-    if (!mxTreeView->get_selected(nullptr))
+    if (!mxTreeView->get_selected())
         return false;
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), u"modules/simpress/ui/effectmenu.ui"_ustr));

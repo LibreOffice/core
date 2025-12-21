@@ -248,7 +248,7 @@ public:
 
     bool get_selected() const
     {
-        return m_xTreeView->get_selected(nullptr);
+        return bool(m_xTreeView->get_selected());
     }
 
     int count_selected_rows() const

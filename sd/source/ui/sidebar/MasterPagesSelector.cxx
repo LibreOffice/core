@@ -146,8 +146,8 @@ IMPL_LINK(MasterPagesSelector, CommandHdl, const CommandEvent&, rEvent, bool)
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> pSelected = mxPreviewIconView->make_iterator();
-        if (!mxPreviewIconView->get_selected(pSelected.get()))
+        std::unique_ptr<weld::TreeIter> pSelected = mxPreviewIconView->get_selected();
+        if (!pSelected)
             return false;
         aPos = mxPreviewIconView->get_rect(*pSelected).Center();
     }

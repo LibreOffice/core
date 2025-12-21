@@ -273,8 +273,7 @@ private:
 
         sal_Int8 nMode = DND_ACTION_NONE;
 
-        std::unique_ptr<weld::TreeIter> xEntry(pSource->make_iterator());
-        if (pSource->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = pSource->get_selected())
         {
             sal_uInt16 nDepth = pSource->get_iter_depth(*xEntry);
             if (nDepth >= 2)
@@ -325,9 +324,8 @@ private:
         sal_uInt16 nDepth = bEntry ? m_rTreeView.get_iter_depth(*xEntry) : 0;
         bool bValid = nDepth != 0;
         // don't drop in the same library
-        std::unique_ptr<weld::TreeIter> xSelected(pSource->make_iterator());
-        bool bSelected = pSource->get_selected(xSelected.get());
-        if (!bSelected)
+        std::unique_ptr<weld::TreeIter> xSelected = pSource->get_selected();
+        if (!xSelected)
             bValid = false;
         else if (nDepth == 1)
         {
@@ -416,8 +414,8 @@ private:
         const OUString& aDestLibName( aDestDesc.GetLibName() );
 
         // get source shell, library name and module/dialog name
-        std::unique_ptr<weld::TreeIter> xSelected(m_rTreeView.make_iterator());
-        if (!m_rTreeView.get_selected(xSelected.get()))
+        std::unique_ptr<weld::TreeIter> xSelected = m_rTreeView.get_selected();
+        if (!xSelected)
             return;
         EntryDescriptor aSourceDesc = m_rTreeView.GetEntryDescriptor(xSelected.get());
         const ScriptDocument& rSourceDoc( aSourceDesc.GetDocument() );

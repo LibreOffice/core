@@ -289,7 +289,6 @@ private:
     std::unique_ptr<weld::Popover> mxPopover;
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::TreeView> mxMenu;
-    std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<weld::Widget> mxNonMenu;
     std::unique_ptr<weld::Label> mxFieldsComboLabel;
     std::unique_ptr<weld::ComboBox> mxFieldsCombo;

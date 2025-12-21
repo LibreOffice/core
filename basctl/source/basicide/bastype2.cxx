@@ -479,8 +479,8 @@ IMPL_LINK(SbTreeListBox, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
 
     assert((sCommand == u"alphabetically" || sCommand == u"properorder") && "Unknown context menu action!");
 
-    bool bValidIter = m_xControl->get_selected(m_xScratchIter.get());
-    EntryDescriptor aCurDesc(GetEntryDescriptor(bValidIter ? m_xScratchIter.get() : nullptr));
+    std::unique_ptr<weld::TreeIter> pSelected = m_xControl->get_selected();
+    EntryDescriptor aCurDesc(GetEntryDescriptor(pSelected.get()));
 
     if (sCommand == u"alphabetically")
     {
@@ -604,13 +604,13 @@ void SbTreeListBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ 
 
 void SbTreeListBox::UpdateEntries()
 {
-    bool bValidIter = m_xControl->get_selected(m_xScratchIter.get());
-    EntryDescriptor aCurDesc(GetEntryDescriptor(bValidIter ? m_xScratchIter.get() : nullptr));
+    std::unique_ptr<weld::TreeIter> pSelected = m_xControl->get_selected();
+    EntryDescriptor aCurDesc(GetEntryDescriptor(pSelected.get()));
 
     // removing the invalid entries
     std::unique_ptr<weld::TreeIter> xLastValid(m_xControl->make_iterator(nullptr));
     bool bLastValid = false;
-    bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
+    bool bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
     while (bValidIter)
     {
         if (IsValidEntry(*m_xScratchIter))

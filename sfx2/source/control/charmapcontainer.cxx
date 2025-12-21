@@ -322,8 +322,8 @@ bool SfxCharmapContainer::HandleContextMenu(weld::IconView& rIconView,
     }
     else
     {
-        pItem = rIconView.make_iterator();
-        if (!rIconView.get_selected(pItem.get()))
+        pItem = rIconView.get_selected();
+        if (!pItem)
             return false;
         aPos = rIconView.get_rect(*pItem).Center();
     }
@@ -363,8 +363,8 @@ void SfxCharmapContainer::updateCharControl(weld::IconView& rIconView,
 
 IMPL_LINK(SfxCharmapContainer, IconViewSelectionChangedHdl, weld::IconView&, rIconView, void)
 {
-    std::unique_ptr<weld::TreeIter> pIter = rIconView.make_iterator();
-    if (!rIconView.get_selected(pIter.get()))
+    std::unique_ptr<weld::TreeIter> pIter = rIconView.get_selected();
+    if (!pIter)
         return;
 
     const int nIndex = rIconView.get_iter_index_in_parent(*pIter);
@@ -396,8 +396,8 @@ IMPL_STATIC_LINK(SfxCharmapContainer, ItemViewFocusOutHdl,  weld::Widget&, rWidg
 
 IMPL_LINK(SfxCharmapContainer, ItemActivatedHdl, weld::IconView&, rIconView, bool)
 {
-    std::unique_ptr<weld::TreeIter> pIter = rIconView.make_iterator();
-    if (!rIconView.get_selected(pIter.get()))
+    std::unique_ptr<weld::TreeIter> pIter = rIconView.get_selected();
+    if (!pIter)
         return false;
 
     const int nIndex = rIconView.get_iter_index_in_parent(*pIter);

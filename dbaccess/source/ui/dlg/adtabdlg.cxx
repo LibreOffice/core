@@ -89,9 +89,8 @@ TableListFacade::~TableListFacade()
 OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
     weld::TreeView& rTableList = m_rTableList.GetWidget();
-    std::unique_ptr<weld::TreeIter> xEntry(rTableList.make_iterator());
-
-    if (!rTableList.get_selected(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = rTableList.get_selected();
+    if (!xEntry)
         return OUString();
 
     OUString aCatalog, aSchema, aTableName;
@@ -217,9 +216,8 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 bool TableListFacade::isLeafSelected() const
 {
     weld::TreeView& rTableList = m_rTableList.GetWidget();
-    std::unique_ptr<weld::TreeIter> xEntry(rTableList.make_iterator());
-    const bool bEntry = rTableList.get_selected(xEntry.get());
-    return bEntry && !rTableList.iter_has_child(*xEntry);
+    std::unique_ptr<weld::TreeIter> xEntry = rTableList.get_selected();
+    return xEntry && !rTableList.iter_has_child(*xEntry);
 }
 
 namespace {
@@ -307,18 +305,16 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 OUString QueryListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
     OUString sSelected;
-    std::unique_ptr<weld::TreeIter> xEntry(m_rQueryList.make_iterator());
-    const bool bEntry = m_rQueryList.get_selected(xEntry.get());
-    if (bEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = m_rQueryList.get_selected();
+    if (xEntry)
         sSelected = _out_rAliasName = m_rQueryList.get_text(*xEntry, 0);
     return sSelected;
 }
 
 bool QueryListFacade::isLeafSelected() const
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_rQueryList.make_iterator());
-    const bool bEntry = m_rQueryList.get_selected(xEntry.get());
-    return bEntry && !m_rQueryList.iter_has_child(*xEntry);
+    std::unique_ptr<weld::TreeIter> xEntry = m_rQueryList.get_selected();
+    return xEntry && !m_rQueryList.iter_has_child(*xEntry);
 
 }
 

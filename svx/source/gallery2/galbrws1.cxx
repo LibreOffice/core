@@ -1216,16 +1216,16 @@ sal_uInt32 GalleryBrowser::ImplGetSelectedItemId( const Point* pSelPos, Point& r
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> xIter = mxListView->make_iterator();
         if( pSelPos )
         {
+            std::unique_ptr<weld::TreeIter> xIter = mxListView->make_iterator();
             if (mxListView->get_dest_row_at_pos(*pSelPos, xIter.get(), false))
                 nRet = mxListView->get_iter_index_in_parent(*xIter) + 1;
             rSelPos = *pSelPos;
         }
         else
         {
-            if (mxListView->get_selected(xIter.get()))
+            if (std::unique_ptr<weld::TreeIter> xIter = mxListView->get_selected())
             {
                 nRet = mxListView->get_iter_index_in_parent(*xIter) + 1;
                 rSelPos = mxListView->get_row_area(*xIter).Center();

@@ -406,10 +406,7 @@ OUString OAppDetailPageHelper::getQualifiedName(const weld::TreeIter* _pEntry) c
 
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(_pEntry));
     if (!_pEntry)
-    {
-        if (!rTreeView.get_selected(xEntry.get()))
-            xEntry.reset();
-    }
+        xEntry = rTreeView.get_selected();
 
     if (!xEntry)
         return sComposedName;
@@ -918,7 +915,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
     if ( isPreviewEnabled() )
     {
         DBTreeViewBase* pCurrent = getCurrentView();
-        if (pCurrent && pCurrent->GetWidget().get_selected(nullptr))
+        if (pCurrent && pCurrent->GetWidget().get_selected())
         {
             getBorderWin().getView()->getAppController().onSelectionChanged();
         }

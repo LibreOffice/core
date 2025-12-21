@@ -264,7 +264,8 @@ namespace svxform
         rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
         m_xItemList->enable_drag_source(xTransferable, DND_ACTION_NONE);
 
-        if (!m_xItemList->get_selected(m_xScratchIter.get()))
+        std::unique_ptr<weld::TreeIter> pIter = m_xItemList->get_selected();
+        if (!pIter)
         {
             // no drag without an entry
             return;
@@ -285,22 +286,22 @@ namespace svxform
         if(!xDataTypes.is())
             return;
 
-        ItemNode *pItemNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*m_xScratchIter));
+        ItemNode *pItemNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*pIter));
         if (!pItemNode)
         {
             // the only known (and allowed?) case where this happens are sub-entries of a submission
             // entry
             DBG_ASSERT( DGTSubmission == m_eGroup, "DataTreeListBox::StartDrag: how this?" );
-            bool bSelected = m_xItemList->iter_parent(*m_xScratchIter);
-            DBG_ASSERT(bSelected && !m_xItemList->get_iter_depth(*m_xScratchIter), "DataTreeListBox::StartDrag: what kind of entry *is* this?");
+            bool bSelected = m_xItemList->iter_parent(*pIter);
+            DBG_ASSERT(bSelected && !m_xItemList->get_iter_depth(*pIter), "DataTreeListBox::StartDrag: what kind of entry *is* this?");
                 // on the submission page, we have only top-level entries (the submission themself)
                 // plus direct children of those (facets of a submission)
-            pItemNode = bSelected ? weld::fromId<ItemNode*>(m_xItemList->get_id(*m_xScratchIter)) : nullptr;
+            pItemNode = bSelected ? weld::fromId<ItemNode*>(m_xItemList->get_id(*pIter)) : nullptr;
             if (!pItemNode)
                 return;
         }
 
-        OUString szName = m_xItemList->get_text(*m_xScratchIter);
+        OUString szName = m_xItemList->get_text(*pIter);
         Reference<css::xml::dom::XNode> xNode(pItemNode->m_xNode);
         Reference<XPropertySet> xPropSet(pItemNode->m_xPropSet);
 
@@ -432,8 +433,7 @@ namespace svxform
             {
                 DataItemType eType = DITElement;
 
-                std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-                bool bEntry = m_xItemList->get_selected(xEntry.get());
+                std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->get_selected();
 
                 std::unique_ptr<ItemNode> pNode;
                 Reference< css::xml::dom::XNode > xParentNode;
@@ -448,8 +448,7 @@ namespace svxform
                         if (aMsgBox.run() != RET_OK)
                             return bHandled;
                     }
-
-                    DBG_ASSERT( bEntry, "XFormsPage::DoToolBoxAction(): no entry" );
+                    assert(xEntry && "XFormsPage::DoToolBoxAction(): no entry");
                     ItemNode* pParentNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
                     assert(pParentNode && "XFormsPage::DoToolBoxAction(): no parent node");
                     xParentNode = pParentNode->m_xNode;
@@ -588,9 +587,7 @@ namespace svxform
         {
             bHandled = true;
 
-            std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-            bool bEntry = m_xItemList->get_selected(xEntry.get());
-            if ( bEntry )
+            if (std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->get_selected())
             {
                 if ( DGTSubmission == m_eGroup && m_xItemList->get_iter_depth(*xEntry) )
                 {
@@ -711,9 +708,7 @@ namespace svxform
         if (!pRet)
             pRet = m_xScratchIter.get();
 
-        std::unique_ptr<weld::TreeIter> xParent(m_xItemList->make_iterator());
-        if (!m_xItemList->get_selected(xParent.get()))
-            xParent.reset();
+        std::unique_ptr<weld::TreeIter> xParent = m_xItemList->get_selected();
         OUString aImage(_bIsElement ? RID_SVXBMP_ELEMENT : RID_SVXBMP_ATTRIBUTE);
         OUString sName;
         try
@@ -813,8 +808,8 @@ namespace svxform
 
         try
         {
-            std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-            if (!m_xItemList->get_selected(xEntry.get()))
+            std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->get_selected();
+            if (!xEntry)
             {
                 SAL_WARN( "svx.form", "corrupt tree" );
                 return;
@@ -882,9 +877,8 @@ namespace svxform
     {
         bool bRet = false;
 
-        std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-        bool bEntry = m_xItemList->get_selected(xEntry.get());
-        if ( bEntry &&
+        std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->get_selected();
+        if ( xEntry &&
              ( DGTInstance != m_eGroup || m_xItemList->get_iter_depth(*xEntry) ) )
         {
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -1200,8 +1194,8 @@ namespace svxform
         bool bEnableEdit = false;
         bool bEnableRemove = false;
 
-        std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-        bool bEntry = m_xItemList->get_selected(xEntry.get());
+        std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->get_selected();
+        bool bEntry = bool(xEntry);
         if (bEntry)
         {
             bEnableAdd = true;

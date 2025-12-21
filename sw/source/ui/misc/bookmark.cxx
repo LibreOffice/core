@@ -500,10 +500,7 @@ BookmarkTable::BookmarkTable(std::unique_ptr<weld::TreeView> xControl)
 
 std::unique_ptr<weld::TreeIter> BookmarkTable::get_selected() const
 {
-    std::unique_ptr<weld::TreeIter> xIter(m_xControl->make_iterator());
-    if (!m_xControl->get_selected(xIter.get()))
-        xIter.reset();
-    return xIter;
+    return m_xControl->get_selected();
 }
 
 void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pMark)

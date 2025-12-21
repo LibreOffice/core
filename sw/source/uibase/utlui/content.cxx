@@ -1429,9 +1429,8 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     bool bDisallow = true;
 
     // don't allow if tree root is selected
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    bool bEntry = m_xTreeView->get_selected(xEntry.get());
-    if (!bEntry || lcl_IsContentType(*xEntry, *m_xTreeView))
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected();
+    if (!xEntry || lcl_IsContentType(*xEntry, *m_xTreeView))
     {
         return true; // disallow
     }
@@ -1878,9 +1877,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xSubPop3->set_active(OUString::number(nId), true);
     }
 
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xEntry.get()))
-        xEntry.reset();
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected();
 
     bool bRemoveGotoEntry = false;
     if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView) ||
@@ -3360,9 +3357,7 @@ void SwContentTree::Display( bool bActive )
 {
     // First read the selected entry to select it later again if necessary
     // -> the user data here are no longer valid!
-    std::unique_ptr<weld::TreeIter> xOldSelEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xOldSelEntry.get()))
-        xOldSelEntry.reset();
+    std::unique_ptr<weld::TreeIter> xOldSelEntry = m_xTreeView->get_selected();
     size_t nEntryRelPos = 0; // relative position to their parent
     size_t nOldEntryCount = GetEntryCount();
     sal_Int32 nOldScrollPos = 0;
@@ -4052,8 +4047,7 @@ bool SwContentTree::HasContentChanged()
 
 void SwContentTree::UpdateLastSelType()
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected())
     {
         while (m_xTreeView->get_iter_depth(*xEntry))
             m_xTreeView->iter_parent(*xEntry);
@@ -4179,8 +4173,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
             {
                 SelectOutlinesWithSelection();
                 // make first selected entry visible
-                std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-                if (xEntry && m_xTreeView->get_selected(xEntry.get()))
+                if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected())
                     m_xTreeView->scroll_to_row(*xEntry);
             }
             else if (m_nRootType == ContentTypeId::UNKNOWN)
@@ -4693,9 +4686,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
         if (ptr == p)
         {
             // get first selected for comparison
-            std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
-            if (!rContentTree.get_selected(xFirstSelected.get()))
-                xFirstSelected.reset();
+            std::unique_ptr<weld::TreeIter> xFirstSelected = rContentTree.get_selected();
             if (rContentTree.count_selected_rows() != 1 || !xFirstSelected ||
                     rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
             {
@@ -4733,9 +4724,7 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
         if (rName == rContentTree.get_text(*xIter))
         {
             // get first selected for comparison
-            std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
-            if (!rContentTree.get_selected(xFirstSelected.get()))
-                xFirstSelected.reset();
+            std::unique_ptr<weld::TreeIter> xFirstSelected = rContentTree.get_selected();
             if (rContentTree.count_selected_rows() != 1 || !xFirstSelected ||
                     rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
             {
@@ -5064,10 +5053,7 @@ void SwContentTree::UpdateTracking()
                 if (weld::fromId<SwOutlineContent*>(
                             m_xTreeView->get_id(rEntry))->GetOutlinePos() == nActPos)
                 {
-                    std::unique_ptr<weld::TreeIter> xFirstSelected(
-                                m_xTreeView->make_iterator());
-                    if (!m_xTreeView->get_selected(xFirstSelected.get()))
-                        xFirstSelected.reset();
+                    std::unique_ptr<weld::TreeIter> xFirstSelected = m_xTreeView->get_selected();
                     // only select if not already selected or tree has multiple entries selected
                     if (m_xTreeView->count_selected_rows() != 1 || !xFirstSelected ||
                             m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
@@ -5598,14 +5584,12 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
     const vcl::KeyCode aCode = rEvent.GetKeyCode();
     if (aCode.GetCode() == KEY_MULTIPLY && aCode.IsMod1())
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected())
             ExpandOrCollapseAll(*m_xTreeView, *xEntry);
     }
     else if (aCode.GetCode() == KEY_RETURN)
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected())
         {
             switch(aCode.GetModifier())
             {
@@ -5635,9 +5619,8 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
     }
     else if(aCode.GetCode() == KEY_DELETE && 0 == aCode.GetModifier())
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()
-                && m_xTreeView->get_selected(xEntry.get()))
+        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected();
+        if (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly() && xEntry)
         {
             if (lcl_IsContent(*xEntry, *m_xTreeView))
             {
@@ -5959,8 +5942,8 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
     if (rSelectedPopupEntry == "makeallfootnotesendnotes"
             || rSelectedPopupEntry == "makeallendnotesfootnotes")
     {
-        std::unique_ptr<weld::TreeIter> xEntryIter(m_xTreeView->make_iterator());
-        if (!m_xTreeView->get_selected(xEntryIter.get()))
+        std::unique_ptr<weld::TreeIter> xEntryIter = m_xTreeView->get_selected();
+        if (!xEntryIter)
             return; // this shouldn't happen
         SwContentType* pContentType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntryIter));
         m_pActiveShell->StartUndo(rSelectedPopupEntry == "makeallfootnotesendnotes"
@@ -6017,8 +6000,8 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         }
     }
 
-    std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xFirst.get()))
+    std::unique_ptr<weld::TreeIter> xFirst = m_xTreeView->get_selected();
+    if (!xFirst)
         return; // this shouldn't happen, but better to be safe than ...
 
     if (rSelectedPopupEntry == "deletealltables" || rSelectedPopupEntry == "deleteallframes"
@@ -6439,8 +6422,8 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
     if (m_bIsRoot)
         return;
     // Select the content type in the Navigate By control
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_selected();
+    if (!xEntry)
         return;
     while (m_xTreeView->get_iter_depth(*xEntry))
         m_xTreeView->iter_parent(*xEntry);

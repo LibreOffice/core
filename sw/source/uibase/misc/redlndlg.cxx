@@ -139,8 +139,7 @@ namespace
 {
 const SwRedlineData* lcl_get_selected_redlinedata(const weld::TreeView& rTreeView)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    if (rTreeView.get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_selected())
     {
         RedlinData* pRedlinData = weld::fromId<RedlinData*>(rTreeView.get_id(*xEntry));
         if (rTreeView.get_iter_depth(*xEntry))
@@ -380,7 +379,7 @@ void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
     bool const bEnable = isAcceptRejectCommandsEnabled(*pView)
         && rTreeView.n_children() != 0
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
-    bool bSel = rTreeView.get_selected(nullptr);
+    std::unique_ptr<weld::TreeIter> pSelectedEntry = rTreeView.get_selected();
 
     bool bIsNotFormated = false;
     rTreeView.selected_foreach([this, pSh, &bIsNotFormated](weld::TreeIter& rEntry){
@@ -396,9 +395,9 @@ void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
         return false;
     });
 
-    m_pTPView->EnableAccept( bEnable && bSel );
-    m_pTPView->EnableReject( bEnable && bSel );
-    m_pTPView->EnableClearFormat( bEnable && !bIsNotFormated && bSel );
+    m_pTPView->EnableAccept( bEnable && pSelectedEntry );
+    m_pTPView->EnableReject( bEnable && pSelectedEntry );
+    m_pTPView->EnableClearFormat( bEnable && !bIsNotFormated && pSelectedEntry );
     m_pTPView->EnableAcceptAll( bEnable );
     m_pTPView->EnableRejectAll( bEnable );
     m_pTPView->EnableClearFormatAll( bEnable &&
@@ -1323,8 +1322,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     if (!m_xParentDlg || m_xParentDlg->has_toplevel_focus())
     {
         weld::TreeView& rTreeView = m_pTable->GetWidget();
-        std::unique_ptr<weld::TreeIter> xActEntry(rTreeView.make_iterator());
-        if (rTreeView.get_selected(xActEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xActEntry = rTreeView.get_selected())
         {
             pSh->StartAction();
             pSh->EnterStdMode();
@@ -1401,9 +1399,8 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     const SwRangeRedline *pRed = nullptr;
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    bool bEntry = rTreeView.get_selected(xEntry.get());
-    if (bEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_selected();
+    if (xEntry)
     {
         std::unique_ptr<weld::TreeIter> xTopEntry(rTreeView.make_iterator(xEntry.get()));
 
@@ -1421,7 +1418,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
-    m_xPopup->set_sensitive(u"writeredit"_ustr, bEntry && pRed &&
+    m_xPopup->set_sensitive(u"writeredit"_ustr, xEntry && pRed &&
                                           !rTreeView.get_iter_depth(*xEntry) &&
                                           rTreeView.count_selected_rows() == 1);
     m_xPopup->set_sensitive(u"writersort"_ustr, rTreeView.n_children() != 0);
@@ -1435,7 +1432,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (sCommand == "writeredit")
     {
-        if (bEntry)
+        if (xEntry)
         {
             if (rTreeView.get_iter_depth(*xEntry))
                 rTreeView.iter_parent(*xEntry);

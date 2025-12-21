@@ -228,9 +228,8 @@ namespace pcr
     IMPL_LINK(OSelectLabelDialog, OnEntrySelected, weld::TreeView&, rLB, void)
     {
         DBG_ASSERT(&rLB == m_xControlTree.get(), "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
-        std::unique_ptr<weld::TreeIter> xIter = m_xControlTree->make_iterator();
-        bool bSelected = m_xControlTree->get_selected(xIter.get());
-        OUString sData = bSelected ? m_xControlTree->get_id(*xIter) : OUString();
+        std::unique_ptr<weld::TreeIter> xIter = m_xControlTree->get_selected();
+        OUString sData = xIter ? m_xControlTree->get_id(*xIter) : OUString();
         if (!sData.isEmpty())
             m_xSelectedControl.set(*weld::fromId<Reference<XPropertySet>*>(sData));
         m_xNoAssignment->set_active(sData.isEmpty());
@@ -242,7 +241,10 @@ namespace pcr
 
         if (m_xNoAssignment->get_active())
         {
-            m_bLastSelected = m_xControlTree->get_selected(m_xLastSelected.get());
+            std::unique_ptr<weld::TreeIter> pSelected = m_xControlTree->get_selected();
+            m_bLastSelected = bool(pSelected);
+            if (pSelected)
+                m_xLastSelected = std::move(pSelected);
         }
         else
         {

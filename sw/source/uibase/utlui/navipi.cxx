@@ -650,8 +650,8 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
     if (IsZoomedIn() || !rTreeView.is_visible())
         return;
 
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    if (!rTreeView.get_selected(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_selected();
+    if (!xEntry)
         return;
 
     bool bUseDeleteFunctionsToolbar = true;
@@ -775,8 +775,8 @@ IMPL_LINK(SwNavigationPI, ContentFunctionsToolbarSelectHdl, const OUString&, rCo
 {
     weld::TreeView& rTreeView = m_xContentTree->get_widget();
 
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    if (!rTreeView.get_selected(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_selected();
+    if (!xEntry)
         return;
 
     const bool bContentEntry

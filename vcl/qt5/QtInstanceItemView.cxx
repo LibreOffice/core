@@ -118,21 +118,18 @@ OUString QtInstanceItemView::get_selected_text() const
     return sText;
 }
 
-bool QtInstanceItemView::get_selected(weld::TreeIter* pIter) const
+std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_selected() const
 {
     SolarMutexGuard g;
 
-    bool bHasSelection = false;
+    std::unique_ptr<weld::TreeIter> pSelectedItem;
     GetQtInstance().RunInMainThread([&] {
         const QModelIndexList aSelectedIndexes = getSelectionModel().selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        bHasSelection = true;
-        if (pIter)
-            static_cast<QtInstanceTreeIter*>(pIter)->setModelIndex(aSelectedIndexes.first());
+        if (!aSelectedIndexes.empty())
+            pSelectedItem = std::make_unique<QtInstanceTreeIter>(aSelectedIndexes.first());
     });
-    return bHasSelection;
+
+    return pSelectedItem;
 }
 
 bool QtInstanceItemView::get_cursor(weld::TreeIter* pIter) const

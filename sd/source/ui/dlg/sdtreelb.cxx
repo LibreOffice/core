@@ -414,8 +414,8 @@ namespace
 {
     bool CanDragSource(const weld::TreeView& rTreeView)
     {
-        std::unique_ptr<weld::TreeIter> xSource(rTreeView.make_iterator());
-        if (!rTreeView.get_selected(xSource.get()))
+        std::unique_ptr<weld::TreeIter> xSource = rTreeView.get_selected();
+        if (!xSource)
             return false;
 
         std::unique_ptr<weld::TreeIter> xSourceParent(rTreeView.make_iterator(xSource.get()));
@@ -538,8 +538,8 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
         return DND_ACTION_NONE;
 
     // disallow if there is no source entry selected
-    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_rTreeView.get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     // disallow when root is source
@@ -578,8 +578,8 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (!pSource || pSource != &m_rTreeView)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_rTreeView.get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());

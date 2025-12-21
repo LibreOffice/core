@@ -188,9 +188,8 @@ private:
         if (!pSource || pSource != &m_rTreeView)
             return DND_ACTION_NONE;
 
-        std::unique_ptr<weld::TreeIter> xSelected(pSource->make_iterator());
-        bool bSelected = pSource->get_selected(xSelected.get());
-        if (!bSelected)
+        std::unique_ptr<weld::TreeIter> xSelected = pSource->get_selected();
+        if (!xSelected)
             return DND_ACTION_NONE;
 
         while (pSource->get_iter_depth(*xSelected))
@@ -227,9 +226,8 @@ private:
         if (!bEntry)
             return DND_ACTION_NONE;
 
-        std::unique_ptr<weld::TreeIter> xSelected(pSource->make_iterator());
-        bool bSelected = pSource->get_selected(xSelected.get());
-        if (!bSelected)
+        std::unique_ptr<weld::TreeIter> xSelected = pSource->get_selected();
+        if (!xSelected)
             return DND_ACTION_NONE;
 
         std::unique_ptr<weld::TreeIter> xSrcParent(pSource->make_iterator(xSelected.get()));
@@ -388,8 +386,8 @@ OUString getCurrentGlossary()
 // select new group
 IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
 {
-    std::unique_ptr<weld::TreeIter> xEntry = rBox.make_iterator();
-    if (!rBox.get_selected(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = rBox.get_selected();
+    if (!xEntry)
         return;
 
     std::unique_ptr<weld::TreeIter> xParent = rBox.make_iterator(xEntry.get());
@@ -458,8 +456,7 @@ std::unique_ptr<weld::TreeIter> SwGlossaryDlg::DoesBlockExist(std::u16string_vie
                                                               std::u16string_view rShort)
 {
     // look for possible entry in TreeListBox
-    std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
-    if (m_xCategoryBox->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->get_selected())
     {
         if (m_xCategoryBox->get_iter_depth(*xEntry))
             m_xCategoryBox->iter_parent(*xEntry);
@@ -519,21 +516,20 @@ IMPL_LINK(SwGlossaryDlg, NameModify, weld::Entry&, rEdit, void)
 
 IMPL_LINK( SwGlossaryDlg, NameDoubleClick, weld::TreeView&, rBox, bool )
 {
-    std::unique_ptr<weld::TreeIter> xEntry = rBox.make_iterator();
-    if (rBox.get_selected(xEntry.get()) && rBox.get_iter_depth(*xEntry) && !m_bIsDocReadOnly)
+    std::unique_ptr<weld::TreeIter> xEntry = rBox.get_selected();
+    if (xEntry && rBox.get_iter_depth(*xEntry) && !m_bIsDocReadOnly)
         m_xDialog->response(RET_OK);
     return true;
 }
 
 IMPL_LINK_NOARG( SwGlossaryDlg, EnableHdl, weld::Toggleable&, void )
 {
-    std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
-    bool bEntry = m_xCategoryBox->get_selected(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->get_selected();
 
     const OUString aEditText(m_xNameED->get_text());
     const bool bHasEntry = !aEditText.isEmpty() && !m_xShortNameEdit->get_text().isEmpty();
     const bool bExists = nullptr != DoesBlockExist(aEditText, m_xShortNameEdit->get_text());
-    const bool bIsGroup = bEntry && !m_xCategoryBox->get_iter_depth(*xEntry);
+    const bool bIsGroup = xEntry && !m_xCategoryBox->get_iter_depth(*xEntry);
     m_xEditBtn->set_item_visible(u"new"_ustr, m_bSelection && bHasEntry && !bExists);
     m_xEditBtn->set_item_visible(u"newtext"_ustr, m_bSelection && bHasEntry && !bExists);
     m_xEditBtn->set_item_visible(u"copy"_ustr, bExists && !bIsGroup);
@@ -583,10 +579,8 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
         }
         if(m_pGlossaryHdl->NewGlossary(aStr, aShortName, false, bNoAttr ))
         {
-            std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
-            if (!m_xCategoryBox->get_selected(xEntry.get()))
-                xEntry.reset();
-            else if (m_xCategoryBox->get_iter_depth(*xEntry))
+            std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->get_selected();
+            if (xEntry && m_xCategoryBox->get_iter_depth(*xEntry))
                 m_xCategoryBox->iter_parent(*xEntry);
             m_xCategoryBox->insert(xEntry.get(), -1, &aStr, &aShortName,
                                    nullptr, nullptr, false, nullptr);
@@ -617,8 +611,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
                                                                   aNewNameDlg.GetNewShort(),
                                                                   aNewNameDlg.GetNewName()))
         {
-            std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
-            if (m_xCategoryBox->get_selected(xEntry.get()))
+            if (std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->get_selected())
             {
                 std::unique_ptr<weld::TreeIter> xOldEntry = m_xCategoryBox->make_iterator(xEntry.get());
                 if (m_xCategoryBox->get_iter_depth(*xEntry))
@@ -986,8 +979,7 @@ IMPL_LINK(SwGlossaryDlg, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 OUString SwGlossaryDlg::GetCurrGrpName() const
 {
-    std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
-    if (m_xCategoryBox->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->get_selected())
     {
         if (m_xCategoryBox->get_iter_depth(*xEntry))
             m_xCategoryBox->iter_parent(*xEntry);
@@ -1075,7 +1067,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
 
 void SwGlossaryDlg::DeleteEntry()
 {
-    bool bEntry = m_xCategoryBox->get_selected(nullptr);
+    std::unique_ptr<weld::TreeIter> pEntry = m_xCategoryBox->get_selected();
 
     const OUString aTitle(m_xNameED->get_text());
     const OUString aShortName(m_xShortNameEdit->get_text());
@@ -1089,7 +1081,7 @@ void SwGlossaryDlg::DeleteEntry()
     }
 
     const bool bExists = nullptr != xChild;
-    const bool bIsGroup = bEntry && !xParent;
+    const bool bIsGroup = pEntry && !xParent;
 
     std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(m_xDialog.get(),
                                                 VclMessageType::Question, VclButtonsType::YesNo,

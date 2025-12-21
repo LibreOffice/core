@@ -124,12 +124,14 @@ MacroChooser::~MacroChooser()
 
 void MacroChooser::StoreMacroDescription()
 {
-    if (!m_xBasicBox->get_selected(m_xBasicBoxIter.get()))
+    std::unique_ptr<weld::TreeIter> pSelected = m_xBasicBox->get_selected();
+    if (!pSelected)
         return;
-    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
+    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pSelected.get());
     OUString aMethodName;
-    if (m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
-        aMethodName = m_xMacroBox->get_text(*m_xMacroBoxIter);
+    pSelected = m_xMacroBox->get_selected();
+    if (pSelected)
+        aMethodName = m_xMacroBox->get_text(*pSelected);
     else
         aMethodName = m_xMacroNameEdit->get_text();
     if ( !aMethodName.isEmpty() )
@@ -245,9 +247,10 @@ SbMethod* MacroChooser::GetMacro()
     SbModule* pModule = m_xBasicBox->FindModule(m_xBasicBoxIter.get());
     if (!pModule)
         return nullptr;
-    if (!m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
+    std::unique_ptr<weld::TreeIter> pSelected = m_xMacroBox->get_selected();
+    if (!pSelected)
         return nullptr;
-    OUString aMacroName(m_xMacroBox->get_text(*m_xMacroBoxIter));
+    OUString aMacroName(m_xMacroBox->get_text(*pSelected));
     return pModule->FindMethod(aMacroName, SbxClassType::Method);
 }
 
@@ -288,9 +291,9 @@ void MacroChooser::DeleteMacro()
     OUString aModName = pModule->GetName();
     OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
 
-    bool bSelected = m_xMacroBox->get_selected(m_xMacroBoxIter.get());
-    DBG_ASSERT(bSelected, "DeleteMacro: Entry ?!");
-    m_xMacroBox->remove(*m_xMacroBoxIter);
+    std::unique_ptr<weld::TreeIter> pSelected = m_xMacroBox->get_selected();
+    assert(pSelected && "DeleteMacro: Entry ?!");
+    m_xMacroBox->remove(*pSelected);
     bForceStoreBasic = true;
 }
 
@@ -375,7 +378,7 @@ void MacroChooser::CheckButtons()
 {
     const bool bCurEntry = m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(bCurEntry ? m_xBasicBoxIter.get() : nullptr);
-    const bool bMacroEntry = m_xMacroBox->get_selected(nullptr);
+    const bool bMacroEntry = bool(m_xMacroBox->get_selected());
     SbMethod* pMethod = GetMacro();
 
     // check, if corresponding libraries are readonly
@@ -558,10 +561,10 @@ IMPL_LINK_NOARG(MacroChooser, EditModifyHdl, weld::Entry&, void)
             }
             if (!bFound)
             {
-                bValidIter = m_xMacroBox->get_selected(m_xMacroBoxIter.get());
+                std::unique_ptr<weld::TreeIter> pSelected = m_xMacroBox->get_selected();
                 // if the entry exists ->Select ->Description...
-                if (bValidIter)
-                    m_xMacroBox->unselect(*m_xMacroBoxIter);
+                if (pSelected)
+                    m_xMacroBox->unselect(*pSelected);
             }
         }
     }
@@ -643,8 +646,9 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, OUString() );
         if (&rButton == m_xEditButton.get())
         {
-            if (m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
-                aInfoItem.SetMethod(m_xMacroBox->get_text(*m_xMacroBoxIter));
+            std::unique_ptr<weld::TreeIter> pSelected = m_xMacroBox->get_selected();
+            if (pSelected)
+                aInfoItem.SetMethod(m_xMacroBox->get_text(*pSelected));
             StoreMacroDescription();
             m_xDialog->hide(); // tdf#126828 dismiss dialog before opening new window
 

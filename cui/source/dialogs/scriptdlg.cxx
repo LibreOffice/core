@@ -521,8 +521,8 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode > const & 
 
 IMPL_LINK_NOARG(SvxScriptOrgDialog, ScriptSelectHdl, weld::TreeView&, void)
 {
-    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator();
-    if (!m_xScriptsBox->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->get_selected();
+    if (!xIter)
         return;
 
     SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(*xIter));
@@ -550,8 +550,8 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
 
         return;
 
-    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator();
-    if (!m_xScriptsBox->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->get_selected();
+    if (!xIter)
         return;
     SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(*xIter));
     if (!userData)
@@ -1014,8 +1014,8 @@ Selection_hash SvxScriptOrgDialog::m_lastSelection;
 
 void SvxScriptOrgDialog::StoreCurrentSelection()
 {
-    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator();
-    if (!m_xScriptsBox->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->get_selected();
+    if (!xIter)
         return;
     OUString aDescription;
     bool bEntry;

@@ -3593,13 +3593,13 @@ OUString SalInstanceItemView::get_selected_text() const
     return OUString();
 }
 
-bool SalInstanceItemView::get_selected(weld::TreeIter* pIter) const
+std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_selected() const
 {
     SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
+    if (pEntry)
+        return std::make_unique<SalInstanceTreeIter>(pEntry);
+
+    return {};
 }
 
 bool SalInstanceItemView::get_cursor(weld::TreeIter* pIter) const

@@ -109,10 +109,9 @@ OUString ScriptsListBox::GetDescriptionText(const OUString& rId)
 
 OUString ScriptsListBox::GetSelectedScriptName()
 {
-    std::unique_ptr<weld::TreeIter> xScriptsEntryIter = m_xTreeView->make_iterator();
-    if (!m_xTreeView->get_selected(xScriptsEntryIter.get()))
-        return OUString();
-    return m_xTreeView->get_text(*xScriptsEntryIter);
+    if (std::unique_ptr<weld::TreeIter> xScriptsEntryIter = m_xTreeView->get_selected())
+        return m_xTreeView->get_text(*xScriptsEntryIter);
+    return OUString();
 }
 
 IMPL_LINK(ScriptsListBox, QueryTooltip, const weld::TreeIter&, rEntryIter, OUString)
@@ -434,8 +433,8 @@ void ScriptContainersListBox::Insert(
 // cui/source/customize/cfgutil.cxx
 void ScriptContainersListBox::ScriptContainerSelected()
 {
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_selected();
+    if (!xIter)
         return;
 
     m_pScriptsListBox->freeze();
@@ -543,8 +542,8 @@ OUString ScriptContainersListBox::GetContainerName(const weld::TreeIter& rIter,
 OUString
 ScriptContainersListBox::GetSelectedEntryContainerName(ScriptContainerType eScriptContainerType)
 {
-    std::unique_ptr<weld::TreeIter> xSelectedEntryIter = m_xTreeView->make_iterator();
-    if (!m_xTreeView->get_selected(xSelectedEntryIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedEntryIter = m_xTreeView->get_selected();
+    if (!xSelectedEntryIter)
         return OUString(); // should never happen
     return GetContainerName(*xSelectedEntryIter, eScriptContainerType);
 }
@@ -702,8 +701,6 @@ void MacroManagerDialog::Notify(SfxBroadcaster&, const SfxHint& rHint)
             return sPath;
         };
 
-        std::unique_ptr<weld::TreeIter> xIter = rScriptContainersTreeView.make_iterator();
-
         // for use to restore the script container tree scroll position
         int nOldScrollPos = rScriptContainersTreeView.vadjustment_get_value();
 
@@ -711,7 +708,7 @@ void MacroManagerDialog::Notify(SfxBroadcaster&, const SfxHint& rHint)
         // and the selected entry in the scripts list box
         OUString sScriptContainersListBoxSelectedEntryPath;
         OUString sScriptsListBoxSelectedEntry;
-        if (rScriptContainersTreeView.get_selected(xIter.get()))
+        if (std::unique_ptr<weld::TreeIter> xIter = rScriptContainersTreeView.get_selected())
         {
             sScriptContainersListBoxSelectedEntryPath = get_path(xIter.get());
             sScriptsListBoxSelectedEntry = m_xScriptsListBox->GetSelectedScriptName();
@@ -719,6 +716,7 @@ void MacroManagerDialog::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
         // create a set containing paths for use to restore the script containers tree expand state
         std::unordered_set<OUString> aExpandedSet;
+        std::unique_ptr<weld::TreeIter> xIter = rScriptContainersTreeView.make_iterator();
         if (!rScriptContainersTreeView.get_iter_first(*xIter)) // no entries?
             return;
         do
@@ -821,8 +819,8 @@ IMPL_LINK(MacroManagerDialog, SelectHdl, weld::TreeView&, rTreeView, void)
         m_xScriptsListBoxLabel->set_label(m_aScriptsListBoxLabelBaseStr);
         m_xScriptsListBox->ClearAll();
 
-        std::unique_ptr<weld::TreeIter> xSelectedEntryIter = rTreeView.make_iterator();
-        if (!rTreeView.get_selected(xSelectedEntryIter.get()))
+        std::unique_ptr<weld::TreeIter> xSelectedEntryIter = rTreeView.get_selected();
+        if (!xSelectedEntryIter)
         {
             UpdateUI();
             return;
@@ -941,9 +939,8 @@ void MacroManagerDialog::UpdateUI()
         = ScriptsListBox::GetDescriptionText(m_xScriptsListBox->get_selected_id());
 
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (rTreeView.get_selected(xSelectedIter.get())
-        && rTreeView.get_iter_depth(*xSelectedIter) == 2) // library
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (xSelectedIter && rTreeView.get_iter_depth(*xSelectedIter) == 2) // library
     {
         if (m_xScriptContainersListBox->GetSelectedEntryContainerName(ScriptContainerType::LANGUAGE)
             == "Basic")
@@ -996,9 +993,8 @@ void MacroManagerDialog::CheckButtons()
     bool bSensitiveAssignButton = false;
 
     weld::TreeView& rScriptContainersTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xScriptContainersSelectedIter
-        = rScriptContainersTreeView.make_iterator();
-    if (rScriptContainersTreeView.get_selected(xScriptContainersSelectedIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xScriptContainersSelectedIter
+        = rScriptContainersTreeView.get_selected())
     {
         if (auto nSelectedIterDepth
             = rScriptContainersTreeView.get_iter_depth(*xScriptContainersSelectedIter))
@@ -1154,9 +1150,8 @@ void MacroManagerDialog::CheckButtons()
 
             // scripts list box state dependent buttons
             weld::TreeView& rScriptsTreeView = m_xScriptsListBox->get_widget();
-            std::unique_ptr<weld::TreeIter> xScriptsSelectedIter = rScriptsTreeView.make_iterator();
-            if (rScriptsTreeView.n_children()
-                && rScriptsTreeView.get_selected(xScriptsSelectedIter.get()))
+            std::unique_ptr<weld::TreeIter> xScriptsSelectedIter = rScriptsTreeView.get_selected();
+            if (rScriptsTreeView.n_children() && xScriptsSelectedIter)
             {
                 bSensitiveAssignButton = true;
 
@@ -1275,8 +1270,8 @@ void MacroManagerDialog::BasicScriptsCreateModule(const basctl::ScriptDocument& 
 {
     // library name is the selected tree entry
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     OUString aLibName = rTreeView.get_text(*xSelectedIter);
@@ -1320,8 +1315,8 @@ void MacroManagerDialog::BasicScriptsCreateDialog(const basctl::ScriptDocument& 
 {
     // library name is the selected tree entry
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     OUString aLibName = rTreeView.get_text(*xSelectedIter);
@@ -1383,8 +1378,8 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogEdit(
     const basctl::ScriptDocument& rDocument)
 {
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     m_xDialog->hide();
@@ -1459,7 +1454,8 @@ basctl::ScriptDocument ScriptContainersListBox::GetScriptDocument(const weld::Tr
     std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->make_iterator(pIter);
     if (pIter == nullptr)
     {
-        if (!m_xTreeView->get_selected(xIter.get()))
+        xIter = m_xTreeView->get_selected();
+        if (!xIter)
             return basctl::ScriptDocument::getApplicationScriptDocument();
     }
 
@@ -1533,8 +1529,8 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
         {
             auto insert_entries = [this]() {
                 weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-                std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-                if (!rTreeView.get_selected(xSelectedIter.get()))
+                std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+                if (!xSelectedIter)
                     return; // should never happen
                 m_xScriptContainersListBox->Fill(xSelectedIter.get());
                 rTreeView.expand_row(*xSelectedIter);
@@ -1597,8 +1593,8 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
     else if (&rButton == m_xMacroEditButton.get())
     {
         weld::TreeView& rTreeView = m_xScriptsListBox->get_widget();
-        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-        if (!rTreeView.get_selected(xSelectedIter.get()))
+        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+        if (!xSelectedIter)
             return; // should never happen
         css::uno::Reference<css::script::browse::XBrowseNode> node
             = getBrowseNode(rTreeView, *xSelectedIter);
@@ -1623,32 +1619,32 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
     else if (&rButton == m_xLibraryModuleDialogDeleteButton.get())
     {
         weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-        if (!rTreeView.get_selected(xSelectedIter.get()))
+        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+        if (!xSelectedIter)
             return; // should never happen
         ScriptingFrameworkScriptsDeleteEntry(rTreeView, *xSelectedIter);
     }
     else if (&rButton == m_xMacroDeleteButton.get())
     {
         weld::TreeView& rTreeView = m_xScriptsListBox->get_widget();
-        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-        if (!rTreeView.get_selected(xSelectedIter.get()))
+        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+        if (!xSelectedIter)
             return; // should never happen
         ScriptingFrameworkScriptsDeleteEntry(rTreeView, *xSelectedIter);
     }
     else if (&rButton == m_xLibraryModuleDialogRenameButton.get())
     {
         weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-        if (!rTreeView.get_selected(xSelectedIter.get()))
+        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+        if (!xSelectedIter)
             return; // should never happen
         ScriptingFrameworkScriptsRenameEntry(rTreeView, *xSelectedIter);
     }
     else if (&rButton == m_xMacroRenameButton.get())
     {
         weld::TreeView& rTreeView = m_xScriptsListBox->get_widget();
-        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-        if (!rTreeView.get_selected(xSelectedIter.get()))
+        std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+        if (!xSelectedIter)
             return; // should never happen
         ScriptingFrameworkScriptsRenameEntry(rTreeView, *xSelectedIter);
     }
@@ -1727,8 +1723,8 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
     const basctl::ScriptDocument& rDocument)
 {
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     if (IsLibraryReadOnlyOrFailedPasswordQuery(rDocument, xSelectedIter.get()))
@@ -1835,8 +1831,8 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogDelete(
     const basctl::ScriptDocument& rDocument)
 {
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     if (IsLibraryReadOnlyOrFailedPasswordQuery(rDocument, xSelectedIter.get()))
@@ -1945,8 +1941,8 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogDelete(
 void MacroManagerDialog::BasicScriptsLibraryPassword(const basctl::ScriptDocument& rDocument)
 {
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     OUString aLibName = rTreeView.get_text(*xSelectedIter);
@@ -2220,8 +2216,8 @@ void MacroManagerDialog::ScriptingFrameworkScriptsDeleteEntry(weld::TreeView& rT
 void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eInputDialogMode)
 {
     weld::TreeView& rTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.make_iterator();
-    if (!rTreeView.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTreeView.get_selected();
+    if (!xSelectedIter)
         return; // should never happen
 
     css::uno::Reference<css::script::browse::XBrowseNode> aChildNode;
@@ -2394,8 +2390,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
 OUString MacroManagerDialog::GetScriptURL() const
 {
     OUString result;
-    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsListBox->make_iterator();
-    if (m_xScriptsListBox->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xScriptsListBox->get_selected())
     {
         ScriptInfo* pScriptInfo = weld::fromId<ScriptInfo*>(m_xScriptsListBox->get_id(*xIter));
         if (pScriptInfo)
@@ -2415,9 +2410,8 @@ void MacroManagerDialog::SaveLastUsedMacro()
     OUString sMacroInfo = m_xScriptsListBox->GetSelectedScriptName();
 
     weld::TreeView& rScriptContainersTreeView = m_xScriptContainersListBox->get_widget();
-    std::unique_ptr<weld::TreeIter> xIter = rScriptContainersTreeView.make_iterator();
-
-    if (!rScriptContainersTreeView.get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = rScriptContainersTreeView.get_selected();
+    if (!xIter)
         return;
 
     do

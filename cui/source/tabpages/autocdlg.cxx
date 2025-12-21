@@ -1128,8 +1128,10 @@ bool OfaAutocorrReplacePage::NewDelHdl(const weld::Widget* pBtn)
 
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
 {
-    std::unique_ptr<weld::TreeIter> xFirstSel(m_xReplaceTLB->make_iterator());
-    bool bFirstSelIterSet = m_xReplaceTLB->get_selected(xFirstSel.get());
+    std::unique_ptr<weld::TreeIter> xFirstSel = m_xReplaceTLB->get_selected();
+    bool bFirstSelIterSet = bool(xFirstSel);
+    if (!xFirstSel)
+        xFirstSel = m_xReplaceTLB->make_iterator();
     bool bShort = &rEdt == m_xShortED.get();
     const OUString rEntry = rEdt.get_text();
     const OUString rRepString = m_xReplaceED->get_text();

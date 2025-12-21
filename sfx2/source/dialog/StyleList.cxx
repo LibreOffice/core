@@ -534,8 +534,8 @@ IMPL_LINK(StyleList, ExecuteDrop, const ExecuteDropEvent&, rEvt, sal_Int8)
     if (!pSource || pSource != m_xTreeBox.get())
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xSource(m_xTreeBox->make_iterator());
-    if (!m_xTreeBox->get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_xTreeBox->get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_xTreeBox->make_iterator());
