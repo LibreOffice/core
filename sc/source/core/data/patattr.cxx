@@ -115,12 +115,14 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
     }
     const OUString* pCandidateStyleName = rCandidate.GetStyleName();
     auto it = maRegisteredCellAttributes.lower_bound(pCandidateStyleName);
+    const size_t nCandidateHashCode = rCandidate.GetHashCode();
     for (; it != maRegisteredCellAttributes.end(); ++it)
     {
         const ScPatternAttr* pCheck = *it;
         if (CompareStringPtr(pCheck->GetStyleName(), pCandidateStyleName) != 0)
             break;
-        if (ScPatternAttr::areSame(pCheck, &rCandidate))
+        if (nCandidateHashCode == pCheck->GetHashCode()
+            && ScPatternAttr::areSame(pCheck, &rCandidate))
         {
             pCheck->mnRefCount++;
             if (bPassingOwnership)
@@ -470,6 +472,15 @@ bool ScPatternAttr::operator==(const ScPatternAttr& rCmp) const
     // that hints to different WhichRanges, but WhichRanges are not compared in
     // the std-operator (but the Items - if needed - as was here done locally)
     return maLocalSfxItemSet == rCmp.maLocalSfxItemSet;
+}
+
+void ScPatternAttr::CalcHashCode() const
+{
+    size_t nHash = 0;
+    if (const OUString* pName = GetStyleName())
+        nHash = pName->hashCode();
+    o3tl::hash_combine(nHash, maLocalSfxItemSet.GetHashCode());
+    moHashCode = nHash;
 }
 
 bool ScPatternAttr::areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2)
@@ -1864,6 +1875,7 @@ void ScPatternAttr::InvalidateCaches()
     mxVisible.reset();
     mxNumberFormatKey.reset();
     mxLanguageType.reset();
+    moHashCode.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
