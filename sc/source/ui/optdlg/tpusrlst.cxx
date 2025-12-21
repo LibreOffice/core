@@ -573,7 +573,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
         {
             sal_Int32 nSelList = mxLbLists->get_selected_index();
 
-            OSL_ENSURE( nSelList != -1 , "Modify without List :-/" );
+            assert(nSelList != -1 && "Modify without List :-/");
 
             if ( !theEntriesStr.isEmpty() )
             {
