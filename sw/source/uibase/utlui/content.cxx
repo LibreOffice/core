@@ -6044,30 +6044,22 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         SwSectionData aSectionData(*pSection);
         if (rSelectedPopupEntry == "protectsection")
         {
-            if (pSection->GetPassword().hasElements())
+            if (pSection->GetPassword().hasElements() && aSectionData.IsProtectFlag())
             {
                 SfxPasswordDialog aPasswordDlg(m_pDialog->GetFrameWeld());
-                if (aPasswordDlg.run())
+                if (aPasswordDlg.run() != RET_OK)
+                    return;
+                if (!SvPasswordHelper::CompareHashPassword(aSectionData.GetPassword(),
+                                                           aPasswordDlg.GetPassword()))
                 {
-                    if (SvPasswordHelper::CompareHashPassword(aSectionData.GetPassword(),
-                                                              aPasswordDlg.GetPassword()))
-                    {
-                        aSectionData.SetProtectFlag(!aSectionData.IsProtectFlag());
-                        if (!aSectionData.IsProtectFlag())
-                            aSectionData.SetPassword(uno::Sequence<sal_Int8 >());
-                    }
-                    else
-                    {
-                        std::unique_ptr<weld::MessageDialog> xInfoBox(
-                            Application::CreateMessageDialog(
-                                m_pDialog->GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
-                                SwResId(STR_WRONG_PASSWORD)));
-                        xInfoBox->run();
-                    }
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+                        m_pDialog->GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+                        SwResId(STR_WRONG_PASSWORD)));
+                    xInfoBox->run();
+                    return;
                 }
             }
-            else
-                aSectionData.SetProtectFlag(!aSectionData.IsProtectFlag());
+            aSectionData.SetProtectFlag(!aSectionData.IsProtectFlag());
         }
         else
             aSectionData.SetHidden(!pSection->IsHidden());
