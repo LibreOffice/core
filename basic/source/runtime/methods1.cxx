@@ -1705,13 +1705,6 @@ static IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
     return nullptr;
 }
 
-static void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
-{
-    rnDay   = implGetDateDay( dDate );
-    rnMonth = implGetDateMonth( dDate );
-    rnYear  = implGetDateYear( dDate );
-}
-
 /** Limits a date to valid dates within tools' class Date capabilities.
 
     @return the year number, truncated if necessary and in that case also
@@ -1765,9 +1758,10 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
         double dHoursMinutesSeconds = dDate - floor( dDate );
 
         bool bOk = true;
-        sal_Int16 nYear, nMonth, nDay;
+        sal_Int16 nDay = implGetDateDay(dDate);
+        sal_Int16 nMonth = implGetDateMonth(dDate);
+        sal_Int16 nYear = implGetDateYear(dDate);
         sal_Int16 nTargetYear16 = 0, nTargetMonth = 0;
-        implGetDayMonthYear( nYear, nMonth, nDay, dDate );
         switch( pInfo->meInterval )
         {
             case Interval::YYYY:
