@@ -764,7 +764,6 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     {
         StoreMacroDescription();
 
-        m_xBasicBox->get_selected(m_xBasicBoxIter.get());
         auto xDlg(std::make_shared<OrganizeDialog>(m_xDialog.get(), nullptr, 0));
         weld::DialogController::runAsync(xDlg, [this](sal_Int32 nRet) {
             if (nRet == RET_OK) // not only closed
