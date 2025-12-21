@@ -31,7 +31,7 @@ void SortOrderReverser::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCR
             size_t nSortedIndex = rOrder[nIndex];
             newOrder[nIndex] = maOrder[nSortedIndex - 1];
         }
-        maOrder = newOrder;
+        maOrder = std::move(newOrder);
     }
 }
 
