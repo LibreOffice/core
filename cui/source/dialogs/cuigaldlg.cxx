@@ -868,6 +868,11 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, weld::Toggleable&, vo
 void TPGalleryThemeProperties::DoPreview()
 {
     int nIndex = m_xLbxFound->get_selected_index();
+    if (nIndex == -1)
+    {
+        SAL_WARN("cui.dialogs", "Nothing selected");
+        return;
+    }
     OUString aString(m_xLbxFound->get_text(nIndex));
 
     if (aString == aPreviewString)
