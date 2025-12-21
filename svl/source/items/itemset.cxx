@@ -27,6 +27,7 @@
 
 #include <libxml/xmlwriter.h>
 #include <tools/XmlWriter.hxx>
+#include <o3tl/hash_combine.hxx>
 
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
@@ -1287,6 +1288,24 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
     }
 
     return true;
+}
+
+size_t SfxItemSet::GetHashCode() const
+{
+    size_t seed = 0;
+
+    for (PoolItemMap::const_iterator it(m_aPoolItemMap.begin()); it != m_aPoolItemMap.end(); it++)
+    {
+        const sal_uInt16 nWhich = it->first;
+        const SfxPoolItem *pItem = it->second;
+
+        o3tl::hash_combine(seed, nWhich);
+        if (!IsInvalidItem(pItem) && !IsDisabledItem(pItem)
+            && pItem && pItem->supportsHashCode())
+            o3tl::hash_combine(seed, pItem->hashCode());
+    }
+
+    return seed;
 }
 
 std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const

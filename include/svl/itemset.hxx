@@ -246,6 +246,7 @@ public:
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
     bool                        operator==(const SfxItemSet &) const;
+    size_t                      GetHashCode() const;
 
     /** Compare possibly ignoring SfxItemPool pointer.
 
