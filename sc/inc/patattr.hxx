@@ -130,6 +130,7 @@ class SAL_DLLPUBLIC_RTTI ScPatternAttr final
     friend class CellAttributeHelper;
 
     SfxItemSet                  maLocalSfxItemSet;
+    mutable std::optional<size_t> moHashCode;
     std::optional<OUString>     moName;
     mutable std::optional<bool> mxVisible;
     mutable std::optional<sal_uInt32> mxNumberFormatKey;
@@ -149,6 +150,7 @@ public:
     SC_DLLPUBLIC ~ScPatternAttr();
 
     bool operator==(const ScPatternAttr& rCmp) const;
+    size_t GetHashCode() const { if (!moHashCode) CalcHashCode(); return *moHashCode; }
 
     // version that allows nullptrs
     SC_DLLPUBLIC static bool areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2);
@@ -285,6 +287,7 @@ private:
     LanguageType            GetLanguageType() const;
     void                    InvalidateCaches();
     void                    InvalidateCacheFor(sal_uInt16 nWhich);
+    void                    CalcHashCode() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
