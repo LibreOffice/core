@@ -148,7 +148,12 @@ void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
                          FormattingStatus& rChange)
 {
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
+    const SwNodeIndex* pContentIdx = rFlyContent.GetContentIdx();
+    if (!pContentIdx)
+    {
+        return;
+    }
+    SwNodeOffset nStart = pContentIdx->GetIndex() + 1;
     Graphic aGraphic;
     OUString aGraphicURL;
     SwNodeType eNodeType = rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType();
