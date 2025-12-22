@@ -65,7 +65,7 @@ XPath::XPath(xmlDocPtr pDocPtr)
 
 XPath::XPath(xmlDocPtr pDocPtr, std::function<void(xmlXPathContextPtr)> funcRegisterNamespaces)
     : mpXmlDocPtr(pDocPtr)
-    , mFuncRegisterNamespaces(funcRegisterNamespaces)
+    , mFuncRegisterNamespaces(std::move(funcRegisterNamespaces))
 {
 }
 
