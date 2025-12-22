@@ -41,7 +41,7 @@ public:
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
     virtual OUString RequestHelp(tools::Rectangle&) { return OUString(); }
-    virtual OUString GetHelpText() const { return m_pDrawingArea->get_tooltip_text(); }
+    OUString GetHelpText() const { return m_pDrawingArea->get_tooltip_text(); }
     Size const& GetOutputSizePixel() const { return m_aSize; }
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }

@@ -140,7 +140,7 @@ public:
 
     // This function simply calls show() or hide() but is convenient when the
     // visibility depends on some condition
-    virtual void set_visible(bool visible)
+    void set_visible(bool visible)
     {
         if (visible)
             show();
