@@ -15467,14 +15467,6 @@ public:
     using GtkInstanceWidget::set_sensitive;
     using GtkInstanceWidget::get_sensitive;
 
-    virtual bool get_sensitive(int pos, int col) const override
-    {
-        col = to_internal_model(col);
-        const auto iter = m_aSensitiveMap.find(col);
-        assert(iter != m_aSensitiveMap.end());
-        return get_bool(pos, iter->second);
-    }
-
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

@@ -1684,8 +1684,6 @@ public:
 
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
 
-    virtual bool get_sensitive(int pos, int col) const override;
-
     virtual bool get_sensitive(const weld::TreeIter& rIter, int col) const override;
 
     virtual TriState get_toggle(int pos, int col = -1) const override;

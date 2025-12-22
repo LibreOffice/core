@@ -4329,12 +4329,6 @@ bool SalInstanceTreeView::get_sensitive(SvTreeListEntry* pEntry, int col) const
     return do_get_sensitive(pEntry, col);
 }
 
-bool SalInstanceTreeView::get_sensitive(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_sensitive(pEntry, col);
-}
-
 void SalInstanceTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

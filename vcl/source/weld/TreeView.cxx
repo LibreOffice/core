@@ -38,6 +38,14 @@ void weld::TreeView::set_sensitive(int row, bool bSensitive, int col)
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_sensitive(*pIter, bSensitive, col);
 }
+
+bool weld::TreeView::get_sensitive(int row, int col) const
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        return get_sensitive(*pIter, col);
+
+    return false;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

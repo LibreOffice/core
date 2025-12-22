@@ -109,11 +109,6 @@ void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
 
-bool QtInstanceTreeView::get_sensitive(int nRow, int nCol) const
-{
-    return get_sensitive(treeIter(nRow), nCol);
-}
-
 void QtInstanceTreeView::set_toggle(int nRow, TriState eState, int nCol)
 {
     set_toggle(treeIter(nRow), eState, nCol);

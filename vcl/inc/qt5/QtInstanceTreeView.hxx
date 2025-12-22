@@ -52,7 +52,6 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
-    virtual bool get_sensitive(int nRow, int nCol) const override;
     virtual void set_toggle(int nRow, TriState eState, int nCol = -1) override;
     virtual TriState get_toggle(int nRow, int nCol = -1) const override;
     virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
