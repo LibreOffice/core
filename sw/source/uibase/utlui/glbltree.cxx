@@ -398,6 +398,12 @@ void SwGlobalTree::MoveSelectionTo(const weld::TreeIter* pDropEntry)
 {
     int nSource = m_xTreeView->get_selected_index();
 
+    if (nSource == -1)
+    {
+        SAL_WARN("sw", "No selection to move");
+        return;
+    }
+
     int nDest = pDropEntry ? m_xTreeView->get_iter_index_in_parent(*pDropEntry)
                            : m_pSwGlblDocContents->size();
 
