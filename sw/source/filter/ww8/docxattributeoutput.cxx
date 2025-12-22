@@ -6287,9 +6287,9 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
     }
 
     // shape filled with the preview image
-    m_pSerializer->singleElementNS(XML_v, XML_imagedata,
-                                   FSNS(XML_r, XML_id), rImageId,
-                                   FSNS(XML_o, XML_title), "");
+    if (!rImageId.isEmpty())
+        m_pSerializer->singleElementNS(XML_v, XML_imagedata, FSNS(XML_r, XML_id), rImageId,
+                                       FSNS(XML_o, XML_title), "");
 
     //export wrap settings
     if (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) //As-char objs does not have surround.
