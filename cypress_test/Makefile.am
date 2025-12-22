@@ -67,6 +67,11 @@ MULTIUSER_DATA_FOLDER = $(abs_srcdir)/data/multiuser/
 MULTIUSER_DATA_WORKDIR = $(if $(coolwsd),$(MULTIUSER_DATA_FOLDER),$(abs_builddir)/workdir/data/multiuser/)
 MULTIUSER_TRACK_FOLDER=$(abs_builddir)/workdir/track/multiuser
 
+REDLINE_USER_AGENT = "cypress"
+REDLINE_TEST_FOLDER = $(abs_srcdir)/integration_tests/redline
+REDLINE_DATA_FOLDER = $(abs_srcdir)/data/redline/
+REDLINE_DATA_WORKDIR = $(if $(coolwsd),$(REDLINE_DATA_FOLDER),$(abs_builddir)/workdir/data/redline/)
+
 USER_INTERFACE = classic
 UPDATE_SCREENSHOT = false
 
@@ -90,6 +95,7 @@ CORE_VERSION := $(subst $(SPACE),_,$(shell "@LO_PATH@"/program/soffice.bin --ver
 BROWSER:=$(if $(CYPRESS_BROWSER),$(CYPRESS_BROWSER),$(CHROME))
 A11Y_ENABLE:=$(if $(CYPRESS_A11Y),$(CYPRESS_A11Y),true)
 A11Y_TAG:=$(if $(findstring true,$(A11Y_ENABLE)),taga11yenabled,taga11ydisabled)
+REDLINE_ENABLE:=false
 
 if ENABLE_DEBUG
 FILTER_DEBUG=cypress:electron,cypress:launcher
@@ -107,6 +113,8 @@ DESKTOP_TEST_FILES=$(subst $(DESKTOP_TEST_FOLDER)/,,$(wildcard $(DESKTOP_TEST_FO
 IDLE_TEST_FILES=$(subst $(IDLE_TEST_FOLDER)/,,$(wildcard $(IDLE_TEST_FOLDER)/*_spec.js) $(wildcard $(IDLE_TEST_FOLDER)/*/*_spec.js))
 
 MULTIUSER_TEST_FILES=$(subst $(MULTIUSER_TEST_FOLDER)/,,$(wildcard $(MULTIUSER_TEST_FOLDER)/*_spec.js) $(wildcard $(MULTIUSER_TEST_FOLDER)/*/*_spec.js))
+
+REDLINE_TEST_FILES=$(subst $(REDLINE_TEST_FOLDER)/,,$(wildcard $(REDLINE_TEST_FOLDER)/*_spec.js) $(wildcard $(REDLINE_TEST_FOLDER)/*/*_spec.js))
 
 MOBILE_TEST_FILES_DONE= \
 	$(foreach test_file,$(MOBILE_TEST_FILES),$(MOBILE_TRACK_FOLDER)/$(test_file).done)
@@ -244,6 +252,7 @@ define start_coolwsd_instance
 			--port=$(FREE_PORT) \
 			--pidfile=$(PID_FILE) \
 			--o:logging.file.property[0]=$(COOLWSD_LOG) \
+			--o:per_document.redlining_as_comments=$(REDLINE_ENABLE) \
 			--unattended \
 			$(if $(findstring php-proxy, $(CYPRESS_INTEGRATION)),--o:net.proxy_prefix=true) \
 			 > $(COOLWSD_OUTPUT) 2>&1 &
@@ -833,6 +842,77 @@ do-run-cov: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call run_idle_tests,,,COVERAGE_RUN="1")
 	$(V)$(KILL_COMMAND) || true
 
+##############################
+# Redlining as comments tests.
+##############################
+
+check-redline: REDLINE_ENABLE := true
+check-redline: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
+	$(call cleanup_before_run)
+	$(call run_JS_error_check)
+	$(if $(HEADLESS_BUILD),$(call start_Xvfb),)
+	$(call start_coolwsd)
+	$(call run_redline_tests,$(spec))
+	$(if $(HEADLESS_BUILD),$(V)pkill Xvfb,)
+	$(V)$(KILL_COMMAND) || true
+
+run-redline: REDLINE_ENABLE := true
+run-redline: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
+	$(call cleanup_before_run)
+	$(call run_JS_error_check)
+	$(call start_coolwsd)
+	$(call run_interactive_redline,$(spec)) || true
+	$(V)$(KILL_COMMAND) || true
+
+REDLINE_CONFIG = \
+	specPattern=$(REDLINE_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(REDLINE_USER_AGENT)
+
+REDLINE_ENV = \
+	DATA_FOLDER=$(REDLINE_DATA_FOLDER),DATA_WORKDIR=$(REDLINE_DATA_WORKDIR),WSD_VERSION_HASH=$(COOLWSD_VERSION_HASH),SERVER=$(COOLWSD_SERVER),SERVER_PORT=$(FREE_PORT),LO_CORE_VERSION="$(CORE_VERSION)",INTEGRATION=$(CYPRESS_INTEGRATION),IMAGES_FOLDER=$(abs_top_srcdir)/browser/images/help/en/,DISABLE_REDLINE=0
+
+REDLINE_INCLUDE_TAGS = \
+		tagredline,$(A11Y_TAG)
+
+# Run one redline test / all redline tests in headless mode.
+# Parameters:
+# 1 - spec (optional):	test file to run, if not specified all redline tests are run.
+# 2 - log (optional):	log file for cypress run, needed for parallel build only.
+# 3 - +env (optional):	additional env variables (will be appended to $(REDLINE_ENV).
+define run_redline_tests
+	$(V)echo $(if $(1),"Running cypress redlining as comment test: $(1)","Running cypress redlining as comment tests...")
+	$(V)echo
+	$(eval CYPRESS_INCLUDE_TAGS=$(REDLINE_INCLUDE_TAGS))
+	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
+	$(V)echo
+	$(eval export CYPRESS_INCLUDE_TAGS)
+	$(eval ENV_EXTENDED=$(REDLINE_ENV)$(if $(3),$(COMMA)$(3)))
+	$(if $(and $(PARALLEL_BUILD), $(1)),\
+		$(V)$(call run_test_parallel,\
+			$(REDLINE_CONFIG),$(ENV_EXTENDED),$(1),desktop,$(2))\
+	,\
+		$(eval SPEC_FILE=$(if $(1),$(REDLINE_TEST_FOLDER)/$(1)))\
+		$(if $(1),$(call check_spec_existence,$(1),redline))\
+		$(call run_test_headless,\
+			$(REDLINE_CONFIG),$(ENV_EXTENDED),$(SPEC_FILE))\
+	)
+endef
+
+define run_interactive_redline
+	$(V)echo "Open cypress with redline tests..."
+	$(V)echo
+	$(eval CYPRESS_INCLUDE_TAGS=$(REDLINE_INCLUDE_TAGS))
+	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
+	$(V)echo
+	$(eval export CYPRESS_INCLUDE_TAGS)
+	$(if $(1),\
+		$(eval SPEC_FILE=$(REDLINE_TEST_FOLDER)/$(1))\
+		$(call check_spec_existence,$(1),redline)\
+	,\
+		$(eval SPEC_FILE=$(REDLINE_TEST_FOLDER)/**/*_spec.js)\
+	)
+	$(call run_interactive_single,$(REDLINE_CONFIG),$(REDLINE_ENV),$(SPEC_FILE))
+endef
+
 ####################
 # General functions.
 ####################
@@ -936,7 +1016,8 @@ define check_spec_existence
 				$(if $(filter desktop,$(2)),$(DESKTOP_TEST_FILES),\
 				$(if $(filter idle,$(2)),$(IDLE_TEST_FILES),\
 				$(if $(filter lighthouse,$(2)),$(LIGHTHOUSE_TEST_FILES),\
-				$(if $(filter multi,$(2)),$(MULTIUSER_TEST_FILES)))))))
+				$(if $(filter multi,$(2)),$(MULTIUSER_TEST_FILES),\
+				$(if $(filter redline,$(2)),$(REDLINE_TEST_FILES))))))))
 	$(if $(filter $(1),$(TEST_FILES)),,$(error CypressError: Can't find the given spec file!))
 
 endef
