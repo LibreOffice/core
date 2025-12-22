@@ -4430,12 +4430,6 @@ void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, TxtAlign e
     set_text_align(rVclIter.iter, eAlign, col);
 }
 
-void SalInstanceTreeView::set_text_align(int pos, TxtAlign eAlign, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text_align(pEntry, eAlign, col);
-}
-
 void SalInstanceTreeView::connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
                                           const Link<const iter_string&, bool>& rEndLink)
 {

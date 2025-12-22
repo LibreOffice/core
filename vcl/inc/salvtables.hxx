@@ -1706,8 +1706,6 @@ public:
 
     virtual void set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int col) override;
 
-    virtual void set_text_align(int pos, TxtAlign eAlign, int col) override;
-
     virtual void connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
                                  const Link<const iter_string&, bool>& rEndLink) override;
 

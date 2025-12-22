@@ -14142,13 +14142,6 @@ private:
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, fValue, -1);
     }
 
-    void set(int pos, int col, double fValue)
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            set(iter, col, fValue);
-    }
-
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
@@ -15388,12 +15381,6 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         col = to_internal_model(col);
         set(rGtkIter.iter, m_aAlignMap[col], toGtkTextAlignValue(eAlign));
-    }
-
-    virtual void set_text_align(int pos, TxtAlign eAlign, int col) override
-    {
-        col = to_internal_model(col);
-        set(pos, m_aAlignMap[col], toGtkTextAlignValue(eAlign));
     }
 
     using GtkInstanceWidget::set_sensitive;

@@ -93,6 +93,12 @@ bool weld::TreeView::get_text_emphasis(int row, int col) const
 
     return false;
 }
+
+void weld::TreeView::set_text_align(int row, TxtAlign eAlign, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_text_align(*pIter, eAlign, col);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

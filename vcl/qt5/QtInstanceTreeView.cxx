@@ -109,11 +109,6 @@ void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTreeView::set_text_align(int nRow, TxtAlign eAlign, int nCol)
-{
-    return set_text_align(treeIter(nRow), eAlign, nCol);
-}
-
 void QtInstanceTreeView::swap(int nPos1, int nPos2)
 {
     SolarMutexGuard g;

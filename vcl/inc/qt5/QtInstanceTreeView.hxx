@@ -52,7 +52,6 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
-    virtual void set_text_align(int nRow, TxtAlign eAlign, int nCol) override;
     virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;
     virtual void set_font_color(int nPos, const Color& rColor) override;
