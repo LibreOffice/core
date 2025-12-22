@@ -35,6 +35,7 @@
 #include <docmodel/color/ComplexColor.hxx>
 #include <attarray.hxx>
 #include <vector>
+#include <unordered_set>
 
 class ScPatternCache;
 enum class ScTableStyleElement;
@@ -981,6 +982,7 @@ private:
     DxfVector           maExtDxfs;          /// List of differential extlst cell styles.
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
     TableStyleVector    maTableStyles;
+    mutable std::unordered_set<sal_Int32> maExtConditionalStyles;  /// DXF identifiers for ExtCondition which have been mapped to styles.
 };
 
 } // namespace oox::xls
