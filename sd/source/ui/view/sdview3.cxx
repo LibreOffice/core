@@ -732,7 +732,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         SdrPageView*    pPV = nullptr;
                         SdrObject* pPickObj2 = PickObj(rPos, getHitTolLog(), pPV);
 
-                        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj )
+                        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj && pPickObj2->GetName() != pObj->GetName() )
                         {
                             // replace object
                             SdrPage* pWorkPage = GetSdrPageView()->GetPage();
@@ -772,6 +772,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             mnAction = DND_ACTION_COPY;
                         }
                         else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj &&
+                            pPickObj->GetName() != pObj->GetName() &&
                             dynamic_cast< const SdrGrafObj *>( pPickObj ) ==  nullptr &&
                                 dynamic_cast< const SdrOle2Obj *>( pPickObj ) ==  nullptr )
                         {

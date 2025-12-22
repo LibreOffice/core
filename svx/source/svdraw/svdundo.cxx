@@ -702,7 +702,7 @@ void SdrUndoRemoveObj::Undo()
     // For UNDOs in Calc/Writer it is necessary to adapt the anchor
     // position of the target object.
     Point aOwnerAnchorPos(0, 0);
-
+    assert(pObjList); // must never be null
     if (dynamic_cast< const SdrObjGroup* >(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
     {
         aOwnerAnchorPos = pObjList->getSdrObjectFromSdrObjList()->GetAnchorPos();
@@ -725,6 +725,7 @@ void SdrUndoRemoveObj::Redo()
     {
         ImplUnmarkObject( mxObj.get() );
         E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
+        assert(pObjList); // must never be null
         pObjList->RemoveObject(mxObj->GetOrdNum());
     }
 
@@ -746,7 +747,7 @@ void SdrUndoInsertObj::Undo()
     if (mxObj->IsInserted())
     {
         ImplUnmarkObject( mxObj.get() );
-
+        assert(pObjList); // must never be null
         rtl::Reference<SdrObject> pChkObj= pObjList->RemoveObject(mxObj->GetOrdNum());
         DBG_ASSERT(pChkObj.get()==mxObj.get(),"UndoInsertObj: RemoveObjNum!=mxObj");
     }
@@ -761,7 +762,7 @@ void SdrUndoInsertObj::Redo()
         // which becomes a member of a group, because its cleared in method
         // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
-
+        assert(pObjList); // must never be null
         if (dynamic_cast<const SdrObjGroup*>(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
             aAnchorPos = mxObj->GetAnchorPos();
@@ -857,12 +858,14 @@ void SdrUndoReplaceObj::Undo()
     DBG_ASSERT(mxNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): New object is not inserted!");
 
     ImplUnmarkObject( mxNewObj.get() );
+    assert(pObjList); // must never be null
     pObjList->ReplaceObject(mxObj.get(), mxNewObj->GetOrdNum());
 }
 
 void SdrUndoReplaceObj::Redo()
 {
     ImplUnmarkObject( mxObj.get() );
+    assert(pObjList); // must never be null
     pObjList->ReplaceObject(mxNewObj.get(), mxObj->GetOrdNum());
 
     // Trigger PageChangeCall
