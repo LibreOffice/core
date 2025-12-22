@@ -109,23 +109,6 @@ void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTreeView::set_image(int nRow, const OUString& rImage, int nCol)
-{
-    set_image(treeIter(nRow), rImage, nCol);
-}
-
-void QtInstanceTreeView::set_image(int nRow, VirtualDevice& rImage, int nCol)
-{
-    set_image(treeIter(nRow), rImage, nCol);
-}
-
-void QtInstanceTreeView::set_image(int nRow,
-                                   const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                                   int nCol)
-{
-    set_image(treeIter(nRow), rImage, nCol);
-}
-
 void QtInstanceTreeView::set_text_emphasis(int nRow, bool bOn, int nCol)
 {
     return set_text_emphasis(treeIter(nRow), bOn, nCol);

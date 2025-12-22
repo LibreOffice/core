@@ -1721,13 +1721,6 @@ public:
 
     void set_image(SvTreeListEntry* pEntry, const Image& rImage, int col);
 
-    virtual void set_image(int pos, const OUString& rImage, int col = -1) override;
-
-    virtual void set_image(int pos, const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                           int col = -1) override;
-
-    virtual void set_image(int pos, VirtualDevice& rImage, int col = -1) override;
-
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
                            int col = -1) override;
 

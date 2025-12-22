@@ -4497,23 +4497,6 @@ void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage
     InvalidateModelEntry(pEntry);
 }
 
-void SalInstanceTreeView::set_image(int pos, const OUString& rImage, int col)
-{
-    set_image(m_xTreeView->GetEntry(nullptr, pos), createImage(rImage), col);
-}
-
-void SalInstanceTreeView::set_image(int pos,
-                                    const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                                    int col)
-{
-    set_image(m_xTreeView->GetEntry(nullptr, pos), Image(rImage), col);
-}
-
-void SalInstanceTreeView::set_image(int pos, VirtualDevice& rImage, int col)
-{
-    set_image(m_xTreeView->GetEntry(nullptr, pos), createImage(rImage), col);
-}
-
 void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

@@ -52,10 +52,6 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
-    virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
-    virtual void set_image(int nRow, VirtualDevice& rImage, int nCol = -1) override;
-    virtual void set_image(int nRow, const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                           int nCol = -1) override;
     virtual void set_text_emphasis(int nRow, bool bOn, int nCol) override;
     virtual bool get_text_emphasis(int nRow, int nCol) const override;
     virtual void set_text_align(int nRow, TxtAlign eAlign, int nCol) override;

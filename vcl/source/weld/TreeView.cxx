@@ -60,6 +60,25 @@ TriState weld::TreeView::get_toggle(int row, int col) const
 
     return TRISTATE_INDET;
 }
+
+void weld::TreeView::set_image(int row, const OUString& rImage, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_image(*pIter, rImage, col);
+}
+
+void weld::TreeView::set_image(int row, VirtualDevice& rImage, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_image(*pIter, rImage, col);
+}
+
+void weld::TreeView::set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                               int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_image(*pIter, rImage, col);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

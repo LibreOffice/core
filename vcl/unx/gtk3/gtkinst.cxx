@@ -15472,30 +15472,6 @@ public:
             g_object_unref(pixbuf);
     }
 
-    void set_image(int pos, GdkPixbuf* pixbuf, int col)
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-        {
-            set_image(iter, col, pixbuf);
-        }
-    }
-
-    virtual void set_image(int pos, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) override
-    {
-        set_image(pos, getPixbuf(rImage), col);
-    }
-
-    virtual void set_image(int pos, const OUString& rImage, int col) override
-    {
-        set_image(pos, getPixbuf(rImage), col);
-    }
-
-    virtual void set_image(int pos, VirtualDevice& rImage, int col) override
-    {
-        set_image(pos, getPixbuf(rImage), col);
-    }
-
     virtual void set_image(const weld::TreeIter& rIter, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

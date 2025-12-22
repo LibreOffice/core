@@ -247,13 +247,18 @@ public:
     virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
 
     // col index -1 sets the expander image
-    virtual void set_image(int row, const OUString& rImage, int col = -1) = 0;
+    void set_image(int row, const OUString& rImage, int col = -1);
+    virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
-    virtual void set_image(int row, VirtualDevice& rImage, int col = -1) = 0;
+    void set_image(int row, VirtualDevice& rImage, int col = -1);
+    virtual void set_image(const TreeIter& rIter, VirtualDevice& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
-    virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                           int col = -1)
+    void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                   int col = -1);
+    virtual void set_image(const TreeIter& rIter,
+                           const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
+
     virtual void set_text_emphasis(int row, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(int row, int col) const = 0;
     virtual void set_text_align(int row, TxtAlign eAlign, int col) = 0;
@@ -340,15 +345,6 @@ public:
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_align(const TreeIter& rIter, TxtAlign eAlign, int col) = 0;
-
-    // col index -1 sets the expander image
-    virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
-    // col index -1 sets the expander image
-    virtual void set_image(const TreeIter& rIter, VirtualDevice& rImage, int col = -1) = 0;
-    // col index -1 sets the expander image
-    virtual void set_image(const TreeIter& rIter,
-                           const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
-        = 0;
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
 
     // scroll to make rIter visible, this will also expand all parent rows of rIter as necessary to
