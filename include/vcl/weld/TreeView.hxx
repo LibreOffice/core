@@ -129,7 +129,6 @@ protected:
                            VirtualDevice* pImageSurface, bool bChildrenOnDemand, TreeIter* pRet)
         = 0;
     virtual void do_insert_separator(int pos, const OUString& rId) = 0;
-    virtual void do_scroll_to_row(int row) = 0;
     using weld::ItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
@@ -273,14 +272,10 @@ public:
     void set_font_color(int pos, const Color& rColor);
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
 
-    // scroll to make 'row' visible, this will also expand all parent rows of 'row' as necessary to
-    // make 'row' visible
-    void scroll_to_row(int row)
-    {
-        disable_notify_events();
-        do_scroll_to_row(row);
-        enable_notify_events();
-    }
+    // scroll to make given row visible, this will also expand all parent rows
+    // of the row as necessary to make the row visible
+    void scroll_to_row(int row);
+    void scroll_to_row(const TreeIter& rIter);
 
     virtual bool is_selected(int pos) const = 0;
 
@@ -349,15 +344,6 @@ public:
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-
-    // scroll to make rIter visible, this will also expand all parent rows of rIter as necessary to
-    // make rIter visible
-    void scroll_to_row(const TreeIter& rIter)
-    {
-        disable_notify_events();
-        do_scroll_to_row(rIter);
-        enable_notify_events();
-    }
 
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 

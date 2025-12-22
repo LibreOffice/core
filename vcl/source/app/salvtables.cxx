@@ -4201,15 +4201,6 @@ void SalInstanceTreeView::do_set_cursor(int pos)
     }
 }
 
-void SalInstanceTreeView::do_scroll_to_row(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    m_xTreeView->MakeVisible(pEntry);
-}
-
 bool SalInstanceTreeView::is_selected(int pos) const
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);

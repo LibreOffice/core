@@ -1664,8 +1664,6 @@ public:
     using SalInstanceItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) override;
 
-    virtual void do_scroll_to_row(int pos) override;
-
     virtual bool is_selected(int pos) const override;
 
     virtual std::vector<int> get_selected_rows() const override;

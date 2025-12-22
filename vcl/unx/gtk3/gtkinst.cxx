@@ -15171,17 +15171,6 @@ public:
         enable_notify_events();
     }
 
-    virtual void do_scroll_to_row(int pos) override
-    {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
-        disable_notify_events();
-        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_tree_view_expand_to_path(m_pTreeView, path);
-        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, true, 0, 0);
-        gtk_tree_path_free(path);
-        enable_notify_events();
-    }
-
     virtual bool is_selected(int pos) const override
     {
         GtkTreeIter iter;

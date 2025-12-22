@@ -150,8 +150,6 @@ std::vector<int> QtInstanceTreeView::get_selected_rows() const
     return aSelectedRows;
 }
 
-void QtInstanceTreeView::do_scroll_to_row(int nRow) { scroll_to_row(treeIter(nRow)); }
-
 bool QtInstanceTreeView::is_selected(int nPos) const { return is_selected(treeIter(nPos)); }
 
 void QtInstanceTreeView::do_set_cursor(int nPos) { do_set_cursor(treeIter(nPos)); }

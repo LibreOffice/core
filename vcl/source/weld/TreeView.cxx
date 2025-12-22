@@ -105,6 +105,19 @@ void weld::TreeView::set_font_color(int pos, const Color& rColor)
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
         set_font_color(*pIter, rColor);
 }
+
+void weld::TreeView::scroll_to_row(int row)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        scroll_to_row(*pIter);
+}
+
+void weld::TreeView::scroll_to_row(const TreeIter& rIter)
+{
+    disable_notify_events();
+    do_scroll_to_row(rIter);
+    enable_notify_events();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
