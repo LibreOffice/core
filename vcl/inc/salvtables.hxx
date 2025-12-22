@@ -1676,8 +1676,6 @@ public:
 
     void set_text(SvTreeListEntry* pEntry, const OUString& rText, int col);
 
-    virtual void set_text(int pos, const OUString& rText, int col = -1) override;
-
     using SalInstanceWidget::set_sensitive;
     using SalInstanceWidget::get_sensitive;
 

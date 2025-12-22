@@ -26,6 +26,12 @@ OUString weld::TreeView::get_text(int row, int col) const
 
     return OUString();
 }
+
+void weld::TreeView::set_text(int row, const OUString& rText, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_text(*pIter, rText, col);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

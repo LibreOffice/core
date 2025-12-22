@@ -228,7 +228,9 @@ public:
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
 
     // col index -1 sets the first text column
-    virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
+    void set_text(int row, const OUString& rText, int col = -1);
+    virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
+
     // col index -1 sets all columns
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
     virtual bool get_sensitive(int row, int col) const = 0;
@@ -327,8 +329,6 @@ public:
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-    // col index -1 sets the first text column
-    virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
     // col index -1 sets all columns
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
     virtual bool get_sensitive(const TreeIter& rIter, int col) const = 0;

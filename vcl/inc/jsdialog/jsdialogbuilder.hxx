@@ -735,7 +735,7 @@ public:
                            VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                            weld::TreeIter* pRet) override;
 
-    virtual void set_text(int row, const OUString& rText, int col = -1) override;
+    using weld::TreeView::set_text;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr, int col = -1) override;
 
     virtual void expand_row(const weld::TreeIter& rIter) override;

@@ -14146,13 +14146,6 @@ private:
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, aStr.getStr(), -1);
     }
 
-    void set(int pos, int col, std::u16string_view rText)
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            set(iter, col, rText);
-    }
-
     void set(const GtkTreeIter& iter, int col, bool bOn)
     {
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, promote_arg(bOn), -1);
@@ -15349,15 +15342,6 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
-    }
-
-    virtual void set_text(int pos, const OUString& rText, int col) override
-    {
-        if (col == -1)
-            col = m_nTextCol;
-        else
-            col = to_internal_model(col);
-        set(pos, col, rText);
     }
 
     virtual TriState get_toggle(int pos, int col) const override

@@ -4281,12 +4281,6 @@ void SalInstanceTreeView::set_text(SvTreeListEntry* pEntry, const OUString& rTex
     InvalidateModelEntry(pEntry);
 }
 
-void SalInstanceTreeView::set_text(int pos, const OUString& rText, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text(pEntry, rText, col);
-}
-
 void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col)
 {
     if (col == -1)

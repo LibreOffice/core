@@ -1778,12 +1778,6 @@ void JSTreeView::do_insert(const weld::TreeIter* pParent, int pos, const OUStrin
     sendUpdate();
 }
 
-void JSTreeView::set_text(int row, const OUString& rText, int col)
-{
-    SalInstanceTreeView::set_text(row, rText, col);
-    sendUpdate();
-}
-
 void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int col)
 {
     SalInstanceTreeView::set_text(rIter, rStr, col);
