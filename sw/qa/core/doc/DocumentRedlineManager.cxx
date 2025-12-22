@@ -353,6 +353,45 @@ CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatDirect)
     // i.e. we got <ins>AAA</ins>BBB<ins>CCC</ins> instead of one big insert.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatOwn)
+{
+    // Given a document with an overlapping delete and format redline:
+    // When importing that document:
+    createSwDoc("del-then-format-own.docx");
+
+    // Then make sure that the overlap part is not lost, instead it's represented with an
+    // SwRangeRedline with 2 SwRedlineData members:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 2
+    // i.e. the document had a format and a delete redline, but part of the format was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+    {
+        const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+    }
+    {
+        // Overlap: both format and delete is tracked, so reject removes all boldness from the
+        // document.
+        const SwRedlineData& rRedlineData = rRedlines[1]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+        CPPUNIT_ASSERT(rRedlineData.Next());
+        const SwRedlineData& rRedlineData2 = rRedlines[1]->GetRedlineData(1);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
+        CPPUNIT_ASSERT(!rRedlineData2.Next());
+    }
+    {
+        const SwRedlineData& rRedlineData = rRedlines[2]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
