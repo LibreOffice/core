@@ -99,6 +99,12 @@ void weld::TreeView::set_text_align(int row, TxtAlign eAlign, int col)
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_text_align(*pIter, eAlign, col);
 }
+
+void weld::TreeView::set_font_color(int pos, const Color& rColor)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
+        set_font_color(*pIter, rColor);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

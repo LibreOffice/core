@@ -4145,12 +4145,6 @@ void SalInstanceTreeView::bulk_insert_for_each(
     thaw();
 }
 
-void SalInstanceTreeView::set_font_color(int pos, const Color& rColor)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_font_color(pEntry, rColor);
-}
-
 void SalInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Color& rColor)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

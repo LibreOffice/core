@@ -14951,13 +14951,6 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_font_color(int pos, const Color& rColor) override
-    {
-        GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
-        set_font_color(iter, rColor);
-    }
-
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

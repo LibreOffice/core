@@ -1651,8 +1651,6 @@ public:
         const weld::TreeIter* pParent = nullptr, const std::vector<int>* pFixedWidths = nullptr,
         bool bGoingToSetText = false) override;
 
-    virtual void set_font_color(int pos, const Color& rColor) override;
-
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
 
     virtual int find_text(const OUString& rText) const override;

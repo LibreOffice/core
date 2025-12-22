@@ -269,7 +269,9 @@ public:
 
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
-    virtual void set_font_color(int pos, const Color& rColor) = 0;
+
+    void set_font_color(int pos, const Color& rColor);
+    virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
 
     // scroll to make 'row' visible, this will also expand all parent rows of 'row' as necessary to
     // make 'row' visible
@@ -347,7 +349,6 @@ public:
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-    virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
 
     // scroll to make rIter visible, this will also expand all parent rows of rIter as necessary to
     // make rIter visible
