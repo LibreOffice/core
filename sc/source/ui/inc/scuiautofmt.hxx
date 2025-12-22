@@ -33,7 +33,7 @@ public:
                     const ScViewData& rViewData);
     virtual ~ScAutoFormatDlg() override;
 
-    sal_uInt16 GetIndex() const { return nIndex; }
+    sal_uInt16 GetIndex() const { return m_nIndex; }
     OUString GetCurrFormatName();
 
 private:
@@ -45,7 +45,7 @@ private:
 
     ScAutoFormat*           pFormat;
     const ScAutoFormatData* pSelFmtData;
-    sal_uInt16                  nIndex;
+    sal_uInt16              m_nIndex;
     bool                    bCoreDataChanged;
     bool                    bFmtInserted;
 
