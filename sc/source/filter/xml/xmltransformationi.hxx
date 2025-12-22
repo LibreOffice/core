@@ -74,6 +74,8 @@ class ScXMLColumnSortContext : public ScXMLImportContext
 {
     ScSortParam maSortParam;
 
+    void ImplDestroy();
+
 public:
     ScXMLColumnSortContext(ScXMLImport& rImport,
                            const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
