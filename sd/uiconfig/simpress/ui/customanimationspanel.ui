@@ -315,9 +315,9 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
-                    <property name="width">2</property>
+                    <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
@@ -473,6 +473,7 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">5</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -485,25 +486,6 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="more_properties">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="customanimationspanel|more_properties|tooltip_text">Options</property>
-                    <property name="image">image1</property>
-                    <property name="always-show-image">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="more_properties-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|more_properties">Specifies additional properties for the selected element in the Custom Animations pane.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
                     <property name="top-attach">6</property>
                   </packing>
                 </child>
@@ -537,6 +519,7 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">7</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -569,6 +552,7 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">8</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -650,31 +634,51 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="placeholder">
+                  <object class="GtkBox" id="dirspan">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="spacing">6</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkBox" id="placeholder">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="more_properties">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="customanimationspanel|more_properties|tooltip_text">Options</property>
+                        <property name="image">image1</property>
+                        <property name="always-show-image">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="more_properties-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|more_properties">Specifies additional properties for the selected element in the Custom Animations pane.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">6</property>
+                    <property name="width">2</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
             </child>
