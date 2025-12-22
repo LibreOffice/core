@@ -14151,13 +14151,6 @@ private:
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, promote_arg(bOn), -1);
     }
 
-    void set(int pos, int col, bool bOn)
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            set(iter, col, bOn);
-    }
-
     void set(const GtkTreeIter& iter, int col, gint bInt)
     {
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, bInt, -1);
@@ -15473,20 +15466,6 @@ public:
 
     using GtkInstanceWidget::set_sensitive;
     using GtkInstanceWidget::get_sensitive;
-
-    virtual void set_sensitive(int pos, bool bSensitive, int col) override
-    {
-        if (col == -1)
-        {
-            for (const auto& elem : m_aSensitiveMap)
-                set(pos, elem.second, bSensitive);
-        }
-        else
-        {
-            col = to_internal_model(col);
-            set(pos, m_aSensitiveMap[col], bSensitive);
-        }
-    }
 
     virtual bool get_sensitive(int pos, int col) const override
     {

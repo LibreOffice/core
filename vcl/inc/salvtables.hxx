@@ -1682,8 +1682,6 @@ public:
     void set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col);
     bool get_sensitive(SvTreeListEntry* pEntry, int col) const;
 
-    virtual void set_sensitive(int pos, bool bSensitive, int col = -1) override;
-
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
 
     virtual bool get_sensitive(int pos, int col) const override;

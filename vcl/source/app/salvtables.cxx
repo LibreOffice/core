@@ -4329,12 +4329,6 @@ bool SalInstanceTreeView::get_sensitive(SvTreeListEntry* pEntry, int col) const
     return do_get_sensitive(pEntry, col);
 }
 
-void SalInstanceTreeView::set_sensitive(int pos, bool bSensitive, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_sensitive(pEntry, bSensitive, col);
-}
-
 bool SalInstanceTreeView::get_sensitive(int pos, int col) const
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);

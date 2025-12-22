@@ -32,6 +32,12 @@ void weld::TreeView::set_text(int row, const OUString& rText, int col)
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_text(*pIter, rText, col);
 }
+
+void weld::TreeView::set_sensitive(int row, bool bSensitive, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_sensitive(*pIter, bSensitive, col);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

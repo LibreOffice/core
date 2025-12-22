@@ -232,8 +232,10 @@ public:
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
 
     // col index -1 sets all columns
-    virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
+    void set_sensitive(int row, bool bSensitive, int col = -1);
+    virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
     virtual bool get_sensitive(int row, int col) const = 0;
+
     // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual void set_toggle(int row, TriState eState, int col = -1) = 0;
     // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
@@ -329,8 +331,6 @@ public:
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-    // col index -1 sets all columns
-    virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
     virtual bool get_sensitive(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
