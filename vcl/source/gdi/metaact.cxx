@@ -1718,6 +1718,9 @@ MetaTransparentAction::MetaTransparentAction( tools::PolyPolygon aPolyPoly, sal_
 
 void MetaTransparentAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maPolyPoly.GetBoundRect())))
+        return;
+
     pOut->DrawTransparent( maPolyPoly, mnTransPercent );
 }
 
