@@ -66,7 +66,7 @@ ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, 
     m_xBtnEdit->connect_clicked(LINK(this, ScHFPage, BtnHdl));
     m_xTurnOnBox->connect_toggled(LINK(this, ScHFPage, TurnOnHdl));
 
-    if ( nId == SID_ATTR_PAGE_HEADERSET )
+    if ( m_nId == SID_ATTR_PAGE_HEADERSET )
         m_xBtnEdit->set_help_id(HID_SC_HEADER_EDIT);
     else
         m_xBtnEdit->set_help_id(HID_SC_FOOTER_EDIT);
@@ -87,7 +87,7 @@ bool ScHFPage::FillItemSet( SfxItemSet* rOutSet )
 {
     bool bResult = SvxHFPage::FillItemSet( rOutSet );
 
-    if ( nId == SID_ATTR_PAGE_HEADERSET )
+    if ( m_nId == SID_ATTR_PAGE_HEADERSET )
     {
         rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERLEFT ) );
         rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERRIGHT ) );
@@ -158,20 +158,20 @@ IMPL_LINK_NOARG(ScHFPage, BtnHdl, weld::Button&, void)
         if ( m_xCntSharedBox->get_sensitive() && !m_xCntSharedBox->get_active() &&
              m_xCntSharedFirstBox->get_sensitive() && !m_xCntSharedFirstBox->get_active() )
         {
-            nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+            nResId = ( m_nId == SID_ATTR_PAGE_HEADERSET )
                      ? RID_SCDLG_HFED_HEADER
                      : RID_SCDLG_HFED_FOOTER;
         }
         else if (m_xCntSharedBox->get_sensitive() && !m_xCntSharedBox->get_active())
         {
-            nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+            nResId = ( m_nId == SID_ATTR_PAGE_HEADERSET )
                      ? RID_SCDLG_HFEDIT_SHAREDFIRSTHEADER
                      : RID_SCDLG_HFEDIT_SHAREDFIRSTFOOTER;
         }
         else
         {
             OSL_ENSURE( m_xCntSharedFirstBox->get_sensitive() && !m_xCntSharedFirstBox->get_active(), "This should be logically impossible." );
-            nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+            nResId = ( m_nId == SID_ATTR_PAGE_HEADERSET )
                      ? RID_SCDLG_HFEDIT_SHAREDLEFTHEADER
                      : RID_SCDLG_HFEDIT_SHAREDLEFTFOOTER;
         }
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(ScHFPage, BtnHdl, weld::Button&, void)
         SfxSingleTabDialogController aDlg(GetFrameWeld(), &aDataSet);
         bool bRightPage = m_xCntSharedBox->get_active() || (SvxPageUsage::Left != nPageUsage);
 
-        if ( nId == SID_ATTR_PAGE_HEADERSET )
+        if ( m_nId == SID_ATTR_PAGE_HEADERSET )
         {
             aText = ScResId( STR_PAGEHEADER );
             if ( bRightPage )

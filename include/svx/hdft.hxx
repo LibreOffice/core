@@ -58,8 +58,8 @@ protected:
 
     SvxHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId);
 
-    sal_uInt16       nId;
-    std::unique_ptr<SfxItemSet> pBBSet;
+    sal_uInt16       m_nId;
+    std::unique_ptr<SfxItemSet> m_pBBSet;
     bool            mbDisableQueryBox : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
 
