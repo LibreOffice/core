@@ -18,6 +18,14 @@ int weld::TreeView::get_selected_index() const
 
     return -1;
 }
+
+OUString weld::TreeView::get_text(int row, int col) const
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        return get_text(*pIter, col);
+
+    return OUString();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

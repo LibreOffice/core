@@ -4250,12 +4250,6 @@ OUString SalInstanceTreeView::get_text(SvTreeListEntry* pEntry, int col) const
     return static_cast<SvLBoxString&>(rItem).GetText();
 }
 
-OUString SalInstanceTreeView::get_text(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_text(pEntry, col);
-}
-
 void SalInstanceTreeView::set_text(SvTreeListEntry* pEntry, const OUString& rText, int col)
 {
     if (col == -1)

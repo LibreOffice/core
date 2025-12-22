@@ -14083,15 +14083,6 @@ private:
         return sRet;
     }
 
-    OUString get(int pos, int col) const
-    {
-        OUString sRet;
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            sRet = get(iter, col);
-        return sRet;
-    }
-
     gint get_int(const GtkTreeIter& iter, int col) const
     {
         gint nRet(-1);
@@ -15358,15 +15349,6 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
-    }
-
-    virtual OUString get_text(int pos, int col) const override
-    {
-        if (col == -1)
-            col = m_nTextCol;
-        else
-            col = to_internal_model(col);
-        return get(pos, col);
     }
 
     virtual void set_text(int pos, const OUString& rText, int col) override

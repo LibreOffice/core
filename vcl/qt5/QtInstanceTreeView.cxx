@@ -109,11 +109,6 @@ void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
 
-OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
-{
-    return get_text(treeIter(nRow), nCol);
-}
-
 void QtInstanceTreeView::set_text(int nRow, const OUString& rText, int nCol)
 {
     set_text(treeIter(nRow), rText, nCol);

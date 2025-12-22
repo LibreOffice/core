@@ -1674,8 +1674,6 @@ public:
 
     OUString get_text(SvTreeListEntry* pEntry, int col) const;
 
-    virtual OUString get_text(int pos, int col = -1) const override;
-
     void set_text(SvTreeListEntry* pEntry, const OUString& rText, int col);
 
     virtual void set_text(int pos, const OUString& rText, int col = -1) override;

@@ -52,7 +52,6 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
-    virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
     virtual void set_sensitive(int nRow, bool bSensitive, int nCol = -1) override;
     virtual bool get_sensitive(int nRow, int nCol) const override;

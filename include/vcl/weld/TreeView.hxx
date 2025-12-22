@@ -221,11 +221,12 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) = 0;
 
-    //by index
     int get_selected_index() const;
 
     // col index -1 gets the first text column
-    virtual OUString get_text(int row, int col = -1) const = 0;
+    OUString get_text(int row, int col = -1) const;
+    virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
+
     // col index -1 sets the first text column
     virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
     // col index -1 sets all columns
@@ -290,7 +291,6 @@ public:
     void select_id(const OUString& rId) { select(find_id(rId)); }
     void remove_id(const OUString& rText) { remove(find_id(rText)); }
 
-    //via iter
     virtual void copy_iterator(const TreeIter& rSource, TreeIter& rDest) const = 0;
 
     // set iter to point to previous node at the current level
@@ -339,8 +339,6 @@ public:
     virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
     // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
-    // col index -1 gets the first text column
-    virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
 
     // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
