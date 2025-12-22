@@ -80,17 +80,6 @@ CellAttributeHelper::~CellAttributeHelper()
     delete mpDefaultCellAttribute;
 }
 
-static int CompareStringPtr(const OUString* lhs, const OUString* rhs)
-{
-    if (lhs == rhs)
-        return 0;
-    if (lhs && rhs)
-        return (*lhs).compareTo(*rhs);
-    if (!lhs && rhs)
-        return -1;
-    return 1;
-}
-
 const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& rCandidate, bool bPassingOwnership) const
 {
     if (&rCandidate == &getDefaultCellAttribute())
@@ -114,28 +103,29 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
         return mpLastHit;
     }
     const OUString* pCandidateStyleName = rCandidate.GetStyleName();
-    auto it = maRegisteredCellAttributes.lower_bound(pCandidateStyleName);
-    const size_t nCandidateHashCode = rCandidate.GetHashCode();
-    for (; it != maRegisteredCellAttributes.end(); ++it)
+    auto it = maRegisteredCellAttributes.find(pCandidateStyleName ? std::optional<OUString>(*pCandidateStyleName) : std::nullopt);
+    if (it != maRegisteredCellAttributes.end())
     {
-        const ScPatternAttr* pCheck = *it;
-        if (CompareStringPtr(pCheck->GetStyleName(), pCandidateStyleName) != 0)
-            break;
-        if (nCandidateHashCode == pCheck->GetHashCode()
-            && ScPatternAttr::areSame(pCheck, &rCandidate))
+        const size_t nCandidateHashCode = rCandidate.GetHashCode();
+        for (const ScPatternAttr* pCheck : it->second)
         {
-            pCheck->mnRefCount++;
-            if (bPassingOwnership)
-                delete &rCandidate;
-            mpLastHit = pCheck;
-            return pCheck;
+            if (nCandidateHashCode == pCheck->GetHashCode()
+                && ScPatternAttr::areSame(pCheck, &rCandidate))
+            {
+                pCheck->mnRefCount++;
+                if (bPassingOwnership)
+                    delete &rCandidate;
+                mpLastHit = pCheck;
+                return pCheck;
+            }
         }
     }
 
     const ScPatternAttr* pCandidate(bPassingOwnership ? &rCandidate : new ScPatternAttr(rCandidate));
     pCandidate->mnRefCount++;
     const_cast<ScPatternAttr*>(pCandidate)->SetPAKey(mnCurrentMaxKey++);
-    maRegisteredCellAttributes.insert(pCandidate);
+    const OUString* pStyleName = pCandidate->GetStyleName();
+    maRegisteredCellAttributes[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(pCandidate);
     mpLastHit = pCandidate;
     return pCandidate;
 }
@@ -154,7 +144,12 @@ void CellAttributeHelper::doUnregister(const ScPatternAttr& rCandidate)
     if (mpLastHit == &rCandidate)
         mpLastHit = nullptr;
 
-    maRegisteredCellAttributes.erase(&rCandidate);
+    const OUString* pStyleName = rCandidate.GetStyleName();
+    auto it = maRegisteredCellAttributes.find(pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt);
+    assert(it != maRegisteredCellAttributes.end());
+    it->second.erase(&rCandidate);
+    if (it->second.empty())
+        maRegisteredCellAttributes.erase(it);
     delete &rCandidate;
 }
 
@@ -187,15 +182,13 @@ const ScPatternAttr& CellAttributeHelper::getDefaultCellAttribute() const
 void CellAttributeHelper::CellStyleDeleted(const ScStyleSheet& rStyle)
 {
     const OUString& rCandidateStyleName = rStyle.GetName();
-    auto it = maRegisteredCellAttributes.lower_bound(&rCandidateStyleName);
-    for (; it != maRegisteredCellAttributes.end(); ++it)
-    {
-        const ScPatternAttr* pCheck = *it;
-        if (CompareStringPtr(pCheck->GetStyleName(), &rCandidateStyleName) != 0)
-            break;
-        if (&rStyle == pCheck->GetStyleSheet())
-            const_cast<ScPatternAttr*>(pCheck)->StyleToName();
-    }
+    auto it = maRegisteredCellAttributes.find(rCandidateStyleName);
+    if (it != maRegisteredCellAttributes.end())
+        for (const ScPatternAttr* pCheck : it->second)
+        {
+            if (&rStyle == pCheck->GetStyleSheet())
+                const_cast<ScPatternAttr*>(pCheck)->StyleToName();
+        }
 }
 
 void CellAttributeHelper::RenameCellStyle(ScStyleSheet& rStyle, const OUString& rNewName)
@@ -203,26 +196,32 @@ void CellAttributeHelper::RenameCellStyle(ScStyleSheet& rStyle, const OUString& 
     std::vector<const ScPatternAttr*> aChanged;
 
     const OUString& rCandidateStyleName = rStyle.GetName();
-    auto it = maRegisteredCellAttributes.lower_bound(&rCandidateStyleName);
-    while(it != maRegisteredCellAttributes.end())
+    auto it = maRegisteredCellAttributes.find(rCandidateStyleName);
+    if (it != maRegisteredCellAttributes.end())
     {
-        const ScPatternAttr* pCheck = *it;
-        if (CompareStringPtr(pCheck->GetStyleName(), &rCandidateStyleName) != 0)
-            break;
-        if (&rStyle == pCheck->GetStyleSheet())
+        for (auto it2 = it->second.begin(); it2 != it->second.end();)
         {
-            aChanged.push_back(pCheck);
-            // The name will change, we have to re-insert it
-            it = maRegisteredCellAttributes.erase(it);
+            const ScPatternAttr* pCheck = *it2;
+            if (&rStyle == pCheck->GetStyleSheet())
+            {
+                aChanged.push_back(pCheck);
+                // The name will change, we have to re-insert it
+                it2 = it->second.erase(it2);
+            }
+            else
+                ++it2;
         }
-        else
-            ++it;
+        if (it->second.empty())
+            maRegisteredCellAttributes.erase(it);
     }
 
     rStyle.SetName(rNewName);
 
     for (const ScPatternAttr* p : aChanged)
-        maRegisteredCellAttributes.insert(p);
+    {
+        const OUString* pStyleName = p->GetStyleName();
+        maRegisteredCellAttributes[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(p);
+    }
 }
 
 void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rName)
@@ -232,12 +231,13 @@ void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rNa
     // Calling StyleSheetChanged isn't enough because the pool may still contain items
     // for undo or clipboard content.
     std::vector<const ScPatternAttr*> aChanged;
-    auto it = maRegisteredCellAttributes.lower_bound(&rName);
-    while(it != maRegisteredCellAttributes.end())
+    auto it = maRegisteredCellAttributes.find(rName);
+    if (it == maRegisteredCellAttributes.end())
+        return;
+
+    for (auto it2 = it->second.begin(); it2 != it->second.end();)
     {
-        const ScPatternAttr* pCheck = *it;
-        if (CompareStringPtr(pCheck->GetStyleName(), &rName) != 0)
-            break;
+        const ScPatternAttr* pCheck = *it2;
         // tdf#163831 Invalidate cache if the style is modified/created
         const_cast<ScPatternAttr*>(pCheck)->InvalidateCaches();
         if (nullptr == pCheck->GetStyleSheet())
@@ -245,22 +245,29 @@ void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rNa
             {
                 aChanged.push_back(pCheck);
                 // if the name changed, we have to re-insert it
-                it = maRegisteredCellAttributes.erase(it);
+                it2 = it->second.erase(it2);
             }
             else
-                ++it;
+                ++it2;
         else
-            ++it;
+            ++it2;
     }
+    if (it->second.empty())
+        maRegisteredCellAttributes.erase(it);
+
     for (const ScPatternAttr* p : aChanged)
-        maRegisteredCellAttributes.insert(p);
+    {
+        const OUString* pStyleName = p->GetStyleName();
+        maRegisteredCellAttributes[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(p);
+    }
 }
 
 void CellAttributeHelper::UpdateAllStyleSheets(ScDocument& rDoc)
 {
     bool bNameChanged = false;
-    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
-        bNameChanged |= const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
+    for (const auto & rPair : maRegisteredCellAttributes)
+        for (const ScPatternAttr* pCheck : rPair.second)
+            bNameChanged |= const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
     if (bNameChanged)
         ReIndexRegistered();
 
@@ -271,8 +278,9 @@ void CellAttributeHelper::UpdateAllStyleSheets(ScDocument& rDoc)
 
 void CellAttributeHelper::AllStylesToNames()
 {
-    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
-        const_cast<ScPatternAttr*>(pCheck)->StyleToName();
+    for (const auto & rPair : maRegisteredCellAttributes)
+        for (const ScPatternAttr* pCheck : rPair.second)
+            const_cast<ScPatternAttr*>(pCheck)->StyleToName();
 
     // force existence, then access
     getDefaultCellAttribute();
@@ -282,38 +290,22 @@ void CellAttributeHelper::AllStylesToNames()
 /// If the style name changed, we need to reindex.
 void CellAttributeHelper::ReIndexRegistered()
 {
-    RegisteredAttrSet aNewSet;
-    for (auto const & p : maRegisteredCellAttributes)
-        aNewSet.insert(p);
-    maRegisteredCellAttributes = std::move(aNewSet);
+    RegisteredAttrMap aNewMap;
+    for (const auto & rPair : maRegisteredCellAttributes)
+        for (const ScPatternAttr* p : rPair.second)
+        {
+            const OUString* pStyleName = p->GetStyleName();
+            aNewMap[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(p);
+        }
+
+    maRegisteredCellAttributes = std::move(aNewMap);
 }
 
-bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const ScPatternAttr* lhs, const ScPatternAttr* rhs) const
+size_t CellAttributeHelper::RegisteredAttrMapHash::operator()(const std::optional<OUString>& p) const
 {
-    int cmp = CompareStringPtr(lhs->GetStyleName(), rhs->GetStyleName());
-    if (cmp < 0)
-        return true;
-    if (cmp > 0)
-        return false;
-    return lhs < rhs;
-}
-bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const ScPatternAttr* lhs, const OUString* rhs) const
-{
-    int cmp = CompareStringPtr(lhs->GetStyleName(), rhs);
-    if (cmp < 0)
-        return true;
-    if (cmp > 0)
-        return false;
-    return false;
-}
-bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const OUString* lhs, const ScPatternAttr* rhs) const
-{
-    int cmp = CompareStringPtr(lhs, rhs->GetStyleName());
-    if (cmp < 0)
-        return true;
-    if (cmp > 0)
-        return false;
-    return true;
+    if (!p)
+        return 0;
+    return p->hashCode();
 }
 
 
