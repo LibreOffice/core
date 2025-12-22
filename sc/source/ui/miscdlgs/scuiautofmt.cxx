@@ -358,7 +358,9 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl, weld::TreeView&, void)
 {
-    m_nIndex = m_xLbFormat->get_selected_index();
+    int nIndex = m_xLbFormat->get_selected_index();
+    assert(nIndex != -1 && "nothing selected");
+    m_nIndex = nIndex;
     UpdateChecks();
 
     if ( m_nIndex == 0 )
