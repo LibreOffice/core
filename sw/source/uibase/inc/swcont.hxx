@@ -44,7 +44,9 @@ enum class ContentTypeId
     FOOTNOTE       = 13,
     ENDNOTE        = 14,
     LAST           = ENDNOTE,
-    UNKNOWN        = -1
+    UNKNOWN        = -1,
+    INDEXTOXBASE   = -2,
+    INDEXTOXMARK   = -3
 };
 
 // strings for context menus

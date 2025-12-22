@@ -36,6 +36,7 @@ class SwContentType;
 class SwFormatField;
 class SwTextINetFormat;
 class SwTOXBase;
+class SwTOXMark;
 class SwTextFootnote;
 
 //  helper classes
@@ -173,13 +174,33 @@ public:
 class SwTOXBaseContent final : public SwContent
 {
     const SwTOXBase* m_pBase;
+    SwTOXMarks m_aMarks;
 public:
-    SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos, const SwTOXBase& rBase)
-        : SwContent( pCnt, rName, nYPos ), m_pBase(&rBase)
-        {}
-    virtual ~SwTOXBaseContent() override;
+    SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos,
+                     const SwTOXBase& rBase)
+        : SwContent(pCnt, rName, nYPos)
+        , m_pBase(&rBase)
+    {
+        const SwTOXType* pTOXType = m_pBase->GetTOXType();
+        if (pTOXType && (m_pBase->GetCreateType() & SwTOXElement::Mark))
+            pTOXType->CollectTextMarks(m_aMarks);
+    }
 
     const SwTOXBase* GetTOXBase() const {return m_pBase;}
+    SwTOXMarks& GetTOXMarks() { return m_aMarks; }
+};
+
+class SwTOXMarkContent final : public SwContent
+{
+    const SwTOXMark* m_pMark;
+public:
+    SwTOXMarkContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos,
+                     const SwTOXMark& rMark)
+        : SwContent(pCnt, rName, nYPos)
+        , m_pMark(&rMark)
+    {
+    }
+    const SwTOXMark* GetTOXMark() const { return m_pMark; }
 };
 
 /**

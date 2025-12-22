@@ -1041,7 +1041,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToolbar" id="IndexesContentUnoToolbar">
+                          <object class="GtkToolbar" id="IndexesTOXBaseContentUnoToolbar">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="halign">start</property>
@@ -1049,7 +1049,21 @@
                             <property name="toolbar-style">icons</property>
                             <property name="show-arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id=".uno:InsertMultiIndex">
+                              <object class="GtkToolButton" id=".uno:UpdateCurIndex">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:EditCurIndex">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
                                 <property name="visible">True</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -1074,7 +1088,34 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">18</property>
+                            <property name="position">19</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="IndexesTOXMarkContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:IndexEntryDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">20</property>
                           </packing>
                         </child>
                         <child>
@@ -1100,7 +1141,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">19</property>
+                            <property name="position">21</property>
                           </packing>
                         </child>
                         <child>
@@ -1115,7 +1156,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">20</property>
+                            <property name="position">22</property>
                           </packing>
                         </child>
                         <child>
@@ -1130,7 +1171,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">21</property>
+                            <property name="position">23</property>
                           </packing>
                         </child>
                         <child>
@@ -1169,7 +1210,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">22</property>
+                            <property name="position">24</property>
                           </packing>
                         </child>
                         <child>
@@ -1195,7 +1236,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">23</property>
+                            <property name="position">25</property>
                           </packing>
                         </child>
                         <child>
@@ -1221,7 +1262,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">24</property>
+                            <property name="position">26</property>
                           </packing>
                         </child>
                         <child>
@@ -1247,7 +1288,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">25</property>
+                            <property name="position">27</property>
                           </packing>
                         </child>
                         <child>
@@ -1262,7 +1303,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">26</property>
+                            <property name="position">28</property>
                           </packing>
                         </child>
                         <child>
@@ -1288,7 +1329,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">27</property>
+                            <property name="position">29</property>
                           </packing>
                         </child>
                         <child>
@@ -1303,7 +1344,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">28</property>
+                            <property name="position">30</property>
                           </packing>
                         </child>
                         <child>
@@ -1331,7 +1372,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">29</property>
+                            <property name="position">31</property>
                           </packing>
                         </child>
                       </object>

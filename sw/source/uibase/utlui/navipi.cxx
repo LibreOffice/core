@@ -608,10 +608,27 @@ void SwNavigationPI::InitContentFunctionsToolbar()
         m_aContentTypeToolbarUnoDispatcherMap[eContentTypeId]
             = std::make_unique<ToolbarUnoDispatcher>(*m_aContentTypeUnoToolbarMap[eContentTypeId],
                                                      *m_xBuilder, m_xFrame);
-        m_aContentUnoToolbarMap[eContentTypeId] = m_xBuilder->weld_toolbar(
-            sContentTypes[static_cast<int>(eContentTypeId)] + "ContentUnoToolbar");
-        m_aContentToolbarUnoDispatcherMap[eContentTypeId] = std::make_unique<ToolbarUnoDispatcher>(
-            *m_aContentUnoToolbarMap[eContentTypeId], *m_xBuilder, m_xFrame);
+        if (eContentTypeId == ContentTypeId::INDEX)
+        {
+            m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXBASE]
+                = m_xBuilder->weld_toolbar("IndexesTOXBaseContentUnoToolbar");
+            m_aContentToolbarUnoDispatcherMap[ContentTypeId::INDEXTOXBASE]
+                = std::make_unique<ToolbarUnoDispatcher>(
+                    *m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXBASE], *m_xBuilder, m_xFrame);
+            m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXMARK]
+                = m_xBuilder->weld_toolbar("IndexesTOXMarkContentUnoToolbar");
+            m_aContentToolbarUnoDispatcherMap[ContentTypeId::INDEXTOXMARK]
+                = std::make_unique<ToolbarUnoDispatcher>(
+                    *m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXMARK], *m_xBuilder, m_xFrame);
+        }
+        else
+        {
+            m_aContentUnoToolbarMap[eContentTypeId] = m_xBuilder->weld_toolbar(
+                sContentTypes[static_cast<int>(eContentTypeId)] + "ContentUnoToolbar");
+            m_aContentToolbarUnoDispatcherMap[eContentTypeId]
+                = std::make_unique<ToolbarUnoDispatcher>(*m_aContentUnoToolbarMap[eContentTypeId],
+                                                         *m_xBuilder, m_xFrame);
+        }
     }
 
     Link<const OUString&, void> aLink
@@ -641,7 +658,15 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
         if (eContentTypeId == ContentTypeId::OUTLINE)
             continue;
         m_aContentTypeUnoToolbarMap[eContentTypeId]->hide();
-        m_aContentUnoToolbarMap[eContentTypeId]->hide();
+        if (eContentTypeId == ContentTypeId::INDEX)
+        {
+            m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXBASE]->hide();
+            m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXMARK]->hide();
+        }
+        else
+        {
+            m_aContentUnoToolbarMap[eContentTypeId]->hide();
+        }
     }
     m_xDeleteFunctionToolbar->hide();
 
@@ -690,23 +715,36 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
         }
         else if (m_xContentTree->IsSelectedEntryCurrentDocCursorPosition(*xEntry))
         {
-            weld::Toolbar& rContentTypeToolbar = *m_aContentUnoToolbarMap[eContentTypeId];
-            if (rContentTypeToolbar.get_n_items())
+            weld::Toolbar* pContentUnoToolbar = nullptr;
+            if (eContentTypeId == ContentTypeId::INDEX)
             {
-                if (eContentTypeId == ContentTypeId::TABLE)
+                if (dynamic_cast<SwTOXBaseContent*>(static_cast<SwTypeNumber*>(
+                        weld::fromId<SwTOXBaseContent*>(rTreeView.get_id(*xEntry)))))
                 {
-                    // prefer .uno:DeleteTable over delete functions toolbar
-                    bUseDeleteFunctionsToolbar
-                        = !lcl_ToolbarHasItemWithIdent(rContentTypeToolbar, u".uno:DeleteTable");
-                }
-                else if (eContentTypeId == ContentTypeId::INDEX)
-                {
+                    pContentUnoToolbar =  m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXBASE].get();
                     // prefer .uno:RemoveTableOf over delete functions toolbar
                     bUseDeleteFunctionsToolbar
-                        = !lcl_ToolbarHasItemWithIdent(rContentTypeToolbar, u".uno:RemoveTableOf");
+                        = !lcl_ToolbarHasItemWithIdent(*pContentUnoToolbar, u".uno:RemoveTableOf");
                 }
-                rContentTypeToolbar.show();
+                else
+                {
+                    pContentUnoToolbar = m_aContentUnoToolbarMap[ContentTypeId::INDEXTOXMARK].get();
+                }
             }
+            else
+            {
+                pContentUnoToolbar = m_aContentUnoToolbarMap[eContentTypeId].get();
+                if (pContentUnoToolbar->get_n_items())
+                {
+                    if (eContentTypeId == ContentTypeId::TABLE)
+                    {
+                        // prefer .uno:DeleteTable over delete functions toolbar
+                        bUseDeleteFunctionsToolbar = !lcl_ToolbarHasItemWithIdent(
+                            *pContentUnoToolbar, u".uno:DeleteTable");
+                    }
+                }
+            }
+            pContentUnoToolbar->show();
         }
     }
 
