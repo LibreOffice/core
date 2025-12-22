@@ -249,8 +249,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
         else
         {
             nCurY += nDiffY;
-            tools::Long nFreq = nCount / (nDiffX+nDiffY);
-            while ( nFreq-- )
+            for (tools::Long nFreq = nCount / (nDiffX+nDiffY); nFreq > 0; --nFreq)
             {
                 for( tools::Long i = nDiffY; i; --i )
                 {
@@ -269,8 +268,8 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
                 }
                 nOffY = -nOffY;
             }
-            nFreq = nCount % (nDiffX+nDiffY);
-            if ( nFreq )
+            tools::Long nFreq = nCount % (nDiffX+nDiffY);
+            if (nFreq > 0)
             {
                 for( tools::Long i = nDiffY; i && nFreq; --i, --nFreq )
                 {
