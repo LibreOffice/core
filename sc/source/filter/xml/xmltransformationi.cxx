@@ -238,6 +238,7 @@ ScXMLColumnSortContext::ScXMLColumnSortContext(
 ScXMLColumnSortContext::~ScXMLColumnSortContext()
 {
     ScDocument* pDoc = GetScImport().GetDocument();
+    assert(pDoc);
     auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
     if (!rDataSources.empty())
     {
