@@ -2129,11 +2129,8 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     {
         bool verticalRun = *pos;
         std::vector<bool>::const_iterator rangeEnd = std::find(pos + 1, end, !verticalRun);
-        size_t index = pos - verticals.cbegin();
-        size_t count = rangeEnd - pos;
-        sk_sp<SkTextBlob> textBlob = SkTextBlob::MakeFromRSXform(
-            glyphIds.data() + index, count * sizeof(SkGlyphID), glyphForms,
-            verticalRun ? verticalFont : font, SkTextEncoding::kGlyphID);
+        sk_sp<SkTextBlob> textBlob = SkTextBlob::MakeFromRSXformGlyphs(
+            glyphIds, glyphForms, verticalRun ? verticalFont : font);
         addUpdateRegion(textBlob->bounds());
         SkPaint paint = makeTextPaint(textColor);
         getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
