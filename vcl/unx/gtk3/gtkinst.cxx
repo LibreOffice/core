@@ -14090,16 +14090,6 @@ private:
         return nRet;
     }
 
-    gint get_int(int pos, int col) const
-    {
-        gint nRet(-1);
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            nRet = get_int(iter, col);
-        gtk_tree_model_get(m_pTreeModel, &iter, col, &nRet, -1);
-        return nRet;
-    }
-
     bool get_bool(const GtkTreeIter& iter, int col) const
     {
         gboolean bRet(false);
@@ -14145,13 +14135,6 @@ private:
     void set(const GtkTreeIter& iter, int col, gint bInt)
     {
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, bInt, -1);
-    }
-
-    void set(int pos, int col, gint bInt)
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            set(iter, col, bInt);
     }
 
     void set(const GtkTreeIter& iter, int col, double fValue)
@@ -15391,19 +15374,6 @@ public:
         set(rGtkIter.iter, m_aWeightMap[col], weight);
     }
 
-    virtual void set_text_emphasis(int pos, bool bOn, int col) override
-    {
-        auto weight = bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
-        if (col == -1)
-        {
-            for (const auto& elem : m_aWeightMap)
-                set(pos, elem.second, weight);
-            return;
-        }
-        col = to_internal_model(col);
-        set(pos, m_aWeightMap[col], weight);
-    }
-
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
@@ -15411,14 +15381,6 @@ public:
         const auto iter = m_aWeightMap.find(col);
         assert(iter != m_aWeightMap.end());
         return get_int(rGtkIter.iter, iter->second) == PANGO_WEIGHT_BOLD;
-    }
-
-    virtual bool get_text_emphasis(int pos, int col) const override
-    {
-        col = to_internal_model(col);
-        const auto iter = m_aWeightMap.find(col);
-        assert(iter != m_aWeightMap.end());
-        return get_int(pos, iter->second) == PANGO_WEIGHT_BOLD;
     }
 
     virtual void set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int col) override

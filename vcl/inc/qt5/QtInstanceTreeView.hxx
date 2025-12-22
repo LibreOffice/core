@@ -52,8 +52,6 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
-    virtual void set_text_emphasis(int nRow, bool bOn, int nCol) override;
-    virtual bool get_text_emphasis(int nRow, int nCol) const override;
     virtual void set_text_align(int nRow, TxtAlign eAlign, int nCol) override;
     virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;

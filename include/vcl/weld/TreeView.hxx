@@ -259,8 +259,11 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
 
-    virtual void set_text_emphasis(int row, bool bOn, int col) = 0;
-    virtual bool get_text_emphasis(int row, int col) const = 0;
+    void set_text_emphasis(int row, bool bOn, int col);
+    virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
+    bool get_text_emphasis(int row, int col) const;
+    virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
+
     virtual void set_text_align(int row, TxtAlign eAlign, int col) = 0;
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
@@ -342,8 +345,6 @@ public:
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-    virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
-    virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_align(const TreeIter& rIter, TxtAlign eAlign, int col) = 0;
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
 

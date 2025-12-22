@@ -4406,22 +4406,10 @@ void SalInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bO
     set_text_emphasis(rVclIter.iter, bOn, col);
 }
 
-void SalInstanceTreeView::set_text_emphasis(int pos, bool bOn, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text_emphasis(pEntry, bOn, col);
-}
-
 bool SalInstanceTreeView::get_text_emphasis(const weld::TreeIter& rIter, int col) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return get_text_emphasis(rVclIter.iter, col);
-}
-
-bool SalInstanceTreeView::get_text_emphasis(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_text_emphasis(pEntry, col);
 }
 
 void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, TxtAlign eAlign, int col)

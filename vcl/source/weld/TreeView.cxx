@@ -79,6 +79,20 @@ void weld::TreeView::set_image(int row, const css::uno::Reference<css::graphic::
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_image(*pIter, rImage, col);
 }
+
+void weld::TreeView::set_text_emphasis(int row, bool bOn, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_text_emphasis(*pIter, bOn, col);
+}
+
+bool weld::TreeView::get_text_emphasis(int row, int col) const
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        return get_text_emphasis(*pIter, col);
+
+    return false;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

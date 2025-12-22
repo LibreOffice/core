@@ -1700,11 +1700,7 @@ public:
 
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override;
 
-    virtual void set_text_emphasis(int pos, bool bOn, int col) override;
-
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override;
-
-    virtual bool get_text_emphasis(int pos, int col) const override;
 
     void set_text_align(SvTreeListEntry* pEntry, TxtAlign eAlign, int col);
 
