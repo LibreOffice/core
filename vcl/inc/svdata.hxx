@@ -55,6 +55,7 @@
 #include <optional>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include "schedulerimpl.hxx"
 #include <basegfx/DrawCommands.hxx>
 
@@ -424,7 +425,7 @@ struct ImplSVData
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     std::unique_ptr<vcl::SettingsConfigItem> mpSettingsConfigItem;
     std::unordered_map< int, OUString > maPaperNames;
-    o3tl::sorted_vector<CacheOwner*> maCacheOwners;
+    std::unordered_set<CacheOwner*> maCacheOwners;
 
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
 
