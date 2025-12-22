@@ -857,6 +857,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxBoolItem(SID_PAGEMODE, false));
         rSet.Put(SfxBoolItem(SID_MASTERPAGE, true));
 
+        // tdf#112628 - disable header and footer in master view
+        rSet.DisableItem(SID_HEADER_AND_FOOTER);
+
         // tdf#139269 - disable menu entries to paste text into read only areas of master views
         const OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
         if (pOlView && pOlView->IsReadOnly())
