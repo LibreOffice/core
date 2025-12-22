@@ -4364,12 +4364,6 @@ void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
     rData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
 }
 
-void SalInstanceTreeView::set_toggle(int pos, TriState eState, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_toggle(pEntry, eState, col);
-}
-
 void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

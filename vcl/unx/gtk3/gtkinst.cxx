@@ -15372,13 +15372,6 @@ public:
         set_toggle(rGtkIter.iter, eState, col);
     }
 
-    virtual void set_toggle(int pos, TriState eState, int col) override
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            set_toggle(iter, eState, col);
-    }
-
     virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override
     {
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))

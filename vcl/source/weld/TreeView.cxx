@@ -46,6 +46,12 @@ bool weld::TreeView::get_sensitive(int row, int col) const
 
     return false;
 }
+
+void weld::TreeView::set_toggle(int row, TriState eState, int col)
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        set_toggle(*pIter, eState, col);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
