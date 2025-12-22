@@ -2260,6 +2260,15 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
         bool bCombineRedlines = !(eOld & RedlineFlags::DontCombineRedlines)
                                 && rCtx.pRedl->IsOwnRedline(*rCtx.pNewRedl)
                                 && !rCtx.pRedl->GetRedlineData(0).IsAnonymized();
+
+        if (bCombineRedlines && rCtx.pRedl->GetType() == RedlineType::Delete
+            && rCtx.pNewRedl->GetType() == RedlineType::Format)
+        {
+            // Don't fold format on top of delete into the delete, that would give an incorrect
+            // result when rejecting this redline, the format would remain in the doc model.
+            bCombineRedlines = false;
+        }
+
         if (bCombineRedlines || rCtx.pRedl->IsMoved())
         {
             switch( rCtx.eCmpPos )
