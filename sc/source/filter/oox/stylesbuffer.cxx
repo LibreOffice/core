@@ -3247,16 +3247,20 @@ OUString StylesBuffer::createExtDxfStyle( sal_Int32 nDxfId ) const
     {
         rStyleName = "ExtConditionalStyle_" + OUString::number(nDxfId + 1);
 
-        // Create a cell style. This may overwrite an existing style if
-        // one with the same name exists.
-        ScStyleSheet& rStyleSheet = ScfTools::MakeCellStyleSheet(
-                *getScDocument().GetStyleSheetPool(), rStyleName, true);
+        // use a map to avoid creating the same style more than once.
+        if (maExtConditionalStyles.insert(nDxfId).second)
+        {
+            // Create a cell style. This may overwrite an existing style if
+            // one with the same name exists.
+            ScStyleSheet& rStyleSheet = ScfTools::MakeCellStyleSheet(
+                    *getScDocument().GetStyleSheetPool(), rStyleName, true);
 
-        rStyleSheet.ResetParent();
-        SfxItemSet& rStyleItemSet =
-            rStyleSheet.GetItemSet();
+            rStyleSheet.ResetParent();
+            SfxItemSet& rStyleItemSet =
+                rStyleSheet.GetItemSet();
 
-        pDxf->fillToItemSet(rStyleItemSet);
+            pDxf->fillToItemSet(rStyleItemSet);
+        }
     }
 
     // on error: fallback to default style
