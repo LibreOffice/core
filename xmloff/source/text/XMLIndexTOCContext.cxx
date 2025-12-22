@@ -219,6 +219,13 @@ void XMLIndexTOCContext::startFastElement(
         }
     }
 
+    if (!xTOCPropertySet)
+    {
+        SAL_WARN("xmloff", "TOC Property Set unavailable");
+        bValid = false;
+        return;
+    }
+
     // finally, check for redlines that should start at
     // the section start node
     if( bValid )
