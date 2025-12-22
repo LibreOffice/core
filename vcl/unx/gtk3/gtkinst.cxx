@@ -15171,13 +15171,6 @@ public:
         enable_notify_events();
     }
 
-    virtual bool is_selected(int pos) const override
-    {
-        GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
-        return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), &iter);
-    }
-
     virtual std::vector<int> get_selected_rows() const override
     {
         std::vector<int> aRows;

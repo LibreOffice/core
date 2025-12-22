@@ -54,7 +54,6 @@ public:
 
     virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;
-    virtual bool is_selected(int nPos) const override;
     using QtInstanceItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) override;
 

@@ -118,6 +118,14 @@ void weld::TreeView::scroll_to_row(const TreeIter& rIter)
     do_scroll_to_row(rIter);
     enable_notify_events();
 }
+
+bool weld::TreeView::is_selected(int pos) const
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
+        return is_selected(*pIter);
+
+    return false;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

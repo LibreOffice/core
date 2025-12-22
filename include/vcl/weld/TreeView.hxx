@@ -277,7 +277,8 @@ public:
     void scroll_to_row(int row);
     void scroll_to_row(const TreeIter& rIter);
 
-    virtual bool is_selected(int pos) const = 0;
+    bool is_selected(int pos) const;
+    virtual bool is_selected(const TreeIter& rIter) const = 0;
 
     using weld::ItemView::set_cursor;
     void set_cursor(int pos)
@@ -344,8 +345,6 @@ public:
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-
-    virtual bool is_selected(const TreeIter& rIter) const = 0;
 
     virtual void move_subtree(TreeIter& rNode, const TreeIter* pNewParent, int nIndexInNewParent)
         = 0;

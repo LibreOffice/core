@@ -4201,12 +4201,6 @@ void SalInstanceTreeView::do_set_cursor(int pos)
     }
 }
 
-bool SalInstanceTreeView::is_selected(int pos) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return m_xTreeView->IsSelected(pEntry);
-}
-
 std::vector<int> SalInstanceTreeView::get_selected_rows() const
 {
     std::vector<int> aRows;

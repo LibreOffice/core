@@ -150,8 +150,6 @@ std::vector<int> QtInstanceTreeView::get_selected_rows() const
     return aSelectedRows;
 }
 
-bool QtInstanceTreeView::is_selected(int nPos) const { return is_selected(treeIter(nPos)); }
-
 void QtInstanceTreeView::do_set_cursor(int nPos) { do_set_cursor(treeIter(nPos)); }
 
 int QtInstanceTreeView::find_text(const OUString& rText) const
