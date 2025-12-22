@@ -364,11 +364,6 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
     return aDesc.makeStringAndClear();
 }
 
-SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const
-{
-    return nSearchFamily;
-}
-
 inline bool SfxStyleSheetIterator::IsTrivialSearch() const
 {
     return (( nMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible) &&
