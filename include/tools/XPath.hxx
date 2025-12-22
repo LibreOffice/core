@@ -23,6 +23,7 @@
 
 namespace tools
 {
+/** Represents an XML element and allows getting attributes, content, child elements. */
 class TOOLS_DLLPUBLIC XmlElement final
 {
     xmlNodePtr mpXmlNode;
@@ -39,6 +40,12 @@ public:
     std::unique_ptr<XmlElement> at(sal_Int32 nIndex);
 };
 
+/** XPath object is a result of XPath evaluation.
+ *
+ * It contains the path string and allows to check the attributes,
+ * content of the result element (if there is only one) or iterates
+ * the resulting elements.
+ */
 class TOOLS_DLLPUBLIC XPathObject final
 {
     xmlXPathObjectPtr mpXPathObject;
@@ -54,6 +61,7 @@ public:
     std::unique_ptr<XmlElement> at(sal_Int32 nIndex);
 };
 
+/** Object that allows to evaluate XPath strings on a XML document. */
 class TOOLS_DLLPUBLIC XPath final
 {
     xmlDocPtr mpXmlDocPtr;
