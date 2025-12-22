@@ -1,4 +1,4 @@
-basic/source/comp/codegen.cxx:478
+basic/source/comp/codegen.cxx:476
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:105
     void canvas::BufferedGraphicDeviceBase::destroyBuffers()
@@ -6,17 +6,13 @@ canvas/inc/base/graphicdevicebase.hxx:305
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
 canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
-include/basegfx/utils/unopolypolygon.hxx:93
+include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 sc/source/core/opencl/opbase.hxx:444
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
-slideshow/source/engine/animationfactory.cxx:617
+slideshow/source/engine/animationfactory.cxx:618
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
-ux-gnu/../../../include/c++/14/bits/locale_facets_nonio.h:2002
-    void std::messages::do_close(int,)const
-ux-gnu/../../../include/c++/14/streambuf:583
-    void std::basic_streambuf::imbue(const class std::locale &,)
-vcl/inc/font/LogicalFontInstance.hxx:131
+vcl/inc/font/LogicalFontInstance.hxx:128
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
 vcl/inc/salframe.hxx:146
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
@@ -26,9 +22,9 @@ vcl/inc/salframe.hxx:318
     void SalFrame::SetTaskBarProgress(int,)
 vcl/inc/salframe.hxx:319
     void SalFrame::SetTaskBarState(enum VclTaskBarStates,)
-vcl/inc/salinst.hxx:217
+vcl/inc/salinst.hxx:225
     void SalInstance::releaseMainThread()
-vcl/inc/salinst.hxx:226
+vcl/inc/salinst.hxx:234
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
 vcl/inc/salmenu.hxx:76
     void SalMenu::GetSystemMenuData(struct SystemMenuData &,)
