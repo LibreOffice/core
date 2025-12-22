@@ -4341,12 +4341,6 @@ bool SalInstanceTreeView::get_sensitive(const weld::TreeIter& rIter, int col) co
     return get_sensitive(rVclIter.iter, col);
 }
 
-TriState SalInstanceTreeView::get_toggle(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_toggle(pEntry, col);
-}
-
 TriState SalInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int col) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

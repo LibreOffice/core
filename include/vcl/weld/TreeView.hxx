@@ -243,7 +243,9 @@ public:
     virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
 
     // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
-    virtual TriState get_toggle(int row, int col = -1) const = 0;
+    TriState get_toggle(int row, int col = -1) const;
+    virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
+
     // col index -1 sets the expander image
     virtual void set_image(int row, const OUString& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
@@ -338,9 +340,6 @@ public:
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_align(const TreeIter& rIter, TxtAlign eAlign, int col) = 0;
-
-    // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
-    virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
 
     // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;

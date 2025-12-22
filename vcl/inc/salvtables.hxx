@@ -1686,8 +1686,6 @@ public:
 
     virtual bool get_sensitive(const weld::TreeIter& rIter, int col) const override;
 
-    virtual TriState get_toggle(int pos, int col = -1) const override;
-
     virtual TriState get_toggle(const weld::TreeIter& rIter, int col = -1) const override;
 
     virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override;

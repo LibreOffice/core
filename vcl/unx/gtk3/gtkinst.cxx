@@ -14107,15 +14107,6 @@ private:
         return bRet;
     }
 
-    bool get_bool(int pos, int col) const
-    {
-        bool bRet(false);
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
-            bRet = get_bool(iter, col);
-        return bRet;
-    }
-
     void set_toggle(const GtkTreeIter& iter, TriState eState, int col)
     {
         if (col == -1)
@@ -15335,20 +15326,6 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
-    }
-
-    virtual TriState get_toggle(int pos, int col) const override
-    {
-        if (col == -1)
-            col = m_nExpanderToggleCol;
-        else
-            col = to_internal_model(col);
-
-        const auto iter = m_aToggleTriStateMap.find(col);
-        assert(iter != m_aToggleTriStateMap.end());
-        if (get_bool(pos, iter->second))
-            return TRISTATE_INDET;
-        return get_bool(pos, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
     virtual TriState get_toggle(const weld::TreeIter& rIter, int col) const override

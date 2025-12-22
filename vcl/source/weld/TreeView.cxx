@@ -52,6 +52,14 @@ void weld::TreeView::set_toggle(int row, TriState eState, int col)
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_toggle(*pIter, eState, col);
 }
+
+TriState weld::TreeView::get_toggle(int row, int col) const
+{
+    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
+        return get_toggle(*pIter, col);
+
+    return TRISTATE_INDET;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

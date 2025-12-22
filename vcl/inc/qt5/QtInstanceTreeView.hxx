@@ -52,7 +52,6 @@ public:
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
-    virtual TriState get_toggle(int nRow, int nCol = -1) const override;
     virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
     virtual void set_image(int nRow, VirtualDevice& rImage, int nCol = -1) override;
     virtual void set_image(int nRow, const css::uno::Reference<css::graphic::XGraphic>& rImage,
