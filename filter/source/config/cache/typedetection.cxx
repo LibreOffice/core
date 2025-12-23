@@ -995,7 +995,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.
     //                                               Our types list was sorted by such criteria!
-    // d) detect service return a valid result    => return its decision but only when it matches the type being tested
+    // d) detect service return a valid result    => return its decision
     // e) detect service return an invalid result
     //    or any needed information could not be
     //    obtained from the cache                 => ignore it, and continue with search
@@ -1043,12 +1043,8 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
 
             OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
 
-            // d) call it 'detected' only when the reported type matches the
-            // type being checked for.  This is important because many detectors
-            // report multiple different types which may mess up our strict type
-            // check order e.g when the type being tested is of higher
-            // complexity and the detector reports a type of lower complexity.
-            if (sDeepType == sFlatType)
+            // d)
+            if (!sDeepType.isEmpty())
                 return sDeepType;
         }
         catch(const css::container::NoSuchElementException&)
