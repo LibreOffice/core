@@ -196,7 +196,10 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
             }
             else
             {
-                // TODO: show error?
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    nullptr, VclMessageType::Error, VclButtonsType::Ok,
+                    SwResId(STR_SWTRANSLATE_ERROR)));
+                xBox->run();
                 break;
             }
 
