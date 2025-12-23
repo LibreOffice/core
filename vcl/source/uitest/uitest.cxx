@@ -13,6 +13,7 @@
 #include <vcl/uitest/uiobject.hxx>
 
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/threadex.hxx>
 
 #include <svdata.hxx>
 
@@ -21,46 +22,61 @@
 
 bool UITest::executeCommand(const OUString& rCommand)
 {
-    return comphelper::dispatchCommand(
-        rCommand,
-        {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
-          css::beans::PropertyState_DIRECT_VALUE}});
+    return vcl::solarthread::syncExecute(
+        [&rCommand]()
+        {
+            return comphelper::dispatchCommand(rCommand,
+                                               { { u"SynchronMode"_ustr, -1, css::uno::Any(true),
+                                                   css::beans::PropertyState_DIRECT_VALUE } });
+        });
 }
 
 bool UITest::executeCommandWithParameters(const OUString& rCommand,
     const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
-    css::uno::Sequence< css::beans::PropertyValue > lNewArgs =
-        {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
-          css::beans::PropertyState_DIRECT_VALUE}};
+    return vcl::solarthread::syncExecute(
+        [&rCommand, &rArgs]()
+        {
+            css::uno::Sequence<css::beans::PropertyValue> lNewArgs
+                = { { u"SynchronMode"_ustr, -1, css::uno::Any(true),
+                      css::beans::PropertyState_DIRECT_VALUE } };
 
-    if ( rArgs.hasElements() )
-    {
-        sal_uInt32 nIndex( lNewArgs.getLength() );
-        lNewArgs.realloc( lNewArgs.getLength()+rArgs.getLength() );
+            if (rArgs.hasElements())
+            {
+                sal_uInt32 nIndex(lNewArgs.getLength());
+                lNewArgs.realloc(lNewArgs.getLength() + rArgs.getLength());
 
-        std::copy(rArgs.begin(), rArgs.end(), std::next(lNewArgs.getArray(), nIndex));
-    }
-    return comphelper::dispatchCommand(rCommand,lNewArgs);
+                std::copy(rArgs.begin(), rArgs.end(), std::next(lNewArgs.getArray(), nIndex));
+            }
+            return comphelper::dispatchCommand(rCommand, lNewArgs);
+        });
 }
 
 bool UITest::executeCommandForProvider(
     const OUString& rCommand,
     const css::uno::Reference< css::frame::XDispatchProvider >& xProvider)
 {
-    return comphelper::dispatchCommand(
-        rCommand,
-        xProvider,
-        {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
-          css::beans::PropertyState_DIRECT_VALUE}});
+    return vcl::solarthread::syncExecute(
+        [&rCommand, &xProvider]()
+        {
+            return comphelper::dispatchCommand(
+            rCommand,
+            xProvider,
+            {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
+              css::beans::PropertyState_DIRECT_VALUE}});
+        });
 }
 
 bool UITest::executeDialog(const OUString& rCommand)
 {
-    return comphelper::dispatchCommand(
-        rCommand,
-        {{u"SynchronMode"_ustr, -1, css::uno::Any(false),
-          css::beans::PropertyState_DIRECT_VALUE}});
+    return vcl::solarthread::syncExecute(
+        [&rCommand]()
+        {
+            return comphelper::dispatchCommand(
+            rCommand,
+            {{u"SynchronMode"_ustr, -1, css::uno::Any(false),
+              css::beans::PropertyState_DIRECT_VALUE}});
+        });
 }
 
 std::unique_ptr<UIObject> UITest::getFocusTopWindow()
