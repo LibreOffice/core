@@ -36,6 +36,7 @@
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
 #include <o3tl/deleter.hxx>
@@ -2025,6 +2026,33 @@ const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const
 void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
 {
     GetProperties().SetMergedItemSetAndBroadcast(rSet, bClearAllItems);
+
+    const SdrMetricItem* pItem;
+    const bool bSetSoftEdge
+        = (SfxItemState::SET == rSet.GetItemState(SDRATTR_SOFTEDGE_RADIUS, true, &pItem)
+           && pItem->GetValue() > 0);
+    if (bSetSoftEdge)
+    {
+        // Remove 3D grabbag
+        try
+        {
+            css::uno::Any aAnyGrabBag;
+            GetGrabBagItem(aAnyGrabBag);
+            uno::Sequence<beans::PropertyValue> aSeqGrabBag
+                = aAnyGrabBag.get<uno::Sequence<beans::PropertyValue>>();
+            auto it = std::find_if(aSeqGrabBag.begin(), aSeqGrabBag.end(),
+                                   [](const beans::PropertyValue& rProp) {
+                                       return rProp.Name == u"3DEffectProperties"_ustr;
+                                   });
+            if (it == aSeqGrabBag.end())
+                return;
+            comphelper::removeElementAt(aSeqGrabBag, it - aSeqGrabBag.begin());
+            SetGrabBagItem(css::uno::Any(aSeqGrabBag));
+        }
+        catch (...)
+        {
+        }
+    }
 }
 
 void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
