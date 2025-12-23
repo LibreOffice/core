@@ -27,6 +27,7 @@
 #include <translatelangselect.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <ndtxt.hxx>
 #include <shellio.hxx>
@@ -139,7 +140,9 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
         = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
     std::optional<OUString> oDeeplKey
         = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-    if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
+    auto sApiUrlTrimmed = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
+    auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
+    if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
     {
         SAL_WARN("sw.ui", "SwTranslateLangSelectDlg: API options are not set");
         m_xDialog->response(RET_CANCEL);
@@ -147,10 +150,8 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
     }
 
     const OString aAPIUrl
-        = OUStringToOString(rtl::Concat2View(*oDeeplAPIUrl + "?tag_handling=html"),
-                            RTL_TEXTENCODING_UTF8)
-              .trim();
-    const OString aAuthKey = OUStringToOString(*oDeeplKey, RTL_TEXTENCODING_UTF8).trim();
+        = OUStringToOString(sApiUrlTrimmed, RTL_TEXTENCODING_UTF8) + "?tag_handling=html";
+    const OString aAuthKey = OUStringToOString(sKeyTrimmed, RTL_TEXTENCODING_UTF8);
     const auto aTargetLang
         = getLanguageVec().at(SwTranslateLangSelectDlg::selectedLangIdx).getLanguage();
 

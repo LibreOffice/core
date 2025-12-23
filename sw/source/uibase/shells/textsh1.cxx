@@ -2305,13 +2305,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
             std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-            if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
+            auto sApiUrlTrimmed = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
+            auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
+            if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
             {
                 SAL_WARN("sw.ui", "SID_FM_TRANSLATE: API options are not set");
                 break;
             }
-            const OString aAPIUrl = OUStringToOString(rtl::Concat2View(*oDeeplAPIUrl + "?tag_handling=html"), RTL_TEXTENCODING_UTF8).trim();
-            const OString aAuthKey = OUStringToOString(*oDeeplKey, RTL_TEXTENCODING_UTF8).trim();
+            const OString aAPIUrl
+                = OUStringToOString(sApiUrlTrimmed, RTL_TEXTENCODING_UTF8) + "?tag_handling=html";
+            const OString aAuthKey = OUStringToOString(sKeyTrimmed, RTL_TEXTENCODING_UTF8);
             OString aTargetLang = OUStringToOString(static_cast<const SfxStringItem*>(pTargetLangStringItem)->GetValue(), RTL_TEXTENCODING_UTF8);
             SwTranslateHelper::TranslateAPIConfig aConfig({aAPIUrl, aAuthKey, aTargetLang});
             SwTranslateHelper::TranslateDocument(rWrtSh, aConfig);
@@ -3966,7 +3969,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     }
                     std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
                     std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-                    if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
+                    auto sApiUrlTrimmed
+                        = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
+                    auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
+                    if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
                     {
                         rSet.DisableItem(nWhich);
                     }
