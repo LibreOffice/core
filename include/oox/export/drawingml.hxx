@@ -521,10 +521,11 @@ public:
     OOX_DLLPUBLIC bool PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXRootShape);
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
-    void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
-                          const css::uno::Reference<css::io::XOutputStream>& xOutStream,
-                          std::u16string_view sGrabBagProperyName, int nDiagramId);
-
+    void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+                               const css::uno::Reference<css::io::XOutputStream>& xOutStream,
+                               std::u16string_view sGrabBagProperyName, int nDiagramId);
+    void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+                               const css::uno::Reference<css::io::XOutputStream>& xOutStream);
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
                             const sax_fastparser::FSHelperPtr& pDrawing);
 

@@ -6837,8 +6837,13 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     uno::Reference<xml::dom::XDocument> drawingDom;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing) >>= drawingDom;
 
-    uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
-    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataRels) >>= xDataRelSeq;
+    uno::Sequence<uno::Sequence<uno::Any>> xDataImageRelSeq;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels)
+        >>= xDataImageRelSeq;
+
+    uno::Sequence<uno::Sequence<uno::Any>> xDataHlinkRelSeq;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels)
+        >>= xDataHlinkRelSeq;
 
     // generate a unique id
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
@@ -6977,7 +6982,8 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
                           uno::Sequence<beans::StringPair>());
 
     // write the associated Images and rels for data file
-    writeDiagramRels(xDataRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
+    writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
+    writeDiagramHlinkRels(xDataHlinkRelSeq, xDataOutputStream);
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -7018,12 +7024,13 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write the associated Images and rels for drawing file
     uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingRels) >>= xDrawingRelSeq;
-    writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
+    writeDiagramImageRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels",
+                          nDiagramId);
 }
 
-void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
-                                 const uno::Reference<io::XOutputStream>& xOutStream,
-                                 std::u16string_view sGrabBagProperyName, int nDiagramId)
+void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+                                      const uno::Reference<io::XOutputStream>& xOutStream,
+                                      std::u16string_view sGrabBagProperyName, int nDiagramId)
 {
     // add image relationships of OOXData, OOXDiagram
     OUString sType(oox::getRelationship(Relationship::IMAGE));
@@ -7078,6 +7085,45 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
             TOOLS_WARN_EXCEPTION("oox.drawingml", "DrawingML::writeDiagramRels Failed to copy grabbaged Image");
         }
         dataImagebin->closeInput();
+    }
+}
+
+void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+                                      const uno::Reference<io::XOutputStream>& xOutStream)
+{
+    uno::Reference<xml::sax::XWriter> xWriter
+        = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+    xWriter->setOutputStream(xOutStream);
+
+    // retrieve the relationships from Sequence
+    for (sal_Int32 j = 0; j < xRelSeq.getLength(); j++)
+    {
+        // diagramDataRelTuple[0] => RID,
+        // diagramDataRelTuple[1] => Target
+        // diagramDataRelTuple[2] => Type
+        const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
+
+        OUString sRelId;
+        OUString sTarget;
+        OUString sType;
+        diagramDataRelTuple[0] >>= sRelId;
+        sRelId = sRelId.copy(3);
+        diagramDataRelTuple[1] >>= sTarget;
+        diagramDataRelTuple[2] >>= sType;
+
+        OUString sRelType;
+        bool bExtURL = true;
+        if (sType == u"slide")
+        {
+            sRelType = oox::getRelationship(Relationship::SLIDE);
+            bExtURL = false;
+        }
+        else
+            sRelType = oox::getRelationship(Relationship::HYPERLINK);
+
+        PropertySet aProps(xOutStream);
+        aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
+        mpFB->addRelation(xOutStream, sRelType, sTarget, bExtURL);
     }
 }
 

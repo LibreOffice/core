@@ -410,10 +410,17 @@ void loadDiagram( ShapePtr const & pShape,
                            pDiagram,
                            xRefDataModel);
 
-            uno::Sequence< uno::Sequence< uno::Any > > aDataRelsMap(
-                pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter, xRefDataModel->getFragmentPath(), u"image" ));
+            uno::Sequence<uno::Sequence<uno::Any>> aDataImageRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                    rFilter, xRefDataModel->getFragmentPath(), u"image"));
+            uno::Sequence<uno::Sequence<uno::Any>> aDataHlinkRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                    rFilter, xRefDataModel->getFragmentPath(), u"hlink"));
 
-            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataRels, uno::Any(aDataRelsMap));
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels,
+                                     uno::Any(aDataImageRelsMap));
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels,
+                                     uno::Any(aDataHlinkRelsMap));
 
             // Pass the info to pShape
             for (auto const& extDrawing : pData->getExtDrawings())
