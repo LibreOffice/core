@@ -1089,6 +1089,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155945)
     // - Actual  : 423
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(getParagraph(2), u"ParaBottomMargin"_ustr));
+
+    //tdf#170003: sectPr emulation: move sectPr bottom margin to the paragraph before the page break
+    // Without a fix in place, this was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(423),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaBottomMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133560)
