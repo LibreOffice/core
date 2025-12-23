@@ -817,8 +817,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             pRange->GetPositions(*pUnoCursor);
             if(pUnoCursor->HasMark())
             {
-                if(*pUnoCursor->GetPoint() < *pUnoCursor->GetMark())
-                    pUnoCursor->Exchange();
+                pUnoCursor->Normalize(false);
                 pUnoCursor->DeleteMark();
             }
         }

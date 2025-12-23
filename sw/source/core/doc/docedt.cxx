@@ -812,8 +812,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
 {
     OSL_ENSURE(this == &pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
 
-    if( *pPam->GetPoint() > *pPam->GetMark() )
-        pPam->Exchange();
+    pPam->Normalize();
 
     SwHyphArgs aHyphArg( pPam, rCursorPos, pPageCnt, pPageSt );
     SwNodeIndex aTmpIdx( pPam->GetMark()->GetNode(), 1 );
