@@ -143,7 +143,12 @@ public:
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
     DiagramDomMap & getDomMap() { return maMainDomMap; }
-    css::uno::Sequence< css::uno::Sequence< css::uno::Any > > & getDataRelsMap() { return maDataRelsMap; }
+
+    css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& getDataImageRelsSeq() { return maImageRelsSeq; }
+    css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& getDataHlinkRelsSeq() { return maHlinkRelsSeq; }
+    const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& getDataImageRelsSeq() const { return maImageRelsSeq; }
+    const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& getDataHlinkRelsSeq() const { return maHlinkRelsSeq; }
+
     void addTo( const ShapePtr & pShape, bool bCreate );
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
@@ -159,7 +164,8 @@ private:
     DiagramQStyleMap               maStyles;
     DiagramColorMap                maColors;
     DiagramDomMap                  maMainDomMap;
-    css::uno::Sequence< css::uno::Sequence< css::uno::Any > > maDataRelsMap;
+    css::uno::Sequence<css::uno::Sequence<css::uno::Any>> maImageRelsSeq;
+    css::uno::Sequence<css::uno::Sequence<css::uno::Any>> maHlinkRelsSeq;
 };
 
 typedef std::shared_ptr< Diagram > DiagramPtr;

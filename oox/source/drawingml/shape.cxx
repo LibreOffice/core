@@ -2888,36 +2888,72 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
     core::RelationsRef xRels = rFilter.importRelations( sFragment );
     if ( xRels )
     {
-        core::RelationsRef xImageRels = xRels->getRelationsFromTypeFromOfficeDoc( sType );
-        if ( xImageRels )
+        if (sType == u"image")
         {
-            xRelListTemp.realloc( xImageRels->size() );
-            auto pxRelListTemp = xRelListTemp.getArray();
-            for (auto const& imageRel : *xImageRels)
+            core::RelationsRef xImageRels = xRels->getRelationsFromTypeFromOfficeDoc(sType);
+            if (xImageRels)
             {
-                uno::Sequence< uno::Any > diagramRelTuple (3);
-                auto pdiagramRelTuple = diagramRelTuple.getArray();
-                // [0] => RID, [1] => InputStream [2] => extension
-                OUString sRelId = imageRel.second.maId;
-
-                pdiagramRelTuple[0] <<= sRelId;
-                OUString sTarget = xImageRels->getFragmentPathFromRelId( sRelId );
-
-                uno::Reference< io::XInputStream > xImageInputStrm( rFilter.openInputStream( sTarget ), uno::UNO_SET_THROW );
-                StreamDataSequence dataSeq;
-                if ( rFilter.importBinaryData( dataSeq, sTarget ) )
+                xRelListTemp.realloc(xImageRels->size());
+                auto pxRelListTemp = xRelListTemp.getArray();
+                for (auto const& imageRel : *xImageRels)
                 {
-                    pdiagramRelTuple[1] <<= dataSeq;
+                    uno::Sequence<uno::Any> diagramRelTuple(3);
+                    auto pdiagramRelTuple = diagramRelTuple.getArray();
+                    // [0] => RID, [1] => InputStream [2] => extension
+                    OUString sRelId = imageRel.second.maId;
+
+                    pdiagramRelTuple[0] <<= sRelId;
+                    OUString sTarget = xImageRels->getFragmentPathFromRelId(sRelId);
+
+                    uno::Reference<io::XInputStream> xImageInputStrm(
+                        rFilter.openInputStream(sTarget), uno::UNO_SET_THROW);
+                    StreamDataSequence dataSeq;
+                    if (rFilter.importBinaryData(dataSeq, sTarget))
+                    {
+                        pdiagramRelTuple[1] <<= dataSeq;
+                    }
+
+                    pdiagramRelTuple[2] <<= sTarget.copy(sTarget.lastIndexOf("."));
+
+                    pxRelListTemp[counter] = std::move(diagramRelTuple);
+                    ++counter;
                 }
-
-                pdiagramRelTuple[2] <<= sTarget.copy( sTarget.lastIndexOf(".") );
-
-                pxRelListTemp[counter] = std::move(diagramRelTuple);
-                ++counter;
             }
-            xRelListTemp.realloc(counter);
-
         }
+        else if (sType == u"hlink")
+        {
+            // Hyperlink can be internal or external
+            core::RelationsRef xSlideRels = xRels->getRelationsFromTypeFromOfficeDoc(u"slide");
+            core::RelationsRef xHlinkRels = xRels->getRelationsFromTypeFromOfficeDoc(u"hyperlink");
+
+            sal_Int32 totalSize
+                = (xSlideRels ? xSlideRels->size() : 0) + (xHlinkRels ? xHlinkRels->size() : 0);
+            xRelListTemp.realloc(totalSize);
+            auto pxRelListTemp = xRelListTemp.getArray();
+
+            // Helper to create relation tuple
+            auto addRelation = [&](const auto& rel, const OUString& relType)
+            {
+                uno::Sequence<uno::Any> tuple(3);
+                auto pTuple = tuple.getArray();
+                pTuple[0] <<= rel.second.maId;
+                pTuple[1] <<= rel.second.maTarget;
+                pTuple[2] <<= relType;
+                pxRelListTemp[counter++] = std::move(tuple);
+            };
+
+            if (xSlideRels)
+            {
+                for (auto const& slideRel : *xSlideRels)
+                    addRelation(slideRel, "slide");
+            }
+            if (xHlinkRels)
+            {
+                for (auto const& hlinkRel : *xHlinkRels)
+                    addRelation(hlinkRel, "hyperlink");
+            }
+        }
+        xRelListTemp.realloc(counter);
     }
     return xRelListTemp;
 }

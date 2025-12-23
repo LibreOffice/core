@@ -153,7 +153,9 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
 {
     sal_Int32 length = maMainDomMap.size();
 
-    if (maDataRelsMap.hasElements())
+    if (getDataImageRelsSeq().hasElements())
+        ++length;
+    if (getDataHlinkRelsSeq().hasElements())
         ++length;
 
     uno::Sequence<beans::PropertyValue> aValue(length);
@@ -165,10 +167,16 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
         ++pValue;
     }
 
-    if (maDataRelsMap.hasElements())
+    if (getDataImageRelsSeq().hasElements())
     {
-        pValue->Name = "OOXDiagramDataRels";
-        pValue->Value <<= maDataRelsMap;
+        pValue->Name = "OOXDiagramDataImageRels";
+        pValue->Value <<= getDataImageRelsSeq();
+        ++pValue;
+    }
+    if (getDataHlinkRelsSeq().hasElements())
+    {
+        pValue->Name = "OOXDiagramDataHlinkRels";
+        pValue->Value <<= getDataHlinkRelsSeq();
         ++pValue;
     }
 
@@ -335,8 +343,10 @@ void loadDiagram( ShapePtr const & pShape,
                            pDiagram,
                            xRefDataModel);
 
-            pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
-                    xRefDataModel->getFragmentPath(), u"image" );
+            pDiagram->getDataImageRelsSeq() = pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                rFilter, xRefDataModel->getFragmentPath(), u"image");
+            pDiagram->getDataHlinkRelsSeq() = pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                rFilter, xRefDataModel->getFragmentPath(), u"hlink");
 
             // Pass the info to pShape
             for (auto const& extDrawing : pData->getExtDrawings())
