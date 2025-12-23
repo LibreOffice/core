@@ -206,7 +206,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
             if (xStatusIndicator.is() && nCount)
                 xStatusIndicator->setValue((100 * ++nProgress) / nCount);
 
-            Idle aIdle("ProgressBar::SetValue aIdle");
+            Idle aIdle("TranslateDocumentCancellable aIdle");
             aIdle.SetPriority(TaskPriority::POST_PAINT);
             aIdle.Start();
 
