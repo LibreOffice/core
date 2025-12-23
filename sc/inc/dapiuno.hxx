@@ -391,7 +391,7 @@ typedef ::cppu::WeakImplHelper
 ScDataPilotFieldObjImpl;
 
 /** Implementation of a single DataPilot field. */
-class ScDataPilotFieldObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
+class SAL_DLLPUBLIC_RTTI ScDataPilotFieldObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
 {
 public:
                         ScDataPilotFieldObj(
