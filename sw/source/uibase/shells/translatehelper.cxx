@@ -191,7 +191,15 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
             const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
             const auto aTranslatedOut = linguistic::Translate(
                 rConfig.m_xTargetLanguage, rConfig.m_xAPIUrl, rConfig.m_xAuthKey, aOut);
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
+            if (!aTranslatedOut.isEmpty())
+            {
+                SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
+            }
+            else
+            {
+                // TODO: show error?
+                break;
+            }
 
             if (xStatusIndicator.is() && nCount)
                 xStatusIndicator->setValue((100 * ++nProgress) / nCount);
