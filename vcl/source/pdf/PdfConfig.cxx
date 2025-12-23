@@ -29,7 +29,8 @@ double getDefaultPdfResolutionDpi()
     }
 
     // Fallback to a sensible default.
-    return Application::GetDefaultDevice()->GetDPIX();
+    OutputDevice* pDefault = Application::GetDefaultDevice();
+    return pDefault ? pDefault->GetDPIX() : 96.0;
 }
 }
 
