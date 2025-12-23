@@ -1254,7 +1254,6 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
-    DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
     DECL_LINK(GetSurroundingHdl, OUString&, int);
     DECL_LINK(DeleteSurroundingHdl, const Selection&, bool);

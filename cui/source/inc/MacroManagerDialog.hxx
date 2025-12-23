@@ -93,10 +93,6 @@ public:
         m_xTreeView->set_image(*m_xScratchIter, rImage);
     }
     int n_children() const { return m_xTreeView->n_children(); }
-    std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const
-    {
-        return m_xTreeView->make_iterator(pOrig);
-    }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
     std::unique_ptr<weld::TreeIter> get_selected() const { return m_xTreeView->get_selected(); }
     OUString get_selected_id() const

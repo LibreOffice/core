@@ -258,7 +258,6 @@ public:
     bool IsInvalidAutoCompleteWords() const { return m_bInvalidAutoCmplWrds; }
     bool IsInvalidWordCount() const { return m_bInvalidWordCount; }
     bool IsInvalidAtPageFly() const { return m_bInvalidAtPageFly; }
-    bool IsInAtPageFlyFormatting() const { return m_bInAtPageFlyFormatting; }
     void SetInAtPageFlyFormatting(bool val) const { m_bInAtPageFlyFormatting = val; }
 
     /** SwPageFrame::GetDrawBackgroundColor

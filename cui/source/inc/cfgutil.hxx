@@ -149,7 +149,6 @@ public:
     void remove(const weld::TreeIter& rIter) { m_xTreeView->remove(rIter); }
     void expand_row(const weld::TreeIter& rIter) { m_xTreeView->expand_row(rIter); }
     int n_children() const { return m_xTreeView->n_children(); }
-    std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool iter_has_child(const weld::TreeIter& rIter) const { return m_xTreeView->iter_has_child(rIter); }
     OUString get_text(int nPos) const { return m_xTreeView->get_text(nPos); }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }

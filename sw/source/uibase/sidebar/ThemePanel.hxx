@@ -42,7 +42,6 @@ private:
 
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
-    DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);
     void DoubleClickHdl();
     VclPtr<VirtualDevice> CreateImage(const model::ColorSet& rColorSet);
 };
