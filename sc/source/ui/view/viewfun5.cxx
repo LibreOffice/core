@@ -343,11 +343,11 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 ScDocShellRef pClipShell(new ScDocShell(SfxModelFlags::NONE, SCDOCMODE_CLIP));
                 SCTAB nSrcTab = 0;
                 pClipShell->GetDocument().ResetClip(&rDoc, nSrcTab);
-                SfxMedium aMed;
-                aMed.GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, uno::Any(xStm)));
-                aMed.SetFilter(pFilter);
+                auto pMed = std::make_unique<SfxMedium>();
+                pMed->GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, uno::Any(xStm)));
+                pMed->SetFilter(pFilter);
 
-                if (pClipShell->DoLoad(&aMed))
+                if (pClipShell->DoLoad(pMed.release()))
                 {
                     PasteFromExcelClip(pClipShell->GetDocument(), nSrcTab, nPosX, nPosY, pLogicPos,
                                        bAllowDialogs);
