@@ -19,10 +19,8 @@
  */
 #pragma once
 #include <vcl/weld.hxx>
-#include <rtl/string.h>
-#include <vector>
+#include <rtl/string.hxx>
 #include <optional>
-#include "translatehelper.hxx"
 
 class SwWrtShell;
 

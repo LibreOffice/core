@@ -20,19 +20,16 @@
 #include <sal/config.h>
 
 #include <config_features.h>
-#include <config_wasm_strip.h>
 #include <wrtsh.hxx>
 #include <pam.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <translatehelper.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <rtl/string.h>
 #include <shellio.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <vcl/htmltransferable.hxx>
 #include <vcl/transfer.hxx>
 #include <swdtflvr.hxx>
@@ -40,6 +37,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <officecfg/Office/Linguistic.hxx>
 #include <strings.hrc>
 
 namespace SwTranslateHelper
@@ -95,15 +93,39 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rDa
 }
 
 #if HAVE_FEATURE_CURL
-void TranslateDocument(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig)
+void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang)
 {
     bool bCancel = false;
-    TranslateDocumentCancellable(rWrtSh, rConfig, bCancel);
+    TranslateDocumentCancellable(rWrtSh, rTargetLang, bCancel);
 }
 
-void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig,
+static bool IsTranslationServiceConfigured(OString* pAPIUrl, OString* pKey)
+{
+    auto oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
+    auto oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
+    auto sApiUrlTrimmed = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
+    auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
+    if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
+        return false;
+    if (pAPIUrl)
+        *pAPIUrl = OUStringToOString(sApiUrlTrimmed, RTL_TEXTENCODING_UTF8) + "?tag_handling=html";
+    if (pKey)
+        *pKey = OUStringToOString(sKeyTrimmed, RTL_TEXTENCODING_UTF8);
+    return true;
+}
+
+bool IsTranslationServiceConfigured() { return IsTranslationServiceConfigured(nullptr, nullptr); }
+
+bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                   const bool& rCancelTranslation)
 {
+    OString aAPIUrl, aAuthKey;
+    if (!IsTranslationServiceConfigured(&aAPIUrl, &aAuthKey))
+    {
+        SAL_WARN("sw.ui", "TranslateDocumentCancellable: API options are not set");
+        return false;
+    }
+
     auto m_pCurrentPam = rWrtSh.GetCursor();
     bool bHasSelection = rWrtSh.HasSelection();
 
@@ -188,8 +210,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
             }
 
             const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
-            const auto aTranslatedOut = linguistic::Translate(
-                rConfig.m_xTargetLanguage, rConfig.m_xAPIUrl, rConfig.m_xAuthKey, aOut);
+            const auto aTranslatedOut = linguistic::Translate(rTargetLang, aAPIUrl, aAuthKey, aOut);
             if (!aTranslatedOut.isEmpty())
             {
                 SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
@@ -221,6 +242,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
 
     if (xStatusIndicator.is())
         xStatusIndicator->end();
+    return true;
 }
 #endif // HAVE_FEATURE_CURL
 }

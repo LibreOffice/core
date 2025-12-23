@@ -21,27 +21,22 @@
 #include <sal/config.h>
 
 #include <config_features.h>
-#include <config_wasm_strip.h>
 
-#include <swtypes.hxx>
+#include <rtl/string.hxx>
+
+#include <swdllapi.h>
 
 class SwWrtShell;
 class SwPaM;
 
 namespace SwTranslateHelper
 {
-struct SW_DLLPUBLIC TranslateAPIConfig final
-{
-    const OString m_xAPIUrl;
-    const OString m_xAuthKey;
-    const OString m_xTargetLanguage;
-};
 SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor);
 SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData);
 #if HAVE_FEATURE_CURL
-SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig);
-SW_DLLPUBLIC void TranslateDocumentCancellable(SwWrtShell& rWrtSh,
-                                               const TranslateAPIConfig& rConfig,
+SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang);
+SW_DLLPUBLIC bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                                const bool& rCancelTranslation);
+SW_DLLPUBLIC bool IsTranslationServiceConfigured();
 #endif
 }
