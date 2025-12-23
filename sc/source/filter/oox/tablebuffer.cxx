@@ -40,11 +40,12 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 TableStyleInfo::TableStyleInfo():
-    mbShowFirstColumn(true),
-    mbShowLastColumn(true),
-    mbShowRowStripes(true),
-    mbShowColStripes(true)
+    mbShowFirstColumn( false ),
+    mbShowLastColumn( false ),
+    mbShowRowStripes( false ),
+    mbShowColStripes( false )
 {
+    maStyleName = u"none"_ustr;
 }
 
 TableModel::TableModel() :
@@ -95,14 +96,11 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 
 void Table::importTableStyleInfo(const AttributeList& rAttribs)
 {
-    TableStyleInfo aInfo;
-    aInfo.maStyleName = rAttribs.getString(XML_name, u"none"_ustr);
-    aInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, true);
-    aInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, true);
-    aInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, true);
-    aInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, true);
-
-    maStyleInfo = aInfo;
+    maStyleInfo.maStyleName = rAttribs.getString(XML_name, u"none"_ustr);
+    maStyleInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, false);
+    maStyleInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, false);
+    maStyleInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, false);
+    maStyleInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, false);
 }
 
 void Table::finalizeImport()
@@ -164,14 +162,11 @@ void Table::finalizeImport()
         if( !(xDatabaseRange->getPropertyValue(u"TokenIndex"_ustr) >>= mnTokenIndex))
             mnTokenIndex = -1;
 
-        if(maStyleInfo && maStyleInfo->maStyleName)
-        {
-            xDatabaseRange->setPropertyValue( u"TableStyleName"_ustr, css::uno::Any(*maStyleInfo->maStyleName));
-            xDatabaseRange->setPropertyValue( u"UseRowStripes"_ustr, css::uno::Any(maStyleInfo->mbShowRowStripes));
-            xDatabaseRange->setPropertyValue( u"UseColStripes"_ustr, css::uno::Any(maStyleInfo->mbShowColStripes));
-            xDatabaseRange->setPropertyValue( u"UseFirstColumnFormatting"_ustr, css::uno::Any(maStyleInfo->mbShowFirstColumn));
-            xDatabaseRange->setPropertyValue( u"UseLastColumnFormatting"_ustr, css::uno::Any(maStyleInfo->mbShowLastColumn));
-        }
+        xDatabaseRange->setPropertyValue( u"TableStyleName"_ustr, css::uno::Any(maStyleInfo.maStyleName));
+        xDatabaseRange->setPropertyValue( u"UseRowStripes"_ustr, css::uno::Any(maStyleInfo.mbShowRowStripes));
+        xDatabaseRange->setPropertyValue( u"UseColStripes"_ustr, css::uno::Any(maStyleInfo.mbShowColStripes));
+        xDatabaseRange->setPropertyValue( u"UseFirstColumnFormatting"_ustr, css::uno::Any(maStyleInfo.mbShowFirstColumn));
+        xDatabaseRange->setPropertyValue( u"UseLastColumnFormatting"_ustr, css::uno::Any(maStyleInfo.mbShowLastColumn));
     }
     catch( Exception& )
     {
