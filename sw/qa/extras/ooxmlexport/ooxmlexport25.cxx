@@ -95,6 +95,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf169986_bottomSpacing, "tdf169986_bottomSpacing.d
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf170003_bottomSpacing, "tdf170003_bottomSpacing.docx")
+{
+    // Given a document with a table before the page break, and a sectPr with a huge bottom spacing
+
+    // This must be 200 twips / 0.35cm / 353 mm100, not sectPr's 2000 twips / 3.53 cm / 3530 mm100
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaBottomMargin"_ustr));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_bottomSpacing.docx")
 {
     // given with a continuous break sectPr with no belowSpacing
