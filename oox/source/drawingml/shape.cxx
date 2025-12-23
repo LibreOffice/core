@@ -1620,6 +1620,18 @@ Reference< XShape > const & Shape::createAndInsert(
                 aShapeProps.setProperty(PROP_CharHeight, GetFontHeight( mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.value() ));
         }
 
+        Sequence<PropertyValue> aCamera3DEffects = get3DProperties().getCameraAttributes();
+        Sequence<PropertyValue> aLightRig3DEffects = get3DProperties().getLightRigAttributes();
+        Sequence<PropertyValue> aShape3DEffects
+            = get3DProperties().getShape3DAttributes(rGraphicHelper, nFillPhClr);
+        bool bHas3DProps = aCamera3DEffects.hasElements() || aLightRig3DEffects.hasElements()
+                           || aShape3DEffects.hasElements();
+        if (bHas3DProps)
+        {
+            // 3D properties override softeEdge
+            getEffectProperties().maSoftEdge.moRad = 0;
+        }
+
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
@@ -2013,10 +2025,7 @@ Reference< XShape > const & Shape::createAndInsert(
             }
 
             // add 3D effects if any to GrabBag. They are still used in export.
-            Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
-            Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
-            Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
-            if( aCamera3DEffects.hasElements() || aLightRig3DEffects.hasElements() || aShape3DEffects.hasElements() )
+            if (bHas3DProps)
             {
                 uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
                 {
