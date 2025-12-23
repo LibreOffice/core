@@ -907,8 +907,7 @@ void SwXTextViewCursor::collapseToStart()
     if(rSh.HasSelection())
     {
         SwPaM* pShellCursor = rSh.GetCursor();
-        if(*pShellCursor->GetPoint() > *pShellCursor->GetMark())
-            pShellCursor->Exchange();
+        pShellCursor->Normalize();
         pShellCursor->DeleteMark();
         rSh.EnterStdMode();
         rSh.SetSelection(*pShellCursor);
@@ -929,8 +928,7 @@ void SwXTextViewCursor::collapseToEnd()
     if(rSh.HasSelection())
     {
         SwPaM* pShellCursor = rSh.GetCursor();
-        if(*pShellCursor->GetPoint() < *pShellCursor->GetMark())
-            pShellCursor->Exchange();
+        pShellCursor->Normalize(false);
         pShellCursor->DeleteMark();
         rSh.EnterStdMode();
         rSh.SetSelection(*pShellCursor);

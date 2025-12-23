@@ -973,10 +973,7 @@ void SAL_CALL SwXTextCursor::collapseToStart()
 
     if (rUnoCursor.HasMark())
     {
-        if (*rUnoCursor.GetPoint() > *rUnoCursor.GetMark())
-        {
-            rUnoCursor.Exchange();
-        }
+        rUnoCursor.Normalize();
         rUnoCursor.DeleteMark();
     }
 }
@@ -989,10 +986,7 @@ void SAL_CALL SwXTextCursor::collapseToEnd()
 
     if (rUnoCursor.HasMark())
     {
-        if (*rUnoCursor.GetPoint() < *rUnoCursor.GetMark())
-        {
-            rUnoCursor.Exchange();
-        }
+        rUnoCursor.Normalize(false);
         rUnoCursor.DeleteMark();
     }
 }

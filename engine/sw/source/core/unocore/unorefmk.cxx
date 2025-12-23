@@ -200,9 +200,9 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     rDoc2.getIDocumentContentOperations().InsertPoolItem( rPam, aRefMark, nInsertFlags );
 
-    if( bMark && *rPam.GetPoint() > *rPam.GetMark())
+    if (bMark)
     {
-        rPam.Exchange();
+        rPam.Normalize();
     }
 
     // aRefMark was copied into the document pool; now retrieve real format...
