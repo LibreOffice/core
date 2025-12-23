@@ -1577,8 +1577,8 @@ IMPL_LINK(GalleryBrowser, SearchHdl, weld::Entry&, searchEdit, void)
     }
     else
     {
-        for(std::set<OUString>::iterator foundIter = aFoundThemes.begin(); foundIter != aFoundThemes.end(); ++foundIter)
-            ImplInsertThemeEntry(mpGallery->GetThemeInfo(*foundIter));
+        for (const auto& rThemeName : aFoundThemes)
+            ImplInsertThemeEntry(mpGallery->GetThemeInfo(rThemeName));
     }
     mxThemes->select_text(curThemeName);
     SelectTheme(curThemeName);

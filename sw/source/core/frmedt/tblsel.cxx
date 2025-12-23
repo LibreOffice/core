@@ -2088,9 +2088,9 @@ static void FndBoxCopyCol( SwTableBox* pBox, FndPara* pFndPara )
     pFndPara->pFndLine->GetBoxes().push_back( std::move(pFndBox) );
 }
 
-static void FndLineCopyCol( SwTableLine* pLine, FndPara* pFndPara )
+static void FndLineCopyCol( const SwTableLine* pLine, FndPara* pFndPara )
 {
-    std::unique_ptr<FndLine_> pFndLine(new FndLine_(pLine, pFndPara->pFndBox));
+    std::unique_ptr<FndLine_> pFndLine(new FndLine_(const_cast<SwTableLine*>(pLine), pFndPara->pFndBox));
     FndPara aPara(*pFndPara, pFndLine.get());
     for( auto& rpBox : pFndLine->GetLine()->GetTabBoxes() )
         FndBoxCopyCol(rpBox, &aPara );
@@ -2102,8 +2102,8 @@ static void FndLineCopyCol( SwTableLine* pLine, FndPara* pFndPara )
 
 void ForEach_FndLineCopyCol(SwTableLines& rLines, FndPara* pFndPara )
 {
-    for( SwTableLines::iterator it = rLines.begin(); it != rLines.end(); ++it )
-        FndLineCopyCol( *it, pFndPara );
+    for(const auto& pLine: rLines)
+        FndLineCopyCol( pLine, pFndPara );
 }
 
 void FndBox_::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
