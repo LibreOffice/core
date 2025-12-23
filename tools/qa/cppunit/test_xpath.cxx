@@ -10,6 +10,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <test/bootstrapfixture.hxx>
 #include <rtl/ustring.hxx>
+#include <test/xmldocptr.hxx>
 #include <tools/stream.hxx>
 #include <tools/XPath.hxx>
 
@@ -36,10 +37,11 @@ public:
         pBuffer[nSize] = 0;
         aFileStream.ReadBytes(pBuffer.get(), nSize);
         auto pCharBuffer = reinterpret_cast<xmlChar*>(pBuffer.get());
-        xmlDocPtr pXmlDoc
-            = xmlReadDoc(pCharBuffer, nullptr, nullptr, XML_PARSE_NODICT | XML_PARSE_HUGE);
 
-        tools::XPath aXPath(pXmlDoc);
+        xmlDocUniquePtr pXmlDoc(
+            xmlReadDoc(pCharBuffer, nullptr, nullptr, XML_PARSE_NODICT | XML_PARSE_HUGE));
+
+        tools::XPath aXPath(pXmlDoc.get());
         auto aNonExistentPath = aXPath.create("/nonexistent");
         CPPUNIT_ASSERT(aNonExistentPath);
         CPPUNIT_ASSERT_EQUAL(0, aNonExistentPath->count());
@@ -80,8 +82,6 @@ public:
         CPPUNIT_ASSERT_EQUAL(u"Content"_ustr, aGrandChildResult->content());
         CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, aGrandChildResult->attribute("attribute1"));
         CPPUNIT_ASSERT_EQUAL(u"CDE"_ustr, aGrandChildResult->attribute("attribute2"));
-
-        xmlFreeDoc(pXmlDoc);
     }
 
     CPPUNIT_TEST_SUITE(XPathTest);
