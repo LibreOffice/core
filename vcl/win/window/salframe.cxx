@@ -865,8 +865,7 @@ WinSalFrame::WinSalFrame()
     mhWnd               = nullptr;
     mhCursor            = LoadCursor( nullptr, IDC_ARROW );
     mhDefIMEContext     = nullptr;
-    mpLocalGraphics     = nullptr;
-    mpThreadGraphics    = nullptr;
+    mpGraphics          = nullptr;
     m_eState = vcl::WindowState::Normal;
     mnShowState         = SW_SHOWNORMAL;
     mnMinWidth          = 0;
@@ -950,8 +949,6 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
     pGraphics->setHDC(nullptr);
     pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC,
         reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
-    if ( pGraphics == mpThreadGraphics )
-        pSalData->mnCacheDCInUse--;
     return true;
 }
 
@@ -969,20 +966,18 @@ WinSalFrame::~WinSalFrame()
         *ppFrame = mpNextFrame;
     mpNextFrame = nullptr;
 
-    // destroy the thread SalGraphics
-    if ( mpThreadGraphics )
+    // destroy the SalGraphics
+    if (mpGraphics)
     {
-        ReleaseFrameGraphicsDC( mpThreadGraphics );
-        delete mpThreadGraphics;
-        mpThreadGraphics = nullptr;
-    }
-
-    // destroy the local SalGraphics
-    if ( mpLocalGraphics )
-    {
-        ReleaseFrameGraphicsDC( mpLocalGraphics );
-        delete mpLocalGraphics;
-        mpLocalGraphics = nullptr;
+        HDC hDC = mpGraphics->getHDC();
+        mpGraphics->setHDC(nullptr);
+        if (pSalData->mpInstance->IsMainThread())
+            ReleaseDC(mhWnd, hDC);
+        else
+            pSalData->mpInstance->SendComWndMessage(
+                SAL_MSG_RELEASEDC, reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC));
+        delete mpGraphics;
+        mpGraphics = nullptr;
     }
 
     if ( mhWnd )
@@ -1023,55 +1018,36 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
     if ( pSalData->mhDitherPal )
         pGraphics->setPalette(pSalData->mhDitherPal);
 
-    if ( pGraphics == mpThreadGraphics )
-        pSalData->mnCacheDCInUse++;
     return true;
 }
 
 SalGraphics* WinSalFrame::AcquireGraphics()
 {
-    if ( mbGraphics || !mhWnd )
+    if (!mhWnd || mbGraphics)
         return nullptr;
 
     SalData* pSalData = GetSalData();
-    WinSalGraphics *pGraphics = nullptr;
-    HDC hDC = nullptr;
 
-    // Other threads get an own DC, because Windows modify in the
-    // other case our DC (changing clip region), when they send a
-    // WM_ERASEBACKGROUND message
-    if ( !pSalData->mpInstance->IsMainThread() )
+    if (!mpGraphics)
     {
-        // We use only three CacheDC's for all threads, because W9x is limited
-        // to max. 5 Cache DC's per thread
-        if ( pSalData->mnCacheDCInUse >= 3 )
+        HDC hDC;
+        if (pSalData->mpInstance->IsMainThread())
+            hDC = GetDC(mhWnd);
+        else
+            hDC = reinterpret_cast<HDC>(
+                static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
+                    SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(mhWnd), 0)));
+        if (!hDC)
             return nullptr;
-
-        if ( !mpThreadGraphics )
-            mpThreadGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
-        pGraphics = mpThreadGraphics;
-        assert( !pGraphics->getHDC() );
-        hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
-                                    SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(mhWnd), 0 )));
+        mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
+        mpGraphics->setHDC(hDC);
     }
-    else
-    {
-        if ( !mpLocalGraphics )
-            mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
-        pGraphics = mpLocalGraphics;
-        hDC = pGraphics->getHDC();
-        if ( !hDC )
-            hDC = GetDC( mhWnd );
-    }
-
-    mbGraphics = InitFrameGraphicsDC( pGraphics, hDC, mhWnd );
-    return mbGraphics ? pGraphics : nullptr;
+    mbGraphics = true;
+    return mpGraphics;
 }
 
-void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
+void WinSalFrame::ReleaseGraphics(SalGraphics* /*pGraphics*/)
 {
-    if ( mpThreadGraphics == pGraphics )
-        ReleaseFrameGraphicsDC( mpThreadGraphics );
     mbGraphics = false;
 }
 
@@ -1497,33 +1473,20 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     }
 
     // to recreate the DCs, if they were destroyed
-    bool bHadLocalGraphics = false, bHadThreadGraphics = false;
+    bool bHadGraphics = false;
 
-    HFONT   hFont   = nullptr;
-    HPEN    hPen    = nullptr;
-    HBRUSH  hBrush  = nullptr;
-
-    int oldCount = pSalData->mnCacheDCInUse;
-
-    // release the thread DC
-    if ( mpThreadGraphics )
+    // release the DC
+    if ( mpGraphics )
     {
-        // save current gdi objects before hdc is gone
-        HDC hDC = mpThreadGraphics->getHDC();
-        if ( hDC )
-        {
-            hFont  = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
-            hPen   = static_cast<HPEN>(GetCurrentObject( hDC, OBJ_PEN ));
-            hBrush = static_cast<HBRUSH>(GetCurrentObject( hDC, OBJ_BRUSH ));
-        }
-
-        bHadThreadGraphics = ReleaseFrameGraphicsDC( mpThreadGraphics );
-        assert( (bHadThreadGraphics && hDC) || (!bHadThreadGraphics && !hDC) );
+        bHadGraphics = true;
+        HDC hDC = mpGraphics->getHDC();
+        mpGraphics->setHDC(nullptr);
+        if (pSalData->mpInstance->IsMainThread())
+            ReleaseDC(mhWnd, hDC);
+        else
+            pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC, reinterpret_cast<WPARAM>(mhWnd),
+                                                    reinterpret_cast<LPARAM>(hDC));
     }
-
-    // release the local DC
-    if ( mpLocalGraphics )
-        bHadLocalGraphics = ReleaseFrameGraphicsDC( mpLocalGraphics );
 
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
@@ -1535,30 +1498,20 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     // succeeded ?
     SAL_WARN_IF( !IsWindow( hWnd ), "vcl", "WinSalFrame::SetParent not successful");
 
-    // re-create thread DC
-    if( bHadThreadGraphics )
+    // re-create DC
+    if( bHadGraphics )
     {
-        HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(
-                    pSalData->mpInstance->SendComWndMessage(
-                        SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(hWnd), 0 )));
-        InitFrameGraphicsDC( mpThreadGraphics, hDC, hWnd );
-        if ( hDC )
-        {
-            // re-select saved gdi objects
-            if( hFont )
-                SelectObject( hDC, hFont );
-            if( hPen )
-                SelectObject( hDC, hPen );
-            if( hBrush )
-                SelectObject( hDC, hBrush );
-
-            SAL_WARN_IF( oldCount != pSalData->mnCacheDCInUse, "vcl", "WinSalFrame::SetParent() hDC count corrupted");
-        }
+        mpGraphics->setHWND( hWnd );
+        HDC hDC;
+        if (pSalData->mpInstance->IsMainThread())
+            hDC = GetDC( hWnd );
+        else
+            hDC = reinterpret_cast<HDC>(
+                static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
+                    SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(hWnd), 0)));
+        if (hDC)
+            mpGraphics->setHDC( hDC );
     }
-
-    // re-create local DC
-    if( bHadLocalGraphics )
-        InitFrameGraphicsDC( mpLocalGraphics, GetDC( hWnd ), hWnd );
 
     // TODO: add SetParent() call for SalObjects
     SAL_WARN_IF( !systemChildren.empty(), "vcl", "WinSalFrame::SetParent() parent of living system child window will be destroyed!");
@@ -2218,10 +2171,8 @@ void WinSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 
 void WinSalFrame::Flush()
 {
-    if(mpLocalGraphics)
-        mpLocalGraphics->Flush();
-    if(mpThreadGraphics)
-        mpThreadGraphics->Flush();
+    if (mpGraphics)
+        mpGraphics->Flush();
     GdiFlush();
 }
 
@@ -3704,9 +3655,9 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
     // reset the background mode for each text input,
     // as some tools such as RichWin may have changed it
-    if ( pFrame->mpLocalGraphics &&
-         pFrame->mpLocalGraphics->getHDC() )
-        SetBkMode( pFrame->mpLocalGraphics->getHDC(), TRANSPARENT );
+    if ( pFrame->mpGraphics &&
+         pFrame->mpGraphics->getHDC() )
+        SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
 
     // determine modifiers
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
@@ -4146,7 +4097,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     {
         // clip region must be set, as we don't get a proper
         // bounding rectangle otherwise
-        WinSalGraphics *pGraphics = pFrame->mpLocalGraphics;
+        WinSalGraphics *pGraphics = pFrame->mpGraphics;
         bool bHasClipRegion = pGraphics &&
             pGraphics->getHDC() && pGraphics->getRegion();
         if ( bHasClipRegion )
@@ -4471,7 +4422,7 @@ static void ImplHandleForcePalette( HWND hWnd )
         return;
     const ::comphelper::ScopeGuard aScopeGuard([](){ ImplSalYieldMutexRelease(); });
 
-    WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
+    WinSalGraphics* pGraphics = pFrame->mpGraphics;
     if (!pGraphics || !pGraphics->getHDC() || !pGraphics->getDefPal()
             || (pGraphics->setPalette(hPal, FALSE) == GDI_ERROR))
         return;
@@ -4539,7 +4490,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     pTempFrame = pSalData->mpFirstFrame;
     while ( pTempFrame )
     {
-        pGraphics = pTempFrame->mpLocalGraphics;
+        pGraphics = pTempFrame->mpGraphics;
         pGraphics->setPalette(nullptr);
         pTempFrame = pTempFrame->mpNextFrame;
     }
@@ -4550,7 +4501,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         pFrame = GetWindowPtr( hWnd );
 
     UnrealizeObject(hPal);
-    const bool bStdDC = pFrame && pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getHDC();
+    const bool bStdDC = pFrame && pFrame->mpGraphics && pFrame->mpGraphics->getHDC();
     if (!bStdDC)
     {
         hDC = GetDC(hWnd);
@@ -4560,8 +4511,8 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     }
     else
     {
-        hDC = pFrame->mpLocalGraphics->getHDC();
-        nCols = pFrame->mpLocalGraphics->setPalette(hPal);
+        hDC = pFrame->mpGraphics->getHDC();
+        nCols = pFrame->mpGraphics->setPalette(hPal);
     }
 
     bUpdate = nCols != 0 && nCols != GDI_ERROR;
@@ -4588,7 +4539,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     {
         if ( pTempFrame != pFrame )
         {
-            pGraphics = pTempFrame->mpLocalGraphics;
+            pGraphics = pTempFrame->mpGraphics;
             if (pGraphics && pGraphics->getDefPal())
             {
                 UINT nRes = pGraphics->setPalette(hPal);
@@ -4605,7 +4556,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         pTempFrame = pSalData->mpFirstFrame;
         while ( pTempFrame )
         {
-            pGraphics = pTempFrame->mpLocalGraphics;
+            pGraphics = pTempFrame->mpGraphics;
             if (pGraphics && pGraphics->getDefPal())
             {
                 InvalidateRect( pTempFrame->mhWnd, nullptr, FALSE );
@@ -5442,9 +5393,9 @@ static bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
     {
         // reset the background mode for each text input,
         // as some tools such as RichWin may have changed it
-        if ( pFrame->mpLocalGraphics &&
-             pFrame->mpLocalGraphics->getHDC() )
-            SetBkMode( pFrame->mpLocalGraphics->getHDC(), TRANSPARENT );
+        if ( pFrame->mpGraphics &&
+             pFrame->mpGraphics->getHDC() )
+            SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
     }
 
     if ( pFrame && pFrame->mbHandleIME )
