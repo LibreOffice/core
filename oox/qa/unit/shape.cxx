@@ -1079,6 +1079,25 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_mathEqual)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(10000.0, fBoundRectHeight, 5);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf170095SoftEdge3D)
+{
+    // Load file with a shape with both soft edge and 3D effects
+    loadFromFile(u"tdf170095.pptx");
+
+    // Then make sure the shape has no soft edge:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nSoftEdgeRad{};
+    xShape->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nSoftEdgeRad;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 882
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nSoftEdgeRad);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
