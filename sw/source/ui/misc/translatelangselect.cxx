@@ -17,28 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <vcl/svapp.hxx>
-#include <osl/diagnose.h>
 #include <uitool.hxx>
-#include <swtypes.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <viewopt.hxx>
 #include <translatelangselect.hxx>
-#include <pagedesc.hxx>
-#include <poolfmt.hxx>
-#include <o3tl/string_view.hxx>
-#include <sal/log.hxx>
-#include <ndtxt.hxx>
-#include <shellio.hxx>
-#include <vcl/idle.hxx>
-#include <mdiexp.hxx>
-#include <strings.hrc>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <sfx2/viewfrm.hxx>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <linguistic/translate.hxx>
-#include <officecfg/Office/Linguistic.hxx>
+#include <translatehelper.hxx>
 
 static const std::vector<SwLanguageListItem>& getLanguageVec()
 {
@@ -136,30 +120,14 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
         return;
     }
 
-    std::optional<OUString> oDeeplAPIUrl
-        = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
-    std::optional<OUString> oDeeplKey
-        = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-    auto sApiUrlTrimmed = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
-    auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
-    if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
-    {
-        SAL_WARN("sw.ui", "SwTranslateLangSelectDlg: API options are not set");
-        m_xDialog->response(RET_CANCEL);
-        return;
-    }
-
-    const OString aAPIUrl
-        = OUStringToOString(sApiUrlTrimmed, RTL_TEXTENCODING_UTF8) + "?tag_handling=html";
-    const OString aAuthKey = OUStringToOString(sKeyTrimmed, RTL_TEXTENCODING_UTF8);
     const auto aTargetLang
         = getLanguageVec().at(SwTranslateLangSelectDlg::selectedLangIdx).getLanguage();
 
     m_bTranslationStarted = true;
-
-    SwTranslateHelper::TranslateAPIConfig aConfig({ aAPIUrl, aAuthKey, aTargetLang });
-    SwTranslateHelper::TranslateDocumentCancellable(m_rWrtSh, aConfig, m_bCancelTranslation);
-    m_xDialog->response(RET_OK);
+    m_xBtnTranslate->set_sensitive(false);
+    bool bRet = SwTranslateHelper::TranslateDocumentCancellable(m_rWrtSh, aTargetLang,
+                                                                m_bCancelTranslation);
+    m_xDialog->response(bRet ? RET_OK : RET_CANCEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

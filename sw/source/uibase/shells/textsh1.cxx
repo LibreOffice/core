@@ -122,7 +122,6 @@
 #include <config_wasm_strip.h>
 #if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
 #include <officecfg/Office/Common.hxx>
-#include <officecfg/Office/Linguistic.hxx>
 #include <svl/visitem.hxx>
 #include <translatelangselect.hxx>
 #endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
@@ -2303,21 +2302,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         const SfxPoolItem* pTargetLangStringItem = nullptr;
         if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TARGETLANG_STR, false, &pTargetLangStringItem))
         {
-            std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
-            std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-            auto sApiUrlTrimmed = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
-            auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
-            if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
-            {
-                SAL_WARN("sw.ui", "SID_FM_TRANSLATE: API options are not set");
-                break;
-            }
-            const OString aAPIUrl
-                = OUStringToOString(sApiUrlTrimmed, RTL_TEXTENCODING_UTF8) + "?tag_handling=html";
-            const OString aAuthKey = OUStringToOString(sKeyTrimmed, RTL_TEXTENCODING_UTF8);
             OString aTargetLang = OUStringToOString(static_cast<const SfxStringItem*>(pTargetLangStringItem)->GetValue(), RTL_TEXTENCODING_UTF8);
-            SwTranslateHelper::TranslateAPIConfig aConfig({aAPIUrl, aAuthKey, aTargetLang});
-            SwTranslateHelper::TranslateDocument(rWrtSh, aConfig);
+            SwTranslateHelper::TranslateDocument(rWrtSh, aTargetLang);
         }
         else
         {
@@ -3967,12 +3953,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                         break;
                     }
-                    std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
-                    std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-                    auto sApiUrlTrimmed
-                        = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
-                    auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
-                    if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
+                    if (!SwTranslateHelper::IsTranslationServiceConfigured())
                     {
                         rSet.DisableItem(nWhich);
                     }
