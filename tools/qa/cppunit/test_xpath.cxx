@@ -44,16 +44,16 @@ public:
         tools::XPath aXPath(pXmlDoc.get());
         auto aNonExistentPath = aXPath.create("/nonexistent");
         CPPUNIT_ASSERT(aNonExistentPath);
-        CPPUNIT_ASSERT_EQUAL(0, aNonExistentPath->count());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNonExistentPath->count());
 
         auto aRootResult = aXPath.create("/root");
         CPPUNIT_ASSERT(aRootResult);
-        CPPUNIT_ASSERT_EQUAL(1, aRootResult->count());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRootResult->count());
         CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, aRootResult->attribute("root-attr"));
         {
             auto aRootElement = aRootResult->at(0);
             CPPUNIT_ASSERT_EQUAL(std::string_view("root"), aRootElement->name());
-            CPPUNIT_ASSERT_EQUAL(4, aRootElement->countChildren());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRootElement->countChildren());
             CPPUNIT_ASSERT_EQUAL(std::string_view("child"), aRootElement->at(0)->name());
             CPPUNIT_ASSERT_EQUAL(std::string_view("child"), aRootElement->at(1)->name());
             CPPUNIT_ASSERT_EQUAL(std::string_view("child"), aRootElement->at(2)->name());
@@ -62,7 +62,7 @@ public:
 
         auto aChildResult = aXPath.create(aRootResult, "/child");
         CPPUNIT_ASSERT(aChildResult);
-        CPPUNIT_ASSERT_EQUAL(3, aChildResult->count());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aChildResult->count());
 
         auto aChildElement = aChildResult->at(0);
         CPPUNIT_ASSERT_EQUAL(std::string_view("child"), aChildElement->name());
@@ -78,7 +78,7 @@ public:
 
         auto aGrandChildResult = aXPath.create(aRootResult, "/child[1]/grandchild");
         CPPUNIT_ASSERT(aGrandChildResult);
-        CPPUNIT_ASSERT_EQUAL(1, aGrandChildResult->count());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGrandChildResult->count());
         CPPUNIT_ASSERT_EQUAL(u"Content"_ustr, aGrandChildResult->content());
         CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, aGrandChildResult->attribute("attribute1"));
         CPPUNIT_ASSERT_EQUAL(u"CDE"_ustr, aGrandChildResult->attribute("attribute2"));

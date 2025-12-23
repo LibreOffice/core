@@ -339,7 +339,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
 
     auto aPolyPolyPath = aPath.create(aPolyPoly, "/polypolygon");
     CPPUNIT_ASSERT(aPolyPolyPath);
-    CPPUNIT_ASSERT_EQUAL(1, aPolyPolyPath->count());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPolyPolyPath->count());
     auto aPolyPolyElement = aPolyPolyPath->at(0);
     CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute(
                                          "height")); // weird Rectangle is created with size 100
@@ -353,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
         = aPath.create("/primitive2D/sdrrectangle/group/polypolygoncolor/polypolygon/polygon");
     CPPUNIT_ASSERT(aPolyPath);
     auto aPoints = aPath.create(aPolyPath, "/point");
-    CPPUNIT_ASSERT_EQUAL(5, aPoints->count());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aPoints->count());
     CPPUNIT_ASSERT_EQUAL(u"49.5"_ustr, aPoints->at(0)->attribute("x"));
     CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(0)->attribute("y"));
     CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(1)->attribute("x"));
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
 
     auto aStrokePath = aPath.create("/primitive2D/sdrrectangle/group/polygonstroke");
     CPPUNIT_ASSERT(aStrokePath);
-    CPPUNIT_ASSERT_EQUAL(1, aStrokePath->count());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStrokePath->count());
 
     auto aLinePath = aPath.create(aStrokePath, "/line");
     CPPUNIT_ASSERT_EQUAL(u"#3465a4"_ustr, aLinePath->attribute("color"));
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     CPPUNIT_ASSERT_EQUAL(u"49.5,99 0,99 0,0 99,0 99,99"_ustr, aLineContentPath->content());
 
     // If solid line, then there is no line stroke information
-    CPPUNIT_ASSERT_EQUAL(0, aPath.create(aStrokePath, "/stroke")->count());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPath.create(aStrokePath, "/stroke")->count());
 
     pPage->RemoveObject(0);
 }
@@ -427,7 +427,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
     tools::XPath aXPath(pXmlDoc.get());
-    CPPUNIT_ASSERT_EQUAL(1, aXPath.create("/primitive2D")->count());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aXPath.create("/primitive2D")->count());
     CPPUNIT_ASSERT_EQUAL(u"Perspective"_ustr,
                          aXPath.create("//scene")->attribute("projectionMode"));
 
