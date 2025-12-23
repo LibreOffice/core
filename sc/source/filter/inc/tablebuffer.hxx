@@ -28,7 +28,7 @@ namespace oox::xls {
 
 struct TableStyleInfo
 {
-    std::optional<OUString> maStyleName;
+    OUString maStyleName;
     bool mbShowFirstColumn;
     bool mbShowLastColumn;
     bool mbShowRowStripes;
@@ -63,8 +63,8 @@ public:
     AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
     /** Creates a new tableColumns handler and stores it internally. */
     TableColumns&  createTableColumns() { return maTableColumns.createTableColumns(); }
-
-    void importTableStyleInfo(const AttributeList& rAttribs);
+    /** Imports the table style info attributes. */
+    void importTableStyleInfo( const AttributeList& rAttribs );
 
     /** Creates a database range from this tables. */
     void                finalizeImport();
@@ -93,7 +93,7 @@ public:
 
 private:
     TableModel          maModel;
-    std::optional<TableStyleInfo> maStyleInfo;
+    TableStyleInfo      maStyleInfo;        /// Table style information.
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
     TableColumnsBuffer  maTableColumns;     /// Column names of this table.
     OUString            maDBRangeName;      /// Name of the database range in the Calc document.

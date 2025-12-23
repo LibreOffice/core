@@ -40,11 +40,12 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 TableStyleInfo::TableStyleInfo():
-    mbShowFirstColumn(true),
-    mbShowLastColumn(true),
-    mbShowRowStripes(true),
-    mbShowColStripes(true)
+    mbShowFirstColumn( false ),
+    mbShowLastColumn( false ),
+    mbShowRowStripes( false ),
+    mbShowColStripes( false )
 {
+    maStyleName = u"none"_ustr;
 }
 
 TableModel::TableModel() :
@@ -95,14 +96,11 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 
 void Table::importTableStyleInfo(const AttributeList& rAttribs)
 {
-    TableStyleInfo aInfo;
-    aInfo.maStyleName = rAttribs.getString(XML_name, u"none"_ustr);
-    aInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, true);
-    aInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, true);
-    aInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, true);
-    aInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, true);
-
-    maStyleInfo = aInfo;
+    maStyleInfo.maStyleName = rAttribs.getString(XML_name, u"none"_ustr);
+    maStyleInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, false);
+    maStyleInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, false);
+    maStyleInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, false);
+    maStyleInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, false);
 }
 
 void Table::finalizeImport()
@@ -167,14 +165,11 @@ void Table::finalizeImport()
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
 
-        if(maStyleInfo && maStyleInfo->maStyleName)
-        {
-            aPropSet.setProperty( PROP_TableStyleName, css::uno::Any(*maStyleInfo->maStyleName));
-            aPropSet.setProperty( PROP_UseRowStripes, maStyleInfo->mbShowRowStripes);
-            aPropSet.setProperty( PROP_UseColStripes, maStyleInfo->mbShowColStripes);
-            aPropSet.setProperty( PROP_UseFirstColumnFormatting, maStyleInfo->mbShowFirstColumn);
-            aPropSet.setProperty( PROP_UseLastColumnFormatting, maStyleInfo->mbShowLastColumn);
-        }
+        aPropSet.setProperty( PROP_TableStyleName, css::uno::Any(maStyleInfo.maStyleName));
+        aPropSet.setProperty( PROP_UseRowStripes, maStyleInfo.mbShowRowStripes);
+        aPropSet.setProperty( PROP_UseColStripes, maStyleInfo.mbShowColStripes);
+        aPropSet.setProperty( PROP_UseFirstColumnFormatting, maStyleInfo.mbShowFirstColumn);
+        aPropSet.setProperty( PROP_UseLastColumnFormatting, maStyleInfo.mbShowLastColumn);
     }
     catch( Exception& )
     {
