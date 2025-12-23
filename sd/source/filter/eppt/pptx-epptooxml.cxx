@@ -251,7 +251,7 @@ const PPTXLayoutInfo aLayoutInfo[] =
     { 8, "Title and table", "tbl" },
     { 9, "Title, clipart on left, text on right", "clipArtAndTx" },
     { 10, "Title, text on left, object on right", "txAndObj" },
-    { 11, "Title and object", "obj" },
+    {  1, "Title and object", "obj" },
     { 12, "Title, text on left, two objects on right", "txAndTwoObj" },
     { 13, "Title, object on left, text on right", "objAndTx" },
     { 14, "Title, object on top, text on bottom", "objOverTx" },
