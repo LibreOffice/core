@@ -225,8 +225,6 @@ public:
     virtual sal_uInt16      GetNum() const override;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
-private:
-    bool                    bDateCompatibility;
 };
 
 //------------------------------------------------------ class ExcBundlesheet -
