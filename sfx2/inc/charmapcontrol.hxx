@@ -36,8 +36,6 @@ public:
 private:
     rtl::Reference<CharmapPopup> m_xControl;
 
-    ScopedVclPtr<VirtualDevice> m_xVirDev;
-
     SfxCharmapContainer m_aCharmapContents;
 
     std::unique_ptr<weld::Label> m_xRecentLabel;

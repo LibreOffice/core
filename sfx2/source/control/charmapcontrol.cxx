@@ -30,7 +30,6 @@ using namespace css;
 SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"sfx/ui/charmapcontrol.ui"_ustr, u"charmapctrl"_ustr)
     , m_xControl(pControl)
-    , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , m_aCharmapContents(*m_xBuilder)
     , m_xRecentLabel(m_xBuilder->weld_label(u"label2"_ustr))
     , m_xDlgBtn(m_xBuilder->weld_button(u"specialchardlg"_ustr))
