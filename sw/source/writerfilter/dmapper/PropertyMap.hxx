@@ -341,6 +341,8 @@ private:
 
     void CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl, PageBreakType eBreakType);
 
+    void EmulateSectPrBelowSpacing(DomainMapper_Impl& rDM_Impl);
+
     void PrepareHeaderFooterProperties();
 
     bool HasHeader() const;
