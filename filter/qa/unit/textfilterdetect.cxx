@@ -270,6 +270,16 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testMarkdownDetect)
     OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
     CPPUNIT_ASSERT_EQUAL(u"Markdown"_ustr, aFilterName);
 }
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf169154)
+{
+    uno::Sequence<beans::PropertyValue> aParams
+        = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
+
+    // Without the fix in place, this test would fail to load the file in RepairPackage mode
+    loadWithParams(createFileURL(u"tdf169154.doc"), aParams);
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
