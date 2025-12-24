@@ -10,31 +10,31 @@
 $(eval $(call gb_Package_Package,extras_gallbullets,$(SRCDIR)/extras/source/gallery/bullets))
 
 $(eval $(call gb_Package_add_files,extras_gallbullets,$(LIBO_SHARE_FOLDER)/gallery/bullets,\
-	circle.png \
-	circle-green.png \
-	triangle.png \
-	triangle-green.png \
-	pin.png \
-	pin-green.png \
-	flag.png \
-	flag-green.png \
-	stars-empty.png \
-	redo.png \
-	cross.png \
-	check.png \
-	cross.png \
-	circle-blue.png \
-	circle-yellow.png \
-	triangle-blue.png \
-	triangle-yellow.png \
-	pin-blue.png \
-	pin-yellow.png \
-	flag-blue.png \
-	flag-yellow.png \
-	undo.png \
-	stars.png \
-	info.png \
-	warning.png \
+	check.svg \
+	circle-blue.svg \
+	circle-green.svg \
+	circle-yellow.svg \
+	circle.svg \
+	cross-red.svg \
+	cross.svg \
+	flag-blue.svg \
+	flag-green.svg \
+	flag-yellow.svg \
+	flag.svg \
+	info.svg \
+	pin-blue.svg \
+	pin-green.svg \
+	pin-yellow.svg \
+	pin.svg \
+	redo.svg \
+	stars-empty.svg \
+	stars.svg \
+	triangle-blue.svg \
+	triangle-green.svg \
+	triangle-yellow.svg \
+	triangle.svg \
+	undo.svg \
+	warning.svg \
 ))
 
 # vim: set noet sw=4 ts=4:
