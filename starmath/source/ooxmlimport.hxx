@@ -44,6 +44,7 @@ private:
     OUString handleSsup();
     OUString readOMathArg( int stoptoken );
     OUString readOMathArgInElement( int token );
+    static OUString handleSetString(const OUString& setOUstring);
 
     oox::formulaimport::XmlStream& m_rStream;
 };
