@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <parse5.hxx>
+#include <unordered_set>
 
 using namespace oox::formulaimport;
 
@@ -580,6 +581,7 @@ OUString SmOoxmlImport::handleR()
     m_rStream.ensureOpeningTag( M_TOKEN( r ));
     bool normal = false;
     bool literal = false;
+    OUString scrString;
     if( XmlStream::Tag rPr = m_rStream.checkOpeningTag( M_TOKEN( rPr )))
     {
         if( XmlStream::Tag litTag = m_rStream.checkOpeningTag( M_TOKEN( lit )))
@@ -591,6 +593,11 @@ OUString SmOoxmlImport::handleR()
         {
             normal = norTag.attribute( M_TOKEN( val ), true );
             m_rStream.ensureClosingTag( M_TOKEN( nor ));
+        }
+        if (XmlStream::Tag srcTag = m_rStream.checkOpeningTag( M_TOKEN( scr )))
+        {
+            scrString = srcTag.attribute( M_TOKEN( val ), scrString );
+            m_rStream.ensureClosingTag( M_TOKEN( scr ));
         }
         m_rStream.ensureClosingTag( M_TOKEN( rPr ));
     }
@@ -605,6 +612,10 @@ OUString SmOoxmlImport::handleR()
                 isTagT = true;
                 XmlStream::Tag rtag = m_rStream.ensureOpeningTag( M_TOKEN( t ));
                 OUString sTagText = rtag.text;
+                if (scrString == "double-struck")
+                {
+                    sTagText = SmOoxmlImport::handleSetString(sTagText);
+                }
                 if( rtag.attribute( OOX_TOKEN( xml, space )) != "preserve" )
                     sTagText = o3tl::trim(sTagText);
                 text.append(sTagText);
@@ -617,11 +628,27 @@ OUString SmOoxmlImport::handleR()
         }
     }
     m_rStream.ensureClosingTag( M_TOKEN( r ));
-    if (normal || literal || isTagT)
+    if (scrString.isEmpty() && (normal || literal || isTagT))
     {
         return encloseOrEscapeLiteral(text.makeStringAndClear(), normal || literal);
     }
     return text.makeStringAndClear();
+}
+
+OUString SmOoxmlImport::handleSetString(const OUString& setOUstring)
+{
+    std::unordered_set<sal_Unicode> setList= {'C', 'N', 'Q', 'R', 'Z', 'c', 'n', 'q', 'r', 'z'};
+    OUString result;
+    for (sal_Int32 i = 0; i < setOUstring.getLength(); i++)
+    {
+        if (setList.contains(setOUstring[i]))
+        {
+            result += OUString::Concat(" set" ) + OUStringChar(setOUstring[i]) + OUString::Concat(" ");
+        }
+        else
+            result += OUStringChar(setOUstring[i]);
+    }
+    return result;
 }
 
 OUString SmOoxmlImport::handleRad()
