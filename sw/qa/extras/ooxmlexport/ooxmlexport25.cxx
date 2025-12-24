@@ -107,6 +107,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf170003_bottomSpacing, "tdf170003_bottomSpacing.d
                          getProperty<sal_Int32>(getParagraph(1), u"ParaBottomMargin"_ustr));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf170119_bottomSpacing, "tdf170119_bottomSpacing.docx")
+{
+    // Given a document with a page break and a sectPr with a huge bottom spacing
+
+    // Without the fix, page 2 started with a 150pt gap, pushing content to the third page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_bottomSpacing.docx")
 {
     // given with a continuous break sectPr with no belowSpacing

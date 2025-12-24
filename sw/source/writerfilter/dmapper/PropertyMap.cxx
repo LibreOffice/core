@@ -1560,6 +1560,22 @@ void SectionPropertyMap::EmulateSectPrBelowSpacing(DomainMapper_Impl& rDM_Impl)
     // to the last paragraph in that section.
     // This emulation works because below spacing before a page break normally has no relevance.
 
+    if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_continuous)
+    {
+        // The complication with continuous breaks is that the below spacing of a sectPr
+        // does NOT directly affect the layout.
+        // [So (except before a page break) it MUST NOT be applied to the previous para.]
+        // However, it IS (indirectly) used to reduce the top margin of the following paragraph.
+        uno::Reference<beans::XPropertySet> const xPSet(m_xStartingRange, uno::UNO_QUERY);
+        if (!xPSet)
+            return; // TODO tdf#170119: emulation not possible without a page break
+
+        style::BreakType eBreakType(style::BreakType_NONE);
+        xPSet->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
+        if (eBreakType != style::BreakType_PAGE_BEFORE)
+            return; // emulation not possible without a page break.
+    }
+
     // m_xPreStartingRange may have skipped over a table as the last thing before the break!
     // If so, then the below spacing can be ignored since tables don't have below spacing.
     // Also, if m_xStartingRange starts with a table (which also doesn't have above spacing)
@@ -1690,6 +1706,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             setHeaderFooterProperties(rDM_Impl);
             InheritOrFinalizePageStyles( rDM_Impl );
             ApplySectionProperties( xSection, rDM_Impl );  //depends on InheritOrFinalizePageStyles
+
+            EmulateSectPrBelowSpacing(rDM_Impl);
+
             uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
             if ( m_bIsFirstSection && !m_sPageStyleName.isEmpty() && xRangeProperties.is() )
             {
