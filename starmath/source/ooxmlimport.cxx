@@ -708,6 +708,8 @@ OUString SmOoxmlImport::handleSsup()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString sup = readOMathArgInElement( M_TOKEN( sup ));
     m_rStream.ensureClosingTag( M_TOKEN( sSup ));
+    if (sup == "'")
+        return "{" + e + "} {" + sup + "}";
     return "{" + e + "} ^ {" + sup + "}";
 }
 
