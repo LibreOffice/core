@@ -40,7 +40,7 @@ public:
     ~PlacesListBox();
 
     void AppendPlace( const PlacePtr& pPlace );
-    void RemovePlace( sal_uInt16 nPos );
+    void RemovePlace( int nPos );
     void RemoveSelectedPlace();
     sal_Int32 GetNbEditablePlaces() const { return mnNbEditables;}
     bool IsUpdated();
