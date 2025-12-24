@@ -347,9 +347,9 @@ OUString SmOoxmlImport::handleD()
         || closing == OUStringChar(MS_RMATHANGLE))
         closing = " right rangle";
     // use scalable brackets (the explicit "left" or "right")
-    if( opening == "(" || opening == "[" )
+    if( opening == "(" || opening == "[" || opening == ")" || opening == "]" )
         opening = "left " + opening;
-    if( closing == ")" || closing == "]" )
+    if( closing == ")" || closing == "]" || closing == "(" || closing == "[")
         closing = " right " + closing;
     if( separator == "|" ) // plain "|" would be actually "V" (logical or)
         separator = " mline ";
